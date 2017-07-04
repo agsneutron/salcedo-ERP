@@ -1,0 +1,6 @@
+# Files
+*.pyc
+SalcedoERP/local_settings.py
+
+#Folders
+.idea
