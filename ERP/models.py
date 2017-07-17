@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.forms.models import model_to_dict
+from users.models import ERPUser
 
 from django.db import models
 from Logs.controller import Logs
@@ -117,7 +118,7 @@ class Pais (models.Model):
 '''
 class LineItem(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    parentLineItem = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
+    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=True)
 
     class Meta:
@@ -141,8 +142,8 @@ class LineItem(models.Model):
     Master model to manage the concepts historical.
 '''
 class ConceptMaster(models.Model):
-    lineItem = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
-    parentConcept = models.ForeignKey('self', verbose_name="Concepto Padre", null=True, blank=True)
+    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
+    parent_concept = models.ForeignKey('self', verbose_name="Concepto Padre", null=True, blank=True)
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=True, editable=True)
     description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
 
@@ -208,7 +209,7 @@ class ConceptDetail(models.Model):
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False , blank=False)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=ARCHIVED)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
-    unitPrice = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
+    unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     start_date = models.DateTimeField(auto_now_add=True)
     end_date = models.DateTimeField(default=None, null=True)
 
@@ -286,6 +287,30 @@ class ProgressEstimate(models.Model):
         ans['type'] = str(self.type)
         return ans
 
+
+'''
+    Model for handling the progress estimate log.
+'''
+class ProgressEstimateLog(models.Model):
+    progress_estimate = models.ForeignKey(ProgressEstimate, verbose_name="Estimación", null=False, blank=False)
+    user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
+    description = models.CharField(verbose_name="Descripción", max_length=512, null=False, blank=False)
+    register_date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=None, null=True)
+
+
+    class Meta:
+        verbose_name_plural = 'Bitácoras de Estimaciones'
+
+
+
+'''
+    Model for the Log File.
+'''
+class LogFile(models.Model):
+    progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Log de Estimación", null=False, blank=False)
+    url = models.CharField(verbose_name="URL", max_length=1024, null=False, blank=False)
+    mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 # ProgramaVivienda
 class ProgramaViviendaDetalle(models.Model):
     tipoProgramaVivienda = models.CharField(verbose_name="tipo vivienda", max_length=8, null=False, blank=False)

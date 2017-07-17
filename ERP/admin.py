@@ -34,9 +34,9 @@ class ConceptMasterAdmin(admin.ModelAdmin):
 
 
 class ConceptDetailAdmin(admin.ModelAdmin):
-    list_display = ('id', 'unit', 'status','quantity','unitPrice')
+    list_display = ('id', 'unit', 'status','quantity','unit_price')
     search_fields = ('unit', 'status','quantity','unitPrice')
-    list_display_links = ('unit', 'status','quantity','unitPrice')
+    list_display_links = ('unit', 'status','quantity','unit_price')
     exclude = ('end_date',)
     list_per_page = 50
 
@@ -49,9 +49,29 @@ class UnitAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
+class LogFileInline(admin.TabularInline):
+    model = LogFile
+    extra = 0
+
+
+class ProgressEstimateLogAdmin(admin.ModelAdmin):
+    list_display = ('user', 'description', 'date')
+    search_fields = ('user', 'description', 'date')
+    list_display_links = ('user', 'description', 'date')
+    list_per_page = 50
+
+    inlines = [
+        LogFileInline,
+    ]
+
+
+
+
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
 admin.site.register(ConceptMaster, ConceptMasterAdmin)
 admin.site.register(ConceptDetail, ConceptDetailAdmin)
 admin.site.register(Unit, UnitAdmin)
+admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
