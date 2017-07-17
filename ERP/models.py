@@ -397,7 +397,7 @@ class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     contrato = models.ForeignKey(Contrato, verbose_name="contrato", null=False , blank=False)
     propietario = models.ForeignKey(Propietario, verbose_name="propietario", null=False , blank=False)
-    nombreproyecto = models.CharField(verbose_name="nombre del proyecto", max_length=8, null=False, blank=False)
+    nombreproyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
     ProgramaViviendaDetalle = models.ForeignKey(ProgramaViviendaDetalle, verbose_name="ProgramaViviendaDetalle", null=False, blank=False)
     fecha_inicial = models.DateTimeField(default=None, null=False)
     fecha_final = models.DateTimeField(default=None, null=False)
