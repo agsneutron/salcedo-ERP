@@ -1,0 +1,219 @@
+{% load i18n static %}<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tablero Pronósticos</title>
+<link href="/static/admin/img/favicon_.ico" type="image/x-icon" rel="shortcut icon" />
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/base.css" %}"  />
+<!-- Bootstrap Library css -->
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap.min.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "admin/css/custom.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "admin/assets/font-aw/css/font-awesome.css" %}" />
+
+{% block extrastyle %}{% endblock %}
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" type="text/css" href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}" />{% endif %}
+{% block extrahead %}{% endblock %}
+{% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE" />{% endblock %}
+    <!-- Jquery Library js -->
+<script src="{% static "http://code.jquery.com/jquery-1.11.3.min.js"%}"></script>
+    <!-- Bootstrap Library js -->
+<script src="{% static "admin/js/bootstrap.min.js"%}"></script>
+
+</head>
+{% load i18n %}
+
+<body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}" data-admin-utc-offset="{% now "Z" %}">
+
+<!-- Start Header -->
+ <header class="page-header">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand logo" href="/admin/">
+              <img class="logo-original hidden-xs" src="{% static "admin/img/logo-white.png" %}" >
+              <img class="logo-hover hidden-xs" src="{% static "admin/img/logo-white_hover.png" %}" >
+              <img style="max-height: 45px; padding-left: 10px" class=" visible-xs" src="{% static "admin/img/logo-white.png" %}" >
+          </a>
+        </div>
+        <div id="navbar" class="text-right">
+            <div class="text-right">
+                <ul id="navlist">
+                    <li><h5>Tablero de control - <strong>PRONÓSTICOS</strong></h5></li>
+                   {% comment %} <li><a href=""><img src="{% static "admin/img/chat.png" %}"></a></li>
+                    <li><a href=""><img src="{% static "admin/img/facebook.png" %}"></a></li>
+                    <li><a href=""><img src="{% static "admin/img/twitter.png" %}"></a></li>
+                    <li><a href=""><img src="{% static "admin/img/youtube.png" %}"></a></li>{% endcomment %}
+                </ul>
+            </div>
+ {% if not is_popup %}
+      {% block usertools %}
+        {% if user.is_active and user.is_staff %}
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown"><a id="nav-toggle" data-toggle="dropdown" href="#" class="dropdown-toggle">
+                {% block welcome-msg %}
+
+
+                 &nbsp;{% trans 'Bienvenido &nbsp;' %}<span class="">{% firstof user.get_short_name user.get_username %}</span>&nbsp;&nbsp;<span class="orange-circle"> <span class="xcontainer"> <span class="xicon"></span></span></span></a>
+                {% endblock %}
+                <ul class="dropdown-menu dropdown-user pull-right">
+                    {% block userlinks %}
+                {% if site_url %}
+                    <li><a href="/ayuda"><i class="fa fa-user"></i>{% trans 'Ayuda' %}</a> </li>
+                {% endif %}
+                    <li class="divider"></li>
+                         {% if user.is_active and user.is_staff %}
+                    {% url 'django-admindocs-docroot' as docsroot %}
+                    {% if docsroot %}
+                        <li><a href="{{ docsroot }}"><i class="fa fa-lock"></i>{% trans 'Documentation' %}</a></li>
+                    {% endif %}
+                {% endif %}
+                         {% if user.has_usable_password %}
+                            <li><a href="{% url 'admin:password_change' %}"><i class="fa fa-lock"></i>{% trans 'Cambiar contraseña' %}</a></li>
+                {% endif %}
+                      <li><a href="{% url 'admin:logout' %}"><i class="fa fa-key"></i>{% trans 'Cerrar sesión' %}</a></li>
+            {% endblock %}
+                </ul>
+            {% endif %}
+        {% endblock %}
+        {% block nav-global %}{% endblock %}
+            </li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </header>
+    <!-- End Header -->
+     <!-- begins navigation -->
+
+
+         <nav class="navbar navbar-default">
+         {% if user.is_active and user.is_staff %}
+          <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            {% comment %}<div class="navbar-header">
+              <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+              </button>
+            </div>{% endcomment %}
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
+              <ul class="nav nav-justified">
+                {#MOVIMIENTOS#}
+                <li class="dropdown">
+                    <a href="/movimientos">Movimientos </a>
+                    <a href="/movimientos" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="caret hidden-xs"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/cargadatos">Carga de Datos</a></li>
+                        </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="/consultas">Consultas </a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="caret hidden-xs"></span></a>
+                      <ul class="dropdown-menu" >
+                          <li><a href="/admin">Consultas Generales</a></li>
+                          <li><a href="/consulta_predefinida">Consultas Pre-definida</a></li>
+                      </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="/catalogos">Catálogos </a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="caret hidden-xs"></span></a>
+                      <ul class="dropdown-menu" >
+                          <li><a href="/catalogos">Indicadores</a></li>
+                      </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="/usuarios">Usuarios </a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="caret hidden-xs"></span></a>
+                      <ul class="dropdown-menu" >
+                          <li><a href="/admin/auth/user/add">Agregar Usuario</a></li>
+                          <li><a href="/admin/auth/user/?e=2">Editar Usuario</a></li>
+                          <li><a href="/admin/auth/user/?e=1">Eliminar Usuario</a></li>
+                      </ul>
+                </li>
+              </ul>
+            </div><!-- /.navbar-collapse -->
+          </div><!-- /.container-fluid -->
+             {% endif %}
+    </nav>
+
+
+     <!-- ends navigation -->
+
+    <!-- begins breadcrumbs and messages -->
+     <div class="container">
+         {% block breadcrumbs %}
+        <div class="breadcrumbs">
+        <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+        {% if title %} &rsaquo; {{ title }}{% endif %}
+        </div>
+        {% endblock %}
+        {% endif %}
+
+        {% block messages %}
+            {% if messages %}
+            <ul class="messagelist">{% for message in messages %}
+              <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}</ul>
+            {% endif %}
+        {% endblock messages %}
+     </div>
+    <!-- ends breadcrumbs and messages -->
+    <!-- Begins MainContainer -->
+<div class="container" >
+    <div id="content" class="{% block coltype %}colM{% endblock %}">
+        {% block pretitle %}{% endblock %}
+        {% block content_title %}{% if title %}{% endif %}{% endblock %}
+        {% block content %}
+        {% block object-tools %}{% endblock %}
+        {{ content }}
+        {% endblock %}
+        {% block sidebar %}{% endblock %}
+        <br class="clear" />
+    </div>
+</div>
+    <!-- END mainContainer -->
+
+    <!-- Begins Footer -->
+    {% block footer %}
+        <div id="" class="footer">
+            <div class="col-md-12 text-center">
+                <p>Av. Insurgentes Sur 1397 Col. Insurgentes Mixcoac Del. Benito Juárez, México D.F., Cp. 03920. Tel: (55) 5482-0000.<br>
+                        Si hubiera alguna diferencia entre los resultados aquí publicados y los oficiales, éstos últimos prevalecerán.<br>
+                            Política de Privacidad:P3P Última Actualización 29/08/2016 , Responsable DTIC</p>
+            </div>
+            <img src="{% static "admin/img/logo-footer.png" %}" alt="" class="img-responsive logo-right hidden-xs">
+        </div>
+    {% endblock %}
+
+    <!-- Ends Footer -->
+
+    <!-- highcharts Library js -->
+
+<script src="{% static "admin/assets/graficas/highcharts.js"%}"></script>
+<script src="{% static "admin/assets/graficas/highcharts-3d.js"%}"></script>
+<script src="{% static "admin/assets/graficas/highcharts-more.js"%}"></script>
+<script src="{% static "admin/assets/graficas/modules/exporting.js"%}"></script>
+<script src="{% static "admin/assets/graficas/themes/grid-light.js"%}"></script>
+<script src="https://code.highcharts.com/modules/drilldown.js"></script>
+
+<script>
+
+</script>
+<script>
+     $(document).ready(function() {
+         document.querySelector( "#nav-toggle" )
+  .addEventListener( "click", function() {
+    this.classList.toggle( "active" );
+  });
+$(document).on("click", function () {
+    $("#nav-toggle").removeClass("active");
+});
+});
+</script>
+
+</body>
+</html>
