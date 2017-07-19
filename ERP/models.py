@@ -311,9 +311,10 @@ class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Log de Estimación", null=False, blank=False)
     url = models.CharField(verbose_name="URL", max_length=1024, null=False, blank=False)
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
+
 # ProgramaVivienda
 class ProgramaViviendaDetalle(models.Model):
-    tipoProgramaVivienda = models.CharField(verbose_name="tipo vivienda", max_length=8, null=False, blank=False)
+    tipoProgramaVivienda = models.CharField(verbose_name="tipo vivienda", max_length=50, null=False, blank=False)
     numeroviviendas = models.DecimalField(verbose_name='número de vivienda', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
 
@@ -354,6 +355,7 @@ class Propietario(models.Model):
     telefono1 = models.CharField(verbose_name="calle", max_length=20, null=False, blank=False)
     telefono2  = models.CharField(verbose_name="calle", max_length=20, null=False, blank=False)
     email  = models.CharField(verbose_name="calle", max_length=100, null=False, blank=False)
+    rfc = models.CharField(verbose_name="RFC", max_length=30, null=False, blank=False)
     empresa = models.ForeignKey(Empresa, verbose_name="empresa", null=False, blank=False)
 
 
@@ -375,6 +377,7 @@ class Propietario(models.Model):
         ans['telefono1'] = str(self.telefono1)
         ans['telefono_2'] = str(self.telefono2)
         ans['email'] = str(self.email)
+        ans['rfc'] = str(self.rfc)
         ans['empresa'] = str(self.empresa.nombreEmpresa)
         return ans
 
@@ -395,9 +398,9 @@ class Propietario(models.Model):
 # proyectos
 class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
-    contrato = models.ForeignKey(Contrato, verbose_name="contrato", null=False , blank=False)
+    contrato = models.ForeignKey(Contrato, verbose_name="contrato", null=False, blank=False)
     propietario = models.ForeignKey(Propietario, verbose_name="propietario", null=False , blank=False)
-    nombreproyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
+    nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
     ProgramaViviendaDetalle = models.ForeignKey(ProgramaViviendaDetalle, verbose_name="ProgramaViviendaDetalle", null=False, blank=False)
     fecha_inicial = models.DateTimeField(default=None, null=False)
     fecha_final = models.DateTimeField(default=None, null=False)
@@ -406,7 +409,7 @@ class Project(models.Model):
     ubicacion_numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
     ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False , blank=False)
-    ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False , blank=False)
+    ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
     ubicacion_cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
     ubicacion_pais = models.ForeignKey(Pais, verbose_name="país", null=False , blank=False)
     area_superficie_escritura = models.DecimalField(verbose_name='superficie escritura', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
@@ -457,19 +460,19 @@ class Project(models.Model):
     tvcable_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
     equipamiento_a100 = models.CharField(verbose_name="a 100", max_length=200, null=False, blank=False)
     equipamiento_a200 = models.CharField(verbose_name="a 200", max_length=200, null=False, blank=False)
-    equipamiento_a500 = models.CharField(verbose_name="da 500", max_length=200, null=False, blank=False)
+    equipamiento_a500 = models.CharField(verbose_name="a 500", max_length=200, null=False, blank=False)
     equipamiento_regional = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
     costo_predio = models.DecimalField(verbose_name='costo del predio', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     costo_m2 = models.DecimalField(verbose_name='m2', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     costo_escrituras = models.DecimalField(verbose_name='escrituras m2', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     costo_levantamiento = models.DecimalField(verbose_name='levantamiento m2', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
-    estudiomercado_demanda = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    estudiomercado_oferta = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    estudiomercado_conclusiones = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    estudiomercado_recomendaciones = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    definicionproyecto_alternativa = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    definicionproyecto_tamaño = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    definicionproyecto_programa = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
+    estudiomercado_demanda = models.CharField(verbose_name="Estudio de Mercado Demanda", max_length=200, null=False, blank=False)
+    estudiomercado_oferta = models.CharField(verbose_name="Estudio de Mercado Oferta", max_length=200, null=False, blank=False)
+    estudiomercado_conclusiones = models.CharField(verbose_name="Estudio de Mercado Conclusiones", max_length=200, null=False, blank=False)
+    estudiomercado_recomendaciones = models.CharField(verbose_name="Estudio de Mercado Recomendaciones", max_length=200, null=False, blank=False)
+    definicionproyecto_alternativa = models.CharField(verbose_name="Alternativa", max_length=200, null=False, blank=False)
+    definicionproyecto_tamaño = models.CharField(verbose_name="Tamaño", max_length=200, null=False, blank=False)
+    definicionproyecto_programa = models.CharField(verbose_name="Programa", max_length=200, null=False, blank=False)
 
     programayarea_areaprivativa = models.DecimalField(verbose_name='area privada', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     programayarea_caseta = models.DecimalField(verbose_name='caseta', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
@@ -687,7 +690,7 @@ class Contratista(models.Model):
     rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
     class Meta:
-        verbose_name_plural = 'Empleado'
+        verbose_name_plural = 'Contratista'
 
 
     def to_serializable_dict(self):
@@ -707,15 +710,15 @@ class Contratista(models.Model):
 
 
     def __str__(self):
-        return self.nombreEmpleado
+        return self.nombreContratista
 
 
     def save(self, *args, **kwargs):
         canSave = True
 
         if canSave:
-            Logs.log("Saving new Empleado", "Te")
-            super(Empleado, self).save(*args, **kwargs)
+            Logs.log("Saving new Contratista", "Te")
+            super(Contratista, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
 
