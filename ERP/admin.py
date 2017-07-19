@@ -64,9 +64,35 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         LogFileInline,
     ]
 
+class EmpleadoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombreEmpleado','rfc')
+    search_fields = ('nombreEmpleado','rfc')
+    list_display_links = ('id', 'nombreEmpleado','rfc')
+    list_per_page = 50
 
+class ContratistaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombreContratista','rfc')
+    search_fields = ('nombreContratista','rfc')
+    list_display_links = ('id', 'nombreContratista','rfc')
+    list_per_page = 50
 
+class EmpresaAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombreEmpresa','rfc')
+    search_fields = ('nombreEmpresa','rfc')
+    list_display_links = ('id', 'nombreEmpresa','rfc')
+    list_per_page = 50
 
+class ContratoAdmin(admin.ModelAdmin):
+    list_display = ('id', 'codigo_obra','objeto_contrato')
+    search_fields = ('codigo_obra','objeto_contrato')
+    list_display_links = ('id', 'codigo_obra','objeto_contrato')
+    list_per_page = 50
+
+class PropietarioAdmin(admin.ModelAdmin):
+    list_display = ('id', 'nombrePropietario','empresa')
+    search_fields = ('nombrePropietario','empresa')
+    list_display_links = ('id', 'nombrePropietario','empresa')
+    list_per_page = 50
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(LineItem, LineItemAdmin)
@@ -75,3 +101,8 @@ admin.site.register(ConceptMaster, ConceptMasterAdmin)
 admin.site.register(ConceptDetail, ConceptDetailAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
+admin.site.register(Empleado, EmpleadoAdmin)
+admin.site.register(Contratista, ContratistaAdmin)
+admin.site.register(Empresa, EmpresaAdmin)
+admin.site.register(Contrato, ContratoAdmin)
+admin.site.register(Propietario, PropietarioAdmin)

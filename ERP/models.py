@@ -251,8 +251,7 @@ class Empleado(models.Model):
             Logs.log("Couldn't save")
 
 class Contratista(models.Model):
-        nombreContratista = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False,
-                                             editable=True)
+        nombreContratista = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
         calle = models.TextField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
         numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
         colonia = models.TextField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
@@ -262,8 +261,8 @@ class Contratista(models.Model):
         cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
         rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
-    class Meta:
-        verbose_name_plural = 'Empleado'
+        class Meta:
+            verbose_name_plural = 'Contratista'
 
         def to_serializable_dict(self):
             ans = model_to_dict(self)
@@ -281,17 +280,17 @@ class Contratista(models.Model):
             return ans
 
 
-    def __str__(self):
-        return self.nombreContratista
+        def __str__(self):
+            return self.nombreContratista
 
-        def save(self, *args, **kwargs):
-            canSave = True
+            def save(self, *args, **kwargs):
+                canSave = True
 
-        if canSave:
-            Logs.log("Saving new Contratista", "Te")
-            super(Contratista, self).save(*args, **kwargs)
-        else:
-            Logs.log("Couldn't save")
+            if canSave:
+                Logs.log("Saving new Contratista", "Te")
+                super(Contratista, self).save(*args, **kwargs)
+            else:
+                Logs.log("Couldn't save")
 
 class Empresa(models.Model):
         nombreEmpresa = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
@@ -378,7 +377,7 @@ class Contrato(models.Model):
         ans['pago_final'] = str(self.pago_final)
         ans['observaciones'] = str(self.observaciones)
 
-            return ans
+        return ans
 
         def __str__(self):
             return self.observaciones
