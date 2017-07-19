@@ -196,58 +196,59 @@ class ModalidadContrato(models.Model):
                 Logs.log("Couldn't save")
 
 class Empleado(models.Model):
-        nombreEmpleado = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
-        calle = models.TextField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
-        numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
-        colonia = models.TextField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
-        municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
-        estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
-        pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
-        cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
-        rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
-        fecha_contrato = models.DateTimeField(verbose_name='Fecha de Contrato', auto_now_add=True)
-        modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Contrato', null=False, blank=False)
-        puesto = models.ForeignKey(Puesto, verbose_name='Puesto', null=False, blank=False)
-        sueldo_inicial = models.DecimalField(verbose_name='sueldo_inicial', decimal_places=2, blank=False, null=False,
-                                             default=0, max_digits=20)
-        sueldo_actual = models.DecimalField(verbose_name='sueldo_actual', decimal_places=2, blank=False, null=False,
-                                            default=0, max_digits=20)
-        antiguedad = models.CharField(verbose_name='Antiguedad', max_length=50, null=False, blank=False, editable=True)
+    nombreEmpleado = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
+    calle = models.TextField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
+    numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
+    colonia = models.TextField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
+    municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
+    estado = models.ForeignKey(Estado,verbose_name='Estado', null=False, blank=False)
+    pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
+    cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
+    rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
+    fecha_contrato = models.DateTimeField(verbose_name='Fecha de Contrato', auto_now_add=True)
+    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Contrato', null=False, blank=False)
+    puesto = models.ForeignKey(Puesto, verbose_name='Puesto', null=False, blank=False)
+    sueldo_inicial = models.DecimalField (verbose_name='sueldo_inicial', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
+    sueldo_actual = models.DecimalField(verbose_name='sueldo_actual', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
+    antiguedad = models.CharField(verbose_name='Antiguedad', max_length=50, null=False, blank=False, editable=True)
 
-        class Meta:
-            verbose_name_plural = 'Empleado'
+    class Meta:
+        verbose_name_plural = 'Empleado'
 
-        def to_serializable_dict(self):
-            ans = model_to_dict(self)
-            ans['id'] = str(self.id)
-            ans['nombreEmpleado'] = str(self.nombreEmpleado)
-            ans['calle'] = str(self.calle)
-            ans['numero'] = str(self.numero)
-            ans['colonia'] = str(self.colonia)
-            ans['municipio'] = str(self.municipio.nombreMunicipio)
-            ans['estado'] = str(self.estado.nombre_estado)
-            ans['pais'] = str(self.pais.nombrePais)
-            ans['cp'] = str(self.cp)
-            ans['rfc'] = str(self.rfc)
-            ans['fecha_contrato'] = str(self.fecha_contrato)
-            ans['modalidad_contrato'] = str(self.modalidad_contrato.modalidadContrato)
-            ans['puesto'] = str(self.puesto.nombrePuesto)
-            ans['sueldo_inicial'] = str(self.sueldo_inicial)
-            ans['sueldo_actual'] = str(self.sueldo_actual)
-            ans['antiguedad'] = str(self.antiguedad)
-            return ans
 
-        def __str__(self):
-            return self.nombreEmpleado
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['id'] = str(self.id)
+        ans['nombreEmpleado'] = str(self.nombreEmpleado)
+        ans['calle'] = str(self.calle)
+        ans['numero'] = str(self.numero)
+        ans['colonia'] = str(self.colonia)
+        ans['municipio'] = str(self.municipio.nombreMunicipio)
+        ans['estado'] = str(self.estado.nombre_estado)
+        ans['pais'] = str(self.pais.nombrePais)
+        ans['cp'] = str(self.cp)
+        ans['rfc'] = str(self.rfc)
+        ans['fecha_contrato'] = str(self.fecha_contrato)
+        ans['modalidad_contrato'] = str(self.modalidad_contrato.modalidadContrato)
+        ans['puesto'] = str(self.puesto.nombrePuesto)
+        ans['sueldo_inicial'] = str(self.sueldo_inicial)
+        ans['sueldo_actual'] = str(self.sueldo_actual)
+        ans['antiguedad'] = str(self.antiguedad)
+        return ans
 
-        def save(self, *args, **kwargs):
-            canSave = True
 
-            if canSave:
-                Logs.log("Saving new Empleado", "Te")
-                super(Empleado, self).save(*args, **kwargs)
-            else:
-                Logs.log("Couldn't save")
+    def __str__(self):
+        return self.nombreEmpleado
+
+
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Empleado", "Te")
+            super(Empleado, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 class Contratista(models.Model):
         nombreContratista = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False,
@@ -261,8 +262,8 @@ class Contratista(models.Model):
         cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
         rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
-        class Meta:
-            verbose_name_plural = 'Empleado'
+    class Meta:
+        verbose_name_plural = 'Empleado'
 
         def to_serializable_dict(self):
             ans = model_to_dict(self)
@@ -279,17 +280,18 @@ class Contratista(models.Model):
 
             return ans
 
-        def __str__(self):
-            return self.nombreEmpleado
+
+    def __str__(self):
+        return self.nombreContratista
 
         def save(self, *args, **kwargs):
             canSave = True
 
-            if canSave:
-                Logs.log("Saving new Empleado", "Te")
-                super(Empleado, self).save(*args, **kwargs)
-            else:
-                Logs.log("Couldn't save")
+        if canSave:
+            Logs.log("Saving new Contratista", "Te")
+            super(Contratista, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 class Empresa(models.Model):
         nombreEmpresa = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
@@ -335,59 +337,46 @@ class Empresa(models.Model):
                 Logs.log("Couldn't save")
 
 class Contrato(models.Model):
-        no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=False,
-                                         editable=True)
-        modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Contrato', null=False, blank=False)
-        dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False,
-                                       editable=True)
-        codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False,
-                                       editable=True)
-        contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
-        objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
-                                           editable=True)
-        fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', auto_now_add=True)
-        dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False,
-                                         editable=True)
-        fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', auto_now_add=True)
-        fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', auto_now_add=True)
-        lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False,
-                                           editable=True)
-        monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False,
-                                             null=False,
-                                             default=0, max_digits=20)
-        monto_contrato_iva = models.DecimalField(verbose_name='Monto de Contrato con IVA', decimal_places=2,
-                                                 blank=False,
-                                                 null=False, default=0, max_digits=20)
-        pago_inicial = models.DecimalField(verbose_name='Pago Inicial', decimal_places=2, blank=False, null=False,
-                                           default=0, max_digits=20)
-        pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=False, null=False,
-                                         default=0,
-                                         max_digits=20)
-        observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
-                                         editable=True)
+    no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=False, editable=True)
+    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Contrato', null=False, blank=False)
+    dependencia = models.CharField (verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
+    codigo_obra = models.CharField (verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
+    contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
+    objeto_contrato = models.TextField (verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False, editable=True)
+    fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', auto_now_add=True)
+    dias_pactados = models.CharField (verbose_name='Días Pactados', max_length=50, null=False, blank=False, editable=True)
+    fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', auto_now_add=True)
+    fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', auto_now_add=True)
+    lugar_ejecucion = models.TextField (verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False, editable=True)
+    monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
+    monto_contrato_iva = models.DecimalField(verbose_name='Monto de Contrato con IVA', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
+    pago_inicial = models.DecimalField(verbose_name='Pago Inicial', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
+    pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
+    observaciones = models.TextField (verbose_name='Observaciones', max_length=500, null=False, blank=False, editable=True)
 
-        class Meta:
-            verbose_name_plural = 'Contrato'
+    class Meta:
+        verbose_name_plural = 'Contrato'
 
-        def to_serializable_dict(self):
-            ans = model_to_dict(self)
-            ans['id'] = str(self.id)
-            ans['no_licitacion'] = str(self.nombreContratista)
-            ans['modalidad_contrato'] = str(self.modalidad_contrato.modalidadContrato)
-            ans['dependencia'] = str(self.dependencia)
-            ans['codigo_obra'] = str(self.codigo_obra)
-            ans['contratista'] = str(self.contratista.nombreContratista)
-            ans['objeto_contrato'] = str(self.objeto_contrato)
-            ans['fecha_firma'] = str(self.fecha_firma)
-            ans['dias_pactados'] = str(self.dias_pactados)
-            ans['fecha_inicio'] = str(self.fecha_inicio)
-            ans['fecha_termino'] = str(self.fecha_termino)
-            ans['lugar_ejecucion'] = str(self.lugar_ejecucion)
-            ans['monto_contrato'] = str(self.monto_contrato)
-            ans['monto_contrato_iva'] = str(self.monto_contrato_iva)
-            ans['pago_inicial'] = str(self.pago_inicial)
-            ans['pago_final'] = str(self.pago_final)
-            ans['observaciones'] = str(self.observaciones)
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['id'] = str(self.id)
+        ans['no_licitacion'] = str(self.nombreContratista)
+        ans['modalidad_contrato'] = str(self.modalidad_contrato.modalidadContrato)
+        ans['dependencia'] = str(self.dependencia)
+        ans['codigo_obra'] = str(self.codigo_obra)
+        ans['contratista'] = str(self.contratista.nombreContratista)
+        ans['objeto_contrato'] = str(self.objeto_contrato)
+        ans['fecha_firma'] = str(self.fecha_firma)
+        ans['dias_pactados'] = str(self.dias_pactados)
+        ans['fecha_inicio'] = str(self.fecha_inicio)
+        ans['fecha_termino'] = str(self.fecha_termino)
+        ans['lugar_ejecucion'] = str(self.lugar_ejecucion)
+        ans['monto_contrato'] = str(self.monto_contrato)
+        ans['monto_contrato_iva'] = str(self.monto_contrato_iva)
+        ans['pago_inicial'] = str(self.pago_inicial)
+        ans['pago_final'] = str(self.pago_final)
+        ans['observaciones'] = str(self.observaciones)
 
             return ans
 
