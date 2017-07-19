@@ -1,0 +1,85 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />
+
+
+{% endblock %}
+
+{% comment %}{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}{% endcomment %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+<script src="../../static/admin/js/custom.js"></script>
+    <script type="text/javascript" src="{% static "admin/assets/ajax/SeriesCategorias.js"%}"></script>
+<script src="../../static/admin/assets/graficas/ajax/servicioscomerciales.js"></script>
+<script src="../../static/admin/assets/graficas/ajax/preferenciasporusuario.js"></script>
+<script src="../../static/admin/assets/graficas/ajax/SetGraficas.js"></script>
+<script src="../../static/admin/assets/ajax/setMapa.js"></script>
+<script src="../../static/admin/assets/ajax/utilerias.js"></script>
+
+<div class="row">
+    <div class="col-md-3 col-xs-12 col-sm-6">
+        <div class="box-border box-300">
+            {% include "admin/servicios_comerciales.html" %}
+        </div>
+    </div>
+    <div class="col-md-3 col-xs-12 col-sm-6 xs-padd">
+        <div class="box-border box-300">
+            {% include "admin/servicios_comerciales_VvsM.html" %}
+        </div>
+    </div>
+    <div class="col-md-6 col-xs-12 col-sm-12 xs-padd sm-padd">
+        <div class="box-border box-300">
+            <div class="rainbow"></div>
+            {% include "admin/servicios_comerciales_region.html" %}
+        </div>
+    </div>
+</div>
+<div class="row pad-12">
+    <div class="col-md-6 col-xs-12 col-sm-12">
+        <div class="box-border box-300">
+            {% include "admin/finanzas.html" %}
+        </div>
+    </div>
+    <div class="col-md-3 col-xs-12 col-sm-6 xs-padd sm-padd">
+        <div class="box-border box-300">
+           {% include "admin/mercadotecnia.html" %}
+        </div>
+    </div>
+    <div class="col-md-3 col-xs-12 col-sm-6 xs-padd sm-padd">
+        <div class="box-border box-145">
+            {% include "admin/legal.html" %}
+
+        </div>
+        <div class="box-border box-145 mar-10">
+            {% include "admin/informatica.html" %}
+
+        </div>
+    </div>
+</div>
+
+    <script src="{% static "admin/js/custom.js"%}"></script>
+    <script>
+        $('ul.dropdown-menu  [data-toggle=dropdown] ').on('click', function(event) {
+            // Avoid following the href location when clicking
+            event.preventDefault();
+            // Avoid having the menu to close when clicking
+            event.stopPropagation();
+            // If a menu is already open we close it
+            $('ul.dropdown-menu  [data-toggle=dropdown] ').parent().removeClass('open');
+            // opening the one you clicked on
+            $(this).parent().addClass('open');
+        });
+    </script>
+
+<script>
+
+</script>
+{% endblock %}
+

@@ -1,0 +1,127 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" />
+    <!-- css carousel -->
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/owl.carousel.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/owl.theme.default.min.css" %}" />
+
+{{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+{% if form.errors and not form.non_field_errors %}
+<p class="errornote">
+{% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+</p>
+{% endif %}
+
+{% if form.non_field_errors %}
+{% for error in form.non_field_errors %}
+<p class="errornote">
+    {{ error }}
+</p>
+{% endfor %}
+{% endif %}
+
+    <div class="row xs-center">
+        <div class="col-sm-6 hidden-xs">
+            <div class="owl-carousel">
+                <div class="item"><img src="{% static "admin/img/001_Pronosticos_GAL.png" %}"> </div>
+                <div class="item"><img src="{% static "admin/img/002_Pronosticos_GAL.png" %}"></div>
+                 <div class="item"><img src="{% static "admin/img/003_Pronosticos_GAL.png" %}"></div>
+                 <div class="item"><img src="{% static "admin/img/004_Pronosticos_GAL.png" %}"></div>
+                 <div class="item"><img src="{% static "admin/img/005_Pronosticos_GAL.png" %}"></div>
+            </div>
+        </div>
+        <div class="col-sm-1 hidden-xs">&nbsp;</div>
+        <div class="col-sm-5 col-xs-12">
+            {% if user.is_authenticated %}
+                <p class="errornote">
+                {% blocktrans trimmed %}
+                    You are authenticated as {{ username }}, but are not authorized to
+                    access this page. Would you like to login to a different account?
+                {% endblocktrans %}
+                </p>
+                {% endif %}
+
+                {% comment %}<form action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+                  <div class="form-row">
+                    {{ form.username.errors }}
+                    {{ form.username.label_tag }} {{ form.username }}
+                  </div>
+                  <div class="form-row">
+                    {{ form.password.errors }}
+                    {{ form.password.label_tag }} {{ form.password }}
+                    <input type="hidden" name="next" value="{{ next }}" />
+                  </div>
+                  {% url 'admin_password_reset' as password_reset_url %}
+                  {% if password_reset_url %}
+                  <div class="password-reset-link">
+                    <a href="{{ password_reset_url }}">{% trans 'Forgotten your password or username?' %}</a>
+                  </div>
+                  {% endif %}
+                  <div class="submit-row">
+                    <label>&nbsp;</label><input type="submit" value="{% trans 'Log in' %}" />
+                  </div>
+                </form>{% endcomment %}
+
+
+        <!--login -->
+        <h1 class="text-center">Iniciar Sesión</h1>
+        <hr>
+          <form class="form col-md-12 center-block"action="{{ app_path }}" method="post" id="login-form">{% csrf_token %}
+            <div class="form-group">
+                {{ form.username.errors }}
+              <input id="id_username" maxlength="254" name="username" type="text" class="form-control input-lg" placeholder="Usuario">
+            </div>
+            <div class="form-group">
+                 {{ form.password.errors }}
+              <input id="id_password" name="password" type="password" class="form-control input-lg" placeholder="Contraseña">
+            </div>
+            <div class="form-group text-center">
+              <button class="btn btn-default " type="submit" value="{% trans 'Log in' %}">Entrar</button>
+                <hr>
+                <div class="text-center">
+                    <span class="fa-stack fa-lg">
+                      <i class="fa fa-circle fa-stack-2x color-orange"></i>
+                      <i class="fa fa-key fa-stack-1x fa-inverse"></i>
+                    </span>
+                    {% url 'admin_password_reset' as password_reset_url %}
+                    <a href="{{ password_reset_url }}"><span class="user-pass">¿Olvidaste tu contraseña?</span></a>
+                </div>
+            </div>
+          </form>
+
+
+
+        </div>
+    </div>
+    <script src="{% static "admin/js/owl.carousel.min.js" %}"></script>
+
+    <script>
+              var owl = $('.owl-carousel');
+              owl.owlCarousel({
+                items: 1,
+                loop: true,
+                margin: 10,
+                autoplay: true,
+
+                autoplayTimeout: 3000,
+                autoplayHoverPause: true
+              });
+
+    </script>
+{% endblock %}
+<!-- js carousel -->
