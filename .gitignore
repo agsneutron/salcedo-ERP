@@ -1,6 +1,9 @@
 # Files
 *.pyc
 SalcedoERP/local_settings.py
+ERP/migrations/
+Logs/migrations/
+Users/migrations/
 
 #Folders
 .idea
