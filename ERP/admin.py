@@ -7,9 +7,9 @@ from django.contrib import admin
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = ('id', 'key','name',)
-    search_fields = ('key','name',)
-    list_display_links = ('id', 'key', 'name',)
+    list_display = ('id', 'key','nombreProyecto',)
+    search_fields = ('key','nombreProyecto',)
+    list_display_links = ('id', 'key', 'nombreProyecto',)
     list_per_page = 50
 
 class LineItemAdmin(admin.ModelAdmin):
