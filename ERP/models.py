@@ -184,7 +184,7 @@ class ModalidadContrato(models.Model):
             return ans
 
         def __str__(self):
-            return self.nombre_puesto
+            return self.modalidadContrato
 
         def save(self, *args, **kwargs):
             canSave = True
@@ -301,7 +301,7 @@ class Empresa(models.Model):
         estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
         pais = models.ForeignKey(Pais, verbose_name='Municipio', null=False, blank=False)
         cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
-        telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=False, blank=False, editable=True)
+        telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
         rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
         class Meta:
@@ -337,7 +337,7 @@ class Empresa(models.Model):
 
 class Contrato(models.Model):
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=False, editable=True)
-    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Contrato', null=False, blank=False)
+    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False, blank=False)
     dependencia = models.CharField (verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
     codigo_obra = models.CharField (verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
@@ -353,8 +353,8 @@ class Contrato(models.Model):
     pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     observaciones = models.TextField (verbose_name='Observaciones', max_length=500, null=False, blank=False, editable=True)
 
-    class Meta:
-        verbose_name_plural = 'Contrato'
+    #class Meta:
+    #    verbose_name_plural = 'Contrato'
 
 
     def to_serializable_dict(self):
@@ -397,14 +397,14 @@ class Propietario(models.Model):
     nombrePropietario = models.CharField(verbose_name="propietario", max_length=200, null=False, blank=False)
     calle = models.CharField(verbose_name="calle", max_length=200, null=False, blank=False)
     numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
-    colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
+    colonia = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
     municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
     estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
     pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
     cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
-    telefono1 = models.CharField(verbose_name="calle", max_length=20, null=False, blank=False)
-    telefono2 = models.CharField(verbose_name="calle", max_length=20, null=False, blank=False)
-    email = models.CharField(verbose_name="calle", max_length=100, null=False, blank=False)
+    telefono1 = models.CharField(verbose_name="Telefono 1", max_length=20, null=True, blank=True)
+    telefono2 = models.CharField(verbose_name="Telefono 2", max_length=20, null=True, blank=True)
+    email = models.CharField(verbose_name="e mail", max_length=100, null=True, blank=True)
     empresa = models.ForeignKey(Empresa, verbose_name="empresa", null=False, blank=False)
 
     class Meta:
@@ -439,6 +439,28 @@ class Propietario(models.Model):
         else:
             Logs.log("Couldn't save")
 
+def content_file_documento_fuente(instance, filename):
+    # print instance.identificador_unico
+    # ext = filename.split('.')[-1]
+    # filename = instance.identificador_unico + '_ANTES.'+ext
+    return '/'.join(['documentosFuente', instance.proyecto.key, filename])
+
+
+class DocumentoFuente(models.Model):
+    descripcion = models.CharField(max_length=50, )
+    documento = models.FileField(upload_to=content_file_documento_fuente, )
+    tipoProyectoDetalle = models.ForeignKey('TipoProyectoDetalle', )
+
+    def __str__(self):
+        return self.descripcion
+
+    def __unicode__(self):
+        return self.descripcion
+
+    def delete(self, using=None):
+        self.documento.delete()
+        super(DocumentoFuente, self).delete(using)
+
 # ProgramaVivienda
 class TipoProyectoDetalle(models.Model):
     proyecto = models.ForeignKey('Project', verbose_name="proyecto", null=True, blank=True)
@@ -452,6 +474,7 @@ class TipoProyectoDetalle(models.Model):
     m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=False, null=False,
                                     default=0,
                                     max_digits=20)
+    documento = models.FileField(blank=True, null=True,upload_to=content_file_documento_fuente, )
 
     class Meta:
         unique_together = [("proyecto","NombreTipoProyecto")]
@@ -485,88 +508,89 @@ class Project(models.Model):
                                                     null=False, default=0, max_digits=20)
     area_superficie_levantamiento = models.DecimalField(verbose_name='superficie levantamiento', decimal_places=2,
                                                         blank=False, null=False, default=0, max_digits=20)
-    estadolegal_documento_propiedad = models.CharField(verbose_name="calle", max_length=200, null=False, blank=False)
-    estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=False, blank=False)
-    estadolegal_predial = models.CharField(verbose_name="predial", max_length=200, null=False, blank=False)
-    estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=False, blank=False)
-    restrccion_vial = models.CharField(verbose_name="vial", max_length=200, null=False, blank=False)
-    restrccion_cna = models.CharField(verbose_name="cna", max_length=200, null=False, blank=False)
-    restrccion_cfe = models.CharField(verbose_name="cfe", max_length=200, null=False, blank=False)
-    restrccion_pemex = models.CharField(verbose_name="pemex", max_length=200, null=False, blank=False)
-    restrccion_inha = models.CharField(verbose_name="inha", max_length=200, null=False, blank=False)
-    restrccion_otros = models.CharField(verbose_name="otros", max_length=200, null=False, blank=False)
-    restrccion_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
-    usosuelo_pmdu = models.CharField(verbose_name="pmdu", max_length=200, null=False, blank=False)
-    usosuelo_densidad = models.CharField(verbose_name="densidad", max_length=200, null=False, blank=False)
-    usosuelo_loteminimo = models.DecimalField(verbose_name='lote mínimo', decimal_places=2, blank=False, null=False,
+    
+    estadolegal_documento_propiedad = models.CharField(verbose_name="calle", max_length=200, null=True, blank=True)
+    estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
+    estadolegal_predial = models.CharField(verbose_name="predial", max_length=200, null=True, blank=True)
+    estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
+    restrccion_vial = models.CharField(verbose_name="vial", max_length=200, null=True, blank=True)
+    restrccion_cna = models.CharField(verbose_name="cna", max_length=200, null=True, blank=True)
+    restrccion_cfe = models.CharField(verbose_name="cfe", max_length=200, null=True, blank=True)
+    restrccion_pemex = models.CharField(verbose_name="pemex", max_length=200, null=True, blank=True)
+    restrccion_inha = models.CharField(verbose_name="inha", max_length=200, null=True, blank=True)
+    restrccion_otros = models.CharField(verbose_name="otros", max_length=200, null=True, blank=True)
+    restrccion_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    usosuelo_pmdu = models.CharField(verbose_name="pmdu", max_length=200, null=True, blank=True)
+    usosuelo_densidad = models.CharField(verbose_name="densidad", max_length=200, null=True, blank=True)
+    usosuelo_loteminimo = models.DecimalField(verbose_name='lote mínimo', decimal_places=2, blank=True, null=True,
                                               default=0, max_digits=20)
-    usosuelo_m2construccion = models.DecimalField(verbose_name='m2 de construcción', decimal_places=2, blank=False,
-                                                  null=False, default=0, max_digits=20)
-    usosuelo_arealibre = models.CharField(verbose_name="area libre", max_length=200, null=False, blank=False)
-    usosuelo_altura = models.CharField(verbose_name="altura", max_length=200, null=False, blank=False)
-    usosuelo_densidadrequerida = models.CharField(verbose_name="densidad requerida", max_length=200, null=False,
-                                                  blank=False)
-    hidraulica_fuente = models.CharField(verbose_name="fuente", max_length=200, null=False, blank=False)
-    hidraulica_distancia = models.CharField(verbose_name="distacia", max_length=200, null=False, blank=False)
-    hidraulica_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
-    sanitaria_tipo = models.CharField(verbose_name="tipo", max_length=200, null=False, blank=False)
-    sanitaria_responsable = models.CharField(verbose_name="responsable", max_length=200, null=False, blank=False)
-    sanitaria_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
-    pluvial_tipo = models.CharField(verbose_name="tipo", max_length=200, null=False, blank=False)
-    pluvial_responsable = models.CharField(verbose_name="responsable", max_length=200, null=False, blank=False)
-    pluvial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
-    vial_viaacceso = models.CharField(verbose_name="vias de acceso", max_length=200, null=False, blank=False)
-    vial_distancia = models.CharField(verbose_name="distancia", max_length=200, null=False, blank=False)
-    vial_carriles = models.CharField(verbose_name="carriles", max_length=200, null=False, blank=False)
-    vial_seccion = models.CharField(verbose_name="seccion", max_length=200, null=False, blank=False)
-    vial_tipopavimento = models.CharField(verbose_name="tipo de pavimento", max_length=200, null=False, blank=False)
-    vial_estadoconstruccion = models.CharField(verbose_name="estado de construcción", max_length=200, null=False,
-                                               blank=False)
-    vial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
-    electricidad_tipo = models.CharField(verbose_name="tipo", max_length=200, null=False, blank=False)
-    electricidad_distancia = models.CharField(verbose_name="distancia", max_length=200, null=False, blank=False)
-    electricidad_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
-    alumbradopublico_tipo = models.CharField(verbose_name="tipo", max_length=200, null=False, blank=False)
-    alumbradopublico_distancia = models.CharField(verbose_name="distancia", max_length=200, null=False, blank=False)
-    alumbradopublico_observaciones = models.CharField(verbose_name="dobservaciones", max_length=200, null=False,
-                                                      blank=False)
-    telefonia_distancia = models.CharField(verbose_name="distancia", max_length=200, null=False, blank=False)
-    telefonia_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
-    tvcable_distancia = models.CharField(verbose_name="distancia", max_length=200, null=False, blank=False)
-    tvcable_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=False, blank=False)
-    equipamiento_a100 = models.CharField(verbose_name="a 100", max_length=200, null=False, blank=False)
-    equipamiento_a200 = models.CharField(verbose_name="a 200", max_length=200, null=False, blank=False)
-    equipamiento_a500 = models.CharField(verbose_name="da 500", max_length=200, null=False, blank=False)
-    equipamiento_regional = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    costo_predio = models.DecimalField(verbose_name='costo del predio', decimal_places=2, blank=False, null=False,
+    usosuelo_m2construccion = models.DecimalField(verbose_name='m2 de construcción', decimal_places=2, blank=True,
+                                                  null=True, default=0, max_digits=20)
+    usosuelo_arealibre = models.CharField(verbose_name="area libre", max_length=200, null=True, blank=True)
+    usosuelo_altura = models.CharField(verbose_name="altura", max_length=200, null=True, blank=True)
+    usosuelo_densidadrequerida = models.CharField(verbose_name="densidad requerida", max_length=200, null=True,
+                                                  blank=True)
+    hidraulica_fuente = models.CharField(verbose_name="fuente", max_length=200, null=True, blank=True)
+    hidraulica_distancia = models.CharField(verbose_name="distacia", max_length=200, null=True, blank=True)
+    hidraulica_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    sanitaria_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
+    sanitaria_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
+    sanitaria_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    pluvial_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
+    pluvial_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
+    pluvial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    vial_viaacceso = models.CharField(verbose_name="vias de acceso", max_length=200, null=True, blank=True)
+    vial_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
+    vial_carriles = models.CharField(verbose_name="carriles", max_length=200, null=True, blank=True)
+    vial_seccion = models.CharField(verbose_name="seccion", max_length=200, null=True, blank=True)
+    vial_tipopavimento = models.CharField(verbose_name="tipo de pavimento", max_length=200, null=True, blank=True)
+    vial_estadoconstruccion = models.CharField(verbose_name="estado de construcción", max_length=200, null=True,
+                                               blank=True)
+    vial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    electricidad_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
+    electricidad_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
+    electricidad_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    alumbradopublico_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
+    alumbradopublico_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
+    alumbradopublico_observaciones = models.CharField(verbose_name="dobservaciones", max_length=200, null=True,
+                                                      blank=True)
+    telefonia_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
+    telefonia_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    tvcable_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
+    tvcable_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    equipamiento_a100 = models.CharField(verbose_name="a 100", max_length=200, null=True, blank=True)
+    equipamiento_a200 = models.CharField(verbose_name="a 200", max_length=200, null=True, blank=True)
+    equipamiento_a500 = models.CharField(verbose_name="da 500", max_length=200, null=True, blank=True)
+    equipamiento_regional = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+    costo_predio = models.DecimalField(verbose_name='costo del predio', decimal_places=2, blank=True, null=True,
                                        default=0, max_digits=20)
-    costo_m2 = models.DecimalField(verbose_name='m2', decimal_places=2, blank=False, null=False, default=0,
+    costo_m2 = models.DecimalField(verbose_name='m2', decimal_places=2, blank=True, null=True, default=0,
                                    max_digits=20)
-    costo_escrituras = models.DecimalField(verbose_name='escrituras m2', decimal_places=2, blank=False, null=False,
+    costo_escrituras = models.DecimalField(verbose_name='escrituras m2', decimal_places=2, blank=True, null=True,
                                            default=0, max_digits=20)
-    costo_levantamiento = models.DecimalField(verbose_name='levantamiento m2', decimal_places=2, blank=False,
-                                              null=False, default=0, max_digits=20)
-    estudiomercado_demanda = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    estudiomercado_oferta = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    estudiomercado_conclusiones = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    estudiomercado_recomendaciones = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    definicionproyecto_alternativa = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    definicionproyecto_tamano = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
-    definicionproyecto_programa = models.CharField(verbose_name="regional", max_length=200, null=False, blank=False)
+    costo_levantamiento = models.DecimalField(verbose_name='levantamiento m2', decimal_places=2, blank=True,
+                                              null=True, default=0, max_digits=20)
+    estudiomercado_demanda = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+    estudiomercado_oferta = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+    estudiomercado_conclusiones = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+    estudiomercado_recomendaciones = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+    definicionproyecto_alternativa = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+    definicionproyecto_tamano = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+    definicionproyecto_programa = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
 
-    programayarea_areaprivativa = models.DecimalField(verbose_name='area privada', decimal_places=2, blank=False,
-                                                      null=False, default=0, max_digits=20)
-    programayarea_caseta = models.DecimalField(verbose_name='caseta', decimal_places=2, blank=False, null=False,
+    programayarea_areaprivativa = models.DecimalField(verbose_name='area privada', decimal_places=2, blank=True,
+                                                      null=True, default=0, max_digits=20)
+    programayarea_caseta = models.DecimalField(verbose_name='caseta', decimal_places=2, blank=True, null=True,
                                                default=0, max_digits=20)
-    programayarea_jardin = models.DecimalField(verbose_name='jardín', decimal_places=2, blank=False, null=False,
+    programayarea_jardin = models.DecimalField(verbose_name='jardín', decimal_places=2, blank=True, null=True,
                                                default=0, max_digits=20)
-    programayarea_vialidad = models.DecimalField(verbose_name='vialidad', decimal_places=2, blank=False, null=False,
+    programayarea_vialidad = models.DecimalField(verbose_name='vialidad', decimal_places=2, blank=True, null=True,
                                                  default=0, max_digits=20)
-    programayarea_areaverde = models.DecimalField(verbose_name='área verde', decimal_places=2, blank=False, null=False,
+    programayarea_areaverde = models.DecimalField(verbose_name='área verde', decimal_places=2, blank=True, null=True,
                                                   default=0, max_digits=20)
     programayarea_estacionamientovisita = models.DecimalField(verbose_name='estacionamiento visita', decimal_places=2,
-                                                              blank=False, null=False, default=0, max_digits=20)
-    programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=False, null=False,
+                                                              blank=True, null=True, default=0, max_digits=20)
+    programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=True, null=True,
                                                    default=0, max_digits=20)
     tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
 

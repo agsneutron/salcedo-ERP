@@ -1,17 +1,23 @@
 # coding=utf-8
 from __future__ import unicode_literals
 from ERP.models import *
-from ERP.forms import TipoProyectoDetalleAddForm,AddProyectoForm
+from ERP.forms import TipoProyectoDetalleAddForm,AddProyectoForm, DocumentoFuenteForm
 
 from django.contrib import admin
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
+class DocumentoFuenteInline(admin.TabularInline):
+    model = DocumentoFuente
+    extra = 2
+    form = DocumentoFuenteForm
+
 class TipoProyectoDetalleInline(admin.TabularInline):
     form = TipoProyectoDetalleAddForm
     model = TipoProyectoDetalle
     extra = 1
     can_delete = False
+
 
 class ProjectAdmin(admin.ModelAdmin):
     form = AddProyectoForm
