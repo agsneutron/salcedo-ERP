@@ -439,6 +439,30 @@ class Propietario(models.Model):
         else:
             Logs.log("Couldn't save")
 
+# ProgramaVivienda
+class TipoProyectoDetalle(models.Model):
+    proyecto = models.ForeignKey('Project', verbose_name="proyecto", null=True, blank=True)
+    #programaVivienda = models.ForeignKey(ProgramaVivienda, related_name="proyecto_programaVivienda",
+    #                                      null=True,
+    #                                      blank=True)
+    NombreTipoProyecto = models.CharField(verbose_name="tipo Proyecto", max_length=8, null=False, blank=False)
+    numero = models.DecimalField(verbose_name='número', decimal_places=2, blank=False,
+                                          null=False,
+                                          default=0, max_digits=20)
+    m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=False, null=False,
+                                    default=0,
+                                    max_digits=20)
+
+    class Meta:
+        unique_together = [("proyecto","NombreTipoProyecto")]
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['id'] = str(self.id)
+        return ans
+
+
+
 
 # proyectos
 class Project(models.Model):
@@ -544,6 +568,7 @@ class Project(models.Model):
                                                               blank=False, null=False, default=0, max_digits=20)
     programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=False, null=False,
                                                    default=0, max_digits=20)
+    tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
 
     class Meta:
         verbose_name_plural = 'Proyectos'
@@ -574,38 +599,6 @@ class Project(models.Model):
         else:
             Logs.log("Couldn't save")
 
-
-# ProgramaVivienda
-class ProgramaViviendaDetalle(models.Model):
-    proyecto = models.ForeignKey(Project, verbose_name="proyecto", null=False, blank=False)
-    tipoProgramaVivienda = models.CharField(verbose_name="tipo vivienda", max_length=8, null=False, blank=False)
-    numeroviviendas = models.DecimalField(verbose_name='número de vivienda', decimal_places=2, blank=False, null=False,
-                                          default=0, max_digits=20)
-    m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=False, null=False, default=0,
-                                    max_digits=20)
-
-    class Meta:
-        verbose_name_plural = 'ProgramaViviendaDetalle'
-
-    def to_serializable_dict(self):
-        ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['tipoProgramaVivienda'] = str(self.tipoProgramaVivienda)
-        ans['numeroviviendas'] = str(self.numeroviviendas)
-        ans['m2terreno'] = str(self.m2terreno)
-        return ans
-
-    def __str__(self):
-        return self.tipo
-
-    def save(self, *args, **kwargs):
-        canSave = True
-
-        if canSave:
-            Logs.log("Saving new ProgramaViviendaDetalle", "Te")
-            super(ProgramaViviendaDetalle, self).save(*args, **kwargs)
-        else:
-            Logs.log("Couldn't save")
 
 
 
