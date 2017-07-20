@@ -2,6 +2,7 @@ from django import forms
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente
 from datetime import datetime
 from django.utils.safestring import mark_safe
+from Logs.controller import Logs
 import os
 from django.conf import settings
 
@@ -14,12 +15,12 @@ class TipoProyectoDetalleAddForm(forms.ModelForm):
         instance = super(TipoProyectoDetalleAddForm, self).save(commit=False)
         if instance.id is not None:  # Revisa si existe ese objeto
             a = TipoProyectoDetalle.objects.filter(id=instance.id).first()
+            Logs.log(a.documento.name, "Mensaje")
+            if a.documento.name != "":  # revisa si tiene una foto asignada
 
-            if a.documento != "":  # revisa si tiene una foto asignada
+                if instance.documento.name != a.documento.name:  # revisa si cambio la foto asignada
 
-                if instance.documento != a.documento:  # revisa si cambio la foto asignada
-                    route = settings.MEDIA_ROOT + "/" + a.documento  # borra la anterior y pon la nueva
-                    print route
+                    route = settings.MEDIA_ROOT + "/" + a.documento.name  # borra la anterior y pon la nueva
                     try:
                         os.remove(route)
                     except Exception as e:
