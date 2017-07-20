@@ -4,8 +4,7 @@
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}" />
     <!-- css carousel -->
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/owl.carousel.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/owl.theme.default.min.css" %}" />
+
 
 {{ form.media }}
 {% endblock %}
@@ -34,6 +33,10 @@
 </p>
 {% endfor %}
 {% endif %}
+
+
+
+
 
     <div class="row xs-center">
         <div class="col-sm-6 hidden-xs">
@@ -108,20 +111,6 @@
 
         </div>
     </div>
-    <script src="{% static "admin/js/owl.carousel.min.js" %}"></script>
 
-    <script>
-              var owl = $('.owl-carousel');
-              owl.owlCarousel({
-                items: 1,
-                loop: true,
-                margin: 10,
-                autoplay: true,
-
-                autoplayTimeout: 3000,
-                autoplayHoverPause: true
-              });
-
-    </script>
 {% endblock %}
 <!-- js carousel -->

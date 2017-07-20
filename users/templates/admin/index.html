@@ -15,13 +15,6 @@
 
 {% block content %}
 
-<script src="../../static/admin/js/custom.js"></script>
-    <script type="text/javascript" src="{% static "admin/assets/ajax/SeriesCategorias.js"%}"></script>
-<script src="../../static/admin/assets/graficas/ajax/servicioscomerciales.js"></script>
-<script src="../../static/admin/assets/graficas/ajax/preferenciasporusuario.js"></script>
-<script src="../../static/admin/assets/graficas/ajax/SetGraficas.js"></script>
-<script src="../../static/admin/assets/ajax/setMapa.js"></script>
-<script src="../../static/admin/assets/ajax/utilerias.js"></script>
 
 <div class="row">
     <div class="col-md-3 col-xs-12 col-sm-6">
@@ -64,22 +57,6 @@
     </div>
 </div>
 
-    <script src="{% static "admin/js/custom.js"%}"></script>
-    <script>
-        $('ul.dropdown-menu  [data-toggle=dropdown] ').on('click', function(event) {
-            // Avoid following the href location when clicking
-            event.preventDefault();
-            // Avoid having the menu to close when clicking
-            event.stopPropagation();
-            // If a menu is already open we close it
-            $('ul.dropdown-menu  [data-toggle=dropdown] ').parent().removeClass('open');
-            // opening the one you clicked on
-            $(this).parent().addClass('open');
-        });
-    </script>
 
-<script>
-
-</script>
 {% endblock %}
 

@@ -13,9 +13,25 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import url, include
 from django.contrib import admin
+
+from django.views.generic.base import RedirectView
+from django.contrib.auth import views as auth_views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+import users
+from django.http import HttpResponseRedirect
+from django.conf import settings
+from django.http import HttpResponseRedirect
+from django.conf import settings
+from users import urls
+
+import users
+from users import views
+admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+url(r'^users/', include(users.urls)),
+url(r'^$', RedirectView.as_view(url='/admin')),
 ]

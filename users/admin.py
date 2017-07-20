@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib import admin
-from users.models import *
+from users.models import ERPUser
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
