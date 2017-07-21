@@ -664,6 +664,7 @@ class ConceptMaster(models.Model):
     parent_concept = models.ForeignKey('self', verbose_name="Concepto Padre", null=True, blank=True)
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=True, editable=True)
     description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
+    status = models.CharField(verbose_name="Status", max_length=1, null=False, default='C', blank=False, unique=False, editable=True)
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
