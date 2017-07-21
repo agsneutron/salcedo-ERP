@@ -23,6 +23,7 @@ class ProjectAdmin(admin.ModelAdmin):
     form = AddProyectoForm
     inlines = (TipoProyectoDetalleInline,)
 
+
 class LineItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'description',)
     search_fields = ('description',)
@@ -30,11 +31,35 @@ class LineItemAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
+class LogFileInline(admin.TabularInline):
+    model = LogFile
+    extra = 0
+
+
+class ProgressEstimateLogAdmin(admin.ModelAdmin):
+    list_display = ('user', 'description', 'date')
+    search_fields = ('user', 'description', 'date')
+    list_display_links = ('user', 'description', 'date')
+    list_per_page = 50
+
+    inlines = [
+        LogFileInline,
+    ]
+
+
+class ProgressEstimateInline(admin.TabularInline):
+    model = ProgressEstimate
+    extra = 0
+
+
 class EstimateAdmin(admin.ModelAdmin):
     list_display = ('id', 'start_date','end_date')
     search_fields = ('start_date','end_date')
     list_display_links = ('start_date','end_date')
     list_per_page = 50
+    inlines = [
+        ProgressEstimateInline
+    ]
 
 
 class ConceptMasterAdmin(admin.ModelAdmin):
@@ -60,20 +85,6 @@ class UnitAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
-class LogFileInline(admin.TabularInline):
-    model = LogFile
-    extra = 0
-
-
-class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    list_display = ('user', 'description', 'date')
-    search_fields = ('user', 'description', 'date')
-    list_display_links = ('user', 'description', 'date')
-    list_per_page = 50
-
-    inlines = [
-        LogFileInline,
-    ]
 
 class EmpleadoAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombreEmpleado','rfc')
