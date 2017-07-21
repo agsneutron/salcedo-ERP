@@ -34,6 +34,7 @@ class LineItemAdmin(admin.ModelAdmin):
 
 
 class LogFileInline(admin.TabularInline):
+    fields = ('file')
     model = LogFile
     extra = 0
 

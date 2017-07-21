@@ -840,7 +840,7 @@ class ProgressEstimateLog(models.Model):
 class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Log de Estimación", null=False,
                                               blank=False)
-    url = models.CharField(verbose_name="URL", max_length=1024, null=False, blank=False)
+    file = models.FileField(verbose_name="URL", max_length=1024, null=False, blank=False)
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
 
