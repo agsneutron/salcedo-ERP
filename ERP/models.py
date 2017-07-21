@@ -440,9 +440,6 @@ class Propietario(models.Model):
             Logs.log("Couldn't save")
 
 def content_file_documento_fuente(instance, filename):
-    # print instance.identificador_unico
-    # ext = filename.split('.')[-1]
-    # filename = instance.identificador_unico + '_ANTES.'+ext
     return '/'.join(['documentosFuente', instance.proyecto.key, filename])
 
 
