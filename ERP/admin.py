@@ -56,7 +56,7 @@ class ProgressEstimateInline(admin.TabularInline):
 
 
 class EstimateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'start_date', 'end_date')
+    list_display = ('get_concept_and_line_item', 'start_date', 'end_date')
     search_fields = ('start_date', 'end_date')
     list_display_links = ('start_date', 'end_date')
     list_per_page = 50
@@ -74,6 +74,14 @@ class EstimateAdmin(admin.ModelAdmin):
                 'fields': ('start_date', 'end_date',)
         }),
     )
+
+    def get_concept_and_line_item(self, obj):
+        if obj.concept_master is not None:
+            return obj.concept_master.line_item.description + " - " + obj.concept_master.description
+        else:
+            return "-"
+
+    get_concept_and_line_item.short_description = "Concepto"
 
 
 class ConceptMasterAdmin(admin.ModelAdmin):
