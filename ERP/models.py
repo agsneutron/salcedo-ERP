@@ -771,7 +771,8 @@ class ConceptDetail(models.Model):
 
 
 class Estimate(models.Model):
-    start_date = models.DateTimeField(auto_now_add=True)
+    concept_master = models.ForeignKey(ConceptMaster, verbose_name="Concepto", null=False, blank=False, default=None)
+    start_date = models.DateTimeField(default=None, null=True)
     end_date = models.DateTimeField(default=None, null=True)
 
     class Meta:
