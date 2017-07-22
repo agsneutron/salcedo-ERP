@@ -5,12 +5,25 @@
     color: #fff;
 }
 .ms-navbar {
-    background-color: #000;
+    background-color: #f2f2f2;
     color: #fff;
     border: none;
     height: 50px;
     margin-bottom: 40px;
     box-shadow: 0 3px 3px rgba(0,0,0,.29);
+}
+.ms-navbar-white.navbar-mode .navbar-nav>li>a:before, .ms-navbar-dark.navbar-mode .navbar-nav>li>a:before, .ms-navbar-primary.navbar-mode .navbar-nav>li>a:before, .ms-header-dark+.ms-navbar-dark .navbar-nav>li>a:before, .ms-header-white+.ms-navbar-white .navbar-nav>li>a:before, .ms-header-primary+.ms-navbar-primary .navbar-nav>li>a:before {
+    background-color: #00a09b;
+    color: white;
+}
+.ms-navbar-white.navbar-mode .navbar-nav>li>a, .ms-navbar-dark.navbar-mode .navbar-nav>li>a, .ms-navbar-primary.navbar-mode .navbar-nav>li>a, .ms-header-dark+.ms-navbar-dark .navbar-nav>li>a, .ms-header-white+.ms-navbar-white .navbar-nav>li>a, .ms-header-primary+.ms-navbar-primary .navbar-nav>li>a {
+    background-color: transparent;
+    color: #333;
+}
+.ms-navbar .navbar-nav li a {
+    font-weight: 100;
+    color: #666;
+    padding: 5px 20px;
 }
 .ms-slidebar {
     background-color: #262626;
@@ -20,6 +33,13 @@
 .ms-slidebar .ms-slidebar-menu>li>a.collapsed {
     background-color: #262626;
     color: #fff;
+}
+.ms-navbar .navbar-nav li.dropdown>a i {
+    padding: 0;
+    vertical-align: middle;
+    margin-left: 0px;
+    font-size: 16px;
+        padding-bottom: 5px;
 }
 .panel {
     margin-bottom: 20px;
@@ -60,11 +80,17 @@
     padding-top: 0;
     display: inline-block;
     text-align: center;
-    margin-left: calc(50% - 50px);
+    margin-left: calc(50% - 35px);
+}
+.ms-header {
+    min-height: 80px;
+    background-color: #fff;
+    position: relative;
+    z-index: 2;
 }
 .ms-logo {
-    width: 104px;
-    height: 99px;
+    width: 71px;
+    height: 80px;
     display: inline-block;
     font-size: 0px;
     line-height: 0px;
@@ -90,13 +116,13 @@
     vertical-align: middle;
 }
 .ms-navbar-white.navbar-mode .navbar-nav>li>a:hover, .ms-navbar-white.navbar-mode .navbar-nav>li>a:focus, .ms-navbar-dark.navbar-mode .navbar-nav>li>a:hover, .ms-navbar-dark.navbar-mode .navbar-nav>li>a:focus, .ms-navbar-primary.navbar-mode .navbar-nav>li>a:hover, .ms-navbar-primary.navbar-mode .navbar-nav>li>a:focus, .ms-header-dark+.ms-navbar-dark .navbar-nav>li>a:hover, .ms-header-dark+.ms-navbar-dark .navbar-nav>li>a:focus, .ms-header-white+.ms-navbar-white .navbar-nav>li>a:hover, .ms-header-white+.ms-navbar-white .navbar-nav>li>a:focus, .ms-header-primary+.ms-navbar-primary .navbar-nav>li>a:hover, .ms-header-primary+.ms-navbar-primary .navbar-nav>li>a:focus {
-    color: #00a09b!important;
+
 }
 .ms-footer {
     padding: 12px 0;
     padding: 1.2rem 0;
     text-align: center;
-    background-color: #00a09b;
+    background-color: #204280;
     color: #fff;
     box-shadow: inset 0 2px 2px 0 rgba(0,0,0,.14), inset 0 3px 1px -2px rgba(0,0,0,.2), inset 0 1px 5px 0 rgba(0,0,0,.12);
 }
@@ -107,6 +133,10 @@
     background-color: #204280;
     color: rgba(255,255,255,.84);
 }
+.btn.btn-raised:not(.btn-link):hover.btn-primary,.btn.btn-raised:not(.btn-link):focus.btn-primary,.btn.btn-raised:not(.btn-link).active.btn-primary,.btn.btn-raised:not(.btn-link):active.btn-primary,.btn-group-raised .btn:not(.btn-link):hover.btn-primary,.btn-group-raised .btn:not(.btn-link):focus.btn-primary,.btn-group-raised .btn:not(.btn-link).active.btn-primary,.btn-group-raised .btn:not(.btn-link):active.btn-primary,.input-group-btn .btn.btn-raised:not(.btn-link):hover.btn-primary,.input-group-btn .btn.btn-raised:not(.btn-link):focus.btn-primary,.input-group-btn .btn.btn-raised:not(.btn-link).active.btn-primary,.input-group-btn .btn.btn-raised:not(.btn-link):active.btn-primary,.btn-group-raised .input-group-btn .btn:not(.btn-link):hover.btn-primary,.btn-group-raised .input-group-btn .btn:not(.btn-link):focus.btn-primary,.btn-group-raised .input-group-btn .btn:not(.btn-link).active.btn-primary,.btn-group-raised .input-group-btn .btn:not(.btn-link):active.btn-primary
+{
+    background-color:#6C7071
+}
 .card.card-primary {
     border-bottom: solid 3px #00a09b;
     border-radius: 3px;
@@ -114,6 +144,9 @@
 a {
     color: #00a09b;
     transition: all ease .1s;
+}
+.ms-hero-bg-dark-light:after {
+    background-color: #00a09b;
 }
 @media (min-width: 768px) {
     .navbar-nav {
