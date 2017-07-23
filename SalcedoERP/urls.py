@@ -16,24 +16,17 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic.base import RedirectView
-
-from django.views.generic.base import RedirectView
 from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-import users
-from django.http import HttpResponseRedirect
-from django.conf import settings
 from django.http import HttpResponseRedirect
 from django.conf import settings
 from users import urls
-
 import users
 from users import views
 admin.autodiscover()
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^users/', include(users.urls)),
     url(r'^$', RedirectView.as_view(url='/admin')),
-url(r'^users/', include(users.urls)),
-url(r'^$', RedirectView.as_view(url='/admin')),
 ]
