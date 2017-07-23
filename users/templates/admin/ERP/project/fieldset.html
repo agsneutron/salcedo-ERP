@@ -1,0 +1,883 @@
+<fieldset class="module aligned {{ fieldset.classes }}">
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    {% comment %}{% for line in fieldset %}
+        <div class="form-group{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+            {% for field in line %}
+                <div{% if not line.fields|length_is:'1' %} class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %} class="checkbox-row"{% endif %}>
+                    {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                    {% if field.is_checkbox %}
+                        {{ field.field }}{{ field.label_tag }}
+                    {% else %}
+                        {{ field.label_tag }}
+                        {% if field.is_readonly %}
+                            <p>{{ field.contents }}</p>
+                        {% else %}
+                            {{ field.field }}
+                        {% endif %}
+                    {% endif %}
+                    {% if field.field.help_text %}
+                        <p class="help">{{ field.field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}{% endcomment %}
+    <!-- card -->
+    <div class="card ">
+        <ul class="nav nav-tabs nav-tabs-full nav-tabs-5 shadow-2dp" role="tablist">
+            <li role="presentation" class="active">
+                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                    <i class="zmdi zmdi-home"></i>
+                    <span class="hidden-xs">Proyecto</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="withoutripple" href="#otro1" aria-controls="otro1" role="tab" data-toggle="tab">
+                    <i class="zmdi zmdi-account"></i>
+                    <span class="hidden-xs">Ubicacion/Áreas</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="withoutripple" href="#otro2" aria-controls="otro2" role="tab" data-toggle="tab">
+                    <i class="zmdi zmdi-email"></i>
+                    <span class="hidden-xs">Propietario/legal</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="withoutripple" href="#otro3" aria-controls="otro3" role="tab" data-toggle="tab">
+                    <i class="zmdi zmdi-settings"></i>
+                    <span class="hidden-xs">Restricciones</span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a class="withoutripple" href="#otro4" aria-controls="otro4" role="tab" data-toggle="tab">
+                    <i class="zmdi zmdi-settings"></i>
+                    <span class="hidden-xs">Analisis del sitio</span>
+                </a>
+            </li>
+        </ul>
+        <div class="card-block">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+                    <div class="row">
+                        <h2 class="text-center">Datos generales</h2>
+                        <hr>
+                        <div class="col-md-3">
+                            <div class="form-group field-key">
+                                <label class="control-label required" for="id_key">Clave del Proyecto:</label>
+                                <input type="text" name="key" id="id_key" required class=" form-control"
+                                       maxlength="255"/>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-contrato">
+                                <label class="control-label required" for="id_contrato">Contrato:</label>
+                                <div class="related-widget-wrapper">
+                                    <select name="contrato" required id="id_contrato" class="form-control selectpicker"
+                                            data-dropup-auto="false">
+                                        <option value="" selected>---------</option>
+                                    </select>
+                                    <div class="botones-select">
+                                        <a class="related-widget-wrapper-link change-related" id="change_id_contrato"
+                                           data-href-template="/admin/ERP/contrato/__fk__/change/?_to_field=id&amp;_popup=1"
+                                           title="Change selected contrato"><img
+                                                src="/static/admin/img/icon-changelink.svg" alt="Change"/></a>
+                                        <a class="related-widget-wrapper-link add-related" id="add_id_contrato"
+                                           href="/admin/ERP/contrato/add/?_to_field=id&amp;_popup=1"
+                                           title="Add another contrato"><img src="/static/admin/img/icon-addlink.svg"
+                                                                             alt="Add"/></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-propietario">
+                                <label class="control-label required" for="id_propietario">Propietario:</label>
+                                <div class="related-widget-wrapper">
+                                    <select name="propietario" required id="id_propietario"
+                                            class="form-control selectpicker" data-dropup-auto="false">
+                                        <option value="" selected>---------</option>
+                                    </select>
+                                    <div class="botones-select">
+                                        <a class="related-widget-wrapper-link change-related" id="change_id_propietario"
+                                           data-href-template="/admin/ERP/propietario/__fk__/change/?_to_field=id&amp;_popup=1"
+                                           title="Change selected propietario"><img
+                                                src="/static/admin/img/icon-changelink.svg"
+                                                alt="Change"/></a><a
+                                            class="related-widget-wrapper-link add-related" id="add_id_propietario"
+                                            href="/admin/ERP/propietario/add/?_to_field=id&amp;_popup=1"
+                                            title="Add another propietario"><img
+                                            src="/static/admin/img/icon-addlink.svg"
+                                            alt="Add"/></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-nombreProyecto">
+                                <label class="control-label required" for="id_nombreProyecto">Nombre del
+                                    proyecto:</label>
+                                <input type="text" name="nombreProyecto" id="id_nombreProyecto" required
+                                       class=" form-control"
+                                       maxlength="100"/>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group field-fecha_inicial">
+                                <label class="control-label required" for="id_fecha_inicial_0">Fecha
+                                    inicial:</label><br>
+                                <div class="datetime">
+                                    <input placeholder="Fecha" type="text" name="fecha_inicial_0"
+                                           id="id_fecha_inicial_0" required class="vDateField" size="10"/>
+
+                                    <input placeholder="Hora" type="text" name="fecha_inicial_1" id="id_fecha_inicial_1"
+                                           required class="vTimeField" size="8"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-fecha_final">
+                                <label class="control-label required" for="id_fecha_final_0">Fecha final:</label><br>
+                                <div class="datetime">
+                                    <input placeholder="Fecha" type="text" name="fecha_final_0" id="id_fecha_final_0"
+                                           required class="vDateField" size="10"/>
+
+                                    <input placeholder="Hora" type="text" name="fecha_final_1" id="id_fecha_final_1"
+                                           required class="vTimeField" size="8"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-tipo_construccion">
+                                <div>
+                                    <label class="control-label required" for="id_tipo_construccion">Tipo de
+                                        construcción:</label>
+                                    <div class="related-widget-wrapper">
+                                        <select name="tipo_construccion" required id="id_tipo_construccion"
+                                                class="form-control">
+                                            <option value="" selected>---------</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="otro1">
+                    <div class="row">
+                        <h2 class="text-center">Ubicación</h2>
+                        <hr>
+                        <div class="col-md-5">
+                            <div class="form-group field-ubicacion_calle">
+                                <div>
+                                    <label class="control-label required" for="id_ubicacion_calle">Calle:</label>
+                                    <input type="text" name="ubicacion_calle" id="id_ubicacion_calle" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group field-ubicacion_numero">
+                                <div>
+                                    <label class="control-label required" for="id_ubicacion_numero">Numero:</label>
+                                    <input type="text" name="ubicacion_numero" id="id_ubicacion_numero" required
+                                           class=" form-control" maxlength="8"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-5">
+                            <div class="form-group field-ubicacion_colonia">
+                                <div>
+                                    <label class="control-label required" for="id_ubicacion_colonia">Colonia:</label>
+                                    <input type="text" name="ubicacion_colonia" id="id_ubicacion_colonia" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group field-ubicacion_municipio">
+                                <div>
+                                    <label class="control-label required"
+                                           for="id_ubicacion_municipio">Municipio:</label>
+                                    <div class="related-widget-wrapper">
+                                        <select name="ubicacion_municipio" required id="id_ubicacion_municipio"
+                                                class="form-control selectpicker">
+                                            <option value="" selected>---------</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-ubicacion_estado">
+                                <div>
+                                    <label class="control-label required" for="id_ubicacion_estado">Estado:</label>
+                                    <div class="related-widget-wrapper">
+                                        <select name="ubicacion_estado" required id="id_ubicacion_estado"
+                                                class="form-control selectpicker">
+                                            <option value="" selected>---------</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-ubicacion_cp">
+                                <div>
+                                    <label class="control-label required" for="id_ubicacion_cp">C.P.</label>
+                                    <input type="number" name="ubicacion_cp" required class=" form-control"
+                                           id="id_ubicacion_cp"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-ubicacion_pais">
+                                <div>
+                                    <label class="control-label required" for="id_ubicacion_pais">País:</label>
+                                    <div class="related-widget-wrapper">
+                                        <select name="ubicacion_pais" required id="id_ubicacion_pais"
+                                                class="form-control selectpicker">
+                                            <option value="" selected>---------</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <h2 class="text-center">Áreas</h2>
+                        <hr>
+                        <div class="col-md-3 col-md-offset-3">
+                            <div class="form-group field-area_superficie_escritura">
+                                <div>
+                                    <label class="control-label required" for="id_area_superficie_escritura">Superficie
+                                        escritura:</label>
+                                    <input type="number" name="area_superficie_escritura" value="0" step="0.01" required
+                                           id="id_area_superficie_escritura" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3  ">
+                            <div class="form-group field-area_superficie_levantamiento">
+                                <div>
+                                    <label class="control-label required" for="id_area_superficie_levantamiento">Superficie
+                                        levantamiento:</label>
+                                    <input type="number" name="area_superficie_levantamiento" value="0" step="0.01"
+                                           required
+                                           id="id_area_superficie_levantamiento" class="form-control"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="otro2">
+                    <div class="row">
+                        <h2 class="text-center">Propietario</h2>
+                        <hr>
+                        <div class="col-md-3">
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h2 class="text-center">Estado legal</h2>
+                        <hr>
+                        <div class="col-md-3">
+                            <div class="form-group field-estadolegal_documento_propiedad">
+                                <label class="control-label required" for="id_estadolegal_documento_propiedad">Documento:</label><br>
+                                <input type="file" name="estadolegal_documento_propiedad"
+                                       id="id_estadolegal_documento_propiedad" required multiple=""
+                                       class="form-control">
+                                <div class="input-group">
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="Cargar documento...">
+                                    <span class="input-group-btn input-group-sm">
+                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                        <i class="material-icons">attach_file</i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-estadolegal_gravamen">
+                                <label class="control-label required"
+                                       for="id_estadolegal_gravamen">Gravamen:</label><br>
+                                <input type="file" name="estadolegal_gravamen" id="id_estadolegal_gravamen" required
+                                       multiple="" class="form-control">
+                                <div class="input-group">
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="Cargar documento...">
+                                    <span class="input-group-btn input-group-sm">
+                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                        <i class="material-icons">attach_file</i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-estadolegal_predial">
+                                <label class="control-label required" for="id_estadolegal_predial">Predial:</label><br>
+                                <input type="file" name="estadolegal_predial" id="id_estadolegal_predial" required
+                                       multiple="" class="form-control">
+                                <div class="input-group">
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="Cargar documento...">
+                                    <span class="input-group-btn input-group-sm">
+                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                        <i class="material-icons">attach_file</i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-estadolegal_agua">
+                                <label class="control-label required" for="id_estadolegal_agua">Agua:</label><br>
+                                <input type="file" name="estadolegal_agua" id="id_estadolegal_agua" required multiple=""
+                                       class="form-control">
+                                <div class="input-group">
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="Cargar documento...">
+                                    <span class="input-group-btn input-group-sm">
+                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                        <i class="material-icons">attach_file</i>
+                                        </button>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="otro3">
+                    <h2 class="text-center">Restricciones</h2>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group field-restrccion_vial">
+                                <div>
+                                    <label class="control-label required" for="id_restrccion_vial">Vial:</label>
+                                    <input type="text" name="restrccion_vial" id="id_restrccion_vial" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-restrccion_cna">
+                                <div>
+                                    <label class="control-label required" for="id_restrccion_cna">Cna:</label>
+                                    <input type="text" name="restrccion_cna" id="id_restrccion_cna" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-restrccion_cfe">
+                                <div>
+                                    <label class="control-label required" for="id_restrccion_cfe">Cfe:</label>
+                                    <input type="text" name="restrccion_cfe" id="id_restrccion_cfe" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group field-restrccion_pemex">
+                                <div>
+                                    <label class="control-label required" for="id_restrccion_pemex">Pemex:</label>
+                                    <input type="text" name="restrccion_pemex" id="id_restrccion_pemex" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-restrccion_inha">
+                                <div>
+                                    <label class="control-label required" for="id_restrccion_inha">Inha:</label>
+                                    <input type="text" name="restrccion_inha" id="id_restrccion_inha" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-restrccion_otros">
+                                <div>
+                                    <label class="control-label required" for="id_restrccion_otros">Otros:</label>
+                                    <input type="text" name="restrccion_otros" id="id_restrccion_otros" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-md-offset-3">
+                            <div class="form-group field-restrccion_observaciones">
+                                <div>
+                                    <label class="control-label required" for="id_restrccion_observaciones">Observaciones:</label>
+                                    <input type="text" name="restrccion_observaciones" id="id_restrccion_observaciones"
+                                           required class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="otro4">
+                    <h2 class="text-center">Uso del suelo</h2>
+                    <hr>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group field-usosuelo_pmdu">
+                                <div>
+                                    <label class="control-label required" for="id_usosuelo_pmdu">Pmdu:</label>
+                                    <input type="text" name="usosuelo_pmdu" id="id_usosuelo_pmdu" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group field-usosuelo_densidad">
+                                <div>
+                                    <label class="control-label required" for="id_usosuelo_densidad">Densidad:</label>
+                                    <input type="text" name="usosuelo_densidad" id="id_usosuelo_densidad" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-usosuelo_loteminimo">
+                                <div>
+                                    <label class="control-label required" for="id_usosuelo_loteminimo">Lote
+                                        mínimo:</label>
+                                    <input type="number" name="usosuelo_loteminimo" value="0" step="0.01" required
+                                           id="id_usosuelo_loteminimo"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group field-usosuelo_m2construccion">
+                                <div>
+                                    <label class="control-label required" for="id_usosuelo_m2construccion">M2 de
+                                        construcción:</label>
+                                    <input type="number" name="usosuelo_m2construccion" value="0" step="0.01" required
+                                           id="id_usosuelo_m2construccion"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-usosuelo_arealibre">
+                                <div>
+                                    <label class="control-label required" for="id_usosuelo_arealibre">Area
+                                        libre:</label>
+                                    <input type="text" name="usosuelo_arealibre" id="id_usosuelo_arealibre" required
+                                           class=" form-control"
+                                           maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-usosuelo_altura">
+                                <div>
+                                    <label class="control-label required" for="id_usosuelo_altura">Altura:</label>
+                                    <input type="text" name="usosuelo_altura" id="id_usosuelo_altura" required
+                                           class=" form-control"
+                                           maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group field-usosuelo_densidadrequerida">
+                                <div>
+                                    <label class="control-label required" for="id_usosuelo_densidadrequerida">Densidad
+                                        requerida:</label>
+                                    <input type="text" name="usosuelo_densidadrequerida"
+                                           id="id_usosuelo_densidadrequerida" required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h2 class="text-center">Hidraulica</h2>
+                        <hr>
+                        <div class="col-md-4">
+                            <div class="form-group field-hidraulica_fuente">
+                                <div>
+                                    <label class="control-label required" for="id_hidraulica_fuente">Fuente:</label>
+                                    <input type="text" name="hidraulica_fuente" id="id_hidraulica_fuente" required
+                                           class=" form-control"
+                                           maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-hidraulica_distancia">
+                                <div>
+                                    <label class="control-label required"
+                                           for="id_hidraulica_distancia">Distacia:</label>
+                                    <input type="text" name="hidraulica_distancia" id="id_hidraulica_distancia" required
+                                           class=" form-control"
+                                           maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-hidraulica_observaciones">
+                                <div>
+                                    <label class="control-label required" for="id_hidraulica_observaciones">Observaciones:</label>
+                                    <input type="text" name="hidraulica_observaciones" id="id_hidraulica_observaciones"
+                                           required
+                                           class=" form-control" maxlength="200"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="form-group field-sanitaria_tipo">
+        <div>
+            <label class="control-label required" for="id_sanitaria_tipo">Tipo:</label>
+            <input type="text" name="sanitaria_tipo" id="id_sanitaria_tipo" required class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-sanitaria_responsable">
+        <div>
+            <label class="control-label required" for="id_sanitaria_responsable">Responsable:</label>
+            <input type="text" name="sanitaria_responsable" id="id_sanitaria_responsable" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-sanitaria_observaciones">
+        <div>
+            <label class="control-label required" for="id_sanitaria_observaciones">Observaciones:</label>
+            <input type="text" name="sanitaria_observaciones" id="id_sanitaria_observaciones" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-pluvial_tipo">
+        <div>
+            <label class="control-label required" for="id_pluvial_tipo">Tipo:</label>
+            <input type="text" name="pluvial_tipo" id="id_pluvial_tipo" required class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-pluvial_responsable">
+        <div>
+            <label class="control-label required" for="id_pluvial_responsable">Responsable:</label>
+            <input type="text" name="pluvial_responsable" id="id_pluvial_responsable" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-pluvial_observaciones">
+        <div>
+            <label class="control-label required" for="id_pluvial_observaciones">Observaciones:</label>
+            <input type="text" name="pluvial_observaciones" id="id_pluvial_observaciones" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-vial_viaacceso">
+        <div>
+            <label class="control-label required" for="id_vial_viaacceso">Vias de acceso:</label>
+            <input type="text" name="vial_viaacceso" id="id_vial_viaacceso" required class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-vial_distancia">
+        <div>
+            <label class="control-label required" for="id_vial_distancia">Distancia:</label>
+            <input type="text" name="vial_distancia" id="id_vial_distancia" required class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-vial_carriles">
+        <div>
+            <label class="control-label required" for="id_vial_carriles">Carriles:</label>
+            <input type="text" name="vial_carriles" id="id_vial_carriles" required class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-vial_seccion">
+        <div>
+            <label class="control-label required" for="id_vial_seccion">Seccion:</label>
+            <input type="text" name="vial_seccion" id="id_vial_seccion" required class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-vial_tipopavimento">
+        <div>
+            <label class="control-label required" for="id_vial_tipopavimento">Tipo de pavimento:</label>
+            <input type="text" name="vial_tipopavimento" id="id_vial_tipopavimento" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-vial_estadoconstruccion">
+        <div>
+            <label class="control-label required" for="id_vial_estadoconstruccion">Estado de construcción:</label>
+            <input type="text" name="vial_estadoconstruccion" id="id_vial_estadoconstruccion" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-vial_observaciones">
+        <div>
+            <label class="control-label required" for="id_vial_observaciones">Observaciones:</label>
+            <input type="text" name="vial_observaciones" id="id_vial_observaciones" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-electricidad_tipo">
+        <div>
+            <label class="control-label required" for="id_electricidad_tipo">Tipo:</label>
+            <input type="text" name="electricidad_tipo" id="id_electricidad_tipo" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-electricidad_distancia">
+        <div>
+            <label class="control-label required" for="id_electricidad_distancia">Distancia:</label>
+            <input type="text" name="electricidad_distancia" id="id_electricidad_distancia" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-electricidad_observaciones">
+        <div>
+            <label class="control-label required" for="id_electricidad_observaciones">Observaciones:</label>
+            <input type="text" name="electricidad_observaciones" id="id_electricidad_observaciones" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-alumbradopublico_tipo">
+        <div>
+            <label class="control-label required" for="id_alumbradopublico_tipo">Tipo:</label>
+            <input type="text" name="alumbradopublico_tipo" id="id_alumbradopublico_tipo" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-alumbradopublico_distancia">
+        <div>
+            <label class="control-label required" for="id_alumbradopublico_distancia">Distancia:</label>
+            <input type="text" name="alumbradopublico_distancia" id="id_alumbradopublico_distancia" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-alumbradopublico_observaciones">
+        <div>
+            <label class="control-label required" for="id_alumbradopublico_observaciones">Dobservaciones:</label>
+            <input type="text" name="alumbradopublico_observaciones" id="id_alumbradopublico_observaciones" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-telefonia_distancia">
+        <div>
+            <label class="control-label required" for="id_telefonia_distancia">Distancia:</label>
+            <input type="text" name="telefonia_distancia" id="id_telefonia_distancia" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-telefonia_observaciones">
+        <div>
+            <label class="control-label required" for="id_telefonia_observaciones">Observaciones:</label>
+            <input type="text" name="telefonia_observaciones" id="id_telefonia_observaciones" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-tvcable_distancia">
+        <div>
+            <label class="control-label required" for="id_tvcable_distancia">Distancia:</label>
+            <input type="text" name="tvcable_distancia" id="id_tvcable_distancia" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-tvcable_observaciones">
+        <div>
+            <label class="control-label required" for="id_tvcable_observaciones">Observaciones:</label>
+            <input type="text" name="tvcable_observaciones" id="id_tvcable_observaciones" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-equipamiento_a100">
+        <div>
+            <label class="control-label required" for="id_equipamiento_a100">A 100:</label>
+            <input type="text" name="equipamiento_a100" id="id_equipamiento_a100" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-equipamiento_a200">
+        <div>
+            <label class="control-label required" for="id_equipamiento_a200">A 200:</label>
+            <input type="text" name="equipamiento_a200" id="id_equipamiento_a200" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-equipamiento_a500">
+        <div>
+            <label class="control-label required" for="id_equipamiento_a500">Da 500:</label>
+            <input type="text" name="equipamiento_a500" id="id_equipamiento_a500" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-equipamiento_regional">
+        <div>
+            <label class="control-label required" for="id_equipamiento_regional">Regional:</label>
+            <input type="text" name="equipamiento_regional" id="id_equipamiento_regional" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-costo_predio">
+        <div>
+            <label class="control-label required" for="id_costo_predio">Costo del predio:</label>
+            <input type="number" name="costo_predio" value="0" step="0.01" required id="id_costo_predio"/>
+        </div>
+    </div>
+    <div class="form-group field-costo_m2">
+        <div>
+            <label class="control-label required" for="id_costo_m2">M2:</label>
+            <input type="number" name="costo_m2" value="0" step="0.01" required id="id_costo_m2"/>
+        </div>
+    </div>
+    <div class="form-group field-costo_escrituras">
+        <div>
+            <label class="control-label required" for="id_costo_escrituras">Escrituras m2:</label>
+            <input type="number" name="costo_escrituras" value="0" step="0.01" required id="id_costo_escrituras"/>
+        </div>
+    </div>
+    <div class="form-group field-costo_levantamiento">
+        <div>
+            <label class="control-label required" for="id_costo_levantamiento">Levantamiento m2:</label>
+            <input type="number" name="costo_levantamiento" value="0" step="0.01" required id="id_costo_levantamiento"/>
+        </div>
+    </div>
+    <div class="form-group field-estudiomercado_demanda">
+        <div>
+            <label class="control-label required" for="id_estudiomercado_demanda">Regional:</label>
+            <input type="text" name="estudiomercado_demanda" id="id_estudiomercado_demanda" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-estudiomercado_oferta">
+        <div>
+            <label class="control-label required" for="id_estudiomercado_oferta">Regional:</label>
+            <input type="text" name="estudiomercado_oferta" id="id_estudiomercado_oferta" required
+                   class=" form-control"
+                   maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-estudiomercado_conclusiones">
+        <div>
+            <label class="control-label required" for="id_estudiomercado_conclusiones">Regional:</label>
+            <input type="text" name="estudiomercado_conclusiones" id="id_estudiomercado_conclusiones" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-estudiomercado_recomendaciones">
+        <div>
+            <label class="control-label required" for="id_estudiomercado_recomendaciones">Regional:</label>
+            <input type="text" name="estudiomercado_recomendaciones" id="id_estudiomercado_recomendaciones" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-definicionproyecto_alternativa">
+        <div>
+            <label class="control-label required" for="id_definicionproyecto_alternativa">Regional:</label>
+            <input type="text" name="definicionproyecto_alternativa" id="id_definicionproyecto_alternativa" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-definicionproyecto_tamano">
+        <div>
+            <label class="control-label required" for="id_definicionproyecto_tamano">Regional:</label>
+            <input type="text" name="definicionproyecto_tamano" id="id_definicionproyecto_tamano" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-definicionproyecto_programa">
+        <div>
+            <label class="control-label required" for="id_definicionproyecto_programa">Regional:</label>
+            <input type="text" name="definicionproyecto_programa" id="id_definicionproyecto_programa" required
+                   class=" form-control" maxlength="200"/>
+        </div>
+    </div>
+    <div class="form-group field-programayarea_areaprivativa">
+        <div>
+            <label class="control-label required" for="id_programayarea_areaprivativa">Area privada:</label>
+            <input type="number" name="programayarea_areaprivativa" value="0" step="0.01" required
+                   id="id_programayarea_areaprivativa"/>
+        </div>
+    </div>
+    <div class="form-group field-programayarea_caseta">
+        <div>
+            <label class="control-label required" for="id_programayarea_caseta">Caseta:</label>
+            <input type="number" name="programayarea_caseta" value="0" step="0.01" required
+                   id="id_programayarea_caseta"/>
+        </div>
+    </div>
+    <div class="form-group field-programayarea_jardin">
+        <div>
+            <label class="control-label required" for="id_programayarea_jardin">Jardín:</label>
+            <input type="number" name="programayarea_jardin" value="0" step="0.01" required
+                   id="id_programayarea_jardin"/>
+        </div>
+    </div>
+    <div class="form-group field-programayarea_vialidad">
+        <div>
+            <label class="control-label required" for="id_programayarea_vialidad">Vialidad:</label>
+            <input type="number" name="programayarea_vialidad" value="0" step="0.01" required
+                   id="id_programayarea_vialidad"/>
+        </div>
+    </div>
+    <div class="form-group field-programayarea_areaverde">
+        <div>
+            <label class="control-label required" for="id_programayarea_areaverde">Área verde:</label>
+            <input type="number" name="programayarea_areaverde" value="0" step="0.01" required
+                   id="id_programayarea_areaverde"/>
+        </div>
+    </div>
+    <div class="form-group field-programayarea_estacionamientovisita">
+        <div>
+            <label class="control-label required" for="id_programayarea_estacionamientovisita">Estacionamiento
+                visita:</label>
+            <input type="number" name="programayarea_estacionamientovisita" value="0" step="0.01" required
+                   id="id_programayarea_estacionamientovisita"/>
+        </div>
+    </div>
+    <div class="form-group field-programayarea_afectacion">
+        <div>
+            <label class="control-label required" for="id_programayarea_afectacion">Afectación:</label>
+            <input type="number" name="programayarea_afectacion" value="0" step="0.01" required
+                   id="id_programayarea_afectacion"/>
+        </div>
+    </div>
+</fieldset>

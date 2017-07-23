@@ -5,7 +5,7 @@ from ERP.models import *
 from django.contrib import admin
 
 # Register your models here.
-# Modificacion del admin de Region para la parte de catalogos
+# Modificacion del templates de Region para la parte de catalogos
 class ProjectAdmin(admin.ModelAdmin):
     list_display = ('id', 'key','nombreProyecto',)
     search_fields = ('key','nombreProyecto',)
