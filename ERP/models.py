@@ -589,7 +589,7 @@ class Project(models.Model):
                                                               blank=True, null=True, default=0, max_digits=20)
     programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=True, null=True,
                                                    default=0, max_digits=20)
-    tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
+    #tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
 
     class Meta:
         verbose_name_plural = 'Proyectos'
@@ -840,7 +840,7 @@ class ProgressEstimateLog(models.Model):
 class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Log de Estimación", null=False,
                                               blank=False)
-    file = models.FileField(verbose_name="URL", max_length=1024, null=False, blank=False)
+    file = models.FileField(verbose_name="URL", max_length=1024, null=True, blank=True)
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
 
