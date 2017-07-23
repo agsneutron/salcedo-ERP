@@ -57,7 +57,7 @@ ROOT_URLCONF = 'SalcedoERP.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'users/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'users/templatess')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

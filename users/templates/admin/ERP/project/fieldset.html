@@ -3,7 +3,7 @@
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
     {% endif %}
-    {% comment %}{% for line in fieldset %}
+    {% for line in fieldset %}
         <div class="form-group{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
             {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
             {% for field in line %}
@@ -25,9 +25,9 @@
                 </div>
             {% endfor %}
         </div>
-    {% endfor %}{% endcomment %}
+    {% endfor %}
     <!-- card -->
-    <div class="card ">
+    {% comment %}<div class="card ">
         <ul class="nav nav-tabs nav-tabs-full nav-tabs-5 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
@@ -879,5 +879,5 @@
             <input type="number" name="programayarea_afectacion" value="0" step="0.01" required
                    id="id_programayarea_afectacion"/>
         </div>
-    </div>
+    </div>{% endcomment %}
 </fieldset>
