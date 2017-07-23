@@ -1,5 +1,5 @@
 from django import forms
-from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente
+from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate
 from datetime import datetime
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
@@ -62,3 +62,22 @@ class DocumentoFuenteForm(forms.ModelForm):
                         print e
 
         return super(DocumentoFuenteForm, self).save(commit)
+
+
+
+
+'''
+    Forms for the progress estimate.
+'''
+class EstimateForm(forms.ModelForm):
+
+    line_item_filter = forms.IntegerField(label="Partida")
+
+    def save(self, commit=True):
+        line_item_filter = self.cleaned_data.get('line_item_filter', None)
+        # ...do something with extra_field here...
+        return super(EstimateForm, self).save(commit=commit)
+
+    class Meta:
+        model = Estimate
+        fields = "__all__"

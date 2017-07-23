@@ -25,8 +25,11 @@ import users
 from users import views
 admin.autodiscover()
 
+import DataUpload
+from DataUpload import urls
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^users/', include(users.urls)),
     url(r'^$', RedirectView.as_view(url='/admin')),
+    url(r'^data_upload/', include(DataUpload.urls)),
 ]

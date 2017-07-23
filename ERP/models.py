@@ -664,6 +664,7 @@ class ConceptMaster(models.Model):
     parent_concept = models.ForeignKey('self', verbose_name="Concepto Padre", null=True, blank=True)
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=True, editable=True)
     description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
+    status = models.CharField(verbose_name="Status", max_length=1, null=False, default='C', blank=False, unique=False, editable=True)
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -771,7 +772,8 @@ class ConceptDetail(models.Model):
 
 
 class Estimate(models.Model):
-    start_date = models.DateTimeField(auto_now_add=True)
+    concept_master = models.ForeignKey(ConceptMaster, verbose_name="Concepto", null=True, blank=False, default=None)
+    start_date = models.DateTimeField(default=None, null=True)
     end_date = models.DateTimeField(default=None, null=True)
 
     class Meta:
@@ -838,7 +840,7 @@ class ProgressEstimateLog(models.Model):
 class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Log de Estimación", null=False,
                                               blank=False)
-    url = models.CharField(verbose_name="URL", max_length=1024, null=False, blank=False)
+    file = models.FileField(verbose_name="URL", max_length=1024, null=False, blank=False)
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
 
