@@ -773,8 +773,9 @@ class ConceptDetail(models.Model):
 
 class Estimate(models.Model):
     concept_master = models.ForeignKey(ConceptMaster, verbose_name="Concepto", null=True, blank=False, default=None)
-    start_date = models.DateTimeField(default=None, null=True)
-    end_date = models.DateTimeField(default=None, null=True)
+    start_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de inicio")
+    end_date = models.DateTimeField(default=None, null=True , verbose_name="Fecha de fin")
+    period = models.DateTimeField(default=None, null=True, verbose_name="Periodo")
 
     class Meta:
         verbose_name_plural = 'Estimaciones'
@@ -801,7 +802,8 @@ class ProgressEstimate(models.Model):
         (ESTIMATE, 'Estimado'),
     )
 
-    type = models.ForeignKey(Unit, verbose_name="Tipo", null=False, blank=False)
+
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS)
 
     class Meta:
         verbose_name_plural = 'Avances'
@@ -814,6 +816,9 @@ class ProgressEstimate(models.Model):
         ans['amount'] = str(self.amount)
         ans['type'] = str(self.type)
         return ans
+
+    def __str__(self):
+        return self.estimate.concept_master.description + " - " + str(self.estimate.period) + " - " + self.key
 
 
 '''
