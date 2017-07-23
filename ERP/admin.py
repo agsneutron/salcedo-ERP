@@ -40,7 +40,7 @@ class LogFileInline(admin.TabularInline):
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    fields = ('description', 'date')
+    fields = ('progress_estimate','description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
@@ -57,9 +57,9 @@ class ProgressEstimateInline(admin.TabularInline):
 
 
 class EstimateAdmin(admin.ModelAdmin):
-    list_display = ('get_concept_and_line_item', 'start_date', 'end_date')
-    search_fields = ('start_date', 'end_date')
-    list_display_links = ('start_date', 'end_date')
+    list_display = ('get_concept_and_line_item', 'period','start_date', 'end_date')
+    search_fields = ('period','start_date', 'end_date')
+    list_display_links = ('get_concept_and_line_item',)
     list_per_page = 50
     inlines = [
         ProgressEstimateInline
@@ -72,7 +72,7 @@ class EstimateAdmin(admin.ModelAdmin):
         }),
         (
             'Estimación', {
-                'fields': ('start_date', 'end_date',)
+                'fields': ('period','start_date', 'end_date',)
         }),
     )
 
