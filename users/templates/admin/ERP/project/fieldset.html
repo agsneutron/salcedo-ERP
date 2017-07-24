@@ -117,7 +117,7 @@
                                     {% for field in line %}
                                         {% if field.field.name == "propietario" %}
                                                       <label class="required" for="id_propietario">Propietario:</label>
-                                                      {{ field.field|addcss:"form-control" }}
+                                                      {{ field.field|addcss:"form-control selectpicker" }}
 
                                        {% endif %}
                                      {% endfor %}
