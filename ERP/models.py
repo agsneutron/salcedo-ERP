@@ -407,8 +407,6 @@ class Propietario(models.Model):
     email = models.CharField(verbose_name="e mail", max_length=100, null=True, blank=True)
     empresa = models.ForeignKey(Empresa, verbose_name="empresa", null=False, blank=False)
 
-    class Meta:
-        verbose_name_plural = 'Propietario'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)

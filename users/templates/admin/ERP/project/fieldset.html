@@ -1,9 +1,11 @@
+
+{% load app_filters admin_static%}
 <fieldset class="module aligned {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
     {% endif %}
-    {% for line in fieldset %}
+    {% comment %}{% for line in fieldset %}
         <div class="form-group{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
             {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
             {% for field in line %}
@@ -25,9 +27,10 @@
                 </div>
             {% endfor %}
         </div>
-    {% endfor %}
+    {% endfor %}{% endcomment %}
     <!-- card -->
-    {% comment %}<div class="card ">
+
+    <div class="card ">
         <ul class="nav nav-tabs nav-tabs-full nav-tabs-5 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
@@ -60,6 +63,7 @@
                 </a>
             </li>
         </ul>
+
         <div class="card-block">
             <div class="tab-content">
                 <div role="tabpanel" class="tab-pane fade active in" id="otro0">
@@ -94,29 +98,24 @@
                                 </div>
                             </div>
                         </div>
+
                         <div class="col-md-3">
                             <div class="form-group field-propietario">
-                                <label class="control-label required" for="id_propietario">Propietario:</label>
                                 <div class="related-widget-wrapper">
-                                    <select name="propietario" required id="id_propietario"
-                                            class="form-control selectpicker" data-dropup-auto="false">
-                                        <option value="" selected>---------</option>
-                                    </select>
-                                    <div class="botones-select">
-                                        <a class="related-widget-wrapper-link change-related" id="change_id_propietario"
-                                           data-href-template="/admin/ERP/propietario/__fk__/change/?_to_field=id&amp;_popup=1"
-                                           title="Change selected propietario"><img
-                                                src="/static/admin/img/icon-changelink.svg"
-                                                alt="Change"/></a><a
-                                            class="related-widget-wrapper-link add-related" id="add_id_propietario"
-                                            href="/admin/ERP/propietario/add/?_to_field=id&amp;_popup=1"
-                                            title="Add another propietario"><img
-                                            src="/static/admin/img/icon-addlink.svg"
-                                            alt="Add"/></a>
-                                    </div>
+                                {% for line in fieldset %}
+                                    {% for field in line %}
+                                        {% if field.field.name == "propietario" %}
+                                                      <label class="required" for="id_propietario">Propietario:</label>
+                                                      {{ field.field|addcss:"form-control" }}
+
+                                       {% endif %}
+                                     {% endfor %}
+                                {% endfor %}
                                 </div>
                             </div>
                         </div>
+
+
                         <div class="col-md-3">
                             <div class="form-group field-nombreProyecto">
                                 <label class="control-label required" for="id_nombreProyecto">Nombre del
@@ -879,5 +878,6 @@
             <input type="number" name="programayarea_afectacion" value="0" step="0.01" required
                    id="id_programayarea_afectacion"/>
         </div>
-    </div>{% endcomment %}
+    </div>
+
 </fieldset>
