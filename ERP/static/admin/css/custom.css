@@ -375,8 +375,12 @@ form .aligned ul {
 }
 .form-group input[type=file] > .input-group > .form-control {
     height: 25px;
-
 }
+.btn:not(.btn-raised).btn-primary, .input-group-btn .btn:not(.btn-raised).btn-primary {
+    color: #00a09b;
+}
+
+
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
