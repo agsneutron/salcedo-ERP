@@ -42,7 +42,7 @@
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro2" aria-controls="otro2" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Propietario/legal</span>
+                    <span class="hidden-xs">legal</span>
                 </a>
             </li>
             <li role="presentation">
@@ -89,8 +89,8 @@
                         <div class="col-md-3">
                             <div class="form-group field-contrato">
                                 <label class="control-label required" for="id_contrato">Contrato:</label>
-                                <div class="related-widget-wrapper">
-                                    <select name="contrato" required id="id_contrato" class="form-control selectpicker">
+                                <div class="col-md-10">
+                                    <select name="contrato" required id="id_contrato" class="form-control selectpicker" >
                                         <option value="" selected>---------</option>
                                         <option value="1">Contrato object</option>
                                     </select>
@@ -308,13 +308,13 @@
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="otro2">
-                    <div class="row">
+                    {% comment %} <div class="row">
                         <h2 class="text-center">Propietario</h2>
                         <hr>
                         <div class="col-md-3">
 
                         </div>
-                    </div>
+                    </div>{% endcomment %}
                     <div class="row">
                         <h2 class="text-center">Estado legal</h2>
                         <hr>
@@ -1224,7 +1224,6 @@
                         <h2 class="text-center">Programas y Áreas</h2>
                         <hr>
                         <div class="col-md-2">
-
                             <div class="form-group field-programayarea_areaprivativa">
                                 <div>
                                     <label class="control-label" for="id_programayarea_areaprivativa">Area
@@ -1237,7 +1236,6 @@
                             </div>
                         </div>
                         <div class="col-md-2">
-
                             <div class="form-group field-programayarea_caseta">
                                 <div>
                                     <label class="control-label" for="id_programayarea_caseta">Caseta:</label>
@@ -1327,8 +1325,17 @@
     </div>
 </fieldset>
 
+{% for inline_admin_formset in inline_admin_formsets %}
+    {% if inline_admin_formset.formset.prefix == "tipoproyectodetalle_set" %}
+        <!-- proyecto detalle-->
+        {% include "admin/ERP/project/tabular.html" %}
+    {% endif %}
+{% endfor %}
+
 
 {% comment %}
+
+
 <div class="js-inline-admin-formset inline-group" id="tipoproyectodetalle_set-group"
      data-inline-type="tabular"
      data-inline-formset="{&quot;name&quot;: &quot;#tipoproyectodetalle_set&quot;, &quot;options&quot;: {&quot;prefix&quot;: &quot;tipoproyectodetalle_set&quot;, &quot;addText&quot;: &quot;Agregar otro/a Tipo proyecto detalle&quot;, &quot;deleteText&quot;: &quot;Eliminar&quot;}}">
@@ -1441,4 +1448,5 @@
         id="django-admin-prepopulated-fields-constants"
         src="/static/admin/js/prepopulate_init.js"
         data-prepopulated-fields="[]">
-</script>{% endcomment %}
+</script>
+{% endcomment %}
