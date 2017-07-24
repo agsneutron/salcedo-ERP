@@ -382,14 +382,14 @@ class Contrato(models.Model):
         def __str__(self):
             return self.observaciones
 
-        def save(self, *args, **kwargs):
-            canSave = True
+        #def save(self, *args, **kwargs):
+            #    canSave = True
 
-            if canSave:
-                Logs.log("Saving new Contrato", "Te")
-                super(Contrato, self).save(*args, **kwargs)
-            else:
-                Logs.log("Couldn't save")
+            #if canSave:
+            #    Logs.log("Saving new Contrato", "Te")
+            #    super(Contrato, self).save(*args, **kwargs)
+            #else:
+            #    Logs.log("Couldn't save")
 
 
 # Propietario
