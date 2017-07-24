@@ -75,231 +75,199 @@
         </ul>
         <div class="card-block">
             <div class="tab-content">
+            {% for line in fieldset %}
+                {% for field in line %}
                 <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                     <div class="row">
                         <h2 class="text-center">Datos generales</h2>
                         <hr>
-                        <div class="col-md-3">
-                            <div class="form-group field-key">
-                                <div>
-                                    <label class="control-label required" for="id_key">Clave del Proyecto:</label>
-                                    <input type="text" name="key" id="id_key" required class="  form-control"
-                                           maxlength="255"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-contrato">
-                                <label class="control-label required" for="id_contrato">Contrato:</label>
-                                <div class="col-md-10">
-                                    <select name="contrato" required id="id_contrato" class="form-control selectpicker" >
-                                        <option value="" selected>---------</option>
-                                        <option value="1">Contrato object</option>
-                                    </select>
-                                    <div class="botones-select">
-                                        <a class="related-widget-wrapper-link change-related" id="change_id_contrato"
-                                           data-href-template="/admin/ERP/contrato/__fk__/change/?_to_field=id&amp;_popup=1"
-                                           title="Change selected contrato"><img
-                                                src="/static/admin/img/icon-changelink.svg"
-                                                alt="Modificar"/></a><a
-                                            class="related-widget-wrapper-link add-related" id="add_id_contrato"
-                                            href="/admin/ERP/contrato/add/?_to_field=id&amp;_popup=1"
-                                            title="Add another contrato"><img src="/static/admin/img/icon-addlink.svg"
-                                                                              alt="Agregar"/></a>
+                        {% if field.field.name == "key" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-key">
+                                    <div>
+                                        <label class="control-label required" for="id_key">Clave del Proyecto:</label>
+                                        {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-propietario">
-                                <div class="related-widget-wrapper">
-                                {% for line in fieldset %}
-                                    {% for field in line %}
-                                        {% if field.field.name == "propietario" %}
-                                                      <label class="required" for="id_propietario">Propietario:</label>
-                                                      {{ field.field|addcss:"form-control selectpicker" }}
+                        {% endif %}
 
-                                       {% endif %}
-                                     {% endfor %}
-                                {% endfor %}
+                        {% if field.field.name == "contrato" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-contrato">
+                                    <div class="related-widget-wrapper">
+                                        <label class="required" for="id_contrato">Contrato:</label>
+                                        {{ field.field|addcss:"form-control selectpicker" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
 
 
-                        <div class="col-md-3">
-                            <div class="form-group field-nombreProyecto">
-                                <div>
-                                    <label class="control-label required" for="id_nombreProyecto">Nombre del
-                                        proyecto:</label>
-                                    <input type="text" name="nombreProyecto" id="id_nombreProyecto" required
-                                           class="  form-control"
-                                           maxlength="100"/>
+                        {% if field.field.name == "propietario" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-propietario">
+                                    <div class="related-widget-wrapper">
+                                        <label class="required" for="id_propietario">Propietario:</label>
+                                        {{ field.field|addcss:"form-control selectpicker" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
+
+                        {% if field.field.name == "nombreProyecto" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-nombreProyecto">
+                                    <div>
+                                        <label class="control-label required" for="id_nombreProyecto">Nombre del
+                                            proyecto:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
                     </div>
                     <hr>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group field-fecha_inicial">
-                                <label class="control-label required" for="id_fecha_inicial_0">Fecha
-                                    inicial:</label><br>
-                                <div class="datetime">
-                                    <input placeholder="Fecha" type="text" name="fecha_inicial_0"
-                                           id="id_fecha_inicial_0" required class="vDateField" size="10"/>
-
-                                    <input placeholder="Hora" type="text" name="fecha_inicial_1" id="id_fecha_inicial_1"
-                                           required class="vTimeField" size="8"/>
+                        {% if field.field.name == "fecha_inicial" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-fecha_inicial">
+                                    <label class="control-label required" for="id_fecha_inicial_0">Fecha
+                                        inicial:</label><br>
+                                    <div class="datetime">
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
+                        {% if field.field.name == "fecha_final" %}
                         <div class="col-md-4">
                             <div class="form-group field-fecha_final">
                                 <label class="control-label required" for="id_fecha_final_0">Fecha final:</label><br>
                                 <div class="datetime">
-                                    <input placeholder="Fecha" type="text" name="fecha_final_0" id="id_fecha_final_0"
-                                           required class="vDateField" size="10"/>
-
-                                    <input placeholder="Hora" type="text" name="fecha_final_1" id="id_fecha_final_1"
-                                           required class="vTimeField" size="8"/>
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if field.field.name == "tipo_construccion" %}
                         <div class="col-md-4">
 
                             <div class="form-group field-tipo_construccion">
                                 <div>
                                     <label class="control-label required" for="id_tipo_construccion">Tipo de
                                         construcción:</label>
-                                    <div class="related-widget-wrapper">
-                                        <select name="tipo_construccion" required id="id_tipo_construccion"
-                                                class="form-control selectpicker">
-                                            <option value="" selected>---------</option>
-                                            <option value="1">OBRA NUEVA</option>
-                                        </select>
-                                    </div>
+                                    {{ field.field|addcss:"form-control selectpicker" }}
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="otro1">
                     <div class="row">
                         <h2 class="text-center">Ubicación</h2>
                         <hr>
-                        <div class="col-md-5">
-                            <div class="form-group field-ubicacion_calle">
-                                <div>
-                                    <label class="control-label required" for="id_ubicacion_calle">Calle:</label>
-                                    <input type="text" name="ubicacion_calle" id="id_ubicacion_calle" required
-                                           class=" form-control" maxlength="200"/>
+                        {% if field.field.name == "ubicacion_calle" %}
+                            <div class="col-md-5">
+                                <div class="form-group field-ubicacion_calle">
+                                    <div>
+                                        <label class="control-label required" for="id_ubicacion_calle">Calle:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-2">
-                            <div class="form-group field-ubicacion_numero">
-                                <div>
-                                    <label class="control-label required" for="id_ubicacion_numero">Numero:</label>
-                                    <input type="text" name="ubicacion_numero" id="id_ubicacion_numero" required
-                                           class=" form-control" maxlength="8"/>
+                        {% endif %}
+                        {% if field.field.name == "ubicacion_numero" %}
+                            <div class="col-md-2">
+                                <div class="form-group field-ubicacion_numero">
+                                    <div>
+                                        <label class="control-label required" for="id_ubicacion_numero">Numero:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-5">
-                            <div class="form-group field-ubicacion_colonia">
-                                <div>
-                                    <label class="control-label required" for="id_ubicacion_colonia">Colonia:</label>
-                                    <input type="text" name="ubicacion_colonia" id="id_ubicacion_colonia" required
-                                           class=" form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "ubicacion_colonia" %}
+                            <div class="col-md-5">
+                                <div class="form-group field-ubicacion_colonia">
+                                    <div>
+                                        <label class="control-label required" for="id_ubicacion_colonia">Colonia:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
+                        {% endif %}
                     </div>
                     <div class="row">
+                        {% if field.field.name == "ubicacion_municipio" %}
                         <div class="col-md-3">
-
                             <div class="form-group field-ubicacion_municipio">
                                 <div>
                                     <label class="control-label required"
                                            for="id_ubicacion_municipio">Municipio:</label>
-                                    <div class="related-widget-wrapper">
-                                        <select name="ubicacion_municipio" required id="id_ubicacion_municipio"
-                                                class="form-control selectpicker">
-                                            <option value="" selected>---------</option>
-                                            <option value="1">Metepec</option>
-                                        </select>
-                                    </div>
+                                    {{ field.field|addcss:"form-control selectpicker" }}
                                 </div>
                             </div>
                         </div>
+                        {% endif %}
+                        {% if field.field.name == "ubicacion_estado" %}
                         <div class="col-md-3">
-
                             <div class="form-group field-ubicacion_estado">
                                 <div>
                                     <label class="control-label required" for="id_ubicacion_estado">Estado:</label>
-                                    <div class="related-widget-wrapper">
-                                        <select name="ubicacion_estado" required id="id_ubicacion_estado"
-                                                class="form-control selectpicker">
-                                            <option value="" selected>---------</option>
-                                            <option value="1">Estado de Mexico</option>
-                                        </select>
+                                    {{ field.field|addcss:"form-control selectpicker" }}
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if field.field.name == "ubicacion_cp" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-ubicacion_cp">
+                                    <div>
+                                        <label class="control-label required" for="id_ubicacion_cp">C.P.</label>
+                                        {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-ubicacion_cp">
-                                <div>
-                                    <label class="control-label required" for="id_ubicacion_cp">C.P.</label>
-                                    <input type="number" name="ubicacion_cp" required class="form-control "
-                                           id="id_ubicacion_cp"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-ubicacion_pais">
-                                <div>
-                                    <label class="control-label required" for="id_ubicacion_pais">País:</label>
-                                    <div class="related-widget-wrapper">
-                                        <select name="ubicacion_pais" required id="id_ubicacion_pais"
-                                                class="form-control selectpicker">
-                                            <option value="" selected>---------</option>
-                                            <option value="1">Mexico</option>
-                                        </select>
+                        {% endif %}
+                        {% if field.field.name == "ubicacion_pais" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-ubicacion_pais">
+                                    <div>
+                                        <label class="control-label required" for="id_ubicacion_pais">País:</label>
+                                        {{ field.field|addcss:"form-control selectpicker" }}
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
 
                     <div class="row">
                         <h2 class="text-center">Áreas</h2>
                         <hr>
-                        <div class="col-md-3 col-md-offset-3">
-                            <div class="form-group field-area_superficie_escritura">
-                                <div>
-                                    <label class="control-label required" for="id_area_superficie_escritura">Superficie
-                                        escritura:</label>
-                                    <input type="number" name="area_superficie_escritura" value="0" step="0.01" required
-                                           id="id_area_superficie_escritura" class="form-control"/>
+                        {% if field.field.name == "area_superficie_escritura" %}
+                            <div class="col-md-3 col-md-offset-3">
+                                <div class="form-group field-area_superficie_escritura">
+                                    <div>
+                                        <label class="control-label required" for="id_area_superficie_escritura">Superficie
+                                            escritura:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3  ">
-                            <div class="form-group field-area_superficie_levantamiento">
-                                <div>
-                                    <label class="control-label required" for="id_area_superficie_levantamiento">Superficie
-                                        levantamiento:</label>
-                                    <input type="number" name="area_superficie_levantamiento" value="0" step="0.01"
-                                           required
-                                           id="id_area_superficie_levantamiento" class="form-control"/>
+                        {% endif %}
+                        {% if field.field.name == "area_superficie_levantamiento" %}
+                            <div class="col-md-3  ">
+                                <div class="form-group field-area_superficie_levantamiento">
+                                    <div>
+                                        <label class="control-label required" for="id_area_superficie_levantamiento">Superficie
+                                            levantamiento:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="otro2">
@@ -313,124 +281,84 @@
                     <div class="row">
                         <h2 class="text-center">Estado legal</h2>
                         <hr>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-estadolegal_documento_propiedad">
-                                <div>
-                                    <label class="control-label" for="id_estadolegal_documento_propiedad">Doc. de
-                                        propiedad:</label>
-                                    <input type="text" name="estadolegal_documento_propiedad"
-                                           id="id_estadolegal_documento_propiedad"
-                                           class="  form-control" maxlength="200"/>
+                        {% if field.field.name == "estadolegal_documento_propiedad" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-estadolegal_documento_propiedad">
+                                    <div>
+                                        <label class="control-label" for="id_estadolegal_documento_propiedad">Doc. de
+                                            propiedad:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-md-3">
-
-                            <div class="form-group field-estadolegal_gravamen">
-                                <div>
-                                    <label class="control-label" for="id_estadolegal_gravamen">Gravamen:</label>
-                                    <input type="text" name="estadolegal_gravamen" id="id_estadolegal_gravamen"
-                                           class="  form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "estadolegal_gravamen" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-estadolegal_gravamen">
+                                    <div>
+                                        <label class="control-label" for="id_estadolegal_gravamen">Gravamen:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-md-3">
-
-                            <div class="form-group field-estadolegal_predial">
-                                <div>
-                                    <label class="control-label" for="id_estadolegal_predial">Predial:</label>
-                                    <input type="text" name="estadolegal_predial" id="id_estadolegal_predial"
-                                           class="  form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "estadolegal_predial" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-estadolegal_predial">
+                                    <div>
+                                        <label class="control-label" for="id_estadolegal_predial">Predial:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
-                        <div class="col-md-3">
-                            <div class="form-group field-estadolegal_agua">
-                                <div>
-                                    <label class="control-label" for="id_estadolegal_agua">Agua:</label>
-                                    <input type="text" name="estadolegal_agua" id="id_estadolegal_agua"
-                                           class="  form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "estadolegal_agua" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-estadolegal_agua">
+                                    <div>
+                                        <label class="control-label" for="id_estadolegal_agua">Agua:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-
+                        {% endif %}
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group field-documento_propiedad">
-                                <label class="control-label required"
-                                       for="id_documento_propiedad">Documento:</label><br>
-                                <input type="file" name="documento_propiedad" id="id_documento_propiedad" required
-                                       multiple=""
-                                       class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
+                        {% if field.field.name == "documento_propiedad" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-documento_propiedad">
+                                    <label class="control-label required"
+                                           for="id_documento_propiedad">Documento:</label><br>
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
+                        {% if field.field.name == "documento_gravamen" %}
                         <div class="col-md-3">
                             <div class="form-group field-documento_gravamen">
                                 <label class="control-label required"
                                        for="id_documento_gravamen">Documento Gravamen:</label><br>
-                                <input type="file" name="documento_gravamen" id="id_documento_gravamen" required
-                                       multiple="" class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
-                                </div>
+                                {{ field.field|addcss:"form-control" }}
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-documento_predial">
-                                <label class="control-label required" for="id_documento_predial">Documento
-                                    Predial:</label><br>
-                                <input type="file" name="documento_predial" id="id_documento_predial" required
-                                       multiple="" class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
+                        {% endif %}
+                        {% if field.field.name == "documento_predial" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-documento_predial">
+                                    <label class="control-label required" for="id_documento_predial">Documento
+                                        Predial:</label><br>
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-documento_agua">
-                                <label class="control-label required" for="id_documento_agua">Agua:</label><br>
-                                <input type="file" name="documento_agua" id="id_documento_agua" required multiple=""
-                                       class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
+                        {% endif %}
+                        {% if field.field.name == "documento_agua" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-documento_agua">
+                                    <label class="control-label required" for="id_documento_agua">Agua:</label><br>
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -439,310 +367,293 @@
                     <h2 class="text-center">Restricciones</h2>
                     <hr>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group field-restrccion_vial">
-                                <div>
-                                    <label class="control-label required" for="id_restrccion_vial">Vial:</label>
-                                    <input type="text" name="restrccion_vial" id="id_restrccion_vial" required
-                                           class=" form-control" maxlength="200"/>
+                        {% if field.field.name == "restrccion_vial" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-restrccion_vial">
+                                    <div>
+                                        <label class="control-label required" for="id_restrccion_vial">Vial:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group field-restrccion_cna">
-                                <div>
-                                    <label class="control-label required" for="id_restrccion_cna">Cna:</label>
-                                    <input type="text" name="restrccion_cna" id="id_restrccion_cna" required
-                                           class=" form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "restrccion_cna" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-restrccion_cna">
+                                    <div>
+                                        <label class="control-label required" for="id_restrccion_cna">Cna:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group field-restrccion_cfe">
-                                <div>
-                                    <label class="control-label required" for="id_restrccion_cfe">Cfe:</label>
-                                    <input type="text" name="restrccion_cfe" id="id_restrccion_cfe" required
-                                           class=" form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "restrccion_cfe" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-restrccion_cfe">
+                                    <div>
+                                        <label class="control-label required" for="id_restrccion_cfe">Cfe:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
-                        <div class="col-md-4">
-                            <div class="form-group field-restrccion_pemex">
-                                <div>
-                                    <label class="control-label required" for="id_restrccion_pemex">Pemex:</label>
-                                    <input type="text" name="restrccion_pemex" id="id_restrccion_pemex" required
-                                           class=" form-control" maxlength="200"/>
+                        {% if field.field.name == "restrccion_pemex" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-restrccion_pemex">
+                                    <div>
+                                        <label class="control-label required" for="id_restrccion_pemex">Pemex:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group field-restrccion_inha">
-                                <div>
-                                    <label class="control-label required" for="id_restrccion_inha">Inha:</label>
-                                    <input type="text" name="restrccion_inha" id="id_restrccion_inha" required
-                                           class=" form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "restrccion_inha" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-restrccion_inha">
+                                    <div>
+                                        <label class="control-label required" for="id_restrccion_inha">Inha:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group field-restrccion_otros">
-                                <div>
-                                    <label class="control-label required" for="id_restrccion_otros">Otros:</label>
-                                    <input type="text" name="restrccion_otros" id="id_restrccion_otros" required
-                                           class=" form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "restrccion_otros" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-restrccion_otros">
+                                    <div>
+                                        <label class="control-label required" for="id_restrccion_otros">Otros:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
-                        <div class="col-md-6 col-md-offset-3">
-                            <div class="form-group field-restrccion_observaciones">
-                                <div>
-                                    <label class="control-label required" for="id_restrccion_observaciones">Observaciones:</label>
-                                    <input type="text" name="restrccion_observaciones" id="id_restrccion_observaciones"
-                                           required class=" form-control" maxlength="200"/>
+                        {% if field.field.name == "restrccion_observaciones" %}
+                            <div class="col-md-6 col-md-offset-3">
+                                <div class="form-group field-restrccion_observaciones">
+                                    <div>
+                                        <label class="control-label required" for="id_restrccion_observaciones">Observaciones:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
                 <div role="tabpanel" class="tab-pane fade" id="otro4">
                     <h2 class="text-center">Uso del suelo</h2>
                     <hr>
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group field-usosuelo_pmdu">
-                                <div>
-                                    <label class="control-label required" for="id_usosuelo_pmdu">Pmdu:</label>
-                                    <input type="text" name="usosuelo_pmdu" id="id_usosuelo_pmdu" required
-                                           class=" form-control" maxlength="200"/>
+                        {% if field.field.name == "usosuelo_pmdu" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-usosuelo_pmdu">
+                                    <div>
+                                        <label class="control-label required" for="id_usosuelo_pmdu">Pmdu:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group field-usosuelo_densidad">
-                                <div>
-                                    <label class="control-label required" for="id_usosuelo_densidad">Densidad:</label>
-                                    <input type="text" name="usosuelo_densidad" id="id_usosuelo_densidad" required
-                                           class=" form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "usosuelo_densidad" %}
+                            <div class="col-md-6">
+                                <div class="form-group field-usosuelo_densidad">
+                                    <div>
+                                        <label class="control-label required" for="id_usosuelo_densidad">Densidad:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-usosuelo_loteminimo">
-                                <div>
-                                    <label class="control-label required" for="id_usosuelo_loteminimo">Lote
-                                        mínimo:</label>
-                                    <input type="number" name="usosuelo_loteminimo" value="0" step="0.01" required
-                                           id="id_usosuelo_loteminimo"/>
+                        {% endif %}
+                        {% if field.field.name == "usosuelo_loteminimo" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-usosuelo_loteminimo">
+                                    <div>
+                                        <label class="control-label required" for="id_usosuelo_loteminimo">Lote
+                                            mínimo:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="form-group field-usosuelo_m2construccion">
-                                <div>
-                                    <label class="control-label required" for="id_usosuelo_m2construccion">M2 de
-                                        construcción:</label>
-                                    <input type="number" name="usosuelo_m2construccion" value="0" step="0.01" required
-                                           id="id_usosuelo_m2construccion"/>
+                        {% if field.field.name == "usosuelo_m2construccion" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-usosuelo_m2construccion">
+                                    <div>
+                                        <label class="control-label required" for="id_usosuelo_m2construccion">M2 de
+                                            construcción:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-usosuelo_arealibre">
-                                <div>
-                                    <label class="control-label required" for="id_usosuelo_arealibre">Area
-                                        libre:</label>
-                                    <input type="text" name="usosuelo_arealibre" id="id_usosuelo_arealibre" required
-                                           class=" form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "usosuelo_arealibre" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-usosuelo_arealibre">
+                                    <div>
+                                        <label class="control-label required" for="id_usosuelo_arealibre">Area
+                                            libre:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-usosuelo_altura">
-                                <div>
-                                    <label class="control-label required" for="id_usosuelo_altura">Altura:</label>
-                                    <input type="text" name="usosuelo_altura" id="id_usosuelo_altura" required
-                                           class=" form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "usosuelo_altura" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-usosuelo_altura">
+                                    <div>
+                                        <label class="control-label required" for="id_usosuelo_altura">Altura:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-usosuelo_densidadrequerida">
-                                <div>
-                                    <label class="control-label required" for="id_usosuelo_densidadrequerida">Densidad
-                                        requerida:</label>
-                                    <input type="text" name="usosuelo_densidadrequerida"
-                                           id="id_usosuelo_densidadrequerida" required
-                                           class=" form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "usosuelo_altura" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-usosuelo_densidadrequerida">
+                                    <div>
+                                        <label class="control-label required" for="id_usosuelo_densidadrequerida">Densidad
+                                            requerida:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                         <h2 class="text-center">Hidraulica</h2>
                         <hr>
-                        <div class="col-md-3">
-                            <div class="form-group field-hidraulica_fuente">
-                                <div>
-                                    <label class="control-label required" for="id_hidraulica_fuente">Fuente:</label>
-                                    <input type="text" name="hidraulica_fuente" id="id_hidraulica_fuente" required
-                                           class=" form-control"
-                                           maxlength="200"/>
+                        {% if field.field.name == "hidraulica_fuente" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-hidraulica_fuente">
+                                    <div>
+                                        <label class="control-label required" for="id_hidraulica_fuente">Fuente:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-hidraulica_distancia">
-                                <div>
-                                    <label class="control-label required"
-                                           for="id_hidraulica_distancia">Distacia:</label>
-                                    <input type="text" name="hidraulica_distancia" id="id_hidraulica_distancia" required
-                                           class=" form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "hidraulica_distancia" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-hidraulica_distancia">
+                                    <div>
+                                        <label class="control-label required"
+                                               for="id_hidraulica_distancia">Distacia:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-hidraulica_observaciones">
-                                <div>
-                                    <label class="control-label required" for="id_hidraulica_observaciones">Observaciones:</label>
-                                    <input type="text" name="hidraulica_observaciones" id="id_hidraulica_observaciones"
-                                           required
-                                           class=" form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "hidraulica_observaciones" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-hidraulica_observaciones">
+                                    <div>
+                                        <label class="control-label required" for="id_hidraulica_observaciones">Observaciones:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-hidraulica_documento">
-                                <label class="control-label required" for="id_hidraulica_documento">Hidraulica
-                                    documento:</label><br>
-                                <input type="file" name="hidraulica_documento" id="id_hidraulica_documento" required
-                                       multiple=""
-                                       class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
+                        {% endif %}
+                        {% if field.field.name == "hidraulica_documento" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-hidraulica_documento">
+                                    <label class="control-label required" for="id_hidraulica_documento">Hidraulica
+                                        documento:</label><br>
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                         <h2 class="text-center">Sanitaria</h2>
                         <hr>
-                        <div class="col-md-3">
-                            <div class="form-group field-sanitaria_tipo">
-                                <div>
-                                    <label class="control-label" for="id_sanitaria_tipo">Tipo:</label>
-                                    <input type="text" name="sanitaria_tipo" id="id_sanitaria_tipo"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% if field.field.name == "sanitaria_tipo" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-sanitaria_tipo">
+                                    <div>
+                                        <label class="control-label" for="id_sanitaria_tipo">Tipo:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-sanitaria_responsable">
-                                <div>
-                                    <label class="control-label" for="id_sanitaria_responsable">Responsable:</label>
-                                    <input type="text" name="sanitaria_responsable" id="id_sanitaria_responsable"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "sanitaria_responsable" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-sanitaria_responsable">
+                                    <div>
+                                        <label class="control-label" for="id_sanitaria_responsable">Responsable:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-sanitaria_observaciones">
-                                <div>
-                                    <label class="control-label" for="id_sanitaria_observaciones">Observaciones:</label>
-                                    <input type="text" name="sanitaria_observaciones" id="id_sanitaria_observaciones"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "sanitaria_observaciones" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-sanitaria_observaciones">
+                                    <div>
+                                        <label class="control-label" for="id_sanitaria_observaciones">Observaciones:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-sanitaria_documento">
-                                <label class="control-label required" for="id_sanitaria_documento">Sanitaria
-                                    documento:</label><br>
-                                <input type="file" name="sanitaria_documento" id="id_sanitaria_documento" required
-                                       multiple="" class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
+                        {% endif %}
+                        {% if field.field.name == "sanitaria_documento" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-sanitaria_documento">
+                                    <label class="control-label required" for="id_sanitaria_documento">Sanitaria
+                                        documento:</label><br>
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
                         <h2 class="text-center">Pluvial</h2>
                         <hr>
-                        <div class="col-md-3">
-                            <div class="form-group field-pluvial_tipo">
-                                <div>
-                                    <label class="control-label" for="id_pluvial_tipo">Tipo:</label>
-                                    <input type="text" name="pluvial_tipo" id="id_pluvial_tipo"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% if field.field.name == "pluvial_tipo" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-pluvial_tipo">
+                                    <div>
+                                        <label class="control-label" for="id_pluvial_tipo">Tipo:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
+                        {% endif %}
+                        {% if field.field.name == "pluvial_responsable" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-pluvial_responsable">
+                                    <div>
+                                        <label class="control-label" for="id_pluvial_responsable">Responsable:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if field.field.name == "pluvial_observaciones" %}
+                            <div class="col-md-3">
 
-
-                            <div class="form-group field-pluvial_responsable">
-                                <div>
-                                    <label class="control-label" for="id_pluvial_responsable">Responsable:</label>
-                                    <input type="text" name="pluvial_responsable" id="id_pluvial_responsable"
-                                           class="form-control"
-                                           maxlength="200"/>
+                                <div class="form-group field-pluvial_observaciones">
+                                    <div>
+                                        <label class="control-label" for="id_pluvial_observaciones">Observaciones:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-pluvial_observaciones">
-                                <div>
-                                    <label class="control-label" for="id_pluvial_observaciones">Observaciones:</label>
-                                    <input type="text" name="pluvial_observaciones" id="id_pluvial_observaciones"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "pluvial_documento" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-pluvial_documento">
+                                    <label class="control-label required" for="id_pluvial_documento">Pluvial
+                                        documento:</label><br>
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-pluvial_documento">
-                                <label class="control-label required" for="id_pluvial_documento">Pluvial
-                                    documento:</label><br>
-                                <input type="file" name="pluvial_documento" id="id_pluvial_documento" required
-                                       multiple=""
-                                       class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                        {% endif %}
                     </div>
                 </div>
 
@@ -750,221 +661,178 @@
                     <h2 class="text-center">Vial</h2>
                     <hr>
                     <div class="row">
-                        <div class="col-md-3">
-
-                            <div class="form-group field-vial_viaacceso">
-                                <div>
-                                    <label class="control-label" for="id_vial_viaacceso">Vias de acceso:</label>
-                                    <input type="text" name="vial_viaacceso" id="id_vial_viaacceso"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% if field.field.name == "vial_viaacceso" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-vial_viaacceso">
+                                    <div>
+                                        <label class="control-label" for="id_vial_viaacceso">Vias de acceso:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-vial_distancia">
-                                <div>
-                                    <label class="control-label" for="id_vial_distancia">Distancia:</label>
-                                    <input type="text" name="vial_distancia" id="id_vial_distancia"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "vial_distancia" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-vial_distancia">
+                                    <div>
+                                        <label class="control-label" for="id_vial_distancia">Distancia:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-vial_carriles">
-                                <div>
-                                    <label class="control-label" for="id_vial_carriles">Carriles:</label>
-                                    <input type="text" name="vial_carriles" id="id_vial_carriles"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "vial_carriles" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-vial_carriles">
+                                    <div>
+                                        <label class="control-label" for="id_vial_carriles">Carriles:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-vial_seccion">
-                                <div>
-                                    <label class="control-label" for="id_vial_seccion">Seccion:</label>
-                                    <input type="text" name="vial_seccion" id="id_vial_seccion"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "vial_seccion" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-vial_seccion">
+                                    <div>
+                                        <label class="control-label" for="id_vial_seccion">Seccion:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
                     </div>
                     <div class="row">
-                        <div class="col-md-3">
+                        {% if field.field.name == "vial_tipopavimento" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-vial_tipopavimento">
+                                    <div>
+                                        <label class="control-label" for="id_vial_tipopavimento">Tipo de pavimento:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if field.field.name == "vial_estadoconstruccion" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-vial_estadoconstruccion">
+                                    <div>
+                                        <label class="control-label" for="id_vial_estadoconstruccion">Estado de
+                                            construcción:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if field.field.name == "vial_observaciones" %}
+                            <div class="col-md-3">
 
-                            <div class="form-group field-vial_tipopavimento">
-                                <div>
-                                    <label class="control-label" for="id_vial_tipopavimento">Tipo de pavimento:</label>
-                                    <input type="text" name="vial_tipopavimento" id="id_vial_tipopavimento"
-                                           class="form-control"
-                                           maxlength="200"/>
+                                <div class="form-group field-vial_observaciones">
+                                    <div>
+                                        <label class="control-label" for="id_vial_observaciones">Observaciones:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-vial_estadoconstruccion">
-                                <div>
-                                    <label class="control-label" for="id_vial_estadoconstruccion">Estado de
-                                        construcción:</label>
-                                    <input type="text" name="vial_estadoconstruccion" id="id_vial_estadoconstruccion"
-                                           class="form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "vial_documento" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-vial_documento">
+                                    <label class="control-label required" for="id_vial_documento">Hidraulica
+                                        documento:</label><br>
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-vial_observaciones">
-                                <div>
-                                    <label class="control-label" for="id_vial_observaciones">Observaciones:</label>
-                                    <input type="text" name="vial_observaciones" id="id_vial_observaciones"
-                                           class="form-control"
-                                           maxlength="200"/>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-3">
-                            <div class="form-group field-vial_documento">
-                                <label class="control-label required" for="id_vial_documento">Hidraulica
-                                    documento:</label><br>
-                                <input type="file" name="vial_documento" id="id_vial_documento" required
-                                       multiple=""
-                                       class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
+                        {% endif %}
                     </div>
 
                     <h2 class="text-center">Electricidad</h2>
                     <hr>
                     <div class="row">
-                        <div class="col-md-3">
-
-                            <div class="form-group field-electricidad_tipo">
-                                <div>
-                                    <label class="control-label" for="id_electricidad_tipo">Tipo:</label>
-                                    <input type="text" name="electricidad_tipo" id="id_electricidad_tipo"
-                                           class="  form-control"
-                                           maxlength="200"/>
+                        {% if field.field.name == "electricidad_tipo" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-electricidad_tipo">
+                                    <div>
+                                        <label class="control-label" for="id_electricidad_tipo">Tipo:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-
-                            <div class="form-group field-electricidad_distancia">
-                                <div>
-                                    <label class="control-label" for="id_electricidad_distancia">Distancia:</label>
-                                    <input type="text" name="electricidad_distancia" id="id_electricidad_distancia"
-                                           class="  form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "electricidad_distancia" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-electricidad_distancia">
+                                    <div>
+                                        <label class="control-label" for="id_electricidad_distancia">Distancia:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-electricidad_observaciones">
-                                <div>
-                                    <label class="control-label"
-                                           for="id_electricidad_observaciones">Observaciones:</label>
-                                    <input type="text" name="electricidad_observaciones"
-                                           id="id_electricidad_observaciones"
-                                           class="  form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "electricidad_observaciones" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-electricidad_observaciones">
+                                    <div>
+                                        <label class="control-label"
+                                               for="id_electricidad_observaciones">Observaciones:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
+                        {% if field.field.name == "electricidad_documento" %}
                         <div class="col-md-3">
                             <div class="form-group field-electricidad_documento">
                                 <label class="control-label required" for="id_electricidad_documento">Hidraulica
                                     documento:</label><br>
-                                <input type="file" name="electricidad_documento" id="id_electricidad_documento" required
-                                       multiple=""
-                                       class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
-                                </div>
+                                {{ field.field|addcss:"form-control" }}
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                     <h2 class="text-center">Alumbrado Público</h2>
                     <hr>
                     <div class="row">
-                        <div class="col-md-3">
-
-                            <div class="form-group field-alumbradopublico_tipo">
-                                <div>
-                                    <label class="control-label" for="id_alumbradopublico_tipo">Tipo:</label>
-                                    <input type="text" name="alumbradopublico_tipo" id="id_alumbradopublico_tipo"
-                                           class="  form-control"
-                                           maxlength="200"/>
+                        {% if field.field.name == "alumbradopublico_tipo" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-alumbradopublico_tipo">
+                                    <div>
+                                        <label class="control-label" for="id_alumbradopublico_tipo">Tipo:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-alumbradopublico_distancia">
-                                <div>
-                                    <label class="control-label" for="id_alumbradopublico_distancia">Distancia:</label>
-                                    <input type="text" name="alumbradopublico_distancia"
-                                           id="id_alumbradopublico_distancia"
-                                           class="  form-control"
-                                           maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "alumbradopublico_distancia" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-alumbradopublico_distancia">
+                                    <div>
+                                        <label class="control-label" for="id_alumbradopublico_distancia">Distancia:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-
-                            <div class="form-group field-alumbradopublico_observaciones">
-                                <div>
-                                    <label class="control-label"
-                                           for="id_alumbradopublico_observaciones">Dobservaciones:</label>
-                                    <input type="text" name="alumbradopublico_observaciones"
-                                           id="id_alumbradopublico_observaciones"
-                                           class="  form-control" maxlength="200"/>
+                        {% endif %}
+                        {% if field.field.name == "alumbradopublico_observaciones" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-alumbradopublico_observaciones">
+                                    <div>
+                                        <label class="control-label"
+                                               for="id_alumbradopublico_observaciones">Dobservaciones:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        {% endif %}
+                        {% if field.field.name == "alumbradopublico_documento" %}
                         <div class="col-md-3">
                             <div class="form-group field-alumbradopublico_documento">
                                 <label class="control-label required" for="id_alumbradopublico_documento">Hidraulica
                                     documento:</label><br>
-                                <input type="file" name="alumbradopublico_documento" id="id_alumbradopublico_documento"
-                                       required
-                                       multiple=""
-                                       class="form-control">
-                                <div class="input-group">
-                                    <input type="text" readonly="" class="form-control"
-                                           placeholder="Cargar documento...">
-                                    <span class="input-group-btn input-group-sm">
-                                        <button type="button" class="btn btn-fab btn-fab-mini">
-                                        <i class="material-icons">attach_file</i>
-                                        </button>
-                                    </span>
-                                </div>
+                                {{ field.field|addcss:"form-control" }}
                             </div>
                         </div>
+                        {% endif %}
                     </div>
                     <h2 class="text-center">Telefonía</h2>
                     <hr>
@@ -1316,6 +1184,8 @@
                 </div>
 
             </div>
+             {% endfor %}
+            {% endfor %}
         </div>
     </div>
 </fieldset>
