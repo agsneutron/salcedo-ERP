@@ -38,6 +38,8 @@ class UsuarioAdmin(UserAdmin):
     #  Overrriding the 'save' method so the user can have the 'staff' status and access the system.
     def save_model(self, request, obj, form, change):
         obj.is_staff = True
+        print "Obj is:"
+        print obj.erpuser
         obj.save()
 
         super(UsuarioAdmin, self).save_model(request, obj, form, change)

@@ -6,6 +6,7 @@ from users.models import ERPUser
 
 from django.db import models
 from Logs.controller import Logs
+from smart_selects.db_fields import ChainedManyToManyField
 
 
 # Create your models here.
@@ -845,6 +846,7 @@ class ProgressEstimateLog(models.Model):
 
     class Meta:
         verbose_name_plural = 'Bitácoras de Estimaciones'
+
 
 
 '''
