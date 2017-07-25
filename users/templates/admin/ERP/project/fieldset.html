@@ -72,6 +72,11 @@
                     <span class="hidden-xs">Programas</span>
                 </a>
             </li>
+            <li role="presentation">
+                <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
+                    <span class="hidden-xs">Tipo Construcción</span>
+                </a>
+            </li>
         </ul>
 
         <div class="card-block">
@@ -142,9 +147,7 @@
                                 <div class="form-group field-fecha_inicial">
                                     <label class="control-label required" for="id_fecha_inicial_0">Fecha
                                         inicial:</label><br>
-                                    <div class="datetime">
-                                        {{ field.field|addcss:"form-control" }}
-                                    </div>
+                                        {{ field.field }}
                                 </div>
                             </div>
 
@@ -1179,20 +1182,24 @@
                         </div>
                     </div>
                 </div>
+                <div role="tabpanel" class="tab-pane fade" id="otro8">
+                 {% for inline_admin_formset in inline_admin_formsets %}
+                    {% if inline_admin_formset.formset.prefix == "tipoproyectodetalle_set" %}
+                        <!-- proyecto detalle-->
+                        {% include "admin/ERP/project/tabular.html" %}
+                    {% endif %}
+                {% endfor %}
+                </div>
             </div>
              {% endif %}
              {% endfor %}
             {% endfor %}
+
         </div>
     </div>
 </fieldset>
 
-{% for inline_admin_formset in inline_admin_formsets %}
-    {% if inline_admin_formset.formset.prefix == "tipoproyectodetalle_set" %}
-        <!-- proyecto detalle-->
-        {% include "admin/ERP/project/tabular.html" %}
-    {% endif %}
-{% endfor %}
+
 
 
 {% comment %}
