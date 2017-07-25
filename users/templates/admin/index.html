@@ -1,16 +1,233 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_static %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}" />{% endblock %}
+
 
 {% block coltype %}colMS{% endblock %}
 
 {% block bodyclass %}{{ block.super }} dashboard{% endblock %}
 
 {% block breadcrumbs %}{% endblock %}
-
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}"/>
+    {#    <script src="{% static "admin/assets/Highcharts/code/themes/dark-unica.js" %}"></script>#}
+{% endblock %}
 {% block content %}
-<div id="contentainer">
-jhbiugvu v utfutftf
-</div>
+    <div id="container">
+        <div class="row">
+            <div class="col-xs-8">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">Consulta</h3>
+                        </div>
+                        <div class="item-right">
+                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-pie-chart"></i></a>
+                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-line-chart"></i></a>
+                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-area-chart"></i></a>
+                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-bar-chart"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-block">
+                        <div id="container-chart" style="height: 250px"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Proyecto 1</h3>
+                    </div>
+                    <div class="card-block" style="height: 290px; padding: 0">
+                        <div id="container-chart-2" style="height: 150px"></div>
+                        <div class="col-xs-6">
+                            <div style="    padding-top: 15px;">
+                                <dl>
+                                    <dd>Fecha inicio</dd>
+                                    <dt>24 septiembre 2007</dt>
+                                    <hr>
+                                    <dd>Fecha termino</dd>
+                                    <dt>24 septiembre 2007</dt>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div style="padding: 20px">
+                                <div class="circle" id="circles-1"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Proyecto 2</h3>
+                    </div>
+                    <div class="card-block" style="height: 290px; padding: 0">
+                        <div id="container-chart-3" style="height: 150px"></div>
+                        <div class="col-xs-6">
+                            <div style="    padding-top: 15px;">
+                                <dl>
+                                    <dd>Fecha inicio</dd>
+                                    <dt>24 septiembre 2007</dt>
+                                    <hr>
+                                    <dd>Fecha termino</dd>
+                                    <dt>24 septiembre 2007</dt>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div style="padding: 20px">
+                                <div class="circle" id="circles-2"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Proyecto 3</h3>
+                    </div>
+                    <div class="card-block" style="height: 290px; padding: 0">
+                        <div id="container-chart-4" style="height: 150px"></div>
+                        <div class="col-xs-6">
+                            <div style="    padding-top: 15px;">
+                                <dl>
+                                    <dd>Fecha inicio</dd>
+                                    <dt>24 septiembre 2007</dt>
+                                    <hr>
+                                    <dd>Fecha termino</dd>
+                                    <dt>24 septiembre 2007</dt>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div style="padding: 20px">
+                                <div class="circle" id="circles-3"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Proyecto 4</h3>
+                    </div>
+                    <div class="card-block" style="height: 290px; padding: 0">
+                        <div id="container-chart-5" style="height: 150px"></div>
+                        <div class="col-xs-6">
+                            <div style="    padding-top: 15px;">
+                                <dl>
+                                    <dd>Fecha inicio</dd>
+                                    <dt>24 septiembre 2007</dt>
+                                    <hr>
+                                    <dd>Fecha termino</dd>
+                                    <dt>24 septiembre 2007</dt>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div style="padding: 20px">
+                                <div class="circle" id="circles-4"></div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <script>
+        $(document).ready(function () {
+            var myCircle = Circles.create({
+                id: 'circles-1',
+                radius: 50,
+                value: 43,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-2',
+                radius: 50,
+                value: 23,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-3',
+                radius: 50,
+                value: 76,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-4',
+                radius: 50,
+                value: 98,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+        });
+    </script>
+
+        <script src="{% static "admin/assets/Highcharts/code/highcharts.js" %}"></script>
+    <script src="{% static "admin/assets/Highcharts/code/modules/exporting.js" %}"></script>
+    <script src="{% static "admin/js/demo-charts.js" %}"></script>
 {% endblock %}
