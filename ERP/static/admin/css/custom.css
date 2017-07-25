@@ -379,7 +379,41 @@ form .aligned ul {
 .btn:not(.btn-raised).btn-primary, .input-group-btn .btn:not(.btn-raised).btn-primary {
     color: #00a09b;
 }
+.item-left {
+    text-align: left;
+}
+.item-right {
+    position: absolute;
+    top: 9px;
+    right: 25px;
+}
+.btn.btn-xs, .btn-group-xs .btn, .input-group-btn .btn.btn-xs, .btn-group-xs .input-group-btn .btn {
+    padding: 5px 2px;
+    font-size: 10px;
+        margin: 0px;
+}
+.card .card-header i {
+    margin-right: 0px;
+    margin: 0px 7px;
+    font-size: 14px;
+}
+#container-chart-2 .highcharts-button-box {
+display: none !important;
+ }
 
+dd {
+    margin-bottom: 5px;
+    margin-bottom: 0;
+}
+dd, dt {
+    line-height: 1;
+}
+dt {
+    color: #00a09b;
+}
+.circle-primary {
+    stroke: #00a09b;
+}
 
 @media (min-width: 768px) {
     .navbar-nav {

@@ -15,6 +15,8 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/theme.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/custom.css" %}"/>
+    <!-- Bootstrap Library js -->
+    <script src="{% static "admin/js/theme.js" %}"></script>
     {% block extrastyle %}{% endblock %}
     {% if LANGUAGE_BIDI %}
         <link rel="stylesheet" type="text/css"
@@ -24,8 +26,7 @@
         <meta name="robots" content="NONE,NOARCHIVE"/>{% endblock %}
     <!-- Jquery Library js -->
 
-    <!-- Bootstrap Library js -->
-    <script src="{% static "admin/js/theme.js" %}"></script>
+
 </head>
 {% load i18n %}
 
