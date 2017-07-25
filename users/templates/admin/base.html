@@ -11,7 +11,7 @@
     <!-- Bootstrap Library css -->
     <link rel="stylesheet" type="text/css" href="{% static "admin/assets/fonts/css/font-awesome.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/animate.css" %}"/>
-
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/bootstrap.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/theme.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/custom.css" %}"/>
@@ -23,9 +23,8 @@
     {% block blockbots %}
         <meta name="robots" content="NONE,NOARCHIVE"/>{% endblock %}
     <!-- Jquery Library js -->
-    <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+
     <!-- Bootstrap Library js -->
-    <script src="{% static "admin/js/bootstrap.min.js" %}"></script>
     <script src="{% static "admin/js/theme.js" %}"></script>
 </head>
 {% load i18n %}
@@ -47,7 +46,7 @@
             <a href="index.html">
                 <!-- <img src="assets/img/demo/logo-header.png" alt=""> -->
                 <span class="ms-logo animated zoomInDown animation-delay-5"><img
-                        src="../../static/admin/img/logo.png"> </span>
+                        src="{% static "admin/img/logo.png" %}"> </span>
             </a>
         </div>
         <div class="header-right">
@@ -68,21 +67,22 @@
 </header>
 <!-- End Header -->
 <!-- begins navigation -->
-    {% if user.is_active and user.is_staff %}
-<nav class="navbar navbar-static-top yamm ms-navbar ms-navbar-primary">
+{% if user.is_active and user.is_staff %}
+    <nav class="navbar navbar-static-top yamm ms-navbar ms-navbar-primary">
 
 
         <div class="container container-full">
             <div class="navbar-header">
                 <a class="navbar-brand" href="index.html">
-                            <span class="ms-logo animated zoomInDown animation-delay-5"><img
-                                    src="../../static/admin/img/logo.png"> </span>
+                    <span class="ms-logo animated zoomInDown animation-delay-5"><img
+                            src="{% static "admin/img/logo_mini.png" %}" style="max-height: 50px"> </span>
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="dropdown active">
-                        <a href="javascript:void(0)" class="dropdown-toggle animated fadeIn animation-delay-4 text-center"
+                        <a href="javascript:void(0)"
+                           class="dropdown-toggle animated fadeIn animation-delay-4 text-center"
                            data-toggle="dropdown" data-hover="dropdown" data-name="home">
                             <i class="fa fa-home text-center"></i><br>
                             Inicio
@@ -112,11 +112,20 @@
                            data-name="blog">
                             <i class="fa fa-home text-center"></i><br>
                             Seguimiento de obra
+                            <i class="zmdi zmdi-chevron-down"></i>
                         </a>
-                        <ul class="dropdown-menu">
-                            <li>
-                                <a href="blog-sidebar.html">
+                        <ul class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
+                            <li class="dropdown-submenu">
+                                <a href="blog-sidebar.html" class="has_children">
                                     <i class="zmdi zmdi-view-compact"></i> Proyectos</a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li>
+                                        <a href="/admin/ERP/project/add/">Agregar</a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/ERP/project/">Consultar</a>
+                                    </li>
+                                </ul>
                             </li>
                             <li>
                                 <a href="blog-sidebar2.html">
@@ -158,26 +167,17 @@
         <!-- container -->
 
 
-</nav>
-    {% endif %}
+    </nav>
+{% endif %}
 
 <!-- ends navigation -->
 
 <!-- begins breadcrumbs and messages -->
-<div class="container">
-    {% block messages %}
-        {% if messages %}
-            <ul class="messagelist">{% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
-            {% endfor %}</ul>
-        {% endif %}
-    {% endblock messages %}
-</div>
+
 <!-- ends breadcrumbs and messages -->
 <!-- Begins MainContainer -->
-<div id="content" class="{% block coltype %}colM{% endblock %}">
+<div id="content" class=" container">
     {% block pretitle %}{% endblock %}
-    {% block content_title %}{% if title %}<h1>{{ title }}</h1>{% endif %}{% endblock %}
     {% block content %}
         {% block object-tools %}{% endblock %}
         {{ content }}
@@ -206,7 +206,7 @@
             <header class="ms-slidebar-header">
                 <div class="ms-slidebar-login">
                     <a href="javascript:void(0)" class="withripple">
-                    Salcedo ERP Ususario
+                        Salcedo ERP Ususario
                     </a>
                 </div>
                 <div class="ms-slidebar-title">

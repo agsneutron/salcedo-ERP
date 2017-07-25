@@ -382,14 +382,14 @@ class Contrato(models.Model):
         def __str__(self):
             return self.observaciones
 
-        def save(self, *args, **kwargs):
-            canSave = True
+        #def save(self, *args, **kwargs):
+            #    canSave = True
 
-            if canSave:
-                Logs.log("Saving new Contrato", "Te")
-                super(Contrato, self).save(*args, **kwargs)
-            else:
-                Logs.log("Couldn't save")
+            #if canSave:
+            #    Logs.log("Saving new Contrato", "Te")
+            #    super(Contrato, self).save(*args, **kwargs)
+            #else:
+            #    Logs.log("Couldn't save")
 
 
 # Propietario
@@ -407,8 +407,6 @@ class Propietario(models.Model):
     email = models.CharField(verbose_name="e mail", max_length=100, null=True, blank=True)
     empresa = models.ForeignKey(Empresa, verbose_name="empresa", null=False, blank=False)
 
-    class Meta:
-        verbose_name_plural = 'Propietario'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -506,10 +504,14 @@ class Project(models.Model):
     area_superficie_levantamiento = models.DecimalField(verbose_name='superficie levantamiento', decimal_places=2,
                                                         blank=False, null=False, default=0, max_digits=20)
     
-    estadolegal_documento_propiedad = models.CharField(verbose_name="calle", max_length=200, null=True, blank=True)
+    estadolegal_documento_propiedad = models.CharField(verbose_name="Documento de propiedad", max_length=200, null=True, blank=True)
+    documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
+    documento_gravamen = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     estadolegal_predial = models.CharField(verbose_name="predial", max_length=200, null=True, blank=True)
+    documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
+    documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     restrccion_vial = models.CharField(verbose_name="vial", max_length=200, null=True, blank=True)
     restrccion_cna = models.CharField(verbose_name="cna", max_length=200, null=True, blank=True)
     restrccion_cfe = models.CharField(verbose_name="cfe", max_length=200, null=True, blank=True)
@@ -530,12 +532,15 @@ class Project(models.Model):
     hidraulica_fuente = models.CharField(verbose_name="fuente", max_length=200, null=True, blank=True)
     hidraulica_distancia = models.CharField(verbose_name="distacia", max_length=200, null=True, blank=True)
     hidraulica_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    hidraulica_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     sanitaria_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     sanitaria_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
     sanitaria_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    sanitaria_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     pluvial_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     pluvial_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
     pluvial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    pluvial_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     vial_viaacceso = models.CharField(verbose_name="vias de acceso", max_length=200, null=True, blank=True)
     vial_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     vial_carriles = models.CharField(verbose_name="carriles", max_length=200, null=True, blank=True)
@@ -544,15 +549,19 @@ class Project(models.Model):
     vial_estadoconstruccion = models.CharField(verbose_name="estado de construcción", max_length=200, null=True,
                                                blank=True)
     vial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    vial_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     electricidad_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     electricidad_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     electricidad_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    electricidad_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     alumbradopublico_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     alumbradopublico_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     alumbradopublico_observaciones = models.CharField(verbose_name="dobservaciones", max_length=200, null=True,
                                                       blank=True)
+    alumbradopublico_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     telefonia_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     telefonia_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+    telefonia_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     tvcable_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     tvcable_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     equipamiento_a100 = models.CharField(verbose_name="a 100", max_length=200, null=True, blank=True)
@@ -567,13 +576,13 @@ class Project(models.Model):
                                            default=0, max_digits=20)
     costo_levantamiento = models.DecimalField(verbose_name='levantamiento m2', decimal_places=2, blank=True,
                                               null=True, default=0, max_digits=20)
-    estudiomercado_demanda = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
-    estudiomercado_oferta = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
-    estudiomercado_conclusiones = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
-    estudiomercado_recomendaciones = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
-    definicionproyecto_alternativa = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
-    definicionproyecto_tamano = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
-    definicionproyecto_programa = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+    estudiomercado_demanda = models.CharField(verbose_name="Demanda", max_length=200, null=True, blank=True)
+    estudiomercado_oferta = models.CharField(verbose_name="Oferta", max_length=200, null=True, blank=True)
+    estudiomercado_conclusiones = models.CharField(verbose_name="Conlusiones", max_length=200, null=True, blank=True)
+    estudiomercado_recomendaciones = models.CharField(verbose_name="Recomendaciones", max_length=200, null=True, blank=True)
+    definicionproyecto_alternativa = models.CharField(verbose_name="Alernativa", max_length=200, null=True, blank=True)
+    definicionproyecto_tamano = models.CharField(verbose_name="Tamaño", max_length=200, null=True, blank=True)
+    definicionproyecto_programa = models.CharField(verbose_name="Programa", max_length=200, null=True, blank=True)
 
     programayarea_areaprivativa = models.DecimalField(verbose_name='area privada', decimal_places=2, blank=True,
                                                       null=True, default=0, max_digits=20)
@@ -589,6 +598,7 @@ class Project(models.Model):
                                                               blank=True, null=True, default=0, max_digits=20)
     programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=True, null=True,
                                                    default=0, max_digits=20)
+    programayarea_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     #tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
 
     class Meta:
