@@ -9,31 +9,31 @@
    <table style="background: #ffffff; border:0px;" width="99%">
      <thead style="background: #ffffff; border:0px;"><tr>
      <tr>
-                                {% for field in inline_admin_formset.fields %}
-                                    {% if not field.widget.is_hidden %}
-                                        <th{% if forloop.first %} colspan="2"{% endif %}{% if field.required %}
-                                                                  class="required"{% endif %}>{{ field.label|capfirst }}
-                                            {% if field.help_text %}&nbsp;
-                                                <img src="{% static "admin/img/icon-unknown.svg" %}"
-                                                     class="help help-tooltip" width="10" height="10"
-                                                     alt="({{ field.help_text|striptags }})"
-                                                     title="{{ field.help_text|striptags }}"/>{% endif %}
-                                        </th>
-                                    {% endif %}
-                                {% endfor %}
-                                {% if inline_admin_formset.formset.can_delete %}
-                                    <th>{% trans "Delete?" %}</th>{% endif %}
-                            </tr>
-                            </thead>
+            {% for field in inline_admin_formset.fields %}
+                {% if not field.widget.is_hidden %}
+                    <th{% if forloop.first %} colspan="2"{% endif %}{% if field.required %}
+                                              class="required"{% endif %}>{{ field.label|capfirst }}
+                        {% if field.help_text %}&nbsp;
+                            <img src="{% static "admin/img/icon-unknown.svg" %}"
+                                 class="help help-tooltip" width="10" height="10"
+                                 alt="({{ field.help_text|striptags }})"
+                                 title="{{ field.help_text|striptags }}"/>{% endif %}
+                    </th>
+                {% endif %}
+            {% endfor %}
+            {% if inline_admin_formset.formset.can_delete %}
+                <th>{% trans "Delete?" %}</th>{% endif %}
+     </tr>
+     </thead>
 
      <tbody style="background: #ffffff; border:0px;">
      {% for inline_admin_form in inline_admin_formset %}
         {% if inline_admin_form.form.non_field_errors %}
-        <tr><td colspan="{{ inline_admin_form|cell_count }}" style="background: #ffffff; border:0px;">{{ inline_admin_form.form.non_field_errors }}</td></tr>
+        <tr><td colspan="{{ inline_admin_form|cell_count }}" style="background: #ffffff; border:1px;">{{ inline_admin_form.form.non_field_errors }}</td></tr>
         {% endif %}
         <tr class="form-row {% cycle "row1" "row2" %} {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last %} empty-form{% endif %}"
              id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
-        <td class="original" style="background: #ffffff; border:0px;" hidden="true">
+        <td class="original" style="background: #ffffff; border:1px;" hidden="true">
           {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
           {% if inline_admin_form.original %} {{ inline_admin_form.original }}{% endif %}
           {% if inline_admin_form.show_url %}<a href="{{ inline_admin_form.absolute_url }}">{% trans "View on site" %}</a>{% endif %}
@@ -55,6 +55,7 @@
             {% for field in line %}
               {% if not field.field.is_hidden %}
               <td{% if field.field.name %} class="field-{{ field.field.name }}"{% endif %} style="background: #ffffff; border:0px;">
+
               {% if field.is_readonly %}
                   <p>{{ field.contents }}</p>
               {% else %}
