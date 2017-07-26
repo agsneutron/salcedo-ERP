@@ -90,7 +90,7 @@ class EstimateForm(forms.ModelForm):
 class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
-        fields = "__all__"
+        fields = ('description', 'date')
 
 
 
