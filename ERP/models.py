@@ -9,6 +9,7 @@ from Logs.controller import Logs
 from smart_selects.db_fields import ChainedManyToManyField
 
 
+
 # Create your models here.
 
 # *********************************************************************
@@ -836,7 +837,6 @@ class ProgressEstimate(models.Model):
     Model for handling the progress estimate log.
 '''
 
-
 class ProgressEstimateLog(models.Model):
     progress_estimate = models.ForeignKey(ProgressEstimate, verbose_name="Estimación", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
@@ -848,6 +848,17 @@ class ProgressEstimateLog(models.Model):
         verbose_name_plural = 'Bitácoras de Estimaciones'
 
 
+    def to_serializable_dict(self):
+        answer = model_to_dict(self)
+        answer['date'] = str(self.date)
+        answer['register_date'] = str(self.register_date)
+        return answer
+
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.description
+
+
 
 '''
     Model for the Log File.
@@ -855,9 +866,14 @@ class ProgressEstimateLog(models.Model):
 
 
 class LogFile(models.Model):
-    progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Log de Estimación", null=False,
+    progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de Estimación", null=False,
                                               blank=False)
     file = models.FileField(verbose_name="Archivo", max_length=1024, null=True, blank=True)
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
+
+    def to_serializable_dict(self):
+        answer = model_to_dict(self)
+        answer['file'] = str(self.file)
+        return answer
 
 

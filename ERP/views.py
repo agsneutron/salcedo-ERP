@@ -1,11 +1,11 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 from __future__ import unicode_literals
 from ERP.forms import ProgressEstimateLogForm, LogFileForm
 from ERP.models import ProgressEstimateLog, LogFile
 from django.db.models import Q
 
 from django.shortcuts import render
-
+from ERP.lib.utilities import Utilities
 
 # Create your views here.
 def progress_estimate_log_view(request):
@@ -20,16 +20,16 @@ def progress_estimate_log_view(request):
 
     # Retrieving data from the model to be rendered.
     logs = ProgressEstimateLog.objects.all()
-    files = []
+    log_files = []
     if logs:
-        print logs.first().id
-        files = LogFile.objects.filter(Q(progress_estimate_log__id=logs.first().id))
+        log_files = LogFile.objects.filter(Q(progress_estimate_log__id=logs.first().id))
 
-    for file in files:
-        print file.file
 
     params = {
         'pel_form': progress_estimate_log_form,
-        'files_form': log_file_form
+        'files_form': log_file_form,
+        'logs': logs,
+        'log_files': Utilities.query_set_to_json(log_files)
     }
+
     return render(request, 'ProgressEstimateLog/progress_estimate_log_form.html', params)

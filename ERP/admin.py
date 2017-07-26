@@ -33,10 +33,6 @@ class LineItemAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
-class LogFileInline(admin.TabularInline):
-    fields = ('file',)
-    model = LogFile
-    extra = 0
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
@@ -45,10 +41,6 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
     list_per_page = 50
-
-    inlines = [
-        LogFileInline,
-    ]
 
 
 class ProgressEstimateInline(admin.TabularInline):

@@ -83,6 +83,7 @@ class EstimateForm(forms.ModelForm):
         fields = "__all__"
 
 
+
 '''
     Forms for the progress estimate log.
 '''
@@ -90,6 +91,7 @@ class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
         fields = "__all__"
+
 
 
 

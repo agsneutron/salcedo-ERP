@@ -1,19 +1,165 @@
 {% extends 'ProgressEstimateLog/base.html' %}
 
+
 {% block content %}
-    <h1>Bitácora de seguimiento</h1>
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ pel_form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
-    </form>
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+        td{
+            padding: 0 20px;
+        }
 
-    <br>
-    <br>
-    <br>
-    <br>
+        .left-container, .right-container{
+            position: relative;
+            display: inline-block !important;
+            width:49%;
+        }
+    </style>
 
-    <form method="POST" class="post-form">{% csrf_token %}
-        {{ files_form.as_p }}
-        <button type="submit" class="save btn btn-default">Save</button>
-    </form>
+    <script type="text/javascript">
+
+        function create_log_files_table(json_log_files){
+            var table_string = "<table>"                            +
+                                    "<thead>"                       +
+                                        "<tr>"                      +
+                                            "<td>Id</td>"           +
+                                            "<td>Archivo</td>"      +
+                                            "<td>Mime</td>"         +
+                                            "<td>Acción</td>"       +
+                                    "</tr>"                         +
+                                    "</thead>"                      +
+                                    ""                              +
+                                    "<tbody>";
+            for(var count in json_log_files){
+                table_string +=         "<tr>"                      +
+                                            "<td>"+json_log_files[count].id+"</td>"        +
+                                            "<td>"+json_log_files[count].file+"</td>"      +
+                                            "<td>"+json_log_files[count].mime+"</td>"      +
+                                            "<td>"+
+                                                "<a href='/admin/ERP/logfile/"+json_log_files[count].id+"/delete/'>"+
+                                                    "Eliminar"                             +
+                                                "</a>"                                     +
+                                            "</td>"                                        +
+                                        "</tr>";
+            }
+
+            table_string +=        "</tbody>"                       +
+                                "</table>";
+
+
+            return table_string;
+
+        }
+
+        var json_log_files = {{log_files}};
+        $(document).ready(function () {
+
+            // Set the files of the first 'pel' as default.
+           if(json_log_files.length > 0){
+               files_table = create_log_files_table(json_log_files);
+               $("#log-files-table").html(files_table);
+           }
+
+           // Setting the value for the select.
+            $("#id_progress_estimate_log").val('{{ logs.first.id }}');
+
+
+           $(".pel_row").click(function(){
+
+               var log_id = $(this).attr('id');
+               // Setting the value for the select.
+               $("#id_progress_estimate_log").val(log_id);
+
+               var url = "/erp/api/log_files_for_progress_estimate_log";
+               var data = {
+                   'csrfmiddlewaretoken':"{{ csrf_token }}",
+                   'pel_id' : log_id
+               };
+               $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function(response){
+                        console.log("Response: "+JSON.stringify(response));
+                        var to_render = "";
+                        if(response.length > 0){
+                            to_render = create_log_files_table(response);
+
+                        }else{
+                            to_render = "<span>Aún no has cargado evidencias</span>";
+
+                        }
+
+                        $("#log-files-table").html(to_render);
+                    },
+                    dataType: "json"
+               });
+           });
+        });
+    </script>
+
+    {{ files }}
+
+    <div class="pel-list-container left-container">
+        <h1>Bitácora de estimación</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Descripción</td>
+                    <td>Fecha</td>
+                    <td>Usuario</td>
+                    <td>Acción</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for log in logs %}
+                    <tr class="pel_row" id="{{log.id}}">
+                        <td>{{log.id}}</td>
+                        <td>{{log.description}}</td>
+                        <td>{{log.date}}</td>
+                        <td>{{log.user.user.first_name}}</td>
+                        <td>
+                            <a href="/admin/ERP/progressestimatelog/{{log.id}}/change/">Editar</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="log-files-list-container right-container">
+        <h1>Evidencias</h1>
+
+        <div id="log-files-table">
+
+        </div>
+    </div>
+
+
+
+
+    <div class="pel-add-container left-container">
+        <h1>Nueva Bitácora de Estimación</h1>
+
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ pel_form.as_p }}
+            <button type="submit" class="save btn btn-default">Añadir</button>
+        </form>
+    </div>
+
+
+    <div class="log-files-add-container right-container">
+        <h1>Nuevos Archivos para la Bitácora</h1>
+
+        <form method="POST" class="post-form">{% csrf_token %}
+            {{ files_form.as_p }}
+            <button type="submit" class="save btn btn-default">Añadir</button>
+        </form>
+    </div>
 {% endblock %}
