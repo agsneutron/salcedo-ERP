@@ -7,10 +7,12 @@ from django.forms.models import model_to_dict
 
 # Create your models here.
 class ERPUser(models.Model):
-    ADMINISTRATOR = "ADMIN"
+    ADMINISTRATOR = "AD"
+    DIRECTIVO = "DI"
 
     ROLES_CHOICES = (
         (ADMINISTRATOR, 'Administrador General'),
+        (DIRECTIVO, 'Directivo'),
     )
 
     user = models.OneToOneField(User)

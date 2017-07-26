@@ -33,22 +33,14 @@ class LineItemAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
-class LogFileInline(admin.TabularInline):
-    fields = ('file',)
-    model = LogFile
-    extra = 0
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    fields = ('progress_estimate','description', 'date')
+    fields = ('user','progress_estimate','description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
     list_per_page = 50
-
-    inlines = [
-        LogFileInline,
-    ]
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -142,6 +134,7 @@ class PropietarioAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
+
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
@@ -154,3 +147,4 @@ admin.site.register(Contratista, ContratistaAdmin)
 admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
+admin.site.register(LogFile)
