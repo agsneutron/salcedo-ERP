@@ -50,8 +50,11 @@ class SaveProgressEstimateLogFormEndpoint(ListView):
         print "The object"
         print pel_obj
 
+        serialized_object = pel_obj.to_serializable_dict()
+        serialized_object['user_fullname'] = user.user.first_name + " " + user.user.last_name
 
-        return HttpResponse(json.dumps({'response':'ok', 'saved_log':pel_obj.to_serializable_dict()}), 'application/json',)
+
+        return HttpResponse(json.dumps({'response':'ok', 'saved_log':serialized_object}), 'application/json',)
 
 
 class SaveProgressEstimateLogFileFormEndpoint(ListView):
@@ -67,7 +70,7 @@ class SaveProgressEstimateLogFileFormEndpoint(ListView):
 
 
         the_file = request.FILES['file']
-        fs = FileSystemStorage(location="ERP/media/documentosFuente/"+project_key)
+        fs = FileSystemStorage(location="ERP/media/documentosFuente/"+project_key+"/log_files")
         file_name = fs.save(the_file.name, the_file)
 
 
@@ -83,7 +86,6 @@ class SaveProgressEstimateLogFileFormEndpoint(ListView):
 
         serialized_obj = file_log_obj.to_serializable_dict()
         serialized_obj[''] = "ERP/media/documentosFuente/"+project_key
-        path_to_file
 
         return HttpResponse(json.dumps({'response': 'ok', 'file_obj':serialized_obj}),
                             'application/json', )

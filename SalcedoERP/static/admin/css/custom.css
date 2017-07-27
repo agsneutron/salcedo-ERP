@@ -414,7 +414,15 @@ dt {
 .circle-primary {
     stroke: #00a09b;
 }
-
+/*estilos para tablas*/
+.table tr td, .table tr th {
+    padding: 5px!important;
+    border-color: #e0e0e0!important;
+    font-size: 13px;
+}
+.danger {
+    color: #f44336;
+}
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
