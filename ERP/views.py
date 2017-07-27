@@ -1,7 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 from ERP.forms import ProgressEstimateLogForm, LogFileForm
-from ERP.models import ProgressEstimateLog, LogFile
+from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate
 from django.db.models import Q
 import json
 
@@ -20,6 +20,7 @@ def progress_estimate_log_view(request):
         logs_queryset = ProgressEstimateLog.objects.all()
     else:
         logs_queryset = ProgressEstimateLog.objects.first(Q(progress_estimate=progress_estimate))
+
 
 
     if logs_queryset:
@@ -48,7 +49,7 @@ def progress_estimate_log_view(request):
         params = {
             'logs': [],
             'log_files': [],
-            'progress_estimate_id': 1
+            'progress_estimate_id': ProgressEstimate.objects.all().first().id
         }
 
     return render(request, 'ProgressEstimateLog/progress_estimate_log_form.html', params)

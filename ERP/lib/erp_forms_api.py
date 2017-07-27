@@ -18,7 +18,7 @@ class SaveProgressEstimateLogFormEndpoint(ListView):
     '''
     def post(self, request, *args, **kwargs):
         # Obtaining the logged user.
-
+        print "The id: " + str(request.POST.get('progress_estimate_id'))
         progress_estimate = ProgressEstimate.objects.get(pk=request.POST.get('progress_estimate_id'))
 
         try:
@@ -61,7 +61,6 @@ class SaveProgressEstimateLogFileFormEndpoint(ListView):
     ''' Endpoint to save a new log file record
     '''
     def post(self, request, *args, **kwargs):
-
         pel = ProgressEstimateLog.objects.get(pk=request.POST.get('id_progress_estimate_log'))
         mime = request.POST.get('mime')
 

@@ -139,6 +139,11 @@ class LogFileAdmin(admin.ModelAdmin):
     fields = ('id', 'progress_estimate_log', 'file', 'mime',)
     model = LogFile
 
+class ProgressEstimateAdmin(admin.ModelAdmin):
+    list_display = ('id', 'estimate', 'key', 'progress','amount', 'type', )
+    fields = ('id', 'estimate', 'key', 'progress','amount', 'type', )
+    model = ProgressEstimate
+
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(LineItem, LineItemAdmin)
@@ -152,5 +157,5 @@ admin.site.register(Contratista, ContratistaAdmin)
 admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
-admin.site.register(ProgressEstimate)
+admin.site.register(ProgressEstimate, ProgressEstimateAdmin )
 admin.site.register(LogFile, LogFileAdmin)
