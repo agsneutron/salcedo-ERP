@@ -81,7 +81,9 @@ class SaveProgressEstimateLogFileFormEndpoint(ListView):
         print "The file object"
         print file_log_obj.to_serializable_dict()
 
+        serialized_obj = file_log_obj.to_serializable_dict()
+        serialized_obj[''] = "ERP/media/documentosFuente/"+project_key
+        path_to_file
 
-
-        return HttpResponse(json.dumps({'response': 'ok', 'file_obj':file_log_obj.to_serializable_dict()}),
+        return HttpResponse(json.dumps({'response': 'ok', 'file_obj':serialized_obj}),
                             'application/json', )

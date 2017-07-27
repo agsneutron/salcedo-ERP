@@ -108,6 +108,8 @@ $(document).ready(function () {
     if (json_logs.length > 0) {
         logs_table = create_logs_table(json_logs);
         $("#logs-table").html(logs_table);
+        // Setting the value for the hidden input.
+        $("#id_progress_estimate_log").val(json_logs[0].id);
     }else{
         $("#logs-table").html("Aún no has cargado bitácoras de estimación");
     }
@@ -122,8 +124,7 @@ $(document).ready(function () {
     }
 
 
-    // Setting the value for the select.
-    $("#id_progress_estimate_log").val(json_log_files[0].id);
+
 
 
     // Function run when click on pel table row
@@ -166,7 +167,6 @@ $(document).ready(function () {
 
     // Function run when the pel form is submitted.
     $("#pel-form").submit(function(){
-        console.log("Submitting pel form");
 
         // Ajax to call the save pel endpoint.
         var url = "/erp/forms_api/save_pel_form";
@@ -184,6 +184,9 @@ $(document).ready(function () {
                 logs_table = create_logs_table(json_logs);
                 $("#logs-table").html(logs_table);
 
+                // Click on the new element created.
+                $("#"+response.saved_log.id).click();
+
                 // Reset the form
                 $("#pel-form")[0].reset();
 
@@ -200,7 +203,6 @@ $(document).ready(function () {
 
      // Function run when the pel form is submitted.
     $("#pel-file-form").submit(function(){
-        console.log("Submitting pel form");
 
         // Ajax to call the save pel endpoint.
         var url = "/erp/forms_api/save_pel_file_form";
