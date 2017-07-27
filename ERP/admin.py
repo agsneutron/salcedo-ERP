@@ -134,6 +134,11 @@ class PropietarioAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
+class LogFileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    model = LogFile
+
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(LineItem, LineItemAdmin)
@@ -147,4 +152,5 @@ admin.site.register(Contratista, ContratistaAdmin)
 admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
-admin.site.register(LogFile)
+admin.site.register(ProgressEstimate)
+admin.site.register(LogFile, LogFileAdmin)

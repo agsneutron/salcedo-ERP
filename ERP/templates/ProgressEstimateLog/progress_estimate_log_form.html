@@ -1,75 +1,195 @@
-{% extends 'ProgressEstimateLog/base.html' %}
-
+{% extends "admin/base_site.html" %}
+{% load staticfiles %}
 
 {% block content %}
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
 
+        td {
+            padding: 0 20px;
+        }
 
+        .timezonewarning {
+            display: none;
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css"/>
+
+    <!-- Includes to interact with the model -->
     <script>
-        // Assigning the variables values from the Django template to make the syntax work.
-        var json_log_files = {{log_files}};
-
+        var json_logs = {{ logs }}
+        var json_log_files = {{ log_files }}
     </script>
+    <script src="{% static 'template/js/progress_estimate_log.js' %}"></script>
 
-    <div class="pel-list-container left-container">
-        <h1>Bitácora de estimación</h1>
 
-        <table>
-            <thead>
-                <tr>
-                    <td>Id</td>
-                    <td>Descripción</td>
-                    <td>Fecha</td>
-                    <td>Usuario</td>
-                    <td>Acción</td>
-                </tr>
-            </thead>
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+    <script type="text/javascript" src="/static/admin/js/actions.js"></script>
+    <script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+    <script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+    <script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+    <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+    <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+    <script type="text/javascript" src="/static/admin/js/inlines.js"></script>
 
-            <tbody>
-                {% for log in logs %}
-                    <tr class="pel_row" id="{{log.id}}">
-                        <td>{{log.id}}</td>
-                        <td>{{log.description}}</td>
-                        <td>{{log.date}}</td>
-                        <td>{{log.user.user.first_name}}</td>
-                        <td>
-                            <a href="/admin/ERP/progressestimatelog/{{log.id}}/change/">Editar</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+
+
+
+
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Bitácora de estimación</h3>
+                </div>
+                <div class="card-block table-responsive" id="logs-table" style="max-height: 235px">
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Evidencias</h3>
+                </div>
+                <div class="card-block table-responsive"  style="max-height: 235px">
+                    <div id="log-files-table">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Nueva Bitácora de Estimación</h3>
+                </div>
 
-    <div class="log-files-list-container right-container">
-        <h1>Evidencias</h1>
+                <div class="card-block">
+                    <form id="pel-form" class="post-form">
 
-        <div id="log-files-table">
+                        <!--
+                        <div class="row">
+                             <div class="col-md-6">
+                            <div class="form-group ">
+                                <label for="id_progress_estimate">Estimación:</label>
+                                <select name="progress_estimate" required id="id_progress_estimate"
+                                        class="form-control selectpicker">
+                                    <option value="" selected>---------</option>
+                                    <option value="1">partida uno - 2017-07-26 06:07:30+00:00 - est1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label for="id_user">Usuario:</label>
+                                <select name="user" required id="id_user" class="form-control selectpicker">
+                                    <option value="" selected>---------</option>
+                                    <option value="1">puebla</option>
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                        -->
 
+                       <div class="row">
+                           <div class="col-md-6">
+                            <div class="form-group ">
+                                <label for="id_description">Descripción:</label>
+                                <input class="form-control" type="text" name="description" required id="id_description"
+                                       maxlength="512"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="id_date" class="col-md-2 control-label">Fecha</label><br>
+                                <input type="text" name="date" id="id_fecha_inicial_0" required=""
+                                       class="vDateField" size="10">
+                                <span class="date-icon" title="Choose a Date"></span></a>
+                            </div>
+                        </div>
+                       </div>
+
+
+                            <button type="submit" class="btn btn-raised btn-primary">Añadir</button>
+
+
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Nuevos Archivos para la Bitácora</h3>
+                </div>
+                <div class="card-block">
+                    <form class="post-form" id="pel-file-form">
+
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <label for="id_file">Archivo:</label>
+                                <input type="file" name="file" id="id_file" multiple="">
+                                <div class="input-group">
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="cargar archivo...">
+                                    <span class="input-group-btn input-group-sm">
+                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                          <i class="material-icons">attach_file</i>
+                                        </button>
+                                      </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group ">
+                                <div class="form-group ">
+                                    <label for="id_mime">Descripción:</label>
+                                    <input class="form-control" type="text" name="mime" required id="id_mime"
+                                           maxlength="128" maxlength="512"/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" value="" id="id_progress_estimate_log" name="id_progress_estimate_log">
+                        <button type="submit" class="btn btn-raised btn-primary">Añadir</button>
+
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 
 
 
+    {% comment %}    <div class="pel-add-container left-container">
+        <h1>Nueva Bit·cora de EstimaciÛn</h1>
 
-    <div class="pel-add-container left-container">
-        <h1>Nueva Bitácora de Estimación</h1>
-
-        <form method="POST" class="post-form" id="pel-form">
-            {% csrf_token %}
+        <form method="POST" class="post-form">{% csrf_token %}
             {{ pel_form.as_p }}
-            <button type="submit" class="save btn btn-default">Añadir</button>
+            <button type="submit" class="save btn btn-default">AÒadir</button>
         </form>
     </div>
 
 
     <div class="log-files-add-container right-container">
-        <h1>Nuevos Archivos para la Bitácora</h1>
+        <h1>Nuevos Archivos para la Bit·cora</h1>
 
         <form method="POST" class="post-form">{% csrf_token %}
             {{ files_form.as_p }}
-            <button type="submit" class="save btn btn-default">Añadir</button>
+            <button type="submit" class="save btn btn-default">AÒadir</button>
         </form>
-    </div>
+    </div>{% endcomment %}
+    {% csrf_token %}
 {% endblock %}
