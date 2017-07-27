@@ -19,7 +19,7 @@ class SaveProgressEstimateLogFormEndpoint(ListView):
     def post(self, request, *args, **kwargs):
         # Obtaining the logged user.
 
-        progress_estimate = ProgressEstimate.objects.all().first()
+        progress_estimate = ProgressEstimate.objects.get(pk=request.POST.get('progress_estimate_id'))
 
         try:
             user = ERPUser.objects.get(pk=request.user.erpuser.id)

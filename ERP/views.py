@@ -15,12 +15,14 @@ def progress_estimate_log_view(request):
     estimate = request.GET.get('estimate')
     progress_estimate = request.GET.get('progress_estimate')
 
-    # Getting the forms to add to the specific models.
-    progress_estimate_log_form = ProgressEstimateLogForm()
-    log_file_form = LogFileForm()
-
     # Retrieving data from the model to be rendered.
-    logs_queryset = ProgressEstimateLog.objects.all()
+    if progress_estimate is None:
+        logs_queryset = ProgressEstimateLog.objects.all()
+    else:
+        logs_queryset = ProgressEstimateLog.objects.first(Q(progress_estimate=progress_estimate))
+
+    # As both cases where treated as querysets, we can retrieve the first id.
+    progress_estimate_id = logs_queryset.first().progress_estimate.id
 
     logs = []
     for log in logs_queryset:
@@ -36,10 +38,9 @@ def progress_estimate_log_view(request):
 
 
     params = {
-        'pel_form': progress_estimate_log_form,
-        'files_form': log_file_form,
         'logs': Utilities.json_to_safe_string(logs),
-        'log_files': Utilities.query_set_to_json_string(log_files)
+        'log_files': Utilities.query_set_to_json_string(log_files),
+        'progress_estimate_id': progress_estimate_id
     }
 
     return render(request, 'ProgressEstimateLog/progress_estimate_log_form.html', params)

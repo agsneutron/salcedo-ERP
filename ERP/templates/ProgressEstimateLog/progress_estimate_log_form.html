@@ -121,8 +121,8 @@
                         </div>
                        </div>
 
-
-                            <button type="submit" class="btn btn-raised btn-primary">Añadir</button>
+                        <input type="hidden" value="{{ progress_estimate_id }}" name="progress_estimate_id" id="progress_estimate_id">
+                        <button type="submit" class="btn btn-raised btn-primary">Añadir</button>
 
 
                     </form>
@@ -155,7 +155,7 @@
                         <div class="col-md-6">
                             <div class="form-group ">
                                 <div class="form-group ">
-                                    <label for="id_mime">Descripción:</label>
+                                    <label for="id_mime">MIME:</label>
                                     <input class="form-control" type="text" name="mime" required id="id_mime"
                                            maxlength="128" maxlength="512"/>
                                 </div>
