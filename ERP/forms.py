@@ -90,7 +90,16 @@ class EstimateForm(forms.ModelForm):
 class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
-        fields = ('description', 'date')
+        fields = '__all__'
+        widgets = {
+            'user': forms.HiddenInput(),
+            'progress_estimate': forms.HiddenInput(),
+            'date': forms.DateTimeInput()
+        }
+
+    # To override the save method for the form.
+    def save(self, commit=True):
+        return super(ProgressEstimateLogForm, self).save(commit)
 
 
 
@@ -99,6 +108,11 @@ class ProgressEstimateLogForm(forms.ModelForm):
     Forms for the log file form.
 '''
 class LogFileForm(forms.ModelForm):
+
     class Meta:
         model = LogFile
         fields = "__all__"
+        test = ProgressEstimateLogForm()
+        widgets = {
+
+        }

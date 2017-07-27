@@ -842,7 +842,7 @@ class ProgressEstimateLog(models.Model):
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
     description = models.CharField(verbose_name="Descripción", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
-    date = models.DateTimeField(default=None, null=True)
+    date = models.DateTimeField(default=None, null=True, verbose_name="Fecha")
 
     class Meta:
         verbose_name_plural = 'Bitácoras de Estimaciones'

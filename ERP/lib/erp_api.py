@@ -14,9 +14,9 @@ from ERP.models import *
 class LogFilesForProgressEstimateLogEndpoint(ListView):
     ''' Endpoit to return the Log Files that belong to a Progress Estimate Log.
     '''
-    def post(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
 
-        pel_id = request.POST.get('pel_id')         # Reading the Progress Estimate Log Id to filter by.
+        pel_id = request.GET.get('pel_id')         # Reading the Progress Estimate Log Id to filter by.
         print "Received Id: " + str(pel_id)
         log_files = LogFile.objects.filter(Q(progress_estimate_log__id=pel_id))    # Filtering the log files.
 
