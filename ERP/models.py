@@ -7,6 +7,7 @@ from users.models import ERPUser
 from django.db import models
 from Logs.controller import Logs
 from smart_selects.db_fields import ChainedManyToManyField
+from django.utils.encoding import python_2_unicode_compatible
 
 
 
@@ -336,7 +337,7 @@ class Empresa(models.Model):
                 super(Empresa, self).save(*args, **kwargs)
             else:
                 Logs.log("Couldn't save")
-
+@python_2_unicode_compatible
 class Contrato(models.Model):
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=False, editable=True)
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False, blank=False)
@@ -381,8 +382,8 @@ class Contrato(models.Model):
 
         return ans
 
-        def __str__(self):
-            return self.observaciones
+    def __str__(self):
+        return self.observaciones
 
         #def save(self, *args, **kwargs):
             #    canSave = True
@@ -395,6 +396,7 @@ class Contrato(models.Model):
 
 
 # Propietario
+@python_2_unicode_compatible
 class Propietario(models.Model):
     nombrePropietario = models.CharField(verbose_name="propietario", max_length=200, null=False, blank=False)
     calle = models.CharField(verbose_name="calle", max_length=200, null=False, blank=False)
@@ -485,6 +487,7 @@ class TipoProyectoDetalle(models.Model):
 
 
 # proyectos
+@python_2_unicode_compatible
 class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     contrato = models.ForeignKey(Contrato, verbose_name="contrato", null=False, blank=False)
@@ -642,7 +645,7 @@ class Project(models.Model):
     Model for the Line Items.
 '''
 
-
+@python_2_unicode_compatible
 class LineItem(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
@@ -670,7 +673,7 @@ class LineItem(models.Model):
     Master model to manage the concepts historical.
 '''
 
-
+@python_2_unicode_compatible
 class ConceptMaster(models.Model):
     line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
     parent_concept = models.ForeignKey('self', verbose_name="Concepto Padre", null=True, blank=True)
@@ -696,7 +699,7 @@ class ConceptMaster(models.Model):
     Model for the units.
 '''
 
-
+@python_2_unicode_compatible
 class Unit(models.Model):
     name = models.CharField(verbose_name="Nombre de la Unidad", max_length=255, null=False, blank=False, unique=True)
     abbreviation = models.CharField(verbose_name="Abreviación", max_length=16, null=False, blank=False, unique=True)
@@ -730,7 +733,7 @@ class Unit(models.Model):
     Model for the concepts.
 '''
 
-
+@python_2_unicode_compatible
 class ConceptDetail(models.Model):
     ARCHIVED = "A"
     CURRENT = "C"
@@ -797,7 +800,7 @@ class Estimate(models.Model):
     Model for the Progress Estimates.
 '''
 
-
+@python_2_unicode_compatible
 class ProgressEstimate(models.Model):
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
     key = models.CharField(verbose_name="Clave de la Estimación", max_length=8, null=False, blank=False)
@@ -836,7 +839,7 @@ class ProgressEstimate(models.Model):
 '''
     Model for handling the progress estimate log.
 '''
-
+@python_2_unicode_compatible
 class ProgressEstimateLog(models.Model):
     progress_estimate = models.ForeignKey(ProgressEstimate, verbose_name="Estimación", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
@@ -858,7 +861,8 @@ class ProgressEstimateLog(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.description
 
-
+    def __str__(self):  # __unicode__ on Python 2
+        return self.description
 
 '''
     Model for the Log File.
