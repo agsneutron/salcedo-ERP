@@ -254,14 +254,14 @@ class Empleado(models.Model):
 
 class Contratista(models.Model):
         nombreContratista = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
-        calle = models.TextField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
+        calle = models.CharField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
         numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
-        colonia = models.TextField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
+        colonia = models.CharField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
         municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
         estado = models.ForeignKey(Estado,verbose_name='Estado', null=False, blank=False)
         pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
         cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
-        rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
+        rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
         class Meta:
             verbose_name_plural = 'Contratista'
@@ -296,15 +296,15 @@ class Contratista(models.Model):
 
 class Empresa(models.Model):
         nombreEmpresa = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
-        calle = models.TextField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
+        calle = models.CharField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
         numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
-        colonia = models.TextField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
+        colonia = models.CharField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
         municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
         estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
-        pais = models.ForeignKey(Pais, verbose_name='Municipio', null=False, blank=False)
+        pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
         cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
         telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
-        rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
+        rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
         class Meta:
             verbose_name_plural = 'Empresa'
@@ -340,20 +340,20 @@ class Empresa(models.Model):
 class Contrato(models.Model):
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=False, editable=True)
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False, blank=False)
-    dependencia = models.CharField (verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
-    codigo_obra = models.CharField (verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
+    dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
+    codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
-    objeto_contrato = models.TextField (verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False, editable=True)
-    fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', auto_now_add=True)
-    dias_pactados = models.CharField (verbose_name='Días Pactados', max_length=50, null=False, blank=False, editable=True)
-    fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', auto_now_add=True)
-    fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', auto_now_add=True)
-    lugar_ejecucion = models.TextField (verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False, editable=True)
+    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False, editable=True)
+    fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', editable=True)
+    dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False, editable=True)
+    fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', editable=True)
+    fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', editable=True)
+    lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False, editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     monto_contrato_iva = models.DecimalField(verbose_name='Monto de Contrato con IVA', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     pago_inicial = models.DecimalField(verbose_name='Pago Inicial', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
     pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=False, null=False, default=0, max_digits=20)
-    observaciones = models.TextField (verbose_name='Observaciones', max_length=500, null=False, blank=False, editable=True)
+    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False, editable=True)
 
     #class Meta:
     #    verbose_name_plural = 'Contrato'

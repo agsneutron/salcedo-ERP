@@ -107,17 +107,25 @@ class EmpleadoAdmin(admin.ModelAdmin):
 
 
 class ContratistaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreContratista', 'rfc')
+    list_display = ('id', 'nombreContratista', 'rfc', 'estado')
     search_fields = ('nombreContratista', 'rfc')
     list_display_links = ('id', 'nombreContratista', 'rfc')
     list_per_page = 50
 
+    def get_fields(self, request, obj=None):
+        fields = ('nombreContratista', 'rfc', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        return fields
+
 
 class EmpresaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreEmpresa', 'rfc')
+    list_display = ('id', 'nombreEmpresa', 'rfc', 'telefono')
     search_fields = ('nombreEmpresa', 'rfc')
     list_display_links = ('id', 'nombreEmpresa', 'rfc')
     list_per_page = 50
+
+    def get_fields(self, request, obj=None):
+        fields = ('nombreEmpresa', 'rfc', 'telefono', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        return fields
 
 
 class ContratoAdmin(admin.ModelAdmin):
@@ -126,12 +134,22 @@ class ContratoAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'codigo_obra', 'objeto_contrato')
     list_per_page = 50
 
+    def get_fields(self, request, obj=None):
+        fields = (
+        'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados', 'fecha_firma',
+        'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final', 'objeto_contrato', 'lugar_ejecucion', 'observaciones')
+        return fields
+
 
 class PropietarioAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombrePropietario', 'empresa')
+    list_display = ('id', 'nombrePropietario', 'email', 'empresa', 'telefono1')
     search_fields = ('nombrePropietario', 'empresa')
     list_display_links = ('id', 'nombrePropietario', 'empresa')
     list_per_page = 50
+
+    def get_fields(self, request, obj=None):
+        fields = ('nombrePropietario', 'email', 'empresa', 'telefono1', 'telefono2', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        return fields
 
 
 class LogFileAdmin(admin.ModelAdmin):
