@@ -49,9 +49,8 @@ class ProgressEstimateInline(admin.TabularInline):
 
 
 class EstimateAdmin(admin.ModelAdmin):
-    list_display = ('get_concept_and_line_item', 'period','start_date', 'end_date')
+    list_display = ('period','start_date', 'end_date')
     search_fields = ('period','start_date', 'end_date')
-    list_display_links = ('get_concept_and_line_item',)
     list_per_page = 50
     inlines = [
         ProgressEstimateInline
@@ -60,7 +59,7 @@ class EstimateAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             'Concepto', {
-                'fields': ('line_item_filter', 'concept_master',)
+                'fields': ('line_item_filter', )
         }),
         (
             'Estimación', {
@@ -68,20 +67,6 @@ class EstimateAdmin(admin.ModelAdmin):
         }),
     )
 
-    def get_concept_and_line_item(self, obj):
-        if obj.concept_master is not None:
-            return obj.concept_master.line_item.description + " - " + obj.concept_master.description
-        else:
-            return "-"
-
-    get_concept_and_line_item.short_description = "Concepto"
-
-
-class ConceptMasterAdmin(admin.ModelAdmin):
-    list_display = ('id', 'key', 'description')
-    search_fields = ('key', 'description')
-    list_display_links = ('key', 'description')
-    list_per_page = 50
 
 
 class ConceptDetailAdmin(admin.ModelAdmin):
@@ -148,8 +133,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
-admin.site.register(ConceptMaster, ConceptMasterAdmin)
-admin.site.register(ConceptDetail, ConceptDetailAdmin)
+admin.site.register(Concept_Input, ConceptDetailAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
