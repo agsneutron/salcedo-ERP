@@ -645,8 +645,8 @@ class Project(models.Model):
 
 class LineItem(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=True)
+    key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=True, default="")
 
     class Meta:
         verbose_name_plural = 'Partidas'
@@ -665,31 +665,6 @@ class LineItem(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.description
 
-
-'''
-    Master model to manage the concepts historical.
-'''
-
-
-class ConceptMaster(models.Model):
-    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
-    parent_concept = models.ForeignKey('self', verbose_name="Concepto Padre", null=True, blank=True)
-    key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=True, editable=True)
-    description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
-    status = models.CharField(verbose_name="Status", max_length=1, null=False, default='C', blank=False, unique=False, editable=True)
-
-    def to_serializable_dict(self):
-        ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['parentConcept'] = str(self.parent_concept)
-        ans['description'] = str(self.description)
-        return ans
-
-    def __str__(self):
-        return self.description
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.description
 
 
 '''
@@ -731,7 +706,7 @@ class Unit(models.Model):
 '''
 
 
-class ConceptDetail(models.Model):
+class Concept_Input(models.Model):
     ARCHIVED = "A"
     CURRENT = "C"
     STATUS_CHOICES = (
@@ -739,9 +714,19 @@ class ConceptDetail(models.Model):
         (CURRENT, 'Actual'),
     )
 
-    master = models.ForeignKey(ConceptMaster, verbose_name="master", null=False, blank=False)
+    CONCEPT = "C"
+    INPUT = "I"
+    TYPE_CHOICES = (
+        (CONCEPT, 'Concepto'),
+        (INPUT, 'Insumo'),
+    )
+
+    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
+    key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=True, editable=True)
+    description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=ARCHIVED)
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
     unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False,
@@ -751,6 +736,7 @@ class ConceptDetail(models.Model):
 
     class Meta:
         verbose_name_plural = 'Conceptos'
+        verbose_name = 'Concepto'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -773,7 +759,7 @@ class ConceptDetail(models.Model):
 
         if canSave:
             Logs.log("Saving new concept", "Te")
-            super(ConceptDetail, self).save(*args, **kwargs)
+            super(Concept_Input, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
 
@@ -784,7 +770,7 @@ class ConceptDetail(models.Model):
 
 
 class Estimate(models.Model):
-    concept_master = models.ForeignKey(ConceptMaster, verbose_name="Concepto", null=True, blank=False, default=None)
+    concept_input = models.ForeignKey(Concept_Input, verbose_name="Concepto", null=True, blank=False, default=None)
     start_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de inicio")
     end_date = models.DateTimeField(default=None, null=True , verbose_name="Fecha de fin")
     period = models.DateTimeField(default=None, null=True, verbose_name="Periodo")
@@ -798,13 +784,25 @@ class Estimate(models.Model):
 '''
 
 
+def generator_file_storage(instance, filename):
+    project_key = instance.proyecto.key
+    line_item_key = instance.estimate.concept_input.line_item.key
+    concept_key = instance.estimate.concept_input.key
+    estimate_id = instance.estimate.id
+    progress_estimate_key = instance.key
+
+    return '/'.join(['documentosFuente',project_key, line_item_key, concept_key, estimate_id, progress_estimate_key, filename])
+
 class ProgressEstimate(models.Model):
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
     key = models.CharField(verbose_name="Clave de la Estimación", max_length=8, null=False, blank=False)
     progress = models.DecimalField(verbose_name='Progreso', decimal_places=2, blank=False, null=False, default=0,
+                                   max_digits=5)
+    amount = models.DecimalField(verbose_name='Cantidad', decimal_places=1, blank=False, null=False, default=0,
+                                 max_digits=4)
+    generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
-    amount = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
-                                 max_digits=20)
+    generator_file = models.FileField(unique=True, upload_to=content_file_documento_fuente, null=True, default=None)
     RETAINER = "R"
     PROGRESS = "P"
     ESTIMATE = "E"
