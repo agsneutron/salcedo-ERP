@@ -632,12 +632,6 @@ class Project(models.Model):
         else:
             Logs.log("Couldn't save")
 
-
-
-
-
-
-
 '''
     Model for the Line Items.
 '''
@@ -645,6 +639,7 @@ class Project(models.Model):
 
 class LineItem(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=False, blank=True)
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=True)
     key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=True, default="")
 
@@ -731,8 +726,6 @@ class Concept_Input(models.Model):
                                    max_digits=20)
     unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False,
                                      default=0, max_digits=20)
-    start_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(default=None, null=True)
 
     class Meta:
         verbose_name_plural = 'Conceptos'
