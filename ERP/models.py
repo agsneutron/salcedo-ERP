@@ -702,13 +702,6 @@ class Unit(models.Model):
 
 
 class Concept_Input(models.Model):
-    ARCHIVED = "A"
-    CURRENT = "C"
-    STATUS_CHOICES = (
-        (ARCHIVED, 'Archivado'),
-        (CURRENT, 'Actual'),
-    )
-
     CONCEPT = "C"
     INPUT = "I"
     TYPE_CHOICES = (
@@ -720,7 +713,6 @@ class Concept_Input(models.Model):
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=True, editable=True)
     description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=ARCHIVED)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
