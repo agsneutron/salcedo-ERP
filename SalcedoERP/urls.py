@@ -16,10 +16,24 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 from django.views.generic.base import RedirectView
+from django.contrib.auth import views as auth_views
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
+from django.http import HttpResponseRedirect
+from django.conf import settings
+from users import urls
+import users
+from ERP import urls
+import ERP
+
+from users import views
+admin.autodiscover()
+
 import DataUpload
 from DataUpload import urls
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^users/', include(users.urls)),
+    url(r'^erp/', include(ERP.urls)),
     url(r'^$', RedirectView.as_view(url='/admin')),
     url(r'^data_upload/', include(DataUpload.urls)),
 ]

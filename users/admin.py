@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.contrib import admin
-from users.models import *
+from users.models import ERPUser
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
 
@@ -38,6 +38,8 @@ class UsuarioAdmin(UserAdmin):
     #  Overrriding the 'save' method so the user can have the 'staff' status and access the system.
     def save_model(self, request, obj, form, change):
         obj.is_staff = True
+        print "Obj is:"
+        print obj.erpuser
         obj.save()
 
         super(UsuarioAdmin, self).save_model(request, obj, form, change)

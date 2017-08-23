@@ -33,21 +33,14 @@ class LineItemAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
-class LogFileInline(admin.TabularInline):
-    model = LogFile
-    extra = 0
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    fields = ('description', 'date')
+    fields = ('user','progress_estimate','description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
     list_per_page = 50
-
-    inlines = [
-        LogFileInline,
-    ]
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -56,9 +49,8 @@ class ProgressEstimateInline(admin.TabularInline):
 
 
 class EstimateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'start_date', 'end_date')
-    search_fields = ('start_date', 'end_date')
-    list_display_links = ('start_date', 'end_date')
+    list_display = ('period','start_date', 'end_date')
+    search_fields = ('period','start_date', 'end_date')
     list_per_page = 50
     inlines = [
         ProgressEstimateInline
@@ -67,20 +59,14 @@ class EstimateAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             'Concepto', {
-                'fields': ('line_item_filter', 'concept_master',)
+                'fields': ('line_item_filter', )
         }),
         (
             'Estimación', {
-                'fields': ('start_date', 'end_date',)
+                'fields': ('period','start_date', 'end_date',)
         }),
     )
 
-
-class ConceptMasterAdmin(admin.ModelAdmin):
-    list_display = ('id', 'key', 'description')
-    search_fields = ('key', 'description')
-    list_display_links = ('key', 'description')
-    list_per_page = 50
 
 
 class ConceptDetailAdmin(admin.ModelAdmin):
@@ -106,17 +92,25 @@ class EmpleadoAdmin(admin.ModelAdmin):
 
 
 class ContratistaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreContratista', 'rfc')
+    list_display = ('id', 'nombreContratista', 'rfc', 'estado')
     search_fields = ('nombreContratista', 'rfc')
     list_display_links = ('id', 'nombreContratista', 'rfc')
     list_per_page = 50
 
+    def get_fields(self, request, obj=None):
+        fields = ('nombreContratista', 'rfc', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        return fields
+
 
 class EmpresaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreEmpresa', 'rfc')
+    list_display = ('id', 'nombreEmpresa', 'rfc', 'telefono')
     search_fields = ('nombreEmpresa', 'rfc')
     list_display_links = ('id', 'nombreEmpresa', 'rfc')
     list_per_page = 50
+
+    def get_fields(self, request, obj=None):
+        fields = ('nombreEmpresa', 'rfc', 'telefono', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        return fields
 
 
 class ContratoAdmin(admin.ModelAdmin):
@@ -125,19 +119,39 @@ class ContratoAdmin(admin.ModelAdmin):
     list_display_links = ('id', 'codigo_obra', 'objeto_contrato')
     list_per_page = 50
 
+    def get_fields(self, request, obj=None):
+        fields = (
+        'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados', 'fecha_firma',
+        'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final', 'objeto_contrato', 'lugar_ejecucion', 'observaciones')
+        return fields
+
 
 class PropietarioAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombrePropietario', 'empresa')
+    list_display = ('id', 'nombrePropietario', 'email', 'empresa', 'telefono1')
     search_fields = ('nombrePropietario', 'empresa')
     list_display_links = ('id', 'nombrePropietario', 'empresa')
     list_per_page = 50
+
+    def get_fields(self, request, obj=None):
+        fields = ('nombrePropietario', 'email', 'empresa', 'telefono1', 'telefono2', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        return fields
+
+
+class LogFileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    model = LogFile
+
+class ProgressEstimateAdmin(admin.ModelAdmin):
+    list_display = ('id', 'estimate', 'key', 'progress','amount', 'type', )
+    fields = ('id', 'estimate', 'key', 'progress','amount', 'type', )
+    model = ProgressEstimate
 
 
 admin.site.register(Project, ProjectAdmin)
 admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
-admin.site.register(ConceptMaster, ConceptMasterAdmin)
-admin.site.register(ConceptDetail, ConceptDetailAdmin)
+admin.site.register(Concept_Input, ConceptDetailAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
@@ -145,3 +159,5 @@ admin.site.register(Contratista, ContratistaAdmin)
 admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
+admin.site.register(ProgressEstimate, ProgressEstimateAdmin )
+admin.site.register(LogFile, LogFileAdmin)
