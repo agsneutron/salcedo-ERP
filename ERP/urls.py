@@ -14,5 +14,6 @@ urlpatterns = [
     # Endpoints to be called after a form to be saved.
     url(r'^forms_api/save_pel_form', erp_forms_api.SaveProgressEstimateLogFormEndpoint.as_view()),
     url(r'^forms_api/save_pel_file_form', erp_forms_api.SaveProgressEstimateLogFileFormEndpoint.as_view()),
+    url(r'^empresas', views.empresas, name='empresas'),
 
 ]
