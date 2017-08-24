@@ -423,6 +423,21 @@ dt {
 .danger {
     color: #f44336;
 }
+.ms-header-primary+.ms-navbar-primary .navbar-nav>li .dropdown-menu li a:hover {
+    color: #333 !important;
+}
+.select2-container .select2-selection--single {
+    box-sizing: border-box;
+    cursor: pointer;
+    display: block;
+    height: 45px!important;
+    user-select: none;
+    -webkit-user-select: none;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+    color: #444;
+    line-height: 40px!important;
+}
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
