@@ -1,12 +1,10 @@
 # coding=utf-8
 from __future__ import unicode_literals
-from django.db import models
 from django.forms.models import model_to_dict
 from users.models import ERPUser
 
 from django.db import models
 from Logs.controller import Logs
-from smart_selects.db_fields import ChainedManyToManyField
 
 
 
@@ -24,7 +22,7 @@ class Pais(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
-        ans['pais'] = self.estado.nombrePais
+        ans['pais'] = self.nombrePais
         return ans
 
     def __str__(self):
@@ -86,6 +84,7 @@ class TipoConstruccion(models.Model):
     def __unicode__(self):
         return self.nombreTipoConstruccion
 
+
 class Departamento(models.Model):
         nombreDepartamento = models.TextField(verbose_name='Departamento', max_length=120, null=False, blank=False,
                                               editable=True)
@@ -105,13 +104,14 @@ class Departamento(models.Model):
             return self.nombreDepartamento
 
         def save(self, *args, **kwargs):
-            canSave = True
+            can_save = True
 
-            if canSave:
+            if can_save:
                 Logs.log("Saving new project", "Te")
                 super(Departamento, self).save(*args, **kwargs)
             else:
                 Logs.log("Couldn't save")
+
 
 class Area(models.Model):
         nombreArea = models.TextField(verbose_name='Área', max_length=120, null=False, blank=False, editable=True)
@@ -141,6 +141,7 @@ class Area(models.Model):
             else:
                 Logs.log("Couldn't save")
 
+
 class Puesto(models.Model):
         nombrePuesto = models.TextField(verbose_name='Puesto', max_length=120, null=False, blank=False, editable=True)
         descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
@@ -158,7 +159,7 @@ class Puesto(models.Model):
             return ans
 
         def __str__(self):
-            return self.nombre_puesto
+            return self.nombrePuesto
 
         def save(self, *args, **kwargs):
             canSave = True
@@ -168,6 +169,7 @@ class Puesto(models.Model):
                 super(Puesto, self).save(*args, **kwargs)
             else:
                 Logs.log("Couldn't save")
+
 
 class ModalidadContrato(models.Model):
         modalidadContrato = models.CharField(verbose_name='Contrato', max_length=250, null=False, blank=False,
@@ -196,6 +198,7 @@ class ModalidadContrato(models.Model):
                 super(ModalidadContrato, self).save(*args, **kwargs)
             else:
                 Logs.log("Couldn't save")
+
 
 class Empleado(models.Model):
     nombreEmpleado = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
@@ -226,7 +229,7 @@ class Empleado(models.Model):
         ans['numero'] = str(self.numero)
         ans['colonia'] = str(self.colonia)
         ans['municipio'] = str(self.municipio.nombreMunicipio)
-        ans['estado'] = str(self.estado.nombre_estado)
+        ans['estado'] = str(self.estado.nombreEstado)
         ans['pais'] = str(self.pais.nombrePais)
         ans['cp'] = str(self.cp)
         ans['rfc'] = str(self.rfc)
@@ -252,6 +255,7 @@ class Empleado(models.Model):
         else:
             Logs.log("Couldn't save")
 
+
 class Contratista(models.Model):
         nombreContratista = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
         calle = models.CharField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
@@ -274,7 +278,7 @@ class Contratista(models.Model):
             ans['numero'] = str(self.numero)
             ans['colonia'] = str(self.colonia)
             ans['municipio'] = str(self.municipio.nombreMunicipio)
-            ans['estado'] = str(self.estado.nombre_estado)
+            ans['estado'] = str(self.estado.nombreEstado)
             ans['pais'] = str(self.pais.nombrePais)
             ans['cp'] = str(self.cp)
             ans['rfc'] = str(self.rfc)
@@ -285,14 +289,15 @@ class Contratista(models.Model):
         def __str__(self):
             return self.nombreContratista
 
-            def save(self, *args, **kwargs):
-                canSave = True
+        def save(self, *args, **kwargs):
+            can_save = True
 
-            if canSave:
+            if can_save:
                 Logs.log("Saving new Contratista", "Te")
                 super(Contratista, self).save(*args, **kwargs)
             else:
                 Logs.log("Couldn't save")
+
 
 class Empresa(models.Model):
         nombreEmpresa = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
@@ -317,7 +322,7 @@ class Empresa(models.Model):
             ans['numero'] = str(self.numero)
             ans['colonia'] = str(self.colonia)
             ans['municipio'] = str(self.municipio.nombreMunicipio)
-            ans['estado'] = str(self.estado.nombre_estado)
+            ans['estado'] = str(self.estado.nombreEstado)
             ans['pais'] = str(self.pais.nombrePais)
             ans['cp'] = str(self.cp)
             ans['telefono'] = str(self.telefono)
@@ -336,6 +341,7 @@ class Empresa(models.Model):
                 super(Empresa, self).save(*args, **kwargs)
             else:
                 Logs.log("Couldn't save")
+
 
 class Contrato(models.Model):
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=False, editable=True)
@@ -362,7 +368,7 @@ class Contrato(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
-        ans['no_licitacion'] = str(self.nombreContratista)
+        ans['no_licitacion'] = str(self.contratista.nombreContratista)
         ans['modalidad_contrato'] = str(self.modalidad_contrato.modalidadContrato)
         ans['dependencia'] = str(self.dependencia)
         ans['codigo_obra'] = str(self.codigo_obra)
@@ -381,17 +387,17 @@ class Contrato(models.Model):
 
         return ans
 
-        def __str__(self):
-            return self.observaciones
+    def __str__(self):
+        return self.observaciones
 
-        #def save(self, *args, **kwargs):
-            #    canSave = True
+    #def save(self, *args, **kwargs):
+        #    canSave = True
 
-            #if canSave:
-            #    Logs.log("Saving new Contrato", "Te")
-            #    super(Contrato, self).save(*args, **kwargs)
-            #else:
-            #    Logs.log("Couldn't save")
+        #if canSave:
+        #    Logs.log("Saving new Contrato", "Te")
+        #    super(Contrato, self).save(*args, **kwargs)
+        #else:
+        #    Logs.log("Couldn't save")
 
 
 # Propietario
@@ -418,7 +424,7 @@ class Propietario(models.Model):
         ans['numero'] = str(self.numero)
         ans['colonia'] = str(self.colonia)
         ans['municipio'] = str(self.municipio.nombreMunicipio)
-        ans['estado'] = str(self.estado.nombre_estado)
+        ans['estado'] = str(self.estado.nombreEstado)
         ans['pais'] = str(self.pais.nombrePais)
         ans['cp'] = str(self.cp)
         ans['telefono1'] = str(self.telefono1)
@@ -482,8 +488,6 @@ class TipoProyectoDetalle(models.Model):
         return ans
 
 
-
-
 # proyectos
 class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
@@ -505,7 +509,7 @@ class Project(models.Model):
                                                     null=False, default=0, max_digits=20)
     area_superficie_levantamiento = models.DecimalField(verbose_name='superficie levantamiento', decimal_places=2,
                                                         blank=False, null=False, default=0, max_digits=20)
-
+    
     estadolegal_documento_propiedad = models.CharField(verbose_name="Documento de propiedad", max_length=200, null=True, blank=True)
     documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
@@ -632,11 +636,10 @@ class Project(models.Model):
         else:
             Logs.log("Couldn't save")
 
+
 '''
     Model for the Line Items.
 '''
-
-
 class LineItem(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
@@ -649,7 +652,7 @@ class LineItem(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
-        ans['project'] = str(self.project.name)
+        ans['project'] = str(self.project.nombreProyecto)
         ans['parentLineItem'] = str(self.parent_line_item)
         ans['description'] = str(self.description)
         return ans
@@ -661,12 +664,9 @@ class LineItem(models.Model):
         return self.description
 
 
-
 '''
     Model for the units.
 '''
-
-
 class Unit(models.Model):
     name = models.CharField(verbose_name="Nombre de la Unidad", max_length=255, null=False, blank=False, unique=True)
     abbreviation = models.CharField(verbose_name="Abreviación", max_length=16, null=False, blank=False, unique=True)
@@ -699,8 +699,6 @@ class Unit(models.Model):
 '''
     Model for the concepts.
 '''
-
-
 class Concept_Input(models.Model):
     CONCEPT = "C"
     INPUT = "I"
@@ -727,9 +725,8 @@ class Concept_Input(models.Model):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
         ans['unit'] = str(self.unit.name)
-        ans['status'] = str(self.status)
         ans['quantity'] = str(self.quantity)
-        ans['unitPrice'] = str(self.unitPrice)
+        ans['unitPrice'] = str(self.unit_price)
         return ans
 
     def __str__(self):
@@ -752,8 +749,6 @@ class Concept_Input(models.Model):
 '''
     Model for the Estimates.
 '''
-
-
 class Estimate(models.Model):
     concept_input = models.ForeignKey(Concept_Input, verbose_name="Concepto", null=True, blank=False, default=None)
     start_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de inicio")
@@ -764,11 +759,10 @@ class Estimate(models.Model):
         verbose_name_plural = 'Estimaciones'
 
 
+
 '''
     Model for the Progress Estimates.
 '''
-
-
 def generator_file_storage(instance, filename):
     project_key = instance.proyecto.key
     line_item_key = instance.estimate.concept_input.line_item.key
@@ -777,6 +771,7 @@ def generator_file_storage(instance, filename):
     progress_estimate_key = instance.key
 
     return '/'.join(['documentosFuente',project_key, line_item_key, concept_key, estimate_id, progress_estimate_key, filename])
+
 
 class ProgressEstimate(models.Model):
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
@@ -813,13 +808,13 @@ class ProgressEstimate(models.Model):
         return ans
 
     def __str__(self):
-        return self.estimate.concept_master.description + " - " + str(self.estimate.period) + " - " + self.key
+        return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
+
 
 
 '''
     Model for handling the progress estimate log.
 '''
-
 class ProgressEstimateLog(models.Model):
     progress_estimate = models.ForeignKey(ProgressEstimate, verbose_name="Estimación", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
@@ -842,12 +837,9 @@ class ProgressEstimateLog(models.Model):
         return self.description
 
 
-
 '''
     Model for the Log File.
 '''
-
-
 class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de Estimación", null=False,
                                               blank=False)
