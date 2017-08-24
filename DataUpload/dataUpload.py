@@ -3,6 +3,7 @@
 from django.http import HttpResponse
 from django.views.generic import ListView
 #from oauth2_provider.models import AccessToken
+from oauth2_provider.models import AccessToken
 
 from DataUpload.helper import DBObject, ErrorDataUpload
 from DataUpload.models import UsuarioFolio

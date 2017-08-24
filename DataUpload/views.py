@@ -11,6 +11,6 @@ from ERP.models import *
 
 def testView(request):
     o = DBObject('Puebla')
-    o.save_all('/Users/josecarranza/Documents/Trabajo/Salcedo-ERP/DataUpload/Orion.xlsx')
+    o.save_all('/Users/josecarranza/Documents/Trabajo/Salcedo-ERP/DataUpload/ResultadoExportacion_2.xlsx')
     return HttpResponse('Done')
     # return render(request, 'DataUpload/carga.html')

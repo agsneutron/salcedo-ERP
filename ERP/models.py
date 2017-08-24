@@ -505,7 +505,7 @@ class Project(models.Model):
                                                     null=False, default=0, max_digits=20)
     area_superficie_levantamiento = models.DecimalField(verbose_name='superficie levantamiento', decimal_places=2,
                                                         blank=False, null=False, default=0, max_digits=20)
-    
+
     estadolegal_documento_propiedad = models.CharField(verbose_name="Documento de propiedad", max_length=200, null=True, blank=True)
     documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
@@ -632,12 +632,6 @@ class Project(models.Model):
         else:
             Logs.log("Couldn't save")
 
-
-
-
-
-
-
 '''
     Model for the Line Items.
 '''
@@ -645,7 +639,8 @@ class Project(models.Model):
 
 class LineItem(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=True)
+    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
+    description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=False)
     key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=True, default="")
 
     class Meta:
@@ -707,13 +702,6 @@ class Unit(models.Model):
 
 
 class Concept_Input(models.Model):
-    ARCHIVED = "A"
-    CURRENT = "C"
-    STATUS_CHOICES = (
-        (ARCHIVED, 'Archivado'),
-        (CURRENT, 'Actual'),
-    )
-
     CONCEPT = "C"
     INPUT = "I"
     TYPE_CHOICES = (
@@ -723,16 +711,13 @@ class Concept_Input(models.Model):
 
     line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
-    key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=True, editable=True)
+    key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=False, editable=True)
     description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
-    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=ARCHIVED)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
     unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False,
                                      default=0, max_digits=20)
-    start_date = models.DateTimeField(auto_now_add=True)
-    end_date = models.DateTimeField(default=None, null=True)
 
     class Meta:
         verbose_name_plural = 'Conceptos'
@@ -748,20 +733,20 @@ class Concept_Input(models.Model):
         return ans
 
     def __str__(self):
-        return self.master.description
+        return self.description
 
-    def save(self, *args, **kwargs):
-        canSave = True
-
-        if self.end_date is not None and self.start_date >= self.end_date:
-            Logs.log("The start date is greater than the end date")
-            canSave = False
-
-        if canSave:
-            Logs.log("Saving new concept", "Te")
-            super(Concept_Input, self).save(*args, **kwargs)
-        else:
-            Logs.log("Couldn't save")
+    # def save(self, *args, **kwargs):
+    #     canSave = True
+    #
+    #     if self.end_date is not None and self.start_date >= self.end_date:
+    #         Logs.log("The start date is greater than the end date")
+    #         canSave = False
+    #
+    #     if canSave:
+    #         Logs.log("Saving new concept", "Te")
+    #         super(Concept_Input, self).save(*args, **kwargs)
+    #     else:
+    #         Logs.log("Couldn't save")
 
 
 '''
@@ -802,7 +787,7 @@ class ProgressEstimate(models.Model):
                                  max_digits=4)
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
-    generator_file = models.FileField(unique=True, upload_to=content_file_documento_fuente, null=True, default=None)
+    generator_file = models.FileField(upload_to=content_file_documento_fuente, null=True, default=None)
     RETAINER = "R"
     PROGRESS = "P"
     ESTIMATE = "E"
