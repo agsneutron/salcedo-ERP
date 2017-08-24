@@ -20,15 +20,18 @@ class TipoProyectoDetalleInline(admin.TabularInline):
     extra = 1
     can_delete = False
 
+
 class ProjectAdmin(admin.ModelAdmin):
     form = AddProyectoForm
     inlines = (TipoProyectoDetalleInline,)
+
 
 class LineItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'description',)
     search_fields = ('description',)
     list_display_links = ('description',)
     list_per_page = 50
+
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
     fields = ('user','progress_estimate','description', 'date')
@@ -93,7 +96,7 @@ class ContratistaAdmin(admin.ModelAdmin):
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
-        fields = ('nombreContratista', 'rfc', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        fields = ('nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos','pais', 'estado', 'municipio', 'calle', 'numero', 'colonia', 'cp')
         return fields
 
 
@@ -137,13 +140,22 @@ class LogFileAdmin(admin.ModelAdmin):
     fields = ('id', 'progress_estimate_log', 'file', 'mime',)
     model = LogFile
 
+
 class ProgressEstimateAdmin(admin.ModelAdmin):
     list_display = ('id', 'estimate', 'key', 'progress','amount', 'type', )
     fields = ('id', 'estimate', 'key', 'progress','amount', 'type', )
     model = ProgressEstimate
 
 
+# Simple admin views.
+admin.site.register(Pais)
+admin.site.register(Estado)
+admin.site.register(Municipio)
+admin.site.register(TipoConstruccion)
+admin.site.register(ModalidadContrato)
+
 admin.site.register(Project, ProjectAdmin)
+
 admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
 admin.site.register(Concept_Input, ConceptDetailAdmin)
