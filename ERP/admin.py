@@ -20,20 +20,15 @@ class TipoProyectoDetalleInline(admin.TabularInline):
     extra = 1
     can_delete = False
 
-
 class ProjectAdmin(admin.ModelAdmin):
     form = AddProyectoForm
     inlines = (TipoProyectoDetalleInline,)
-
 
 class LineItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'description',)
     search_fields = ('description',)
     list_display_links = ('description',)
     list_per_page = 50
-
-
-
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
     fields = ('user','progress_estimate','description', 'date')
@@ -70,9 +65,9 @@ class EstimateAdmin(admin.ModelAdmin):
 
 
 class ConceptDetailAdmin(admin.ModelAdmin):
-    list_display = ('id', 'unit', 'status', 'quantity', 'unit_price')
-    search_fields = ('unit', 'status', 'quantity', 'unitPrice')
-    list_display_links = ('unit', 'status', 'quantity', 'unit_price')
+    list_display = ('id', 'unit', 'quantity', 'unit_price')
+    search_fields = ('unit', 'quantity', 'unitPrice')
+    list_display_links = ('unit', 'quantity', 'unit_price')
     exclude = ('end_date',)
     list_per_page = 50
 
