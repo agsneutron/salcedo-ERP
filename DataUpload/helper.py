@@ -5,7 +5,10 @@ import xlrd
 
 from abc import ABCMeta, abstractmethod
 
+from decimal import Decimal
+
 from DataUpload.models import UsuarioFolio
+from ERP.models import Concept_Input, Unit, LineItem
 
 '''
     Clase Objeto BD
@@ -50,15 +53,16 @@ class DBObject:
     parent_nodes = []
     current_indent = 0
 
-    ID_COL = 0
-    LINE_ITEM_COL = 1
+    LINE_ITEM_KEY_COL = 0
+    LINE_ITEM_DESCRIPTION_COL = 1
     CONCEPT_KEY_COL = 2
-    CONCEPT_COL = 3
-    START_DATE_COL = 4
-    CALENDAR_DAYS_COL = 5
-    END_DATE_COL = 6
-    PERCENTAGE_COL = 7
-    COST_COL = 8
+    CONCEPT_DESCRIPTION_COL = 3
+    UNIT_COL = 4
+    QUANTITY_COL = 5
+    UNIT_PRICE_COL = 6
+
+    INPUT_TYPE = 'I'
+    CONCEPT_TYPE = 'C'
 
     '''
         Indent length in spaces
@@ -91,30 +95,62 @@ class DBObject:
     '''
 
     def save(self, folio, record):
-        # print "Saving: " + str(record)
-        # First, we have to identify whether we are dealing with a line item, compound concept or a single one.
-        is_line_item = record[self.LINE_ITEM_COL] == '-'
+        # First, we get each all the attributes.
+        line_item_key = record[self.LINE_ITEM_KEY_COL]
+        line_item_description = record[self.LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
+        concept_key = record[self.CONCEPT_KEY_COL].encode('utf-8')
+        concept_description = record[self.CONCEPT_DESCRIPTION_COL].encode('utf-8')
+        unit = record[self.UNIT_COL].encode('utf-8')
+        quantity = Decimal(record[self.QUANTITY_COL].replace(',',''))
+        unit_price = Decimal(record[self.UNIT_PRICE_COL][1:].replace(',',''))
 
-        if is_line_item:
-            print 'Partida'
 
+        
+        unit_qs = Unit.objects.filter(abbreviation=unit.upper())
+
+        if len(unit_qs) == 0:
+            unit_obj = Unit(abbreviation=unit.upper(),
+                            quantification='C',
+                            name=unit.upper())
+            unit_obj.save()
         else:
-            print 'Concepto'
+            unit_obj = unit_qs[0]
 
-        # Get end set indent level
-        concept = record[self.CONCEPT_COL]
-        indent = 0
-        for i in range(0, len(concept)):
-            if concept[i] != ' ':
-                break
-            indent += 1
-        indent /= self.INDENT_LENGTH
+        line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
 
-        self.current_indent = indent
+        if len(line_item_qs) == 0:
+            line_item_obj = LineItem(key=line_item_key.upper(),
+                                     project_id=2,
+                                     parent_line_item=None,
+                                     description=line_item_description)
+            line_item_obj.save()
+        else:
+            line_item_obj = line_item_qs[0]
 
-        print 'Indent Level: ' + str(indent)
+        input = Concept_Input(
+            line_item=line_item_obj,
+            unit=unit_obj,
+            key=concept_key,
+            description=concept_description,
+            quantity=quantity,
+            unit_price=unit_price,
+            type=self.INPUT_TYPE
+        )
 
+        print input
+        input.save()
 
+    '''
+   Método file_format_is_valid:
+   file: the filed translated to a two-dimensional array of values.
+
+   This method receives a matrix of values and determines if everything is correct and it can be uploaded.
+   '''
+
+    def file_format_is_valid(self, file):
+        # Check if line items exist
+        # Check if units exist
+        return True
 
     '''
     Método save_all:
@@ -131,17 +167,15 @@ class DBObject:
             raise Exception('Ha habido un problema leyendo el archivo')
         recordList = file.getElementList()
 
-        print recordList
+        if not self.file_format_is_valid(recordList):
+            raise ErrorDataUpload("El formato de archivo no es válido")
 
         try:
             for record in recordList:
                 # print 'Single record:' + str(record)
-                self.save(folio, record)
-                '''
-                uf = UsuarioFolio()
-                uf.usuario = self.nombre_usuario
-                uf.folio = folio
-                uf.save()'''
+                if(record[0] != ""):
+                    self.save(folio, record)
+
         except Exception, e:
             # self.object_class.objects.filter(folio=folio).delete()
             raise e
