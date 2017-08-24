@@ -466,15 +466,15 @@ class DocumentoFuente(models.Model):
 
 # ProgramaVivienda
 class TipoProyectoDetalle(models.Model):
-    proyecto = models.ForeignKey('Project', verbose_name="proyecto", null=True, blank=True)
+    proyecto = models.ForeignKey('Project', verbose_name="Proyecto", null=True, blank=True)
     #programaVivienda = models.ForeignKey(ProgramaVivienda, related_name="proyecto_programaVivienda",
     #                                      null=True,
     #                                      blank=True)
-    NombreTipoProyecto = models.CharField(verbose_name="tipo Proyecto", max_length=8, null=False, blank=False)
-    numero = models.DecimalField(verbose_name='número', decimal_places=2, blank=False,
+    NombreTipoProyecto = models.CharField(verbose_name="Tipo Proyecto", max_length=8, null=False, blank=False)
+    numero = models.DecimalField(verbose_name='Número', decimal_places=2, blank=False,
                                           null=False,
                                           default=0, max_digits=20)
-    m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=False, null=False,
+    m2terreno = models.DecimalField(verbose_name='Terreno (m2)', decimal_places=2, blank=False, null=False,
                                     default=0,
                                     max_digits=20)
     documento = models.FileField(blank=True, null=True,upload_to=content_file_documento_fuente, )
