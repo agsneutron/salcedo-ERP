@@ -33,14 +33,14 @@
 
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
       data-admin-utc-offset="{% now "Z" %}">
-<div id="ms-preload" class="ms-preload">
+{% comment %}<div id="ms-preload" class="ms-preload">
     <div id="status">
         <div class="spinner">
             <div class="dot1"></div>
             <div class="dot2"></div>
         </div>
     </div>
-</div>
+</div>{% endcomment %}
 <header class="ms-header ms-header-primary" id="header">
     <div class="container container-full">
         <div class="ms-title">

@@ -320,13 +320,29 @@ class Empresa(models.Model):
     calle = models.CharField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
     numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
     colonia = models.CharField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
-    municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
-    estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
-    pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
+    #municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
+    #estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
+    #pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
+    telefono_dos = models.IntegerField(verbose_name='Teléfono No.2', null=True, blank=True, editable=True)
+    email = models.CharField(verbose_name='Correo Electrónico', max_length=60, null=False, blank=True, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
+    # Attribute for the Chained Keys.
+    pais = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    estado = ChainedForeignKey(Estado,
+                               chained_field="pais",
+                               chained_model_field="pais",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True)
+    municipio = ChainedForeignKey(Municipio,
+                                  chained_field="estado",
+                                  chained_model_field="estado",
+                                  show_all=False,
+                                  auto_choose=True,
+                                  sort=True)
     class Meta:
         verbose_name_plural = 'Empresa'
 
@@ -432,14 +448,30 @@ class Propietario(models.Model):
     calle = models.CharField(verbose_name="calle", max_length=200, null=False, blank=False)
     numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     colonia = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
-    municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
-    estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
-    pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
+    #municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
+    #estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
+    #pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
+    rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
     cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
     telefono1 = models.CharField(verbose_name="Telefono 1", max_length=20, null=True, blank=True)
     telefono2 = models.CharField(verbose_name="Telefono 2", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="e mail", max_length=100, null=True, blank=True)
     empresa = models.ForeignKey(Empresa, verbose_name="empresa", null=False, blank=False)
+
+    # Attribute for the Chained Keys.
+    pais = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    estado = ChainedForeignKey(Estado,
+                               chained_field="pais",
+                               chained_model_field="pais",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True)
+    municipio = ChainedForeignKey(Municipio,
+                                  chained_field="estado",
+                                  chained_model_field="estado",
+                                  show_all=False,
+                                  auto_choose=True,
+                                  sort=True)
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)

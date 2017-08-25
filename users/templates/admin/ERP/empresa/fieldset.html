@@ -47,7 +47,7 @@
                         <h2 class="text-center">Datos generales</h2>
 
                             <hr>
-                            <div class="col-md-3">
+                            <div class="col-md-6">
                                 <div class="form-group field-nombreEmpresa">
                                     <div>
                                         <label class="control-label required" for="id_nombreEmpresa">Nombre de Empresa:</label>
@@ -68,9 +68,20 @@
                                 </div>
                             </div>
 
+                    </div>
+                    {% endif %}
+                    {% if field.field.name == "email" %}
+                    <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group field-email">
+                                    <div>
+                                        <label class="control-label required" for="id_email">E-mail:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
 
                     {% endif %}
-
                     {% if field.field.name == "telefono" %}
 
                             <div class="col-md-3">
@@ -82,54 +93,31 @@
                                 </div>
                             </div>
 
+                    {% endif %}
+                    {% if field.field.name == "telefono_dos" %}
+
+                            <div class="col-md-3">
+                                <div class="form-group field-telefono_dos">
+                                    <div>
+                                        <label class="control-label required" for="id_telefono_dos">Teléfono (2):</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+
                     </div>
                     {% endif %}
-
-                    {% if field.field.name == "calle" %}
-                    <div class="row">
-                            <div class="col-md-5">
-                                <div class="form-group field-calle">
+                     {% if field.field.name == "pais" %}
+                     <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group field-pais">
                                     <div>
-                                        <label class="control-label required" for="id_calle">Calle:</label>
-                                        {{ field.field|addcss:"form-control" }}
+                                        <label class="control-label required" for="id_pais">País:</label>
+                                        {{ field.field|addcss:"form-control selectpicker" }}
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
-                        {% if field.field.name == "numero" %}
-                            <div class="col-md-2">
-                                <div class="form-group field-numero">
-                                    <div>
-                                        <label class="control-label required" for="id_numero">Numero:</label>
-                                        {{ field.field|addcss:"form-control" }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if field.field.name == "colonia" %}
-                            <div class="col-md-5">
-                                <div class="form-group field-colonia">
-                                    <div>
-                                        <label class="control-label required" for="id_colonia">Colonia:</label>
-                                        {{ field.field|addcss:"form-control" }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if field.field.name == "municipio" %}
-                    </div>
-                    <div class="row">
-
-                        <div class="col-md-3">
-                            <div class="form-group field-municipio">
-                                <div>
-                                    <label class="control-label required"
-                                           for="idmunicipio">Municipio:</label>
-                                    {{ field.field|addcss:"form-control selectpicker" }}
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
+                    {% endif %}
                         {% if field.field.name == "estado" %}
                         <div class="col-md-3">
                             <div class="form-group field-estado">
@@ -140,7 +128,21 @@
                             </div>
                         </div>
                         {% endif %}
-                        {% if field.field.name == "cp" %}
+                    {% if field.field.name == "municipio" %}
+
+
+                        <div class="col-md-3">
+                            <div class="form-group field-municipio">
+                                <div>
+                                    <label class="control-label required"
+                                           for="idmunicipio">Municipio:</label>
+                                    {{ field.field|addcss:"form-control selectpicker" }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {% endif %}
+                     {% if field.field.name == "cp" %}
                             <div class="col-md-3">
                                 <div class="form-group field-cp">
                                     <div>
@@ -149,23 +151,45 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         {% endif %}
-                        {% if field.field.name == "pais" %}
-                            <div class="col-md-3">
-                                <div class="form-group field-pais">
+                     {% if field.field.name == "calle" %}
+                    <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group field-calle">
                                     <div>
-                                        <label class="control-label required" for="id_pais">País:</label>
-                                        {{ field.field|addcss:"form-control selectpicker" }}
+                                        <label class="control-label required" for="id_calle">Calle:</label>
+                                        {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
-
-                    </div>
-                    {% endif %}
+                        {% endif %}
+                        {% if field.field.name == "numero" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-numero">
+                                    <div>
+                                        <label class="control-label required" for="id_numero">Número:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if field.field.name == "colonia" %}
+                            <div class="col-md-3">
+                                <div class="form-group field-colonia">
+                                    <div>
+                                        <label class="control-label required" for="id_colonia">Colonia:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endif %}
             {% endfor %}
             {% endfor %}
+            </div>
         </div>
-
+</div>
 
     </div>
 </fieldset>
