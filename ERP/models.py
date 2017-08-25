@@ -30,6 +30,10 @@ class Pais(models.Model):
     def __unicode__(self):
         return self.nombrePais
 
+    class Meta:
+        verbose_name_plural = 'Países'
+        verbose_name= "País"
+
 
 class Estado(models.Model):
     nombreEstado = models.CharField(max_length=200)
@@ -209,17 +213,17 @@ class Empleado(models.Model):
     colonia = models.TextField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
     municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
     estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
-    pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
+    pais = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     rfc = models.TextField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
     fecha_contrato = models.DateTimeField(verbose_name='Fecha de Contrato', auto_now_add=True)
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Contrato', null=False, blank=False)
     puesto = models.ForeignKey(Puesto, verbose_name='Puesto', null=False, blank=False)
-    sueldo_inicial = models.DecimalField(verbose_name='sueldo_inicial', decimal_places=2, blank=False, null=False,
+    sueldo_inicial = models.DecimalField(verbose_name='Sueldo Inicial', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
-    sueldo_actual = models.DecimalField(verbose_name='sueldo_actual', decimal_places=2, blank=False, null=False,
+    sueldo_actual = models.DecimalField(verbose_name='Sueldo Actual', decimal_places=2, blank=False, null=False,
                                         default=0, max_digits=20)
-    antiguedad = models.CharField(verbose_name='Antiguedad', max_length=50, null=False, blank=False, editable=True)
+    antiguedad = models.CharField(verbose_name='Antigüedad', max_length=50, null=False, blank=False, editable=True)
 
     class Meta:
         verbose_name_plural = 'Empleado'
@@ -264,12 +268,12 @@ class Contratista(models.Model):
     colonia = models.CharField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
-    telefono = models.IntegerField(verbose_name='Teléfono',null=False, blank=False, editable=True)
-    telefono_dos = models.IntegerField(verbose_name='Teléfono No.2',null=False, blank=True, editable=True)
+    telefono = models.IntegerField(verbose_name='Teléfono', null=False, blank=False, editable=True)
+    telefono_dos = models.IntegerField(verbose_name='Teléfono No.2', null=False, blank=True, editable=True)
     email = models.CharField(verbose_name='Correo Electrónico', max_length=60, null=False, blank=False, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
-    # Attribute for the Chained Keys.
+    # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
     pais = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
     estado = ChainedForeignKey(Estado,
                                chained_field="pais",
@@ -278,11 +282,11 @@ class Contratista(models.Model):
                                auto_choose=True,
                                sort=True)
     municipio = ChainedForeignKey(Municipio,
-                               chained_field="estado",
-                               chained_model_field="estado",
-                               show_all=False,
-                               auto_choose=True,
-                               sort=True)
+                                  chained_field="estado",
+                                  chained_model_field="estado",
+                                  show_all=False,
+                                  auto_choose=True,
+                                  sort=True)
 
     class Meta:
         verbose_name_plural = 'Contratista'
@@ -563,7 +567,7 @@ class Project(models.Model):
     hidraulica_fuente = models.CharField(verbose_name="fuente", max_length=200, null=True, blank=True)
     hidraulica_distancia = models.CharField(verbose_name="distacia", max_length=200, null=True, blank=True)
     hidraulica_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
-    hidraulica_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    hidraulica_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, verbose_name="Documento de hidráulica")
     sanitaria_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     sanitaria_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
     sanitaria_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
@@ -630,7 +634,8 @@ class Project(models.Model):
                                                               blank=True, null=True, default=0, max_digits=20)
     programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=True, null=True,
                                                    default=0, max_digits=20)
-    programayarea_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    programayarea_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente,
+                                               verbose_name="Documento de programa y área")
     latitud = models.FloatField(default=0)
     longitud = models.FloatField(default=0)
 
@@ -784,13 +789,23 @@ class Concept_Input(models.Model):
 '''
     Model for the Estimates.
 '''
-
-
 class Estimate(models.Model):
-    concept_input = models.ForeignKey(Concept_Input, verbose_name="Concepto", null=True, blank=False, default=None)
     start_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de inicio")
     end_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de fin")
     period = models.DateTimeField(default=None, null=True, verbose_name="Periodo")
+
+    # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
+    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=True, blank=False, default=None)
+    concept_input = ChainedForeignKey(Concept_Input,
+                                      chained_field="line_item",
+                                      chained_model_field="line_item",
+                                      show_all=False,
+                                      auto_choose=True,
+                                      sort=True,
+                                      null=False,
+                                      blank=False,
+                                      verbose_name="Concepto / Insumo"
+                                      )
 
     class Meta:
         verbose_name_plural = 'Estimaciones'
@@ -822,7 +837,8 @@ class ProgressEstimate(models.Model):
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
-    generator_file = models.FileField(upload_to=content_file_documento_fuente, null=True, default=None)
+    generator_file = models.FileField(upload_to=content_file_documento_fuente, null=True, default=None,
+                                      verbose_name="Archivo del Generador")
     RETAINER = "R"
     PROGRESS = "P"
     ESTIMATE = "E"
@@ -832,7 +848,7 @@ class ProgressEstimate(models.Model):
         (ESTIMATE, 'Estimado'),
     )
 
-    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS)
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS, verbose_name="Tipo")
 
     class Meta:
         verbose_name_plural = 'Avances'
