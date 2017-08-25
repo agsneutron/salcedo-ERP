@@ -48,9 +48,9 @@
 
                             <hr>
                             <div class="col-md-6">
-                                <div class="form-group field-nombreContratista">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_nombreContratista">Nombre de Contratista:</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
@@ -60,9 +60,9 @@
                     {% if field.field.name == "rfc" %}
 
                             <div class="col-md-3">
-                                <div class="form-group field-rfc">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_rfc">RFC:</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
@@ -73,9 +73,9 @@
                     {% if field.field.name == "email" %}
                     <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group field-email">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_email">E-mail:</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
@@ -85,9 +85,9 @@
                     {% if field.field.name == "telefono" %}
 
                             <div class="col-md-3">
-                                <div class="form-group field-telefono">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_telefono">Teléfono:</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
@@ -98,9 +98,9 @@
                     {% if field.field.name == "telefono_dos" %}
 
                             <div class="col-md-3">
-                                <div class="form-group field-telefono_dos">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_telefono_dos">Teléfono (2):</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
@@ -111,9 +111,9 @@
                      {% if field.field.name == "pais" %}
                      <div class="row">
                             <div class="col-md-3">
-                                <div class="form-group field-pais">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_pais">País:</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control selectpicker" }}
                                     </div>
                                 </div>
@@ -121,9 +121,9 @@
                     {% endif %}
                         {% if field.field.name == "estado" %}
                         <div class="col-md-3">
-                            <div class="form-group field-estado">
-                                <div>
-                                    <label class="control-label required" for="id_estado">Estado:</label>
+                            <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
                                     {{ field.field|addcss:"form-control selectpicker" }}
                                 </div>
                             </div>
@@ -133,10 +133,9 @@
 
 
                         <div class="col-md-3">
-                            <div class="form-group field-municipio">
-                                <div>
-                                    <label class="control-label required"
-                                           for="idmunicipio">Municipio:</label>
+                            <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
                                     {{ field.field|addcss:"form-control selectpicker" }}
                                 </div>
                             </div>
@@ -145,9 +144,9 @@
                         {% endif %}
                      {% if field.field.name == "cp" %}
                             <div class="col-md-3">
-                                <div class="form-group field-cp">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_cp">C.P.</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
@@ -157,9 +156,9 @@
                      {% if field.field.name == "calle" %}
                     <div class="row">
                             <div class="col-md-6">
-                                <div class="form-group field-calle">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_calle">Calle:</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
@@ -167,9 +166,9 @@
                         {% endif %}
                         {% if field.field.name == "numero" %}
                             <div class="col-md-3">
-                                <div class="form-group field-numero">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_numero">Número:</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
@@ -177,9 +176,9 @@
                         {% endif %}
                         {% if field.field.name == "colonia" %}
                             <div class="col-md-3">
-                                <div class="form-group field-colonia">
+                                <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        <label class="control-label required" for="id_colonia">Colonia:</label>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
