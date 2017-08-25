@@ -1,0 +1,257 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/login.css" %}"/>
+    <script src="{% static "admin/js/particles.min.js" %}"></script>
+    <style>
+
+        canvas {
+            display: block;
+            vertical-align: bottom;
+            position: absolute;
+            top: 0;
+        }
+
+        #particles-js {
+            width: 100%;
+            height: 100%;
+
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 50% 50%;
+        }
+
+        .card-hero {
+            z-index: 9;
+        }
+
+        .ms-hero-bg-dark-light {
+
+            z-index: 1;
+        }
+
+        .ms-hero-page-override {
+            margin: -50px 0 0;
+            padding: 30px 0 120px;
+        }
+    .form-group label.control-label {
+    font-size: 12px;
+    line-height: 1.07143;
+    font-weight: 400;
+    margin: 9px 0 0;
+}
+    .form-group {
+    padding-bottom: 7px;
+    margin: 17px 0 0;
+}
+    </style>
+    {{ form.media }}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+
+{% block usertools %}{% endblock %}
+
+{% block nav-global %}{% endblock %}
+
+{% block content_title %}{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+    {% if form.errors and not form.non_field_errors %}
+        <p class="errornote">
+            {% if form.errors.items|length == 1 %}{% trans "Please correct the error below." %}{% else %}
+                {% trans "Please correct the errors below." %}{% endif %}
+        </p>
+    {% endif %}
+
+    {% if form.non_field_errors %}
+        {% for error in form.non_field_errors %}
+            <p class="errornote">
+                {{ error }}
+            </p>
+        {% endfor %}
+    {% endif %}
+
+    {% if user.is_authenticated %}
+        <p class="errornote">
+            {% blocktrans with username=request.user.get_username trimmed %}
+                You are authenticated as {{ username }}, but are not authorized to
+                access this page. Would you like to login to a different account?
+            {% endblocktrans %}
+        </p>
+    {% endif %}
+
+
+    <div class="ms-hero-page-override ms-hero-img-city ms-hero-bg-dark-light">
+        <div class="container">
+            <div class="text-center">
+
+                <p class="lead lead-lg color-white text-center center-block mt-2 mw-800 text-uppercase fw-300 animated fadeInUp animation-delay-7">
+                    Construcción & Supervisión</p>
+            </div>
+        </div>
+    </div>
+    <div id="particles-js">
+        <div class="container">
+
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="card card-hero card-primary animated fadeInUp animation-delay-7">
+                        <div class="card-block">
+                            <h1 class="color-primary text-center">Login Sistema ERP</h1>
+                            <form class="form-horizontal" action="{{ app_path }}" method="post"
+                                  id="login-form">{% csrf_token %}
+                                <fieldset>
+                                    <div class="form-group">
+
+                                        <label for="inputEmail" class="col-md-2 control-label">Usuario</label>
+                                        <div class="col-md-10">
+
+                                            <input id="id_username" maxlength="254" name="username" type="text" class="form-control" placeholder="Usuario">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="inputPassword" class="col-md-2 control-label">Contraseña</label>
+                                        <div class="col-md-10">
+                                            {{ form.password.errors }}
+
+
+                                            <input id="id_password" name="password" type="password" class="form-control" placeholder="Contraseña">
+                                        </div>
+                                    </div>
+                                    {% url 'admin_password_reset' as password_reset_url %}
+                    <a href="{{ password_reset_url }}"><span class="user-pass">¿Olvidaste tu contraseña?</span></a>
+                                </fieldset>
+                                <button class="btn btn-raised btn-primary btn-block" type="submit"
+                                        value="{% trans 'Log in' %}">Ingresar
+                                    <i class="zmdi zmdi-long-arrow-right no-mr ml-1"></i>
+                                </button>
+                            </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ---- particles.js config ---- */
+
+        particlesJS("particles-js", {
+            "particles": {
+                "number": {
+                    "value": 100,
+                    "density": {
+                        "enable": true,
+                        "value_area": 800
+                    }
+                },
+                "color": {
+                    "value": "#00a09b"
+                },
+                "shape": {
+                    "type": "circle",
+                    "stroke": {
+                        "width": 0,
+                        "color": "#000000"
+                    },
+                    "polygon": {
+                        "nb_sides": 5
+                    },
+                    "image": {
+                        "src": "img/github.svg",
+                        "width": 100,
+                        "height": 100
+                    }
+                },
+                "opacity": {
+                    "value": 0.5,
+                    "random": false,
+                    "anim": {
+                        "enable": false,
+                        "speed": 1,
+                        "opacity_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "size": {
+                    "value": 3,
+                    "random": true,
+                    "anim": {
+                        "enable": false,
+                        "speed": 40,
+                        "size_min": 0.1,
+                        "sync": false
+                    }
+                },
+                "line_linked": {
+                    "enable": true,
+                    "distance": 150,
+                    "color": "#00a09b",
+                    "opacity": 0.2,
+                    "width": 1
+                },
+                "move": {
+                    "enable": true,
+                    "speed": 6,
+                    "direction": "none",
+                    "random": false,
+                    "straight": false,
+                    "out_mode": "out",
+                    "bounce": false,
+                    "attract": {
+                        "enable": false,
+                        "rotateX": 600,
+                        "rotateY": 1200
+                    }
+                }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": {
+                    "onhover": {
+                        "enable": true,
+                        "mode": "grab"
+                    },
+                    "onclick": {
+                        "enable": true,
+                        "mode": "push"
+                    },
+                    "resize": true
+                },
+                "modes": {
+                    "grab": {
+                        "distance": 140,
+                        "line_linked": {
+                            "opacity": 1
+                        }
+                    },
+                    "bubble": {
+                        "distance": 400,
+                        "size": 40,
+                        "duration": 2,
+                        "opacity": 8,
+                        "speed": 3
+                    },
+                    "repulse": {
+                        "distance": 200,
+                        "duration": 0.4
+                    },
+                    "push": {
+                        "particles_nb": 4
+                    },
+                    "remove": {
+                        "particles_nb": 2
+                    }
+                }
+            },
+            "retina_detect": true
+        });
+
+    </script>
+{% endblock %}
+<!-- js carousel -->
