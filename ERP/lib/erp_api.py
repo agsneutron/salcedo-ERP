@@ -22,3 +22,21 @@ class LogFilesForProgressEstimateLogEndpoint(ListView):
 
         json_files = Utilities.query_set_to_json_string(log_files)
         return HttpResponse(json_files,'application/json',)
+
+
+
+class ConceptInputsForLineItemAndType(ListView):
+    '''
+        Endpoint to return the concepts or inputs filtered by a line_item and a type [concept|input]
+    '''
+    def get(self, request, *args, **kwargs):
+
+        line_item_id = request.GET.get('line_item')         # Getting the type fpr the request.
+        type = request.GET.get('type')                      # Getting the type fpr the request.
+        print line_item_id
+        print type
+
+        query_set = Concept_Input.objects.filter(Q(type=type) & Q(line_item=line_item_id))
+
+        #json_files = Utilities.query_set_to_json_string(query_set)
+        return HttpResponse({},'application/json',)

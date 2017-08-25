@@ -77,6 +77,7 @@ class TipoConstruccion(models.Model):
 
     class Meta:
         verbose_name_plural = 'Tipos de Construcción'
+        verbose_name = 'Tipo de Construcción'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -524,9 +525,9 @@ class Project(models.Model):
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
     fecha_inicial = models.DateTimeField(default=None, null=False)
     fecha_final = models.DateTimeField(default=None, null=False)
-    tipo_construccion = models.ForeignKey(TipoConstruccion, verbose_name="tipo de construcción", null=False,
+    tipo_construccion = models.ForeignKey(TipoConstruccion, verbose_name="Tipo de construcción", null=False,
                                           blank=False)
-    ubicacion_calle = models.CharField(verbose_name="calle", max_length=200, null=False, blank=False)
+    ubicacion_calle = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
     ubicacion_numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
     ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
