@@ -36,7 +36,8 @@ class ConceptInputsForLineItemAndType(ListView):
         print line_item_id
         print type
 
-        query_set = Concept_Input.objects.filter(Q(type=type) & Q(line_item=line_item_id))
-
-        #json_files = Utilities.query_set_to_json_string(query_set)
+        qs = Concept_Input.objects.filter(Q(type=type) & Q(line_item=line_item_id))
+        print qs
+        #cleaned_qs = Utilities.clean_generic_queryset(qs)
+        #response = Utilities.query_set_to_json_string(cleaned_qs)
         return HttpResponse({},'application/json',)

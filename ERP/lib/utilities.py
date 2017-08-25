@@ -1,5 +1,7 @@
 import json
 from django.utils.safestring import mark_safe
+from decimal import Decimal
+from datetime import date
 
 class Utilities():
 
@@ -16,3 +18,18 @@ class Utilities():
     @staticmethod
     def json_to_safe_string(the_json):
         return mark_safe(json.dumps(the_json))
+
+    @staticmethod
+    def clean_generic_queryset(query_set_object):
+        """
+        Cleans a QuerySet object, converting it's decimal properties to strings.
+        :param query_set_object: object to clean
+        :return: the QuerySet object with the decimal attributes converted to strings
+        """
+        response = []
+        for obj in query_set_object:
+            for obj_attr in obj.keys():
+                if type(obj[obj_attr]) is Decimal or type(obj[obj_attr]) is date:
+                    obj[obj_attr] = str(obj[obj_attr])
+            response.append(obj)
+        return response
