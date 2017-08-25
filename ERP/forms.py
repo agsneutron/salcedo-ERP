@@ -71,16 +71,28 @@ class DocumentoFuenteForm(forms.ModelForm):
 '''
 class EstimateForm(forms.ModelForm):
 
-    line_item_filter = forms.IntegerField(label="Partida")
+    model = Estimate
+    fields = '__all__'
 
-    def save(self, commit=True):
-        line_item_filter = self.cleaned_data.get('line_item_filter', None)
-        # ...do something with extra_field here...
-        return super(EstimateForm, self).save(commit=commit)
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        print "The request"
+        print self.request.GET.get('project')
+        super(EstimateForm, self).__init__(*args, **kwargs)
 
-    class Meta:
-        model = Estimate
-        fields = "__all__"
+        '''
+        super(VisitasForm, self).__init__(*args, **kwargs)
+
+        # Filtrando las obras para que no se puedan agregar visitas a aquellas que tienen el estatus de 'Proyectada'
+        self.fields['obra'].queryset = Obra.objects.exclude(estatus__nombre="PROYECTADA")
+
+        # Cambiando el valor del nombre para que se despliegue con el formato: 'folio - nombre'
+        print "Got: "
+        print self.fields['obra'].queryset[0].to_serializable_dict()
+        for obra in self.fields['obra'].queryset:
+            obra.nombre = str(obra.folio) + " - " + obra.nombre, self).save(commit=commit)
+        '''
+
 
 
 
