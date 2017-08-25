@@ -1,4 +1,8 @@
 import logging
+from django.contrib.admin.models import LogEntry
+
+from ERP.lib.utilities import Utilities
+from ERP.models import SystemLogEntry
 
 
 class LoggingConstants:
@@ -13,6 +17,8 @@ class LoggingConstants:
     ERROR = logging.ERROR
     CRITICAL = logging.CRITICAL
 
+    TYPE_OFFSET = 1000
+
     PRIORITIES = {
         logging.DEBUG: "Debug",
         logging.INFO: "Info",
@@ -23,17 +29,40 @@ class LoggingConstants:
 
 
 class SystemException(Exception):
-    def __init__(self, message, type, priority):
+    def __init__(self, message, type, priority, user_id):
         self.logger = logging.getLogger(type)
         self.type = type
         self.priority = priority
-        self.process_exception()
+        self.message = message
+        self.user_id = user_id
 
-        Exception.__init__(self, message)
+
+        print 'Por procesar error con mensaje: '+message
+
+
+        self.process_exception()
+        Exception.__init__(self, self.message)
 
     def process_exception(self):
         print 'Exception of type ' + self.type + ' and priority ' + LoggingConstants.PRIORITIES[self.priority]
-        pass
+        print 'Guardando error.'
+        obj = SystemLogEntry(
+            label=self.type,
+            information=Utilities.json_to_safe_string(self.get_information()),
+            priority=self.priority,
+            user_id=self.user_id)
+        print obj
+        obj.save()
+        print 'Error guardado.'
+
+    def get_information(self):
+        information = {
+            "message": self.message
+        }
+        return information
+
+    def save(self):
+        self.process_exception()
 
 
 class SystemLog(object):

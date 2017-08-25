@@ -5,6 +5,8 @@ from aetypes import Enum
 import xlrd
 from decimal import Decimal
 
+from django.db import transaction
+
 from ERP.models import Concept_Input, Unit, LineItem
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 
@@ -60,11 +62,11 @@ class DBObject(object):
         - ConceptInput
     """
 
-    def __init__(self, username):
+    def __init__(self, user_id):
         """ Initializes the DBObject instance.
         :param username: The username that will make changes to the database.
         """
-        self.username = username
+        self.user_id = user_id
 
     class InputConstants(Enum):
         """ Contains a series of constants that help locate information of inputs on a record list.
@@ -179,19 +181,21 @@ class DBObject(object):
             file_obj = FileInterface(file_path)
         except:
             # The file does not exist.
-            raise ErrorDataUpload('Ha habido un problema leyendo el archivo', LoggingConstants.ERROR)
+            raise ErrorDataUpload('Ha habido un problema leyendo el archivo', LoggingConstants.ERROR, self.user_id)
 
         # Obtain the element list for the file.
         record_list = file_obj.get_element_list()
 
         if model == self.CONCEPT_UPLOAD or model == self.INPUT_UPLOAD:
+            # Handle concepts and inputs
             self.save_all_concept_input(record_list)
         elif model == self.LINE_ITEM_UPLOAD:
+            # Handle line items
             self.save_all_line_items(record_list)
         else:
             raise ErrorDataUpload(
                 'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
-                LoggingConstants.CRITICAL)
+                LoggingConstants.CRITICAL, self.user_id)
 
     def save_all_concept_input(self, record_list):
         folio = str(uuid.uuid4())
@@ -233,7 +237,7 @@ class DBObject(object):
         if line_item_has_parent:
             line_item_qs = LineItem.objects.filter(key=line_item_parent_key.upper())
             if line_item_parent_key is not None and len(line_item_qs) == 0:
-                raise ErrorDataUpload('No existe la partida padre')
+                raise ErrorDataUpload('No existe la partida padre', LoggingConstants.ERROR, self.user_id)
             else:
                 parent_id = line_item_qs[0].id
         else:
@@ -243,62 +247,66 @@ class DBObject(object):
                                  project_id=2,
                                  parent_line_item_id=parent_id,
                                  description=line_item_description)
-
+        # with transaction.atomic():
         line_item_obj.save()
 
-    '''
-        Método save:
-        Éste método guardará a la base de datos los objetos apoyándose del modelo y de la lista columns.
-        Se leerán los atributos definidos por el modelo, y con ayuda de la lista columns se tomara el valor correcto.
-        El tipo correcto se leerá desde el modelo.
-    '''
 
-    def save_concept_input(self, folio, record, model):
-        # First, we get each all the attributes.
-        line_item_key = record[self.ENUM_DICT[model].LINE_ITEM_KEY_COL]
-        line_item_description = record[self.ENUM_DICT[model].LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
-        concept_key = record[self.ENUM_DICT[model].CONCEPT_KEY_COL].encode('utf-8')
-        concept_description = record[self.ENUM_DICT[model].CONCEPT_DESCRIPTION_COL].encode('utf-8')
-        unit = record[self.ENUM_DICT[model].UNIT_COL].encode('utf-8')
-        quantity = Decimal(record[self.ENUM_DICT[model].QUANTITY_COL].replace(',', ''))
-        unit_price = Decimal(record[self.ENUM_DICT[model].UNIT_PRICE_COL][1:].replace(',', ''))
+'''
+    Método save:
+    Éste método guardará a la base de datos los objetos apoyándose del modelo y de la lista columns.
+    Se leerán los atributos definidos por el modelo, y con ayuda de la lista columns se tomara el valor correcto.
+    El tipo correcto se leerá desde el modelo.
+'''
 
-        # print unit_price
 
-        unit_qs = Unit.objects.filter(abbreviation=unit.upper())
+def save_concept_input(self, folio, record, model):
+    # First, we get each all the attributes.
+    line_item_key = record[self.ENUM_DICT[model].LINE_ITEM_KEY_COL]
+    line_item_description = record[self.ENUM_DICT[model].LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
+    concept_key = record[self.ENUM_DICT[model].CONCEPT_KEY_COL].encode('utf-8')
+    concept_description = record[self.ENUM_DICT[model].CONCEPT_DESCRIPTION_COL].encode('utf-8')
+    unit = record[self.ENUM_DICT[model].UNIT_COL].encode('utf-8')
+    quantity = Decimal(record[self.ENUM_DICT[model].QUANTITY_COL].replace(',', ''))
+    unit_price = Decimal(record[self.ENUM_DICT[model].UNIT_PRICE_COL][1:].replace(',', ''))
 
-        if len(unit_qs) == 0:
-            unit_obj = Unit(abbreviation=unit.upper(),
-                            quantification='C',
-                            name=unit.upper())
-            unit_obj.save()
-        else:
-            unit_obj = unit_qs[0]
+    # print unit_price
 
-        line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
+    unit_qs = Unit.objects.filter(abbreviation=unit.upper())
 
-        if len(line_item_qs) == 0:
-            line_item_obj = LineItem(key=line_item_key.upper(),
-                                     project_id=2,
-                                     parent_line_item=None,
-                                     description=line_item_description)
-            line_item_obj.save()
-        else:
-            line_item_obj = line_item_qs[0]
+    if len(unit_qs) == 0:
+        unit_obj = Unit(abbreviation=unit.upper(),
+                        quantification='C',
+                        name=unit.upper())
+        #with transaction.atomic():
+        unit_obj.save()
+    else:
+        unit_obj = unit_qs[0]
 
-        concept_input = Concept_Input(
-            line_item=line_item_obj,
-            unit=unit_obj,
-            key=concept_key,
-            description=concept_description,
-            quantity=quantity,
-            unit_price=unit_price,
-            type=self.CONCEPT_INPUT_TYPES[model]
-        )
+    line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
 
-        concept_input.save()
+    if len(line_item_qs) == 0:
+        line_item_obj = LineItem(key=line_item_key.upper(),
+                                 project_id=2,
+                                 parent_line_item=None,
+                                 description=line_item_description)
+        #with transaction.atomic():
+        line_item_obj.save()
+    else:
+        line_item_obj = line_item_qs[0]
+
+    concept_input = Concept_Input(
+        line_item=line_item_obj,
+        unit=unit_obj,
+        key=concept_key,
+        description=concept_description,
+        quantity=quantity,
+        unit_price=unit_price,
+        type=self.CONCEPT_INPUT_TYPES[model]
+    )
+    #with transaction.atomic():
+    concept_input.save()
 
 
 class ErrorDataUpload(SystemException):
-    def __init__(self, message, priority):
-        SystemException.__init__(self, message, LoggingConstants.DATA_UPLOAD, priority)
+    def __init__(self, message, priority, user_id):
+        SystemException.__init__(self, message, LoggingConstants.DATA_UPLOAD, priority, user_id)
