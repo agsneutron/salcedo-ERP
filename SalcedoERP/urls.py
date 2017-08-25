@@ -26,10 +26,12 @@ from ERP import urls
 import ERP
 
 from users import views
+
 admin.autodiscover()
 
 import DataUpload
 from DataUpload import urls
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^users/', include(users.urls)),
