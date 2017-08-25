@@ -7,5 +7,12 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect, render_to_response
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from django.template import RequestContext,loader
+from django.template import RequestContext, loader
 
+
+def empresas(request):
+    return render(request, 'empresas.html')
+
+
+def contratos(request):
+    return render(request, 'contratos.html')
