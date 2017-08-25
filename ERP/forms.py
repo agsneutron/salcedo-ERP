@@ -1,5 +1,6 @@
+# coding=utf-8
 from django import forms
-from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile
+from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem
 from datetime import datetime
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
@@ -76,24 +77,9 @@ class EstimateForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
-        print "The request"
-        print self.request.GET.get('project')
         super(EstimateForm, self).__init__(*args, **kwargs)
-
-        '''
-        super(VisitasForm, self).__init__(*args, **kwargs)
-
-        # Filtrando las obras para que no se puedan agregar visitas a aquellas que tienen el estatus de 'Proyectada'
-        self.fields['obra'].queryset = Obra.objects.exclude(estatus__nombre="PROYECTADA")
-
-        # Cambiando el valor del nombre para que se despliegue con el formato: 'folio - nombre'
-        print "Got: "
-        print self.fields['obra'].queryset[0].to_serializable_dict()
-        for obra in self.fields['obra'].queryset:
-            obra.nombre = str(obra.folio) + " - " + obra.nombre, self).save(commit=commit)
-        '''
-
-
+        project_id = self.request.GET.get('project')
+        self.fields['line_item'].queryset = LineItem.objects.filter(project__id=project_id)
 
 
 '''

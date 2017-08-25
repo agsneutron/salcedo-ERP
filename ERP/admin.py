@@ -27,6 +27,7 @@ class ProjectAdmin(admin.ModelAdmin):
     search_fields = ('nombreProyecto', 'key')
 
 
+
 class LineItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'description',)
     search_fields = ('description',)
@@ -78,7 +79,7 @@ class EstimateAdmin(admin.ModelAdmin):
 
 
 class ConceptInputAdmin(admin.ModelAdmin):
-    list_display = ('id', 'unit', 'quantity', 'unit_price')
+    list_display = ('id', 'description','type','unit', 'quantity', 'unit_price')
     search_fields = ('unit', 'quantity', 'unitPrice')
     list_display_links = ('unit', 'quantity', 'unit_price')
     exclude = ('end_date',)
