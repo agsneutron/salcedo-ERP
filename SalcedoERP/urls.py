@@ -26,16 +26,20 @@ from ERP import urls
 import ERP
 
 from users import views
+
 admin.autodiscover()
 
 import DataUpload
 from DataUpload import urls
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^users/', include(users.urls)),
     url(r'^erp/', include(ERP.urls)),
     url(r'^$', RedirectView.as_view(url='/admin')),
     url(r'^data_upload/', include(DataUpload.urls)),
+    url(r'^admin/empresas', users.views.empresas, name='empresas'),
+    url(r'^admin/contratos', users.views.contratos, name='contratos'),
 
     url(r'^chaining/', include('smart_selects.urls')),
 ]

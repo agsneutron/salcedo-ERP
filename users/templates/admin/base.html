@@ -33,20 +33,20 @@
 
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
       data-admin-utc-offset="{% now "Z" %}">
-<div id="ms-preload" class="ms-preload">
+{% comment %}<div id="ms-preload" class="ms-preload">
     <div id="status">
         <div class="spinner">
             <div class="dot1"></div>
             <div class="dot2"></div>
         </div>
     </div>
-</div>
+</div>{% endcomment %}
 <header class="ms-header ms-header-primary" id="header">
     <div class="container container-full">
         <div class="ms-title">
             <a href="index.html">
                 <!-- <img src="assets/img/demo/logo-header.png" alt=""> -->
-                <span class="ms-logo animated zoomInDown animation-delay-5"><img
+                <span class="ms-logo"><img
                         src="{% static "admin/img/logo.png" %}"> </span>
             </a>
         </div>
@@ -75,14 +75,14 @@
         <div class="container container-full">
             <div class="navbar-header">
                 <a class="navbar-brand" href="index.html">
-                    <span class="ms-logo animated zoomInDown animation-delay-5"><img
+                    <span class="ms-logo"><img
                             src="{% static "admin/img/logo_mini.png" %}" style="max-height: 50px"> </span>
                 </a>
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li class="dropdown active">
-                        <a href="javascript:void(0)"
+                        <a href="/admin"
                            class="dropdown-toggle animated fadeIn animation-delay-4 text-center"
                            data-toggle="dropdown" data-hover="dropdown" data-name="home">
                             <i class="fa fa-home text-center"></i><br>
@@ -138,22 +138,36 @@
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="#" class="dropdown-toggle animated fadeIn animation-delay-6"
+                        <a href="#" class="dropdown-toggle  "
                            data-toggle="dropdown"
                            data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                           data-name="component">
+                           data-name="">
                             <i class="fa fa-home text-center"></i><br>
                             Contratación
+                            <i class="zmdi zmdi-chevron-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
-                            <li>
+                           {% comment %} <li>
                                 <a href="/admin/ERP/contrato/add/">
                                     <i class="zmdi zmdi-view-dashboard"></i>Agregar</a>
                             </li>
                             <li>
                                 <a href="/admin/ERP/contrato/">
                                     <i class="zmdi zmdi-view-dashboard"></i>Consultar</a>
+                            </li>{% endcomment %}
+                            <li>
+                                <a href="/admin/ERP/contrato/">
+                                    <i class="zmdi zmdi-view-dashboard"></i>Contratos</a>
                             </li>
+                            <li>
+                                <a href="/admin/ERP/empresa/">
+                                    <i class="zmdi zmdi-view-dashboard"></i>Empresas</a>
+                            </li>
+                            <li>
+                                <a href="/admin/ERP/contratista/">
+                                    <i class="zmdi zmdi-view-dashboard"></i>Contratistas</a>
+                            </li>
+
                         </ul>
 
                     </li>
@@ -236,6 +250,7 @@
 
 <!-- ends breadcrumbs and messages -->
 <!-- Begins MainContainer -->
+<div id="particles-js">
 <div id="content" class=" container">
     {% block pretitle %}{% endblock %}
     {% block content %}

@@ -423,6 +423,20 @@ dt {
 .danger {
     color: #f44336;
 }
+.ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+    padding: 0;
+    background-color: #424242;
+    border-radius: 0;
+    box-shadow: 0 3px 3px rgba(0,0,0,.29), 0 3px 3px rgba(0,0,0,.29);
+    display: none !important;
+
+}
+.ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    transition: 0 !important;
+    display: block !important;
+}
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;

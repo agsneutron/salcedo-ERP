@@ -53,3 +53,5 @@ def progress_estimate_log_view(request):
         }
 
     return render(request, 'ProgressEstimateLog/progress_estimate_log_form.html', params)
+
+

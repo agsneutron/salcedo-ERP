@@ -1,11 +1,17 @@
 {% extends "admin/base_site.html" %}
+
 {% load i18n admin_urls admin_static admin_list %}
 
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
     {% if cl.formset %}
         <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+
     {% endif %}
     {% if cl.formset or action_form %}
         <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -15,6 +21,29 @@
         <style>
             #changelist table thead th:first-child {
                 width: inherit
+            }
+
+            .ui-selectmenu.ui-popup .ui-input-search {
+                margin-left: .5em;
+                margin-right: .5em;
+            }
+
+            .ui-selectmenu.ui-dialog .ui-content {
+                padding-top: 0;
+            }
+
+            .ui-selectmenu.ui-dialog .ui-selectmenu-list {
+                margin-top: 0;
+            }
+
+            .ui-selectmenu.ui-popup .ui-selectmenu-list li.ui-first-child .ui-btn {
+                border-top-width: 1px;
+                -webkit-border-radius: 0;
+                border-radius: 0;
+            }
+
+            .ui-selectmenu.ui-dialog .ui-header {
+                border-bottom-width: 1px;
             }
         </style>
     {% endif %}
@@ -107,16 +136,53 @@
                         <div class="card">
                             <div class="card-header">
                                 <div class="item-left">
-                                    <h3 class="card-title text">Bitacora</h3>
+                                    <h3 class="card-title text">Empresas</h3>
                                 </div>
                                 <div class="item-right">
-                                    <a href="{% add_preserved_filters add_url is_popup to_field %}" class="btn btn-raised btn-success" style="    margin: -4px 1px;">
-                                    &nbsp; Agregar nuevo registro
+                                    <a href="{% add_preserved_filters add_url is_popup to_field %}"
+                                       class="btn-circle btn-circle-raised btn-circle-success" style="    margin: -4px 1px;">
+                                        &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x" style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
                                     </a>
                                 </div>
                             </div>
                             <div class="card-block">
-                                <div id="container-bitacora" style=""></div>
+                                <div class="">
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <select class="js-example-placeholder-single form-control">
+                                                <option value=""></option>
+                                                <option value="AL">dato1</option>
+
+                                                <option value="WY">dato2</option>
+                                            </select>
+                                            <span class="input-group-btn">
+                        <button type="button" class="btn btn-fab btn-fab-mini">
+                          <i class="material-icons">search</i>
+                        </button>
+                      </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% comment %} <div id="container-bitacora" style=""></div>{% endcomment %}
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <h3>Resultados de busqueda</h3>
+                                <div class="list-group">
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 1 <span class="badge bg-danger">Editar</span></a>
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 2</a>
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 3</a>
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 4</a>
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 5</a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -130,7 +196,7 @@
     </div>
 
 
-    <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>
+    {% comment %}   <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>
     <script src="{% static "admin/assets/Highcharts/code/modules/exporting.js" %}"></script>
 
     <script>
@@ -195,9 +261,18 @@
                     parent: 'new_offices',
                     start: today + 9.5 * day,
                     milestone: true
-                }, ]
-            }, ]
+                },]
+            },]
         });
 
+    </script>{% endcomment %}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".js-example-placeholder-single").select2({
+                placeholder: "Busqueda por nombre de empresa",
+                allowClear: true
+            });
+        });
     </script>
 {% endblock %}
