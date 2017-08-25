@@ -106,7 +106,7 @@ class ContratistaAdmin(admin.ModelAdmin):
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
-        fields = ('nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos','pais', 'estado', 'municipio', 'calle', 'numero', 'colonia', 'cp')
+        fields = ('nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle', 'numero', 'colonia')
         return fields
 
 
@@ -117,7 +117,7 @@ class EmpresaAdmin(admin.ModelAdmin):
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
-        fields = ('nombreEmpresa', 'rfc', 'telefono', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        fields = ('nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle', 'numero', 'colonia')
         return fields
 
 
@@ -141,7 +141,7 @@ class PropietarioAdmin(admin.ModelAdmin):
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
-        fields = ('nombrePropietario', 'email', 'empresa', 'telefono1', 'telefono2', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        fields = ('nombrePropietario', 'rfc', 'empresa', 'email','telefono1', 'telefono2', 'pais', 'estado', 'municipio', 'cp', 'calle', 'numero', 'colonia')
         return fields
 
 

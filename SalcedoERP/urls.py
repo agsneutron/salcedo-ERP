@@ -38,8 +38,8 @@ urlpatterns = [
     url(r'^erp/', include(ERP.urls)),
     url(r'^$', RedirectView.as_view(url='/admin')),
     url(r'^data_upload/', include(DataUpload.urls)),
-
-    url(r'^chaining/', include('smart_selects.urls')),
     url(r'^admin/empresas', users.views.empresas, name='empresas'),
     url(r'^admin/contratos', users.views.contratos, name='contratos'),
+
+    url(r'^chaining/', include('smart_selects.urls')),
 ]
