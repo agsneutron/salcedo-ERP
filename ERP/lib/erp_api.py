@@ -33,11 +33,8 @@ class ConceptInputsForLineItemAndType(ListView):
 
         line_item_id = request.GET.get('line_item')         # Getting the type fpr the request.
         type = request.GET.get('type')                      # Getting the type fpr the request.
-        print line_item_id
-        print type
 
-        qs = Concept_Input.objects.filter(Q(type=type) & Q(line_item=line_item_id))
-        print qs
-        #cleaned_qs = Utilities.clean_generic_queryset(qs)
-        #response = Utilities.query_set_to_json_string(cleaned_qs)
-        return HttpResponse({},'application/json',)
+        qs = Concept_Input.objects.filter(Q(type=type) & Q(line_item=line_item_id)).values('id', 'description')
+        cleaned_qs = Utilities.clean_generic_queryset(qs)
+
+        return HttpResponse(cleaned_qs,'application/json',)

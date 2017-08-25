@@ -79,7 +79,7 @@ class EstimateAdmin(admin.ModelAdmin):
 
 
 class ConceptInputAdmin(admin.ModelAdmin):
-    list_display = ('id', 'description','type','unit', 'quantity', 'unit_price')
+    list_display = ('id', 'description','unit', 'quantity', 'unit_price')
     search_fields = ('unit', 'quantity', 'unitPrice')
     list_display_links = ('unit', 'quantity', 'unit_price')
     exclude = ('end_date',)
@@ -156,6 +156,8 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
     list_display = ('estimate', 'key', 'progress','amount', 'type', 'generator_file')
     fields = ('estimate', 'key', 'progress','amount', 'type', 'generator_file')
     model = ProgressEstimate
+
+
 
 
 # Simple admin views.

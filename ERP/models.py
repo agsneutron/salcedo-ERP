@@ -738,8 +738,6 @@ class Unit(models.Model):
 '''
     Model for the concepts.
 '''
-
-
 class Concept_Input(models.Model):
     CONCEPT = "C"
     INPUT = "I"
@@ -751,8 +749,8 @@ class Concept_Input(models.Model):
     line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=False, editable=True)
-    description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
+    description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
     unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False,
@@ -808,9 +806,28 @@ class Estimate(models.Model):
                                       verbose_name="Concepto / Insumo"
                                       )
 
+
     class Meta:
         verbose_name_plural = 'Estimaciones'
 
+    def __str__(self):
+        return "Partida: " + self.line_item.description[:45] + " Concepto: " + self.concept_input.description + " Periodo: " + str(self.period)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        line_item_display = ""
+        concept_input_display = ""
+
+        if len(self.line_item.description) >40:
+             line_item_display =  self.line_item.description[0:40] + "..."
+        else:
+            line_item_display =  self.line_item.description
+
+        if len(self.concept_input.description) > 40:
+            concept_input_display = self.concept_input.description[0:40] + "..."
+        else:
+            concept_input_display = self.concept_input.description
+
+        return "Partida: " + line_item_display + " Concepto: " + concept_input_display + " Periodo: " + str(self.period)
 
 '''
     Model for the Progress Estimates.
@@ -852,7 +869,8 @@ class ProgressEstimate(models.Model):
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS, verbose_name="Tipo")
 
     class Meta:
-        verbose_name_plural = 'Avances'
+        verbose_name_plural = 'Avances de la Estimación'
+        verbose_name = 'Avance de la Estimación'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)

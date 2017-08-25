@@ -71,9 +71,9 @@ class DocumentoFuenteForm(forms.ModelForm):
     Forms for the progress estimate.
 '''
 class EstimateForm(forms.ModelForm):
-
-    model = Estimate
-    fields = '__all__'
+    class Meta:
+        model = Estimate
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
