@@ -20,15 +20,19 @@ class TipoProyectoDetalleInline(admin.TabularInline):
     extra = 1
     can_delete = False
 
+
 class ProjectAdmin(admin.ModelAdmin):
     form = AddProyectoForm
     inlines = (TipoProyectoDetalleInline,)
+    search_fields = ('nombreProyecto', 'key')
+
 
 class LineItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'description',)
     search_fields = ('description',)
     list_display_links = ('description',)
     list_per_page = 50
+
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
     fields = ('user','progress_estimate','description', 'date')
@@ -44,27 +48,36 @@ class ProgressEstimateInline(admin.TabularInline):
 
 
 class EstimateAdmin(admin.ModelAdmin):
-    list_display = ('period','start_date', 'end_date')
-    search_fields = ('period','start_date', 'end_date')
+    form = EstimateForm
+    list_display = ('line_item','concept_input','period','start_date', 'end_date')
+    search_fields = ('line_item','concept_input','period','start_date', 'end_date')
     list_per_page = 50
     inlines = [
         ProgressEstimateInline
     ]
-    form = EstimateForm
     fieldsets = (
         (
             'Concepto', {
-                'fields': ('line_item_filter', )
+                'fields': ('line_item', )
         }),
         (
             'Estimación', {
-                'fields': ('period','start_date', 'end_date',)
+                'fields': ('concept_input','period','start_date', 'end_date',)
         }),
     )
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EstimateAdmin, self).get_form(request, obj, **kwargs)
+
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
 
 
-class ConceptDetailAdmin(admin.ModelAdmin):
+class ConceptInputAdmin(admin.ModelAdmin):
     list_display = ('id', 'unit', 'quantity', 'unit_price')
     search_fields = ('unit', 'quantity', 'unitPrice')
     list_display_links = ('unit', 'quantity', 'unit_price')
@@ -88,12 +101,12 @@ class EmpleadoAdmin(admin.ModelAdmin):
 
 class ContratistaAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombreContratista', 'rfc', 'estado')
-    search_fields = ('nombreContratista', 'rfc')
+    search_fields = ('nombreContratista', 'rfc', 'estado__nombreEstado')
     list_display_links = ('id', 'nombreContratista', 'rfc')
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
-        fields = ('nombreContratista', 'rfc', 'calle', 'numero', 'colonia', 'municipio', 'estado', 'cp', 'pais')
+        fields = ('nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos','pais', 'estado', 'municipio', 'calle', 'numero', 'colonia', 'cp')
         return fields
 
 
@@ -137,16 +150,25 @@ class LogFileAdmin(admin.ModelAdmin):
     fields = ('id', 'progress_estimate_log', 'file', 'mime',)
     model = LogFile
 
+
 class ProgressEstimateAdmin(admin.ModelAdmin):
-    list_display = ('id', 'estimate', 'key', 'progress','amount', 'type', )
-    fields = ('id', 'estimate', 'key', 'progress','amount', 'type', )
+    list_display = ('estimate', 'key', 'progress','amount', 'type', 'generator_file')
+    fields = ('estimate', 'key', 'progress','amount', 'type', 'generator_file')
     model = ProgressEstimate
 
 
+# Simple admin views.
+admin.site.register(Pais)
+admin.site.register(Estado)
+admin.site.register(Municipio)
+admin.site.register(TipoConstruccion)
+admin.site.register(ModalidadContrato)
+
 admin.site.register(Project, ProjectAdmin)
+
 admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
-admin.site.register(Concept_Input, ConceptDetailAdmin)
+admin.site.register(Concept_Input, ConceptInputAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
@@ -154,5 +176,5 @@ admin.site.register(Contratista, ContratistaAdmin)
 admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
-admin.site.register(ProgressEstimate, ProgressEstimateAdmin )
+admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
