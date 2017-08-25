@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from ERP import views
+from ERP import views,api
 from ERP.lib import erp_api
 from ERP.lib import erp_forms_api
 
@@ -13,9 +13,6 @@ urlpatterns = [
     # Endpoints to be called after a form to be saved.
     url(r'^forms_api/save_pel_form', erp_forms_api.SaveProgressEstimateLogFormEndpoint.as_view()),
     url(r'^forms_api/save_pel_file_form', erp_forms_api.SaveProgressEstimateLogFileFormEndpoint.as_view()),
-
-
-
-
+    url(r'^api/project_list', api.ProjectEndpoint.as_view()),
 
 ]
