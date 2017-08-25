@@ -105,7 +105,7 @@
                                 <div class="form-group field-contrato">
                                     <div class="related-widget-wrapper">
                                         <label class="required" for="id_contrato">Contrato:</label>
-                                        {{ field.field|addcss:"form-control selectpicker" }}
+                                        {{ field.field|addcss:"form-control " }}
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                                 <div class="form-group field-propietario">
                                     <div class="related-widget-wrapper">
                                         <label class="required" for="id_propietario">Propietario:</label>
-                                        {{ field.field|addcss:"form-control selectpicker" }}
+                                        {{ field.field|addcss:"form-control " }}
                                     </div>
                                 </div>
                             </div>
@@ -168,7 +168,7 @@
                                 <div>
                                     <label class="control-label required" for="id_tipo_construccion">Tipo de
                                         Construcción:</label>
-                                    {{ field.field|addcss:"form-control selectpicker" }}
+                                    {{ field.field|addcss:"form-control " }}
                                 </div>
                             </div>
                         </div>
@@ -221,7 +221,7 @@
                                 <div>
                                     <label class="control-label required"
                                            for="id_ubicacion_municipio">Municipio:</label>
-                                    {{ field.field|addcss:"form-control selectpicker" }}
+                                    {{ field.field|addcss:"form-control " }}
                                 </div>
                             </div>
                         </div>
@@ -231,7 +231,7 @@
                             <div class="form-group field-ubicacion_estado">
                                 <div>
                                     <label class="control-label required" for="id_ubicacion_estado">Estado:</label>
-                                    {{ field.field|addcss:"form-control selectpicker" }}
+                                    {{ field.field|addcss:"form-control " }}
                                 </div>
                             </div>
                         </div>
@@ -251,7 +251,7 @@
                                 <div class="form-group field-ubicacion_pais">
                                     <div>
                                         <label class="control-label required" for="id_ubicacion_pais">País:</label>
-                                        {{ field.field|addcss:"form-control selectpicker" }}
+                                        {{ field.field|addcss:"form-control " }}
                                     </div>
                                 </div>
                             </div>
@@ -374,79 +374,79 @@
                     </div>
                 </div>
                     {% endif %}
-                    {% if field.field.name == "restrccion_vial" %}
+                    {% if field.field.name == "restriccion_vial" %}
                 <div role="tabpanel" class="tab-pane fade" id="otro3">
                     <h2 class="text-center">Restricciones</h2>
                     <hr>
                     <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group field-restrccion_vial">
+                                <div class="form-group field-restriccion_vial">
                                     <div>
-                                        <label class="control-label required" for="id_restrccion_vial">Vial:</label>
+                                        <label class="control-label required" for="id_restriccion_vial">Vial:</label>
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
                         {% endif %}
-                        {% if field.field.name == "restrccion_cna" %}
+                        {% if field.field.name == "restriccion_cna" %}
                             <div class="col-md-4">
-                                <div class="form-group field-restrccion_cna">
+                                <div class="form-group field-restriccion_cna">
                                     <div>
-                                        <label class="control-label required" for="id_restrccion_cna">CNA:</label>
+                                        <label class="control-label required" for="id_restriccion_cna">CNA:</label>
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
                         {% endif %}
-                        {% if field.field.name == "restrccion_cfe" %}
+                        {% if field.field.name == "restriccion_cfe" %}
                             <div class="col-md-4">
-                                <div class="form-group field-restrccion_cfe">
+                                <div class="form-group field-restriccion_cfe">
                                     <div>
-                                        <label class="control-label required" for="id_restrccion_cfe">CFE:</label>
+                                        <label class="control-label required" for="id_restriccion_cfe">CFE:</label>
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
                     </div>
                     {% endif %}
-                    {% if field.field.name == "restrccion_pemex" %}
+                    {% if field.field.name == "restriccion_pemex" %}
                     <div class="row">
                             <div class="col-md-4">
-                                <div class="form-group field-restrccion_pemex">
+                                <div class="form-group field-restriccion_pemex">
                                     <div>
-                                        <label class="control-label required" for="id_restrccion_pemex">PEMEX:</label>
+                                        <label class="control-label required" for="id_restriccion_pemex">PEMEX:</label>
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
                         {% endif %}
-                        {% if field.field.name == "restrccion_inha" %}
+                        {% if field.field.name == "restriccion_inha" %}
                             <div class="col-md-4">
-                                <div class="form-group field-restrccion_inha">
+                                <div class="form-group field-restriccion_inha">
                                     <div>
-                                        <label class="control-label required" for="id_restrccion_inha">INHA:</label>
+                                        <label class="control-label required" for="id_restriccion_inha">INHA:</label>
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
                         {% endif %}
-                        {% if field.field.name == "restrccion_otros" %}
+                        {% if field.field.name == "restriccion_otros" %}
                             <div class="col-md-4">
-                                <div class="form-group field-restrccion_otros">
+                                <div class="form-group field-restriccion_otros">
                                     <div>
-                                        <label class="control-label required" for="id_restrccion_otros">Otros:</label>
+                                        <label class="control-label required" for="id_restriccion_otros">Otros:</label>
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
                             </div>
                     </div>
                     {% endif %}
-                    {% if field.field.name == "restrccion_observaciones" %}
+                    {% if field.field.name == "restriccion_observaciones" %}
                     <div class="row">
                             <div class="col-md-6 col-md-offset-3">
-                                <div class="form-group field-restrccion_observaciones">
+                                <div class="form-group field-restriccion_observaciones">
                                     <div>
-                                        <label class="control-label required" for="id_restrccion_observaciones">Observaciones:</label>
+                                        <label class="control-label required" for="id_restriccion_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>

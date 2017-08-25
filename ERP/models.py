@@ -419,7 +419,7 @@ class Contrato(models.Model):
         return ans
 
     def __str__(self):
-        return self.observaciones
+        return self.codigo_obra
 
         # def save(self, *args, **kwargs):
         #    canSave = True
