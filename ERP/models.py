@@ -1,6 +1,12 @@
 # coding=utf-8
 from __future__ import unicode_literals
+
+from django.utils import timezone
+from django.conf import settings
+from django.contrib.contenttypes.models import ContentType
 from django.forms.models import model_to_dict
+from django.utils.encoding import smart_text
+
 from users.models import ERPUser
 from smart_selects.db_fields import ChainedForeignKey
 from django.db import models
@@ -32,7 +38,7 @@ class Pais(models.Model):
 
     class Meta:
         verbose_name_plural = 'Países'
-        verbose_name= "País"
+        verbose_name = "País"
 
 
 class Estado(models.Model):
@@ -568,7 +574,8 @@ class Project(models.Model):
     hidraulica_fuente = models.CharField(verbose_name="fuente", max_length=200, null=True, blank=True)
     hidraulica_distancia = models.CharField(verbose_name="distacia", max_length=200, null=True, blank=True)
     hidraulica_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
-    hidraulica_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, verbose_name="Documento de hidráulica")
+    hidraulica_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente,
+                                            verbose_name="Documento de hidráulica")
     sanitaria_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     sanitaria_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
     sanitaria_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
@@ -790,6 +797,8 @@ class Concept_Input(models.Model):
 '''
     Model for the Estimates.
 '''
+
+
 class Estimate(models.Model):
     start_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de inicio")
     end_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de fin")
@@ -907,3 +916,37 @@ class LogFile(models.Model):
         answer = model_to_dict(self)
         answer['file'] = str(self.file)
         return answer
+
+
+class SystemLogEntry(models.Model):
+    action_time = models.DateTimeField(
+        'action time',
+        default=timezone.now,
+        editable=False,
+    )
+    user = models.ForeignKey(
+        ERPUser,
+        models.CASCADE,
+        verbose_name='user',
+        unique=False
+    )
+
+    # Translators: 'repr' means representation (https://docs.python.org/3/library/functions.html#repr)
+    label = models.CharField('label', max_length=200)
+    # change_message is either a string or a JSON structure
+    information = models.TextField('information', blank=True)
+
+    # priority
+    priority = models.IntegerField(verbose_name='Prioridad', null=False, blank=False, editable=False)
+
+    class Meta:
+        verbose_name = 'system log entry'
+        verbose_name_plural = 'system log entries'
+        ordering = ('-action_time',)
+
+
+    def __repr__(self):
+        return smart_text(self.action_time)
+
+    def __str__(self):
+        return "Value: " + self.information
