@@ -891,9 +891,9 @@ class Concept_Input(models.Model):
 
 
 class Estimate(models.Model):
-    start_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de inicio")
-    end_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de fin")
-    period = models.DateTimeField(default=None, null=True, verbose_name="Periodo")
+    start_date = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Fecha de inicio")
+    end_date = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Fecha de fin")
+    period = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Periodo")
 
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
     line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=True, blank=False, default=None)

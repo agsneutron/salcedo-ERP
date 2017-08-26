@@ -198,21 +198,21 @@ class DBObject(object):
                 LoggingConstants.CRITICAL, self.user_id)
 
     def save_all_concept_input(self, record_list):
-        folio = str(uuid.uuid4())
-
+        """ Save a set of concept or input records
+        :param record_list: list of concepts or inputs.
+        """
         try:
             for record in record_list:
-                # print 'Single record:' + str(record)
+                # Iterate over each record
                 if record[0] != "":
-                    self.save_concept_input(folio, record, Concept_Input)
+                    # Validate that the record is not empty
+                    # Save the record
+                    self.save_concept_input(record, self.CONCEPT_UPLOAD)
 
         except Exception, e:
-            # self.object_class.objects.filter(folio=folio).delete()
             raise e
-        return folio
 
     def save_all_line_items(self, record_list):
-        folio = str(uuid.uuid4())
         self.LineItemConstants.set_max_level(len(record_list[0]))
 
         try:
@@ -222,9 +222,7 @@ class DBObject(object):
                     self.save_line_item(record)
 
         except Exception, e:
-            # self.object_class.objects.filter(folio=folio).delete()
             raise e
-        return folio
 
     def save_line_item(self, record):
         # First, we get each all the attributes.
@@ -247,64 +245,60 @@ class DBObject(object):
                                  project_id=2,
                                  parent_line_item_id=parent_id,
                                  description=line_item_description)
-        # with transaction.atomic():
         line_item_obj.save()
 
 
-'''
-    Método save:
-    Éste método guardará a la base de datos los objetos apoyándose del modelo y de la lista columns.
-    Se leerán los atributos definidos por el modelo, y con ayuda de la lista columns se tomara el valor correcto.
-    El tipo correcto se leerá desde el modelo.
-'''
+    '''
+        Método save:
+        Éste método guardará a la base de datos los objetos apoyándose del modelo y de la lista columns.
+        Se leerán los atributos definidos por el modelo, y con ayuda de la lista columns se tomara el valor correcto.
+        El tipo correcto se leerá desde el modelo.
+    '''
 
 
-def save_concept_input(self, folio, record, model):
-    # First, we get each all the attributes.
-    line_item_key = record[self.ENUM_DICT[model].LINE_ITEM_KEY_COL]
-    line_item_description = record[self.ENUM_DICT[model].LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
-    concept_key = record[self.ENUM_DICT[model].CONCEPT_KEY_COL].encode('utf-8')
-    concept_description = record[self.ENUM_DICT[model].CONCEPT_DESCRIPTION_COL].encode('utf-8')
-    unit = record[self.ENUM_DICT[model].UNIT_COL].encode('utf-8')
-    quantity = Decimal(record[self.ENUM_DICT[model].QUANTITY_COL].replace(',', ''))
-    unit_price = Decimal(record[self.ENUM_DICT[model].UNIT_PRICE_COL][1:].replace(',', ''))
+    def save_concept_input(self,record, model):
+        # First, we get each all the attributes.
+        line_item_key = record[self.ConceptConstants.LINE_ITEM_KEY_COL]
+        line_item_description = record[self.ConceptConstants.LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
+        concept_key = record[self.ConceptConstants.CONCEPT_KEY_COL].encode('utf-8')
+        concept_description = record[self.ConceptConstants.CONCEPT_DESCRIPTION_COL].encode('utf-8')
+        unit = record[self.ConceptConstants.UNIT_COL].encode('utf-8')
+        quantity = Decimal(record[self.ConceptConstants.QUANTITY_COL].replace(',', ''))
+        unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL][1:].replace(',', ''))
 
-    # print unit_price
 
-    unit_qs = Unit.objects.filter(abbreviation=unit.upper())
+        unit_qs = Unit.objects.filter(abbreviation=unit.upper())
 
-    if len(unit_qs) == 0:
-        unit_obj = Unit(abbreviation=unit.upper(),
-                        quantification='C',
-                        name=unit.upper())
-        #with transaction.atomic():
-        unit_obj.save()
-    else:
-        unit_obj = unit_qs[0]
 
-    line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
+        if len(unit_qs) == 0:
+            unit_obj = Unit(abbreviation=unit.upper(),
+                            quantification='C',
+                            name=unit.upper())
+            unit_obj.save()
+        else:
+            unit_obj = unit_qs[0]
 
-    if len(line_item_qs) == 0:
-        line_item_obj = LineItem(key=line_item_key.upper(),
-                                 project_id=2,
-                                 parent_line_item=None,
-                                 description=line_item_description)
-        #with transaction.atomic():
-        line_item_obj.save()
-    else:
-        line_item_obj = line_item_qs[0]
+        line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
 
-    concept_input = Concept_Input(
-        line_item=line_item_obj,
-        unit=unit_obj,
-        key=concept_key,
-        description=concept_description,
-        quantity=quantity,
-        unit_price=unit_price,
-        type=self.CONCEPT_INPUT_TYPES[model]
-    )
-    #with transaction.atomic():
-    concept_input.save()
+        if len(line_item_qs) == 0:
+            line_item_obj = LineItem(key=line_item_key.upper(),
+                                     project_id=1,
+                                     parent_line_item=None,
+                                     description=line_item_description)
+            line_item_obj.save()
+        else:
+            line_item_obj = line_item_qs[0]
+
+        concept_input = Concept_Input(
+            line_item=line_item_obj,
+            unit=unit_obj,
+            key=concept_key,
+            description=concept_description,
+            quantity=quantity,
+            unit_price=unit_price,
+            type=self.CONCEPT_INPUT_TYPES[model]
+        )
+        concept_input.save()
 
 
 class ErrorDataUpload(SystemException):

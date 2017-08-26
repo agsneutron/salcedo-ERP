@@ -1,5 +1,7 @@
 # coding=utf-8
 from django import forms
+from django.db import models
+
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem
 from datetime import datetime
 from django.utils.safestring import mark_safe
