@@ -1,6 +1,8 @@
 # coding=utf-8
 from __future__ import unicode_literals
-from ERP.forms import ProgressEstimateLogForm, LogFileForm
+
+from django.http import HttpResponseRedirect
+
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate
 from django.db.models import Q
 import json
@@ -54,4 +56,14 @@ def progress_estimate_log_view(request):
 
     return render(request, 'ProgressEstimateLog/progress_estimate_log_form.html', params)
 
+
+def upload_file(request):
+    if request.method == 'POST':
+        form = LineItemUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            #handle_uploaded_file(request.FILES['file'])
+            return HttpResponseRedirect('/success/url/')
+    else:
+        form = LineItemUploadForm()
+    return render(request, 'upload.html', {'form': form})
 

@@ -1,5 +1,7 @@
 # coding=utf-8
 from django import forms
+from django.db import models
+
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem
 from datetime import datetime
 from django.utils.safestring import mark_safe
@@ -74,9 +76,9 @@ class DocumentoFuenteForm(forms.ModelForm):
     Forms for the progress estimate.
 '''
 class EstimateForm(forms.ModelForm):
-
-    model = Estimate
-    fields = '__all__'
+    class Meta:
+        model = Estimate
+        fields = '__all__'
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)

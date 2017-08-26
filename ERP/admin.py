@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm
 
+
 from django.contrib import admin
 
 
@@ -25,7 +26,6 @@ class ProjectAdmin(admin.ModelAdmin):
     form = AddProyectoForm
     inlines = (TipoProyectoDetalleInline,)
     search_fields = ('nombreProyecto', 'key')
-
 
 
 class LineItemAdmin(admin.ModelAdmin):
@@ -88,7 +88,7 @@ class EstimateAdmin(admin.ModelAdmin):
 
 
 class ConceptInputAdmin(admin.ModelAdmin):
-    list_display = ('id', 'description','type','unit', 'quantity', 'unit_price')
+    list_display = ('id', 'description','unit', 'quantity', 'unit_price')
     search_fields = ('unit', 'quantity', 'unitPrice')
     list_display_links = ('unit', 'quantity', 'unit_price')
     exclude = ('end_date',)
@@ -165,6 +165,8 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
     list_display = ('estimate', 'key', 'progress','amount', 'type', 'generator_file')
     fields = ('estimate', 'key', 'progress','amount', 'type', 'generator_file')
     model = ProgressEstimate
+
+
 
 
 # Simple admin views.

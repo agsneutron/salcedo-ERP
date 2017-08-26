@@ -116,6 +116,9 @@ class Departamento(models.Model):
     def __str__(self):
         return self.nombreDepartamento
 
+    def __unicode__(self):
+        return self.nombreDepartamento
+
     def save(self, *args, **kwargs):
         can_save = True
 
@@ -143,6 +146,10 @@ class Area(models.Model):
         return ans
 
     def __str__(self):
+        return self.nombreArea
+
+
+    def __unicode__(self):
         return self.nombreArea
 
     def save(self, *args, **kwargs):
@@ -174,6 +181,10 @@ class Puesto(models.Model):
     def __str__(self):
         return self.nombrePuesto
 
+
+    def __unicode__(self):
+        return self.nombrePuesto
+
     def save(self, *args, **kwargs):
         canSave = True
 
@@ -201,6 +212,12 @@ class ModalidadContrato(models.Model):
         return ans
 
     def __str__(self):
+        return self.modalidadContrato
+
+    def __str__(self):
+        return self.nombreContratista
+
+    def __unicode__(self):
         return self.modalidadContrato
 
     def save(self, *args, **kwargs):
@@ -256,6 +273,9 @@ class Empleado(models.Model):
         return ans
 
     def __str__(self):
+        return self.nombreEmpleado
+
+    def __unicode__(self):
         return self.nombreEmpleado
 
     def save(self, *args, **kwargs):
@@ -316,6 +336,9 @@ class Contratista(models.Model):
     def __str__(self):
         return self.nombreContratista
 
+    def __unicode__(self):
+        return self.nombreContratista
+
     def save(self, *args, **kwargs):
         can_save = True
 
@@ -358,6 +381,10 @@ class Empresa(models.Model):
         return ans
 
     def __str__(self):
+        return self.nombreEmpresa
+
+
+    def __unicode__(self):
         return self.nombreEmpresa
 
     def save(self, *args, **kwargs):
@@ -427,6 +454,10 @@ class Contrato(models.Model):
     def __str__(self):
         return self.codigo_obra
 
+
+    def __unicode__(self):
+        return self.codigo_obra
+
         # def save(self, *args, **kwargs):
         #    canSave = True
 
@@ -472,6 +503,9 @@ class Propietario(models.Model):
     def __str__(self):
         return self.nombrePropietario
 
+    def __unicode__(self):
+        return self.nombrePropietario
+
     def save(self, *args, **kwargs):
         canSave = True
 
@@ -505,7 +539,7 @@ class DocumentoFuente(models.Model):
 # ProgramaVivienda
 class TipoProyectoDetalle(models.Model):
     proyecto = models.ForeignKey('Project', verbose_name="proyecto", null=True, blank=True)
-    NombreTipoProyecto = models.CharField(verbose_name="tipo Proyecto", max_length=8, null=False, blank=False)
+    nombreTipoProyecto = models.CharField(verbose_name="tipo Proyecto", max_length=8, null=False, blank=False)
     numero = models.DecimalField(verbose_name='número', decimal_places=2, blank=False,
                                  null=False,
                                  default=0, max_digits=20)
@@ -515,12 +549,18 @@ class TipoProyectoDetalle(models.Model):
     documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
 
     class Meta:
-        unique_together = [("proyecto", "NombreTipoProyecto")]
+        unique_together = [("proyecto", "nombreTipoProyecto")]
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
         return ans
+
+    def __str__(self):
+        return self.nombreTipoProyecto
+
+    def __unicode__(self):
+        return self.nombreTipoProyecto
 
 
 # proyectos
@@ -665,6 +705,10 @@ class Project(models.Model):
     def __str__(self):
         return self.nombreProyecto
 
+
+    def __unicode__(self):
+        return self.nombreProyecto
+
     def save(self, *args, **kwargs):
         canSave = True
 
@@ -745,8 +789,6 @@ class Unit(models.Model):
 '''
     Model for the concepts.
 '''
-
-
 class Concept_Input(models.Model):
     CONCEPT = "C"
     INPUT = "I"
@@ -758,8 +800,8 @@ class Concept_Input(models.Model):
     line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=False, editable=True)
-    description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
+    description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
     unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False,
@@ -768,6 +810,7 @@ class Concept_Input(models.Model):
     class Meta:
         verbose_name_plural = 'Conceptos'
         verbose_name = 'Concepto'
+        unique_together = [("line_item", "key")]
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -780,18 +823,9 @@ class Concept_Input(models.Model):
     def __str__(self):
         return self.description
 
-        # def save(self, *args, **kwargs):
-        #     canSave = True
-        #
-        #     if self.end_date is not None and self.start_date >= self.end_date:
-        #         Logs.log("The start date is greater than the end date")
-        #         canSave = False
-        #
-        #     if canSave:
-        #         Logs.log("Saving new concept", "Te")
-        #         super(Concept_Input, self).save(*args, **kwargs)
-        #     else:
-        #         Logs.log("Couldn't save")
+
+    def __unicode__(self):
+        return self.description
 
 
 '''
@@ -800,9 +834,9 @@ class Concept_Input(models.Model):
 
 
 class Estimate(models.Model):
-    start_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de inicio")
-    end_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de fin")
-    period = models.DateTimeField(default=None, null=True, verbose_name="Periodo")
+    start_date = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Fecha de inicio")
+    end_date = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Fecha de fin")
+    period = models.DateTimeField(default=None, null=True, blank=True, verbose_name="Periodo")
 
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
     line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=True, blank=False, default=None)
@@ -817,9 +851,28 @@ class Estimate(models.Model):
                                       verbose_name="Concepto / Insumo"
                                       )
 
+
     class Meta:
         verbose_name_plural = 'Estimaciones'
 
+    def __str__(self):
+        return "Partida: " + self.line_item.description[:45] + " Concepto: " + self.concept_input.description + " Periodo: " + str(self.period)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        line_item_display = ""
+        concept_input_display = ""
+
+        if len(self.line_item.description) > 40:
+             line_item_display =  self.line_item.description[0:40] + "..."
+        else:
+            line_item_display =  self.line_item.description
+
+        if len(self.concept_input.description) > 40:
+            concept_input_display = self.concept_input.description[0:40] + "..."
+        else:
+            concept_input_display = self.concept_input.description
+
+        return "Partida: " + line_item_display + " Concepto: " + concept_input_display + " Periodo: " + str(self.period)
 
 '''
     Model for the Progress Estimates.
@@ -861,7 +914,8 @@ class ProgressEstimate(models.Model):
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS, verbose_name="Tipo")
 
     class Meta:
-        verbose_name_plural = 'Avances'
+        verbose_name_plural = 'Avances de la Estimación'
+        verbose_name = 'Avance de la Estimación'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -873,6 +927,10 @@ class ProgressEstimate(models.Model):
         return ans
 
     def __str__(self):
+        return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
+
+
+    def __unicode__(self):
         return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
 
 
