@@ -3,7 +3,7 @@ from django.views.generic.list import ListView
 from django.http.response import HttpResponse
 from ERP.lib import utilities
 from ERP.lib.utilities import Utilities
-from ERP.models import Project, LineItem
+from ERP.models import Project, LineItem, Estimate
 import json
 
 
@@ -32,6 +32,37 @@ class LineItemsByProject(View):
                 'description': unicode(line_item.description)
             }
             the_list.append(new_item)
+
+        return HttpResponse(
+            json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
+            'application/json; charset=utf-8')
+
+
+class EstimatesByLineItems(View):
+    def get(self, request):
+        line_item_id = request.GET.get('line_item_id')
+        estimates = Estimate.objects.filter(line_item_id=line_item_id)
+
+        description_qs = LineItem.objects.filter(id=line_item_id)
+        if len(description_qs) == 0:
+            the_list = {'error': 'There is no line_item with id = ' + line_item_id}
+            return HttpResponse(
+                json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
+                'application/json; charset=utf-8')
+
+        the_list = {'line_item': {
+            'id': line_item_id,
+            'description': 'desc'
+        }, 'estimates': []}
+
+        for estimate in estimates:
+            new_item = {
+                'id': estimate.id,
+                'start_date': estimate.start_date,
+                'end_date': estimate.end_date,
+                'period': estimate.period,
+            }
+            the_list['estimates'].append(new_item)
 
         return HttpResponse(
             json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),

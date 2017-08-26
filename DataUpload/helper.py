@@ -282,7 +282,7 @@ class DBObject(object):
 
         if len(line_item_qs) == 0:
             line_item_obj = LineItem(key=line_item_key.upper(),
-                                     project_id=2,
+                                     project_id=1,
                                      parent_line_item=None,
                                      description=line_item_description)
             line_item_obj.save()
