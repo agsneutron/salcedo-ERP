@@ -80,16 +80,33 @@
 
 {% block content %}
     <div id="content-main">
+         <div id="container">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <div class="card">
+                                <div class="card-header">
+                                    <div class="item-left">
+                                        <h3 class="card-title text">{{ cl.opts.verbose_name_plural|capfirst }}s</h3>
+                                    </div>
         {% block object-tools %}
             {% if has_add_permission %}
                 <ul class="object-tools">
                     {% block object-tools-items %}
-                        {% comment %}<li>
+
+                       {% comment %} <li>
                             {% url cl.opts|admin_urlname:'add' as add_url %}
                             <a href="{% add_preserved_filters add_url is_popup to_field %}" class="addlink">
                                 {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
                             </a>
                         </li>{% endcomment %}
+
+                            <div class="item-right">
+                             {% url cl.opts|admin_urlname:'add' as add_url %}
+                                        <a href="{% add_preserved_filters add_url is_popup to_field %}"
+                                           class="btn-circle btn-circle-raised btn-circle-success" style="    margin: -4px 1px;">
+                                            &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x" style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                                        </a>
+                            </div>
                     {% endblock %}
                 </ul>
             {% endif %}
@@ -101,8 +118,28 @@
             </p>
             {{ cl.formset.non_form_errors }}
         {% endif %}
+
+
+                                </div>
+
+
+                <div class="card-block">
+                     <div class="">
+                        <div class="form-group">
+                            <div class="input-group col-xs-12">
+                   {% block search %}{% search_form cl %}{% endblock %}
+                              </div>
+                         </div>
+                     </div>
+
+                         {% comment %} <div id="container-bitacora" style=""></div>{% endcomment %}
+                </div>
+
+                            </div>
+                        </div>
+                    </div>
         <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
-            {#            {% block search %}{% search_form cl %}{% endblock %}#}
+
             {% block date_hierarchy %}{% date_hierarchy cl %}{% endblock %}
 
             {% block filters %}
@@ -121,57 +158,20 @@
                 {% endif %}
 
                 {% block result_list %}
-                    {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
-                    {% result_list cl %}
-                    {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
-                {% endblock %}
+                   {% comment %} {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+{% endcomment %}                    {% result_list cl %}
+                   {% comment %} {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+{% endcomment %}                {% endblock %}
                 {% block pagination %}{% pagination cl %}{% endblock %}
             </form>
 
             {#   -------------------------------#}
             {#   -------------------------------#}
-            <div id="container">
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="card">
-                            <div class="card-header">
-                                <div class="item-left">
-                                    <h3 class="card-title text">Estimaciones</h3>
-                                </div>
-                                <div class="item-right">
-                                    <a href="{% add_preserved_filters add_url is_popup to_field %}"
-                                       class="btn-circle btn-circle-raised btn-circle-success" style="    margin: -4px 1px;">
-                                        &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x" style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
-                                    </a>
-                                </div>
-                            </div>
-                            <div class="card-block">
-                                <div class="">
-                                    <div class="form-group">
-
-                                        <div class="input-group">
-                                            <select class="js-example-placeholder-single form-control">
-                                                <option value=""></option>
-                                                <option value="AL">dato1</option>
-
-                                                <option value="WY">dato2</option>
-                                            </select>
-                                            <span class="input-group-btn">
-                        <button type="button" class="btn btn-fab btn-fab-mini">
-                          <i class="material-icons">search</i>
-                        </button>
-                      </span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                {% comment %} <div id="container-bitacora" style=""></div>{% endcomment %}
 
 
-                            </div>
-                        </div>
-                    </div>
+{% comment %}
 
+            <div class="row">
                     <div class="col-xs-12">
                         <div class="card">
                             <div class="card-block">
@@ -186,8 +186,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
+
             </div>
+{% endcomment %}
 
 
             {#   -------------------------------#}

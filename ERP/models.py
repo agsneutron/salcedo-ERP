@@ -362,7 +362,7 @@ class Empresa(models.Model):
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
     class Meta:
-        verbose_name_plural = 'Empresa'
+        verbose_name_plural = 'Empresas'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -425,8 +425,8 @@ class Contrato(models.Model):
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
                                      editable=True)
 
-    # class Meta:
-    #    verbose_name_plural = 'Contrato'
+    class Meta:
+        verbose_name_plural = 'Contratos'
 
 
     def to_serializable_dict(self):
@@ -499,6 +499,9 @@ class Propietario(models.Model):
         ans['email'] = str(self.email)
         ans['empresa'] = str(self.empresa.nombreEmpresa)
         return ans
+
+    class Meta:
+        verbose_name_plural = 'Propietarios'
 
     def __str__(self):
         return self.nombrePropietario
