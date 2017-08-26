@@ -563,7 +563,7 @@ class TipoProyectoDetalle(models.Model):
         return self.nombreTipoProyecto
 
 
-# proyectos
+# Projects model.
 class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     contrato = models.ForeignKey(Contrato, verbose_name="contrato", null=False, blank=False)
@@ -723,19 +723,63 @@ class Project(models.Model):
             Logs.log("Couldn't save")
 
 
+def uploaded_catalogs_destination(instance, filename):
+    type = instance.type
+    print "Tipo: "
+    print type
+    route = ""
+    if type == "CC":
+        route = "concepts"
+    elif type == "LC":
+        route = "line_items"
+    elif type == "IE":
+        route = "inputs"
+
+    return '/'.join(['carga_de_catalogos', instance.project.key, route, filename])
+
+
+class UploadedCatalogsHistory(models.Model):
+    CONCEPTS_CATALOG = "CC"
+    LINE_ITEMS_CATALOG = "LC"
+    INPUT_EXPLOSION = "IE"
+    CATALOG_CHOICES = (
+        (CONCEPTS_CATALOG, 'Catálogo de conceptos'),
+        (LINE_ITEMS_CATALOG, 'Catálogo de partidas'),
+        (INPUT_EXPLOSION, 'Explosión de insumos'),
+    )
+    file = models.FileField(upload_to=uploaded_catalogs_destination, null=True, default=None,
+                                      verbose_name="Archivo del Generador")
+    upload_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de carga")
+    type = models.CharField(max_length=2, choices=CATALOG_CHOICES, default=CONCEPTS_CATALOG)
+
+    # Foreign keys.
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+
+    def __str__(self):
+        return str(self.upload_date) + self.type
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.upload_date) + self.type
+
+    class Meta:
+        verbose_name_plural = 'Cargas de catálogos'
+        verbose_name = 'Carga de catálogo'
+
 '''
     Model for the Line Items.
 '''
-
-
 class LineItem(models.Model):
-    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
+    # Model attributes.
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=False)
     key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=True, default="")
 
+    # Foreign keys for the model.
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
+
     class Meta:
         verbose_name_plural = 'Partidas'
+        verbose_name = 'Partida'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -790,6 +834,16 @@ class Unit(models.Model):
     Model for the concepts.
 '''
 class Concept_Input(models.Model):
+
+    # Choices (Dictionary) for the status attribute.
+    CANCELED = "C"
+    ACTIVE = "A"
+    ESTATUS_CHOICES = (
+        (CANCELED, 'Cancelada'),
+        (ACTIVE, 'Activa'),
+    )
+
+    # Choices for the type attribute.
     CONCEPT = "C"
     INPUT = "I"
     TYPE_CHOICES = (
@@ -797,15 +851,18 @@ class Concept_Input(models.Model):
         (INPUT, 'Insumo'),
     )
 
-    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
-    unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=False, editable=True)
-    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
     description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
+    status = models.CharField(max_length=2, choices=ESTATUS_CHOICES, default=CONCEPT)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
     unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False,
                                      default=0, max_digits=20)
+    type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
+
+    # Foreign Keys.
+    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
+    unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Conceptos'
