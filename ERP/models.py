@@ -348,7 +348,7 @@ class Empresa(models.Model):
                                   auto_choose=True,
                                   sort=True)
     class Meta:
-        verbose_name_plural = 'Empresa'
+        verbose_name_plural = 'Empresas'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -407,8 +407,8 @@ class Contrato(models.Model):
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
                                      editable=True)
 
-    # class Meta:
-    #    verbose_name_plural = 'Contrato'
+    class Meta:
+        verbose_name_plural = 'Contratos'
 
 
     def to_serializable_dict(self):
@@ -493,6 +493,9 @@ class Propietario(models.Model):
         ans['email'] = str(self.email)
         ans['empresa'] = str(self.empresa.nombreEmpresa)
         return ans
+
+    class Meta:
+        verbose_name_plural = 'Propietarios'
 
     def __str__(self):
         return self.nombrePropietario
