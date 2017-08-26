@@ -774,10 +774,8 @@ class UploadedCatalogsHistory(models.Model):
         verbose_name = 'Carga de catálogo'
 
     def save(self, *args, **kwargs):
-        if self.image:
-            small = rescale_image(self.image, width=100, height=100)
-            self.image_small = SimpleUploadedFile(name, small_pic)
-        super(Model, self).save(*args, **kwargs)
+
+        super(UploadedCatalogsHistory, self).save(*args, **kwargs)
 
 
 '''
