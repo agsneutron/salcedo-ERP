@@ -20,7 +20,7 @@ class ProjectEndpoint(View):
 
 
 class LineItemsByProject(View):
-    def get(selfself, request):
+    def get(self, request):
         project_id = request.GET.get('project_id')
         line_items = LineItem.objects.filter(project_id=project_id)
 
