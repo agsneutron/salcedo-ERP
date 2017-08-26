@@ -1,5 +1,5 @@
 {% load app_filters admin_static%}
-<fieldset class="module aligned {{ fieldset.classes }}">
+<fieldset class=" {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
@@ -114,7 +114,7 @@
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control " }}
+                                        {{ field.field|addcss:"form-control selectpicker" }}
                                     </div>
                                 </div>
                             </div>
@@ -124,7 +124,7 @@
                             <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.field|addcss:"form-control selectpicker" }}
                                 </div>
                             </div>
                         </div>
@@ -136,7 +136,7 @@
                             <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control " }}
+                                    {{ field.field|addcss:"form-control selectpicker" }}
                                 </div>
                             </div>
                         </div>

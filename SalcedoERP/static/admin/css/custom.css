@@ -437,6 +437,10 @@ dt {
     transition: 0 !important;
     display: block !important;
 }
+.required label, label.required {
+    font-weight: inherit !important;
+    color: #333;
+}
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
