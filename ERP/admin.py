@@ -1,8 +1,12 @@
 # coding=utf-8
 from __future__ import unicode_literals
+
+from django.contrib import messages
+from django.db import transaction
+
+from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm
-
 
 from django.contrib import admin
 
@@ -36,7 +40,7 @@ class LineItemAdmin(admin.ModelAdmin):
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    fields = ('user','progress_estimate','description', 'date')
+    fields = ('user', 'progress_estimate', 'description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
@@ -50,8 +54,8 @@ class ProgressEstimateInline(admin.TabularInline):
 
 class EstimateAdmin(admin.ModelAdmin):
     form = EstimateForm
-    list_display = ('line_item','concept_input','period','start_date', 'end_date')
-    search_fields = ('line_item','concept_input','period','start_date', 'end_date')
+    list_display = ('line_item', 'concept_input', 'period', 'start_date', 'end_date')
+    search_fields = ('line_item', 'concept_input', 'period', 'start_date', 'end_date')
     list_per_page = 50
 
     inlines = [
@@ -60,12 +64,12 @@ class EstimateAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             'Partida', {
-                'fields': ('line_item', )
-        }),
+                'fields': ('line_item',)
+            }),
         (
             'Estimación', {
-                'fields': ('concept_input','period','start_date', 'end_date',)
-        }),
+                'fields': ('concept_input', 'period', 'start_date', 'end_date',)
+            }),
     )
 
     def get_form(self, request, obj=None, **kwargs):
@@ -88,7 +92,7 @@ class EstimateAdmin(admin.ModelAdmin):
 
 
 class ConceptInputAdmin(admin.ModelAdmin):
-    list_display = ('id', 'description','unit', 'quantity', 'unit_price')
+    list_display = ('id', 'description', 'unit', 'quantity', 'unit_price')
     search_fields = ('unit', 'quantity', 'unitPrice')
     list_display_links = ('unit', 'quantity', 'unit_price')
     exclude = ('end_date',)
@@ -116,7 +120,10 @@ class ContratistaAdmin(admin.ModelAdmin):
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
-        fields = ('nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle', 'numero', 'colonia')
+        fields = (
+            'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
+            'calle',
+            'numero', 'colonia')
         return fields
 
 
@@ -127,7 +134,9 @@ class EmpresaAdmin(admin.ModelAdmin):
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
-        fields = ('nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle', 'numero', 'colonia')
+        fields = (
+            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+            'numero', 'colonia')
         return fields
 
 
@@ -139,8 +148,10 @@ class ContratoAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-        'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados', 'fecha_firma',
-        'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final', 'objeto_contrato', 'lugar_ejecucion', 'observaciones')
+            'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados',
+            'fecha_firma',
+            'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones')
         return fields
 
 
@@ -151,7 +162,10 @@ class PropietarioAdmin(admin.ModelAdmin):
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
-        fields = ('nombrePropietario', 'rfc', 'empresa', 'email','telefono1', 'telefono2', 'pais', 'estado', 'municipio', 'cp', 'calle', 'numero', 'colonia')
+        fields = (
+            'nombrePropietario', 'rfc', 'empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
+            'cp',
+            'calle', 'numero', 'colonia')
         return fields
 
 
@@ -162,10 +176,29 @@ class LogFileAdmin(admin.ModelAdmin):
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):
-    list_display = ('estimate', 'key', 'progress','amount', 'type', 'generator_file')
-    fields = ('estimate', 'key', 'progress','amount', 'type', 'generator_file')
+    list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
+    fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
     model = ProgressEstimate
 
+
+class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
+    model = UploadedCatalogsHistory
+
+    def save_model(self, request, obj, form, change):
+        user_id = request.user.id
+        dbo = DBObject(user_id)
+        try:
+            with transaction.atomic():
+                dbo.save_all(request.FILES['line_items_file'],
+                             dbo.LINE_ITEM_UPLOAD)
+                dbo.save_all(request.FILES['concepts_file'],
+                             dbo.CONCEPT_UPLOAD)
+                super(UploadedCatalogsHistoryAdmin, self).save_model(request, obj, form, change)
+
+        except ErrorDataUpload as e:
+            e.save()
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, e.get_error_message())
 
 
 
@@ -175,7 +208,7 @@ admin.site.register(Estado)
 admin.site.register(Municipio)
 admin.site.register(TipoConstruccion)
 admin.site.register(ModalidadContrato)
-admin.site.register(UploadedCatalogsHistory)
+admin.site.register(UploadedCatalogsHistory, UploadedCatalogsHistoryAdmin)
 admin.site.register(UploadedInputExplotionsHistory)
 
 admin.site.register(Project, ProjectAdmin)
