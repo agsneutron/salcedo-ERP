@@ -9,9 +9,9 @@ def testView(request):
     o = DBObject(request.user.id)
 
     try:
-        #with transaction.atomic():
-        o.save_all('/Users/josecarranza/Documents/Trabajo/Salcedo-ERP/DataUpload/ResultadoExportacion_2.xlsx',
-                   o.INPUT_UPLOAD)
+        with transaction.atomic():
+            o.save_all('/Users/josecarranza/Documents/Trabajo/Salcedo-ERP/DataUpload/ResultadoExportacion_2.xlsx',
+                       o.INPUT_UPLOAD)
             # o.save_all('/Users/josecarranza/Documents/Trabajo/Salcedo-ERP/DataUpload/ResultadoExportacion_Partidas.xlsx',
             #            o.LINE_ITEM_UPLOAD)
     except ErrorDataUpload as e:
