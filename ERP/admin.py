@@ -176,6 +176,7 @@ admin.site.register(Municipio)
 admin.site.register(TipoConstruccion)
 admin.site.register(ModalidadContrato)
 admin.site.register(UploadedCatalogsHistory)
+admin.site.register(UploadedInputExplotionsHistory)
 
 admin.site.register(Project, ProjectAdmin)
 

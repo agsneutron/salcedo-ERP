@@ -744,47 +744,67 @@ class Project(models.Model):
             Logs.log("Couldn't save")
 
 
+'''
+    Model and upload function to the catalogs (lineitem|concepts) history.
+'''
 def uploaded_catalogs_destination(instance, filename):
-    type = instance.type
-    print "Tipo: "
-    print type
-    route = ""
-    if type == "CC":
-        route = "concepts"
-    elif type == "LC":
-        route = "line_items"
-    elif type == "IE":
-        route = "inputs"
-
-    return '/'.join(['carga_de_catalogos', instance.project.key, route, filename])
+    return '/'.join(['carga_de_catalogos', instance.project.key, filename])
 
 
 class UploadedCatalogsHistory(models.Model):
-    CONCEPTS_CATALOG = "CC"
-    LINE_ITEMS_CATALOG = "LC"
-    INPUT_EXPLOSION = "IE"
-    CATALOG_CHOICES = (
-        (CONCEPTS_CATALOG, 'Catálogo de conceptos'),
-        (LINE_ITEMS_CATALOG, 'Catálogo de partidas'),
-        (INPUT_EXPLOSION, 'Explosión de insumos'),
-    )
-    file = models.FileField(upload_to=uploaded_catalogs_destination, null=True, default=None,
-                                      verbose_name="Archivo del Generador")
-    upload_date = models.DateTimeField(default=None, null=True, verbose_name="Fecha de carga")
-    type = models.CharField(max_length=2, choices=CATALOG_CHOICES, default=CONCEPTS_CATALOG)
+    line_items_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True, default=None,
+                                      verbose_name="Archivo de partidas")
+
+    concepts_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True, default=None,
+                                       verbose_name="Archivo de conceptos")
+
+    upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
 
     # Foreign keys.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
 
     def __str__(self):
-        return str(self.upload_date) + self.type
+        return str(self.upload_date)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.upload_date) + self.type
+        return str(self.upload_date)
 
     class Meta:
         verbose_name_plural = 'Cargas de catálogos'
         verbose_name = 'Carga de catálogo'
+
+    def save(self, *args, **kwargs):
+
+        super(UploadedCatalogsHistory, self).save(*args, **kwargs)
+
+
+'''
+    Model and upload function to the inputs explosion (lineitem|concepts) history.
+'''
+def uploaded_explotions_destination(instance, filename):
+    return '/'.join(['explosion_de_insumos', instance.project.key, filename])
+
+
+class UploadedInputExplotionsHistory(models.Model):
+    file = models.FileField(upload_to=uploaded_explotions_destination, null=True, default=None,
+                                      verbose_name="Explosión de Insumos")
+
+
+    upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
+
+    # Foreign keys.
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+
+    def __str__(self):
+        return str(self.upload_date)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.upload_date)
+
+    class Meta:
+        verbose_name_plural = 'Cargas de explosiones de insumos'
+        verbose_name = 'Carga de explosión de insumos'
+
 
 '''
     Model for the Line Items.
