@@ -336,9 +336,6 @@ class Contratista(models.Model):
     def __str__(self):
         return self.nombreContratista
 
-    def __unicode__(self):
-        return self.nombreContratista
-
     def save(self, *args, **kwargs):
         can_save = True
 
@@ -354,13 +351,29 @@ class Empresa(models.Model):
     calle = models.CharField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
     numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
     colonia = models.CharField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
-    municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
-    estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
-    pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
+    #municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
+    #estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
+    #pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
+    telefono_dos = models.IntegerField(verbose_name='Teléfono No.2', null=True, blank=True, editable=True)
+    email = models.CharField(verbose_name='Correo Electrónico', max_length=60, null=False, blank=True, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
+    # Attribute for the Chained Keys.
+    pais = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    estado = ChainedForeignKey(Estado,
+                               chained_field="pais",
+                               chained_model_field="pais",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True)
+    municipio = ChainedForeignKey(Municipio,
+                                  chained_field="estado",
+                                  chained_model_field="estado",
+                                  show_all=False,
+                                  auto_choose=True,
+                                  sort=True)
     class Meta:
         verbose_name_plural = 'Empresa'
 
@@ -381,10 +394,6 @@ class Empresa(models.Model):
         return ans
 
     def __str__(self):
-        return self.nombreEmpresa
-
-
-    def __unicode__(self):
         return self.nombreEmpresa
 
     def save(self, *args, **kwargs):
@@ -425,8 +434,8 @@ class Contrato(models.Model):
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
                                      editable=True)
 
-    # class Meta:
-    #    verbose_name_plural = 'Contrato'
+    class Meta:
+        verbose_name_plural = 'Contratos'
 
 
     def to_serializable_dict(self):
@@ -470,18 +479,34 @@ class Contrato(models.Model):
 
 # Propietario
 class Propietario(models.Model):
-    nombrePropietario = models.CharField(verbose_name="propietario", max_length=200, null=False, blank=False)
-    calle = models.CharField(verbose_name="calle", max_length=200, null=False, blank=False)
-    numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
+    nombrePropietario = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False)
+    calle = models.CharField(verbose_name="Calle", max_length=200, null=False, blank=False)
+    numero = models.CharField(verbose_name="Número", max_length=8, null=False, blank=False)
     colonia = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
-    municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
-    estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
-    pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
+    #municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
+    #estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
+    #pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
+    rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
     cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
-    telefono1 = models.CharField(verbose_name="Telefono 1", max_length=20, null=True, blank=True)
-    telefono2 = models.CharField(verbose_name="Telefono 2", max_length=20, null=True, blank=True)
-    email = models.CharField(verbose_name="e mail", max_length=100, null=True, blank=True)
-    empresa = models.ForeignKey(Empresa, verbose_name="empresa", null=False, blank=False)
+    telefono1 = models.CharField(verbose_name="Teléfono ", max_length=20, null=True, blank=True)
+    telefono2 = models.CharField(verbose_name="Teléfono No.2", max_length=20, null=True, blank=True)
+    email = models.CharField(verbose_name="Correo Electrónico", max_length=100, null=True, blank=True)
+    empresa = models.ForeignKey(Empresa, verbose_name="Empresa", null=False, blank=False)
+
+    # Attribute for the Chained Keys.
+    pais = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    estado = ChainedForeignKey(Estado,
+                               chained_field="pais",
+                               chained_model_field="pais",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True)
+    municipio = ChainedForeignKey(Municipio,
+                                  chained_field="estado",
+                                  chained_model_field="estado",
+                                  show_all=False,
+                                  auto_choose=True,
+                                  sort=True)
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -503,9 +528,6 @@ class Propietario(models.Model):
     def __str__(self):
         return self.nombrePropietario
 
-    def __unicode__(self):
-        return self.nombrePropietario
-
     def save(self, *args, **kwargs):
         canSave = True
 
@@ -518,7 +540,6 @@ class Propietario(models.Model):
 
 def content_file_documento_fuente(instance, filename):
     return '/'.join(['documentosFuente', instance.proyecto.key, filename])
-
 
 class DocumentoFuente(models.Model):
     descripcion = models.CharField(max_length=50, )

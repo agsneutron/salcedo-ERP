@@ -110,8 +110,8 @@ class EmpleadoAdmin(admin.ModelAdmin):
 
 
 class ContratistaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreContratista', 'rfc', 'estado')
-    search_fields = ('nombreContratista', 'rfc', 'estado__nombreEstado')
+    list_display = ('id', 'nombreContratista', 'rfc', 'email', 'estado', 'municipio')
+    search_fields = ('nombreContratista', 'rfc', 'estado__nombreEstado', 'email', 'municipio__nombreMunicipio')
     list_display_links = ('id', 'nombreContratista', 'rfc')
     list_per_page = 50
 
