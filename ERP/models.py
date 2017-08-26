@@ -752,10 +752,10 @@ def uploaded_catalogs_destination(instance, filename):
 
 
 class UploadedCatalogsHistory(models.Model):
-    line_items_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True, default=None,
+    line_items_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
                                       verbose_name="Archivo de partidas")
 
-    concepts_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True, default=None,
+    concepts_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
                                        verbose_name="Archivo de conceptos")
 
     upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
@@ -774,7 +774,6 @@ class UploadedCatalogsHistory(models.Model):
         verbose_name = 'Carga de catálogo'
 
     def save(self, *args, **kwargs):
-
         super(UploadedCatalogsHistory, self).save(*args, **kwargs)
 
 

@@ -61,6 +61,10 @@ class SystemException(Exception):
         }
         return information
 
+
+    def get_error_message(self):
+        return self.message
+
     def save(self):
         self.process_exception()
 

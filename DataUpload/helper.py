@@ -26,7 +26,7 @@ class FileInterface(object):
         """ Inits the FileInterface object with a file.
         :param file_path: the path of the file with which the object will be initialized.
         """
-        self.book = xlrd.open_workbook(file_path)
+        self.book = xlrd.open_workbook(file_contents=file_path.read())
 
     def get_element_list(self):
         """ Obtains an list containing all the records of the first sheet of the object's file.
@@ -247,7 +247,6 @@ class DBObject(object):
                                  description=line_item_description)
         line_item_obj.save()
 
-
     '''
         Método save:
         Éste método guardará a la base de datos los objetos apoyándose del modelo y de la lista columns.
@@ -255,8 +254,7 @@ class DBObject(object):
         El tipo correcto se leerá desde el modelo.
     '''
 
-
-    def save_concept_input(self,record, model):
+    def save_concept_input(self, record, model):
         # First, we get each all the attributes.
         line_item_key = record[self.ConceptConstants.LINE_ITEM_KEY_COL]
         line_item_description = record[self.ConceptConstants.LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
@@ -266,9 +264,7 @@ class DBObject(object):
         quantity = Decimal(record[self.ConceptConstants.QUANTITY_COL].replace(',', ''))
         unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL][1:].replace(',', ''))
 
-
         unit_qs = Unit.objects.filter(abbreviation=unit.upper())
-
 
         if len(unit_qs) == 0:
             unit_obj = Unit(abbreviation=unit.upper(),
@@ -281,11 +277,8 @@ class DBObject(object):
         line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
 
         if len(line_item_qs) == 0:
-            line_item_obj = LineItem(key=line_item_key.upper(),
-                                     project_id=1,
-                                     parent_line_item=None,
-                                     description=line_item_description)
-            line_item_obj.save()
+            raise ErrorDataUpload('Se intentó agregar un concepto correspondiente a una partida que no existe.',
+                                  LoggingConstants.ERROR, self.user_id)
         else:
             line_item_obj = line_item_qs[0]
 
