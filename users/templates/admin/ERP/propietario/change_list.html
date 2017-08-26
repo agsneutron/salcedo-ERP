@@ -86,7 +86,7 @@
                             <div class="card">
                                 <div class="card-header">
                                     <div class="item-left">
-                                        <h3 class="card-title text">Contratistas</h3>
+                                        <h3 class="card-title text">{{ cl.opts.verbose_name_plural|capfirst }}s</h3>
                                     </div>
         {% block object-tools %}
             {% if has_add_permission %}
