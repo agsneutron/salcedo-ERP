@@ -459,6 +459,10 @@ padding: 0;
     transition: all 0s ease;
 
 }
+.required label, label.required {
+    font-weight: inherit !important;
+    color: #333;
+}
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
