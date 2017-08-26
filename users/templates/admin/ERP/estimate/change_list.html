@@ -8,6 +8,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type="text/javascript" src={% static "admin/assets/ajax/ajax-estimate.js" %}></script>
+
 
     {% if cl.formset %}
         <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
@@ -22,26 +25,21 @@
             #changelist table thead th:first-child {
                 width: inherit
             }
-
             .ui-selectmenu.ui-popup .ui-input-search {
                 margin-left: .5em;
                 margin-right: .5em;
             }
-
             .ui-selectmenu.ui-dialog .ui-content {
                 padding-top: 0;
             }
-
             .ui-selectmenu.ui-dialog .ui-selectmenu-list {
                 margin-top: 0;
             }
-
             .ui-selectmenu.ui-popup .ui-selectmenu-list li.ui-first-child .ui-btn {
                 border-top-width: 1px;
                 -webkit-border-radius: 0;
                 border-radius: 0;
             }
-
             .ui-selectmenu.ui-dialog .ui-header {
                 border-bottom-width: 1px;
             }
@@ -150,11 +148,8 @@
                                     <div class="form-group">
 
                                         <div class="input-group">
-                                            <select class="js-example-placeholder-single form-control">
-                                                <option value=""></option>
-                                                <option value="AL">dato1</option>
+                                            <select class="js-example-placeholder-single form-control" id="project_list">
 
-                                                <option value="WY">dato2</option>
                                             </select>
                                             <span class="input-group-btn">
                         <button type="button" class="btn btn-fab btn-fab-mini">
@@ -202,14 +197,12 @@
     <script>
         var today = new Date(),
                 day = 1000 * 60 * 60 * 24;
-
         // Set to 00:00:00:000 today
         today.setUTCHours(0);
         today.setUTCMinutes(0);
         today.setUTCSeconds(0);
         today.setUTCMilliseconds(0);
         today = today.getTime();
-
         // THE CHART
         Highcharts.ganttChart('container-bitacora', {
             title: {
@@ -220,7 +213,6 @@
                 min: today - 3 * day,
                 max: today + 18 * day
             },
-
             /*
              plotOptions: {
              gantt: {
@@ -230,7 +222,6 @@
              }
              },
              */
-
             series: [{
                 name: 'Registro1',
                 data: [{
@@ -264,7 +255,6 @@
                 },]
             },]
         });
-
     </script>{% endcomment %}
 
     <script type="text/javascript">
