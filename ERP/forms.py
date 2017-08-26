@@ -7,6 +7,9 @@ from Logs.controller import Logs
 import os
 from django.conf import settings
 
+from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
+
+
 class TipoProyectoDetalleAddForm(forms.ModelForm):
     class Meta:
         model = TipoProyectoDetalle
