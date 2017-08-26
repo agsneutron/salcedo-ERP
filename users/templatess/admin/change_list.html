@@ -1,0 +1,278 @@
+{% extends "admin/base_site.html" %}
+
+{% load i18n admin_urls admin_static admin_list %}
+
+{% block extrastyle %}
+    {{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
+
+
+    {% if cl.formset %}
+        <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+
+    {% endif %}
+    {% if cl.formset or action_form %}
+        <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+    {% endif %}
+    {{ media.css }}
+    {% if not actions_on_top and not actions_on_bottom %}
+        <style>
+            #changelist table thead th:first-child {
+                width: inherit
+            }
+
+            .ui-selectmenu.ui-popup .ui-input-search {
+                margin-left: .5em;
+                margin-right: .5em;
+            }
+
+            .ui-selectmenu.ui-dialog .ui-content {
+                padding-top: 0;
+            }
+
+            .ui-selectmenu.ui-dialog .ui-selectmenu-list {
+                margin-top: 0;
+            }
+
+            .ui-selectmenu.ui-popup .ui-selectmenu-list li.ui-first-child .ui-btn {
+                border-top-width: 1px;
+                -webkit-border-radius: 0;
+                border-radius: 0;
+            }
+
+            .ui-selectmenu.ui-dialog .ui-header {
+                border-bottom-width: 1px;
+            }
+        </style>
+    {% endif %}
+{% endblock %}
+
+{% block extrahead %}
+    {{ block.super }}
+    {{ media.js }}
+    {% if action_form %}{% if actions_on_top or actions_on_bottom %}
+        <script type="text/javascript">
+            (function ($) {
+                $(document).ready(function ($) {
+                    $("tr input.action-select").actions();
+                });
+            })(django.jQuery);
+        </script>
+    {% endif %}{% endif %}
+{% endblock %}
+
+{% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-list{% endblock %}
+
+{% if not is_popup %}
+    {% block breadcrumbs %}
+        <div class="breadcrumbs">
+            <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+            &rsaquo; <a
+                href="{% url 'admin:app_list' app_label=cl.opts.app_label %}">{{ cl.opts.app_config.verbose_name }}</a>
+            &rsaquo; {{ cl.opts.verbose_name_plural|capfirst }}
+        </div>
+    {% endblock %}
+{% endif %}
+
+{% block coltype %}flex{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        {% block object-tools %}
+            {% if has_add_permission %}
+                <ul class="object-tools">
+                    {% block object-tools-items %}
+                        {% comment %}<li>
+                            {% url cl.opts|admin_urlname:'add' as add_url %}
+                            <a href="{% add_preserved_filters add_url is_popup to_field %}" class="addlink">
+                                {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
+                            </a>
+                        </li>{% endcomment %}
+                    {% endblock %}
+                </ul>
+            {% endif %}
+        {% endblock %}
+        {% if cl.formset.errors %}
+            <p class="errornote">
+                {% if cl.formset.total_error_count == 1 %}{% trans "Please correct the error below." %}{% else %}
+                    {% trans "Please correct the errors below." %}{% endif %}
+            </p>
+            {{ cl.formset.non_form_errors }}
+        {% endif %}
+        <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
+            {#            {% block search %}{% search_form cl %}{% endblock %}#}
+            {% block date_hierarchy %}{% date_hierarchy cl %}{% endblock %}
+
+            {% block filters %}
+                {% if cl.has_filters %}
+                    <div id="changelist-filter">
+                        <h2>{% trans 'Filter' %}</h2>
+                        {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+                    </div>
+                {% endif %}
+            {% endblock %}
+
+            <form id="changelist-form" method="post"{% if cl.formset.is_multipart %}
+                  enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
+                {% if cl.formset %}
+                    <div>{{ cl.formset.management_form }}</div>
+                {% endif %}
+
+                {% block result_list %}
+                    {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+                    {% result_list cl %}
+                    {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+                {% endblock %}
+                {% block pagination %}{% pagination cl %}{% endblock %}
+            </form>
+
+            {#   -------------------------------#}
+            {#   -------------------------------#}
+            <div id="container">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="item-left">
+                                    <h3 class="card-title text">Empresas</h3>
+                                </div>
+                                <div class="item-right">
+                                    <a href="{% add_preserved_filters add_url is_popup to_field %}"
+                                       class="btn-circle btn-circle-raised btn-circle-success" style="    margin: -4px 1px;">
+                                        &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x" style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="card-block">
+                                <div class="">
+                                    <div class="form-group">
+
+                                        <div class="input-group">
+                                            <select class="js-example-placeholder-single form-control">
+                                                <option value=""></option>
+                                                <option value="AL">dato1</option>
+
+                                                <option value="WY">dato2</option>
+                                            </select>
+                                            <span class="input-group-btn">
+                        <button type="button" class="btn btn-fab btn-fab-mini">
+                          <i class="material-icons">search</i>
+                        </button>
+                      </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {% comment %} <div id="container-bitacora" style=""></div>{% endcomment %}
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-12">
+                        <div class="card">
+                            <div class="card-block">
+                                <h3>Resultados de busqueda</h3>
+                                <div class="list-group">
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 1 <span class="badge bg-danger">Editar</span></a>
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 2</a>
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 3</a>
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 4</a>
+                                    <a href="javascript:void(0)" class="list-group-item">Nombre de empresa 5</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {#   -------------------------------#}
+            {#   -------------------------------#}
+        </div>
+    </div>
+
+
+    {% comment %}   <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>
+    <script src="{% static "admin/assets/Highcharts/code/modules/exporting.js" %}"></script>
+
+    <script>
+        var today = new Date(),
+                day = 1000 * 60 * 60 * 24;
+
+        // Set to 00:00:00:000 today
+        today.setUTCHours(0);
+        today.setUTCMinutes(0);
+        today.setUTCSeconds(0);
+        today.setUTCMilliseconds(0);
+        today = today.getTime();
+
+        // THE CHART
+        Highcharts.ganttChart('container-bitacora', {
+            title: {
+                text: 'Registro de bitacora'
+            },
+            xAxis: {
+                currentDateIndicator: true,
+                min: today - 3 * day,
+                max: today + 18 * day
+            },
+
+            /*
+             plotOptions: {
+             gantt: {
+             pathfinder: {
+             type: 'simpleConnect'
+             }
+             }
+             },
+             */
+
+            series: [{
+                name: 'Registro1',
+                data: [{
+                    taskName: 'descripcion1',
+                    id: 'new_offices',
+                    start: today - 2 * day,
+                    end: today + 14 * day
+                }, {
+                    taskName: 'descripcion2',
+                    id: 'prepare_building',
+                    parent: 'new_offices',
+                    start: today - (2 * day),
+                    end: today + (6 * day),
+                    completed: {
+                        amount: 0.2
+                    }
+                }, {
+                    taskName: 'descripcion3',
+                    id: 'inspect_building',
+                    dependency: 'prepare_building',
+                    parent: 'new_offices',
+                    start: today + 6 * day,
+                    end: today + 8 * day
+                }, {
+                    taskName: 'descripcion4',
+                    id: 'passed_inspection',
+                    dependency: 'inspect_building',
+                    parent: 'new_offices',
+                    start: today + 9.5 * day,
+                    milestone: true
+                },]
+            },]
+        });
+
+    </script>{% endcomment %}
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".js-example-placeholder-single").select2({
+                placeholder: "Busqueda por nombre de empresa",
+                allowClear: true
+            });
+        });
+    </script>
+{% endblock %}
