@@ -73,7 +73,7 @@ class EstimateAdmin(admin.ModelAdmin):
         # get the foreign key field I want to restrict
         line_item = ModelForm.base_fields['line_item']
         concept_input = ModelForm.base_fields['concept_input']
-        # remove the green + and change by setting can_change_related and can_add_related to False on the widget
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         line_item.widget.can_add_related = False
         line_item.widget.can_change_related = False
         concept_input.widget.can_add_related = False
