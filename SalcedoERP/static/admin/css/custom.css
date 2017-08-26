@@ -441,6 +441,7 @@ dt {
     font-weight: inherit !important;
     color: #333;
 }
+
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
