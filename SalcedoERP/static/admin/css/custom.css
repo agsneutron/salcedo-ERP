@@ -1,7 +1,14 @@
+html {
+  position: relative;
+  min-height: 100%;
+}
 body {
     background-color: #fff;
-}
 
+}
+#content{
+    padding-bottom: 30px;
+}
 .text-center {
     text-align: center;
 }
@@ -257,6 +264,11 @@ hr {
 }
 
 .ms-footer {
+    position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 48px;
     padding: 12px 0;
     padding: 1.2rem 0;
     text-align: center;
@@ -423,25 +435,34 @@ dt {
 .danger {
     color: #f44336;
 }
-.ms-navbar .navbar-nav li.dropdown .dropdown-menu {
-    padding: 0;
-    background-color: #424242;
-    border-radius: 0;
-    box-shadow: 0 3px 3px rgba(0,0,0,.29), 0 3px 3px rgba(0,0,0,.29);
-    display: none !important;
+.ms-header-primary+.ms-navbar-primary .navbar-nav>li .dropdown-menu li a:hover {
+    color: #333 !important;
+}
 
+.list-group .list-group-item, .list-group a.list-group-item {
+    padding: 1px 15px!important;
+    font-size: 12px!important;
+}
+.ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+padding: 0;
+
+    -webkit-transform: scale(0);
+    transform: scale(0);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    left: inherit;
+    right: inherit;
 }
 .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
-    -webkit-transform: scale(1);
+-webkit-transform: scale(1);
     transform: scale(1);
-    transition: 0 !important;
-    display: block !important;
+    transition: all 0s ease;
+
 }
 .required label, label.required {
     font-weight: inherit !important;
     color: #333;
 }
-
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;

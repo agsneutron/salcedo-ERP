@@ -52,6 +52,7 @@ function getDataProjectList(onSuccess) {
         $.ajax({
             url: '/erp/api/project_list/',
             type: 'get',
+            //data: ajaxData,
             success: function(data) {
                 setProjectList(data);
             },
