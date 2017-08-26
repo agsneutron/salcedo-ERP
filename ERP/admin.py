@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm
 
+
 from django.contrib import admin
 
 
@@ -25,7 +26,6 @@ class ProjectAdmin(admin.ModelAdmin):
     form = AddProyectoForm
     inlines = (TipoProyectoDetalleInline,)
     search_fields = ('nombreProyecto', 'key')
-
 
 
 class LineItemAdmin(admin.ModelAdmin):
