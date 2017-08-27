@@ -39,12 +39,26 @@ class LineItemAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
+class LogFileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    model = LogFile
+
+
+class LogFileInline(admin.TabularInline):
+    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    model = LogFile
+    extra = 1
+
+
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    fields = ('user', 'progress_estimate', 'description', 'date')
+    fields = ('user', 'project', 'description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
     list_per_page = 50
+    inlines = [LogFileInline,]
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -168,11 +182,6 @@ class PropietarioAdmin(admin.ModelAdmin):
             'calle', 'numero', 'colonia')
         return fields
 
-
-class LogFileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
-    model = LogFile
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):

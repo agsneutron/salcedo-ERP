@@ -207,6 +207,7 @@ class DBObject(object):
                 if record[0] != "":
                     # Validate that the record is not empty
                     # Save the record
+                    print record
                     self.save_concept_input(record, self.CONCEPT_UPLOAD)
 
         except Exception, e:
