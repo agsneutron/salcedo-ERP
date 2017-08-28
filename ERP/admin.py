@@ -58,7 +58,7 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
     list_per_page = 50
-    inlines = [LogFileInline,]
+    inlines = [LogFileInline, ]
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -183,7 +183,6 @@ class PropietarioAdmin(admin.ModelAdmin):
         return fields
 
 
-
 class ProgressEstimateAdmin(admin.ModelAdmin):
     list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
     fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
@@ -210,6 +209,23 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             messages.error(request, e.get_error_message())
 
 
+class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
+    model = UploadedInputExplotionsHistory
+
+    def save_model(self, request, obj, form, change):
+        user_id = request.user.id
+        dbo = DBObject(user_id)
+        try:
+            with transaction.atomic():
+                dbo.save_all(request.FILES['file'],
+                             dbo.INPUT_UPLOAD)
+                super(UploadedInputExplotionHistoryAdmin, self).save_model(request, obj, form, change)
+
+        except ErrorDataUpload as e:
+            e.save()
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, e.get_error_message())
+
 
 # Simple admin views.
 admin.site.register(Pais)
@@ -218,7 +234,7 @@ admin.site.register(Municipio)
 admin.site.register(TipoConstruccion)
 admin.site.register(ModalidadContrato)
 admin.site.register(UploadedCatalogsHistory, UploadedCatalogsHistoryAdmin)
-admin.site.register(UploadedInputExplotionsHistory)
+admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistoryAdmin)
 
 admin.site.register(Project, ProjectAdmin)
 
