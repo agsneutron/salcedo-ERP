@@ -492,6 +492,14 @@ padding: 0;
     font-size: 16px;
     line-height: 1.42857;
 }
+.aligned label {
+    display: block;
+    padding: 4px 10px 0 0;
+    float: left;
+    width: 100% !important;
+    word-wrap: break-word;
+    line-height: 1;
+}
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
