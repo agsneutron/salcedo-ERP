@@ -411,7 +411,7 @@ class Contrato(models.Model):
                                      editable=True)
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
                                            blank=False)
-    dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
+    dependencia = models.CharField(verbose_name='Dependencia', max_length=50, null=False, blank=False, editable=True)
     codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
     objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,

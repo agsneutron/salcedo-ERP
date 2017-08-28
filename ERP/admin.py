@@ -183,6 +183,9 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 
 class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
     model = UploadedCatalogsHistory
+    fields = ('project', 'line_items_file', 'concepts_file')
+    list_display = ('project', 'line_items_file', 'concepts_file', 'upload_date')
+    list_per_page = 50
 
     def save_model(self, request, obj, form, change):
         user_id = request.user.id
