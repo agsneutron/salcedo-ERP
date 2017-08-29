@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+import operator
 from django.http import HttpResponseRedirect
 from django.views import generic
 from django.views.generic import ListView
@@ -75,6 +76,28 @@ def progress_estimate_log_view(request):
 class CompaniesListView(ListView):
     model = Empresa
     template_name = "ERP/company-list.html"
+    search_fields = ("empresaNombre",)
+
+    """
+       Display a Blog List page filtered by the search query.
+       """
+    paginate_by = 1
+
+    def get_queryset(self):
+        result = super(CompaniesListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(nombreEmpresa__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(calle__icontains=q) for q in query_list))
+            )
+
+        return result
+
 
     def get_context_data(self, **kwargs):
         context = super(CompaniesListView, self).get_context_data(**kwargs)

@@ -237,7 +237,7 @@ class CompanyModelAdmin(admin.ModelAdmin):
         urls = super(CompanyModelAdmin, self).get_urls()
         my_urls = [
             url(r'^$',
-                self.admin_site.admin_view(CompaniesListView.as_view())),
+                self.admin_site.admin_view(CompaniesListView.as_view()),name='company-list-view'),
             url(r'^(?P<pk>\d+)/$', views.CompanyDetailView.as_view(), name='company-detail'),
 
         ]
