@@ -6,6 +6,7 @@ from django.contrib import messages
 from django.db import transaction
 
 from DataUpload.helper import DBObject, ErrorDataUpload
+from ERP import views
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm
 
@@ -237,6 +238,8 @@ class CompanyModelAdmin(admin.ModelAdmin):
         my_urls = [
             url(r'^$',
                 self.admin_site.admin_view(CompaniesListView.as_view())),
+            url(r'^(?P<pk>\d+)/$', views.CompanyDetailView.as_view(), name='company-detail'),
+
         ]
         return my_urls + urls
 
