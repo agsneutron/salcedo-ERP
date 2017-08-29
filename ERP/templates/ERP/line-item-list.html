@@ -6,11 +6,16 @@
 
         {% include 'ERP/list-search-fields.html' %}
 
+        {% if parent_line_item is not None %}
+            <h1>Partida Actual: {{ parent_line_item.description }}</h1>
+        {% endif %}
+
         <h1>Partidas</h1>
-        <div><a href="add">Agregar</a></div>
         <ul>
             {% for line_item in object_list %}
-                <li><a href="{{ line_item.id }}">{{ line_item.description }}</a> | <a href="{{ line_item.id }}">Ver</a> | <a
+                <li>
+                    <a href="/admin/ERP/lineitem/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.description }}</a>
+                    | <a href="{{ line_item.id }}">Ver</a> | <a
                         href="{{ line_item.id }}/change">Editar</a> | <a href="{{ line_item.id }}/delete">Eliminar</a>
                 </li>
             {% empty %}
@@ -18,7 +23,21 @@
             {% endfor %}
         </ul>
 
+
         {% include 'ERP/list-pagination.html' %}
+
+
+        <h1>Conceptos</h1>
+        <ul>
+            {% for concept in concepts_inputs %}
+                <li>
+                    {{ concept.description }}
+                </li>
+            {% empty %}
+                <li>No se encontraron conceptos.</li>
+            {% endfor %}
+        </ul>
+
 
     </div>
 {% endblock %}

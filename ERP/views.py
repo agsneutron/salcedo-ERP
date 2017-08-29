@@ -303,11 +303,11 @@ class LineItemListView(ListView):
         result = super(LineItemListView, self).get_queryset()
 
         # Reading the params from the url.
-        LineItemListView.project_id = self.kwargs['project']
-        LineItemListView.parent_id = self.kwargs['parent']
+        LineItemListView.project_id = int(self.kwargs['project'])
+        LineItemListView.parent_id = int(self.kwargs['parent'])
 
         # If the param for the parent is received as 0, then its value must be None.
-        if LineItemListView.parent_id == '0':
+        if LineItemListView.parent_id == 0:
             LineItemListView.parent_id = None
 
         print "The filters:"
@@ -344,6 +344,10 @@ class LineItemListView(ListView):
 
         # Getting the concept inputs for the selected Line Item parent.
         context['concepts_inputs'] = Concept_Input.objects.filter(Q(line_item=LineItemListView.parent_id))
+        if LineItemListView.parent_id is not None:
+            context['parent_line_item'] = LineItem.objects.get(pk=LineItemListView.parent_id)
+        else:
+            context['parent_line_item'] = None
         
         print "Concept / Inputs"
         print context['concepts_inputs']
