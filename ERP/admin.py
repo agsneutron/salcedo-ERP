@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+from django.conf.urls import url
 from django.contrib import messages
 from django.db import transaction
 
@@ -10,9 +11,11 @@ from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuen
 
 from django.contrib import admin
 
-
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
+from ERP.views import CompaniesListView
+
+
 class DocumentoFuenteInline(admin.TabularInline):
     model = DocumentoFuente
     extra = 2
@@ -141,17 +144,17 @@ class ContratistaAdmin(admin.ModelAdmin):
         return fields
 
 
-class EmpresaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreEmpresa', 'rfc', 'telefono')
-    search_fields = ('nombreEmpresa', 'rfc')
-    list_display_links = ('id', 'nombreEmpresa', 'rfc')
-    list_per_page = 50
-
-    def get_fields(self, request, obj=None):
-        fields = (
-            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia')
-        return fields
+# class EmpresaAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'nombreEmpresa', 'rfc', 'telefono')
+#     search_fields = ('nombreEmpresa', 'rfc')
+#     list_display_links = ('id', 'nombreEmpresa', 'rfc')
+#     list_per_page = 50
+#
+#     def get_fields(self, request, obj=None):
+#         fields = (
+#             'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+#             'numero', 'colonia')
+#         return fields
 
 
 class ContratoAdmin(admin.ModelAdmin):
@@ -227,6 +230,17 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
             messages.error(request, e.get_error_message())
 
 
+@admin.register(Empresa)
+class CompanyModelAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(CompanyModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(CompaniesListView.as_view())),
+        ]
+        return my_urls + urls
+
+
 # Simple admin views.
 admin.site.register(Pais)
 admin.site.register(Estado)
@@ -245,7 +259,7 @@ admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
 admin.site.register(Contratista, ContratistaAdmin)
-admin.site.register(Empresa, EmpresaAdmin)
+# admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
