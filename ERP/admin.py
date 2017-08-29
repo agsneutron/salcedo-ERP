@@ -241,6 +241,7 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
 
+
     def get_fields(self, request, obj=None):
 
         fields = (

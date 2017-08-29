@@ -250,9 +250,23 @@
 
 <!-- ends navigation -->
 
-<!-- begins breadcrumbs and messages -->
+{% comment %}{% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    {% if title %} &rsaquo; {{ title }}{% endif %}
+    </div>
+{% endblock %}
 
-<!-- ends breadcrumbs and messages -->
+
+{% block messages %}
+    {% if messages %}
+        <ul class="messagelist">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock messages %}{% endcomment %}
 <!-- Begins MainContainer -->
 <div id="particles-js">
     <div id="content" class=" container">
