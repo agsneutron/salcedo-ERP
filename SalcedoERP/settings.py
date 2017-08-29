@@ -65,11 +65,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'SalcedoERP.urls'
 TEMPLATETAGS_DIRS = (
-    os.path.join(BASE_DIR, 'templatetags'),
+    os.path.join(BASE_DIR, 'users/templatetags'),
 )
 
-print "Tags:"
-print os.path.join(BASE_DIR, 'templatetags')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -151,6 +149,7 @@ STATIC_FILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
+print os.path.join(PROJECT_ROOT, '../static')
 # Loading local settings to the project.
 try:
     from .local_settings import *
