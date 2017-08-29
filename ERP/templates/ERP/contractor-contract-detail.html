@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <h1>Clave del Contrato: {{ contratocontratista.clave_contrato }}  <a href="change">Editar</a></h1>
+        <ul>
+            {% if contratocontratista.no_licitacion != "" %}
+                <li>Número de Licitación: {{ contratocontratista.no_licitacion }}</li>
+            {% endif %}
+            <li>Dependencia: {{ contratocontratista.dependencia }}</li>
+            <li>Código de Obra: {{ contratocontratista.codigo_obra }}</li>
+            <li>Objeto Contrato: {{ contratocontratista.objeto_contrato }}</li>
+            <li>Fecha de Firma: {{ contratocontratista.fecha_firma }}</li>
+            <li>Días Pactados: {{ contratocontratista.dias_pactados }}</li>
+            <li>Fecha de Inicio: {{ contratocontratista.fecha_inicio }}</li>
+            <li>Fecha de Término: {{ contratocontratista.fecha_termino }}</li>
+            <li>Lugar de Ejecución: {{ contratocontratista.lugar_ejecucion }}</li>
+            <li>Monto del Contrato: {{ contratocontratista.monto_contrato }}</li>
+            <li>IVA Aplicable al Contrato: {{ contratocontratista.monto_contrato_iva }}</li>
+            <li>Pago Inicial: {{ contratocontratista.pago_inicial }}</li>
+            <li>Pago Final: {{ contratocontratista.pago_final }}</li>
+            <li>Observaciones: {{ contratocontratista.observaciones }}</li>
+        </ul>
+
+{% endblock %}

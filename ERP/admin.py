@@ -255,6 +255,9 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
             messages.error(request, e.get_error_message())
 
 
+
+# Overriding the admin views to provide a detail view as required.
+
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
     def get_fields(self, request, obj=None):
@@ -294,6 +297,20 @@ class ContractorModelAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
+@admin.register(ContratoContratista)
+class ContractorContractModelAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(ContractorContractModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(views.ContractorContractListView.as_view()), name='contractor-contract-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ContractorContractDetailView.as_view(), name='contractor-contract-detail'),
+
+        ]
+        return my_urls + urls
+
+
+
 # Simple admin views.
 admin.site.register(Pais)
 admin.site.register(Estado)
@@ -313,7 +330,7 @@ admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
 # admin.site.register(Contratista, ContratistaAdmin)
 # admin.site.register(Empresa, EmpresaAdmin)
-admin.site.register(Contrato, ContratoAdmin)
+# admin.site.register(ContratoContratista, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
