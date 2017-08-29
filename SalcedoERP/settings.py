@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """
 Django settings for SalcedoERP project.
 
@@ -11,6 +13,15 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
+
+import locale
+
+locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+# locale.currency(1000, grouping=True)
+# español para windows
+# locale.setlocale(locale.LC_ALL, "esp")
+# español para linux
+# locale.setlocale(locale.LC_ALL, "es_MX.utf8")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

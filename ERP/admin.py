@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+import django
 from django.conf.urls import url
 from django.contrib import messages
 from django.db import transaction
@@ -15,6 +16,7 @@ from django.contrib import admin
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
 from ERP.views import CompaniesListView, ContractorListView
+from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
 class DocumentoFuenteInline(admin.TabularInline):
@@ -202,11 +204,14 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         user_id = request.user.id
+        print "se intentó 1"
         dbo = DBObject(user_id)
+
         try:
             with transaction.atomic():
                 project_id = request.POST.get('project')
 
+                print 'about to save line_items'
                 dbo.save_all(request.FILES['line_items_file'],
                              dbo.LINE_ITEM_UPLOAD, project_id)
                 dbo.save_all(request.FILES['concepts_file'],
@@ -217,6 +222,12 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             e.save()
             messages.set_level(request, messages.ERROR)
             messages.error(request, e.get_error_message())
+        except django.db.utils.IntegrityError as e:
+            # Create exception without raising it.
+            print 'Hubo un error de integridad'
+            edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, user_id)
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, edu.get_error_message())
 
 
 class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
@@ -233,6 +244,11 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
                              dbo.INPUT_UPLOAD, project_id)
                 super(UploadedInputExplotionHistoryAdmin, self).save_model(request, obj, form, change)
 
+        except django.db.utils.IntegrityError as e:
+            print 'error 2'
+            pass
+            # print 'ERRORRRRR'
+            # raise ErrorDataUpload(str(e), LoggingConstants.ERROR, request.user_id)
         except ErrorDataUpload as e:
             e.save()
             messages.set_level(request, messages.ERROR)
@@ -241,13 +257,10 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
-
-
     def get_fields(self, request, obj=None):
-
         fields = (
-                 'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-                 'numero', 'colonia')
+            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+            'numero', 'colonia')
         return fields
 
     def get_urls(self):

@@ -811,7 +811,7 @@ class UploadedInputExplotionsHistory(models.Model):
 class LineItem(models.Model):
     # Model attributes.
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=False)
-    key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=True, default="")
+    key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=False, default="")
 
     # Foreign keys for the model.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
