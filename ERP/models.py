@@ -492,8 +492,8 @@ class Propietario(models.Model):
     #pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
     cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
-    telefono1 = models.CharField(verbose_name="Teléfono ", max_length=20, null=True, blank=True)
-    telefono2 = models.CharField(verbose_name="Teléfono No.2", max_length=20, null=True, blank=True)
+    telefono1 = models.CharField(verbose_name="Teléfono Principal", max_length=20, null=True, blank=True)
+    telefono2 = models.CharField(verbose_name="Teléfono Secundario", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=100, null=True, blank=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa", null=False, blank=False)
 

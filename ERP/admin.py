@@ -310,6 +310,48 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
+@admin.register(Propietario)
+class OwnerModelAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(OwnerModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(views.OwnerListView.as_view()),
+                name='owner-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.OwnerDetailView.as_view(), name='propietario-detail'),
+
+        ]
+        return my_urls + urls
+
+
+@admin.register(LineItem)
+class LineItemAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(LineItemAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<project>[0-9]+)/(?P<parent>[0-9]+)/$',
+                self.admin_site.admin_view(views.LineItemListView.as_view()),
+                name='concept-input-view'),
+            url(r'^(?P<pk>\d+)/$', views.LineItemDetailView.as_view(), name='concept-input-detail'),
+
+        ]
+        return my_urls + urls
+
+
+
+@admin.register(Concept_Input)
+class ConceptInputAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(ConceptInputAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(views.ConceptInputListView.as_view()),
+                name='concept-input-view'),
+            url(r'^(?P<pk>\d+)/$', views.ConceptInputDetailView.as_view(), name='concept-input-detail'),
+
+        ]
+        return my_urls + urls
+
 
 # Simple admin views.
 admin.site.register(Pais)
@@ -322,15 +364,15 @@ admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistor
 
 admin.site.register(Project, ProjectAdmin)
 
-admin.site.register(LineItem, LineItemAdmin)
+#admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
-admin.site.register(Concept_Input, ConceptInputAdmin)
+#admin.site.register(Concept_Input, ConceptInputAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
 # admin.site.register(Contratista, ContratistaAdmin)
 # admin.site.register(Empresa, EmpresaAdmin)
 # admin.site.register(ContratoContratista, ContratoAdmin)
-admin.site.register(Propietario, PropietarioAdmin)
+# admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
