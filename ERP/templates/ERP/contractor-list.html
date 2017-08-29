@@ -6,12 +6,12 @@
 
         {% include 'ERP/list-search-fields.html' %}
 
-        <h1>Empresas</h1>
+        <h1>Contratistas</h1>
         <div><a href="add">Agregar</a></div>
         <ul>
-            {% for company in object_list %}
-                <li><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a> | <a href="{{ company.id }}">Ver</a> | <a
-                        href="{{ company.id }}/change">Editar</a> | <a href="{{ company.id }}/delete">Eliminar</a>
+            {% for contractor in object_list %}
+                <li><a href="{{ contractor.id }}">{{ contractor.nombreContratista }}</a> | <a href="{{ contractor.id }}">Ver</a> | <a
+                        href="{{ contractor.id }}/change">Editar</a> | <a href="{{ contractor.id }}/delete">Eliminar</a>
                 </li>
             {% empty %}
                 <li>No Companies yet.</li>

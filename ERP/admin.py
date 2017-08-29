@@ -14,7 +14,7 @@ from django.contrib import admin
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
-from ERP.views import CompaniesListView
+from ERP.views import CompaniesListView, ContractorListView
 
 
 class DocumentoFuenteInline(admin.TabularInline):
@@ -131,18 +131,19 @@ class EmpleadoAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
-class ContratistaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreContratista', 'rfc', 'email', 'estado', 'municipio')
-    search_fields = ('nombreContratista', 'rfc', 'estado__nombreEstado', 'email', 'municipio__nombreMunicipio')
-    list_display_links = ('id', 'nombreContratista', 'rfc')
-    list_per_page = 50
-
-    def get_fields(self, request, obj=None):
-        fields = (
-            'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
-            'calle',
-            'numero', 'colonia')
-        return fields
+#
+# class ContratistaAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'nombreContratista', 'rfc', 'email', 'estado', 'municipio')
+#     search_fields = ('nombreContratista', 'rfc', 'estado__nombreEstado', 'email', 'municipio__nombreMunicipio')
+#     list_display_links = ('id', 'nombreContratista', 'rfc')
+#     list_per_page = 50
+#
+#     def get_fields(self, request, obj=None):
+#         fields = (
+#             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
+#             'calle',
+#             'numero', 'colonia')
+#         return fields
 
 
 # class EmpresaAdmin(admin.ModelAdmin):
@@ -248,6 +249,26 @@ class CompanyModelAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
+@admin.register(Contratista)
+class ContractorModelAdmin(admin.ModelAdmin):
+    def get_fields(self, request, obj=None):
+        fields = (
+            'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
+            'calle',
+            'numero', 'colonia')
+        return fields
+
+    def get_urls(self):
+        urls = super(ContractorModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(ContractorListView.as_view()), name='contractor-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ContractorDetailView.as_view(), name='contractor-detail'),
+        ]
+
+        return my_urls + urls
+
+
 # Simple admin views.
 admin.site.register(Pais)
 admin.site.register(Estado)
@@ -265,7 +286,7 @@ admin.site.register(Concept_Input, ConceptInputAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
-admin.site.register(Contratista, ContratistaAdmin)
+# admin.site.register(Contratista, ContratistaAdmin)
 # admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
