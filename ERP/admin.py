@@ -244,16 +244,17 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
                              dbo.INPUT_UPLOAD, project_id)
                 super(UploadedInputExplotionHistoryAdmin, self).save_model(request, obj, form, change)
 
+
         except django.db.utils.IntegrityError as e:
-            print 'error 2'
-            pass
-            # print 'ERRORRRRR'
-            # raise ErrorDataUpload(str(e), LoggingConstants.ERROR, request.user_id)
+            # Create exception without raising it.
+            print 'Hubo un error de integridad'
+            edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, user_id)
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, edu.get_error_message())
         except ErrorDataUpload as e:
             e.save()
             messages.set_level(request, messages.ERROR)
             messages.error(request, e.get_error_message())
-
 
 
 # Overriding the admin views to provide a detail view as required.
@@ -303,7 +304,8 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         urls = super(ContractorContractModelAdmin, self).get_urls()
         my_urls = [
             url(r'^$',
-                self.admin_site.admin_view(views.ContractorContractListView.as_view()), name='contractor-contract-list-view'),
+                self.admin_site.admin_view(views.ContractorContractListView.as_view()),
+                name='contractor-contract-list-view'),
             url(r'^(?P<pk>\d+)/$', views.ContractorContractDetailView.as_view(), name='contractor-contract-detail'),
 
         ]
@@ -338,7 +340,6 @@ class LineItemAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
-
 @admin.register(Concept_Input)
 class ConceptInputAdmin(admin.ModelAdmin):
     def get_urls(self):
@@ -364,9 +365,9 @@ admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistor
 
 admin.site.register(Project, ProjectAdmin)
 
-#admin.site.register(LineItem, LineItemAdmin)
+# admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
-#admin.site.register(Concept_Input, ConceptInputAdmin)
+# admin.site.register(Concept_Input, ConceptInputAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
