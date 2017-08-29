@@ -1,17 +1,11 @@
 {% extends "admin/base_site.html" %}
 
 
-
 {% block content %}
     <div id="content-main">
 
-        <form id="searchform" action="" method="get" accept-charset="utf-8">
-            <button class="searchbutton" type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-            <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
-        </form>
 
+        {% include 'ERP/list-search-fields.html' %}
 
         <h1>Empresas</h1>
         <div><a href="add">Agregar</a></div>
@@ -25,24 +19,9 @@
             {% endfor %}
         </ul>
 
-        {# .... *Now the pagination section* .... #}
-        {% if is_paginated %}
-            <div class="pagination">
-            <span class="page-links">
-                {% if page_obj.has_previous %}
-                    <a href="?page=
-                            {{ page_obj.previous_page_number }}{% if has_query %} {{ query_string }} {% endif %}">previous</a>
-                {% endif %}
-                <span class="page-current">
-                    Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
-                </span>
-                {% if page_obj.has_next %}
-                    <a href="?page={{ page_obj.next_page_number }}{% if has_query %} {{ query_string }} {% endif %}  ">next</a>
-                {% endif %}
 
-            </span>
-            </div>
-        {% endif %}
+        {% include 'ERP/list-pagination.html' %}
+
 
     </div>
 {% endblock %}

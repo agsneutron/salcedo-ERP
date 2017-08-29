@@ -73,13 +73,13 @@ def progress_estimate_log_view(request):
 class CompaniesListView(ListView):
     model = Empresa
     template_name = "ERP/company-list.html"
-    search_fields = ("empresaNombre",)
+    # search_fields = ("empresaNombre",)
     query = None
 
     """
        Display a Blog List page filtered by the search query.
        """
-    paginate_by = 1
+    paginate_by = 10
 
     def get_queryset(self):
         result = super(CompaniesListView, self).get_queryset()
