@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+    <div id="content-main">
+
+        {% include 'ERP/list-search-fields.html' %}
+
+        <h1>Partidas</h1>
+        <div><a href="add">Agregar</a></div>
+        <ul>
+            {% for line_item in object_list %}
+                <li><a href="{{ line_item.id }}">{{ line_item.key }}</a> | <a href="{{ line_item.id }}">Ver</a> | <a
+                        href="{{ line_item.id }}/change">Editar</a> | <a href="{{ line_item.id }}/delete">Eliminar</a>
+                </li>
+            {% empty %}
+                <li>No se encontraron partidas.</li>
+            {% endfor %}
+        </ul>
+
+        {% include 'ERP/list-pagination.html' %}
+
+    </div>
+{% endblock %}

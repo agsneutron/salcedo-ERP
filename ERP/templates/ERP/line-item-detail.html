@@ -1,0 +1,10 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <h1>Clave de la Partida: {{ lineitem.key }}  <a href="change">Editar</a></h1>
+        <ul>
+            <li>Descripción: {{ lineitem.description }}</li>
+
+        </ul>
+
+{% endblock %}

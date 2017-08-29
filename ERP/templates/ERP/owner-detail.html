@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <h1>Nombre: {{ propietario.nombrePropietario }}  <a href="change">Editar</a></h1>
+        <ul>
+            <li>Empresa: {{ propietario.empresa }}</li>
+            <li>RFC: {{ propietario.rfc }}</li>
+            <li>Correo Electrónico: {{ propietario.email }}</li>
+            <li>Teléfono Principal: {{ propietario.telefono1 }}</li>
+            <li>Teléfono Secundario: {{ propietario.telefono2 }}</li>
+            <li>Estado: {{ propietario.estado }}</li>
+            <li>Muncipio: {{ propietario.municipio }}</li>
+            <li>Calle: {{ propietario.calle }}</li>
+            <li>Número: {{ propietario.numero }}</li>
+            <li>Colonia: {{ propietario.colonia }}</li>
+        </ul>
+
+{% endblock %}
