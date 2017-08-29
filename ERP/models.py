@@ -785,7 +785,7 @@ def uploaded_explotions_destination(instance, filename):
 
 
 class UploadedInputExplotionsHistory(models.Model):
-    file = models.FileField(upload_to=uploaded_explotions_destination, null=True, default=None,
+    file = models.FileField(upload_to=uploaded_explotions_destination, null=True,
                                       verbose_name="Explosión de Insumos")
 
 
@@ -893,7 +893,7 @@ class Concept_Input(models.Model):
 
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=False, editable=True)
     description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
-    status = models.CharField(max_length=2, choices=ESTATUS_CHOICES, default=CONCEPT)
+    status = models.CharField(max_length=2, choices=ESTATUS_CHOICES, default=ACTIVE)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
     unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False,

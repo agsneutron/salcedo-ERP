@@ -2,13 +2,16 @@
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
+from django.views import generic
+from django.views.generic import ListView
 
-from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate
+from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa
 from django.db.models import Q
 import json
 
 from django.shortcuts import render
 from ERP.lib.utilities import Utilities
+from django.utils import timezone
 
 # Create your views here.
 def progress_estimate_log_view(request):
@@ -57,13 +60,29 @@ def progress_estimate_log_view(request):
     return render(request, 'ProgressEstimateLog/progress_estimate_log_form.html', params)
 
 
-def upload_file(request):
-    if request.method == 'POST':
-        form = LineItemUploadForm(request.POST, request.FILES)
-        if form.is_valid():
-            #handle_uploaded_file(request.FILES['file'])
-            return HttpResponseRedirect('/success/url/')
-    else:
-        form = LineItemUploadForm()
-    return render(request, 'upload.html', {'form': form})
+# def upload_file(request):
+#     if request.method == 'POST':
+#         form = LineItemUploadForm(request.POST, request.FILES)
+#         if form.is_valid():
+#             #handle_uploaded_file(request.FILES['file'])
+#             return HttpResponseRedirect('/success/url/')
+#     else:
+#         form = LineItemUploadForm()
+#     return render(request, 'upload.html', {'form': form})
+#
 
+
+class CompaniesListView(ListView):
+    model = Empresa
+    template_name = "ERP/company-list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CompaniesListView, self).get_context_data(**kwargs)
+        context['now'] = timezone.now()
+        print context
+        return context
+
+
+class CompanyDetailView(generic.DetailView):
+    model = Empresa
+    template_name = "ERP/company-detail.html"

@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <h1>Nombre: {{ empresa.nombreEmpresa }}  <a href="change">Editar</a></h1>
+        <ul>
+            <li>Calle: {{ empresa.calle }}</li>
+            <li>Número: {{ empresa.numero }}</li>
+            <li>Colonia: {{ empresa.colonia }}</li>
+            <li>Municipio: {{ empresa.municipio }}</li>
+            <li>Estado: {{ empresa.estado }}</li>
+            <li>País: {{ empresa.pais }}</li>
+            <li>CP: {{ empresa.cp }}</li>
+            <li>Teléfono: {{ empresa.telefono }}</li>
+            <li>RFC: {{ empresa.rfc }}</li>
+        </ul>
+
+{% endblock %}

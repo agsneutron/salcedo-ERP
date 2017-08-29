@@ -1,0 +1,20 @@
+{% extends "admin/base_site.html" %}
+
+
+
+{% block content %}
+    <div id="content-main">
+        <h1>Empresas</h1>
+        <div><a href="add">Agregar</a></div>
+        <ul>
+            {% for company in object_list %}
+                <li><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a> | <a href="{{ company.id }}">Ver</a> | <a href="{{ company.id }}/change">Editar</a>
+                </li>
+            {% empty %}
+                <li>No Companies yet.</li>
+            {% endfor %}
+        </ul>
+
+
+    </div>
+{% endblock %}
