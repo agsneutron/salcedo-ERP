@@ -1,18 +1,22 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+from django.conf.urls import url
 from django.contrib import messages
 from django.db import transaction
 
 from DataUpload.helper import DBObject, ErrorDataUpload
+from ERP import views
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm
 
 from django.contrib import admin
 
-
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
+from ERP.views import CompaniesListView, ContractorListView
+
+
 class DocumentoFuenteInline(admin.TabularInline):
     model = DocumentoFuente
     extra = 2
@@ -39,12 +43,26 @@ class LineItemAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
+class LogFileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    model = LogFile
+
+
+class LogFileInline(admin.TabularInline):
+    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    model = LogFile
+    extra = 1
+
+
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    fields = ('user', 'progress_estimate', 'description', 'date')
+    fields = ('user', 'project', 'description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
     list_per_page = 50
+    inlines = [LogFileInline, ]
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -113,31 +131,32 @@ class EmpleadoAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
-class ContratistaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreContratista', 'rfc', 'email', 'estado', 'municipio')
-    search_fields = ('nombreContratista', 'rfc', 'estado__nombreEstado', 'email', 'municipio__nombreMunicipio')
-    list_display_links = ('id', 'nombreContratista', 'rfc')
-    list_per_page = 50
+#
+# class ContratistaAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'nombreContratista', 'rfc', 'email', 'estado', 'municipio')
+#     search_fields = ('nombreContratista', 'rfc', 'estado__nombreEstado', 'email', 'municipio__nombreMunicipio')
+#     list_display_links = ('id', 'nombreContratista', 'rfc')
+#     list_per_page = 50
+#
+#     def get_fields(self, request, obj=None):
+#         fields = (
+#             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
+#             'calle',
+#             'numero', 'colonia')
+#         return fields
 
-    def get_fields(self, request, obj=None):
-        fields = (
-            'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
-            'calle',
-            'numero', 'colonia')
-        return fields
 
-
-class EmpresaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreEmpresa', 'rfc', 'telefono')
-    search_fields = ('nombreEmpresa', 'rfc')
-    list_display_links = ('id', 'nombreEmpresa', 'rfc')
-    list_per_page = 50
-
-    def get_fields(self, request, obj=None):
-        fields = (
-            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia')
-        return fields
+# class EmpresaAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'nombreEmpresa', 'rfc', 'telefono')
+#     search_fields = ('nombreEmpresa', 'rfc')
+#     list_display_links = ('id', 'nombreEmpresa', 'rfc')
+#     list_per_page = 50
+#
+#     def get_fields(self, request, obj=None):
+#         fields = (
+#             'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+#             'numero', 'colonia')
+#         return fields
 
 
 class ContratoAdmin(admin.ModelAdmin):
@@ -169,12 +188,6 @@ class PropietarioAdmin(admin.ModelAdmin):
         return fields
 
 
-class LogFileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
-    model = LogFile
-
-
 class ProgressEstimateAdmin(admin.ModelAdmin):
     list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
     fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
@@ -189,16 +202,87 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
         dbo = DBObject(user_id)
         try:
             with transaction.atomic():
+                project_id = request.POST.get('project')
+
                 dbo.save_all(request.FILES['line_items_file'],
-                             dbo.LINE_ITEM_UPLOAD)
+                             dbo.LINE_ITEM_UPLOAD, project_id)
                 dbo.save_all(request.FILES['concepts_file'],
-                             dbo.CONCEPT_UPLOAD)
+                             dbo.CONCEPT_UPLOAD, project_id)
                 super(UploadedCatalogsHistoryAdmin, self).save_model(request, obj, form, change)
 
         except ErrorDataUpload as e:
             e.save()
             messages.set_level(request, messages.ERROR)
             messages.error(request, e.get_error_message())
+
+
+class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
+    model = UploadedInputExplotionsHistory
+
+    def save_model(self, request, obj, form, change):
+        user_id = request.user.id
+        dbo = DBObject(user_id)
+        try:
+            with transaction.atomic():
+                project_id = request.POST.get('project')
+
+                dbo.save_all(request.FILES['file'],
+                             dbo.INPUT_UPLOAD, project_id)
+                super(UploadedInputExplotionHistoryAdmin, self).save_model(request, obj, form, change)
+
+        except ErrorDataUpload as e:
+            e.save()
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, e.get_error_message())
+
+
+
+# Overriding the admin views to provide a detail view as required.
+
+@admin.register(Empresa)
+class CompanyModelAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(CompanyModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(CompaniesListView.as_view()), name='company-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.CompanyDetailView.as_view(), name='company-detail'),
+
+        ]
+        return my_urls + urls
+
+
+@admin.register(Contratista)
+class ContractorModelAdmin(admin.ModelAdmin):
+    def get_fields(self, request, obj=None):
+        fields = (
+            'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
+            'calle',
+            'numero', 'colonia')
+        return fields
+
+    def get_urls(self):
+        urls = super(ContractorModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(ContractorListView.as_view()), name='contractor-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ContractorDetailView.as_view(), name='contractor-detail'),
+        ]
+
+        return my_urls + urls
+
+
+@admin.register(ContratoContratista)
+class ContractorContractModelAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(ContractorContractModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(views.ContractorContractListView.as_view()), name='contractor-contract-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ContractorContractDetailView.as_view(), name='contractor-contract-detail'),
+
+        ]
+        return my_urls + urls
 
 
 
@@ -209,7 +293,7 @@ admin.site.register(Municipio)
 admin.site.register(TipoConstruccion)
 admin.site.register(ModalidadContrato)
 admin.site.register(UploadedCatalogsHistory, UploadedCatalogsHistoryAdmin)
-admin.site.register(UploadedInputExplotionsHistory)
+admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistoryAdmin)
 
 admin.site.register(Project, ProjectAdmin)
 
@@ -219,9 +303,9 @@ admin.site.register(Concept_Input, ConceptInputAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
-admin.site.register(Contratista, ContratistaAdmin)
-admin.site.register(Empresa, EmpresaAdmin)
-admin.site.register(Contrato, ContratoAdmin)
+# admin.site.register(Contratista, ContratistaAdmin)
+# admin.site.register(Empresa, EmpresaAdmin)
+# admin.site.register(ContratoContratista, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)

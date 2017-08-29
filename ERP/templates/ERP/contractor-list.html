@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+    <div id="content-main">
+
+        {% include 'ERP/list-search-fields.html' %}
+
+        <h1>Contratistas</h1>
+        <div><a href="add">Agregar</a></div>
+        <ul>
+            {% for contractor in object_list %}
+                <li><a href="{{ contractor.id }}">{{ contractor.nombreContratista }}</a> | <a href="{{ contractor.id }}">Ver</a> | <a
+                        href="{{ contractor.id }}/change">Editar</a> | <a href="{{ contractor.id }}/delete">Eliminar</a>
+                </li>
+            {% empty %}
+                <li>No Companies yet.</li>
+            {% endfor %}
+        </ul>
+
+        {% include 'ERP/list-pagination.html' %}
+
+    </div>
+{% endblock %}

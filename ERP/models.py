@@ -295,8 +295,8 @@ class Contratista(models.Model):
     colonia = models.CharField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
-    telefono = models.IntegerField(verbose_name='Teléfono', null=False, blank=False, editable=True)
-    telefono_dos = models.IntegerField(verbose_name='Teléfono No.2', null=False, blank=True, editable=True)
+    telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
+    telefono_dos = models.CharField(verbose_name='Teléfono No.2', max_length=30, null=True, blank=True, editable=True)
     email = models.CharField(verbose_name='Correo Electrónico', max_length=60, null=False, blank=False, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
@@ -356,7 +356,7 @@ class Empresa(models.Model):
     #pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
-    telefono_dos = models.IntegerField(verbose_name='Teléfono No.2', null=True, blank=True, editable=True)
+    telefono_dos = models.CharField(verbose_name='Teléfono No.2', max_length=30, null=True, blank=True, editable=True)
     email = models.CharField(verbose_name='Correo Electrónico', max_length=60, null=False, blank=True, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
@@ -406,33 +406,37 @@ class Empresa(models.Model):
             Logs.log("Couldn't save")
 
 
-class Contrato(models.Model):
-    no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=False,
-                                     editable=True)
-    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
-                                           blank=False)
+class ContratoContratista(models.Model):
+    clave_contrato = models.CharField(verbose_name='Clave del Contrato', max_length=32, null=False, blank=False)
     dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
-    codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
-    contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
-    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
-                                       editable=True)
     fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', editable=True)
     dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False,
                                      editable=True)
     fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', editable=True)
     lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False,
-                                       editable=True)
+                                      editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
     monto_contrato_iva = models.DecimalField(verbose_name='Monto de Contrato con IVA', decimal_places=2, blank=False,
                                              null=False, default=0, max_digits=20)
     pago_inicial = models.DecimalField(verbose_name='Pago Inicial', decimal_places=2, blank=False, null=False,
                                        default=0, max_digits=20)
-    pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=False, null=False, default=0,
+    pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=True, null=False, default=0,
                                      max_digits=20)
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
                                      editable=True)
+    no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,
+                                     editable=True)
+    codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
+    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
+                                       editable=True)
+
+    # Foreign Keys:
+    project =  models.ForeignKey('Project', verbose_name='Proyecto', null=False, blank=False)
+    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
+                                           blank=False)
+    contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Contratos'
@@ -587,7 +591,6 @@ class TipoProyectoDetalle(models.Model):
 # Projects model.
 class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
-    contrato = models.ForeignKey(Contrato, verbose_name="contrato", null=False, blank=False)
     propietario = models.ForeignKey(Propietario, verbose_name="propietario", null=False, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
     fecha_inicial = models.DateTimeField(default=None, null=False)
@@ -785,7 +788,7 @@ def uploaded_explotions_destination(instance, filename):
 
 
 class UploadedInputExplotionsHistory(models.Model):
-    file = models.FileField(upload_to=uploaded_explotions_destination, null=True, default=None,
+    file = models.FileField(upload_to=uploaded_explotions_destination, null=True,
                                       verbose_name="Explosión de Insumos")
 
 
@@ -893,7 +896,7 @@ class Concept_Input(models.Model):
 
     key = models.CharField(verbose_name="Clave", max_length=32, null=False, blank=False, unique=False, editable=True)
     description = models.TextField(verbose_name="Descripción", max_length=4096, null=False, blank=False, editable=True)
-    status = models.CharField(max_length=2, choices=ESTATUS_CHOICES, default=CONCEPT)
+    status = models.CharField(max_length=2, choices=ESTATUS_CHOICES, default=ACTIVE)
     quantity = models.DecimalField(verbose_name='Cantidad', decimal_places=2, blank=False, null=False, default=0,
                                    max_digits=20)
     unit_price = models.DecimalField(verbose_name='Precio Unitario', decimal_places=2, blank=False, null=False,
@@ -1037,14 +1040,14 @@ class ProgressEstimate(models.Model):
 
 
 class ProgressEstimateLog(models.Model):
-    progress_estimate = models.ForeignKey(ProgressEstimate, verbose_name="Estimación", null=False, blank=False)
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
     description = models.CharField(verbose_name="Descripción", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=None, null=True, verbose_name="Fecha")
 
     class Meta:
-        verbose_name_plural = 'Bitácoras de Estimaciones'
+        verbose_name_plural = 'Bitácoras de estimaciones'
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
@@ -1060,17 +1063,22 @@ class ProgressEstimateLog(models.Model):
     Model for the Log File.
 '''
 
+def progress_estimate_log_destination(instance, filename):
+    return '/'.join(['bitacoras_de_proyecto', instance.progress_estimate_log.project.key, filename])
 
 class LogFile(models.Model):
-    progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de Estimación", null=False,
+    progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de estimación", null=False,
                                               blank=False)
-    file = models.FileField(verbose_name="Archivo", max_length=1024, null=True, blank=True)
+    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination)
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
         answer['file'] = str(self.file)
         return answer
+
+    class Meta:
+        verbose_name_plural = 'Archivo de bitácoras de estimaciones'
 
 
 class SystemLogEntry(models.Model):
