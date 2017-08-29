@@ -138,6 +138,7 @@ STATIC_FILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
+print os.path.join(PROJECT_ROOT, '../static')
 # Loading local settings to the project.
 try:
     from .local_settings import *
