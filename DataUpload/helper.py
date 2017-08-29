@@ -6,6 +6,7 @@ import xlrd
 from decimal import Decimal
 
 from django.db import transaction
+from django.db.models import Q
 
 from ERP.models import Concept_Input, Unit, LineItem
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
@@ -158,7 +159,7 @@ class DBObject(object):
         CONCEPT_UPLOAD: 'C'
     }
 
-    def save_all(self, file_path, model):
+    def save_all(self, file_path, model, project_id=None):
         """ Saves to the database all the records contained on a file.
         :param file_path: The path of the file from which the data will be read.
         :param model: The model to which the information on the file is associated. This model should be one of the
@@ -188,16 +189,16 @@ class DBObject(object):
 
         if model == self.CONCEPT_UPLOAD or model == self.INPUT_UPLOAD:
             # Handle concepts and inputs
-            self.save_all_concept_input(record_list, model)
+            self.save_all_concept_input(record_list, model, project_id)
         elif model == self.LINE_ITEM_UPLOAD:
             # Handle line items
-            self.save_all_line_items(record_list)
+            self.save_all_line_items(record_list, project_id)
         else:
             raise ErrorDataUpload(
                 'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
                 LoggingConstants.CRITICAL, self.user_id)
 
-    def save_all_concept_input(self, record_list, model):
+    def save_all_concept_input(self, record_list, model, project_id):
         """ Save a set of concept or input records
         :param record_list: list of concepts or inputs.
         """
@@ -208,24 +209,24 @@ class DBObject(object):
                     # Validate that the record is not empty
                     # Save the record
                     print record
-                    self.save_concept_input(record, model)
+                    self.save_concept_input(record, model, project_id)
 
         except Exception, e:
             raise e
 
-    def save_all_line_items(self, record_list):
+    def save_all_line_items(self, record_list, project_id):
         self.LineItemConstants.set_max_level(len(record_list[0]))
 
         try:
             for record in record_list:
                 # print 'Single record:' + str(record)
                 if record[self.LineItemConstants.get_max_level()] != "":
-                    self.save_line_item(record)
+                    self.save_line_item(record, project_id)
 
         except Exception, e:
             raise e
 
-    def save_line_item(self, record):
+    def save_line_item(self, record, project_id):
         # First, we get each all the attributes.
         line_item_parent_key = self.LineItemConstants.get_parent_key(record)
         line_item_key = self.LineItemConstants.get_key(record)
@@ -243,7 +244,7 @@ class DBObject(object):
             parent_id = None
 
         line_item_obj = LineItem(key=line_item_key.upper(),
-                                 project_id=2,
+                                 project_id=project_id,
                                  parent_line_item_id=parent_id,
                                  description=line_item_description)
         line_item_obj.save()
@@ -255,7 +256,7 @@ class DBObject(object):
         El tipo correcto se leerá desde el modelo.
     '''
 
-    def save_concept_input(self, record, model):
+    def save_concept_input(self, record, model, project_id):
         # First, we get each all the attributes.
         line_item_key = record[self.ConceptConstants.LINE_ITEM_KEY_COL]
         line_item_description = record[self.ConceptConstants.LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
@@ -275,15 +276,16 @@ class DBObject(object):
         else:
             unit_obj = unit_qs[0]
 
-        line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
+        line_item_qs = LineItem.objects.filter(Q(key=line_item_key.upper()) & Q(project_id=project_id))
 
         if len(line_item_qs) == 0:
             model_names = {
                 self.CONCEPT_UPLOAD: 'concepto',
                 self.INPUT_UPLOAD: 'insumo'
             }
-            raise ErrorDataUpload('Se intentó agregar un '+model_names[model]+' correspondiente a una partida que no existe.',
-                                  LoggingConstants.ERROR, self.user_id)
+            raise ErrorDataUpload(
+                'Se intentó agregar un ' + model_names[model] + ' correspondiente a una partida que no existe.',
+                LoggingConstants.ERROR, self.user_id)
         else:
             line_item_obj = line_item_qs[0]
 
