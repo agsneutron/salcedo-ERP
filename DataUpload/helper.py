@@ -1,5 +1,6 @@
 # coding=utf-8
 import uuid
+from _mysql import IntegrityError
 from aetypes import Enum
 
 import xlrd
@@ -187,15 +188,21 @@ class DBObject(object):
         # Obtain the element list for the file.
         record_list = file_obj.get_element_list()
 
-        if model == self.CONCEPT_UPLOAD or model == self.INPUT_UPLOAD:
-            # Handle concepts and inputs
-            self.save_all_concept_input(record_list, model, project_id)
-        elif model == self.LINE_ITEM_UPLOAD:
-            # Handle line items
-            self.save_all_line_items(record_list, project_id)
-        else:
+        try:
+
+            if model == self.CONCEPT_UPLOAD or model == self.INPUT_UPLOAD:
+                # Handle concepts and inputs
+                self.save_all_concept_input(record_list, model, project_id)
+            elif model == self.LINE_ITEM_UPLOAD:
+                # Handle line items
+                self.save_all_line_items(record_list, project_id)
+            else:
+                raise ErrorDataUpload(
+                    'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
+                    LoggingConstants.CRITICAL, self.user_id)
+        except IntegrityError as e:
             raise ErrorDataUpload(
-                'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
+                e.message,
                 LoggingConstants.CRITICAL, self.user_id)
 
     def save_all_concept_input(self, record_list, model, project_id):
