@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.http import HttpResponseRedirect
+from django.views import generic
 from django.views.generic import ListView
 
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa
@@ -81,3 +82,7 @@ class CompaniesListView(ListView):
         print context
         return context
 
+
+class CompanyDetailView(generic.DetailView):
+    model = Empresa
+    template_name = "ERP/company-detail.html"
