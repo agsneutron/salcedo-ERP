@@ -23,7 +23,7 @@
               href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}"/>{% endif %}
     {% block extrahead %}{% endblock %}
     {% block blockbots %}
-    <script src="{% static "ERP/admin/js/theme.js" %}"></script>
+        <script src="{% static "ERP/admin/js/theme.js" %}"></script>
     {% endblock %}
 
     <!-- Jquery Library js -->
@@ -149,32 +149,35 @@
                             <i class="zmdi zmdi-chevron-down"></i>
                         </a>
                         <ul class="dropdown-menu dropdown-menu-left">
-                           {% comment %} <li>
-                                <a href="/admin/ERP/contrato/add/">
-                                    <i class="zmdi zmdi-view-dashboard"></i>Agregar</a>
-                            </li>
-                            <li>
-                                <a href="/admin/ERP/contrato/">
-                                    <i class="zmdi zmdi-view-dashboard"></i>Consultar</a>
-                            </li>{% endcomment %}
-                            <li>
-                                <a href="/admin/ERP/contrato/">
-                                    <i class="zmdi zmdi-view-dashboard"></i>Contratos</a>
-                            </li>
-                            <li>
-                                <a href="/admin/ERP/empresa/">
-                                    <i class="zmdi zmdi-view-dashboard"></i>Empresas</a>
-                            </li>
-                            <li>
-                                <a href="/admin/ERP/contratista/">
-                                    <i class="zmdi zmdi-view-dashboard"></i>Contratistas</a>
-                            </li>
 
+                            <li class="dropdown-submenu">
+                                <a href="">
+                                    <i class="zmdi zmdi-view-dashboard"></i>Contratos</a>
+
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li>
+                                        <a href="/admin/ERP/contrato/add/">Agregar</a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/ERP/contrato/">Consultar</a>
+                                    </li>
+                                </ul>
+                            </li>
                         </ul>
 
                     </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
+                    {% comment %}<li class="dropdown">
+                        <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-8"
+                           data-toggle="dropdown"
+                           data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                           data-name="portfolio">
+                            <i class="fa fa-home text-center"></i><br>
+                            Proyectos
+                        </a>
+
+                    </li>{% endcomment %}
+                   <li class="dropdown">
+                        <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-7"
                            data-toggle="dropdown"
                            data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                            data-name="blog">
@@ -182,22 +185,44 @@
                             Seguimiento de obra
                             <i class="zmdi zmdi-chevron-down"></i>
                         </a>
+
                         <ul class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
-                            <li class="dropdown-submenu">
-                                <a href="blog-sidebar.html" class="has_children">
+                            <li class="dropdown">
+                                <a href="/admin/ERP/project/">
                                     <i class="zmdi zmdi-view-compact"></i> Proyectos</a>
-                                <ul class="dropdown-menu dropdown-menu-left">
-                                    <li>
-                                        <a href="/admin/ERP/project/add/">Agregar</a>
-                                    </li>
-                                    <li>
-                                        <a href="/admin/ERP/project/">Consultar</a>
-                                    </li>
-                                </ul>
                             </li>
-                            <li>
-                                <a href="blog-sidebar2.html">
-                                    <i class="zmdi zmdi-view-compact"></i> Precios unitarios</a>
+                            {% comment %}<li class="dropdown-submenu">
+                                <a href="blog-sidebar.html" class="has_children">
+                                    <i class="zmdi zmdi-view-compact"></i> Precios Unitarios</a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+
+                                        <li class="dropdown-submenu">
+                                            <a href="blog-sidebar.html" class="has_children">
+                                                <i class="zmdi zmdi-view-compact"></i> Catálogo de Conceptos</a>
+                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                <li>
+                                                    <a href="/admin/ERP/uploadedcatalogshistory/add/">Agregar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/admin/ERP/uploadedcatalogshistory/">Consultar</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+
+
+                                     <li class="dropdown-submenu">
+                                            <a href="blog-sidebar.html" class="has_children">
+                                                <i class="zmdi zmdi-view-compact"></i> Catálogo de Insumos</a>
+                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                <li>
+                                                    <a href="/admin/ERP/uploadedcatalogshistory/add/">Agregar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/admin/ERP/uploadedcatalogshistory/">Consultar</a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                </ul>
                             </li>
                             <li class="dropdown-submenu">
                                 <a href="" class="has_children">
@@ -222,7 +247,7 @@
                                         <a href="/admin/ERP/progressestimatelog/">Consultar</a>
                                     </li>
                                 </ul>
-                            </li>
+                            </li>{% endcomment %}
                         </ul>
                     </li>
                     <li class="dropdown">
@@ -260,32 +285,39 @@
 
 <!-- ends navigation -->
 
-<!-- begins breadcrumbs and messages -->
+{% comment %}{% block breadcrumbs %}
+    <div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+    {% if title %} &rsaquo; {{ title }}{% endif %}
+    </div>
+{% endblock %}
+{% endcomment %}
 
-<!-- ends breadcrumbs and messages -->
+{% block messages %}
+    {% if messages %}
+        <ul class="messagelist">
+            {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock messages %}
 <!-- Begins MainContainer -->
 <div id="particles-js">
-<div id="content" class=" container">
-    {% block pretitle %}{% endblock %}
-    {% block content %}
-        {% block object-tools %}{% endblock %}
-        {{ content }}
-    {% endblock %}
-    {% block sidebar %}{% endblock %}
-    <br class="clear"/>
-</div>
-<!-- END mainContainer -->
+    <div id="content" class=" container">
+        {% block pretitle %}{% endblock %}
+        {% block content %}
+            {% block object-tools %}{% endblock %}
+            {{ content }}
+        {% endblock %}
+        {% block sidebar %}{% endblock %}
+        <br class="clear"/>
+    </div>
+    <!-- END mainContainer -->
 
-<!-- Begins Footer -->
-{% block footer %}
 
-    <footer class="ms-footer" id="footer">
-        <div class="container">
-            <p>Copyright &copy; Salcedo ERP 2017</p>
-        </div>
-    </footer>
-{% endblock %}
 </div>
+
 {% if not is_popup %}
     {% block usertools %}
         {% if has_permission %}
@@ -349,5 +381,14 @@
 
 {% endif %}
 
+ <!-- Begins Footer -->
+    {% block footer %}
+
+        <footer class="ms-footer" id="footer">
+            <div class="container">
+                <p>Copyright &copy; Salcedo ERP 2017</p>
+            </div>
+        </footer>
+    {% endblock %}
 </body>
 </html>

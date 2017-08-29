@@ -708,8 +708,8 @@ class Project(models.Model):
                                                    default=0, max_digits=20)
     programayarea_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente,
                                                verbose_name="Documento de programa y área")
-    latitud = models.FloatField(default=0)
-    longitud = models.FloatField(default=0)
+    latitud = models.FloatField(default=0, blank=True, null=True,)
+    longitud = models.FloatField(default=0, blank=True, null=True,)
 
     # tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
 

@@ -463,6 +463,43 @@ padding: 0;
     font-weight: inherit !important;
     color: #333;
 }
+.card .card-header {
+
+    padding: .1rem 2rem;
+    background-color: #f5f5f5;
+}
+.card .card-header h3 {
+
+    font-size: 1.6rem;
+    margin: 7px 1px;
+}
+.absolute-r {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+.card .card-block, .card.card-block {
+
+    padding: .3rem 2.1rem;
+}
+.form-control, .form-group .form-control {
+    border: 1px solid #e2e2e2;
+
+}
+.form-control {
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+    line-height: 1.42857;
+}
+.aligned label {
+    display: block;
+    padding: 4px 10px 0 0;
+    float: left;
+    width: 100% !important;
+    word-wrap: break-word;
+    line-height: 1;
+}
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
