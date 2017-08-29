@@ -823,6 +823,7 @@ class LineItem(models.Model):
     class Meta:
         verbose_name_plural = 'Partidas'
         verbose_name = 'Partida'
+        unique_together = ('project', 'key')
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -910,7 +911,7 @@ class Concept_Input(models.Model):
     class Meta:
         verbose_name_plural = 'Conceptos'
         verbose_name = 'Concepto'
-        unique_together = [("line_item", "key")]
+        unique_together = ("line_item", "key")
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)

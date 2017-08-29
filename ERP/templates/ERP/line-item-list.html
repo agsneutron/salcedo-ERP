@@ -10,7 +10,7 @@
         <div><a href="add">Agregar</a></div>
         <ul>
             {% for line_item in object_list %}
-                <li><a href="{{ line_item.id }}">{{ line_item.key }}</a> | <a href="{{ line_item.id }}">Ver</a> | <a
+                <li><a href="{{ line_item.id }}">{{ line_item.description }}</a> | <a href="{{ line_item.id }}">Ver</a> | <a
                         href="{{ line_item.id }}/change">Editar</a> | <a href="{{ line_item.id }}/delete">Eliminar</a>
                 </li>
             {% empty %}
