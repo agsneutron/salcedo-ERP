@@ -304,7 +304,7 @@ class LineItemAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(LineItemAdmin, self).get_urls()
         my_urls = [
-            url(r'^$',
+            url(r'^(?P<project>[0-9]+)/(?P<parent>[0-9]+)/$',
                 self.admin_site.admin_view(views.LineItemListView.as_view()),
                 name='concept-input-view'),
             url(r'^(?P<pk>\d+)/$', views.LineItemDetailView.as_view(), name='concept-input-detail'),

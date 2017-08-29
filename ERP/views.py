@@ -292,6 +292,7 @@ class LineItemListView(ListView):
     template_name = "ERP/line-item-list.html"
     query = None
     project_id = None
+    parent_id = None
 
     """
        Display a Blog List page filtered by the search query.
@@ -300,8 +301,22 @@ class LineItemListView(ListView):
 
     def get_queryset(self):
         result = super(LineItemListView, self).get_queryset()
-        LineItemListView.project_id = self.request.GET.get('project_id')
-        result = result.filter(Q(project__id = LineItemListView.project_id))
+
+        # Reading the params from the url.
+        LineItemListView.project_id = self.kwargs['project']
+        LineItemListView.parent_id = self.kwargs['parent']
+
+        # If the param for the parent is received as 0, then its value must be None.
+        if LineItemListView.parent_id == '0':
+            LineItemListView.parent_id = None
+
+        print "The filters:"
+        print "Project Id: " + str(LineItemListView.project_id)
+        print "Parent Id: " + str(LineItemListView.parent_id)
+
+        # Filtering the results.
+        result = result.filter(Q(project__id = LineItemListView.project_id) & Q(parent_line_item__id = LineItemListView.parent_id))
+
 
         # Query to filter the list content.
         query = self.request.GET.get('q')
@@ -326,6 +341,12 @@ class LineItemListView(ListView):
         context['query'] = LineItemListView.query
         context['query_string'] = '&q=' + LineItemListView.query
         context['has_query'] = (LineItemListView.query is not None) and (LineItemListView.query != "")
+
+        # Getting the concept inputs for the selected Line Item parent.
+        context['concepts_inputs'] = Concept_Input.objects.filter(Q(line_item=LineItemListView.parent_id))
+        
+        print "Concept / Inputs"
+        print context['concepts_inputs']
         return context
 
 class LineItemDetailView(generic.DetailView):
