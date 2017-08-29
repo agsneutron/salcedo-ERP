@@ -356,7 +356,7 @@ class Empresa(models.Model):
     #pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
-    telefono_dos = models.IntegerField(verbose_name='Teléfono No.2', null=True, blank=True, editable=True)
+    telefono_dos = models.CharField(verbose_name='Teléfono No.2', max_length=30, null=True, blank=True, editable=True)
     email = models.CharField(verbose_name='Correo Electrónico', max_length=60, null=False, blank=True, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
