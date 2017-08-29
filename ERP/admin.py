@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+from django.conf.urls import url
 from django.contrib import messages
 from django.db import transaction
 
@@ -10,9 +11,11 @@ from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuen
 
 from django.contrib import admin
 
-
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
+from ERP.views import CompaniesListView
+
+
 class DocumentoFuenteInline(admin.TabularInline):
     model = DocumentoFuente
     extra = 2
@@ -39,12 +42,26 @@ class LineItemAdmin(admin.ModelAdmin):
     list_per_page = 50
 
 
+class LogFileAdmin(admin.ModelAdmin):
+    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    model = LogFile
+
+
+class LogFileInline(admin.TabularInline):
+    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    model = LogFile
+    extra = 1
+
+
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    fields = ('user', 'progress_estimate', 'description', 'date')
+    fields = ('user', 'project', 'description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
     list_display_links = ('user', 'description', 'date')
     list_per_page = 50
+    inlines = [LogFileInline, ]
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -127,17 +144,17 @@ class ContratistaAdmin(admin.ModelAdmin):
         return fields
 
 
-class EmpresaAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombreEmpresa', 'rfc', 'telefono')
-    search_fields = ('nombreEmpresa', 'rfc')
-    list_display_links = ('id', 'nombreEmpresa', 'rfc')
-    list_per_page = 50
-
-    def get_fields(self, request, obj=None):
-        fields = (
-            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia')
-        return fields
+# class EmpresaAdmin(admin.ModelAdmin):
+#     list_display = ('id', 'nombreEmpresa', 'rfc', 'telefono')
+#     search_fields = ('nombreEmpresa', 'rfc')
+#     list_display_links = ('id', 'nombreEmpresa', 'rfc')
+#     list_per_page = 50
+#
+#     def get_fields(self, request, obj=None):
+#         fields = (
+#             'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+#             'numero', 'colonia')
+#         return fields
 
 
 class ContratoAdmin(admin.ModelAdmin):
@@ -169,12 +186,6 @@ class PropietarioAdmin(admin.ModelAdmin):
         return fields
 
 
-class LogFileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
-    model = LogFile
-
-
 class ProgressEstimateAdmin(admin.ModelAdmin):
     list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
     fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
@@ -204,6 +215,34 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             messages.error(request, e.get_error_message())
 
 
+class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
+    model = UploadedInputExplotionsHistory
+
+    def save_model(self, request, obj, form, change):
+        user_id = request.user.id
+        dbo = DBObject(user_id)
+        try:
+            with transaction.atomic():
+                dbo.save_all(request.FILES['file'],
+                             dbo.INPUT_UPLOAD)
+                super(UploadedInputExplotionHistoryAdmin, self).save_model(request, obj, form, change)
+
+        except ErrorDataUpload as e:
+            e.save()
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, e.get_error_message())
+
+
+@admin.register(Empresa)
+class CompanyModelAdmin(admin.ModelAdmin):
+    def get_urls(self):
+        urls = super(CompanyModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(CompaniesListView.as_view())),
+        ]
+        return my_urls + urls
+
 
 # Simple admin views.
 admin.site.register(Pais)
@@ -212,7 +251,7 @@ admin.site.register(Municipio)
 admin.site.register(TipoConstruccion)
 admin.site.register(ModalidadContrato)
 admin.site.register(UploadedCatalogsHistory, UploadedCatalogsHistoryAdmin)
-admin.site.register(UploadedInputExplotionsHistory)
+admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistoryAdmin)
 
 admin.site.register(Project, ProjectAdmin)
 
@@ -223,7 +262,7 @@ admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
 admin.site.register(Contratista, ContratistaAdmin)
-admin.site.register(Empresa, EmpresaAdmin)
+# admin.site.register(Empresa, EmpresaAdmin)
 admin.site.register(Contrato, ContratoAdmin)
 admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)

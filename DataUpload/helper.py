@@ -188,7 +188,7 @@ class DBObject(object):
 
         if model == self.CONCEPT_UPLOAD or model == self.INPUT_UPLOAD:
             # Handle concepts and inputs
-            self.save_all_concept_input(record_list)
+            self.save_all_concept_input(record_list, model)
         elif model == self.LINE_ITEM_UPLOAD:
             # Handle line items
             self.save_all_line_items(record_list)
@@ -197,7 +197,7 @@ class DBObject(object):
                 'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
                 LoggingConstants.CRITICAL, self.user_id)
 
-    def save_all_concept_input(self, record_list):
+    def save_all_concept_input(self, record_list, model):
         """ Save a set of concept or input records
         :param record_list: list of concepts or inputs.
         """
@@ -207,7 +207,8 @@ class DBObject(object):
                 if record[0] != "":
                     # Validate that the record is not empty
                     # Save the record
-                    self.save_concept_input(record, self.CONCEPT_UPLOAD)
+                    print record
+                    self.save_concept_input(record, model)
 
         except Exception, e:
             raise e
@@ -277,7 +278,11 @@ class DBObject(object):
         line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
 
         if len(line_item_qs) == 0:
-            raise ErrorDataUpload('Se intentó agregar un concepto correspondiente a una partida que no existe.',
+            model_names = {
+                self.CONCEPT_UPLOAD: 'concepto',
+                self.INPUT_UPLOAD: 'insumo'
+            }
+            raise ErrorDataUpload('Se intentó agregar un '+model_names[model]+' correspondiente a una partida que no existe.',
                                   LoggingConstants.ERROR, self.user_id)
         else:
             line_item_obj = line_item_qs[0]
