@@ -44,44 +44,73 @@
                         {% if field.field.name == "project" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                             <div class="row">
-                            <h2 class="text-center">Archivos</h2>
+                                <h2 class="text-center">Archivos</h2>
 
-                            <hr>
-                            <div class="col-md-12">
+                                <hr>
+                                <div class="col-md-12">
+                                    <div class="form-group field-{{ field.field.name }}">
+                                        <div>
+                                            {{ field.label_tag }}
+                                            {{ field.field|addcss:"form-control" }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if field.field.name == "line_items_file" %}
+                            <div class="row">
+                            <div class="col-md-6">
                                 <div class="form-group field-{{ field.field.name }}">
+                                    {{ field.field|addcss:"form-control" }}
+                                    <div class="input-group">
+                                         {{ field.label_tag }}
+                                      <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">
+                                      <span class="input-group-btn input-group-sm">
+                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                          <i class="material-icons">attach_file</i>
+                                        </button>
+                                      </span>
+                                    </div>
+                                </div>
+
+
+
+
+                                {% comment %}<div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
-                                </div>
+                                </div>{% endcomment %}
                             </div>
-                            </div>
-                        {% endif %}
 
-                    {% if field.field.name == "line_items_file" %}
-                     <div class="row">
+                        {% endif %}
+                    {% if field.field.name == "concepts_file" %}
+
                         <div class="col-md-6">
                             <div class="form-group field-{{ field.field.name }}">
+                                    {{ field.field|addcss:"form-control" }}
+                                    <div class="input-group">
+                                         {{ field.label_tag }}
+                                      <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">
+                                      <span class="input-group-btn input-group-sm">
+                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                          <i class="material-icons">attach_file</i>
+                                        </button>
+                                      </span>
+                                    </div>
+                                </div>
+
+                            {% comment %}<div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
                                     {{ field.field|addcss:"form-control" }}
                                 </div>
-                            </div>
+                            </div>{% endcomment %}
                         </div>
-
+                        </div>
                     {% endif %}
-                        {% if field.field.name == "concepts_file" %}
-
-                            <div class="col-md-6">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {% endif %}
 
 
 
@@ -94,4 +123,6 @@
 </fieldset>
 
 
+<script>
+    document.getElementById("id_line_items_file").placeholder = "Type name here..";
 </script>
