@@ -295,8 +295,8 @@ class Contratista(models.Model):
     colonia = models.CharField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
-    telefono = models.IntegerField(verbose_name='Teléfono', null=False, blank=False, editable=True)
-    telefono_dos = models.IntegerField(verbose_name='Teléfono No.2', null=False, blank=True, editable=True)
+    telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
+    telefono_dos = models.CharField(verbose_name='Teléfono No.2', max_length=30, null=True, blank=True, editable=True)
     email = models.CharField(verbose_name='Correo Electrónico', max_length=60, null=False, blank=False, editable=True)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
 
@@ -406,33 +406,37 @@ class Empresa(models.Model):
             Logs.log("Couldn't save")
 
 
-class Contrato(models.Model):
-    no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=False,
-                                     editable=True)
-    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
-                                           blank=False)
+class ContratoContratista(models.Model):
+    clave_contrato = models.CharField(verbose_name='Clave del Contrato', max_length=32, null=False, blank=False)
     dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
-    codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
-    contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
-    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
-                                       editable=True)
     fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', editable=True)
     dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False,
                                      editable=True)
     fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', editable=True)
     lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False,
-                                       editable=True)
+                                      editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
     monto_contrato_iva = models.DecimalField(verbose_name='Monto de Contrato con IVA', decimal_places=2, blank=False,
                                              null=False, default=0, max_digits=20)
     pago_inicial = models.DecimalField(verbose_name='Pago Inicial', decimal_places=2, blank=False, null=False,
                                        default=0, max_digits=20)
-    pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=False, null=False, default=0,
+    pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=True, null=False, default=0,
                                      max_digits=20)
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
                                      editable=True)
+    no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,
+                                     editable=True)
+    codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
+    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
+                                       editable=True)
+
+    # Foreign Keys:
+    project =  models.ForeignKey('Project', verbose_name='Proyecto', null=False, blank=False)
+    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
+                                           blank=False)
+    contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Contratos'
@@ -587,7 +591,6 @@ class TipoProyectoDetalle(models.Model):
 # Projects model.
 class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
-    contrato = models.ForeignKey(Contrato, verbose_name="contrato", null=False, blank=False)
     propietario = models.ForeignKey(Propietario, verbose_name="propietario", null=False, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
     fecha_inicial = models.DateTimeField(default=None, null=False)
