@@ -2,13 +2,10 @@
 {% if cl.search_fields %}
     <div id="toolbar">
         <form id="changelist-search" method="get">
-            <div class="col-xs-8"><!-- DIV needed for valid HTML -->
-
+            <div class="col-xs-3 col-xs-offset-9"><!-- DIV needed for valid HTML -->
 
                 <input type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" class="form-control"/>
-            </div>
-            <div class="col-xs-2">
-                <span class="input-group-btn">
+                <span class="input-group-btn absolute-r">
                     <button type="submit" value="{% trans 'Search' %}" class="btn btn-fab btn-fab-mini">
                         <i class="material-icons">search</i>
                     </button>

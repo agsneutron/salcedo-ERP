@@ -54,11 +54,11 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'SalcedoERP.urls'
 TEMPLATETAGS_DIRS = (
-    os.path.join(BASE_DIR, 'templatetags'),
+    os.path.join(BASE_DIR, 'users/templatetags'),
 )
 
 print "Tags:"
-print os.path.join(BASE_DIR, 'templatetags')
+print os.path.join(BASE_DIR, 'users/templatetags')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

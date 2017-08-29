@@ -43,11 +43,11 @@
                     {% for field in line %}
                         {% if field.field.name == "nombreContratista" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                            <div class="row">
-                            <h2 class="text-center">Datos Generales</h2>
 
+                            <h2 class="text-center">Datos Generales</h2>
+                            <div class="row">
                             <hr>
-                            <div class="col-md-6">
+                            <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
@@ -68,11 +68,11 @@
                             </div>
                         </div>
 
-                        </div>
+
                     {% endif %}
                         {% if field.field.name == "email" %}
-                            <div class="row">
-                            <div class="col-md-6">
+
+                            <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
@@ -106,10 +106,10 @@
                             </div>
                         </div>
 
-                        </div>
+
                     {% endif %}
                         {% if field.field.name == "pais" %}
-                            <div class="row">
+
                             <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
@@ -151,11 +151,11 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
+
                     {% endif %}
                         {% if field.field.name == "calle" %}
-                            <div class="row">
-                            <div class="col-md-6">
+
+                            <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
