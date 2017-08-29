@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <h1>Nombre: {{ contratista.nombreContratista }}  <a href="change">Editar</a></h1>
+        <ul>
+            <li>Calle: {{ contratista.calle }}</li>
+            <li>Número: {{ contratista.numero }}</li>
+            <li>Colonia: {{ contratista.colonia }}</li>
+            <li>Municipio: {{ contratista.municipio }}</li>
+            <li>Estado: {{ contratista.estado }}</li>
+            <li>País: {{ contratista.pais }}</li>
+            <li>CP: {{ contratista.cp }}</li>
+            <li>Teléfono: {{ contratista.telefono }}</li>
+            <li>RFC: {{ contratista.rfc }}</li>
+            <li>Email: {{ contratista.email }}</li>
+        </ul>
+
+{% endblock %}
