@@ -14,7 +14,7 @@ from django.contrib import admin
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
-from ERP.views import CompaniesListView, ContractorListView
+from ERP.views import CompaniesListView, ContractorListView, ProjectListView
 
 
 class DocumentoFuenteInline(admin.TabularInline):
@@ -30,10 +30,10 @@ class TipoProyectoDetalleInline(admin.TabularInline):
     can_delete = False
 
 
-class ProjectAdmin(admin.ModelAdmin):
-    form = AddProyectoForm
-    inlines = (TipoProyectoDetalleInline,)
-    search_fields = ('nombreProyecto', 'key')
+#class ProjectAdmin(admin.ModelAdmin):
+#    form = AddProyectoForm
+#    inlines = (TipoProyectoDetalleInline,)
+#    search_fields = ('nombreProyecto', 'key')
 
 
 class LineItemAdmin(admin.ModelAdmin):
@@ -297,6 +297,22 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
+@admin.register(Project)
+class ProjectModelAdmin(admin.ModelAdmin):
+    inlines = (TipoProyectoDetalleInline,)
+
+    def get_urls(self):
+        urls = super(ProjectModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(ProjectListView.as_view()), name='project-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ProjectDetailView.as_view(), name='project-detail'),
+        ]
+
+        return my_urls + urls
+
+
+
 
 # Simple admin views.
 admin.site.register(Pais)
@@ -307,7 +323,7 @@ admin.site.register(ModalidadContrato)
 admin.site.register(UploadedCatalogsHistory, UploadedCatalogsHistoryAdmin)
 admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistoryAdmin)
 
-admin.site.register(Project, ProjectAdmin)
+#admin.site.register(Project, ProjectAdmin)
 
 admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
