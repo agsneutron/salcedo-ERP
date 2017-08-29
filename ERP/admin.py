@@ -236,6 +236,14 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
+
+    def get_fields(self, request, obj=None):
+
+        fields = (
+                 'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+                 'numero', 'colonia')
+        return fields
+
     def get_urls(self):
         urls = super(CompanyModelAdmin, self).get_urls()
         my_urls = [
