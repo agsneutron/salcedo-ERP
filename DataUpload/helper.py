@@ -6,6 +6,7 @@ import xlrd
 from decimal import Decimal
 
 from django.db import transaction
+from django.db.models import Q
 
 from ERP.models import Concept_Input, Unit, LineItem
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
@@ -188,7 +189,7 @@ class DBObject(object):
 
         if model == self.CONCEPT_UPLOAD or model == self.INPUT_UPLOAD:
             # Handle concepts and inputs
-            self.save_all_concept_input(record_list, model)
+            self.save_all_concept_input(record_list, model, project_id)
         elif model == self.LINE_ITEM_UPLOAD:
             # Handle line items
             self.save_all_line_items(record_list, project_id)
@@ -197,7 +198,7 @@ class DBObject(object):
                 'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
                 LoggingConstants.CRITICAL, self.user_id)
 
-    def save_all_concept_input(self, record_list, model):
+    def save_all_concept_input(self, record_list, model, project_id):
         """ Save a set of concept or input records
         :param record_list: list of concepts or inputs.
         """
@@ -208,7 +209,7 @@ class DBObject(object):
                     # Validate that the record is not empty
                     # Save the record
                     print record
-                    self.save_concept_input(record, model)
+                    self.save_concept_input(record, model, project_id)
 
         except Exception, e:
             raise e
@@ -255,7 +256,7 @@ class DBObject(object):
         El tipo correcto se leerá desde el modelo.
     '''
 
-    def save_concept_input(self, record, model):
+    def save_concept_input(self, record, model, project_id):
         # First, we get each all the attributes.
         line_item_key = record[self.ConceptConstants.LINE_ITEM_KEY_COL]
         line_item_description = record[self.ConceptConstants.LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
@@ -275,7 +276,7 @@ class DBObject(object):
         else:
             unit_obj = unit_qs[0]
 
-        line_item_qs = LineItem.objects.filter(key=line_item_key.upper())
+        line_item_qs = LineItem.objects.filter(Q(key=line_item_key.upper()) & Q(project_id=project_id))
 
         if len(line_item_qs) == 0:
             model_names = {

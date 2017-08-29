@@ -206,7 +206,7 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
                 dbo.save_all(request.FILES['line_items_file'],
                              dbo.LINE_ITEM_UPLOAD, project_id)
                 dbo.save_all(request.FILES['concepts_file'],
-                             dbo.CONCEPT_UPLOAD)
+                             dbo.CONCEPT_UPLOAD, project_id)
                 super(UploadedCatalogsHistoryAdmin, self).save_model(request, obj, form, change)
 
         except ErrorDataUpload as e:
@@ -223,8 +223,10 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
         dbo = DBObject(user_id)
         try:
             with transaction.atomic():
+                project_id = request.POST.get('project')
+
                 dbo.save_all(request.FILES['file'],
-                             dbo.INPUT_UPLOAD)
+                             dbo.INPUT_UPLOAD, project_id)
                 super(UploadedInputExplotionHistoryAdmin, self).save_model(request, obj, form, change)
 
         except ErrorDataUpload as e:
