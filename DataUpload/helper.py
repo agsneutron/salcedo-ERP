@@ -1,16 +1,29 @@
 # coding=utf-8
 import uuid
-from _mysql import IntegrityError
 from aetypes import Enum
 
+from django.utils.encoding import python_2_unicode_compatible
+
+import django
 import xlrd
 from decimal import Decimal
 
+from _mysql_exceptions import IntegrityError
 from django.db import transaction
 from django.db.models import Q
 
 from ERP.models import Concept_Input, Unit, LineItem
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
+
+
+import locale
+
+locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+# locale.currency(1000, grouping=True)
+# español para windows
+# locale.setlocale(locale.LC_ALL, "esp")
+# español para linux
+# locale.setlocale(locale.LC_ALL, "es_MX.utf8")
 
 
 class FileInterface(object):
@@ -58,16 +71,21 @@ class FileInterface(object):
         return element_list
 
 
+@python_2_unicode_compatible
 class DBObject(object):
     """ Assists in saving information to the database, specifically for models:
         - LineItem
         - ConceptInput
     """
 
+    def __str__(self):
+        return 'dbobj'
+
     def __init__(self, user_id):
         """ Initializes the DBObject instance.
         :param username: The username that will make changes to the database.
         """
+
         self.user_id = user_id
 
     class InputConstants(Enum):
@@ -198,12 +216,11 @@ class DBObject(object):
                 self.save_all_line_items(record_list, project_id)
             else:
                 raise ErrorDataUpload(
-                    'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
+                    u'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
                     LoggingConstants.CRITICAL, self.user_id)
-        except IntegrityError as e:
-            raise ErrorDataUpload(
-                e.message,
-                LoggingConstants.CRITICAL, self.user_id)
+        except django.db.utils.IntegrityError as e:
+            print 'ERRROR1'
+            raise e
 
     def save_all_concept_input(self, record_list, model, project_id):
         """ Save a set of concept or input records
@@ -215,7 +232,7 @@ class DBObject(object):
                 if record[0] != "":
                     # Validate that the record is not empty
                     # Save the record
-                    print record
+                    # print 'saving' + str(record)
                     self.save_concept_input(record, model, project_id)
 
         except Exception, e:
@@ -244,7 +261,9 @@ class DBObject(object):
         if line_item_has_parent:
             line_item_qs = LineItem.objects.filter(key=line_item_parent_key.upper())
             if line_item_parent_key is not None and len(line_item_qs) == 0:
-                raise ErrorDataUpload('No existe la partida padre', LoggingConstants.ERROR, self.user_id)
+                raise ErrorDataUpload(
+                    'No existe la partida padre con clave ' + line_item_parent_key + ' para la partida ' + line_item_key + '.',
+                    LoggingConstants.ERROR, self.user_id)
             else:
                 parent_id = line_item_qs[0].id
         else:
@@ -275,6 +294,9 @@ class DBObject(object):
 
         unit_qs = Unit.objects.filter(abbreviation=unit.upper())
 
+
+        # print 'all good 1'
+
         if len(unit_qs) == 0:
             unit_obj = Unit(abbreviation=unit.upper(),
                             quantification='C',
@@ -286,15 +308,22 @@ class DBObject(object):
         line_item_qs = LineItem.objects.filter(Q(key=line_item_key.upper()) & Q(project_id=project_id))
 
         if len(line_item_qs) == 0:
+
+            # print 'all good 2'
             model_names = {
                 self.CONCEPT_UPLOAD: 'concepto',
                 self.INPUT_UPLOAD: 'insumo'
             }
             raise ErrorDataUpload(
-                'Se intentó agregar un ' + model_names[model] + ' correspondiente a una partida que no existe.',
+                u"Se intentó agregar un " + model_names[
+                    model] + "(" + concept_key + ") correspondiente a una partida que no existe (" + line_item_key + ").",
                 LoggingConstants.ERROR, self.user_id)
         else:
+
+            # print 'all good 3'
             line_item_obj = line_item_qs[0]
+
+        # print 'all good'
 
         concept_input = Concept_Input(
             line_item=line_item_obj,

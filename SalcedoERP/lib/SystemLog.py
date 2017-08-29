@@ -4,6 +4,8 @@ from django.contrib.admin.models import LogEntry
 from ERP.lib.utilities import Utilities
 from ERP.models import SystemLogEntry
 
+from django.utils.encoding import python_2_unicode_compatible
+
 
 class LoggingConstants:
     def __init__(self):
@@ -28,23 +30,28 @@ class LoggingConstants:
     }
 
 
+@python_2_unicode_compatible
 class SystemException(Exception):
+    def __str__(self):
+        return self.message
+
     def __init__(self, message, type, priority, user_id):
+        print 'message is unicode: ' + message
+
         self.logger = logging.getLogger(type)
         self.type = type
         self.priority = priority
-        self.message = message
+        self.message = unicode(message)
         self.user_id = user_id
 
-
-        print 'Por procesar error con mensaje: '+message
+        # print 'Por procesar error con mensaje: '+message
 
 
         self.process_exception()
         Exception.__init__(self, self.message)
 
     def process_exception(self):
-        print 'Exception of type ' + self.type + ' and priority ' + LoggingConstants.PRIORITIES[self.priority]
+        # print 'Exception of type ' + self.type + ' and priority ' + LoggingConstants.PRIORITIES[self.priority]
         print 'Guardando error.'
         obj = SystemLogEntry(
             label=self.type,
@@ -60,7 +67,6 @@ class SystemException(Exception):
             "message": self.message
         }
         return information
-
 
     def get_error_message(self):
         return self.message

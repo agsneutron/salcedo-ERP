@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+    <div id="content-main">
+
+        {% include 'ERP/list-search-fields.html' %}
+
+        <h1>Propietario</h1>
+        <div><a href="add">Agregar</a></div>
+        <ul>
+            {% for owner in object_list %}
+                <li><a href="{{ owner.id }}">{{ owner.nombrePropietario }}</a> | <a href="{{ owner.id }}">Ver</a> | <a
+                        href="{{ owner.id }}/change">Editar</a> | <a href="{{ owner.id }}/delete">Eliminar</a>
+                </li>
+            {% empty %}
+                <li>No Owners yet.</li>
+            {% endfor %}
+        </ul>
+
+        {% include 'ERP/list-pagination.html' %}
+
+    </div>
+{% endblock %}
