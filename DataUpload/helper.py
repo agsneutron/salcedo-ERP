@@ -158,7 +158,7 @@ class DBObject(object):
         CONCEPT_UPLOAD: 'C'
     }
 
-    def save_all(self, file_path, model):
+    def save_all(self, file_path, model, project_id=None):
         """ Saves to the database all the records contained on a file.
         :param file_path: The path of the file from which the data will be read.
         :param model: The model to which the information on the file is associated. This model should be one of the
@@ -191,7 +191,7 @@ class DBObject(object):
             self.save_all_concept_input(record_list, model)
         elif model == self.LINE_ITEM_UPLOAD:
             # Handle line items
-            self.save_all_line_items(record_list)
+            self.save_all_line_items(record_list, project_id)
         else:
             raise ErrorDataUpload(
                 'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
@@ -213,19 +213,19 @@ class DBObject(object):
         except Exception, e:
             raise e
 
-    def save_all_line_items(self, record_list):
+    def save_all_line_items(self, record_list, project_id):
         self.LineItemConstants.set_max_level(len(record_list[0]))
 
         try:
             for record in record_list:
                 # print 'Single record:' + str(record)
                 if record[self.LineItemConstants.get_max_level()] != "":
-                    self.save_line_item(record)
+                    self.save_line_item(record, project_id)
 
         except Exception, e:
             raise e
 
-    def save_line_item(self, record):
+    def save_line_item(self, record, project_id):
         # First, we get each all the attributes.
         line_item_parent_key = self.LineItemConstants.get_parent_key(record)
         line_item_key = self.LineItemConstants.get_key(record)
@@ -243,7 +243,7 @@ class DBObject(object):
             parent_id = None
 
         line_item_obj = LineItem(key=line_item_key.upper(),
-                                 project_id=2,
+                                 project_id=project_id,
                                  parent_line_item_id=parent_id,
                                  description=line_item_description)
         line_item_obj.save()
@@ -282,8 +282,9 @@ class DBObject(object):
                 self.CONCEPT_UPLOAD: 'concepto',
                 self.INPUT_UPLOAD: 'insumo'
             }
-            raise ErrorDataUpload('Se intentó agregar un '+model_names[model]+' correspondiente a una partida que no existe.',
-                                  LoggingConstants.ERROR, self.user_id)
+            raise ErrorDataUpload(
+                'Se intentó agregar un ' + model_names[model] + ' correspondiente a una partida que no existe.',
+                LoggingConstants.ERROR, self.user_id)
         else:
             line_item_obj = line_item_qs[0]
 

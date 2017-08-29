@@ -201,8 +201,10 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
         dbo = DBObject(user_id)
         try:
             with transaction.atomic():
+                project_id = request.POST.get('project')
+
                 dbo.save_all(request.FILES['line_items_file'],
-                             dbo.LINE_ITEM_UPLOAD)
+                             dbo.LINE_ITEM_UPLOAD, project_id)
                 dbo.save_all(request.FILES['concepts_file'],
                              dbo.CONCEPT_UPLOAD)
                 super(UploadedCatalogsHistoryAdmin, self).save_model(request, obj, form, change)
@@ -237,7 +239,7 @@ class CompanyModelAdmin(admin.ModelAdmin):
         urls = super(CompanyModelAdmin, self).get_urls()
         my_urls = [
             url(r'^$',
-                self.admin_site.admin_view(CompaniesListView.as_view()),name='company-list-view'),
+                self.admin_site.admin_view(CompaniesListView.as_view()), name='company-list-view'),
             url(r'^(?P<pk>\d+)/$', views.CompanyDetailView.as_view(), name='company-detail'),
 
         ]
