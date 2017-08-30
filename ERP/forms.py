@@ -131,15 +131,17 @@ class EstimateSearchForm(forms.Form):
         super(EstimateSearchForm, self).__init__()
         self.project_id = project_id
 
-    start_date = forms.DateTimeField(initial=datetime.date.today, widget=SelectDateWidget)
-    end_date = forms.DateTimeField(initial=datetime.date.today, widget=SelectDateWidget)
-    # end_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget)
+    start_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget,
+                                     label="Fecha de Inicio")
+    end_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget,
+                                   label="Fecha de Término")
 
     TYPE_CHOICES = (
         ('C', "Concepto"),
         ('I', "Insumo"),
     )
-    status = forms.ChoiceField(choices=TYPE_CHOICES, label="", initial='', widget=forms.Select(), required=True)
+    type = forms.ChoiceField(choices=TYPE_CHOICES, initial='', widget=forms.Select(), required=True,
+                             label="Tipo")
 
     line_item = forms.ModelChoiceField(queryset=LineItem.objects.filter(project_id=1),
-                                       empty_label="Seleccionar Partida")
+                                       empty_label="Seleccionar Partida", label='')

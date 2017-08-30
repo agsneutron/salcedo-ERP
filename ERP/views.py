@@ -412,6 +412,7 @@ class EstimateListView(ListView):
             query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
             query = query & Q(start_date__lte=query_date)
 
+
         result = result.filter(query)
 
         return result
