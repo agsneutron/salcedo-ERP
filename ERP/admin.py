@@ -288,6 +288,23 @@ class CompanyModelAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(CompanyModelAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        pais = ModelForm.base_fields['pais']
+        estado = ModelForm.base_fields['estado']
+        municipio = ModelForm.base_fields['municipio']
+
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        pais.widget.can_add_related = False
+        pais.widget.can_change_related = False
+        estado.widget.can_add_related = False
+        estado.widget.can_change_related = False
+        municipio.widget.can_add_related = False
+        municipio.widget.can_change_related = False
+
+        return ModelForm
+
 
 @admin.register(Contratista)
 class ContractorModelAdmin(admin.ModelAdmin):
@@ -307,6 +324,23 @@ class ContractorModelAdmin(admin.ModelAdmin):
         ]
 
         return my_urls + urls
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(ContractorModelAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        pais = ModelForm.base_fields['pais']
+        estado = ModelForm.base_fields['estado']
+        municipio = ModelForm.base_fields['municipio']
+
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        pais.widget.can_add_related = False
+        pais.widget.can_change_related = False
+        estado.widget.can_add_related = False
+        estado.widget.can_change_related = False
+        municipio.widget.can_add_related = False
+        municipio.widget.can_change_related = False
+
+        return ModelForm
 
 
 @admin.register(ContratoContratista)
@@ -355,6 +389,14 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
 @admin.register(Propietario)
 class OwnerModelAdmin(admin.ModelAdmin):
+
+    def get_fields(self, request, obj=None):
+        fields = (
+            'nombrePropietario', 'rfc', 'empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
+            'cp',
+            'calle', 'numero', 'colonia')
+        return fields
+
     def get_urls(self):
         urls = super(OwnerModelAdmin, self).get_urls()
         my_urls = [
@@ -365,6 +407,27 @@ class OwnerModelAdmin(admin.ModelAdmin):
 
         ]
         return my_urls + urls
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(OwnerModelAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        pais = ModelForm.base_fields['pais']
+        estado = ModelForm.base_fields['estado']
+        municipio = ModelForm.base_fields['municipio']
+        empresa = ModelForm.base_fields['empresa']
+
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        pais.widget.can_add_related = False
+        pais.widget.can_change_related = False
+        estado.widget.can_add_related = False
+        estado.widget.can_change_related = False
+        municipio.widget.can_add_related = False
+        municipio.widget.can_change_related = False
+        empresa.widget.can_add_related = False
+        empresa.widget.can_change_related = False
+
+        return ModelForm
+
 
 
 @admin.register(LineItem)
@@ -408,6 +471,28 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
         return my_urls + urls
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(ProjectModelAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        ubicacion_pais = ModelForm.base_fields['ubicacion_pais']
+        ubicacion_estado = ModelForm.base_fields['ubicacion_estado']
+        ubicacion_municipio = ModelForm.base_fields['ubicacion_municipio']
+        tipo_construccion = ModelForm.base_fields['tipo_construccion']
+        propietario = ModelForm.base_fields['propietario']
+
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        ubicacion_pais.widget.can_add_related = False
+        ubicacion_pais.widget.can_change_related = False
+        ubicacion_estado.widget.can_add_related = False
+        ubicacion_estado.widget.can_change_related = False
+        ubicacion_municipio.widget.can_add_related = False
+        ubicacion_municipio.widget.can_change_related = False
+        tipo_construccion.widget.can_add_related = False
+        tipo_construccion.widget.can_change_related = False
+        propietario.widget.can_add_related = False
+        propietario.widget.can_change_related = False
+
+        return ModelForm
 
 
 
