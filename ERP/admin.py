@@ -16,7 +16,7 @@ from django.contrib import admin
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
-from ERP.views import CompaniesListView, ContractorListView, ProjectListView,ProgressEstimateLogListView
+from ERP.views import CompaniesListView, ContractorListView, ProjectListView,ProgressEstimateLogListView,EstimateListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
@@ -549,6 +549,8 @@ class EstimateAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+
 
 
 # Simple admin views.
