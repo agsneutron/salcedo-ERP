@@ -3,6 +3,100 @@
 
 {% block content %}
     <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card ">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">Proyecto</h3>
+                        </div>
+                        <div class="item-right">
+
+                            <a href="add/"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: -28px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                {% include 'ERP/list-search-fields.html' %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Clave</th>
+                                            <th>Propietario</th>
+                                            <th>Inicio</th>
+                                            <th>Termino</th>
+                                            <th>Contrucción</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                         {% for project in object_list %}
+                                            <tr>
+
+
+                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                 <td><span >{{ project.nombreProyecto}}</span></td>
+                                                <td><span >{{ project.key }}</span></td>
+                                                <td><span >{{ project.propietario  }}</span></td>
+                                                <td><span >{{ project.fecha_inicial }}</span></td>
+                                                <td><span >{{ project.fecha_final }}</span></td>
+                                                <td><span >{{ project.tipo_construccion }}</span></td>
+
+
+                                                <td style="width: 7%"><a href="{{ project.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
+                                                <td style="width: 9%"><a href="{{ project.id }}/change"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
+                                                <td style="width: 2%"><a href="/admin/ERP/project/dashboard/{{ project.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-tachometer color-danger eliminar" style="margin-right: 0"></i> Dashboard</a>
+                                                </td>
+
+                                                {% empty %}
+                                                <td>No Companies yet.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                {% include 'ERP/list-pagination.html' %}
+                                <hr>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
+
+
+{% comment %}{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+    <div id="content-main">
 
         {% include 'ERP/list-search-fields.html' %}
 
@@ -11,7 +105,7 @@
         <ul>
             {% for project in object_list %}
                 <li><a href="{{ project.id }}">{{ project.nombreProyecto }}</a> | <a href="{{ project.id }}">Ver</a> | <a
-                        href="{{ project.id }}/change">Editar</a> {% comment %}| <a href="{{ project.id }}/delete">Eliminar</a>{% endcomment %}
+                        href="{{ project.id }}/change">Editar</a> | <a href="{{ project.id }}/delete">Eliminar</a>
                         <a href="/admin/ERP/project/dashboard/{{ project.id }}">Dashboard</a>
                 </li>
             {% empty %}
@@ -22,4 +116,4 @@
         {% include 'ERP/list-pagination.html' %}
 
     </div>
-{% endblock %}
+{% endblock %}{% endcomment %}
