@@ -89,9 +89,10 @@ class EstimateForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(EstimateForm, self).__init__(*args, **kwargs)
         project_id = self.request.GET.get('project')
-        self.fields['start_date'].widget = widgets.AdminDateWidget()
-        self.fields['end_date'].widget = widgets.AdminDateWidget()
-        self.fields['period'].widget = widgets.AdminDateWidget()
+        print "Project ID: " + str(project_id)
+        # self.fields['start_date'].widget = widgets.AdminDateWidget()
+        # self.fields['end_date'].widget = widgets.AdminDateWidget()
+        # self.fields['period'].widget = widgets.AdminDateWidget()
         self.fields['line_item'].queryset = LineItem.objects.filter(project__id=project_id)
 
 
@@ -121,14 +122,12 @@ class ProgressEstimateLogForm(forms.ModelForm):
     Forms for the log file form.
 '''
 
-
 class LogFileForm(forms.ModelForm):
     class Meta:
         model = LogFile
         fields = "__all__"
         test = ProgressEstimateLogForm()
         widgets = {
-
         }
 
 
@@ -169,3 +168,12 @@ class EstimateSearchForm(forms.Form):
 
     line_item = forms.ModelChoiceField(queryset=LineItem.objects.filter(project_id=1),
                                        empty_label="Seleccionar Partida", label='')
+
+
+class AddEstimateForm(forms.Form):
+    project_id = None
+    def __init__(self, project_id):
+        super(AddEstimateForm, self).__init__()
+        AddEstimateForm.project_id = project_id
+
+    project = forms.IntegerField(initial=project_id)
