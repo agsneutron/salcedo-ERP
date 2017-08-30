@@ -2,18 +2,25 @@
 from __future__ import unicode_literals
 
 import operator
+import urllib
+from datetime import date
+
+import datetime
 from django.http import HttpResponseRedirect
+from django.urls.base import reverse
 from django.views import generic
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 
+from ERP.forms import EstimateSearchForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate,Project
 from django.db.models import Q
 import json
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from ERP.lib.utilities import Utilities
-from django.utils import timezone
+from SalcedoERP.lib.constants import Constants
 
 
 # Create your views here.
@@ -405,43 +412,76 @@ class EstimateListView(ListView):
     template_name = "ERP/estimate-list.html"
     query = None
     project_id = None
+    params = ""
 
     """
        Display a Blog List page filtered by the search query.
     """
-    paginate_by = 10
+    paginate_by = 1
 
     def get_queryset(self):
+
+        print "URL is:"
+
         result = super(EstimateListView, self).get_queryset()
         EstimateListView.project_id = int(self.kwargs['project'])
 
+        # Filtering the results by the current project.
 
-        result = result.filter(Q(concept_input__line_item__project__id=EstimateListView.project_id))
 
-        query = self.request.GET.get('q')
-        if query:
-            EstimateListView.query = query
-            query_list = query.split()
-            result = result.filter(
-                reduce(operator.and_,
-                       (Q(key__icontains=q) for q in query_list)) |
-                reduce(operator.and_,
-                       (Q(description__icontains=q) for q in query_list)) |
-                reduce(operator.and_,
-                       (Q(status__icontains=q) for q in query_list))
-            )
-        else:
-            EstimateListView.query = ''
+        # Query params for the estimates.
+        query = Q()
+
+        # Must filter by project id.
+        query = query & Q(concept_input__line_item__project__id=EstimateListView.project_id)
+
+        params_copy = self.request.GET.copy()
+        params_copy.pop('page', None)
+
+        EstimateListView.params = urllib.urlencode(params_copy)
+
+        type = self.request.GET.get('search_type')
+        if type is not None:
+            query = query & Q(concept_input__type = type)
+
+        start_date = self.request.GET.get('start_date')
+        if start_date is not None:
+            query_date = datetime.datetime.strptime(start_date, Constants.DATE_FORMAT).date()
+            query = query & Q(start_date__gte=query_date)
+
+        end_date = self.request.GET.get('end_date')
+        if end_date is not None:
+            query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
+            query = query & Q(start_date__lte=query_date)
+
+
+        result = result.filter(query)
 
         return result
 
     def get_context_data(self, **kwargs):
         context = super(EstimateListView, self).get_context_data(**kwargs)
-        context['query'] = EstimateListView.query
-        context['query_string'] = '&q=' + EstimateListView.query
-        context['has_query'] = (EstimateListView.query is not None) and (EstimateListView.query != "")
         context['project'] = EstimateListView.project_id
+        context['params'] = EstimateListView.params
+
+
+
+        context['form'] = EstimateSearchForm(EstimateListView.project_id)
+
         return context
+
+
+class EstimateDelete(DeleteView):
+    model = Estimate
+    success_url = ""
+    template_name = "ERP/estimate_confirm_delete.html"
+
+    def delete(self, request, *args, **kwargs):
+        print "About to delete."
+        obj = self.get_object()
+        project_id = obj.concept_input.line_item.project.id
+        EstimateDelete.success_url = "/admin/ERP/estimate/list/" + str(project_id)
+        return super(EstimateDelete, self).delete(request, *args, **kwargs)
 
 
 class EstimateDetailView(generic.DetailView):
@@ -452,4 +492,10 @@ class EstimateDetailView(generic.DetailView):
         context = super(EstimateDetailView, self).get_context_data(**kwargs)
         estimate = context['estimate']
         context['progress_estimates'] = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
+
         return context
+
+
+class DashBoardView(generic.DetailView):
+    model = Project
+    template_name = "ERP/dashboard_project.html"

@@ -12,6 +12,7 @@
             {% for project in object_list %}
                 <li><a href="{{ project.id }}">{{ project.nombreProyecto }}</a> | <a href="{{ project.id }}">Ver</a> | <a
                         href="{{ project.id }}/change">Editar</a> {% comment %}| <a href="{{ project.id }}/delete">Eliminar</a>{% endcomment %}
+                        <a href="ERP/">Dashboard</a>
                 </li>
             {% empty %}
                 <li>No Owners yet.</li>

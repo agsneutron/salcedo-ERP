@@ -1,19 +1,38 @@
 {% extends "admin/base_site.html" %}
-
+{% block extrahead %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css"/>
+    <script type="text/javascript" src="/admin/jsi18n/"></script>
+    <script type="text/javascript" src="/static/admin/js/core.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+    <script type="text/javascript" src="/static/admin/js/actions.min.js"></script>
+    <script type="text/javascript" src="/static/admin/js/calendar.js"></script>
+    <script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+    <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+{% endblock %}
 
 {% block content %}
     <div id="content-main">
 
-        {% include 'ERP/list-search-fields.html' %}
+
+
+        <form action="" method="get">
+            {{ form }}
+           <button class="searchbutton" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
+        </form>
+
 
         <h1>Estimaciones</h1>
         <div><a href="add">Agregar</a></div>
         <ul>
             {% for estimate in object_list %}
                 <li>
-                    <a href="{{ estimate.id }}">{{ estimate.start_date }} Concepto o Insumo:{{ estimate.line_item.description }}</a> |
+                    <a href="Inicio: {{ estimate.id }}">Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }} - Concepto o Insumo: {{ estimate.concept_input.description }}</a> |
+                    <a href="{{ estimate.id }}">Concepto | Insumo: {{ estimate.line_item.description }}</a> |
                     <a href="/admin/ERP/estimate/{{ estimate.id }}">Ver</a> |
-                    <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> | <a href="{{ estimate.id }}/delete">Eliminar</a>
+                    <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> |
+                    <a href="/admin/ERP/estimate/{{ estimate.id }}/delete">Eliminar</a>
                 </li>
             {% empty %}
                 <li>Aún no se han generado estimaciones.</li>

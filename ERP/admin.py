@@ -10,6 +10,7 @@ from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm,ContractForm
+from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm,ProgressEstimateLogForm
 
 from django.contrib import admin
 
@@ -59,6 +60,7 @@ class LogFileInline(admin.TabularInline):
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
+    form=ProgressEstimateLogForm
     fields = ('user', 'project', 'description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
@@ -66,14 +68,14 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     list_per_page = 50
     inlines = [LogFileInline, ]
 
-    '''def get_form(self, request, obj=None, **kwargs):
+    def get_form(self, request, obj=None, **kwargs):
         ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
         class ModelFormEMetaClass(ModelFormE):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
                 return ModelFormE(*args, **kwargs)
 
-        return ModelFormEMetaClass'''
+        return ModelFormEMetaClass
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -536,13 +538,16 @@ class EstimateAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(EstimateAdmin, self).get_urls()
+        info = self.model._meta.app_label, self.model._meta.model_name
         my_urls = [
             url(r'^list/(?P<project>[0-9]+)/$',
                 self.admin_site.admin_view(views.EstimateListView.as_view()),
                 name='estimate-view'),
             url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
+            url(r'^(?P<pk>\d+)/delete$', views.EstimateDelete.as_view(), name='estimate-delete'),
 
         ]
+        print "My URLS:"
         return my_urls + urls
 
 
