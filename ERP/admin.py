@@ -9,7 +9,7 @@ from django.db import transaction
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
-from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm
+from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm,ProgressEstimateLogForm
 
 from django.contrib import admin
 
@@ -59,6 +59,7 @@ class LogFileInline(admin.TabularInline):
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
+    form=ProgressEstimateLogForm
     fields = ('user', 'project', 'description', 'date')
     list_display = ('user', 'description', 'date')
     search_fields = ('user', 'description', 'date')
@@ -66,14 +67,14 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     list_per_page = 50
     inlines = [LogFileInline, ]
 
-    '''def get_form(self, request, obj=None, **kwargs):
+    def get_form(self, request, obj=None, **kwargs):
         ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
         class ModelFormEMetaClass(ModelFormE):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
                 return ModelFormE(*args, **kwargs)
 
-        return ModelFormEMetaClass'''
+        return ModelFormEMetaClass
 
 
 class ProgressEstimateInline(admin.TabularInline):

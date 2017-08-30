@@ -453,3 +453,8 @@ class EstimateDetailView(generic.DetailView):
         estimate = context['estimate']
         context['progress_estimates'] = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
         return context
+
+
+class ProjectDetailView(generic.DetailView):
+    model = Project
+    template_name = "ERP/dashboard_project.html"
