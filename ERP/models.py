@@ -1065,7 +1065,7 @@ class ProgressEstimateLog(models.Model):
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
-        answer['date'] = str(self.date)
+        #answer['date'] = str(self.date)
         answer['register_date'] = str(self.register_date)
         return answer
 
@@ -1083,7 +1083,7 @@ def progress_estimate_log_destination(instance, filename):
 class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de estimación", null=False,
                                               blank=False)
-    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination)
+    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination, default="")
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
     def to_serializable_dict(self):

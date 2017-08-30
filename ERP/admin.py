@@ -73,6 +73,8 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         class ModelFormEMetaClass(ModelFormE):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
+                kwargs['project_id'] = request.GET.get('project')
+                kwargs['user_id'] = request.user.id
                 return ModelFormE(*args, **kwargs)
 
         return ModelFormEMetaClass
