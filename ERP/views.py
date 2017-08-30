@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 import operator
 import urllib
 from datetime import date
-
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext, loader
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls.base import reverse
@@ -494,8 +495,3 @@ class EstimateDetailView(generic.DetailView):
         context['progress_estimates'] = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
 
         return context
-
-
-class DashBoardView(generic.DetailView):
-    model = Project
-    template_name = "ERP/dashboard_project.html"
