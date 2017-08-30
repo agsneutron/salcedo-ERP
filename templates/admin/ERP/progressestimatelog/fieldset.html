@@ -1,0 +1,100 @@
+{% load app_filters admin_static%}
+<fieldset class="module aligned {{ fieldset.classes }}">
+
+    {{ fieldset.management_form }}
+
+    <div class="card ">
+        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+            <li role="presentation" class="active">
+                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                    {% if fieldset.name %}{{ fieldset.name }}{% endif %}
+                </a>
+            </li>
+        </ul>
+
+        <div class="card-block">
+            <div class="tab-content">
+            {% for line in fieldset %}
+                {% for field in line %}
+                    {% if field.field.name == "date" %}
+                <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+                    <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field }}
+                                    </div>
+                                </div>
+                            </div>
+                    {% endif %}
+
+                    {% if field.field.name == "description" %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    {% endif %}
+                    {% if field.field.name == "project" %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    {% endif %}
+                    {% if field.field.name == "user" %}
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                    {% endif %}
+
+            {% endfor %}
+            {% endfor %}
+            </div>
+        </div>
+</div>
+
+    </div>
+</fieldset>
+
+    <script src="{% static "ERP/admin/js/custom.js" %}"></script>
+    <script src="{% static "ERP/admin/js/bootstrap-datepicker.min.js" %}"></script>
+    <script src="{% static "ERP/admin/js/bootstrap-datepicker.es.min.js" %}"></script>
+    <script>
+
+        {% comment %}$('.datepicker').datepicker({
+            format: 'mm/dd/yyyy',
+            startDate: '-3d'
+        });{% endcomment %}
+
+        $('.date').datepicker({
+            autoclose: true,
+            toggleActive: true,
+            language: "es"
+        });
+
+    </script>

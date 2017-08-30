@@ -1049,7 +1049,7 @@ class ProgressEstimate(models.Model):
 class ProgressEstimateLog(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
-    description = models.CharField(verbose_name="Descripción", max_length=512, null=False, blank=False)
+    description = models.TextField(verbose_name="Descripción", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=None, null=True, verbose_name="Fecha")
 
