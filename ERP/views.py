@@ -7,7 +7,7 @@ from django.views import generic
 from django.views.generic import ListView
 
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem
+    Propietario, Concept_Input, LineItem, Estimate
 from django.db.models import Q
 import json
 
@@ -303,11 +303,11 @@ class LineItemListView(ListView):
         result = super(LineItemListView, self).get_queryset()
 
         # Reading the params from the url.
-        LineItemListView.project_id = self.kwargs['project']
-        LineItemListView.parent_id = self.kwargs['parent']
+        LineItemListView.project_id = int(self.kwargs['project'])
+        LineItemListView.parent_id = int(self.kwargs['parent'])
 
         # If the param for the parent is received as 0, then its value must be None.
-        if LineItemListView.parent_id == '0':
+        if LineItemListView.parent_id == 0:
             LineItemListView.parent_id = None
 
         print "The filters:"
@@ -344,6 +344,10 @@ class LineItemListView(ListView):
 
         # Getting the concept inputs for the selected Line Item parent.
         context['concepts_inputs'] = Concept_Input.objects.filter(Q(line_item=LineItemListView.parent_id))
+        if LineItemListView.parent_id is not None:
+            context['parent_line_item'] = LineItem.objects.get(pk=LineItemListView.parent_id)
+        else:
+            context['parent_line_item'] = None
         
         print "Concept / Inputs"
         print context['concepts_inputs']
@@ -352,3 +356,51 @@ class LineItemListView(ListView):
 class LineItemDetailView(generic.DetailView):
     model = LineItem
     template_name = "ERP/line-item-detail.html"
+
+
+
+# Views for the model Estimate.
+class EstimateListView(ListView):
+    model = Estimate
+    template_name = "ERP/estimate-list.html"
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+
+    def get_queryset(self):
+        result = super(EstimateListView, self).get_queryset()
+        print "Results"
+        for record in result:
+            print record
+
+        query = self.request.GET.get('q')
+        if query:
+            EstimateListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(key__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(description__icontains=q) for q in query_list))|
+                reduce(operator.and_,
+                       (Q(status__icontains=q) for q in query_list))
+            )
+        else:
+            EstimateListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EstimateListView, self).get_context_data(**kwargs)
+        context['query'] = EstimateListView.query
+        context['query_string'] = '&q=' + EstimateListView.query
+        context['has_query'] = (EstimateListView.query is not None) and (EstimateListView.query != "")
+        return context
+
+
+class EstimateDetailView(generic.DetailView):
+    model = Estimate
+    template_name = "ERP/estimate-detail.html"
