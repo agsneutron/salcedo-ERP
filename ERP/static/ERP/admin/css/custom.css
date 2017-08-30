@@ -493,6 +493,11 @@ padding: 0;
     right: 9px;
     top: 4px;
 }
+.absolute-l {
+    position: absolute;
+    left: 27%;
+    top: 4px;
+}
 .card .card-block, .card.card-block {
 
     padding: .3rem 2.1rem;
@@ -582,4 +587,7 @@ padding: 0;
     top: -13px;
     position: relative;
     left: -15px;
+}
+.searchfield {
+    width: 25%;
 }
