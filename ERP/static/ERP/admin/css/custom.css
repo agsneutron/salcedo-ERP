@@ -478,9 +478,9 @@ padding: 0;
     margin: 7px 1px;
 }
 .absolute-r {
-    position: absolute;
-    right: 0;
-    top: 0;
+        position: absolute;
+    right: 9px;
+    top: 4px;
 }
 .card .card-block, .card.card-block {
 
@@ -549,11 +549,14 @@ padding: 0;
     padding: 0 0 0 50px;
     width: 100%;
 }
-
-
 .messagelist li.error {
     background: #fad5d0 none repeat scroll 0 0;
     color: #d4373b;
     border: 1px solid #d4373b;
 }
-
+.btn.btn-raised, .btn.btn-raised.btn-default, .btn.btn-fab, .btn.btn-fab.btn-default, .btn-group-raised .btn, .btn-group-raised .btn.btn-default, .input-group-btn .btn.btn-raised, .input-group-btn .btn.btn-raised.btn-default, .input-group-btn .btn.btn-fab, .input-group-btn .btn.btn-fab.btn-default, .btn-group-raised .input-group-btn .btn, .btn-group-raised .input-group-btn .btn.btn-default {
+    background-color: #f8f8f8 !important;
+    color: rgba(0,0,0,.87);
+    padding-right: 10px;
+    padding-left: 10px;
+}
