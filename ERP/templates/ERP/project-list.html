@@ -39,9 +39,9 @@
                                             <th>Inicio</th>
                                             <th>Termino</th>
                                             <th>Contrucción</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Dashboard</th>
                                         </tr>
                                         </thead>
                                          {% for project in object_list %}
@@ -57,7 +57,7 @@
                                                 <td><span >{{ project.tipo_construccion }}</span></td>
 
 
-                                                <td style="width: 7%"><a href="{{ project.id }}"
+                                             {% comment %}   <td style="width: 7%"><a href="{{ project.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-search color-default eliminar"></i> Ver</a></td>
                                                 <td style="width: 9%"><a href="{{ project.id }}/change"
@@ -66,8 +66,20 @@
                                                 <td style="width: 2%"><a href="/admin/ERP/project/dashboard/{{ project.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-tachometer color-danger eliminar" style="margin-right: 0"></i> Dashboard</a>
-                                                </td>
+                                                </td>{% endcomment %}
 
+
+
+                                                 <td class="text-center" style="width: 5%"><a href="{{ project.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 5%"><a href="{{ project.id }}/change"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 2%"><a href="/admin/ERP/project/dashboard/{{ project.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-trash-o color-danger eliminar"></i></a>
+                                                </td>
                                                 {% empty %}
                                                 <td>No existen {{ title_list }}</td>
                                             </tr>

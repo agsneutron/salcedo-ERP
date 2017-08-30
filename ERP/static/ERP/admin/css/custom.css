@@ -498,10 +498,7 @@ padding: 0;
     left: 27%;
     top: 4px;
 }
-.card .card-block, .card.card-block {
 
-    padding: .3rem 2.1rem;
-}
 .form-control, .form-group .form-control {
     border: 1px solid #e2e2e2;
 
@@ -588,6 +585,7 @@ padding: 0;
 }
 .eliminar {
     font-size: 15px;
+    margin-right: 0px !important;
 }
 .color-active{
     color: #00a09b;
@@ -601,6 +599,9 @@ padding: 0;
 .searchfield {
     width: 25%;
 }
+#searchform {
+        padding-bottom: 20px;
+}
 .ms-icon.ms-icon-xxlg {
     width: 80px;
     height: 80px;
@@ -610,4 +611,8 @@ padding: 0;
 }
 .highcharts-credits {
     display: none !important;
+}
+.card .list-group {
+    border: none;
+    padding-top: 50px;
 }
