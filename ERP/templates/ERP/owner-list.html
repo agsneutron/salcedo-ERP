@@ -16,9 +16,9 @@
                                             <th>RFC:</th>
                                             <th>E-mail</th>
                                             <th>Teléfono</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Eliminar</th>
                                         </tr>
                                         </thead>
                                          {% for owner in object_list %}
@@ -31,15 +31,17 @@
                                                 <td><span >{{ owner.email  }}</span></td>
                                                 <td><span >{{ owner.telefono1 }}</span></td>
 
-                                                <td style="width: 7%"><a href="{{ owner.id }}"
+
+
+                                                 <td class="text-center" style="width: 5%"><a href="{{ owner.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
-                                                <td style="width: 9%"><a href="{{ owner.id }}/change"
+                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 5%"><a href="{{ owner.id }}/change"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
-                                                <td style="width: 2%"><a href="{{ owner.id }}/delete"
+                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 2%"><a href="{{ owner.id }}/delete"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-trash-o color-danger eliminar" style="margin-right: 0"></i></a>
+                                                        class="fa fa-trash-o color-danger eliminar"></i></a>
                                                 </td>
 
                                                 {% empty %}

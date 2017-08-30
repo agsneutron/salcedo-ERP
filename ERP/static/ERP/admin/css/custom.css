@@ -585,6 +585,7 @@ padding: 0;
 }
 .eliminar {
     font-size: 15px;
+    margin-right: 0px !important;
 }
 .color-active{
     color: #00a09b;

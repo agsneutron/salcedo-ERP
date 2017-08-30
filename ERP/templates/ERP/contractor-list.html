@@ -15,9 +15,9 @@
                                             <th>Municipio</th>
                                             <th>Estado</th>
                                             <th>Teléfono</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Eliminar</th>
                                         </tr>
                                         </thead>
                                          {% for contractor in object_list %}
@@ -29,15 +29,16 @@
                                                 <td><span >{{ contractor.estado  }}</span></td>
                                                 <td><span >{{ contractor.telefono }}</span></td>
 
-                                                <td style="width: 7%"><a href="{{ contractor.id }}"
+
+                                                <td class="text-center" style="width: 5%"><a href="{{ contractor.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
-                                                <td style="width: 9%"><a href="{{ contractor.id }}/change"
+                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 5%"><a href="{{ contractor.id }}/change"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
-                                                <td style="width: 2%"><a href="{{ contractor.id }}/delete"
+                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 2%"><a href="{{ contractor.id }}/delete"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-trash-o color-danger eliminar" style="margin-right: 0"></i></a>
+                                                        class="fa fa-trash-o color-danger eliminar"></i></a>
                                                 </td>
 
                                                 {% empty %}
