@@ -550,6 +550,20 @@ class EstimateAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+    def get_urls(self):
+        urls = super(EstimateAdmin, self).get_urls()
+        info = self.model._meta.app_label, self.model._meta.model_name
+        my_urls = [
+            url(r'^list/(?P<project>[0-9]+)/$',
+                self.admin_site.admin_view(views.EstimateListView.as_view()),
+                name='estimate-view'),
+            url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
+            url(r'^(?P<pk>\d+)/delete$', views.EstimateDelete.as_view(), name='estimate-delete'),
+
+        ]
+        print "My URLS:"
+        return my_urls + urls
+
 
 
 
