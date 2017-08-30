@@ -286,14 +286,17 @@ hr {
 }
 
 .btn.btn-raised.btn-primary, .btn.btn-fab.btn-primary, .btn-group-raised .btn.btn-primary, .input-group-btn .btn.btn-raised.btn-primary, .input-group-btn .btn.btn-fab.btn-primary, .btn-group-raised .input-group-btn .btn.btn-primary {
-    background-color: #204280;
-    color: rgba(255, 255, 255, .84);
+    background-color: #204280 !important;
+    color: rgba(255, 255, 255, .84) !important;
 }
 
 .btn.btn-raised:not(.btn-link):hover.btn-primary, .btn.btn-raised:not(.btn-link):focus.btn-primary, .btn.btn-raised:not(.btn-link).active.btn-primary, .btn.btn-raised:not(.btn-link):active.btn-primary, .btn-group-raised .btn:not(.btn-link):hover.btn-primary, .btn-group-raised .btn:not(.btn-link):focus.btn-primary, .btn-group-raised .btn:not(.btn-link).active.btn-primary, .btn-group-raised .btn:not(.btn-link):active.btn-primary, .input-group-btn .btn.btn-raised:not(.btn-link):hover.btn-primary, .input-group-btn .btn.btn-raised:not(.btn-link):focus.btn-primary, .input-group-btn .btn.btn-raised:not(.btn-link).active.btn-primary, .input-group-btn .btn.btn-raised:not(.btn-link):active.btn-primary, .btn-group-raised .input-group-btn .btn:not(.btn-link):hover.btn-primary, .btn-group-raised .input-group-btn .btn:not(.btn-link):focus.btn-primary, .btn-group-raised .input-group-btn .btn:not(.btn-link).active.btn-primary, .btn-group-raised .input-group-btn .btn:not(.btn-link):active.btn-primary {
     background-color: #6C7071
 }
-
+.btn.btn-raised.btn-info, .btn.btn-fab.btn-info, .btn-group-raised .btn.btn-info, .input-group-btn .btn.btn-raised.btn-info, .input-group-btn .btn.btn-fab.btn-info, .btn-group-raised .input-group-btn .btn.btn-info {
+    background-color: #00bcd4!important;
+    color: rgba(255,255,255,.84)!important;
+}
 .card.card-primary {
     border-bottom: solid 3px #00a09b;
     border-radius: 3px;
@@ -400,7 +403,7 @@ form .aligned ul {
 }
 .item-right {
     position: absolute;
-    top: 9px;
+    top: 2px;
     right: 25px;
 }
 .btn.btn-xs, .btn-group-xs .btn, .input-group-btn .btn.btn-xs, .btn-group-xs .input-group-btn .btn {
@@ -432,9 +435,10 @@ dt {
 }
 /*estilos para tablas*/
 .table tr td, .table tr th {
-    padding: 5px!important;
+        padding: 10px 12px!important;
     border-color: #e0e0e0!important;
-    font-size: 13px;
+    /* line-height: 31px; */
+    font-size: 14px;
 }
 .danger {
     color: #f44336;
@@ -470,7 +474,14 @@ padding: 0;
 .card .card-header {
 
     padding: .1rem 2rem;
-    background-color: #e2e2e2;
+    background-color: #204280;
+    color: #fff;
+}
+.light {
+
+    background-color: #f5f5f5 !important;
+    color: #757575 !important;
+
 }
 .card .card-header h3 {
 
@@ -480,6 +491,11 @@ padding: 0;
 .absolute-r {
         position: absolute;
     right: 9px;
+    top: 4px;
+}
+.absolute-l {
+    position: absolute;
+    left: 27%;
     top: 4px;
 }
 .card .card-block, .card.card-block {
@@ -565,8 +581,30 @@ padding: 0;
 
 
 .btn.btn-raised, .btn.btn-raised.btn-default, .btn.btn-fab, .btn.btn-fab.btn-default, .btn-group-raised .btn, .btn-group-raised .btn.btn-default, .input-group-btn .btn.btn-raised, .input-group-btn .btn.btn-raised.btn-default, .input-group-btn .btn.btn-fab, .input-group-btn .btn.btn-fab.btn-default, .btn-group-raised .input-group-btn .btn, .btn-group-raised .input-group-btn .btn.btn-default {
-    background-color: #f8f8f8 !important;
+    background-color: #f8f8f8 ;
     color: rgba(0,0,0,.87);
     padding-right: 10px;
     padding-left: 10px;
+}
+.eliminar {
+    font-size: 15px;
+}
+.color-active{
+    color: #00a09b;
+}
+.tool-button {
+    display: inline-flex;
+    top: -13px;
+    position: relative;
+    left: -15px;
+}
+.searchfield {
+    width: 25%;
+}
+.ms-icon.ms-icon-xxlg {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    font-size: 36px;
+    margin-bottom: 2px !important;
 }

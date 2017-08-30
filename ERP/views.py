@@ -89,6 +89,7 @@ class CompaniesListView(ListView):
        Display a Blog List page filtered by the search query.
     """
     paginate_by = 10
+    title_list= 'Empresas'
 
     def get_queryset(self):
         result = super(CompaniesListView, self).get_queryset()
@@ -110,6 +111,7 @@ class CompaniesListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CompaniesListView, self).get_context_data(**kwargs)
+        context['title_list'] = CompaniesListView.title_list
         context['query'] = CompaniesListView.query
         context['query_string'] = '&q=' + CompaniesListView.query
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")

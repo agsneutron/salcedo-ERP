@@ -25,76 +25,115 @@
 
 
         <div class="row">
-            <div class="col-xs-8">
+            <div class="col-xs-6">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header ">
                         <div class="item-left">
-                            <h3 class="card-title text">Consulta</h3>
-                        </div>
-                        <div class="item-right">
-                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-pie-chart"></i></a>
-                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-line-chart"></i></a>
-                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-area-chart"></i></a>
-                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-bar-chart"></i></a>
+
+                            <h3 class="card-title text">Nombre de Proyecto: {{ project.nombreProyecto }} </h3>
                         </div>
                     </div>
-                    <div class="card-block">
-                        <div id="container-chart" style="height: 250px"></div>
+                    <div class="col-xs-6">
+                        <div class="" style="">
+                            <h4 class="color-active">Generales</h4>
+                            <div class="list-group">
+                                    <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i> Clave de Proyecto: {{ project.key }} </span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i> Propietario: {{ project.propietario }} </span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i> Fecha de Inicio: {{ project.fecha_inicial }}
+                                    </span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i> Fecha de Termino: {{ project.fecha_final }}
+                                    </span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i> Tipo de
+                                        Contrucción: {{ project.tipo_construccion }}</span>
+                            </div>
+
+                        </div>
+                        <div class="tool-button" style="display: inline-flex">
+                            <a href="javascript:void(0)" class="btn btn-royal">
+                                <i class="fa fa-search"></i> Ver mas</a>
+                            <a href="javascript:void(0)" class="btn btn-danger">
+                                <i class="fa fa-pencil"></i> Editar</a>
+                        </div>
+
                     </div>
+                    <div class="col-xs-6">
+                        <div class="">
+
+                            <h4 class="color-active">Ubcación</h4>
+
+                            <div class="list-group">
+                                    <span class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i>País: {{ project.ubicacion_pais }}</span>
+                                <span class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i>Estado: {{ project.ubicacion_estado }}</span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i>Municipio: {{ project.ubicacion_municipio }}
+                                    </span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i>Colonia: {{ project.ubicacion_colonia }}</span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i>Calle: {{ project.ubicacion_calle }}</span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i>Número: {{ project.ubicacion_numero }}</span>
+                                <span href="" class="list-group-item withripple ">
+                                        <i class="fa fa-chevron-right color-active"></i>CP: {{ project.ubicacion_cp }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="btn-group btn-group-justified btn-group-raised ">
+                        <a href="" class="btn btn-info"
+                           style="font-size: 10px;font-weight: bold;color: white !important;">
+                            Cat. conceptos
+                        </a>
+                        <a href="" class="btn btn-info"
+                           style="font-size: 10px;font-weight: bold;color: white !important;">
+                            Cat. explosion insumos
+                        </a>
+                        <a href="" class="btn btn-info"
+                           style="font-size: 10px;font-weight: bold;color: white !important;">
+                            Estimaciones
+                        </a>
+                        <a href="" class="btn btn-info"
+                           style="font-size: 10px;font-weight: bold;color: white !important;">
+                            Carga CC/CI
+                        </a>
+                    </div>
+
+
+                    <div class="clearfix"></div>
+
+
                 </div>
             </div>
-            <div class="col-xs-4">
+            <div class="col-xs-6">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Proyecto 1</h3>
+                    <div class="card-header ">
+                        <h3 class="card-title">Ubicación</h3>
                     </div>
-                    <div class="card-block" style="height: 290px; padding: 0">
-                        <div id="container-chart-2" style="height: 150px"></div>
-                        <div class="col-xs-6">
-                            <div style="    padding-top: 15px;">
-                                <dl>
-                                    <dd>Fecha inicio</dd>
-                                    <dt>24 septiembre 2007</dt>
-                                    <hr>
-                                    <dd>Fecha termino</dd>
-                                    <dt>24 septiembre 2007</dt>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div style="padding: 20px">
-                                <div class="circle" id="circles-1"></div>
-                            </div>
-                        </div>
+                    <div class="card-block" style="height: 303px; padding: 0">
+                        <div id="map" style="height: 303px"></div>
+
 
                     </div>
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-xs-4">
                 <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Proyecto 2</h3>
+                    <div class="card-header light">
+                        <h3 class="card-title">Indicador 1</h3>
                     </div>
-                    <div class="card-block" style="height: 290px; padding: 0">
-                        <div id="container-chart-3" style="height: 150px"></div>
-                        <div class="col-xs-6">
-                            <div style="    padding-top: 15px;">
-                                <dl>
-                                    <dd>Fecha inicio</dd>
-                                    <dt>24 septiembre 2007</dt>
-                                    <hr>
-                                    <dd>Fecha termino</dd>
-                                    <dt>24 septiembre 2007</dt>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div style="padding: 20px">
-                                <div class="circle" id="circles-2"></div>
-                            </div>
-                        </div>
+                    <div class="card-block" style="height: 150px; padding: 0">
+                        <div id="container-chart" style="height: 150px"></div>
+
 
                     </div>
                 </div>
@@ -102,55 +141,24 @@
 
             <div class="col-xs-4">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header light">
+                        <h3 class="card-title">Indicador 2</h3>
+                    </div>
+                    <div class="card-block" style="height: 150px; padding: 0">
+                        <div id="container-chart-2" style="height: 150px"></div>
+
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-4">
+                <div class="card">
+                    <div class="card-header light">
                         <h3 class="card-title">Proyecto 3</h3>
                     </div>
-                    <div class="card-block" style="height: 290px; padding: 0">
-                        <div id="container-chart-4" style="height: 150px"></div>
-                        <div class="col-xs-6">
-                            <div style="    padding-top: 15px;">
-                                <dl>
-                                    <dd>Fecha inicio</dd>
-                                    <dt>24 septiembre 2007</dt>
-                                    <hr>
-                                    <dd>Fecha termino</dd>
-                                    <dt>24 septiembre 2007</dt>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div style="padding: 20px">
-                                <div class="circle" id="circles-3"></div>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xs-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="card-title">Proyecto 4</h3>
-                    </div>
-                    <div class="card-block" style="height: 290px; padding: 0">
-                        <div id="container-chart-5" style="height: 150px"></div>
-                        <div class="col-xs-6">
-                            <div style="    padding-top: 15px;">
-                                <dl>
-                                    <dd>Fecha inicio</dd>
-                                    <dt>24 septiembre 2007</dt>
-                                    <hr>
-                                    <dd>Fecha termino</dd>
-                                    <dt>24 septiembre 2007</dt>
-                                </dl>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            <div style="padding: 20px">
-                                <div class="circle" id="circles-4"></div>
-                            </div>
-                        </div>
+                    <div class="card-block" style="height: 150px; padding: 0">
+                        <div id="container-chart-3" style="height: 150px"></div>
 
                     </div>
                 </div>
@@ -159,7 +167,25 @@
         </div>
     </div>
 
+    <script>
+        var map;
+        function initMap() {
+            map = new google.maps.Map(document.getElementById('map'), {
+                center: {lat: 19.4160065, lng: -99.2944344},
+                zoom: 10,
 
+            });
+            var marker = new google.maps.Marker({
+                position: {lat: 19.4160065, lng: -99.2944344},
+                map: map,
+                title: 'Hello World!'
+            });
+            // To add the marker to the map, call setMap();
+marker.setMap(map);
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs&callback=initMap"
+            async defer></script>
     <script>
         $(document).ready(function () {
             var myCircle = Circles.create({
