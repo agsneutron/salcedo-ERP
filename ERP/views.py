@@ -6,8 +6,7 @@ from django.http import HttpResponseRedirect
 from django.views import generic
 from django.views.generic import ListView
 
-from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista,Project, Propietario
-    Concept_Input, LineItem
+from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista,Project, Propietario, Concept_Input, LineItem
 from django.db.models import Q
 import json
 
