@@ -1,0 +1,13 @@
+table, th, td {
+    border: 1px solid black;
+}
+
+td {
+    padding: 0 20px;
+}
+
+.left-container, .right-container {
+    position: relative;
+    display: inline-block !important;
+    width: 49%;
+}
