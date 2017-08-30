@@ -211,10 +211,24 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         {% endif %}
+                     {% if field.field.name == "ubicacion_pais" %}
+                          <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group field-ubicacion_pais">
+                                    <div>
+                                        <label class="control-label required" for="id_ubicacion_pais">País:</label>
+                                        {{ field.field|addcss:"form-control " }}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                    {% endif %}
                         {% if field.field.name == "ubicacion_municipio" %}
-                    </div>
-                    <div class="row">
+
+
 
                         <div class="col-md-3">
                             <div class="form-group field-ubicacion_municipio">
@@ -245,19 +259,9 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         {% endif %}
-                        {% if field.field.name == "ubicacion_pais" %}
-                            <div class="col-md-3">
-                                <div class="form-group field-ubicacion_pais">
-                                    <div>
-                                        <label class="control-label required" for="id_ubicacion_pais">País:</label>
-                                        {{ field.field|addcss:"form-control " }}
-                                    </div>
-                                </div>
-                            </div>
 
-                    </div>
-                    {% endif %}
                     {% if field.field.name == "area_superficie_escritura" %}
                     <div class="row">
                         <h2 class="text-center">Áreas</h2>
@@ -366,7 +370,7 @@
                         {% if field.field.name == "documento_agua" %}
                             <div class="col-md-3">
                                 <div class="form-group field-documento_agua">
-                                    <label class="control-label required" for="id_documento_agua">Agua:</label><br>
+                                    <label class="control-label required" for="id_documento_agua">Documento de Agua:</label><br>
                                     {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
