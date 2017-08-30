@@ -496,6 +496,13 @@ class EstimateDetailView(generic.DetailView):
         return context
 
 
-class DashBoardView(generic.DetailView):
+class DashBoardView(ListView):
     model = Project
     template_name = "ERP/dashboard_project.html"
+    project_id = None
+
+    def get_queryset(self):
+        # Reading the params from the url.
+        DashBoardView.project_id = int(self.kwargs['project'])
+        print "The id:"
+        print DashBoardView.project_id
