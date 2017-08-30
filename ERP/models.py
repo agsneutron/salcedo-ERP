@@ -1005,7 +1005,7 @@ class ProgressEstimate(models.Model):
                                            null=False, default=0,
                                            max_digits=20)
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
-                                      verbose_name="Archivo del Generador")
+                                      verbose_name="Archivo del Generador", blank=True)
     RETAINER = "R"
     PROGRESS = "P"
     ESTIMATE = "E"

@@ -2,16 +2,19 @@
 from __future__ import unicode_literals
 
 import operator
+
 from django.http import HttpResponseRedirect
+from django.urls.base import reverse
 from django.views import generic
 from django.views.generic import ListView
+from django.views.generic.edit import DeleteView
 
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate
 from django.db.models import Q
 import json
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from ERP.lib.utilities import Utilities
 from django.utils import timezone
 
@@ -370,6 +373,11 @@ class EstimateListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
+
+
+        print "URL is:"
+
+
         result = super(EstimateListView, self).get_queryset()
         EstimateListView.project_id = int(self.kwargs['project'])
 
@@ -382,11 +390,7 @@ class EstimateListView(ListView):
             query_list = query.split()
             result = result.filter(
                 reduce(operator.and_,
-                       (Q(key__icontains=q) for q in query_list)) |
-                reduce(operator.and_,
-                       (Q(description__icontains=q) for q in query_list)) |
-                reduce(operator.and_,
-                       (Q(status__icontains=q) for q in query_list))
+                       (Q(start_date__icontains=q) for q in query_list)) 
             )
         else:
             EstimateListView.query = ''
@@ -400,6 +404,21 @@ class EstimateListView(ListView):
         context['has_query'] = (EstimateListView.query is not None) and (EstimateListView.query != "")
         context['project'] = EstimateListView.project_id
         return context
+
+
+class EstimateDelete(DeleteView):
+    model = Estimate
+    success_url = ""
+    template_name = "ERP/estimate_confirm_delete.html"
+
+
+    def delete(self, request, *args, **kwargs):
+
+        print "About to delete."
+        obj = self.get_object()
+        project_id = obj.concept_input.line_item.project.id
+        EstimateDelete.success_url = "/admin/ERP/estimate/list/"+str(project_id)
+        return super(EstimateDelete, self).delete(request, *args, **kwargs)
 
 
 class EstimateDetailView(generic.DetailView):
