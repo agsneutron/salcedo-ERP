@@ -66,6 +66,15 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     list_per_page = 50
     inlines = [LogFileInline, ]
 
+    '''def get_form(self, request, obj=None, **kwargs):
+        ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
+        class ModelFormEMetaClass(ModelFormE):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelFormE(*args, **kwargs)
+
+        return ModelFormEMetaClass'''
+
 
 class ProgressEstimateInline(admin.TabularInline):
     model = ProgressEstimate
