@@ -11,7 +11,7 @@ from users.models import ERPUser
 from smart_selects.db_fields import ChainedForeignKey
 from django.db import models
 from Logs.controller import Logs
-
+from django import forms
 
 # Create your models here.
 
@@ -823,6 +823,7 @@ class LineItem(models.Model):
     class Meta:
         verbose_name_plural = 'Partidas'
         verbose_name = 'Partida'
+        unique_together = ('project', 'key')
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -910,7 +911,7 @@ class Concept_Input(models.Model):
     class Meta:
         verbose_name_plural = 'Conceptos'
         verbose_name = 'Concepto'
-        unique_together = [("line_item", "key")]
+        unique_together = ("line_item", "key")
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -939,7 +940,7 @@ class Estimate(models.Model):
     period = models.DateTimeField(null=True, blank=False, verbose_name="Periodo")
 
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
-    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=True, blank=False, default=None)
+    line_item = models.ForeignKey(LineItem, verbose_name="Partidas", null=True, blank=False, default=None)
     concept_input = ChainedForeignKey(Concept_Input,
                                       chained_field="line_item",
                                       chained_model_field="line_item",
@@ -990,6 +991,9 @@ def generator_file_storage(instance, filename):
         ['documentosFuente', project_key, line_item_key, concept_key, estimate_id, progress_estimate_key, filename])
 
 
+def content_file_generador(instance, filename):
+    return '/'.join(['documentosFuente', instance.estimate.concept_input.line_item.project.key, filename])
+
 class ProgressEstimate(models.Model):
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
     key = models.CharField(verbose_name="Clave de la Estimación", max_length=8, null=False, blank=False)
@@ -1000,7 +1004,7 @@ class ProgressEstimate(models.Model):
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
-    generator_file = models.FileField(upload_to=content_file_documento_fuente, null=True, default=None,
+    generator_file = models.FileField(upload_to=content_file_generador, null=True,
                                       verbose_name="Archivo del Generador")
     RETAINER = "R"
     PROGRESS = "P"
