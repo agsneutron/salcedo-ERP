@@ -131,9 +131,8 @@ class EstimateSearchForm(forms.Form):
         super(EstimateSearchForm, self).__init__()
         self.project_id = project_id
 
-    start_date = forms.DateTimeField(initial=datetime.date.today, widget=SelectDateWidget)
-    end_date = forms.DateTimeField(initial=datetime.date.today, widget=SelectDateWidget)
-    # end_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget)
+    start_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget)
+    end_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget)
 
     TYPE_CHOICES = (
         ('C', "Concepto"),

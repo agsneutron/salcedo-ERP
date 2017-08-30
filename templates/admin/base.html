@@ -6,6 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Salcedo</title>
+
+
+    <style>
+        .calendarbox.module{
+            z-index:99999999;
+        }
+    </style>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
     <link href="/static/admin/img/favicon_.ico" type="image/x-icon" rel="shortcut icon"/>
 
     <!-- Bootstrap Library css -->
@@ -22,9 +34,13 @@
     {% if LANGUAGE_BIDI %}
         <link rel="stylesheet" type="text/css"
               href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}"/>{% endif %}
-    {% block extrahead %}{% endblock %}
+    {% block extrahead %}
+
+
+    {% endblock %}
+
+
     {% block blockbots %}
-        <script src=“https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js“></script>
         <script src="{% static "ERP/admin/js/theme.js" %}"></script>
     {% endblock %}
 
