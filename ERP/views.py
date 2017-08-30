@@ -171,7 +171,7 @@ class ContractorContractListView(ListView):
     model = ContratoContratista
     template_name = "ERP/contractor-contract-list.html"
     query = None
-
+    title_list = 'Contratos con Contratistas'
     """
        Display a Blog List page filtered by the search query.
        """
@@ -197,6 +197,7 @@ class ContractorContractListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ContractorContractListView, self).get_context_data(**kwargs)
+        context['title_list'] = ContractorContractListView.title_list
         context['query'] = CompaniesListView.query
         context['query_string'] = '&q=' + ContractorContractListView.query
         context['has_query'] = (ContractorContractListView.query is not None) and (
@@ -215,7 +216,7 @@ class OwnerListView(ListView):
     model = Propietario
     template_name = "ERP/owner-list.html"
     query = None
-
+    title_list = "Contratistas"
     """
        Display a Blog List page filtered by the search query.
     """
@@ -241,6 +242,7 @@ class OwnerListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(OwnerListView, self).get_context_data(**kwargs)
+        context['title_list'] = OwnerListView.title_list
         context['query'] = OwnerListView.query
         context['query_string'] = '&q=' + OwnerListView.query
         context['has_query'] = (OwnerListView.query is not None) and (OwnerListView.query != "")
@@ -387,6 +389,7 @@ class ProjectListView(ListView):
     template_name = "ERP/project-list.html"
     # search_fields = ("empresaNombre",)
     query = None
+    title_list = "Proyectos"
 
     """
        Display a Blog List page filtered by the search query.
@@ -413,6 +416,7 @@ class ProjectListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectListView, self).get_context_data(**kwargs)
+        context['title_list'] = ProjectListView.title_list
         context['query'] = ProjectListView.query
         context['query_string'] = '&q=' + ProjectListView.query
         context['has_query'] = (ProjectListView.query is not None) and (ProjectListView.query != "")
