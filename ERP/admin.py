@@ -247,8 +247,7 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 
         except django.db.utils.IntegrityError as e:
             # Create exception without raising it.
-            print 'Hubo un error de integridad'
-            edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, user_id)
+            edu = ErrorDataUpload(str(e.__cause__), LoggingConstants.ERROR, user_id)
             messages.set_level(request, messages.ERROR)
             messages.error(request, edu.get_error_message())
         except ErrorDataUpload as e:
