@@ -12,15 +12,17 @@ from django.views import generic
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 
-from ERP.forms import EstimateSearchForm
+from ERP.forms import EstimateSearchForm, AddEstimateForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem, Estimate,Project
+    Propietario, Concept_Input, LineItem, Estimate, Project
 from django.db.models import Q
 import json
 
 from django.shortcuts import render, redirect
 from ERP.lib.utilities import Utilities
 from SalcedoERP.lib.constants import Constants
+
+from django.forms import formset_factory
 
 
 # Create your views here.
@@ -302,6 +304,14 @@ class LineItemListView(ListView):
     project_id = None
     parent_id = None
 
+    current_type = 'C'
+    current_type_full = 'conceptos'
+
+    types_dict = {
+        'conceptos': 'C',
+        'insumos': 'I'
+    }
+
     """
        Display a Blog List page filtered by the search query.
     """
@@ -313,6 +323,11 @@ class LineItemListView(ListView):
         # Reading the params from the url.
         LineItemListView.project_id = int(self.kwargs['project'])
         LineItemListView.parent_id = int(self.kwargs['parent'])
+        LineItemListView.current_type = self.types_dict[self.kwargs['type']]
+        LineItemListView.current_type_full = self.kwargs['type']
+
+        print "The type is:"
+        print LineItemListView.current_type
 
         # If the param for the parent is received as 0, then its value must be None.
         if LineItemListView.parent_id == 0:
@@ -349,13 +364,13 @@ class LineItemListView(ListView):
         context['query'] = LineItemListView.query
         context['query_string'] = '&q=' + LineItemListView.query
         context['has_query'] = (LineItemListView.query is not None) and (LineItemListView.query != "")
+        context['current_type_full'] = LineItemListView.current_type_full
 
         # Getting the concept inputs for the selected Line Item parent.
-        context['concepts_inputs'] = Concept_Input.objects.filter(Q(line_item=LineItemListView.parent_id))
+        context['concepts_inputs'] = Concept_Input.objects.filter(
+            Q(line_item=LineItemListView.parent_id) & Q(type=LineItemListView.current_type))
         if LineItemListView.parent_id is not None:
             context['parent_line_item'] = LineItem.objects.get(pk=LineItemListView.parent_id)
-        else:
-            context['parent_line_item'] = None
 
         print "Concept / Inputs"
         print context['concepts_inputs']
@@ -365,6 +380,7 @@ class LineItemListView(ListView):
 class LineItemDetailView(generic.DetailView):
     model = LineItem
     template_name = "ERP/line-item-detail.html"
+
 
 class ProjectListView(ListView):
     model = Project
@@ -408,7 +424,6 @@ class ProjectDetailView(generic.DetailView):
     template_name = "ERP/project-detail.html"
 
 
-
 # Views for the model Estimate.
 class EstimateListView(ListView):
     model = Estimate
@@ -445,7 +460,7 @@ class EstimateListView(ListView):
 
         type = self.request.GET.get('search_type')
         if type is not None:
-            query = query & Q(concept_input__type = type)
+            query = query & Q(concept_input__type=type)
 
         start_date = self.request.GET.get('start_date')
         if start_date is not None:
@@ -457,7 +472,6 @@ class EstimateListView(ListView):
             query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
             query = query & Q(start_date__lte=query_date)
 
-
         result = result.filter(query)
 
         return result
@@ -467,9 +481,13 @@ class EstimateListView(ListView):
         context['project'] = EstimateListView.project_id
         context['params'] = EstimateListView.params
 
-
-
         context['form'] = EstimateSearchForm(EstimateListView.project_id)
+
+        context['add_form'] = AddEstimateForm(EstimateListView.project_id)
+
+        AddEstimateFormSet = formset_factory(AddEstimateForm)
+
+        context['formset'] = AddEstimateFormSet()
 
         return context
 
@@ -509,3 +527,9 @@ class DashBoardView(ListView):
         DashBoardView.project_id = int(self.kwargs['project'])
         print "The id:"
         print DashBoardView.project_id
+
+    def get_context_data(self, **kwargs):
+        context = super(DashBoardView, self).get_context_data(**kwargs)
+        context['project_id'] = DashBoardView.project_id
+
+        return context

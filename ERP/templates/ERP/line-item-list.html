@@ -2,6 +2,8 @@
 
 
 {% block content %}
+    <a href="/admin/ERP/uploadedcatalogshistory/add/?project={{project_id}}">Añadir catálogo de conceptos</a>
+    <a href="/admin/ERP/uploadedinputexplotionshistory/add/?project={{project_id}}">Añadir explosión de insumos</a>
     <div id="content-main">
 
         {% include 'ERP/list-search-fields.html' %}
@@ -14,9 +16,11 @@
         <ul>
             {% for line_item in object_list %}
                 <li>
-                    <a href="/admin/ERP/lineitem/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.description }}</a>
-                    | <a href="{{ line_item.id }}">Ver</a> | <a
-                        href="{{ line_item.id }}/change">Editar</a> | <a href="{{ line_item.id }}/delete">Eliminar</a>
+                    <a href="/admin/ERP/lineitem/{{ current_type_full }}/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.description }}</a>
+                    | <a
+                        href="/admin/ERP/lineitem/{{ current_type_full }}/{{ line_item.project_id }}/{{ line_item.id }}">Ver</a>
+                    |
+                    <a href="{{ line_item.id }}/change">Editar</a> | <a href="{{ line_item.id }}/delete">Eliminar</a>
                 </li>
             {% empty %}
                 <li>No se encontraron partidas.</li>
@@ -27,11 +31,11 @@
         {% include 'ERP/list-pagination.html' %}
 
 
-        <h1>Conceptos</h1>
+        <h1>{{ current_type_full }} - Cambiar!!!</h1>
         <ul>
             {% for concept in concepts_inputs %}
                 <li>
-                    {{ concept.description }}
+                    {{ concept.description }} | <!--<a href="">Añadir Estimación</a>-->
                 </li>
             {% empty %}
                 <li>No se encontraron conceptos.</li>

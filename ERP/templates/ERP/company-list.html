@@ -1,7 +1,7 @@
 {% extends "admin/base_site.html" %}
+
+
 {% block content %}
-<<<<<<< HEAD
-=======
 
                                 {% include 'ERP/list-search-fields.html' %}
 
@@ -59,49 +59,7 @@
                 </div>
             </div>
         </div>
->>>>>>> remotes/origin/Memo-Branch2
-
-    {% include 'ERP/list-search-fields.html' %}
-
-    <table class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Nombre</th>
-            <th>Municipio</th>
-            <th>Estado</th>
-            <th>Teléfono</th>
-            <th></th>
-            <th></th>
-            <th></th>
-        </tr>
-        </thead>
-        {% for company in object_list %}
-            <tr>
 
 
-                {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
-                <td><span >{{ company.nombreEmpresa }}</span></td>
-                <td><span >{{ company.municipio }}</span></td>
-                <td><span >{{ company.estado  }}</span></td>
-                <td><span >{{ company.telefono }}</span></td>
-
-                <td style="width: 7%"><a href="{{ company.id }}"
-                                         class="btn btn-raised btn-default btn-xs"><i
-                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
-                <td style="width: 9%"><a href="{{ company.id }}/change"
-                                         class="btn btn-raised btn-default btn-xs"><i
-                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
-                <td style="width: 2%"><a href="{{ company.id }}/delete"
-                                         class="btn btn-raised btn-default btn-xs"><i
-                        class="fa fa-trash-o color-danger eliminar" style="margin-right: 0"></i></a>
-                </td>
-
-                {% empty %}
-                <td>No Companies yet.</td>
-            </tr>
-        {% endfor %}
-    </table>
-
-    {% include 'ERP/list-pagination.html' %}
-
+    </div>
 {% endblock %}

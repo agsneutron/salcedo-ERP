@@ -1,18 +1,18 @@
+{% comment %}<form id="searchform" action="" method="get" accept-charset="utf-8">
+    <button class="searchbutton" type="submit">
+        <i class="fa fa-search"></i>
+    </button>
+    <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+</form>{% endcomment %}
 {% block header_list %}
     <div id="content-main">
         <div class="row">
             <div class="col-xs-12">
-                <div class="card ">
+                <div class="card">
                     <div class="card-header">
                         <div class="item-left">
-                            <h3 class="card-title text">{% block title_list %}{{ title_list }}{% endblock %}</h3>
+                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
                         </div>
-<<<<<<< HEAD
-                        <div class="item-right">
-
-                            <a href="add/" class="btn-circle btn-circle-raised btn-circle-success" style="margin: -4px 1px;top: -28px;">
-                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x" style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
-=======
                           <div class="item-right">
 
                             <a href="add/"
@@ -20,57 +20,24 @@
                                style="margin: -4px 1px;top: -28px;">
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
                                           style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
->>>>>>> remotes/origin/Memo-Branch2
                             </a>
                         </div>
                     </div>
 
                     <div class="card-block">
-                        <div class="row">
-                            <div class="col-xs-12">
-
-{#                                beggins search form#}
+                    <div class="row">
+                         <div class="col-xs-12">
                                 <form id="searchform" action="" method="get" accept-charset="utf-8">
                                     <button class="searchbutton" type="submit">
                                         <i class="fa fa-search"></i>
                                     </button>
                                     <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
                                 </form>
-{#                                ends search form#}
+
 
                         </div>
-<<<<<<< HEAD
-                        </div>
-                        <div class="row">
-                            <div class="col-xs-12">
-                                <div class="table-responsive">
-{% endblock %}
-{% comment %}
-<form id="searchform" action="" method="get" accept-charset="utf-8">
-            <div class=""><!-- DIV needed for valid HTML -->
-
-               <input class="form-control searchfield" id="searchbox" name="q" type="text" placeholder="Search" >
-                <span class="input-group-btn absolute-l">
-                    <button type="submit" value="Buscar" class="btn btn-fab btn-fab-mini">
-                        <i class="material-icons">search</i>
-                    </button>
-                </span>
-            </div>
-
-        </form>
-
-{% endcomment %}
-
-{% comment %}<form id="searchform" action="" method="get" accept-charset="utf-8">
-    <button class="searchbutton" type="submit">
-        <i class="fa fa-search"></i>
-    </button>
-    <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
-</form>{% endcomment %}
-=======
                     </div>
                     <div class="row">
                         <div class="col-xs-12">
                         <div class="table-responsive">
 {% endblock %}
->>>>>>> remotes/origin/Memo-Branch2
