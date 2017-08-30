@@ -4,6 +4,7 @@ from django.contrib.admin import widgets
 from django.db import models
 from django.forms import SelectDateWidget
 from django.utils import timezone
+from users.models import ERPUser
 
 import datetime
 
@@ -96,9 +97,6 @@ class EstimateForm(forms.ModelForm):
         self.fields['line_item'].queryset = LineItem.objects.filter(project__id=project_id)
 
 
-
-
-
 '''
     Forms for the progress estimate log.
 '''
@@ -107,22 +105,30 @@ class EstimateForm(forms.ModelForm):
 class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
-        fields = '__all__'
+        fields = ('project', 'description', 'date',)
         widgets = {
             'user': forms.HiddenInput(),
             'progress_estimate': forms.HiddenInput()
         }
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
+        self.project_id = kwargs.pop('project_id', None)
+        self.user_id = kwargs.pop('user_id', None)
+
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+        kwargs['initial'].update({'project': self.project_id})
+        kwargs['initial'].update({'user': self.user_id})
+
         super(ProgressEstimateLogForm, self).__init__(*args, **kwargs)
         #self.fields['date'].widget = widgets.AdminDateWidget()
     # To override the save method for the form.
     def save(self, commit=True):
-        #self.request = kwargs.pop('request', None)
-        project_id = self.request.GET.get('project')
-        self.user=1
-        self.project=project_id
-        return super(ProgressEstimateLogForm, self).save(commit)
+        user_id = self.request.user.id
+
+        save_obj = super(ProgressEstimateLogForm, self)
+        return save_obj.save(commit)
 
 
 '''
