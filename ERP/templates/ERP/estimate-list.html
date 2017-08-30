@@ -14,28 +14,14 @@
 {% block content %}
     <div id="content-main">
 
-        {% comment %}
-        <form id="searchform" action="" method="get" accept-charset="utf-8">
-            <button class="searchbutton" type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-            <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
 
-
-            <select name="search_type">
-                <option value="C">Concepto</option>
-                <option value="I">Insumo</option>
-            </select>
-
-
-        </form>
-
-        {% endcomment %}
 
         <form action="" method="get">
             {% csrf_token %}
             {{ form }}
-            <input type="submit" value="Submit"/>
+           <button class="searchbutton" type="submit">
+                <i class="fa fa-search"></i>
+            </button>
         </form>
 
 
