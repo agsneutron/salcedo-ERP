@@ -457,7 +457,7 @@ class EstimateListView(ListView):
 
         EstimateListView.params = urllib.urlencode(params_copy)
 
-        type = self.request.GET.get('search_type')
+        type = self.request.GET.get('type')
         if type is not None:
             query = query & Q(concept_input__type=type)
 
@@ -470,6 +470,13 @@ class EstimateListView(ListView):
         if end_date is not None:
             query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
             query = query & Q(start_date__lte=query_date)
+
+        line_item_filter = self.request.GET.get('line_item')
+        if line_item_filter is not None:
+            query = query & Q(concept_input__line_item__id=line_item_filter)
+
+        print "The Query"
+        print query
 
         result = result.filter(query)
 
