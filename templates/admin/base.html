@@ -6,6 +6,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Salcedo</title>
+
+
+    <style>
+        .calendarbox.module{
+            z-index:99999999;
+        }
+    </style>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+
     <link href="/static/admin/img/favicon_.ico" type="image/x-icon" rel="shortcut icon"/>
 
     <!-- Bootstrap Library css -->
@@ -17,11 +29,17 @@
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/custom.css" %}"/>
     <!-- Bootstrap Library js -->
 
+
     {% block extrastyle %}{% endblock %}
     {% if LANGUAGE_BIDI %}
         <link rel="stylesheet" type="text/css"
               href="{% block stylesheet_rtl %}{% static "admin/css/rtl.css" %}{% endblock %}"/>{% endif %}
-    {% block extrahead %}{% endblock %}
+    {% block extrahead %}
+
+
+    {% endblock %}
+
+
     {% block blockbots %}
         <script src="{% static "ERP/admin/js/theme.js" %}"></script>
     {% endblock %}
@@ -176,7 +194,7 @@
                         </a>
 
                     </li>{% endcomment %}
-                   <li class="dropdown">
+                    <li class="dropdown">
                         <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-7"
                            data-toggle="dropdown"
                            data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
