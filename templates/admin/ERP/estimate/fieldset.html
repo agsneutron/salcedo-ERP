@@ -83,3 +83,21 @@
 
     </div>
 </fieldset>
+
+    <script src="{% static "ERP/admin/js/custom.js" %}"></script>
+    <script src="{% static "ERP/admin/js/bootstrap-datepicker.min.js" %}"></script>
+    <script src="{% static "ERP/admin/js/bootstrap-datepicker.es.min.js" %}"></script>
+    <script>
+
+        {% comment %}$('.datepicker').datepicker({
+            format: 'mm/dd/yyyy',
+            startDate: '-3d'
+        });{% endcomment %}
+
+        $('.date').datepicker({
+            autoclose: true,
+            toggleActive: true,
+            language: "es"
+        });
+
+    </script>

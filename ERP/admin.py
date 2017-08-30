@@ -69,7 +69,7 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
 
 class ProgressEstimateInline(admin.TabularInline):
     model = ProgressEstimate
-    extra = 0
+    extra = 1
 
 
 class EstimateAdmin(admin.ModelAdmin):

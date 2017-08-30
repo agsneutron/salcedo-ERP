@@ -11,7 +11,7 @@ from users.models import ERPUser
 from smart_selects.db_fields import ChainedForeignKey
 from django.db import models
 from Logs.controller import Logs
-
+from django import forms
 
 # Create your models here.
 

@@ -8,6 +8,7 @@ from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
 from django.conf import settings
+from django.contrib.admin import widgets
 
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
 
@@ -84,6 +85,9 @@ class EstimateForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(EstimateForm, self).__init__(*args, **kwargs)
         project_id = self.request.GET.get('project')
+        self.fields['start_date'].widget = widgets.AdminDateWidget()
+        self.fields['end_date'].widget = widgets.AdminDateWidget()
+        self.fields['period'].widget = widgets.AdminDateWidget()
         self.fields['line_item'].queryset = LineItem.objects.filter(project__id=project_id)
 
 
