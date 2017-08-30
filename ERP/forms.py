@@ -105,7 +105,7 @@ class EstimateForm(forms.ModelForm):
 class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
-        fields = ('project', 'description', 'date',)
+        fields = '__all__'
         widgets = {
             'user': forms.HiddenInput(),
             'progress_estimate': forms.HiddenInput()
@@ -114,6 +114,9 @@ class ProgressEstimateLogForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         self.project_id = kwargs.pop('project_id', None)
         self.user_id = kwargs.pop('user_id', None)
+
+        print "User_ID:" + str(self.user_id)
+        print "project_id:" + str(self.project_id)
 
 
         if not kwargs.get('initial'):
