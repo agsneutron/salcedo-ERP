@@ -303,6 +303,36 @@ class ContractorModelAdmin(admin.ModelAdmin):
 
 @admin.register(ContratoContratista)
 class ContractorContractModelAdmin(admin.ModelAdmin):
+
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(ContractorContractModelAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        project = ModelForm.base_fields['project']
+        contratista = ModelForm.base_fields['contratista']
+        modalidad_contrato = ModelForm.base_fields['modalidad_contrato']
+
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        project.widget.can_add_related = False
+        project.widget.can_change_related = False
+        contratista.widget.can_add_related = False
+        contratista.widget.can_change_related = False
+        modalidad_contrato.widget.can_add_related = False
+        modalidad_contrato.widget.can_change_related = False
+
+        return ModelForm
+
+
+    def get_fields(self, request, obj=None):
+        fields = (
+            'clave_contrato','project', 'no_licitacion', 'contratista', 'modalidad_contrato', 'dias_pactados',
+            'codigo_obra', 'dependencia',
+            'fecha_firma', 'fecha_inicio', 'fecha_termino',
+            'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones')
+        return fields
+
+
     def get_urls(self):
         urls = super(ContractorContractModelAdmin, self).get_urls()
         my_urls = [
