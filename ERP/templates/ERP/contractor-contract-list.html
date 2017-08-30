@@ -5,12 +5,12 @@
     <div id="content-main">
         <div class="row">
             <div class="col-xs-12">
-                <div class="card ">
+                <div class="card">
                     <div class="card-header">
                         <div class="item-left">
-                            <h3 class="card-title text">Contratos</h3>
+                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
                         </div>
-                        <div class="item-right">
+                          <div class="item-right">
 
                             <a href="add/"
                                class="btn-circle btn-circle-raised btn-circle-success"
@@ -38,9 +38,9 @@
                                             <th>Código de Obra</th>
                                             <th>Objeto Contrato</th>
                                             <th>Fecha de Firma</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Eliminar</th>
                                         </tr>
                                         </thead>
                                           {% for contrato in object_list %}
@@ -52,16 +52,20 @@
                                                 <td><span >{{ contratocontratista.dependencia }}</span></td>
                                                 <td><span >{{ contratocontratista.codigo_obra  }}</span></td>
                                                 <td><span >{{ contratocontratista.objeto_contrato }}</span></td>
+                                                <td><span >{{ contratocontratista.fecha_firma }}</span></td>
+
+
+
 
                                                 <td style="width: 7%"><a href="{{ contrato.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
-                                                <td style="width: 9%"><a href="{{ contrato.id }}/change"
+                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 5%"><a href="{{ contrato.id }}/change"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
-                                                <td style="width: 2%"><a href="{{ contrato.id }}/delete"
+                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 2%"><a href="{{ contrato.id }}/delete"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-trash-o color-danger eliminar" style="margin-right: 0"></i></a>
+                                                        class="fa fa-trash-o color-danger eliminar"></i></a>
                                                 </td>
 
                                                 {% empty %}

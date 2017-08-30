@@ -1,12 +1,32 @@
-
 {% extends "admin/base_site.html" %}
 
 
 {% block content %}
+    <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
+                        </div>
+                          <div class="item-right">
+
+                            <a href="add/"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: -25px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-block">
 
                                 {% include 'ERP/list-search-fields.html' %}
 
-                        <div class="row">
+                                <div class="row">
+                                <br>
                             <div class="col-xs-12">
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
@@ -16,9 +36,9 @@
                                             <th>RFC:</th>
                                             <th>E-mail</th>
                                             <th>Teléfono</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Eliminar</th>
                                         </tr>
                                         </thead>
                                          {% for owner in object_list %}
@@ -31,19 +51,21 @@
                                                 <td><span >{{ owner.email  }}</span></td>
                                                 <td><span >{{ owner.telefono1 }}</span></td>
 
-                                                <td style="width: 7%"><a href="{{ owner.id }}"
+
+
+                                                 <td class="text-center" style="width: 5%"><a href="{{ owner.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
-                                                <td style="width: 9%"><a href="{{ owner.id }}/change"
+                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 5%"><a href="{{ owner.id }}/change"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
-                                                <td style="width: 2%"><a href="{{ owner.id }}/delete"
+                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 2%"><a href="{{ owner.id }}/delete"
                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-trash-o color-danger eliminar" style="margin-right: 0"></i></a>
+                                                        class="fa fa-trash-o color-danger eliminar"></i></a>
                                                 </td>
 
                                                 {% empty %}
-                                                <td>No Companies yet.</td>
+                                                <td>No existen {{ title_list }}</td>
                                             </tr>
                                         {% endfor %}
                                     </table>

@@ -129,7 +129,7 @@ class ContractorListView(ListView):
     template_name = "ERP/contractor-list.html"
     # search_fields = ("empresaNombre",)
     query = None
-
+    title_list = 'Contratistas'
     """
        Display a Blog List page filtered by the search query.
     """
@@ -155,6 +155,7 @@ class ContractorListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ContractorListView, self).get_context_data(**kwargs)
+        context['title_list'] = ContractorListView.title_list
         context['query'] = CompaniesListView.query
         context['query_string'] = '&q=' + CompaniesListView.query
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
@@ -171,7 +172,7 @@ class ContractorContractListView(ListView):
     model = ContratoContratista
     template_name = "ERP/contractor-contract-list.html"
     query = None
-
+    title_list = 'Contratos con Contratistas'
     """
        Display a Blog List page filtered by the search query.
        """
@@ -197,6 +198,7 @@ class ContractorContractListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ContractorContractListView, self).get_context_data(**kwargs)
+        context['title_list'] = ContractorContractListView.title_list
         context['query'] = CompaniesListView.query
         context['query_string'] = '&q=' + ContractorContractListView.query
         context['has_query'] = (ContractorContractListView.query is not None) and (
@@ -215,7 +217,7 @@ class OwnerListView(ListView):
     model = Propietario
     template_name = "ERP/owner-list.html"
     query = None
-
+    title_list = "Contratistas"
     """
        Display a Blog List page filtered by the search query.
     """
@@ -241,6 +243,7 @@ class OwnerListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(OwnerListView, self).get_context_data(**kwargs)
+        context['title_list'] = OwnerListView.title_list
         context['query'] = OwnerListView.query
         context['query_string'] = '&q=' + OwnerListView.query
         context['has_query'] = (OwnerListView.query is not None) and (OwnerListView.query != "")
@@ -303,6 +306,7 @@ class LineItemListView(ListView):
     query = None
     project_id = None
     parent_id = None
+    title_list= 'Catálogo de Conceptos'
 
     current_type = 'C'
     current_type_full = 'conceptos'
@@ -360,6 +364,7 @@ class LineItemListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LineItemListView, self).get_context_data(**kwargs)
+        context['title_list'] = LineItemListView.title_list
         context['project_id'] = LineItemListView.project_id
         context['query'] = LineItemListView.query
         context['query_string'] = '&q=' + LineItemListView.query
@@ -387,6 +392,7 @@ class ProjectListView(ListView):
     template_name = "ERP/project-list.html"
     # search_fields = ("empresaNombre",)
     query = None
+    title_list = "Proyectos"
 
     """
        Display a Blog List page filtered by the search query.
@@ -413,6 +419,7 @@ class ProjectListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ProjectListView, self).get_context_data(**kwargs)
+        context['title_list'] = ProjectListView.title_list
         context['query'] = ProjectListView.query
         context['query_string'] = '&q=' + ProjectListView.query
         context['has_query'] = (ProjectListView.query is not None) and (ProjectListView.query != "")
@@ -585,5 +592,4 @@ class DashBoardView(ListView):
     def get_context_data(self, **kwargs):
         context = super(DashBoardView, self).get_context_data(**kwargs)
         context['project_id'] = DashBoardView.project_id
-
         return context
