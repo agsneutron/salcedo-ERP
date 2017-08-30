@@ -2,7 +2,7 @@
 
 
 {% block content %}
-     <div id="content-main">
+    <div id="content-main">
         <div class="row">
             <div class="col-xs-12">
                 <div class="card">
@@ -14,7 +14,7 @@
 
                             <a href="add/"
                                class="btn-circle btn-circle-raised btn-circle-success"
-                               style="margin: -4px 1px;top: -28px;">
+                               style="margin: -4px 1px;top: -25px;">
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
                                           style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
                             </a>
@@ -64,7 +64,7 @@
                                                 </td>
 
                                                 {% empty %}
-                                                <td>No Companies yet.</td>
+                                                <td>No existen {{ title_list }}</td>
                                             </tr>
                                         {% endfor %}
                                     </table>

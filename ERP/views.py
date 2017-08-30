@@ -305,6 +305,7 @@ class LineItemListView(ListView):
     query = None
     project_id = None
     parent_id = None
+    title_list= 'Catálogo de Conceptos'
 
     current_type = 'C'
     current_type_full = 'conceptos'
@@ -362,6 +363,7 @@ class LineItemListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LineItemListView, self).get_context_data(**kwargs)
+        context['title_list'] = LineItemListView.title_list
         context['project_id'] = LineItemListView.project_id
         context['query'] = LineItemListView.query
         context['query_string'] = '&q=' + LineItemListView.query
