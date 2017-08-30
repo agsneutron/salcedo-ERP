@@ -88,6 +88,7 @@ class CompaniesListView(ListView):
        Display a Blog List page filtered by the search query.
     """
     paginate_by = 10
+    title_list= 'Empresas'
 
     def get_queryset(self):
         result = super(CompaniesListView, self).get_queryset()
@@ -109,6 +110,7 @@ class CompaniesListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(CompaniesListView, self).get_context_data(**kwargs)
+        context['title_list'] = CompaniesListView.title_list
         context['query'] = CompaniesListView.query
         context['query_string'] = '&q=' + CompaniesListView.query
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
@@ -495,3 +497,15 @@ class EstimateDetailView(generic.DetailView):
         context['progress_estimates'] = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
 
         return context
+
+
+class DashBoardView(ListView):
+    model = Project
+    template_name = "ERP/dashboard_project.html"
+    project_id = None
+
+    def get_queryset(self):
+        # Reading the params from the url.
+        DashBoardView.project_id = int(self.kwargs['project'])
+        print "The id:"
+        print DashBoardView.project_id

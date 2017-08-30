@@ -617,9 +617,9 @@ class Project(models.Model):
     estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
     documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_gravamen = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
-
-    documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+
 
     restriccion_vial = models.CharField(verbose_name="vial", max_length=200, null=True, blank=True)
     restriccion_cna = models.CharField(verbose_name="cna", max_length=200, null=True, blank=True)
