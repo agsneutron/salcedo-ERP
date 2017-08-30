@@ -364,6 +364,7 @@ class EstimateListView(ListView):
     model = Estimate
     template_name = "ERP/estimate-list.html"
     query = None
+    project_id = None
 
     """
        Display a Blog List page filtered by the search query.
@@ -372,9 +373,10 @@ class EstimateListView(ListView):
 
     def get_queryset(self):
         result = super(EstimateListView, self).get_queryset()
-        print "Results"
-        for record in result:
-            print record
+        EstimateListView.project_id = int(self.kwargs['project'])
+
+
+        result = result.filter(Q(concept_input__line_item__project__id=EstimateListView.project_id))
 
         query = self.request.GET.get('q')
         if query:
@@ -398,6 +400,7 @@ class EstimateListView(ListView):
         context['query'] = EstimateListView.query
         context['query_string'] = '&q=' + EstimateListView.query
         context['has_query'] = (EstimateListView.query is not None) and (EstimateListView.query != "")
+        context['project'] = EstimateListView.project_id
         return context
 
 

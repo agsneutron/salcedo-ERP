@@ -395,7 +395,7 @@ class EstimateAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(EstimateAdmin, self).get_urls()
         my_urls = [
-            url(r'^list/(?P<test>[0-9]+)/$',
+            url(r'^list/(?P<project>[0-9]+)/$',
                 self.admin_site.admin_view(views.EstimateListView.as_view()),
                 name='estimate-view'),
             url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
