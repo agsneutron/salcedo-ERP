@@ -1,16 +1,15 @@
-<form id="searchform" action="" method="get" accept-charset="utf-8">
+{% comment %}<form id="searchform" action="" method="get" accept-charset="utf-8">
     <button class="searchbutton" type="submit">
         <i class="fa fa-search"></i>
     </button>
     <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
-</form>
+</form>{% endcomment %}
 
 
-{% comment %}
 <form id="searchform" action="" method="get" accept-charset="utf-8">
-            <div class="col-xs-3 col-xs-offset-9"><!-- DIV needed for valid HTML -->
+            <div class="col-xs-3"><!-- DIV needed for valid HTML -->
 
-                <input type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" class="form-control"/>
+               <input class="form-control searchfield" id="searchbox" name="q" type="text" placeholder="Search">
                 <span class="input-group-btn absolute-r">
                     <button type="submit" value="Buscar" class="btn btn-fab btn-fab-mini">
                         <i class="material-icons">search</i>
@@ -20,4 +19,4 @@
 
         </form>
 
-{% endcomment %}
+
