@@ -469,6 +469,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
             url(r'^$',
                 self.admin_site.admin_view(ProjectListView.as_view()), name='project-list-view'),
             url(r'^(?P<pk>\d+)/$', views.ProjectDetailView.as_view(), name='project-detail'),
+            url(r'^dashboard/(?P<project>[0-9]+)/$', views.DashBoardView.as_view(), name='project-dashboard'),
         ]
 
         return my_urls + urls
