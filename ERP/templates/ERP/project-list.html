@@ -91,29 +91,3 @@
     </div>
 {% endblock %}
 
-
-{% comment %}{% extends "admin/base_site.html" %}
-
-
-{% block content %}
-    <div id="content-main">
-
-        {% include 'ERP/list-search-fields.html' %}
-
-        <h1>Proyecto</h1>
-        <div><a href="add">Agregar</a></div>
-        <ul>
-            {% for project in object_list %}
-                <li><a href="{{ project.id }}">{{ project.nombreProyecto }}</a> | <a href="{{ project.id }}">Ver</a> | <a
-                        href="{{ project.id }}/change">Editar</a> | <a href="{{ project.id }}/delete">Eliminar</a>
-                        <a href="/admin/ERP/project/dashboard/{{ project.id }}">Dashboard</a>
-                </li>
-            {% empty %}
-                <li>No Owners yet.</li>
-            {% endfor %}
-        </ul>
-
-        {% include 'ERP/list-pagination.html' %}
-
-    </div>
-{% endblock %}{% endcomment %}
