@@ -500,6 +500,16 @@ padding: 0;
     word-wrap: break-word;
     line-height: 1;
 }
+.errorlist {
+        position: absolute;
+    bottom: -21px;
+    right: 0;
+    font-size: 10px;
+    width: 100%;
+    text-align: right;
+    list-style: none;
+    color: #ff0000;
+}
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
