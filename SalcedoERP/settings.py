@@ -1,3 +1,5 @@
+# coding=utf-8
+
 """
 Django settings for SalcedoERP project.
 
@@ -12,6 +14,15 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 
+import locale
+
+locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+# locale.currency(1000, grouping=True)
+# español para windows
+# locale.setlocale(locale.LC_ALL, "esp")
+# español para linux
+# locale.setlocale(locale.LC_ALL, "es_MX.utf8")
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,7 +33,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '9+ue&u-t+v6s8_^7ivxbxfec%pszd8rhxm%0_$@*#$j2@a_6$$'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -54,11 +65,9 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'SalcedoERP.urls'
 TEMPLATETAGS_DIRS = (
-    os.path.join(BASE_DIR, 'templatetags'),
+    os.path.join(BASE_DIR, 'users/templatetags'),
 )
 
-print "Tags:"
-print os.path.join(BASE_DIR, 'templatetags')
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -140,6 +149,7 @@ STATIC_FILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 
+print os.path.join(PROJECT_ROOT, '../static')
 # Loading local settings to the project.
 try:
     from .local_settings import *
