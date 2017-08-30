@@ -2,22 +2,87 @@
 
 
 {% block content %}
-    <div id="content-main" >
+    <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card ">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">Contratos</h3>
+                        </div>
+                        <div class="item-right">
+
+                            <a href="add/"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: -28px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                {% include 'ERP/list-search-fields.html' %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Clave del Contrato</th>
+                                            <th>Dependencia</th>
+                                            <th>Código de Obra</th>
+                                            <th>Objeto Contrato</th>
+                                            <th>Fecha de Firma</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                          {% for contrato in object_list %}
+                                            <tr>
 
 
-        {% include 'ERP/list-search-fields.html' %}
+                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                 <td><span > {{ contratocontratista.clave_contrato }} </span></td>
+                                                <td><span >{{ contratocontratista.dependencia }}</span></td>
+                                                <td><span >{{ contratocontratista.codigo_obra  }}</span></td>
+                                                <td><span >{{ contratocontratista.objeto_contrato }}</span></td>
 
-        <h1>Contratos</h1>
-        <div><a href="add">Agregar</a></div>
-        <ul>
-            {% for contrato in object_list %}
-                <li><a href="{{ contrato.id }}">{{ contrato.clave_contrato }}</a> | <a href="{{ contrato.id }}">Ver</a> | <a
-                        href="{{ contrato.id }}/change">Editar</a> | <a href="{{ contrato.id }}/delete">Eliminar</a>
-                </li>
-            {% empty %}
-                <li>No Contracts yet.</li>
-            {% endfor %}
-        </ul>
-        {% include 'ERP/list-pagination.html' %}
+                                                <td style="width: 7%"><a href="{{ contrato.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
+                                                <td style="width: 9%"><a href="{{ contrato.id }}/change"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
+                                                <td style="width: 2%"><a href="{{ contrato.id }}/delete"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-trash-o color-danger eliminar" style="margin-right: 0"></i></a>
+                                                </td>
+
+                                                {% empty %}
+                                                <td>No Companies yet.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                {% include 'ERP/list-pagination.html' %}
+                                <hr>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
     </div>
 {% endblock %}

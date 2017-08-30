@@ -1,3 +1,9 @@
+{% comment %}<form id="searchform" action="" method="get" accept-charset="utf-8">
+    <button class="searchbutton" type="submit">
+        <i class="fa fa-search"></i>
+    </button>
+    <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
+</form>{% endcomment %}
 {% block header_list %}
     <div id="content-main">
         <div class="row">
@@ -25,6 +31,7 @@
                                     <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
                                 </form>
 
+
                         </div>
                     </div>
                     <div class="row">
@@ -33,10 +40,10 @@
 {% endblock %}
 {% comment %}
 <form id="searchform" action="" method="get" accept-charset="utf-8">
-            <div class="col-xs-3 col-xs-offset-9"><!-- DIV needed for valid HTML -->
+            <div class=""><!-- DIV needed for valid HTML -->
 
-                <input type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" class="form-control"/>
-                <span class="input-group-btn absolute-r">
+               <input class="form-control searchfield" id="searchbox" name="q" type="text" placeholder="Search" >
+                <span class="input-group-btn absolute-l">
                     <button type="submit" value="Buscar" class="btn btn-fab btn-fab-mini">
                         <i class="material-icons">search</i>
                     </button>
@@ -45,4 +52,4 @@
 
         </form>
 
-{% endcomment %}
+
