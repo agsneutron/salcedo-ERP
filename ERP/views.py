@@ -126,7 +126,7 @@ class ContractorListView(ListView):
     template_name = "ERP/contractor-list.html"
     # search_fields = ("empresaNombre",)
     query = None
-
+    title_list = 'Contratistas'
     """
        Display a Blog List page filtered by the search query.
     """
@@ -152,6 +152,7 @@ class ContractorListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(ContractorListView, self).get_context_data(**kwargs)
+        context['title_list'] = ContractorListView.title_list
         context['query'] = CompaniesListView.query
         context['query_string'] = '&q=' + CompaniesListView.query
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
