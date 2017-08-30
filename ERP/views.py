@@ -7,7 +7,7 @@ from django.views import generic
 from django.views.generic import ListView
 
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem, Estimate
+    Propietario, Concept_Input, LineItem, Estimate,Project
 from django.db.models import Q
 import json
 
