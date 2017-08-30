@@ -115,14 +115,12 @@ class ProgressEstimateLogForm(forms.ModelForm):
     Forms for the log file form.
 '''
 
-
 class LogFileForm(forms.ModelForm):
     class Meta:
         model = LogFile
         fields = "__all__"
         test = ProgressEstimateLogForm()
         widgets = {
-
         }
 
 
