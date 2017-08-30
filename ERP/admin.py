@@ -15,7 +15,7 @@ from django.contrib import admin
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
-from ERP.views import CompaniesListView, ContractorListView
+from ERP.views import CompaniesListView, ContractorListView, ProjectListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
@@ -32,10 +32,10 @@ class TipoProyectoDetalleInline(admin.TabularInline):
     can_delete = False
 
 
-class ProjectAdmin(admin.ModelAdmin):
-    form = AddProyectoForm
-    inlines = (TipoProyectoDetalleInline,)
-    search_fields = ('nombreProyecto', 'key')
+#class ProjectAdmin(admin.ModelAdmin):
+#    form = AddProyectoForm
+#    inlines = (TipoProyectoDetalleInline,)
+#    search_fields = ('nombreProyecto', 'key')
 
 
 class LineItemAdmin(admin.ModelAdmin):
@@ -253,26 +253,30 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
                              dbo.INPUT_UPLOAD, project_id)
                 super(UploadedInputExplotionHistoryAdmin, self).save_model(request, obj, form, change)
 
+
         except django.db.utils.IntegrityError as e:
-            print 'error 2'
-            pass
-            # print 'ERRORRRRR'
-            # raise ErrorDataUpload(str(e), LoggingConstants.ERROR, request.user_id)
+            # Create exception without raising it.
+            print 'Hubo un error de integridad'
+            edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, user_id)
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, edu.get_error_message())
         except ErrorDataUpload as e:
             e.save()
             messages.set_level(request, messages.ERROR)
             messages.error(request, e.get_error_message())
 
 
-
 # Overriding the admin views to provide a detail view as required.
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
+
+
     def get_fields(self, request, obj=None):
+
         fields = (
-            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia')
+                 'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+                 'numero', 'colonia')
         return fields
 
     def get_urls(self):
@@ -312,7 +316,8 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         urls = super(ContractorContractModelAdmin, self).get_urls()
         my_urls = [
             url(r'^$',
-                self.admin_site.admin_view(views.ContractorContractListView.as_view()), name='contractor-contract-list-view'),
+                self.admin_site.admin_view(views.ContractorContractListView.as_view()),
+                name='contractor-contract-list-view'),
             url(r'^(?P<pk>\d+)/$', views.ContractorContractDetailView.as_view(), name='contractor-contract-detail'),
 
         ]
@@ -347,7 +352,6 @@ class LineItemAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
-
 @admin.register(Concept_Input)
 class ConceptInputAdmin(admin.ModelAdmin):
     def get_urls(self):
@@ -361,6 +365,22 @@ class ConceptInputAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+@admin.register(Project)
+class ProjectModelAdmin(admin.ModelAdmin):
+    inlines = (TipoProyectoDetalleInline,)
+
+    def get_urls(self):
+        urls = super(ProjectModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(ProjectListView.as_view()), name='project-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ProjectDetailView.as_view(), name='project-detail'),
+        ]
+
+        return my_urls + urls
+
+
+
 
 # Simple admin views.
 admin.site.register(Pais)
@@ -371,11 +391,11 @@ admin.site.register(ModalidadContrato)
 admin.site.register(UploadedCatalogsHistory, UploadedCatalogsHistoryAdmin)
 admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistoryAdmin)
 
-admin.site.register(Project, ProjectAdmin)
+#admin.site.register(Project, ProjectAdmin)
 
-#admin.site.register(LineItem, LineItemAdmin)
+# admin.site.register(LineItem, LineItemAdmin)
 admin.site.register(Estimate, EstimateAdmin)
-#admin.site.register(Concept_Input, ConceptInputAdmin)
+# admin.site.register(Concept_Input, ConceptInputAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
 admin.site.register(Empleado, EmpleadoAdmin)
