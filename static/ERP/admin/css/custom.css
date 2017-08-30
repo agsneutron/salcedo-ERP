@@ -1,14 +1,17 @@
 html {
-  position: relative;
-  min-height: 100%;
+    position: relative;
+    min-height: 100%;
 }
+
 body {
     background-color: #fff;
 
 }
-#content{
+
+#content {
     padding-bottom: 30px;
 }
+
 .text-center {
     text-align: center;
 }
@@ -17,19 +20,22 @@ h1, h2, h3, h4, h5, h6 {
     margin: 20px 0 15px;
     margin: 1rem 0 1rem;
 }
+
 hr {
     display: block;
     border-top: 1px solid #00a09b;
     margin: 25px 0;
 }
+
 .form-group.is-focused .form-control {
     border: 0;
-    background-image: linear-gradient(#00a09b,#00a09b),linear-gradient(#d2d2d2,#d2d2d2);
-    background-size: 100% 2px,100% 1px;
+    background-image: linear-gradient(#00a09b, #00a09b), linear-gradient(#d2d2d2, #d2d2d2);
+    background-size: 100% 2px, 100% 1px;
     box-shadow: none;
     border-radius: 0;
     transition-duration: .3s;
 }
+
 .ms-preload {
     position: fixed;
     top: 0;
@@ -265,10 +271,10 @@ hr {
 
 .ms-footer {
     position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 48px;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 48px;
     padding: 12px 0;
     padding: 1.2rem 0;
     text-align: center;
@@ -380,71 +386,86 @@ form .aligned ul {
     color: rgba(255, 255, 255, .5) !important;
     text-align: center;
 }
+
 .btn.btn-fab.btn-fab-mini, .btn-group-sm .btn.btn-fab, .input-group-btn .btn.btn-fab.btn-fab-mini, .btn-group-sm .input-group-btn .btn.btn-fab {
     height: 30px;
     min-width: 30px;
     width: 30px;
 }
+
 .form-group input[type=file] > .input-group > .form-control {
     height: 25px;
 }
+
 .btn:not(.btn-raised).btn-primary, .input-group-btn .btn:not(.btn-raised).btn-primary {
     color: #00a09b;
 }
+
 .item-left {
     text-align: left;
 }
+
 .item-right {
     position: absolute;
     top: 9px;
     right: 25px;
 }
+
 .btn.btn-xs, .btn-group-xs .btn, .input-group-btn .btn.btn-xs, .btn-group-xs .input-group-btn .btn {
     padding: 5px 2px;
     font-size: 10px;
-        margin: 0px;
+    margin: 0px;
 }
+
 .card .card-header i {
     margin-right: 0px;
     margin: 0px 7px;
     font-size: 14px;
 }
+
 #container-chart-2 .highcharts-button-box {
-display: none !important;
- }
+    display: none !important;
+}
 
 dd {
     margin-bottom: 5px;
     margin-bottom: 0;
 }
+
 dd, dt {
     line-height: 1;
 }
+
 dt {
     color: #00a09b;
 }
+
 .circle-primary {
     stroke: #00a09b;
 }
+
 /*estilos para tablas*/
 .table tr td, .table tr th {
-    padding: 5px!important;
-    border-color: #e0e0e0!important;
+    padding: 5px !important;
+    border-color: #e0e0e0 !important;
     font-size: 13px;
 }
+
 .danger {
     color: #f44336;
 }
-.ms-header-primary+.ms-navbar-primary .navbar-nav>li .dropdown-menu li a:hover {
+
+.ms-header-primary + .ms-navbar-primary .navbar-nav > li .dropdown-menu li a:hover {
     color: #333 !important;
 }
 
 .list-group .list-group-item, .list-group a.list-group-item {
-    padding: 1px 15px!important;
-    font-size: 12px!important;
+    padding: 1px 15px !important;
+    font-size: 12px !important;
 }
+
 .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
-padding: 0;
+    padding: 0;
 
     -webkit-transform: scale(0);
     transform: scale(0);
@@ -453,16 +474,63 @@ padding: 0;
     left: inherit;
     right: inherit;
 }
+
 .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
--webkit-transform: scale(1);
+    -webkit-transform: scale(1);
     transform: scale(1);
     transition: all 0s ease;
 
 }
+
 .required label, label.required {
     font-weight: inherit !important;
     color: #333;
 }
+
+.card .card-header {
+
+    padding: .1rem 2rem;
+    background-color: #f5f5f5;
+}
+
+.card .card-header h3 {
+
+    font-size: 1.6rem;
+    margin: 7px 1px;
+}
+
+.absolute-r {
+    position: absolute;
+    right: 0;
+    top: 0;
+}
+
+.card .card-block, .card.card-block {
+
+    padding: .3rem 2.1rem;
+}
+
+.form-control, .form-group .form-control {
+    border: 1px solid #e2e2e2;
+
+}
+
+.form-control {
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+    line-height: 1.42857;
+}
+
+.aligned label {
+    display: block;
+    padding: 4px 10px 0 0;
+    float: left;
+    width: 100% !important;
+    word-wrap: break-word;
+    line-height: 1;
+}
+
 @media (min-width: 768px) {
     .navbar-nav {
         float: none;
@@ -479,3 +547,4 @@ padding: 0;
         text-align: center;
     }
 }
+

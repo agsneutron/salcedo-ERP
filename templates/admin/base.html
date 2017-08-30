@@ -74,7 +74,7 @@
     <nav class="navbar navbar-static-top yamm ms-navbar ms-navbar-primary">
 
 
-        <div class="container container-full">
+        <div class="container container-full container-nav">
             <div class="navbar-header">
                 <a class="navbar-brand" href="index.html">
                     <span class="ms-logo"><img
@@ -226,13 +226,25 @@
                             </li>
                             <li class="dropdown-submenu">
                                 <a href="" class="has_children">
-                                    <i class="zmdi zmdi-view-dashboard"></i> Obra civil/instalaciones</a>
+                                    <i class="zmdi zmdi-view-dashboard"></i> Estimaciones</a>
                                 <ul class="dropdown-menu dropdown-menu-left">
                                     <li>
-                                        <a href="/admin/ERP/project/add/">Estimaciones</a>
+                                        <a href="/admin/ERP/estimate/add/">Agregar</a>
                                     </li>
                                     <li>
-                                        <a href="/admin/ERP/progressestimatelog/">Bítacora</a>
+                                        <a href="/admin/ERP/estimate/">Consultar</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a href="" class="has_children">
+                                    <i class="zmdi zmdi-view-dashboard"></i> Bitácoras</a>
+                                <ul class="dropdown-menu dropdown-menu-left">
+                                    <li>
+                                        <a href="/admin/ERP/project/add/">Agregar</a>
+                                    </li>
+                                    <li>
+                                        <a href="/admin/ERP/progressestimatelog/">Consultar</a>
                                     </li>
                                 </ul>
                             </li>{% endcomment %}
@@ -267,6 +279,16 @@
         </div>
         <!-- container -->
 
+        {% block messages %}
+            {% if messages %}
+                <ul class="messagelist">
+                    {% for message in messages %}
+                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+        {% endblock messages %}
 
     </nav>
 {% endif %}
@@ -281,15 +303,7 @@
 {% endblock %}
 {% endcomment %}
 
-{% block messages %}
-    {% if messages %}
-        <ul class="messagelist">
-            {% for message in messages %}
-                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
-            {% endfor %}
-        </ul>
-    {% endif %}
-{% endblock messages %}
+
 <!-- Begins MainContainer -->
 <div id="particles-js">
     <div id="content" class=" container">
@@ -369,14 +383,14 @@
 
 {% endif %}
 
- <!-- Begins Footer -->
-    {% block footer %}
+<!-- Begins Footer -->
+{% block footer %}
 
-        <footer class="ms-footer" id="footer">
-            <div class="container">
-                <p>Copyright &copy; Salcedo ERP 2017</p>
-            </div>
-        </footer>
-    {% endblock %}
+    <footer class="ms-footer" id="footer">
+        <div class="container">
+            <p>Copyright &copy; Salcedo ERP 2017</p>
+        </div>
+    </footer>
+{% endblock %}
 </body>
 </html>

@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <h1>Clave del Concepto: {{ concept_input.key }}  <a href="change">Editar</a></h1>
+        <ul>
+            <li>Partida: {{ concept_input.line_item }}</li>
+            <li>Descripción: {{ concept_input.description }}</li>
+            <li>Cantidad: {{ concept_input.quantity }}</li>
+            <li>Unidad: {{ concept_input.unit }}</li>
+            <li>Precio Unitario: {{ concept_input.unit_price }}</li>
+        </ul>
+
+{% endblock %}
