@@ -614,10 +614,13 @@ class Project(models.Model):
                                                        blank=True)
     estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
     estadolegal_predial = models.CharField(verbose_name="predial", max_length=200, null=True, blank=True)
+
+
     estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
+
+    # File Fields
     documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_gravamen = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
-
     documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
 
@@ -723,9 +726,11 @@ class Project(models.Model):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
         ans['key'] = str(self.key)
-        ans['contrato'] = str(self.contrato.objeto_contrato)
-        ans['nombreProyecto'] = str(self.nombreProyecto)
+        ans['nombreProyecto'] = unicode(str(self.nombreProyecto))
         ans['propietario'] = str(self.propietario.nombrePropietario)
+        ans['ubicacion_municipio'] = unicode(str(self.ubicacion_municipio.nombreMunicipio))
+        ans['ubicacion_estado'] = 'eh'#unicode(str(self.ubicacion_estado.nombreEstado))
+        ans['ubicacion_pais'] = unicode(str(self.ubicacion_pais.nombrePais))
 
         return ans
 

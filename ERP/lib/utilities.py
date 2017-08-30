@@ -6,22 +6,21 @@ from decimal import Decimal
 from datetime import date
 from django.utils.safestring import mark_safe
 
-class Utilities():
 
+class Utilities():
     @staticmethod
     def query_set_to_json_string(query_set):
         return mark_safe(json.dumps(map(lambda query_set: query_set.to_serializable_dict(), query_set),
-                           ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True,))
+                                    ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ))
 
     @staticmethod
     def query_set_to_json(query_set):
         return json.loads(json.dumps(map(lambda query_set: query_set.to_serializable_dict(), query_set),
-                           ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True,))
+                                     ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ))
 
     @staticmethod
     def json_to_safe_string(the_json):
         return mark_safe(json.dumps(the_json))
-
 
     # Toma un queryset, lo vuelve serializable y lo serializa para poder devolverlo al cliente.
     @staticmethod
@@ -40,7 +39,6 @@ class Utilities():
     def query_set_to_dictionary(query_set_object):
         return map(lambda model_object: model_object.to_serializable_dict(), query_set_object)
 
-
     @staticmethod
     def clean_generic_queryset(query_set_object):
         """
@@ -56,7 +54,19 @@ class Utilities():
             response.append(obj)
         return response
 
-
+    @staticmethod
+    def clean_generic_queryset_from_nones(query_set_object):
+        """
+        Cleans a QuerySet object, converting it's decimal properties to strings.
+        :param query_set_object: object to clean
+        :return: the QuerySet object with the decimal attributes converted to strings
+        """
+        response = []
+        for obj_attr in query_set_object.keys():
+            if query_set_object[obj_attr] is None:
+                query_set_object[obj_attr] = 'None'
+        response.append(query_set_object)
+        return response
 
     @staticmethod
     def remove_empty_values_keys_from_object(object):
