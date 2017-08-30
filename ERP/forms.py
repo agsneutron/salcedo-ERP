@@ -1,9 +1,13 @@
 # coding=utf-8
 from django import forms
+from django.contrib.admin import widgets
 from django.db import models
+from django.forms import SelectDateWidget
+from django.utils import timezone
+
+import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem
-from datetime import datetime
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -33,17 +37,17 @@ class TipoProyectoDetalleAddForm(forms.ModelForm):
                         print e
         return super(TipoProyectoDetalleAddForm, self).save(commit)
 
-class AddProyectoForm(forms.ModelForm):
 
+class AddProyectoForm(forms.ModelForm):
     class Meta:
         model = Project
         fields = '__all__'
-
 
     def save(self, commit=True):
         instance = super(AddProyectoForm, self).save(commit=False)
 
         return super(AddProyectoForm, self).save(commit=commit)
+
 
 class DocumentoFuenteForm(forms.ModelForm):
     class Meta:
@@ -70,11 +74,11 @@ class DocumentoFuenteForm(forms.ModelForm):
         return super(DocumentoFuenteForm, self).save(commit)
 
 
-
-
 '''
     Forms for the progress estimate.
 '''
+
+
 class EstimateForm(forms.ModelForm):
     class Meta:
         model = Estimate
@@ -90,6 +94,8 @@ class EstimateForm(forms.ModelForm):
 '''
     Forms for the progress estimate log.
 '''
+
+
 class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
@@ -105,13 +111,12 @@ class ProgressEstimateLogForm(forms.ModelForm):
         return super(ProgressEstimateLogForm, self).save(commit)
 
 
-
-
 '''
     Forms for the log file form.
 '''
-class LogFileForm(forms.ModelForm):
 
+
+class LogFileForm(forms.ModelForm):
     class Meta:
         model = LogFile
         fields = "__all__"
@@ -119,3 +124,22 @@ class LogFileForm(forms.ModelForm):
         widgets = {
 
         }
+
+
+class EstimateSearchForm(forms.Form):
+    def __init__(self, project_id):
+        super(EstimateSearchForm, self).__init__()
+        self.project_id = project_id
+
+    start_date = forms.DateTimeField(initial=datetime.date.today, widget=SelectDateWidget)
+    end_date = forms.DateTimeField(initial=datetime.date.today, widget=SelectDateWidget)
+    # end_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget)
+
+    TYPE_CHOICES = (
+        ('C', "Concepto"),
+        ('I', "Insumo"),
+    )
+    status = forms.ChoiceField(choices=TYPE_CHOICES, label="", initial='', widget=forms.Select(), required=True)
+
+    line_item = forms.ModelChoiceField(queryset=LineItem.objects.filter(project_id=1),
+                                       empty_label="Seleccionar Partida")

@@ -3,13 +3,16 @@ from __future__ import unicode_literals
 
 import operator
 import urllib
+from datetime import date
 
+import datetime
 from django.http import HttpResponseRedirect
 from django.urls.base import reverse
 from django.views import generic
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 
+from ERP.forms import EstimateSearchForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate
 from django.db.models import Q
@@ -17,7 +20,7 @@ import json
 
 from django.shortcuts import render, redirect
 from ERP.lib.utilities import Utilities
-from django.utils import timezone
+from SalcedoERP.lib.constants import Constants
 
 
 # Create your views here.
@@ -376,6 +379,8 @@ class EstimateListView(ListView):
 
     def get_queryset(self):
 
+        print "URL is:"
+
         result = super(EstimateListView, self).get_queryset()
         EstimateListView.project_id = int(self.kwargs['project'])
 
@@ -389,13 +394,23 @@ class EstimateListView(ListView):
         query = query & Q(concept_input__line_item__project__id=EstimateListView.project_id)
 
         params_copy = self.request.GET.copy()
-        params_copy.pop('page')
+        params_copy.pop('page', None)
 
         EstimateListView.params = urllib.urlencode(params_copy)
 
         type = self.request.GET.get('search_type')
         if type is not None:
             query = query & Q(concept_input__type = type)
+
+        start_date = self.request.GET.get('start_date')
+        if start_date is not None:
+            query_date = datetime.datetime.strptime(start_date, Constants.DATE_FORMAT).date()
+            query = query & Q(start_date__gte=query_date)
+
+        end_date = self.request.GET.get('end_date')
+        if end_date is not None:
+            query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
+            query = query & Q(start_date__lte=query_date)
 
         result = result.filter(query)
 
@@ -405,6 +420,11 @@ class EstimateListView(ListView):
         context = super(EstimateListView, self).get_context_data(**kwargs)
         context['project'] = EstimateListView.project_id
         context['params'] = EstimateListView.params
+
+
+
+        context['form'] = EstimateSearchForm(EstimateListView.project_id)
+
         return context
 
 
@@ -413,13 +433,11 @@ class EstimateDelete(DeleteView):
     success_url = ""
     template_name = "ERP/estimate_confirm_delete.html"
 
-
     def delete(self, request, *args, **kwargs):
-
         print "About to delete."
         obj = self.get_object()
         project_id = obj.concept_input.line_item.project.id
-        EstimateDelete.success_url = "/admin/ERP/estimate/list/"+str(project_id)
+        EstimateDelete.success_url = "/admin/ERP/estimate/list/" + str(project_id)
         return super(EstimateDelete, self).delete(request, *args, **kwargs)
 
 
@@ -431,4 +449,5 @@ class EstimateDetailView(generic.DetailView):
         context = super(EstimateDetailView, self).get_context_data(**kwargs)
         estimate = context['estimate']
         context['progress_estimates'] = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
+
         return context
