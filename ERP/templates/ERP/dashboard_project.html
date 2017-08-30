@@ -14,6 +14,16 @@
 {% endblock %}
 {% block content %}
     <div id="container">
+
+        <a href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/">Catálogo de Conceptos</a>
+        <a href="/admin/ERP/lineitem/insumos/{{ project_id }}/0/">Explosión de Insumos</a>
+        <a href="/admin/ERP/estimate/list/{{ project_id }}">Búsqueda de Estimaciones</a>
+
+        <a href="/admin/ERP/uploadedcatalogshistory/add/?project={{ project_id }}">Añadir catálogo de conceptos</a>
+        <a href="/admin/ERP/uploadedinputexplotionshistory/add/?project={{ project_id }}">Añadir explosión de
+            insumos</a>
+
+
         <div class="row">
             <div class="col-xs-8">
                 <div class="card">
@@ -227,7 +237,7 @@
         });
     </script>
 
-        <script src="{% static "ERP/admin/assets/Highcharts/code/highcharts.js" %}"></script>
+    <script src="{% static "ERP/admin/assets/Highcharts/code/highcharts.js" %}"></script>
     <script src="{% static "ERP/admin/assets/Highcharts/code/modules/exporting.js" %}"></script>
     <script src="{% static "ERP/admin/js/demo-charts.js" %}"></script>
 {% endblock %}

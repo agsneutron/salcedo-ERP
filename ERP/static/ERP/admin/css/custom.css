@@ -554,6 +554,16 @@ padding: 0;
     color: #d4373b;
     border: 1px solid #d4373b;
 }
+
+.messagelist li.success {
+    background: #b9d4b0 none repeat scroll 0 0;
+    color: #4f943b;
+    border: 1px solid #4f943b;
+}
+
+
+
+
 .btn.btn-raised, .btn.btn-raised.btn-default, .btn.btn-fab, .btn.btn-fab.btn-default, .btn-group-raised .btn, .btn-group-raised .btn.btn-default, .input-group-btn .btn.btn-raised, .input-group-btn .btn.btn-raised.btn-default, .input-group-btn .btn.btn-fab, .input-group-btn .btn.btn-fab.btn-default, .btn-group-raised .input-group-btn .btn, .btn-group-raised .input-group-btn .btn.btn-default {
     background-color: #f8f8f8 !important;
     color: rgba(0,0,0,.87);
