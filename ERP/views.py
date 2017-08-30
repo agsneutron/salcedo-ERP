@@ -455,6 +455,6 @@ class EstimateDetailView(generic.DetailView):
         return context
 
 
-class ProjectDetailView(generic.DetailView):
+class DashBoardView(generic.DetailView):
     model = Project
     template_name = "ERP/dashboard_project.html"
