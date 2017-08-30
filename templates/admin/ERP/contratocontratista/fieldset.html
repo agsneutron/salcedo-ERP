@@ -32,7 +32,7 @@
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Contrato</span>
+                    <span class="hidden-xs">Contrato de Contratistas</span>
                 </a>
             </li>
         </ul>
@@ -41,7 +41,8 @@
             <div class="tab-content">
             {% for line in fieldset %}
                 {% for field in line %}
-                    {% if field.field.name == "no_licitacion" %}
+
+                    {% if field.field.name == "clave_contrato" %}
                 <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                     <div class="row">
                         <h2 class="text-center">Datos generales</h2>
@@ -57,8 +58,7 @@
 
                             </div>
                     {% endif %}
-
-                    {% if field.field.name == "modalidad_contrato" %}
+                    {% if field.field.name == "project" %}
 
                             <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
@@ -71,8 +71,7 @@
 
 
                     {% endif %}
-
-                    {% if field.field.name == "dependencia" %}
+                    {% if field.field.name == "no_licitacion" %}
 
                             <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
@@ -82,11 +81,37 @@
                                     </div>
                                 </div>
                             </div>
-                     </div>
+                    </div>
 
                     {% endif %}
 
-                    {% if field.field.name == "codigo_obra" %}
+
+
+                     {% if field.field.name == "contratista" %}
+
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if field.field.name == "modalidad_contrato" %}
+
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                     {% endif %}
+                      {% if field.field.name == "codigo_obra" %}
                       <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-codigo_obra">
@@ -100,8 +125,7 @@
                             </div>
 
                     {% endif %}
-
-                     {% if field.field.name == "contratista" %}
+                     {% if field.field.name == "dependencia" %}
 
                             <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
@@ -111,8 +135,11 @@
                                     </div>
                                 </div>
                             </div>
-                        {% endif %}
+                     </div>
+
+                    {% endif %}
                         {% if field.field.name == "dias_pactados" %}
+                                <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>

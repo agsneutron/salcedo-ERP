@@ -9,13 +9,13 @@ from django.db import transaction
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
-from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm
+from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm,ContractForm
 
 from django.contrib import admin
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
-from ERP.views import CompaniesListView, ContractorListView
+from ERP.views import CompaniesListView, ContractorListView, ProjectListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
@@ -32,10 +32,10 @@ class TipoProyectoDetalleInline(admin.TabularInline):
     can_delete = False
 
 
-class ProjectAdmin(admin.ModelAdmin):
-    form = AddProyectoForm
-    inlines = (TipoProyectoDetalleInline,)
-    search_fields = ('nombreProyecto', 'key')
+#class ProjectAdmin(admin.ModelAdmin):
+#    form = AddProyectoForm
+#    inlines = (TipoProyectoDetalleInline,)
+#    search_fields = ('nombreProyecto', 'key')
 
 
 class LineItemAdmin(admin.ModelAdmin):
@@ -66,10 +66,19 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     list_per_page = 50
     inlines = [LogFileInline, ]
 
+    '''def get_form(self, request, obj=None, **kwargs):
+        ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
+        class ModelFormEMetaClass(ModelFormE):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelFormE(*args, **kwargs)
+
+        return ModelFormEMetaClass'''
+
 
 class ProgressEstimateInline(admin.TabularInline):
     model = ProgressEstimate
-    extra = 0
+    extra = 1
 
 '''
 class EstimateAdmin(admin.ModelAdmin):
@@ -260,10 +269,13 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
+
+
     def get_fields(self, request, obj=None):
+
         fields = (
-            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia')
+                 'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+                 'numero', 'colonia')
         return fields
 
     def get_urls(self):
@@ -299,6 +311,36 @@ class ContractorModelAdmin(admin.ModelAdmin):
 
 @admin.register(ContratoContratista)
 class ContractorContractModelAdmin(admin.ModelAdmin):
+    form = ContractForm
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(ContractorContractModelAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        project = ModelForm.base_fields['project']
+        contratista = ModelForm.base_fields['contratista']
+        modalidad_contrato = ModelForm.base_fields['modalidad_contrato']
+
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        project.widget.can_add_related = False
+        project.widget.can_change_related = False
+        contratista.widget.can_add_related = False
+        contratista.widget.can_change_related = False
+        modalidad_contrato.widget.can_add_related = False
+        modalidad_contrato.widget.can_change_related = False
+
+        return ModelForm
+
+
+    def get_fields(self, request, obj=None):
+        fields = (
+            'clave_contrato','project', 'no_licitacion', 'contratista', 'modalidad_contrato', 'dias_pactados',
+            'codigo_obra', 'dependencia',
+            'fecha_firma', 'fecha_inicio', 'fecha_termino',
+            'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones')
+        return fields
+
+
     def get_urls(self):
         urls = super(ContractorContractModelAdmin, self).get_urls()
         my_urls = [
@@ -351,6 +393,22 @@ class ConceptInputAdmin(admin.ModelAdmin):
 
         ]
         return my_urls + urls
+
+@admin.register(Project)
+class ProjectModelAdmin(admin.ModelAdmin):
+    inlines = (TipoProyectoDetalleInline,)
+
+    def get_urls(self):
+        urls = super(ProjectModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(ProjectListView.as_view()), name='project-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ProjectDetailView.as_view(), name='project-detail'),
+        ]
+
+        return my_urls + urls
+
+
 
 
 @admin.register(Estimate)
@@ -413,7 +471,7 @@ admin.site.register(ModalidadContrato)
 admin.site.register(UploadedCatalogsHistory, UploadedCatalogsHistoryAdmin)
 admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistoryAdmin)
 
-admin.site.register(Project, ProjectAdmin)
+#admin.site.register(Project, ProjectAdmin)
 
 # admin.site.register(LineItem, LineItemAdmin)
 #admin.site.register(Estimate, EstimateAdmin)

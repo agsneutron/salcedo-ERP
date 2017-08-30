@@ -7,7 +7,7 @@ from django.views import generic
 from django.views.generic import ListView
 
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem, Estimate
+    Propietario, Concept_Input, LineItem, Estimate,Project
 from django.db.models import Q
 import json
 
@@ -355,6 +355,48 @@ class LineItemListView(ListView):
 class LineItemDetailView(generic.DetailView):
     model = LineItem
     template_name = "ERP/line-item-detail.html"
+
+class ProjectListView(ListView):
+    model = Project
+    template_name = "ERP/project-list.html"
+    # search_fields = ("empresaNombre",)
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+
+    def get_queryset(self):
+        result = super(ProjectListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            ProjectListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(nombreProyecto__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(ubicacion_calle__icontains=q) for q in query_list))
+            )
+        else:
+            ProjectListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectListView, self).get_context_data(**kwargs)
+        context['query'] = ProjectListView.query
+        context['query_string'] = '&q=' + ProjectListView.query
+        context['has_query'] = (ProjectListView.query is not None) and (ProjectListView.query != "")
+        return context
+
+
+class ProjectDetailView(generic.DetailView):
+    model = Project
+    template_name = "ERP/project-detail.html"
+
 
 
 # Views for the model Estimate.

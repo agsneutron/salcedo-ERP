@@ -43,4 +43,5 @@ urlpatterns = [
     url(r'^admin/empresas', users.views.empresas, name='empresas'),
     url(r'^admin/contratos', users.views.contratos, name='contratos'),
 
+
 ]
