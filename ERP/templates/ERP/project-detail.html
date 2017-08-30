@@ -1,164 +1,164 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-    {% comment %}
 
 
+{% comment %}
 
     <h1> Nombre de Proyecto: {{ project.nombreProyecto }} <a href="change">Editar</a></h1>
 
-    <ul>
-        <li>Clave de Proyecto: {{ project.key }} </li>
-        <li>Propietario: {{ project.propietario }} </li>
-        <li>Fecha de Inicio: {{ project.fecha_inicial }}</li>
-        <li>Fecha de Termino: {{ project.fecha_final }}</li>
-        <li>Tipo de Contrucción: {{ project.tipo_construccion }}</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Clave de Proyecto: {{ project.key }} </li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Propietario: {{ project.propietario }} </li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fecha de Inicio: {{ project.fecha_inicial }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fecha de Termino: {{ project.fecha_final }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo de Contrucción: {{ project.tipo_construccion }}</li>
     </ul>
-    <ul>
-        <li>País: {{ project.ubicacion_pais }}</li>
-        <li>Estado: {{ project.ubicacion_estado }}</li>
-        <li>Municipio: {{ project.ubicacion_municipio }}</li>
-        <li>Colonia: {{ project.ubicacion_colonia }}</li>
-        <li>Calle: {{ project.ubicacion_calle }}</li>
-        <li>Número: {{ project.ubicacion_numero }}</li>
-        <li>CP: {{ project.ubicacion_cp }}</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> País: {{ project.ubicacion_pais }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado: {{ project.ubicacion_estado }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Municipio: {{ project.ubicacion_municipio }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Colonia: {{ project.ubicacion_colonia }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Calle: {{ project.ubicacion_calle }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Número: {{ project.ubicacion_numero }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CP: {{ project.ubicacion_cp }}</li>
     </ul>
-    <li>Áreas</li>
-    <ul>
-        <li>Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
-        <li>Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Áreas</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}</li>
     </ul>
-    <li>Estado Legal</li>
-    <ul>
-        <li>Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
-        <li>Documento: {{ project.documento_propiedad }}</li>
-        <li>Gravamen: {{ project.estadolegal_gravamen }}</li>
-        <li>Documento: {{ project.documento_gravamen }}</li>
-        <li>Predial: {{ project.estadolegal_predial }}</li>
-        <li>Documento: {{ project.documento_predial }}</li>
-        <li>Agua: {{ project.estadolegal_agua }}</li>
-        <li>Documento: {{ project.documento_agua }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado Legal</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_propiedad }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Gravamen: {{ project.estadolegal_gravamen }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_gravamen }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Predial: {{ project.estadolegal_predial }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_predial }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Agua: {{ project.estadolegal_agua }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_agua }}</li>
     </ul>
-    <li>Restricciones</li>
-    <ul>
-        <li>Vial: {{ project.restriccion_vial }}</li>
-        <li>CNA : {{ project.restriccion_cna }}</li>
-        <li>CFE : {{ project.restriccion_cfe }}</li>
-        <li>PEMEX: {{ project.restriccion_pemex }}</li>
-        <li>INHA: {{ project.restriccion_inha }}</li>
-        <li>Otros: {{ project.restriccion_otros }}</li>
-        <li>Observaciones: {{ project.restriccion_observaciones }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Restricciones</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vial: {{ project.restriccion_vial }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CNA : {{ project.restriccion_cna }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CFE : {{ project.restriccion_cfe }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> PEMEX: {{ project.restriccion_pemex }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> INHA: {{ project.restriccion_inha }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Otros: {{ project.restriccion_otros }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.restriccion_observaciones }}</li>
     </ul>
-    <li>Uso de Suelo</li>
-    <ul>
-        <li>PDMU: {{ project.usosuelo_pmdu }}</li>
-        <li>Densidad: {{ project.usosuelo_densidad }}</li>
-        <li>Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
-        <li>M2 de Construcción: {{ project.usosuelo_m2construccion }}</li>
-        <li>Área Libre: {{ project.usosuelo_arealibre }}</li>
-        <li>Altura: {{ project.usosuelo_altura }}</li>
-        <li>Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Uso de Suelo</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> PDMU: {{ project.usosuelo_pmdu }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad: {{ project.usosuelo_densidad }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2 de Construcción: {{ project.usosuelo_m2construccion }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Libre: {{ project.usosuelo_arealibre }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Altura: {{ project.usosuelo_altura }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
     </ul>
-    <li>Hidráulica</li>
-    <ul>
-        <li>Fuente: {{ project.hidraulica_fuente }}</li>
-        <li>Distancia: {{ project.hidraulica_distancia }}</li>
-        <li>Observaciones: {{ project.hidraulica_observaciones }}</li>
-        <li>Documento: {{ project.hidraulica_documento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Hidráulica</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fuente: {{ project.hidraulica_fuente }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.hidraulica_distancia }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.hidraulica_observaciones }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.hidraulica_documento }}</li>
     </ul>
-    <li>Sanitaria</li>
-    <ul>
-        <li>Tipo: {{ project.sanitaria_tipo }}</li>
-        <li>Responsable: {{ project.sanitaria_responsable }}</li>
-        <li>Observaciones: {{ project.sanitaria_observaciones }}</li>
-        <li>Documento: {{ project.sanitaria_documento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Sanitaria</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.sanitaria_tipo }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.sanitaria_responsable }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.sanitaria_observaciones }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.sanitaria_documento }}</li>
     </ul>
-    <li>Pluvial</li>
-    <ul>
-        <li>Tipo: {{ project.pluvial_tipo }}</li>
-        <li>Responsable: {{ project.pluvial_responsable }}</li>
-        <li>Observaciones: {{ project.pluvial_observaciones }}</li>
-        <li>Documento: {{ project.pluvial_documento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Pluvial</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.pluvial_tipo }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.pluvial_responsable }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.pluvial_observaciones }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.pluvial_documento }}</li>
     </ul>
-    <li>Vial</li>
-    <ul>
-        <li>Vías de Acceso: {{ project.vial_viaacceso }}</li>
-        <li>Distancia: {{ project.vial_distancia }}</li>
-        <li>Carriles: {{ project.vial_carriles }}</li>
-        <li>Sección: {{ project.vial_seccion }}</li>
-        <li>Tipo de Pavimento: {{ project.vial_tipopavimento }}</li>
-        <li>Estado de Construcción: {{ project.vial_estadoconstruccion }}</li>
-        <li>Observaciones: {{ project.vial_observaciones }}</li>
-        <li>Documento: {{ project.vial_documento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vial</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vías de Acceso: {{ project.vial_viaacceso }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.vial_distancia }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Carriles: {{ project.vial_carriles }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Sección: {{ project.vial_seccion }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo de Pavimento: {{ project.vial_tipopavimento }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado de Construcción: {{ project.vial_estadoconstruccion }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.vial_observaciones }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.vial_documento }}</li>
     </ul>
-    <li>Electricidad</li>
-    <ul>
-        <li>Tipo: {{ project.electricidad_tipo }}</li>
-        <li>Distancia: {{ project.electricidad_distancia }}</li>
-        <li>Observaciones: {{ project.electricidad_observaciones }}</li>
-        <li>Documento: {{ project.electricidad_documento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Electricidad</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.electricidad_tipo }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.electricidad_distancia }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.electricidad_observaciones }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.electricidad_documento }}</li>
     </ul>
 
-    <li>Alumbrado Público</li>
-    <ul>
-        <li>Tipo: {{ project.alumbradopublico_tipo }}</li>
-        <li>Distancia: {{ project.alumbradopublico_distancia }}</li>
-        <li>Observaciones: {{ project.alumbradopublico_observaciones }}</li>
-        <li>Documento: {{ project.alumbradopublico_documento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Alumbrado Público</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.alumbradopublico_tipo }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.alumbradopublico_distancia }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.alumbradopublico_observaciones }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.alumbradopublico_documento }}</li>
     </ul>
-    <li>Telefonía</li>
-    <ul>
-        <li>Distancia: {{ project.telefonia_distancia }}</li>
-        <li>Observaciones: {{ project.telefonia_observaciones }}</li>
-        <li>Documento: {{ project.telefonia_documento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Telefonía</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.telefonia_distancia }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.telefonia_observaciones }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.telefonia_documento }}</li>
     </ul>
-    <li>TV Cable</li>
-    <ul>
-        <li>Distancia: {{ project.tvcable_distancia }}</li>
-        <li>Observaciones: {{ project.tvcable_observaciones }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> TV Cable</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.tvcable_distancia }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.tvcable_observaciones }}</li>
     </ul>
-    <li>Equipamiento</li>
-    <ul>
-        <li>A 100 : {{ project.equipamiento_a100 }}</li>
-        <li>A 200 : {{ project.equipamiento_a200 }}</li>
-        <li>A 500 : {{ project.equipamiento_a500 }}</li>
-        <li>Regional : {{ project.equipamiento_regional }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Equipamiento</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 100 : {{ project.equipamiento_a100 }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 200 : {{ project.equipamiento_a200 }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 500 : {{ project.equipamiento_a500 }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Regional : {{ project.equipamiento_regional }}</li>
     </ul>
-    <li>Costo</li>
-    <ul>
-        <li>Costo del Predio : {{ project.costo_predio }}</li>
-        <li>M2 : {{ project.costo_m2 }}</li>
-        <li>Escrituras M2 : {{ project.costo_escrituras }}</li>
-        <li>Levantamiento M2 : {{ project.costo_levantamiento }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Costo</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Costo del Predio : {{ project.costo_predio }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2 : {{ project.costo_m2 }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Escrituras M2 : {{ project.costo_escrituras }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Levantamiento M2 : {{ project.costo_levantamiento }}</li>
     </ul>
-    <li>Estudio de Mercado</li>
-    <ul>
-        <li>Demanda : {{ project.estudiomercado_demanda }}</li>
-        <li>Oferta : {{ project.estudiomercado_oferta }}</li>
-        <li>Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
-        <li>Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estudio de Mercado</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Demanda : {{ project.estudiomercado_demanda }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Oferta : {{ project.estudiomercado_oferta }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
     </ul>
-    <li>Definición del Proyecto</li>
-    <ul>
-        <li>Alernativa : {{ project.definicionproyecto_alternativa }}</li>
-        <li>Tamaño : {{ project.definicionproyecto_tamano }}</li>
-        <li>Programa : {{ project.definicionproyecto_programa }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Definición del Proyecto</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Alernativa : {{ project.definicionproyecto_alternativa }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tamaño : {{ project.definicionproyecto_tamano }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Programa : {{ project.definicionproyecto_programa }}</li>
     </ul>
-    <li>Programas y Áreas</li>
-    <ul>
-        <li>Área Privada : {{ project.programayarea_areaprivativa }}</li>
-        <li>Caseta : {{ project.programayarea_caseta }}</li>
-        <li>Jardín : {{ project.programayarea_jardin }}</li>
-        <li>Vialidad: {{ project.programayarea_vialidad }}</li>
-        <li>Área Verde : {{ project.programayarea_areaverde }}</li>
-        <li>Estacionamiento Visitas: {{ project.programayarea_estacionamientovisita }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Programas y Áreas</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Privada : {{ project.programayarea_areaprivativa }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Caseta : {{ project.programayarea_caseta }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Jardín : {{ project.programayarea_jardin }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vialidad: {{ project.programayarea_vialidad }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Verde : {{ project.programayarea_areaverde }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estacionamiento Visitas: {{ project.programayarea_estacionamientovisita }}</li>
     </ul>
-    <li>Afectación</li>
-    <ul>
-        <li>Afectación : {{ project.programayarea_afectacion }}</li>
-        <li>Documento: {{ project.programayarea_documento }}</li>
-        <li>Latitud: {{ project.latitud }}</li>
-        <li>Longitud: {{ project.longitud }}</li>
+    <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Afectación</li>
+    <ul class="list-group">
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Afectación : {{ project.programayarea_afectacion }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.programayarea_documento }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Latitud: {{ project.latitud }}</li>
+        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Longitud: {{ project.longitud }}</li>
     </ul>
     </ul>
 {% endcomment %}
@@ -169,7 +169,8 @@
 
 
 
-    {% comment %} <div class="card nav-tabs-ver-container">
+
+     <div class="card nav-tabs-ver-container">
         <div class="row">
             <h1> Nombre de Proyecto: {{ project.nombreProyecto }} </h1>
             <div class="col-md-3">
@@ -226,186 +227,186 @@
                 <div class="card-block">
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="general">
-                            <ul>
-                                <li>Clave de Proyecto: {{ project.key }} </li>
-                                <li>Propietario: {{ project.propietario }} </li>
-                                <li>Fecha de Inicio: {{ project.fecha_inicial }}</li>
-                                <li>Fecha de Termino: {{ project.fecha_final }}</li>
-                                <li>Tipo de Contrucción: {{ project.tipo_construccion }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Clave de Proyecto: {{ project.key }} </li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Propietario: {{ project.propietario }} </li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fecha de Inicio: {{ project.fecha_inicial }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fecha de Termino: {{ project.fecha_final }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo de Contrucción: {{ project.tipo_construccion }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="ubicacion">
-                            <ul>
-                                <li>País: {{ project.ubicacion_pais }}</li>
-                                <li>Estado: {{ project.ubicacion_estado }}</li>
-                                <li>Municipio: {{ project.ubicacion_municipio }}</li>
-                                <li>Colonia: {{ project.ubicacion_colonia }}</li>
-                                <li>Calle: {{ project.ubicacion_calle }}</li>
-                                <li>Número: {{ project.ubicacion_numero }}</li>
-                                <li>CP: {{ project.ubicacion_cp }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> País: {{ project.ubicacion_pais }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado: {{ project.ubicacion_estado }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Municipio: {{ project.ubicacion_municipio }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Colonia: {{ project.ubicacion_colonia }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Calle: {{ project.ubicacion_calle }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Número: {{ project.ubicacion_numero }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CP: {{ project.ubicacion_cp }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="areas">
-                            <ul>
-                                <li>Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
-                                <li>Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="legal">
-                            <ul>
-                                <li>Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
-                                <li>Documento: {{ project.documento_propiedad }}</li>
-                                <li>Gravamen: {{ project.estadolegal_gravamen }}</li>
-                                <li>Documento: {{ project.documento_gravamen }}</li>
-                                <li>Predial: {{ project.estadolegal_predial }}</li>
-                                <li>Documento: {{ project.documento_predial }}</li>
-                                <li>Agua: {{ project.estadolegal_agua }}</li>
-                                <li>Documento: {{ project.documento_agua }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_propiedad }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Gravamen: {{ project.estadolegal_gravamen }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_gravamen }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Predial: {{ project.estadolegal_predial }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_predial }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Agua: {{ project.estadolegal_agua }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_agua }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="rest">
-                            <ul>
-                                <li>Vial: {{ project.restriccion_vial }}</li>
-                                <li>CNA : {{ project.restriccion_cna }}</li>
-                                <li>CFE : {{ project.restriccion_cfe }}</li>
-                                <li>PEMEX: {{ project.restriccion_pemex }}</li>
-                                <li>INHA: {{ project.restriccion_inha }}</li>
-                                <li>Otros: {{ project.restriccion_otros }}</li>
-                                <li>Observaciones: {{ project.restriccion_observaciones }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vial: {{ project.restriccion_vial }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CNA : {{ project.restriccion_cna }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CFE : {{ project.restriccion_cfe }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> PEMEX: {{ project.restriccion_pemex }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> INHA: {{ project.restriccion_inha }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Otros: {{ project.restriccion_otros }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.restriccion_observaciones }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="suelo">
-                            <ul>
-                                <li>PDMU: {{ project.usosuelo_pmdu }}</li>
-                                <li>Densidad: {{ project.usosuelo_densidad }}</li>
-                                <li>Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
-                                <li>M2 de Construcción: {{ project.usosuelo_m2construccion }}</li>
-                                <li>Área Libre: {{ project.usosuelo_arealibre }}</li>
-                                <li>Altura: {{ project.usosuelo_altura }}</li>
-                                <li>Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> PDMU: {{ project.usosuelo_pmdu }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad: {{ project.usosuelo_densidad }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2 de Construcción: {{ project.usosuelo_m2construccion }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Libre: {{ project.usosuelo_arealibre }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Altura: {{ project.usosuelo_altura }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="hidra">
-                            <ul>
-                                <li>Fuente: {{ project.hidraulica_fuente }}</li>
-                                <li>Distancia: {{ project.hidraulica_distancia }}</li>
-                                <li>Observaciones: {{ project.hidraulica_observaciones }}</li>
-                                <li>Documento: {{ project.hidraulica_documento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fuente: {{ project.hidraulica_fuente }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.hidraulica_distancia }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.hidraulica_observaciones }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.hidraulica_documento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="sanit">
-                            <ul>
-                                <li>Tipo: {{ project.sanitaria_tipo }}</li>
-                                <li>Responsable: {{ project.sanitaria_responsable }}</li>
-                                <li>Observaciones: {{ project.sanitaria_observaciones }}</li>
-                                <li>Documento: {{ project.sanitaria_documento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.sanitaria_tipo }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.sanitaria_responsable }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.sanitaria_observaciones }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.sanitaria_documento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="pluvial">
-                            <ul>
-                                <li>Tipo: {{ project.pluvial_tipo }}</li>
-                                <li>Responsable: {{ project.pluvial_responsable }}</li>
-                                <li>Observaciones: {{ project.pluvial_observaciones }}</li>
-                                <li>Documento: {{ project.pluvial_documento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.pluvial_tipo }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.pluvial_responsable }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.pluvial_observaciones }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.pluvial_documento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="vial">
-                            <ul>
-                                <li>Vías de Acceso: {{ project.vial_viaacceso }}</li>
-                                <li>Distancia: {{ project.vial_distancia }}</li>
-                                <li>Carriles: {{ project.vial_carriles }}</li>
-                                <li>Sección: {{ project.vial_seccion }}</li>
-                                <li>Tipo de Pavimento: {{ project.vial_tipopavimento }}</li>
-                                <li>Estado de Construcción: {{ project.vial_estadoconstruccion }}</li>
-                                <li>Observaciones: {{ project.vial_observaciones }}</li>
-                                <li>Documento: {{ project.vial_documento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vías de Acceso: {{ project.vial_viaacceso }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.vial_distancia }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Carriles: {{ project.vial_carriles }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Sección: {{ project.vial_seccion }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo de Pavimento: {{ project.vial_tipopavimento }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado de Construcción: {{ project.vial_estadoconstruccion }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.vial_observaciones }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.vial_documento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="elect">
-                            <ul>
-                                <li>Tipo: {{ project.electricidad_tipo }}</li>
-                                <li>Distancia: {{ project.electricidad_distancia }}</li>
-                                <li>Observaciones: {{ project.electricidad_observaciones }}</li>
-                                <li>Documento: {{ project.electricidad_documento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.electricidad_tipo }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.electricidad_distancia }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.electricidad_observaciones }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.electricidad_documento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="alumbrado">
-                            <ul>
-                                <li>Tipo: {{ project.alumbradopublico_tipo }}</li>
-                                <li>Distancia: {{ project.alumbradopublico_distancia }}</li>
-                                <li>Observaciones: {{ project.alumbradopublico_observaciones }}</li>
-                                <li>Documento: {{ project.alumbradopublico_documento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.alumbradopublico_tipo }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.alumbradopublico_distancia }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.alumbradopublico_observaciones }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.alumbradopublico_documento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="telefon">
-                            <ul>
-                                <li>Distancia: {{ project.telefonia_distancia }}</li>
-                                <li>Observaciones: {{ project.telefonia_observaciones }}</li>
-                                <li>Documento: {{ project.telefonia_documento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.telefonia_distancia }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.telefonia_observaciones }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.telefonia_documento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="tv">
-                            <ul>
-                                <li>Distancia: {{ project.tvcable_distancia }}</li>
-                                <li>Observaciones: {{ project.tvcable_observaciones }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.tvcable_distancia }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.tvcable_observaciones }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="equip">
-                            <ul>
-                                <li>A 100 : {{ project.equipamiento_a100 }}</li>
-                                <li>A 200 : {{ project.equipamiento_a200 }}</li>
-                                <li>A 500 : {{ project.equipamiento_a500 }}</li>
-                                <li>Regional : {{ project.equipamiento_regional }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 100 : {{ project.equipamiento_a100 }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 200 : {{ project.equipamiento_a200 }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 500 : {{ project.equipamiento_a500 }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Regional : {{ project.equipamiento_regional }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="costo">
-                            <ul>
-                                <li>Costo del Predio : {{ project.costo_predio }}</li>
-                                <li>M2 : {{ project.costo_m2 }}</li>
-                                <li>Escrituras M2 : {{ project.costo_escrituras }}</li>
-                                <li>Levantamiento M2 : {{ project.costo_levantamiento }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Costo del Predio : {{ project.costo_predio }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2 : {{ project.costo_m2 }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Escrituras M2 : {{ project.costo_escrituras }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Levantamiento M2 : {{ project.costo_levantamiento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="estudio">
-                            <ul>
-                                <li>Demanda : {{ project.estudiomercado_demanda }}</li>
-                                <li>Oferta : {{ project.estudiomercado_oferta }}</li>
-                                <li>Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
-                                <li>Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Demanda : {{ project.estudiomercado_demanda }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Oferta : {{ project.estudiomercado_oferta }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="definicion">
-                            <ul>
-                                <li>Alernativa : {{ project.definicionproyecto_alternativa }}</li>
-                                <li>Tamaño : {{ project.definicionproyecto_tamano }}</li>
-                                <li>Programa : {{ project.definicionproyecto_programa }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Alernativa : {{ project.definicionproyecto_alternativa }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tamaño : {{ project.definicionproyecto_tamano }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Programa : {{ project.definicionproyecto_programa }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="program">
-                            <ul>
-                                <li>Área Privada : {{ project.programayarea_areaprivativa }}</li>
-                                <li>Caseta : {{ project.programayarea_caseta }}</li>
-                                <li>Jardín : {{ project.programayarea_jardin }}</li>
-                                <li>Vialidad: {{ project.programayarea_vialidad }}</li>
-                                <li>Área Verde : {{ project.programayarea_areaverde }}</li>
-                                <li>Estacionamiento Visitas: {{ project.programayarea_estacionamientovisita }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Privada : {{ project.programayarea_areaprivativa }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Caseta : {{ project.programayarea_caseta }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Jardín : {{ project.programayarea_jardin }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vialidad: {{ project.programayarea_vialidad }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Verde : {{ project.programayarea_areaverde }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estacionamiento Visitas: {{ project.programayarea_estacionamientovisita }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="afectacion">
-                            <ul>
-                                <li>Afectación : {{ project.programayarea_afectacion }}</li>
-                                <li>Documento: {{ project.programayarea_documento }}</li>
-                                <li>Latitud: {{ project.latitud }}</li>
-                                <li>Longitud: {{ project.longitud }}</li>
+                            <ul class="list-group">
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Afectación : {{ project.programayarea_afectacion }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.programayarea_documento }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Latitud: {{ project.latitud }}</li>
+                                <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Longitud: {{ project.longitud }}</li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>{% endcomment %}
+    </div>
 
-
+{% comment %}
 
     <h1> Nombre de Proyecto: {{ project.nombreProyecto }} </h1>
     <div class="row masonry-container">
@@ -415,12 +416,12 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Clave de Proyecto: {{ project.key }} </li>
-                        <li>Propietario: {{ project.propietario }} </li>
-                        <li>Fecha de Inicio: {{ project.fecha_inicial }}</li>
-                        <li>Fecha de Termino: {{ project.fecha_final }}</li>
-                        <li>Tipo de Contrucción: {{ project.tipo_construccion }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Clave de Proyecto: {{ project.key }} </li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Propietario: {{ project.propietario }} </li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fecha de Inicio: {{ project.fecha_inicial }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fecha de Termino: {{ project.fecha_final }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo de Contrucción: {{ project.tipo_construccion }}</li>
                     </ul>
                 </div>
             </div>
@@ -429,14 +430,14 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>País: {{ project.ubicacion_pais }}</li>
-                        <li>Estado: {{ project.ubicacion_estado }}</li>
-                        <li>Municipio: {{ project.ubicacion_municipio }}</li>
-                        <li>Colonia: {{ project.ubicacion_colonia }}</li>
-                        <li>Calle: {{ project.ubicacion_calle }}</li>
-                        <li>Número: {{ project.ubicacion_numero }}</li>
-                        <li>CP: {{ project.ubicacion_cp }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> País: {{ project.ubicacion_pais }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado: {{ project.ubicacion_estado }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Municipio: {{ project.ubicacion_municipio }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Colonia: {{ project.ubicacion_colonia }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Calle: {{ project.ubicacion_calle }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Número: {{ project.ubicacion_numero }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CP: {{ project.ubicacion_cp }}</li>
                     </ul>
                 </div>
             </div>
@@ -445,9 +446,9 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
-                        <li>Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}</li>
                     </ul>
                 </div>
             </div>
@@ -456,15 +457,15 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
-                        <li>Documento: {{ project.documento_propiedad }}</li>
-                        <li>Gravamen: {{ project.estadolegal_gravamen }}</li>
-                        <li>Documento: {{ project.documento_gravamen }}</li>
-                        <li>Predial: {{ project.estadolegal_predial }}</li>
-                        <li>Documento: {{ project.documento_predial }}</li>
-                        <li>Agua: {{ project.estadolegal_agua }}</li>
-                        <li>Documento: {{ project.documento_agua }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_propiedad }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Gravamen: {{ project.estadolegal_gravamen }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_gravamen }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Predial: {{ project.estadolegal_predial }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_predial }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Agua: {{ project.estadolegal_agua }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_agua }}</li>
                     </ul>
                 </div>
             </div>
@@ -473,14 +474,14 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Vial: {{ project.restriccion_vial }}</li>
-                        <li>CNA : {{ project.restriccion_cna }}</li>
-                        <li>CFE : {{ project.restriccion_cfe }}</li>
-                        <li>PEMEX: {{ project.restriccion_pemex }}</li>
-                        <li>INHA: {{ project.restriccion_inha }}</li>
-                        <li>Otros: {{ project.restriccion_otros }}</li>
-                        <li>Observaciones: {{ project.restriccion_observaciones }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vial: {{ project.restriccion_vial }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CNA : {{ project.restriccion_cna }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CFE : {{ project.restriccion_cfe }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> PEMEX: {{ project.restriccion_pemex }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> INHA: {{ project.restriccion_inha }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Otros: {{ project.restriccion_otros }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.restriccion_observaciones }}</li>
                     </ul>
                 </div>
             </div>
@@ -489,14 +490,14 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>PDMU: {{ project.usosuelo_pmdu }}</li>
-                        <li>Densidad: {{ project.usosuelo_densidad }}</li>
-                        <li>Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
-                        <li>M2 de Construcción: {{ project.usosuelo_m2construccion }}</li>
-                        <li>Área Libre: {{ project.usosuelo_arealibre }}</li>
-                        <li>Altura: {{ project.usosuelo_altura }}</li>
-                        <li>Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> PDMU: {{ project.usosuelo_pmdu }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad: {{ project.usosuelo_densidad }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2 de Construcción: {{ project.usosuelo_m2construccion }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Libre: {{ project.usosuelo_arealibre }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Altura: {{ project.usosuelo_altura }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
                     </ul>
                 </div>
             </div>
@@ -505,11 +506,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Fuente: {{ project.hidraulica_fuente }}</li>
-                        <li>Distancia: {{ project.hidraulica_distancia }}</li>
-                        <li>Observaciones: {{ project.hidraulica_observaciones }}</li>
-                        <li>Documento: {{ project.hidraulica_documento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fuente: {{ project.hidraulica_fuente }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.hidraulica_distancia }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.hidraulica_observaciones }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.hidraulica_documento }}</li>
                     </ul>
                 </div>
             </div>
@@ -518,11 +519,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Tipo: {{ project.sanitaria_tipo }}</li>
-                        <li>Responsable: {{ project.sanitaria_responsable }}</li>
-                        <li>Observaciones: {{ project.sanitaria_observaciones }}</li>
-                        <li>Documento: {{ project.sanitaria_documento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.sanitaria_tipo }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.sanitaria_responsable }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.sanitaria_observaciones }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.sanitaria_documento }}</li>
                     </ul>
                 </div>
             </div>
@@ -531,11 +532,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Tipo: {{ project.pluvial_tipo }}</li>
-                        <li>Responsable: {{ project.pluvial_responsable }}</li>
-                        <li>Observaciones: {{ project.pluvial_observaciones }}</li>
-                        <li>Documento: {{ project.pluvial_documento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.pluvial_tipo }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.pluvial_responsable }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.pluvial_observaciones }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.pluvial_documento }}</li>
                     </ul>
                 </div>
             </div>
@@ -544,15 +545,15 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Vías de Acceso: {{ project.vial_viaacceso }}</li>
-                        <li>Distancia: {{ project.vial_distancia }}</li>
-                        <li>Carriles: {{ project.vial_carriles }}</li>
-                        <li>Sección: {{ project.vial_seccion }}</li>
-                        <li>Tipo de Pavimento: {{ project.vial_tipopavimento }}</li>
-                        <li>Estado de Construcción: {{ project.vial_estadoconstruccion }}</li>
-                        <li>Observaciones: {{ project.vial_observaciones }}</li>
-                        <li>Documento: {{ project.vial_documento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vías de Acceso: {{ project.vial_viaacceso }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.vial_distancia }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Carriles: {{ project.vial_carriles }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Sección: {{ project.vial_seccion }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo de Pavimento: {{ project.vial_tipopavimento }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado de Construcción: {{ project.vial_estadoconstruccion }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.vial_observaciones }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.vial_documento }}</li>
                     </ul>
                 </div>
             </div>
@@ -561,11 +562,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Tipo: {{ project.electricidad_tipo }}</li>
-                        <li>Distancia: {{ project.electricidad_distancia }}</li>
-                        <li>Observaciones: {{ project.electricidad_observaciones }}</li>
-                        <li>Documento: {{ project.electricidad_documento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.electricidad_tipo }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.electricidad_distancia }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.electricidad_observaciones }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.electricidad_documento }}</li>
                     </ul>
                 </div>
             </div>
@@ -574,11 +575,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Tipo: {{ project.alumbradopublico_tipo }}</li>
-                        <li>Distancia: {{ project.alumbradopublico_distancia }}</li>
-                        <li>Observaciones: {{ project.alumbradopublico_observaciones }}</li>
-                        <li>Documento: {{ project.alumbradopublico_documento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.alumbradopublico_tipo }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.alumbradopublico_distancia }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.alumbradopublico_observaciones }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.alumbradopublico_documento }}</li>
                     </ul>
                 </div>
             </div>
@@ -587,10 +588,10 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Distancia: {{ project.telefonia_distancia }}</li>
-                        <li>Observaciones: {{ project.telefonia_observaciones }}</li>
-                        <li>Documento: {{ project.telefonia_documento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.telefonia_distancia }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.telefonia_observaciones }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.telefonia_documento }}</li>
                     </ul>
                 </div>
             </div>
@@ -599,9 +600,9 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Distancia: {{ project.tvcable_distancia }}</li>
-                        <li>Observaciones: {{ project.tvcable_observaciones }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.tvcable_distancia }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.tvcable_observaciones }}</li>
                     </ul>
                 </div>
             </div>
@@ -610,11 +611,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>A 100 : {{ project.equipamiento_a100 }}</li>
-                        <li>A 200 : {{ project.equipamiento_a200 }}</li>
-                        <li>A 500 : {{ project.equipamiento_a500 }}</li>
-                        <li>Regional : {{ project.equipamiento_regional }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 100 : {{ project.equipamiento_a100 }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 200 : {{ project.equipamiento_a200 }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 500 : {{ project.equipamiento_a500 }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Regional : {{ project.equipamiento_regional }}</li>
                     </ul>
                 </div>
             </div>
@@ -623,11 +624,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Costo del Predio : {{ project.costo_predio }}</li>
-                        <li>M2 : {{ project.costo_m2 }}</li>
-                        <li>Escrituras M2 : {{ project.costo_escrituras }}</li>
-                        <li>Levantamiento M2 : {{ project.costo_levantamiento }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Costo del Predio : {{ project.costo_predio }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2 : {{ project.costo_m2 }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Escrituras M2 : {{ project.costo_escrituras }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Levantamiento M2 : {{ project.costo_levantamiento }}</li>
                     </ul>
                 </div>
             </div>
@@ -636,11 +637,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Demanda : {{ project.estudiomercado_demanda }}</li>
-                        <li>Oferta : {{ project.estudiomercado_oferta }}</li>
-                        <li>Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
-                        <li>Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Demanda : {{ project.estudiomercado_demanda }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Oferta : {{ project.estudiomercado_oferta }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
                     </ul>
                 </div>
             </div>
@@ -649,10 +650,10 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Alernativa : {{ project.definicionproyecto_alternativa }}</li>
-                        <li>Tamaño : {{ project.definicionproyecto_tamano }}</li>
-                        <li>Programa : {{ project.definicionproyecto_programa }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Alernativa : {{ project.definicionproyecto_alternativa }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tamaño : {{ project.definicionproyecto_tamano }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Programa : {{ project.definicionproyecto_programa }}</li>
                     </ul>
                 </div>
             </div>
@@ -661,13 +662,13 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Área Privada : {{ project.programayarea_areaprivativa }}</li>
-                        <li>Caseta : {{ project.programayarea_caseta }}</li>
-                        <li>Jardín : {{ project.programayarea_jardin }}</li>
-                        <li>Vialidad: {{ project.programayarea_vialidad }}</li>
-                        <li>Área Verde : {{ project.programayarea_areaverde }}</li>
-                        <li>Estacionamiento Visitas: {{ project.programayarea_estacionamientovisita }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Privada : {{ project.programayarea_areaprivativa }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Caseta : {{ project.programayarea_caseta }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Jardín : {{ project.programayarea_jardin }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vialidad: {{ project.programayarea_vialidad }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Verde : {{ project.programayarea_areaverde }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estacionamiento Visitas: {{ project.programayarea_estacionamientovisita }}</li>
                     </ul>
                 </div>
             </div>
@@ -676,11 +677,11 @@
             <div class="card">
                 <div class="card-header">Item Title</div>
                 <div class="card-block">
-                    <ul>
-                        <li>Afectación : {{ project.programayarea_afectacion }}</li>
-                        <li>Documento: {{ project.programayarea_documento }}</li>
-                        <li>Latitud: {{ project.latitud }}</li>
-                        <li>Longitud: {{ project.longitud }}</li>
+                    <ul class="list-group">
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Afectación : {{ project.programayarea_afectacion }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.programayarea_documento }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Latitud: {{ project.latitud }}</li>
+                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Longitud: {{ project.longitud }}</li>
                     </ul>
                 </div>
             </div>
@@ -693,10 +694,10 @@
 
 
 
-    <ul>
+    <ul class="list-group">
         --{{ tipoproyectodetalle_set }}--
 
-    </ul>
+    </ul>{% endcomment %}
 
 
 {% endblock %}

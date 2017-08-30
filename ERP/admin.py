@@ -16,7 +16,7 @@ from django.contrib import admin
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
-from ERP.views import CompaniesListView, ContractorListView, ProjectListView
+from ERP.views import CompaniesListView, ContractorListView, ProjectListView,ProgressEstimateLogListView,EstimateListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
@@ -61,10 +61,10 @@ class LogFileInline(admin.TabularInline):
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
     form=ProgressEstimateLogForm
-    fields = ('user', 'project', 'description', 'date')
-    list_display = ('user', 'description', 'date')
-    search_fields = ('user', 'description', 'date')
-    list_display_links = ('user', 'description', 'date')
+    fields = ('user', 'project', 'date', 'description')
+    list_display = ('user', 'date', 'description')
+    search_fields = ('user', 'date', 'description')
+    list_display_links = ('user', 'date', 'description')
     list_per_page = 50
     inlines = [LogFileInline, ]
 
@@ -78,6 +78,18 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
                 return ModelFormE(*args, **kwargs)
 
         return ModelFormEMetaClass
+
+    def get_urls(self):
+        urls = super(ProgressEstimateLogAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(ProgressEstimateLogListView.as_view()), name='progressestimatelog-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ProgressEstimateLogDetailView.as_view(), name='progressestimatelog-detail'),
+
+        ]
+        return my_urls + urls
+
+
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -538,7 +550,6 @@ class EstimateAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
-
     def get_urls(self):
         urls = super(EstimateAdmin, self).get_urls()
         info = self.model._meta.app_label, self.model._meta.model_name
@@ -552,6 +563,7 @@ class EstimateAdmin(admin.ModelAdmin):
         ]
         print "My URLS:"
         return my_urls + urls
+
 
 
 
