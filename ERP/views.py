@@ -9,6 +9,7 @@ from django.views import generic
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 
+from ERP.forms import EstimateSearchForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate
 from django.db.models import Q
@@ -374,13 +375,10 @@ class EstimateListView(ListView):
 
     def get_queryset(self):
 
-
         print "URL is:"
-
 
         result = super(EstimateListView, self).get_queryset()
         EstimateListView.project_id = int(self.kwargs['project'])
-
 
         result = result.filter(Q(concept_input__line_item__project__id=EstimateListView.project_id))
 
@@ -390,7 +388,7 @@ class EstimateListView(ListView):
             query_list = query.split()
             result = result.filter(
                 reduce(operator.and_,
-                       (Q(start_date__icontains=q) for q in query_list)) 
+                       (Q(start_date__icontains=q) for q in query_list))
             )
         else:
             EstimateListView.query = ''
@@ -403,6 +401,11 @@ class EstimateListView(ListView):
         context['query_string'] = '&q=' + EstimateListView.query
         context['has_query'] = (EstimateListView.query is not None) and (EstimateListView.query != "")
         context['project'] = EstimateListView.project_id
+
+
+
+        context['form'] = EstimateSearchForm(EstimateListView.project_id)
+
         return context
 
 
@@ -411,13 +414,11 @@ class EstimateDelete(DeleteView):
     success_url = ""
     template_name = "ERP/estimate_confirm_delete.html"
 
-
     def delete(self, request, *args, **kwargs):
-
         print "About to delete."
         obj = self.get_object()
         project_id = obj.concept_input.line_item.project.id
-        EstimateDelete.success_url = "/admin/ERP/estimate/list/"+str(project_id)
+        EstimateDelete.success_url = "/admin/ERP/estimate/list/" + str(project_id)
         return super(EstimateDelete, self).delete(request, *args, **kwargs)
 
 
@@ -429,4 +430,5 @@ class EstimateDetailView(generic.DetailView):
         context = super(EstimateDetailView, self).get_context_data(**kwargs)
         estimate = context['estimate']
         context['progress_estimates'] = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
+
         return context
