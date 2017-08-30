@@ -614,9 +614,14 @@ class Project(models.Model):
                                                        blank=True)
     estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
     estadolegal_predial = models.CharField(verbose_name="predial", max_length=200, null=True, blank=True)
+
+
     estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
+
+    # File Fields
     documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_gravamen = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
 
@@ -723,9 +728,11 @@ class Project(models.Model):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
         ans['key'] = str(self.key)
-        ans['contrato'] = str(self.contrato.objeto_contrato)
-        ans['nombreProyecto'] = str(self.nombreProyecto)
+        ans['nombreProyecto'] = unicode(str(self.nombreProyecto))
         ans['propietario'] = str(self.propietario.nombrePropietario)
+        ans['ubicacion_municipio'] = unicode(str(self.ubicacion_municipio.nombreMunicipio))
+        ans['ubicacion_estado'] = 'eh'#unicode(str(self.ubicacion_estado.nombreEstado))
+        ans['ubicacion_pais'] = unicode(str(self.ubicacion_pais.nombrePais))
 
         return ans
 
@@ -1058,7 +1065,7 @@ class ProgressEstimateLog(models.Model):
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
-        answer['date'] = str(self.date)
+        #answer['date'] = str(self.date)
         answer['register_date'] = str(self.register_date)
         return answer
 
@@ -1076,7 +1083,7 @@ def progress_estimate_log_destination(instance, filename):
 class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de estimación", null=False,
                                               blank=False)
-    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination)
+    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination, default="")
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
     def to_serializable_dict(self):
