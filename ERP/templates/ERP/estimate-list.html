@@ -10,8 +10,10 @@
         <div><a href="add">Agregar</a></div>
         <ul>
             {% for estimate in object_list %}
-                <li><a href="{{ estimate.id }}">{{ estimate.start_date }} Concepto o Insumo:{{ estimate.line_item.description }}</a> | <a href="{{ estimate.id }}">Avances de la estimación</a> | <a
-                        href="{{ estimate.id }}/change">Editar</a> | <a href="{{ estimate.id }}/delete">Eliminar</a>
+                <li>
+                    <a href="{{ estimate.id }}">{{ estimate.start_date }} Concepto o Insumo:{{ estimate.line_item.description }}</a> |
+                    <a href="/admin/ERP/estimate/{{ estimate.id }}">Ver</a> |
+                    <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> | <a href="{{ estimate.id }}/delete">Eliminar</a>
                 </li>
             {% empty %}
                 <li>Aún no se han generado estimaciones.</li>
