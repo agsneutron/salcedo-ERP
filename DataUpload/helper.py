@@ -15,10 +15,11 @@ from django.db.models import Q
 from ERP.models import Concept_Input, Unit, LineItem
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 
-
 import locale
 
 locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+
+
 # locale.currency(1000, grouping=True)
 # español para windows
 # locale.setlocale(locale.LC_ALL, "esp")
@@ -285,31 +286,29 @@ class DBObject(object):
     def save_concept_input(self, record, model, project_id):
         # First, we get each all the attributes.
         line_item_key = record[self.ConceptConstants.LINE_ITEM_KEY_COL]
-        line_item_description = record[self.ConceptConstants.LINE_ITEM_DESCRIPTION_COL].encode('utf-8')
+        # line_item_description = record[self.ConceptConstants.LINE_ITEM_DESCRIPTION_COL].encode('utf-8')  # Not used
         concept_key = record[self.ConceptConstants.CONCEPT_KEY_COL].encode('utf-8')
         concept_description = record[self.ConceptConstants.CONCEPT_DESCRIPTION_COL].encode('utf-8')
         unit = record[self.ConceptConstants.UNIT_COL].encode('utf-8')
         quantity = Decimal(record[self.ConceptConstants.QUANTITY_COL].replace(',', ''))
         unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL][1:].replace(',', ''))
 
+        # Check if the unit exists. If not, add it.
         unit_qs = Unit.objects.filter(abbreviation=unit.upper())
-
-
-        # print 'all good 1'
-
         if len(unit_qs) == 0:
+            # The unit does not exist. Add it.
             unit_obj = Unit(abbreviation=unit.upper(),
                             quantification='C',
                             name=unit.upper())
             unit_obj.save()
         else:
+            # The unit exists. Use it.
             unit_obj = unit_qs[0]
 
+        # Now we're going to check if the line item provided for the concept exists.
         line_item_qs = LineItem.objects.filter(Q(key=line_item_key.upper()) & Q(project_id=project_id))
-
         if len(line_item_qs) == 0:
-
-            # print 'all good 2'
+            # The line item does not exist. Raise an exception to be displayed to the user.
             model_names = {
                 self.CONCEPT_UPLOAD: 'concepto',
                 self.INPUT_UPLOAD: 'insumo'
@@ -319,11 +318,18 @@ class DBObject(object):
                     model] + "(" + concept_key + ") correspondiente a una partida que no existe (" + line_item_key + ").",
                 LoggingConstants.ERROR, self.user_id)
         else:
-
-            # print 'all good 3'
+            # The line item exists. Use it.
             line_item_obj = line_item_qs[0]
 
-        # print 'all good'
+        # Now We'll check that (line_item_id, concept_key) does not already exist.
+        concepts_validation_qs = Concept_Input.objects.filter(Q(line_item_id=line_item_obj.id) & Q(key=concept_key))
+        if len(concepts_validation_qs) != 0:
+            # Data already exists. Raise an error to be displayed to the user.
+            raise ErrorDataUpload(
+                u'Se intentó guardar el concepto ' + concept_key + u' para la partida ' + line_item_obj.key
+                + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.',
+                LoggingConstants.ERROR, self.user_id)
+
 
         concept_input = Concept_Input(
             line_item=line_item_obj,
