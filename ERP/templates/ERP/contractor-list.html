@@ -1,24 +1,91 @@
+
+
+
+
+
 {% extends "admin/base_site.html" %}
 
 
 {% block content %}
     <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card ">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">Contratistas</h3>
+                        </div>
+                        <div class="item-right">
 
-        {% include 'ERP/list-search-fields.html' %}
+                            <a href="add/"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: -28px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+                    </div>
 
-        <h1>Contratistas</h1>
-        <div><a href="add">Agregar</a></div>
-        <ul>
-            {% for contractor in object_list %}
-                <li><a href="{{ contractor.id }}">{{ contractor.nombreContratista }}</a> | <a href="{{ contractor.id }}">Ver</a> | <a
-                        href="{{ contractor.id }}/change">Editar</a> | <a href="{{ contractor.id }}/delete">Eliminar</a>
-                </li>
-            {% empty %}
-                <li>No Companies yet.</li>
-            {% endfor %}
-        </ul>
+                    <div class="card-block">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                {% include 'ERP/list-search-fields.html' %}
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Municipio</th>
+                                            <th>Estado</th>
+                                            <th>Teléfono</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                         {% for contractor in object_list %}
+                                            <tr>
 
-        {% include 'ERP/list-pagination.html' %}
+                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                 <td><span >{{ contractor.nombreContratista }}</span></td>
+                                                <td><span >{{ contractor.municipio }}</span></td>
+                                                <td><span >{{ contractor.estado  }}</span></td>
+                                                <td><span >{{ contractor.telefono }}</span></td>
+
+                                                <td style="width: 7%"><a href="{{ contractor.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
+                                                <td style="width: 9%"><a href="{{ contractor.id }}/change"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
+                                                <td style="width: 2%"><a href="{{ contractor.id }}/delete"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-trash-o color-danger eliminar" style="margin-right: 0"></i></a>
+                                                </td>
+
+                                                {% empty %}
+                                                <td>No Companies yet.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                {% include 'ERP/list-pagination.html' %}
+                                <hr>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
 
     </div>
 {% endblock %}

@@ -1,18 +1,26 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-    <h1>Nombre: {{ contratista.nombreContratista }}  <a href="change">Editar</a></h1>
-        <ul>
-            <li>Calle: {{ contratista.calle }}</li>
-            <li>Número: {{ contratista.numero }}</li>
-            <li>Colonia: {{ contratista.colonia }}</li>
-            <li>Municipio: {{ contratista.municipio }}</li>
-            <li>Estado: {{ contratista.estado }}</li>
-            <li>País: {{ contratista.pais }}</li>
-            <li>CP: {{ contratista.cp }}</li>
-            <li>Teléfono: {{ contratista.telefono }}</li>
-            <li>RFC: {{ contratista.rfc }}</li>
-            <li>Email: {{ contratista.email }}</li>
-        </ul>
-
+    <h1>Nombre: {{ contratista.nombreContratista }} <a href="change">Editar</a></h1>
+    <ul>
+        <li>Calle: {{ contratista.calle }}</li>
+        <li>Número: {{ contratista.numero }}</li>
+        <li>Colonia: {{ contratista.colonia }}</li>
+        <li>Municipio: {{ contratista.municipio }}</li>
+        <li>Estado: {{ contratista.estado }}</li>
+        <li>País: {{ contratista.pais }}</li>
+        <li>CP: {{ contratista.cp }}</li>
+        <li>Teléfono: {{ contratista.telefono }}</li>
+        <li>RFC: {{ contratista.rfc }}</li>
+        <li>Email: {{ contratista.email }}</li>
+    </ul>
+    <div class="card card-info">
+        <div class="card-block text-center">
+            <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i
+                    class="zmdi zmdi-cloud-outline"></i></span>
+            <h4 class="color-info">Lorem ipsum dolor</h4>
+            <p>...</p>
+            <a href="javascript:void(0)" class="btn btn-raised btn-info"><i class="zmdi zmdi-airplane"></i> Button</a>
+        </div>
+    </div>
 {% endblock %}
