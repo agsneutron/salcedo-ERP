@@ -1,5 +1,4 @@
 {% extends "admin/base_site.html" %}
-
 {% block extrahead %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css"/>
     <script type="text/javascript" src="/admin/jsi18n/"></script>
@@ -17,7 +16,6 @@
 
 
         <form action="" method="get">
-            {% csrf_token %}
             {{ form }}
            <button class="searchbutton" type="submit">
                 <i class="fa fa-search"></i>
@@ -30,8 +28,8 @@
         <ul>
             {% for estimate in object_list %}
                 <li>
-                    <a href="{{ estimate.id }}">{{ estimate.start_date }} Concepto o
-                        Insumo:{{ estimate.line_item.description }}</a> |
+                    <a href="Inicio: {{ estimate.id }}">Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }} - Concepto o Insumo: {{ estimate.concept_input.description }}</a> |
+                    <a href="{{ estimate.id }}">Concepto | Insumo: {{ estimate.line_item.description }}</a> |
                     <a href="/admin/ERP/estimate/{{ estimate.id }}">Ver</a> |
                     <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> |
                     <a href="/admin/ERP/estimate/{{ estimate.id }}/delete">Eliminar</a>
