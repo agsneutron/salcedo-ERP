@@ -154,8 +154,6 @@ class ContractorDetailView(generic.DetailView):
     template_name = "ERP/contractor-detail.html"
 
 
-
-
 # Views for the model ContratoContratista.
 class ContractorContractListView(ListView):
     model = ContratoContratista
@@ -188,8 +186,9 @@ class ContractorContractListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(ContractorContractListView, self).get_context_data(**kwargs)
         context['query'] = CompaniesListView.query
-        context['query_string'] = '&q='+ContractorContractListView.query
-        context['has_query'] = (ContractorContractListView.query is not None) and (ContractorContractListView.query != "")
+        context['query_string'] = '&q=' + ContractorContractListView.query
+        context['has_query'] = (ContractorContractListView.query is not None) and (
+            ContractorContractListView.query != "")
         print context
         return context
 
@@ -197,7 +196,6 @@ class ContractorContractListView(ListView):
 class ContractorContractDetailView(generic.DetailView):
     model = ContratoContratista
     template_name = "ERP/contractor-contract-detail.html"
-
 
 
 # Views for the model Propietaro.
@@ -232,7 +230,7 @@ class OwnerListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(OwnerListView, self).get_context_data(**kwargs)
         context['query'] = OwnerListView.query
-        context['query_string'] = '&q='+OwnerListView.query
+        context['query_string'] = '&q=' + OwnerListView.query
         context['has_query'] = (OwnerListView.query is not None) and (OwnerListView.query != "")
         return context
 
@@ -240,7 +238,6 @@ class OwnerListView(ListView):
 class OwnerDetailView(generic.DetailView):
     model = Propietario
     template_name = "ERP/owner-detail.html"
-
 
 
 # Views for the model Concept Input.
@@ -265,7 +262,7 @@ class ConceptInputListView(ListView):
                 reduce(operator.and_,
                        (Q(key__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
-                       (Q(description__icontains=q) for q in query_list))|
+                       (Q(description__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
                        (Q(status__icontains=q) for q in query_list))
             )
@@ -280,6 +277,7 @@ class ConceptInputListView(ListView):
         context['query_string'] = '&q=' + ConceptInputListView.query
         context['has_query'] = (ConceptInputListView.query is not None) and (ConceptInputListView.query != "")
         return context
+
 
 class ConceptInputDetailView(generic.DetailView):
     model = Concept_Input
@@ -315,8 +313,8 @@ class LineItemListView(ListView):
         print "Parent Id: " + str(LineItemListView.parent_id)
 
         # Filtering the results.
-        result = result.filter(Q(project__id = LineItemListView.project_id) & Q(parent_line_item__id = LineItemListView.parent_id))
-
+        result = result.filter(
+            Q(project__id=LineItemListView.project_id) & Q(parent_line_item__id=LineItemListView.parent_id))
 
         # Query to filter the list content.
         query = self.request.GET.get('q')
@@ -348,15 +346,15 @@ class LineItemListView(ListView):
             context['parent_line_item'] = LineItem.objects.get(pk=LineItemListView.parent_id)
         else:
             context['parent_line_item'] = None
-        
+
         print "Concept / Inputs"
         print context['concepts_inputs']
         return context
 
+
 class LineItemDetailView(generic.DetailView):
     model = LineItem
     template_name = "ERP/line-item-detail.html"
-
 
 
 # Views for the model Estimate.
@@ -384,7 +382,7 @@ class EstimateListView(ListView):
                 reduce(operator.and_,
                        (Q(key__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
-                       (Q(description__icontains=q) for q in query_list))|
+                       (Q(description__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
                        (Q(status__icontains=q) for q in query_list))
             )
@@ -404,3 +402,9 @@ class EstimateListView(ListView):
 class EstimateDetailView(generic.DetailView):
     model = Estimate
     template_name = "ERP/estimate-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(EstimateDetailView, self).get_context_data(**kwargs)
+        estimate = context['estimate']
+        context['progress_estimates'] = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
+        return context

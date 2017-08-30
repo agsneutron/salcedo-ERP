@@ -1004,7 +1004,7 @@ class ProgressEstimate(models.Model):
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
-    generator_file = models.FileField(upload_to=content_file_generador, null=True, default=None,
+    generator_file = models.FileField(upload_to=content_file_generador, null=True,
                                       verbose_name="Archivo del Generador")
     RETAINER = "R"
     PROGRESS = "P"
