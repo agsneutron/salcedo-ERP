@@ -73,7 +73,7 @@
             ],
             chart: {
                 type: 'spline',
-                marginLeft: 55,
+                marginLeft: 65,
                 backgroundColor: {
                     linearGradient: {
                         x1: 0,
@@ -302,7 +302,7 @@
             ],
             chart: {
                 type: 'spline',
-                marginLeft: 55,
+                marginLeft: 65,
                 backgroundColor: {
                     linearGradient: {
                         x1: 0,
@@ -531,7 +531,7 @@
             ],
             chart: {
                 type: 'spline',
-                marginLeft: 55,
+                marginLeft: 65,
                 backgroundColor: {
                     linearGradient: {
                         x1: 0,
@@ -760,7 +760,7 @@
             ],
             chart: {
                 type: 'spline',
-                marginLeft: 55,
+                marginLeft: 65,
                 backgroundColor: {
                     linearGradient: {
                         x1: 0,
