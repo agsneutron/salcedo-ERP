@@ -3,9 +3,7 @@
 
 {% block content %}
     <div id="content-main">
-
         {% include 'ERP/list-search-fields.html' %}
-
         <h1>Propietario</h1>
         <div><a href="add">Agregar</a></div>
         <ul>
@@ -17,8 +15,6 @@
                 <li>No Owners yet.</li>
             {% endfor %}
         </ul>
-
         {% include 'ERP/list-pagination.html' %}
-
     </div>
 {% endblock %}
