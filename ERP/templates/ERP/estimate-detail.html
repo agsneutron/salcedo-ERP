@@ -1,0 +1,36 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    <h1>Clave de la Estimación: {{ estimate.start_date }} <a href="change">Editar</a></h1>
+    <ul>
+        <li>Nombre de la partida: {{ estimate.concept_input.line_item.description }}</li>
+        <li>Descripción: {{ estimate.concept_input.description }}</li>
+        <li>Periodo: {{ estimate.period }}</li>
+        <li>Descripción: {{ estimate.description }}</li>
+        <li>Descripción: {{ estimate.description }}</li>
+        <li>Descripción: {{ estimate.description }}</li>
+        <li>Descripción: {{ estimate.description }}</li>
+        <li>Descripción: {{ estimate.description }}</li>
+        <li>Descripción: {{ estimate.description }}</li>
+        <li>Descripción: {{ estimate.description }}</li>
+    </ul>
+
+
+
+    <h1>Progress Estimates</h1>
+    <ul>
+        {% for progress_estimate in progress_estimates %}
+            <li>
+                {{ progress_estimate.key }}: {{ progress_estimate.progress }}
+            </li>
+        {% empty %}
+            <li>No Companies yet.</li>
+        {% endfor %}
+    </ul>
+
+
+
+
+
+
+{% endblock %}
