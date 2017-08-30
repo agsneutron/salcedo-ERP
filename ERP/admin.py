@@ -71,7 +71,7 @@ class ProgressEstimateInline(admin.TabularInline):
     model = ProgressEstimate
     extra = 0
 
-
+'''
 class EstimateAdmin(admin.ModelAdmin):
     form = EstimateForm
     list_display = ('line_item', 'concept_input', 'period', 'start_date', 'end_date')
@@ -109,7 +109,7 @@ class EstimateAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
-
+'''
 
 class ConceptInputAdmin(admin.ModelAdmin):
     list_display = ('id', 'description', 'unit', 'quantity', 'unit_price')
@@ -354,6 +354,57 @@ class ConceptInputAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
+@admin.register(Estimate)
+class EstimateAdmin(admin.ModelAdmin):
+    form = EstimateForm
+    list_per_page = 50
+
+    inlines = [
+        ProgressEstimateInline
+    ]
+    fieldsets = (
+        (
+            'Partida', {
+                'fields': ('line_item',)
+            }),
+        (
+            'Estimación', {
+                'fields': ('concept_input', 'period', 'start_date', 'end_date',)
+            }),
+    )
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EstimateAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        line_item = ModelForm.base_fields['line_item']
+        concept_input = ModelForm.base_fields['concept_input']
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        line_item.widget.can_add_related = False
+        line_item.widget.can_change_related = False
+        concept_input.widget.can_add_related = False
+        concept_input.widget.can_change_related = False
+
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
+    def get_urls(self):
+        urls = super(EstimateAdmin, self).get_urls()
+        my_urls = [
+            url(r'^list/(?P<test>[0-9]+)/$',
+                self.admin_site.admin_view(views.EstimateListView.as_view()),
+                name='estimate-view'),
+            url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
+
+        ]
+        return my_urls + urls
+
+
+
 # Simple admin views.
 admin.site.register(Pais)
 admin.site.register(Estado)
@@ -366,7 +417,7 @@ admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistor
 admin.site.register(Project, ProjectAdmin)
 
 # admin.site.register(LineItem, LineItemAdmin)
-admin.site.register(Estimate, EstimateAdmin)
+#admin.site.register(Estimate, EstimateAdmin)
 # admin.site.register(Concept_Input, ConceptInputAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
