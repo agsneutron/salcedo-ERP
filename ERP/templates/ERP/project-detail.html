@@ -1,9 +1,9 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-    {% comment %}
 
 
+{% comment %}
 
     <h1> Nombre de Proyecto: {{ project.nombreProyecto }} <a href="change">Editar</a></h1>
 
@@ -169,7 +169,8 @@
 
 
 
- <div class="card nav-tabs-ver-container">
+
+     <div class="card nav-tabs-ver-container">
         <div class="row">
             <h1> Nombre de Proyecto: {{ project.nombreProyecto }} </h1>
             <div class="col-md-3">
@@ -405,7 +406,7 @@
         </div>
     </div>
 
-
+{% comment %}
 
     <h1> Nombre de Proyecto: {{ project.nombreProyecto }} </h1>
     <div class="row masonry-container">
@@ -696,7 +697,7 @@
     <ul>
         --{{ tipoproyectodetalle_set }}--
 
-    </ul>
+    </ul>{% endcomment %}
 
 
 {% endblock %}
