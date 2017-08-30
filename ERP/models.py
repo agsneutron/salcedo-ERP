@@ -6,13 +6,13 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.forms.models import model_to_dict
 from django.utils.encoding import smart_text
-
+from django.utils.timezone import now
 from users.models import ERPUser
 from smart_selects.db_fields import ChainedForeignKey
 from django.db import models
 from Logs.controller import Logs
 from django import forms
-
+import datetime
 # Create your models here.
 
 # *********************************************************************
@@ -614,9 +614,14 @@ class Project(models.Model):
                                                        blank=True)
     estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
     estadolegal_predial = models.CharField(verbose_name="predial", max_length=200, null=True, blank=True)
+
+
     estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
+
+    # File Fields
     documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_gravamen = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
 
@@ -723,9 +728,11 @@ class Project(models.Model):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
         ans['key'] = str(self.key)
-        ans['contrato'] = str(self.contrato.objeto_contrato)
-        ans['nombreProyecto'] = str(self.nombreProyecto)
+        ans['nombreProyecto'] = unicode(str(self.nombreProyecto))
         ans['propietario'] = str(self.propietario.nombrePropietario)
+        ans['ubicacion_municipio'] = unicode(str(self.ubicacion_municipio.nombreMunicipio))
+        ans['ubicacion_estado'] = 'eh'#unicode(str(self.ubicacion_estado.nombreEstado))
+        ans['ubicacion_pais'] = unicode(str(self.ubicacion_pais.nombrePais))
 
         return ans
 
@@ -938,9 +945,9 @@ class Concept_Input(models.Model):
 
 
 class Estimate(models.Model):
-    start_date = models.DateTimeField(null=True, blank=False, verbose_name="Fecha de inicio")
-    end_date = models.DateTimeField(null=True, blank=False, verbose_name="Fecha de fin")
-    period = models.DateTimeField(null=True, blank=False, verbose_name="Periodo")
+    start_date = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Fecha de inicio")
+    end_date = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Fecha de fin")
+    period = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Periodo")
 
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
     line_item = models.ForeignKey(LineItem, verbose_name="Partidas", null=True, blank=False, default=None)
@@ -1049,7 +1056,7 @@ class ProgressEstimate(models.Model):
 class ProgressEstimateLog(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
-    description = models.CharField(verbose_name="Descripción", max_length=512, null=False, blank=False)
+    description = models.TextField(verbose_name="Descripción", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=None, null=True, verbose_name="Fecha")
 
@@ -1058,7 +1065,7 @@ class ProgressEstimateLog(models.Model):
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
-        answer['date'] = str(self.date)
+        #answer['date'] = str(self.date)
         answer['register_date'] = str(self.register_date)
         return answer
 
@@ -1076,7 +1083,7 @@ def progress_estimate_log_destination(instance, filename):
 class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de estimación", null=False,
                                               blank=False)
-    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination)
+    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination, default="")
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
     def to_serializable_dict(self):
