@@ -1,0 +1,59 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+
+                                {% include 'ERP/list-search-fields.html' %}
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Nombre Proyecto</th>
+                                            <th>Descripci&oacute;n</th>
+                                            <th>Fecha</th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+                                         {% for bitacora in object_list %}
+                                            <tr>
+
+
+                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                 <td><span >{{ bitacora.project.nombreProyecto}}</span></td>
+                                                <td><span >{{ bitacora.description }}</span></td>
+                                                <td><span >{{ bitacora.date  }}</span></td>
+
+
+                                                <td style="width: 7%"><a href="{{ bitacora.id}}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
+                                                <td style="width: 9%"><a href="{{ bitacora.id }}/change"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
+
+                                                {% empty %}
+                                                <td colspan="5">No existen bitácoras.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                {% include 'ERP/list-pagination.html' %}
+                                <hr>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}

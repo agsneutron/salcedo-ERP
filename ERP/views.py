@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 import operator
 import urllib
 from datetime import date
-
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext, loader
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls.base import reverse
@@ -89,7 +90,7 @@ class CompaniesListView(ListView):
        Display a Blog List page filtered by the search query.
     """
     paginate_by = 10
-    title_list= 'Empresas'
+    title_list = 'Empresas'
 
     def get_queryset(self):
         result = super(CompaniesListView, self).get_queryset()
@@ -421,6 +422,53 @@ class ProjectListView(ListView):
 class ProjectDetailView(generic.DetailView):
     model = Project
     template_name = "ERP/project-detail.html"
+
+
+class ProgressEstimateLogListView(ListView):
+    model = ProgressEstimateLog
+    template_name = "ERP/progressestimatelog-list.html"
+    # search_fields = ("empresaNombre",)
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+
+    def get_queryset(self):
+        result = super(ProgressEstimateLogListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            ProgressEstimateLogListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(description__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(project__nombreProyecto__icontains=q) for q in query_list))
+            )
+        else:
+            ProjectListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(ProgressEstimateLogListView, self).get_context_data(**kwargs)
+        context['query'] = ProgressEstimateLogListView.query
+        if (ProgressEstimateLogListView.query is not None):
+            context['query_string'] = '&q=' + ProgressEstimateLogListView.query
+        else:
+            context['query_string'] = ''
+
+        context['has_query'] = (ProgressEstimateLogListView.query is not None) and (
+            ProgressEstimateLogListView.query != "")
+        return context
+
+
+class ProgressEstimateLogDetailView(generic.DetailView):
+    model = ProgressEstimateLog
+    template_name = "ERP/progressestimatelog-detail.html"
 
 
 # Views for the model Estimate.
