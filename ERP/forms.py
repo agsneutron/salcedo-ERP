@@ -8,7 +8,6 @@ from django.utils import timezone
 import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, ContratoContratista
-from datetime import datetime
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -156,9 +155,9 @@ class EstimateSearchForm(forms.Form):
         super(EstimateSearchForm, self).__init__()
         self.project_id = project_id
 
-    start_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget,
+    start_date = forms.DateTimeField(initial=datetime.date.today(), widget=widgets.AdminDateWidget,
                                      label="Fecha de Inicio")
-    end_date = forms.DateTimeField(initial=datetime.date.today, widget=widgets.AdminDateWidget,
+    end_date = forms.DateTimeField(initial=datetime.date.today(), widget=widgets.AdminDateWidget,
                                    label="Fecha de Término")
 
     TYPE_CHOICES = (
