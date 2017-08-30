@@ -1,32 +1,52 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-    <h1>Clave de la Estimación: {{ estimate.start_date }} <a href="change">Editar</a></h1>
+    <h1>Estimación</h1>
     <ul>
         <li>Nombre de la partida: {{ estimate.concept_input.line_item.description }}</li>
         <li>Descripción: {{ estimate.concept_input.description }}</li>
         <li>Periodo: {{ estimate.period }}</li>
-        <li>Descripción: {{ estimate.description }}</li>
-        <li>Descripción: {{ estimate.description }}</li>
-        <li>Descripción: {{ estimate.description }}</li>
-        <li>Descripción: {{ estimate.description }}</li>
-        <li>Descripción: {{ estimate.description }}</li>
-        <li>Descripción: {{ estimate.description }}</li>
-        <li>Descripción: {{ estimate.description }}</li>
+        <li>Fecha de inicio: {{ estimate.start_date }}</li>
+        <li>Fecha Final: {{ estimate.end_date }}</li>
     </ul>
 
 
 
     <h1>Progress Estimates</h1>
-    <ul>
+    <table border="1">
+        <tr>
+            <td>Clave de la estimación</td>
+            <td>Progreso</td>
+            <td>Cantidad</td>
+            <td>Cantidad del Generador</td>
+            <td>Archivo del generador</td>
+            <td>Tipo</td>
+        </tr>
         {% for progress_estimate in progress_estimates %}
-            <li>
-                {{ progress_estimate.key }}: {{ progress_estimate.progress }}
-            </li>
+            <tr>
+                <td>
+                    {{ progress_estimate.key }}
+                </td>
+                <td>
+                    {{ progress_estimate.progress }}
+                </td>
+                <td>
+                    {{ progress_estimate.amount }}
+                </td>
+                <td>
+                    {{ progress_estimate.generator_amount }}
+                </td>
+                <td>
+                    {{ progress_estimate.generator_file }}
+                </td>
+                <td>
+                    {{ progress_estimate.type }}
+                </td>
+            </tr>
         {% empty %}
             <li>No Companies yet.</li>
         {% endfor %}
-    </ul>
+    </table>
 
 
 

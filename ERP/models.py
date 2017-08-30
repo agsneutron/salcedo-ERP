@@ -600,10 +600,11 @@ class Project(models.Model):
     ubicacion_calle = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
     ubicacion_numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
-    ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
-    ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
-    ubicacion_cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
     ubicacion_pais = models.ForeignKey(Pais, verbose_name="país", null=False, blank=False)
+    ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
+    ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
+    ubicacion_cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
+
     area_superficie_escritura = models.DecimalField(verbose_name='superficie escritura', decimal_places=2, blank=False,
                                                     null=False, default=0, max_digits=20)
     area_superficie_levantamiento = models.DecimalField(verbose_name='superficie levantamiento', decimal_places=2,
@@ -611,13 +612,15 @@ class Project(models.Model):
 
     estadolegal_documento_propiedad = models.CharField(verbose_name="Documento de propiedad", max_length=200, null=True,
                                                        blank=True)
-    documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
-    documento_gravamen = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     estadolegal_predial = models.CharField(verbose_name="predial", max_length=200, null=True, blank=True)
-    documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
+    documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    documento_gravamen = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+
     documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+
     restriccion_vial = models.CharField(verbose_name="vial", max_length=200, null=True, blank=True)
     restriccion_cna = models.CharField(verbose_name="cna", max_length=200, null=True, blank=True)
     restriccion_cfe = models.CharField(verbose_name="cfe", max_length=200, null=True, blank=True)
@@ -1005,7 +1008,7 @@ class ProgressEstimate(models.Model):
                                            null=False, default=0,
                                            max_digits=20)
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
-                                      verbose_name="Archivo del Generador")
+                                      verbose_name="Archivo del Generador", blank=True)
     RETAINER = "R"
     PROGRESS = "P"
     ESTIMATE = "E"
