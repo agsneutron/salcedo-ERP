@@ -2,7 +2,7 @@
 from django import forms
 from django.db import models
 
-from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem
+from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, ContratoContratista
 from datetime import datetime
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
@@ -125,3 +125,21 @@ class LogFileForm(forms.ModelForm):
         widgets = {
 
         }
+
+
+
+'''
+    Forms for the progress estimate.
+'''
+class ContractForm(forms.ModelForm):
+    class Meta:
+        model = ContratoContratista
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        super(ContractForm, self).__init__(*args, **kwargs)
+        self.fields['fecha_inicio'].widget = widgets.AdminDateWidget()
+        self.fields['fecha_termino'].widget = widgets.AdminDateWidget()
+        self.fields['fecha_firma'].widget = widgets.AdminDateWidget()
+

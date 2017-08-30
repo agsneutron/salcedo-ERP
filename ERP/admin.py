@@ -9,7 +9,7 @@ from django.db import transaction
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
-from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm
+from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm,ContractForm
 
 from django.contrib import admin
 
@@ -311,7 +311,7 @@ class ContractorModelAdmin(admin.ModelAdmin):
 
 @admin.register(ContratoContratista)
 class ContractorContractModelAdmin(admin.ModelAdmin):
-
+    form = ContractForm
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(ContractorContractModelAdmin, self).get_form(request, obj, **kwargs)
