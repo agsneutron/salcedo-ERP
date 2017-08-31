@@ -6,13 +6,13 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.forms.models import model_to_dict
 from django.utils.encoding import smart_text
-
+from django.utils.timezone import now
 from users.models import ERPUser
 from smart_selects.db_fields import ChainedForeignKey
 from django.db import models
 from Logs.controller import Logs
 from django import forms
-
+import datetime
 # Create your models here.
 
 # *********************************************************************
@@ -945,9 +945,9 @@ class Concept_Input(models.Model):
 
 
 class Estimate(models.Model):
-    start_date = models.DateTimeField(null=True, blank=False, verbose_name="Fecha de inicio")
-    end_date = models.DateTimeField(null=True, blank=False, verbose_name="Fecha de fin")
-    period = models.DateTimeField(null=True, blank=False, verbose_name="Periodo")
+    start_date = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Fecha de inicio")
+    end_date = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Fecha de fin")
+    period = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Periodo")
 
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
     line_item = models.ForeignKey(LineItem, verbose_name="Partidas", null=True, blank=False, default=None)
@@ -1056,12 +1056,12 @@ class ProgressEstimate(models.Model):
 class ProgressEstimateLog(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
-    description = models.CharField(verbose_name="Descripción", max_length=512, null=False, blank=False)
+    description = models.TextField(verbose_name="Descripción", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=None, null=True, verbose_name="Fecha")
 
     class Meta:
-        verbose_name_plural = 'Bitácoras de estimaciones'
+        verbose_name_plural = 'Bitácoras'
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
@@ -1092,7 +1092,7 @@ class LogFile(models.Model):
         return answer
 
     class Meta:
-        verbose_name_plural = 'Archivo de bitácoras de estimaciones'
+        verbose_name_plural = 'Archivo de bitácoras'
 
 
 class SystemLogEntry(models.Model):

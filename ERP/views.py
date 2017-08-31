@@ -4,7 +4,8 @@ from __future__ import unicode_literals
 import operator
 import urllib
 from datetime import date
-
+from django.shortcuts import render, redirect, render_to_response
+from django.template import RequestContext, loader
 import datetime
 from django.http import HttpResponseRedirect
 from django.urls.base import reverse
@@ -89,7 +90,7 @@ class CompaniesListView(ListView):
        Display a Blog List page filtered by the search query.
     """
     paginate_by = 10
-    title_list= 'Empresas'
+    title_list = 'Empresas'
 
     def get_queryset(self):
         result = super(CompaniesListView, self).get_queryset()
@@ -305,7 +306,7 @@ class LineItemListView(ListView):
     query = None
     project_id = None
     parent_id = None
-    title_list= 'Catálogo de Conceptos'
+    title_list = 'Catálogo de Conceptos'
 
     current_type = 'C'
     current_type_full = 'conceptos'
@@ -430,6 +431,68 @@ class ProjectDetailView(generic.DetailView):
     template_name = "ERP/project-detail.html"
 
 
+class ProgressEstimateLogListView(ListView):
+    model = ProgressEstimateLog
+    template_name = "ERP/progressestimatelog-list.html"
+    # search_fields = ("empresaNombre",)
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+
+    def get_queryset(self):
+        result = super(ProgressEstimateLogListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        project_id = self.request.GET.get('project')
+
+        result = result.filter(Q(project_id=project_id))
+
+        if query:
+            ProgressEstimateLogListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(description__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(project__nombreProyecto__icontains=q) for q in query_list))
+            )
+        else:
+            ProjectListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(ProgressEstimateLogListView, self).get_context_data(**kwargs)
+        context['query'] = ProgressEstimateLogListView.query
+        if (ProgressEstimateLogListView.query is not None):
+            context['query_string'] = '&q=' + ProgressEstimateLogListView.query
+        else:
+            context['query_string'] = ''
+
+        context['has_query'] = (ProgressEstimateLogListView.query is not None) and (
+            ProgressEstimateLogListView.query != "")
+        return context
+
+
+'''class ProgressEstimateLogDetailView(generic.DetailView):
+    model = ProgressEstimateLog
+    template_name = "ERP/progressestimatelog-detail.html"'''
+
+class ProgressEstimateLogDetailView(generic.DetailView):
+    model = ProgressEstimateLog
+    template_name = "ERP/progressestimatelog-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProgressEstimateLogDetailView, self).get_context_data(**kwargs)
+        progressestimatelog = context['progressestimatelog']
+        context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
+
+        return context
+
+
 # Views for the model Estimate.
 class EstimateListView(ListView):
     model = Estimate
@@ -437,6 +500,7 @@ class EstimateListView(ListView):
     query = None
     project_id = None
     params = ""
+    title_list="Estimación"
 
     """
        Display a Blog List page filtered by the search query.
@@ -464,7 +528,7 @@ class EstimateListView(ListView):
 
         EstimateListView.params = urllib.urlencode(params_copy)
 
-        type = self.request.GET.get('search_type')
+        type = self.request.GET.get('type')
         if type is not None:
             query = query & Q(concept_input__type=type)
 
@@ -478,6 +542,13 @@ class EstimateListView(ListView):
             query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
             query = query & Q(start_date__lte=query_date)
 
+        line_item_filter = self.request.GET.get('line_item')
+        if line_item_filter is not None:
+            query = query & Q(concept_input__line_item__id=line_item_filter)
+
+        print "The Query"
+        print query
+
         result = result.filter(query)
 
         return result
@@ -486,7 +557,7 @@ class EstimateListView(ListView):
         context = super(EstimateListView, self).get_context_data(**kwargs)
         context['project'] = EstimateListView.project_id
         context['params'] = EstimateListView.params
-
+        context['title_list'] = EstimateListView.title_list
         context['form'] = EstimateSearchForm(EstimateListView.project_id)
 
         context['add_form'] = AddEstimateForm(EstimateListView.project_id)
