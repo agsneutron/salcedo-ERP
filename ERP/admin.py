@@ -252,7 +252,6 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         user_id = request.user.id
-        print "se intentó 1"
         dbo = DBObject(user_id)
 
         try:
