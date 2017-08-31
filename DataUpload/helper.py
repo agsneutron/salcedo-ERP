@@ -285,8 +285,8 @@ class DBObject(object):
 
 
             raise ErrorDataUpload(
-                u'Se intentó guardar la partida ' + line_item_key + u' para el proyecto ' + project_key
-                + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.',
+                u'Se intentó guardar la partida '.encode('utf-8') + line_item_key + u' para el proyecto '.encode('utf-8') + project_key
+                + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.'.encode('utf-8'),
                 LoggingConstants.ERROR, self.user_id)
 
         line_item_obj = LineItem(key=line_item_key.upper(),
@@ -333,8 +333,8 @@ class DBObject(object):
                 self.INPUT_UPLOAD: 'insumo'
             }
             raise ErrorDataUpload(
-                u"Se intentó agregar un " + model_names[
-                    model] + "(" + concept_key + ") correspondiente a una partida que no existe (" + line_item_key + ").",
+                u"Se intentó agregar un ".encode('utf-8') + model_names[
+                    model] + u"(".encode('utf-8') + concept_key + u") correspondiente a una partida que no existe (".encode('utf-8') + line_item_key + u").".encode('utf-8'),
                 LoggingConstants.ERROR, self.user_id)
         else:
             # The line item exists. Use it.
@@ -345,8 +345,8 @@ class DBObject(object):
         if len(concepts_validation_qs) != 0:
             # Data already exists. Raise an error to be displayed to the user.
             raise ErrorDataUpload(
-                u'Se intentó guardar el concepto ' + concept_key + u' para la partida ' + line_item_obj.key
-                + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.',
+                u'Se intentó guardar el concepto '.encode('utf-8') + concept_key + u' para la partida '.encode('utf-8') + line_item_obj.key
+                + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.'.encode('utf-8'),
                 LoggingConstants.ERROR, self.user_id)
 
         concept_input = Concept_Input(
