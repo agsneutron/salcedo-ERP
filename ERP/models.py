@@ -1061,7 +1061,7 @@ class ProgressEstimateLog(models.Model):
     date = models.DateTimeField(default=None, null=True, verbose_name="Fecha")
 
     class Meta:
-        verbose_name_plural = 'Bitácoras de estimaciones'
+        verbose_name_plural = 'Bitácoras'
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
@@ -1092,7 +1092,7 @@ class LogFile(models.Model):
         return answer
 
     class Meta:
-        verbose_name_plural = 'Archivo de bitácoras de estimaciones'
+        verbose_name_plural = 'Archivo de bitácoras'
 
 
 class SystemLogEntry(models.Model):
