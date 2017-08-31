@@ -1,6 +1,11 @@
 # coding=utf-8
 import uuid
 
+import sys
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
 from django.utils.encoding import python_2_unicode_compatible
 
 import django
