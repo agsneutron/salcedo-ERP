@@ -278,8 +278,8 @@ class DBObject(object):
             project_key = Project.objects.filter(Q(pk=project_id))[0].key
 
             raise ErrorDataUpload(
-                u'Se intentó guardar la partida '.encode('utf-8') + unicode(line_item_key) + u' para el proyecto ' + unicode(project_key)
-                + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.'.encode('utf-8'),
+                u'Se intento guardar la partida ' + unicode(line_item_key) + u' para el proyecto ' + unicode(project_key)
+                + u'. Esta partida esta duplicada en el archivo o ya fue cargada anteriormente. La operacion ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
 
         line_item_obj = LineItem(key=line_item_key.upper(),
