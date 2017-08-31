@@ -14,6 +14,7 @@ from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuen
     ProgressEstimateLogForm
 
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
@@ -98,6 +99,18 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+    def response_add(self, request, obj, post_url_continue=None):
+        project_id = request.GET.get('project')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project=' + project_id)
+        else:
+            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+    def response_change(self, request, obj, post_url_continue=None):
+        project_id=request.GET.get('project')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project='+project_id)
+        else:
+            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -571,6 +584,19 @@ class EstimateAdmin(admin.ModelAdmin):
         ]
         print "My URLS:"
         return my_urls + urls
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if '_addanother' not in request.POST:
+            project_id = request.GET.get('project')
+            return HttpResponseRedirect('/admin/ERP/estimate/list/' + project_id + '/')
+        else:
+            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+    def response_change(self, request, obj, post_url_continue=None):
+        project_id=request.GET.get('project')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/ERP/estimate/list/'+project_id+'/')
+        else:
+            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
 
 
 # Simple admin views.
