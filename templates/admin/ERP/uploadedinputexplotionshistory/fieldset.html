@@ -53,6 +53,7 @@
                                         <div>
                                             {{ field.label_tag }}
                                             {{ field.field|addcss:"form-control" }}
+                                            {{ field.errors }}
                                         </div>
                                     </div>
                                 </div>
@@ -66,6 +67,7 @@
                                     {{ field.field|addcss:"form-control" }}
                                     <div class="input-group">
                                          {{ field.label_tag }}
+                                        {{ field.errors }}
                                       <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">
                                       <span class="input-group-btn input-group-sm">
                                         <button type="button" class="btn btn-fab btn-fab-mini">
