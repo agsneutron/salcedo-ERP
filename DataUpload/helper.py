@@ -1,6 +1,5 @@
 # coding=utf-8
 import uuid
-from aetypes import Enum
 
 from django.utils.encoding import python_2_unicode_compatible
 
@@ -89,7 +88,7 @@ class DBObject(object):
 
         self.user_id = user_id
 
-    class InputConstants(Enum):
+    class InputConstants:
         """ Contains a series of constants that help locate information of inputs on a record list.
         """
         # The following constants are the column numbers for different attributes of an Input instance
@@ -101,7 +100,7 @@ class DBObject(object):
         QUANTITY_COL = 5
         UNIT_PRICE_COL = 6
 
-    class ConceptConstants(Enum):
+    class ConceptConstants:
         """ Contains a series of constants that help locate information of concepts on a record list.
         """
         # The following constants are the column numbers for different attributes of a Concept instance
@@ -114,7 +113,7 @@ class DBObject(object):
         QUANTITY_COL = 5
         UNIT_PRICE_COL = 6
 
-    class LineItemConstants(Enum):
+    class LineItemConstants:
         """ Contains a series of constants and methods that help locate information of line items on a record list.
         """
         # The following constants are the column numbers for different attributes of a Line Instance instance
