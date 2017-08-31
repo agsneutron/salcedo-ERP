@@ -306,7 +306,7 @@ class LineItemListView(ListView):
     query = None
     project_id = None
     parent_id = None
-    title_list= 'Catálogo de Conceptos'
+    title_list = 'Catálogo de Conceptos'
 
     current_type = 'C'
     current_type_full = 'conceptos'
@@ -446,6 +446,10 @@ class ProgressEstimateLogListView(ListView):
         result = super(ProgressEstimateLogListView, self).get_queryset()
 
         query = self.request.GET.get('q')
+        project_id = self.request.GET.get('project')
+
+        result = result.filter(Q(project_id=project_id))
+
         if query:
             ProgressEstimateLogListView.query = query
             query_list = query.split()
