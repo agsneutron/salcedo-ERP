@@ -14,11 +14,12 @@ from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuen
     ProgressEstimateLogForm
 
 from django.contrib import admin
+from django.http import HttpResponseRedirect
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
 from ERP.views import CompaniesListView, ContractorListView, ProjectListView, ProgressEstimateLogListView, \
-    EstimateListView
+    EstimateListView, UploadedInputExplotionsHistoryListView, UploadedCatalogsHistoryAdminListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
@@ -98,6 +99,18 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+    def response_add(self, request, obj, post_url_continue=None):
+        project_id = request.GET.get('project')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project=' + project_id)
+        else:
+            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+    def response_change(self, request, obj, post_url_continue=None):
+        project_id=request.GET.get('project')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project='+project_id)
+        else:
+            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -264,6 +277,15 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             messages.error(request, edu.get_error_message())
 
 
+    def get_urls(self):
+       urls = super(UploadedCatalogsHistoryAdmin, self).get_urls()
+       my_urls = [
+          url(r'^$', self.admin_site.admin_view(UploadedCatalogsHistoryAdminListView.as_view()),
+              name='uploadedcatalogshistoryadmin-list-view'),
+        ]
+       return my_urls + urls
+
+
 class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
     model = UploadedInputExplotionsHistory
 
@@ -294,6 +316,13 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
             messages.set_level(request, messages.ERROR)
             messages.error(request, e.get_error_message())
 
+    def get_urls(self):
+        urls = super(UploadedInputExplotionHistoryAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',self.admin_site.admin_view(UploadedInputExplotionsHistoryListView.as_view()), name='uploadedinputexplotionshistory-list-view'),
+
+        ]
+        return my_urls + urls
 
 # Overriding the admin views to provide a detail view as required.
 
@@ -570,6 +599,20 @@ class EstimateAdmin(admin.ModelAdmin):
         ]
         print "My URLS:"
         return my_urls + urls
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if '_addanother' not in request.POST:
+            project_id = request.GET.get('project')
+            return HttpResponseRedirect('/admin/ERP/estimate/list/' + project_id + '/')
+        else:
+            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+    def response_change(self, request, obj, post_url_continue=None):
+        project_id=request.GET.get('project')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/ERP/estimate/list/'+project_id+'/')
+        else:
+            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+
 
 
 # Simple admin views.

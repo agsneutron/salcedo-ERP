@@ -24,6 +24,7 @@
                                     <div>
                                         {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -37,6 +38,7 @@
                                     <div>
                                         {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -49,6 +51,7 @@
                                 <div class="form-group field-fecha_final">
                                 <label class="control-label required" for="id_fecha_final_0">Periodo:</label><br>
                                     {{ field.field}}
+                                    {{ field.errors }}
                                 </div>
                             </div>
 
@@ -59,6 +62,7 @@
                                 <div class="form-group field-fecha_final">
                                 <label class="control-label required" for="id_fecha_final_0">Fecha de Inicio:</label><br>
                                     {{ field.field}}
+                                    {{ field.errors }}
                                 </div>
                             </div>
 
@@ -69,6 +73,7 @@
                                 <div class="form-group field-fecha_final">
                                 <label class="control-label required" for="id_fecha_final_0">Fecha Final:</label><br>
                                     {{ field.field}}
+                                    {{ field.errors }}
                                 </div>
                             </div>
 

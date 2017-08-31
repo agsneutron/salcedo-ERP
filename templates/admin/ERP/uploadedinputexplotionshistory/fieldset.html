@@ -33,7 +33,7 @@
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Catálogo de Conceptos</span>
+                    <span class="hidden-xs">Carga de Explosión de Insumos</span>
                 </a>
             </li>
         </ul>
@@ -45,7 +45,7 @@
                         {% if field.field.name == "project" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                             <div class="row">
-                                <h2 class="text-center">Archivos</h2>
+                                <h2 class="text-center">Archivo</h2>
 
                                 <hr>
                                 <div class="col-md-12">
@@ -53,6 +53,7 @@
                                         <div>
                                             {{ field.label_tag }}
                                             {{ field.field|addcss:"form-control" }}
+                                            {{ field.errors }}
                                         </div>
                                     </div>
                                 </div>
@@ -66,6 +67,7 @@
                                     {{ field.field|addcss:"form-control" }}
                                     <div class="input-group">
                                          {{ field.label_tag }}
+                                        {{ field.errors }}
                                       <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">
                                       <span class="input-group-btn input-group-sm">
                                         <button type="button" class="btn btn-fab btn-fab-mini">

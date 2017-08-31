@@ -47,7 +47,6 @@
     {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
     </p>
     {{ adminform.form.non_field_errors }}
-   {{ errors }}
 {% endif %}
 
 {% block field_sets %}
@@ -60,7 +59,7 @@
 
 {% block inline_field_sets %}
 {% for inline_admin_formset in inline_admin_formsets %}
-    {% include inline_admin_formset.opts.template %}
+    {% include "admin/ERP/estimate/tabular.html" %}
 {% endfor %}
 {% endblock %}
 

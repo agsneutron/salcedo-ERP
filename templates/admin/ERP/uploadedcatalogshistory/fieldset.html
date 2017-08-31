@@ -52,6 +52,7 @@
                                         <div>
                                             {{ field.label_tag }}
                                             {{ field.field|addcss:"form-control" }}
+                                            {{ field.errors }}
                                         </div>
                                     </div>
                                 </div>
@@ -63,6 +64,7 @@
                             <div class="col-md-6">
                                 <div class="form-group field-{{ field.field.name }}">
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                     <div class="input-group">
                                          {{ field.label_tag }}
                                       <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">
@@ -91,6 +93,7 @@
                         <div class="col-md-6">
                             <div class="form-group field-{{ field.field.name }}">
                                     {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
                                     <div class="input-group">
                                          {{ field.label_tag }}
                                       <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">

@@ -106,6 +106,7 @@
                                     <div class="related-widget-wrapper">
                                         <label class="required" for="id_contrato">Contrato:</label>
                                         {{ field.field|addcss:"form-control " }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -119,6 +120,7 @@
                                     <div class="related-widget-wrapper">
                                         <label class="required" for="id_propietario">Propietario:</label>
                                         {{ field.field|addcss:"form-control " }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -132,6 +134,7 @@
                                         <label class="control-label required" for="id_nombreProyecto">Nombre del
                                             Proyecto:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -148,6 +151,7 @@
                                     <label class="control-label required" for="id_fecha_inicial_0">Fecha
                                         Inicial:</label><br>
                                         {{ field.field }}
+                                        {{ field.errors }}
                                 </div>
                             </div>
 
@@ -157,6 +161,7 @@
                             <div class="form-group field-fecha_final">
                                 <label class="control-label required" for="id_fecha_final_0">Fecha Final:</label><br>
                                     {{ field.field}}
+                                    {{ field.errors }}
                             </div>
                         </div>
 
@@ -169,6 +174,7 @@
                                     <label class="control-label required" for="id_tipo_construccion">Tipo de
                                         Construcción:</label>
                                     {{ field.field|addcss:"form-control " }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -188,6 +194,7 @@
                                     <div>
                                         <label class="control-label required" for="id_ubicacion_calle">Calle:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -198,6 +205,7 @@
                                     <div>
                                         <label class="control-label required" for="id_ubicacion_numero">Número:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -208,6 +216,7 @@
                                     <div>
                                         <label class="control-label required" for="id_ubicacion_colonia">Colonia:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -220,6 +229,7 @@
                                     <div>
                                         <label class="control-label required" for="id_ubicacion_pais">País:</label>
                                         {{ field.field|addcss:"form-control " }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -236,6 +246,7 @@
                                     <label class="control-label required"
                                            for="id_ubicacion_municipio">Municipio:</label>
                                     {{ field.field|addcss:"form-control " }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -246,6 +257,7 @@
                                 <div>
                                     <label class="control-label required" for="id_ubicacion_estado">Estado:</label>
                                     {{ field.field|addcss:"form-control " }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -256,6 +268,7 @@
                                     <div>
                                         <label class="control-label required" for="id_ubicacion_cp">C.P.</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -273,6 +286,7 @@
                                         <label class="control-label required" for="id_area_superficie_escritura">Superficie
                                             Escritura:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -284,6 +298,7 @@
                                         <label class="control-label required" for="id_area_superficie_levantamiento">Superficie
                                             Levantamiento:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -303,6 +318,7 @@
                                         <label class="control-label" for="id_estadolegal_documento_propiedad">Documento de
                                             propiedad:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -313,6 +329,7 @@
                                     <div>
                                         <label class="control-label" for="id_estadolegal_gravamen">Gravamen:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -323,6 +340,7 @@
                                     <div>
                                         <label class="control-label" for="id_estadolegal_predial">Predial:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -333,6 +351,7 @@
                                     <div>
                                         <label class="control-label" for="id_estadolegal_agua">Agua:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -346,6 +365,7 @@
                                     <label class="control-label required"
                                            for="id_documento_propiedad">Documento:</label><br>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         {% endif %}
@@ -355,6 +375,7 @@
                                 <label class="control-label required"
                                        for="id_documento_gravamen">Documento Gravamen:</label><br>
                                 {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
                             </div>
                         </div>
                         {% endif %}
@@ -364,6 +385,7 @@
                                     <label class="control-label required" for="id_documento_predial">Documento
                                         Predial:</label><br>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         {% endif %}
@@ -372,6 +394,7 @@
                                 <div class="form-group field-documento_agua">
                                     <label class="control-label required" for="id_documento_agua">Documento de Agua:</label><br>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
 
@@ -388,6 +411,7 @@
                                     <div>
                                         <label class="control-label required" for="id_restriccion_vial">Vial:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -398,6 +422,7 @@
                                     <div>
                                         <label class="control-label required" for="id_restriccion_cna">CNA:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -408,6 +433,7 @@
                                     <div>
                                         <label class="control-label required" for="id_restriccion_cfe">CFE:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -420,6 +446,7 @@
                                     <div>
                                         <label class="control-label required" for="id_restriccion_pemex">PEMEX:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -430,6 +457,7 @@
                                     <div>
                                         <label class="control-label required" for="id_restriccion_inha">INHA:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -440,6 +468,7 @@
                                     <div>
                                         <label class="control-label required" for="id_restriccion_otros">Otros:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -452,6 +481,7 @@
                                     <div>
                                         <label class="control-label required" for="id_restriccion_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -468,6 +498,7 @@
                                     <div>
                                         <label class="control-label required" for="id_usosuelo_pmdu">PMDU:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -478,6 +509,7 @@
                                     <div>
                                         <label class="control-label required" for="id_usosuelo_densidad">Densidad:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -489,6 +521,7 @@
                                         <label class="control-label required" for="id_usosuelo_loteminimo">Lote
                                             Mínimo:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -502,6 +535,7 @@
                                         <label class="control-label required" for="id_usosuelo_m2construccion">M2 de
                                             Construcción:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -513,6 +547,7 @@
                                         <label class="control-label required" for="id_usosuelo_arealibre">Área
                                             Libre:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -523,6 +558,7 @@
                                     <div>
                                         <label class="control-label required" for="id_usosuelo_altura">Altura:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -534,6 +570,7 @@
                                         <label class="control-label required" for="id_usosuelo_densidadrequerida">Densidad
                                             Requerida:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -548,6 +585,7 @@
                                     <div>
                                         <label class="control-label required" for="id_hidraulica_fuente">Fuente:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -559,6 +597,7 @@
                                         <label class="control-label required"
                                                for="id_hidraulica_distancia">Distacia:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -569,6 +608,7 @@
                                     <div>
                                         <label class="control-label required" for="id_hidraulica_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -579,6 +619,7 @@
                                     <label class="control-label required" for="id_hidraulica_documento">Documento Hidráulica
                                         :</label><br>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                     </div>
@@ -592,6 +633,7 @@
                                     <div>
                                         <label class="control-label" for="id_sanitaria_tipo">Tipo:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -602,6 +644,7 @@
                                     <div>
                                         <label class="control-label" for="id_sanitaria_responsable">Responsable:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -612,6 +655,7 @@
                                     <div>
                                         <label class="control-label" for="id_sanitaria_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -622,6 +666,7 @@
                                     <label class="control-label required" for="id_sanitaria_documento">Sanitaria
                                         documento:</label><br>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                     </div>
@@ -635,6 +680,7 @@
                                     <div>
                                         <label class="control-label" for="id_pluvial_tipo">Tipo:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -645,6 +691,7 @@
                                     <div>
                                         <label class="control-label" for="id_pluvial_responsable">Responsable:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -656,6 +703,7 @@
                                     <div>
                                         <label class="control-label" for="id_pluvial_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -666,6 +714,7 @@
                                     <label class="control-label required" for="id_pluvial_documento">Pluvial
                                         documento:</label><br>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                     </div>
@@ -681,6 +730,7 @@
                                     <div>
                                         <label class="control-label" for="id_vial_viaacceso">Vías de acceso:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -691,6 +741,7 @@
                                     <div>
                                         <label class="control-label" for="id_vial_distancia">Distancia:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -701,6 +752,7 @@
                                     <div>
                                         <label class="control-label" for="id_vial_carriles">Carriles:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -711,6 +763,7 @@
                                     <div>
                                         <label class="control-label" for="id_vial_seccion">Sección:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -723,6 +776,7 @@
                                     <div>
                                         <label class="control-label" for="id_vial_tipopavimento">Tipo de Pavimento:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -734,6 +788,7 @@
                                         <label class="control-label" for="id_vial_estadoconstruccion">Estado de
                                             Construcción:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -745,6 +800,7 @@
                                     <div>
                                         <label class="control-label" for="id_vial_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -755,6 +811,7 @@
                                     <label class="control-label required" for="id_vial_documento">Vial
                                         Documento:</label><br>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                     </div>
@@ -768,6 +825,7 @@
                                     <div>
                                         <label class="control-label" for="id_electricidad_tipo">Tipo:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -778,6 +836,7 @@
                                     <div>
                                         <label class="control-label" for="id_electricidad_distancia">Distancia:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -789,6 +848,7 @@
                                         <label class="control-label"
                                                for="id_electricidad_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -799,6 +859,7 @@
                                 <label class="control-label required" for="id_electricidad_documento">Electricidad
                                     Documento:</label><br>
                                 {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
                             </div>
                         </div>
                     </div>
@@ -812,6 +873,7 @@
                                     <div>
                                         <label class="control-label" for="id_alumbradopublico_tipo">Tipo:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -822,6 +884,7 @@
                                     <div>
                                         <label class="control-label" for="id_alumbradopublico_distancia">Distancia:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -833,6 +896,7 @@
                                         <label class="control-label"
                                                for="id_alumbradopublico_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
@@ -843,6 +907,7 @@
                                 <label class="control-label required" for="id_alumbradopublico_documento">Alumbrado Público
                                     Documento:</label><br>
                                 {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
                             </div>
                         </div>
                     </div>
@@ -856,6 +921,7 @@
                                 <div>
                                     <label class="control-label" for="id_telefonia_distancia">Distancia:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -866,6 +932,7 @@
                                 <div>
                                     <label class="control-label" for="id_telefonia_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -876,6 +943,7 @@
                                 <label class="control-label required" for="id_telefonia_documento">Telefonía
                                     Documento:</label><br>
                                 {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
                             </div>
                         </div>
                     </div>
@@ -889,6 +957,7 @@
                                 <div>
                                     <label class="control-label" for="id_tvcable_distancia">Distancia:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -899,6 +968,7 @@
                                 <div>
                                     <label class="control-label" for="id_tvcable_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -914,6 +984,7 @@
                                 <div>
                                     <label class="control-label" for="id_equipamiento_a100">A 100:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -925,6 +996,7 @@
                                 <div>
                                     <label class="control-label" for="id_equipamiento_a200">A 200:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -936,6 +1008,7 @@
                                 <div>
                                     <label class="control-label" for="id_equipamiento_a500">A 500:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -947,6 +1020,7 @@
                                 <div>
                                     <label class="control-label" for="id_equipamiento_regional">Regional:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -964,6 +1038,7 @@
                                 <div>
                                     <label class="control-label" for="id_costo_predio">Costo del Predio:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -975,6 +1050,7 @@
                                 <div>
                                     <label class="control-label" for="id_costo_m2">M2:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -986,6 +1062,7 @@
                                 <div>
                                     <label class="control-label" for="id_costo_escrituras">Escrituras m2:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -997,6 +1074,7 @@
                                 <div>
                                     <label class="control-label" for="id_costo_levantamiento">Levantamiento m2:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1011,6 +1089,7 @@
                                 <div>
                                     <label class="control-label" for="id_estudiomercado_demanda">Demanda:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1021,6 +1100,7 @@
                                 <div>
                                     <label class="control-label" for="id_estudiomercado_oferta">Oferta:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1032,6 +1112,7 @@
                                     <label class="control-label"
                                            for="id_estudiomercado_conclusiones">Conclusiones:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1042,6 +1123,7 @@
                                 <div>
                                     <label class="control-label" for="id_estudiomercado_recomendaciones">Recomendaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1058,6 +1140,7 @@
                                     <label class="control-label"
                                            for="id_definicionproyecto_alternativa">Alernativa:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1069,6 +1152,7 @@
                                 <div>
                                     <label class="control-label" for="id_definicionproyecto_tamano">Tamaño:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1080,6 +1164,7 @@
                                 <div>
                                     <label class="control-label" for="id_definicionproyecto_programa">Programa:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1097,6 +1182,7 @@
                                     <label class="control-label" for="id_programayarea_areaprivativa">Área
                                         Privada:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1107,6 +1193,7 @@
                                 <div>
                                     <label class="control-label" for="id_programayarea_caseta">Caseta:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1118,6 +1205,7 @@
                                 <div>
                                     <label class="control-label" for="id_programayarea_jardin">Jardín:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1129,6 +1217,7 @@
                                 <div>
                                     <label class="control-label" for="id_programayarea_vialidad">Vialidad:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1140,6 +1229,7 @@
                                 <div>
                                     <label class="control-label" for="id_programayarea_areaverde">Área Verde:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1152,6 +1242,7 @@
                                     <label class="control-label" for="id_programayarea_estacionamientovisita">Estacionamiento
                                         visita:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1167,6 +1258,7 @@
                                 <div>
                                     <label class="control-label" for="id_programayarea_afectacion">Afectación:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
@@ -1179,6 +1271,7 @@
                                     <label class="control-label" for="id_programayarea_documento">Programa y Área
                                         Documento:</label>
                                     {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>

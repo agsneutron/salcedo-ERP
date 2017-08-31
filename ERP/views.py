@@ -15,7 +15,7 @@ from django.views.generic.edit import DeleteView
 
 from ERP.forms import EstimateSearchForm, AddEstimateForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem, Estimate, Project
+    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory
 from django.db.models import Q
 import json
 
@@ -306,7 +306,10 @@ class LineItemListView(ListView):
     query = None
     project_id = None
     parent_id = None
-    title_list = 'Catálogo de Conceptos'
+    title_list = 'Catálogo de '
+    add_url = "/admin/ERP/"
+    url_c = "uploadedcatalogshistory/add/?project="
+    url_i = "uploadedinputexplotionshistory/add/?project="
 
     current_type = 'C'
     current_type_full = 'conceptos'
@@ -364,7 +367,7 @@ class LineItemListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LineItemListView, self).get_context_data(**kwargs)
-        context['title_list'] = LineItemListView.title_list
+        context['title_list'] = LineItemListView.title_list + LineItemListView.current_type_full
         context['project_id'] = LineItemListView.project_id
         context['query'] = LineItemListView.query
         context['query_string'] = '&q=' + LineItemListView.query
@@ -376,6 +379,11 @@ class LineItemListView(ListView):
             Q(line_item=LineItemListView.parent_id) & Q(type=LineItemListView.current_type))
         if LineItemListView.parent_id is not None:
             context['parent_line_item'] = LineItem.objects.get(pk=LineItemListView.parent_id)
+
+        if LineItemListView.current_type == 'C':
+            context['add_url'] = LineItemListView.add_url + LineItemListView.url_c + str(LineItemListView.project_id)
+        else:
+            context['add_url'] = LineItemListView.add_url + LineItemListView.url_i + str(LineItemListView.project_id)
 
         print "Concept / Inputs"
         print context['concepts_inputs']
@@ -436,6 +444,8 @@ class ProgressEstimateLogListView(ListView):
     template_name = "ERP/progressestimatelog-list.html"
     # search_fields = ("empresaNombre",)
     query = None
+    title_list = "Bitácoras"
+    add_url="/admin/ERP/progressestimatelog/add?project="
 
     """
        Display a Blog List page filtered by the search query.
@@ -465,8 +475,13 @@ class ProgressEstimateLogListView(ListView):
         return result
 
     def get_context_data(self, **kwargs):
+        project_id = self.request.GET.get('project')
         context = super(ProgressEstimateLogListView, self).get_context_data(**kwargs)
         context['query'] = ProgressEstimateLogListView.query
+        context['title_list'] = ProgressEstimateLogListView.title_list
+        if project_id is not None:
+            context['add_url'] = ProgressEstimateLogListView.add_url + project_id
+
         if (ProgressEstimateLogListView.query is not None):
             context['query_string'] = '&q=' + ProgressEstimateLogListView.query
         else:
@@ -501,6 +516,7 @@ class EstimateListView(ListView):
     project_id = None
     params = ""
     title_list="Estimación"
+    add_url = "/admin/ERP/estimate/add?project="
 
     """
        Display a Blog List page filtered by the search query.
@@ -554,11 +570,13 @@ class EstimateListView(ListView):
         return result
 
     def get_context_data(self, **kwargs):
+        project_id = self.request.GET.get('project')
         context = super(EstimateListView, self).get_context_data(**kwargs)
         context['project'] = EstimateListView.project_id
         context['params'] = EstimateListView.params
         context['title_list'] = EstimateListView.title_list
         context['form'] = EstimateSearchForm(EstimateListView.project_id)
+        context['add_url'] = EstimateListView.add_url + str(EstimateListView.project_id)
 
         context['add_form'] = AddEstimateForm(EstimateListView.project_id)
 
@@ -609,4 +627,80 @@ class DashBoardView(ListView):
         context = super(DashBoardView, self).get_context_data(**kwargs)
         context['project_id'] = DashBoardView.project_id
         context['project'] = Project.objects.filter(Q(id=DashBoardView.project_id))
+        return context
+
+
+# Views for the model UploadedInputExplotionsHistory.
+class UploadedInputExplotionsHistoryListView(ListView):
+    model = UploadedInputExplotionsHistory
+    template_name = "ERP/uploadedinputexplotionshistory-list.html"
+    query = None
+    title_list = "Carga de Explosión de Insumos"
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+
+    def get_queryset(self):
+        result = super(UploadedInputExplotionsHistoryListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            UploadedInputExplotionsHistoryListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(file__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(upload_date__icontains=q) for q in query_list))
+            )
+        else:
+            UploadedInputExplotionsHistoryListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(UploadedInputExplotionsHistoryListView, self).get_context_data(**kwargs)
+        context['title_list'] = UploadedInputExplotionsHistoryListView.title_list
+        context['query'] = UploadedInputExplotionsHistoryListView.query
+        context['query_string'] = '&q=' + UploadedInputExplotionsHistoryListView.query
+        context['has_query'] = (UploadedInputExplotionsHistoryListView.query is not None) and (UploadedInputExplotionsHistoryListView.query != "")
+        return context
+
+
+# Views for the model UploadedCatalogsHistory.
+class UploadedCatalogsHistoryAdminListView(ListView):
+    model = UploadedCatalogsHistory
+    template_name = "ERP/uploadedcatalogshistoryadmin-list.html"
+    query = None
+    title_list = "Carga de Catálogo de Conceptos"
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+
+    def get_queryset(self):
+        result = super(UploadedCatalogsHistoryAdminListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            UploadedCatalogsHistoryAdminListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(concepts_file__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(line_items_file__icontains=q) for q in query_list))
+            )
+        else:
+            UploadedCatalogsHistoryAdminListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(UploadedCatalogsHistoryAdminListView, self).get_context_data(**kwargs)
+        context['title_list'] = UploadedCatalogsHistoryAdminListView.title_list
+        context['query'] = UploadedCatalogsHistoryAdminListView.query
+        context['query_string'] = '&q=' + UploadedCatalogsHistoryAdminListView.query
+        context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (UploadedCatalogsHistoryAdminListView.query != "")
         return context
