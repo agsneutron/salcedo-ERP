@@ -57,23 +57,16 @@ class SystemException(Exception):
         return self.message
 
     def __init__(self, message, type, priority, user_id):
-
-
         self.logger = logging.getLogger(type)
         self.type = type
         self.priority = priority
-        self.message = unicode(message)
+        self.message = message.encode('utf-8')
         self.user_id = user_id
-
-
-
 
         self.process_exception()
         Exception.__init__(self, self.message)
 
     def process_exception(self):
-
-
         obj = SystemLogEntry(
             label=self.type,
             information=Utilities.json_to_safe_string(self.get_information()),
@@ -82,15 +75,14 @@ class SystemException(Exception):
 
         obj.save()
 
-
     def get_information(self):
         information = {
-            "message": self.message
+            "message": self.message.encode('utf-8')
         }
         return information
 
     def get_error_message(self):
-        return self.message
+        return self.message.encode('utf-8')
 
     def save(self):
         self.process_exception()
