@@ -471,7 +471,9 @@ class ProgressEstimateLogListView(ListView):
         context = super(ProgressEstimateLogListView, self).get_context_data(**kwargs)
         context['query'] = ProgressEstimateLogListView.query
         context['title_list'] = ProgressEstimateLogListView.title_list
-        context['add_url'] = ProgressEstimateLogListView.add_url + project_id
+        if project_id is not None:
+            context['add_url'] = ProgressEstimateLogListView.add_url + project_id
+
         if (ProgressEstimateLogListView.query is not None):
             context['query_string'] = '&q=' + ProgressEstimateLogListView.query
         else:
