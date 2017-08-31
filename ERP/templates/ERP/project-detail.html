@@ -177,49 +177,23 @@
                 <ul class="nav nav-tabs-ver" role="tablist">
                     <li role="presentation" class="active"><a href="#general" aria-controls="home" role="tab"
                                                               data-toggle="tab"><i class="zmdi zmdi-home"></i>
-                        General</a>
+                        Proyecto</a>
                     </li>
                     <li role="presentation"><a href="#ubicacion" aria-controls="profile" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-account"></i> Ubicación</a></li>
-                    <li role="presentation"><a href="#areas" aria-controls="messages" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-email"></i> Áreas</a></li>
+                            class="zmdi zmdi-account"></i> Ubicación/Áreas</a></li>
+                    {% comment %}<li role="presentation"><a href="#areas" aria-controls="messages" role="tab" data-toggle="tab"><i
+                            class="zmdi zmdi-email"></i> Áreas</a></li>{% endcomment %}
                     <li role="presentation"><a href="#legal" aria-controls="settings" role="tab" data-toggle="tab"><i
                             class="zmdi zmdi-settings"></i> Estado Legal</a></li>
                     <li role="presentation"><a href="#rest" aria-controls="settings" role="tab" data-toggle="tab"><i
                             class="zmdi zmdi-settings"></i> Restricciones</a></li>
                     <li role="presentation"><a href="#suelo" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Uso de suelo</a></li>
-                    <li role="presentation"><a href="#hidra" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Hidráulica</a></li>
-                    <li role="presentation"><a href="#sanit" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Sanitaria</a></li>
-                    <li role="presentation"><a href="#pluvial" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Pluvial</a></li>
-                    <li role="presentation"><a href="#vial" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Vial</a></li>
-                    <li role="presentation"><a href="#elect" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Electricidad</a></li>
-                    <li role="presentation"><a href="#alumbrado" aria-controls="settings" role="tab"
-                                               data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Alumbrado Público</a></li>
-                    <li role="presentation"><a href="#telefon" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Telefonía</a></li>
-                    <li role="presentation"><a href="#tv" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Tv cable</a></li>
-                    <li role="presentation"><a href="#equip" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Equipamiento</a></li>
+                            class="zmdi zmdi-settings"></i> Analisis</a></li>
                     <li role="presentation"><a href="#costo" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Costo</a></li>
-                    <li role="presentation"><a href="#estudio" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Estudio de Mercado</a></li>
-                    <li role="presentation"><a href="#definicion" aria-controls="settings" role="tab"
-                                               data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Definición del Proyecto</a></li>
+                            class="zmdi zmdi-settings"></i> Costo/Mercado</a></li>
                     <li role="presentation"><a href="#program" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Programas y Áreas</a></li>
-                    <li role="presentation"><a href="#afectacion" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Afectación</a></li>
-                    <
+                            class="zmdi zmdi-settings"></i> Programa</a></li>
+
 
                 </ul>
             </div>
@@ -236,7 +210,9 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="ubicacion">
-                            <ul class="list-group top-padding">
+                            <div class="col-xs-6">
+                                <h4>Ubicación</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> País: {{ project.ubicacion_pais }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado: {{ project.ubicacion_estado }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Municipio: {{ project.ubicacion_municipio }}</li>
@@ -245,13 +221,17 @@
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Número: {{ project.ubicacion_numero }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CP: {{ project.ubicacion_cp }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="areas">
-                            <ul class="list-group top-padding">
+                            </div>
+                           <div class="col-xs-6">
+                               <h4>Áreas</h4>
+                                <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}</li>
                             </ul>
+                            </div>
+
                         </div>
+
                         <div role="tabpanel" class="tab-pane" id="legal">
                             <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
@@ -276,7 +256,9 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="suelo">
-                            <ul class="list-group top-padding">
+                            <div class="col-xs-4">
+                                <h4>Uso de suelo</h4>
+                                <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> PDMU: {{ project.usosuelo_pmdu }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad: {{ project.usosuelo_densidad }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
@@ -285,33 +267,38 @@
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Altura: {{ project.usosuelo_altura }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="hidra">
-                            <ul class="list-group top-padding">
+                            </div>
+                            <div class="col-xs-4">
+                                <h4>Hidraulica</h4>
+                                <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fuente: {{ project.hidraulica_fuente }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.hidraulica_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.hidraulica_observaciones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.hidraulica_documento }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="sanit">
-                            <ul class="list-group top-padding">
+                            </div>
+<div class="col-xs-4">
+    <h4>Sanitaria</h4>
+                             <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.sanitaria_tipo }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.sanitaria_responsable }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.sanitaria_observaciones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.sanitaria_documento }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="pluvial">
-                            <ul class="list-group top-padding">
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="col-xs-4">
+                                <h4>Pluvial</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.pluvial_tipo }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.pluvial_responsable }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.pluvial_observaciones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.pluvial_documento }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="vial">
-                            <ul class="list-group top-padding">
+                            </div>
+                            <div class="col-xs-4">
+                                <h4>Vial</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vías de Acceso: {{ project.vial_viaacceso }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.vial_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Carriles: {{ project.vial_carriles }}</li>
@@ -321,69 +308,89 @@
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.vial_observaciones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.vial_documento }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="elect">
-                            <ul class="list-group top-padding">
+                            </div>
+                           <div class="col-xs-4">
+                               <h4>Electricidad</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.electricidad_tipo }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.electricidad_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.electricidad_observaciones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.electricidad_documento }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="alumbrado">
-                            <ul class="list-group top-padding">
+                            </div>
+                            <div class="clearfix"></div>
+<div class="col-xs-4">
+    <h4>Alumbrado público</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.alumbradopublico_tipo }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.alumbradopublico_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.alumbradopublico_observaciones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.alumbradopublico_documento }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="telefon">
+                            </div>
+                           <div class="col-xs-4">
+<h4>Telefonía</h4>
                             <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.telefonia_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.telefonia_observaciones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.telefonia_documento }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="tv">
-                            <ul class="list-group top-padding">
+                            </div>
+<div class="col-xs-4">
+    <h4>Tv cable</h4>
+                               <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.tvcable_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.tvcable_observaciones }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="equip">
-                            <ul class="list-group top-padding">
+                            </div>
+                            <div class="clearfix"></div>
+                           <div class="col-xs-4">
+                               <h4>Equipamiento</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 100 : {{ project.equipamiento_a100 }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 200 : {{ project.equipamiento_a200 }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 500 : {{ project.equipamiento_a500 }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Regional : {{ project.equipamiento_regional }}</li>
                             </ul>
+                            </div>
+
                         </div>
                         <div role="tabpanel" class="tab-pane" id="costo">
-                            <ul class="list-group top-padding">
+                            <div class="col-xs-4">
+                                <h4>Costo</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Costo del Predio : {{ project.costo_predio }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2 : {{ project.costo_m2 }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Escrituras M2 : {{ project.costo_escrituras }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Levantamiento M2 : {{ project.costo_levantamiento }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="estudio">
-                            <ul class="list-group top-padding">
+                            </div>
+                            <div class="col-xs-4">
+                                <h4>Estudio de mercado</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Demanda : {{ project.estudiomercado_demanda }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Oferta : {{ project.estudiomercado_oferta }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="definicion">
+                            </div>
+                            <div class="col-xs-4">
+<h4>Definicion del proyecto</h4>
                             <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Alernativa : {{ project.definicionproyecto_alternativa }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tamaño : {{ project.definicionproyecto_tamano }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Programa : {{ project.definicionproyecto_programa }}</li>
                             </ul>
+                            </div>
+
+
+
+
                         </div>
                         <div role="tabpanel" class="tab-pane" id="program">
-                            <ul class="list-group top-padding">
+                            <div class="col-xs-6">
+                                <h4>Programas y Áreas</h4>
+                               <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Privada : {{ project.programayarea_areaprivativa }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Caseta : {{ project.programayarea_caseta }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Jardín : {{ project.programayarea_jardin }}</li>
@@ -391,14 +398,18 @@
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Verde : {{ project.programayarea_areaverde }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estacionamiento Visitas: {{ project.programayarea_estacionamientovisita }}</li>
                             </ul>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="afectacion">
-                            <ul class="list-group top-padding">
+                            </div>
+                            <div class="col-xs-6">
+                                <h4>Afectación</h4>
+                                 <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Afectación : {{ project.programayarea_afectacion }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.programayarea_documento }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Latitud: {{ project.latitud }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Longitud: {{ project.longitud }}</li>
                             </ul>
+                            </div>
+
+
                         </div>
                     </div>
                 </div>
