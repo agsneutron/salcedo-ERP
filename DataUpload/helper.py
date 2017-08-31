@@ -283,6 +283,7 @@ class DBObject(object):
 
             project_key = Project.objects.filter(Q(pk=project_id))[0].key
 
+
             raise ErrorDataUpload(
                 u'Se intentó guardar la partida ' + line_item_key + u' para el proyecto ' + project_key
                 + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.',
