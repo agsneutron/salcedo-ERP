@@ -28,10 +28,8 @@ locale.setlocale(locale.LC_ALL, "es_MX.utf8")
 
 class FileInterface(object):
     """ Reads .xls files and converts them to lists.
-
     Attributes:
         file_path: the path of the file that must be read.
-
     """
 
     # The book from which the data will be read
