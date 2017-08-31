@@ -1,4 +1,4 @@
-# coding=utf-8
+# -*- coding: utf-8 -*-
 import uuid
 
 from django.utils.encoding import python_2_unicode_compatible
@@ -17,14 +17,20 @@ from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 import locale
 
 # locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
-#locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 
 # locale.currency(1000, grouping=True)
 # español para windows
 # locale.setlocale(locale.LC_ALL, "esp")
+
+
+
+# Mac
+locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+
+
 # español para linux
-locale.setlocale(locale.LC_ALL, "es_MX.utf8")
+# locale.setlocale(locale.LC_ALL, "es_MX.utf8")
 
 
 class FileInterface(object):
@@ -282,8 +288,6 @@ class DBObject(object):
                 + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
 
-
-
         line_item_obj = LineItem(key=line_item_key.upper(),
                                  project_id=project_id,
                                  parent_line_item_id=parent_id,
@@ -343,7 +347,6 @@ class DBObject(object):
                 u'Se intentó guardar el concepto ' + concept_key + u' para la partida ' + line_item_obj.key
                 + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
-
 
         concept_input = Concept_Input(
             line_item=line_item_obj,
