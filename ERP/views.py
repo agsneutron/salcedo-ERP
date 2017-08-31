@@ -306,7 +306,10 @@ class LineItemListView(ListView):
     query = None
     project_id = None
     parent_id = None
-    title_list = 'Catálogo de Conceptos'
+    title_list = 'Catálogo de '
+    add_url = "/admin/ERP/"
+    url_c = "uploadedcatalogshistory/add/?project="
+    url_i = "uploadedinputexplotionshistory/add/?project="
 
     current_type = 'C'
     current_type_full = 'conceptos'
@@ -364,7 +367,7 @@ class LineItemListView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super(LineItemListView, self).get_context_data(**kwargs)
-        context['title_list'] = LineItemListView.title_list
+        context['title_list'] = LineItemListView.title_list + LineItemListView.current_type_full
         context['project_id'] = LineItemListView.project_id
         context['query'] = LineItemListView.query
         context['query_string'] = '&q=' + LineItemListView.query
@@ -376,6 +379,11 @@ class LineItemListView(ListView):
             Q(line_item=LineItemListView.parent_id) & Q(type=LineItemListView.current_type))
         if LineItemListView.parent_id is not None:
             context['parent_line_item'] = LineItem.objects.get(pk=LineItemListView.parent_id)
+
+        if LineItemListView.current_type == 'C':
+            context['add_url'] = LineItemListView.add_url + LineItemListView.url_c
+        else:
+            context['add_url'] = LineItemListView.add_url + LineItemListView.url_i
 
         print "Concept / Inputs"
         print context['concepts_inputs']
