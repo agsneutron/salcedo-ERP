@@ -16,9 +16,8 @@ from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 
 import locale
 
-
 # locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
-#locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+# locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 
 # locale.currency(1000, grouping=True)
@@ -286,11 +285,13 @@ class DBObject(object):
             project_key = Project.objects.filter(Q(pk=project_id))[0].key
 
             raise ErrorDataUpload(
-                u'Se intentó guardar la partida ' + line_item_key + u' para el proyecto ' + project_key
-                + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.',
+                u"Se intentó guardar la partida para el proyecto. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.",
                 LoggingConstants.ERROR, self.user_id)
 
-
+            # raise ErrorDataUpload(
+            #     u"Se intentó guardar la partida " + line_item_key + u" para el proyecto " + project_key
+            #     + u". Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.",
+            #     LoggingConstants.ERROR, self.user_id)
 
         line_item_obj = LineItem(key=line_item_key.upper(),
                                  project_id=project_id,
@@ -351,7 +352,6 @@ class DBObject(object):
                 u'Se intentó guardar el concepto ' + concept_key + u' para la partida ' + line_item_obj.key
                 + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
-
 
         concept_input = Concept_Input(
             line_item=line_item_obj,
