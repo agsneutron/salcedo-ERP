@@ -16,9 +16,8 @@ from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 
 import locale
 
-
 # locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
-#locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+# locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 
 # locale.currency(1000, grouping=True)
@@ -275,8 +274,7 @@ class DBObject(object):
         else:
             parent_id = None
 
-
-        #Now We'll check that (line_item_id, concept_key) does not already exist.
+        # Now We'll check that (line_item_id, concept_key) does not already exist.
         line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
 
         if len(line_item_validation_qs) != 0:
@@ -285,8 +283,10 @@ class DBObject(object):
             project_key = Project.objects.filter(Q(pk=project_id))[0].key
 
             raise ErrorDataUpload(
-                u'Se intentó guardar la partida '.encode('utf-8') + line_item_key + u' para el proyecto '.encode('utf-8') + project_key
-                + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.'.encode('utf-8'),
+                (u'Se intentó guardar la partida '.encode('utf-8') + line_item_key + u' para el proyecto '.encode(
+                    'utf-8') + project_key
+                 + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.'.encode(
+                    'utf-8')).encode('utf-8'),
                 LoggingConstants.ERROR, self.user_id)
 
         line_item_obj = LineItem(key=line_item_key.upper(),
@@ -334,7 +334,9 @@ class DBObject(object):
             }
             raise ErrorDataUpload(
                 u"Se intentó agregar un ".encode('utf-8') + model_names[
-                    model] + u"(".encode('utf-8') + concept_key + u") correspondiente a una partida que no existe (".encode('utf-8') + line_item_key + u").".encode('utf-8'),
+                    model] + u"(".encode(
+                    'utf-8') + concept_key + u") correspondiente a una partida que no existe (".encode(
+                    'utf-8') + line_item_key + u").".encode('utf-8'),
                 LoggingConstants.ERROR, self.user_id)
         else:
             # The line item exists. Use it.
@@ -345,8 +347,10 @@ class DBObject(object):
         if len(concepts_validation_qs) != 0:
             # Data already exists. Raise an error to be displayed to the user.
             raise ErrorDataUpload(
-                u'Se intentó guardar el concepto '.encode('utf-8') + concept_key + u' para la partida '.encode('utf-8') + line_item_obj.key
-                + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.'.encode('utf-8'),
+                u'Se intentó guardar el concepto '.encode('utf-8') + concept_key + u' para la partida '.encode(
+                    'utf-8') + line_item_obj.key
+                + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.'.encode(
+                    'utf-8'),
                 LoggingConstants.ERROR, self.user_id)
 
         concept_input = Concept_Input(
@@ -363,4 +367,4 @@ class DBObject(object):
 
 class ErrorDataUpload(SystemException):
     def __init__(self, message, priority, user_id):
-        SystemException.__init__(self, message, LoggingConstants.DATA_UPLOAD, priority, user_id)
+        SystemException.__init__(self, message.encode('utf-8'), LoggingConstants.DATA_UPLOAD, priority, user_id)

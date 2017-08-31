@@ -64,7 +64,7 @@ class SystemException(Exception):
         self.user_id = user_id
 
         self.process_exception()
-        Exception.__init__(self, self.message)
+        Exception.__init__(self, self.message.encode('utf-8'))
 
     def process_exception(self):
         obj = SystemLogEntry(
