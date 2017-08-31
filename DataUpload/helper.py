@@ -269,6 +269,7 @@ class DBObject(object):
                 parent_id = line_item_qs[0].id
         else:
             parent_id = None
+            
 
         # Now We'll check that (line_item_id, concept_key) does not already exist.
         # line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
