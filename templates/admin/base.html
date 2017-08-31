@@ -340,9 +340,7 @@
 
 </div>
 
-{% if not is_popup %}
-    {% block usertools %}
-        {% if has_permission %}
+
             <div id="user-tools">
             <div class="ms-slidebar sb-slidebar sb-left sb-style-overlay" id="ms-slidebar">
             <div class="sb-slidebar-container">
@@ -395,13 +393,11 @@
                 {% endblock %}
 
             </ul>
-        {% endif %}
-    {% endblock %}
+
 {% block nav-global %}{% endblock %}
 </div>
 </div>
 
-{% endif %}
 
 <!-- Begins Footer -->
 {% block footer %}
