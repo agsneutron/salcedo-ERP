@@ -444,6 +444,8 @@ class ProgressEstimateLogListView(ListView):
     template_name = "ERP/progressestimatelog-list.html"
     # search_fields = ("empresaNombre",)
     query = None
+    title_list = "Bitácoras"
+    add_url="/admin/ERP/progressestimatelog/add?project="
 
     """
        Display a Blog List page filtered by the search query.
@@ -473,8 +475,13 @@ class ProgressEstimateLogListView(ListView):
         return result
 
     def get_context_data(self, **kwargs):
+        project_id = self.request.GET.get('project')
         context = super(ProgressEstimateLogListView, self).get_context_data(**kwargs)
         context['query'] = ProgressEstimateLogListView.query
+        context['title_list'] = ProgressEstimateLogListView.title_list
+        if project_id is not None:
+            context['add_url'] = ProgressEstimateLogListView.add_url + project_id
+
         if (ProgressEstimateLogListView.query is not None):
             context['query_string'] = '&q=' + ProgressEstimateLogListView.query
         else:
@@ -509,6 +516,7 @@ class EstimateListView(ListView):
     project_id = None
     params = ""
     title_list="Estimación"
+    add_url = "/admin/ERP/estimate/add?project="
 
     """
        Display a Blog List page filtered by the search query.
@@ -562,11 +570,13 @@ class EstimateListView(ListView):
         return result
 
     def get_context_data(self, **kwargs):
+        project_id = self.request.GET.get('project')
         context = super(EstimateListView, self).get_context_data(**kwargs)
         context['project'] = EstimateListView.project_id
         context['params'] = EstimateListView.params
         context['title_list'] = EstimateListView.title_list
         context['form'] = EstimateSearchForm(EstimateListView.project_id)
+        context['add_url'] = EstimateListView.add_url + str(EstimateListView.project_id)
 
         context['add_form'] = AddEstimateForm(EstimateListView.project_id)
 

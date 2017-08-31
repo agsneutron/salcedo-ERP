@@ -2,13 +2,15 @@
 from django import forms
 from django.contrib.admin import widgets
 from django.db import models
+from django.db.models import Q
 from django.forms import SelectDateWidget
 from django.utils import timezone
 from users.models import ERPUser
 
 import datetime
 
-from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, ContratoContratista
+from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
+    ContratoContratista
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -106,37 +108,63 @@ class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
         fields = '__all__'
+        # exclude = ('user',)
         widgets = {
-            'user': forms.HiddenInput(),
+            # 'user': forms.HiddenInput(),
             'progress_estimate': forms.HiddenInput()
         }
+
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         self.project_id = kwargs.pop('project_id', None)
         self.user_id = kwargs.pop('user_id', None)
 
-        print "User_ID:" + str(self.user_id)
-        print "project_id:" + str(self.project_id)
+        print 'kwargs:'
+        print kwargs
 
+        # print "User_ID:" + str(self.user_id)
+        print "project_id:" + str(self.project_id)
 
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
+
         kwargs['initial'].update({'project': self.project_id})
-        kwargs['initial'].update({'user': self.user_id})
+        # kwargs['initial'].update({'user': self.user_id})
+        kwargs['initial'].update({'user': 1})
+        # kwargs['initial'].update({'user_id': self.user_id})
 
         super(ProgressEstimateLogForm, self).__init__(*args, **kwargs)
-        #self.fields['date'].widget = widgets.AdminDateWidget()
-    # To override the save method for the form.
-    def save(self, commit=True):
-        user_id = self.request.user.id
+        # self.fields['date'].widget = widgets.AdminDateWidget()
 
-        save_obj = super(ProgressEstimateLogForm, self)
-        return save_obj.save(commit)
+    # To override the save method for the form.
+    # def save(self, commit=True):
+    #     user_id = self.request.user.id
+    #
+    #     save_obj = super(ProgressEstimateLogForm, self)
+    #
+    #     print 'saving'
+    #     print save_obj
+    #     save_obj.user = ERPUser.objects.filter(Q(id=1))
+    #     return save_obj.save(commit)
+    #
+    # def clean_user(self):
+    #     data = self.cleaned_data['user']
+    #     self.cleaned_data['user'] = 1
+    #     print 'cleaning user!!'
+    #     # do some stuff
+    #     return data
+    #
+    def clean(self):
+        # Then call the clean() method of the super  class
+        cleaned_data = super(ProgressEstimateLogForm, self).clean()
+        cleaned_data['user'] = ERPUser.objects.get(pk=self.user_id)
+        return cleaned_data
 
 
 '''
     Forms for the log file form.
 '''
+
 
 class LogFileForm(forms.ModelForm):
     class Meta:
@@ -147,10 +175,11 @@ class LogFileForm(forms.ModelForm):
         }
 
 
-
 '''
     Forms for the progress estimate.
 '''
+
+
 class ContractForm(forms.ModelForm):
     class Meta:
         model = ContratoContratista
@@ -162,7 +191,6 @@ class ContractForm(forms.ModelForm):
         self.fields['fecha_inicio'].widget = widgets.AdminDateWidget()
         self.fields['fecha_termino'].widget = widgets.AdminDateWidget()
         self.fields['fecha_firma'].widget = widgets.AdminDateWidget()
-
 
 
 class EstimateSearchForm(forms.Form):
@@ -188,6 +216,7 @@ class EstimateSearchForm(forms.Form):
 
 class AddEstimateForm(forms.Form):
     project_id = None
+
     def __init__(self, project_id):
         super(AddEstimateForm, self).__init__()
         AddEstimateForm.project_id = project_id

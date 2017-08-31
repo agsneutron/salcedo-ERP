@@ -5,11 +5,15 @@
                 <div class="card">
                     <div class="card-header">
                         <div class="item-left">
-                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
+                            <h3 class="card-title text">{% block title %}{{ title_list.title }} {% endblock %}</h3>
                         </div>
                           <div class="item-right">
 
-                            <a href="add/"
+                            <a  {% if add_url != "" %}
+                                    href="{{ add_url }}"
+                                {% else%}
+                                    href="add/"
+                                {% endif %}
                                class="btn-circle btn-circle-raised btn-circle-success"
                                style="margin: -4px 1px;top: -25px;">
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"

@@ -13,6 +13,8 @@ from django.db import models
 from Logs.controller import Logs
 from django import forms
 import datetime
+
+
 # Create your models here.
 
 # *********************************************************************
@@ -148,7 +150,6 @@ class Area(models.Model):
     def __str__(self):
         return self.nombreArea
 
-
     def __unicode__(self):
         return self.nombreArea
 
@@ -180,7 +181,6 @@ class Puesto(models.Model):
 
     def __str__(self):
         return self.nombrePuesto
-
 
     def __unicode__(self):
         return self.nombrePuesto
@@ -351,9 +351,9 @@ class Empresa(models.Model):
     calle = models.CharField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
     numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
     colonia = models.CharField(verbose_name='Colonia', max_length=50, null=False, blank=False, editable=True)
-    #municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
-    #estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
-    #pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
+    # municipio = models.ForeignKey(Municipio, verbose_name='Municipio', null=False, blank=False)
+    # estado = models.ForeignKey(Estado, verbose_name='Estado', null=False, blank=False)
+    # pais = models.ForeignKey(Pais, verbose_name='Pais', null=False, blank=False)
     cp = models.CharField(verbose_name='C.P.', max_length=20, null=False, blank=False, editable=True)
     telefono = models.CharField(verbose_name='Teléfono', max_length=30, null=True, blank=True, editable=True)
     telefono_dos = models.CharField(verbose_name='Teléfono No.2', max_length=30, null=True, blank=True, editable=True)
@@ -374,6 +374,7 @@ class Empresa(models.Model):
                                   show_all=False,
                                   auto_choose=True,
                                   sort=True)
+
     class Meta:
         verbose_name_plural = 'Empresa'
 
@@ -415,7 +416,7 @@ class ContratoContratista(models.Model):
     fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', editable=True)
     lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False,
-                                      editable=True)
+                                       editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
     monto_contrato_iva = models.DecimalField(verbose_name='Monto de Contrato con IVA', decimal_places=2, blank=False,
@@ -433,14 +434,13 @@ class ContratoContratista(models.Model):
                                        editable=True)
 
     # Foreign Keys:
-    project =  models.ForeignKey('Project', verbose_name='Proyecto', null=False, blank=False)
+    project = models.ForeignKey('Project', verbose_name='Proyecto', null=False, blank=False)
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
                                            blank=False)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Contratos'
-
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -467,7 +467,6 @@ class ContratoContratista(models.Model):
     def __str__(self):
         return self.codigo_obra
 
-
     def __unicode__(self):
         return self.codigo_obra
 
@@ -487,9 +486,9 @@ class Propietario(models.Model):
     calle = models.CharField(verbose_name="Calle", max_length=200, null=False, blank=False)
     numero = models.CharField(verbose_name="Número", max_length=8, null=False, blank=False)
     colonia = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
-    #municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
-    #estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
-    #pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
+    # municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
+    # estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
+    # pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
     cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
     telefono1 = models.CharField(verbose_name="Teléfono Principal", max_length=20, null=True, blank=True)
@@ -544,6 +543,7 @@ class Propietario(models.Model):
 
 def content_file_documento_fuente(instance, filename):
     return '/'.join(['documentosFuente', instance.proyecto.key, filename])
+
 
 class DocumentoFuente(models.Model):
     descripcion = models.CharField(max_length=50, )
@@ -615,7 +615,6 @@ class Project(models.Model):
     estadolegal_gravamen = models.CharField(verbose_name="gravamen", max_length=200, null=True, blank=True)
     estadolegal_predial = models.CharField(verbose_name="predial", max_length=200, null=True, blank=True)
 
-
     estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
 
     # File Fields
@@ -624,7 +623,6 @@ class Project(models.Model):
     documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
     documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
-
 
     restriccion_vial = models.CharField(verbose_name="vial", max_length=200, null=True, blank=True)
     restriccion_cna = models.CharField(verbose_name="cna", max_length=200, null=True, blank=True)
@@ -716,8 +714,8 @@ class Project(models.Model):
                                                    default=0, max_digits=20)
     programayarea_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente,
                                                verbose_name="Documento de programa y área")
-    latitud = models.FloatField(default=0, blank=True, null=True,)
-    longitud = models.FloatField(default=0, blank=True, null=True,)
+    latitud = models.FloatField(default=0, blank=True, null=True, )
+    longitud = models.FloatField(default=0, blank=True, null=True, )
 
     # tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
 
@@ -731,14 +729,13 @@ class Project(models.Model):
         ans['nombreProyecto'] = unicode(str(self.nombreProyecto))
         ans['propietario'] = str(self.propietario.nombrePropietario)
         ans['ubicacion_municipio'] = unicode(str(self.ubicacion_municipio.nombreMunicipio))
-        ans['ubicacion_estado'] = 'eh'#unicode(str(self.ubicacion_estado.nombreEstado))
+        ans['ubicacion_estado'] = 'eh'  # unicode(str(self.ubicacion_estado.nombreEstado))
         ans['ubicacion_pais'] = unicode(str(self.ubicacion_pais.nombrePais))
 
         return ans
 
     def __str__(self):
         return self.nombreProyecto
-
 
     def __unicode__(self):
         return self.nombreProyecto
@@ -760,16 +757,18 @@ class Project(models.Model):
 '''
     Model and upload function to the catalogs (lineitem|concepts) history.
 '''
+
+
 def uploaded_catalogs_destination(instance, filename):
     return '/'.join(['carga_de_catalogos', instance.project.key, filename])
 
 
 class UploadedCatalogsHistory(models.Model):
     line_items_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
-                                      verbose_name="Archivo de partidas")
+                                       verbose_name="Archivo de partidas")
 
     concepts_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
-                                       verbose_name="Archivo de conceptos")
+                                     verbose_name="Archivo de conceptos")
 
     upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
 
@@ -793,14 +792,15 @@ class UploadedCatalogsHistory(models.Model):
 '''
     Model and upload function to the inputs explosion (lineitem|concepts) history.
 '''
+
+
 def uploaded_explotions_destination(instance, filename):
     return '/'.join(['explosion_de_insumos', instance.project.key, filename])
 
 
 class UploadedInputExplotionsHistory(models.Model):
     file = models.FileField(upload_to=uploaded_explotions_destination, null=True,
-                                      verbose_name="Explosión de Insumos")
-
+                            verbose_name="Explosión de Insumos")
 
     upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
 
@@ -821,6 +821,8 @@ class UploadedInputExplotionsHistory(models.Model):
 '''
     Model for the Line Items.
 '''
+
+
 class LineItem(models.Model):
     # Model attributes.
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=False)
@@ -887,8 +889,9 @@ class Unit(models.Model):
 '''
     Model for the concepts.
 '''
-class Concept_Input(models.Model):
 
+
+class Concept_Input(models.Model):
     # Choices (Dictionary) for the status attribute.
     CANCELED = "C"
     ACTIVE = "A"
@@ -934,7 +937,6 @@ class Concept_Input(models.Model):
     def __str__(self):
         return self.description
 
-
     def __unicode__(self):
         return self.description
 
@@ -945,9 +947,9 @@ class Concept_Input(models.Model):
 
 
 class Estimate(models.Model):
-    start_date = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Fecha de inicio")
-    end_date = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Fecha de fin")
-    period = models.DateTimeField(default=now(),null=True, blank=False, verbose_name="Periodo")
+    start_date = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Fecha de inicio")
+    end_date = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
+    period = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Periodo")
 
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
     line_item = models.ForeignKey(LineItem, verbose_name="Partidas", null=True, blank=False, default=None)
@@ -962,21 +964,21 @@ class Estimate(models.Model):
                                       verbose_name="Concepto / Insumo"
                                       )
 
-
     class Meta:
         verbose_name_plural = 'Estimaciones'
 
     def __str__(self):
-        return "Partida: " + self.line_item.description[:45] + " Concepto: " + self.concept_input.description + " Periodo: " + str(self.period)
+        return "Partida: " + self.line_item.description[
+                             :45] + " Concepto: " + self.concept_input.description + " Periodo: " + str(self.period)
 
     def __unicode__(self):  # __unicode__ on Python 2
         line_item_display = ""
         concept_input_display = ""
 
         if len(self.line_item.description) > 40:
-             line_item_display =  self.line_item.description[0:40] + "..."
+            line_item_display = self.line_item.description[0:40] + "..."
         else:
-            line_item_display =  self.line_item.description
+            line_item_display = self.line_item.description
 
         if len(self.concept_input.description) > 40:
             concept_input_display = self.concept_input.description[0:40] + "..."
@@ -984,6 +986,7 @@ class Estimate(models.Model):
             concept_input_display = self.concept_input.description
 
         return "Partida: " + line_item_display + " Concepto: " + concept_input_display + " Periodo: " + str(self.period)
+
 
 '''
     Model for the Progress Estimates.
@@ -1003,6 +1006,7 @@ def generator_file_storage(instance, filename):
 
 def content_file_generador(instance, filename):
     return '/'.join(['documentosFuente', instance.estimate.concept_input.line_item.project.key, filename])
+
 
 class ProgressEstimate(models.Model):
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
@@ -1043,7 +1047,6 @@ class ProgressEstimate(models.Model):
     def __str__(self):
         return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
 
-
     def __unicode__(self):
         return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
 
@@ -1055,35 +1058,43 @@ class ProgressEstimate(models.Model):
 
 class ProgressEstimateLog(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=False, blank=False)
+    user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=True, blank=True)
     description = models.TextField(verbose_name="Descripción", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
-    date = models.DateTimeField(default=None, null=True, verbose_name="Fecha")
+    date = models.DateTimeField(default=now(), null=True, verbose_name="Fecha")
 
     class Meta:
         verbose_name_plural = 'Bitácoras'
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
-        #answer['date'] = str(self.date)
+        # answer['date'] = str(self.date)
         answer['register_date'] = str(self.register_date)
         return answer
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.description
 
+    def __init__(self, *args, **kwargs):
+        super(ProgressEstimateLog, self).__init__(*args, **kwargs)
+        self.user = ERPUser.objects.get(pk=1)
+        # print 'user_id: ' + str(self.user.id)
+
 
 '''
     Model for the Log File.
 '''
 
+
 def progress_estimate_log_destination(instance, filename):
     return '/'.join(['bitacoras_de_proyecto', instance.progress_estimate_log.project.key, filename])
+
 
 class LogFile(models.Model):
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de estimación", null=False,
                                               blank=False)
-    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination, default="")
+    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination,
+                            default="")
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
     def to_serializable_dict(self):
@@ -1120,7 +1131,6 @@ class SystemLogEntry(models.Model):
         verbose_name = 'system log entry'
         verbose_name_plural = 'system log entries'
         ordering = ('-action_time',)
-
 
     def __repr__(self):
         return smart_text(self.action_time)
