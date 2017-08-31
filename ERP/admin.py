@@ -9,14 +9,16 @@ from django.db import transaction
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
-from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm,ContractForm
-from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm,ProgressEstimateLogForm
+from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm
+from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, \
+    ProgressEstimateLogForm
 
 from django.contrib import admin
 
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
-from ERP.views import CompaniesListView, ContractorListView, ProjectListView,ProgressEstimateLogListView,EstimateListView
+from ERP.views import CompaniesListView, ContractorListView, ProjectListView, ProgressEstimateLogListView, \
+    EstimateListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
@@ -33,7 +35,7 @@ class TipoProyectoDetalleInline(admin.TabularInline):
     can_delete = False
 
 
-#class ProjectAdmin(admin.ModelAdmin):
+# class ProjectAdmin(admin.ModelAdmin):
 #    form = AddProyectoForm
 #    inlines = (TipoProyectoDetalleInline,)
 #    search_fields = ('nombreProyecto', 'key')
@@ -60,7 +62,7 @@ class LogFileInline(admin.TabularInline):
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
-    form=ProgressEstimateLogForm
+    form = ProgressEstimateLogForm
     fields = ('user', 'project', 'date', 'description')
     list_display = ('user', 'date', 'description')
     search_fields = ('user', 'date', 'description')
@@ -75,6 +77,7 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
         project.widget.can_change_related = False
+
         class ModelFormEMetaClass(ModelFormE):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
@@ -88,7 +91,8 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         urls = super(ProgressEstimateLogAdmin, self).get_urls()
         my_urls = [
             url(r'^$',
-                self.admin_site.admin_view(ProgressEstimateLogListView.as_view()), name='progressestimatelog-list-view'),
+                self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
+                name='progressestimatelog-list-view'),
             url(r'^(?P<pk>\d+)/$', views.ProgressEstimateLogDetailView.as_view(), name='progressestimatelog-detail'),
 
         ]
@@ -96,10 +100,10 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
 
 
 
-
 class ProgressEstimateInline(admin.TabularInline):
     model = ProgressEstimate
     extra = 1
+
 
 '''
 class EstimateAdmin(admin.ModelAdmin):
@@ -140,6 +144,7 @@ class EstimateAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 '''
+
 
 class ConceptInputAdmin(admin.ModelAdmin):
     list_display = ('id', 'description', 'unit', 'quantity', 'unit_price')
@@ -265,7 +270,7 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-            'project', 'file', )
+            'project', 'file',)
         return fields
 
     def save_model(self, request, obj, form, change):
@@ -295,13 +300,10 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
-
-
     def get_fields(self, request, obj=None):
-
         fields = (
-                 'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-                 'numero', 'colonia')
+            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+            'numero', 'colonia')
         return fields
 
     def get_urls(self):
@@ -390,16 +392,14 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
         return ModelForm
 
-
     def get_fields(self, request, obj=None):
         fields = (
-            'clave_contrato','project', 'no_licitacion', 'contratista', 'modalidad_contrato', 'dias_pactados',
+            'clave_contrato', 'project', 'no_licitacion', 'contratista', 'modalidad_contrato', 'dias_pactados',
             'codigo_obra', 'dependencia',
             'fecha_firma', 'fecha_inicio', 'fecha_termino',
             'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
             'objeto_contrato', 'lugar_ejecucion', 'observaciones')
         return fields
-
 
     def get_urls(self):
         urls = super(ContractorContractModelAdmin, self).get_urls()
@@ -415,7 +415,6 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
 @admin.register(Propietario)
 class OwnerModelAdmin(admin.ModelAdmin):
-
     def get_fields(self, request, obj=None):
         fields = (
             'nombrePropietario', 'rfc', 'empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
@@ -455,7 +454,6 @@ class OwnerModelAdmin(admin.ModelAdmin):
         return ModelForm
 
 
-
 @admin.register(LineItem)
 class LineItemAdmin(admin.ModelAdmin):
     def get_urls(self):
@@ -482,6 +480,7 @@ class ConceptInputAdmin(admin.ModelAdmin):
 
         ]
         return my_urls + urls
+
 
 @admin.register(Project)
 class ProjectModelAdmin(admin.ModelAdmin):
@@ -522,12 +521,10 @@ class ProjectModelAdmin(admin.ModelAdmin):
         return ModelForm
 
 
-
 @admin.register(Estimate)
 class EstimateAdmin(admin.ModelAdmin):
     form = EstimateForm
     list_per_page = 50
-
 
     inlines = [
         ProgressEstimateInline
@@ -576,8 +573,6 @@ class EstimateAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
-
-
 # Simple admin views.
 admin.site.register(Pais)
 admin.site.register(Estado)
@@ -587,10 +582,10 @@ admin.site.register(ModalidadContrato)
 admin.site.register(UploadedCatalogsHistory, UploadedCatalogsHistoryAdmin)
 admin.site.register(UploadedInputExplotionsHistory, UploadedInputExplotionHistoryAdmin)
 
-#admin.site.register(Project, ProjectAdmin)
+# admin.site.register(Project, ProjectAdmin)
 
 # admin.site.register(LineItem, LineItemAdmin)
-#admin.site.register(Estimate, EstimateAdmin)
+# admin.site.register(Estimate, EstimateAdmin)
 # admin.site.register(Concept_Input, ConceptInputAdmin)
 admin.site.register(Unit, UnitAdmin)
 admin.site.register(ProgressEstimateLog, ProgressEstimateLogAdmin)
