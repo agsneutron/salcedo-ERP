@@ -88,7 +88,7 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(ProgressEstimateLogAdmin, self).get_urls()
         my_urls = [
-            url(r'^$',
+            url(r'^(?P<project>[0-9]+)$',
                 self.admin_site.admin_view(ProgressEstimateLogListView.as_view()), name='progressestimatelog-list-view'),
             url(r'^(?P<pk>\d+)/$', views.ProgressEstimateLogDetailView.as_view(), name='progressestimatelog-detail'),
 
