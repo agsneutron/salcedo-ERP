@@ -608,4 +608,5 @@ class DashBoardView(ListView):
     def get_context_data(self, **kwargs):
         context = super(DashBoardView, self).get_context_data(**kwargs)
         context['project_id'] = DashBoardView.project_id
+        context['project'] = Project.objects.filter(Q(id=DashBoardView.project_id))
         return context
