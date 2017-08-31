@@ -271,13 +271,14 @@ class DBObject(object):
 
         #Now We'll check that (line_item_id, concept_key) does not already exist.
         line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
+
         if len(line_item_validation_qs) != 0:
             # Data already exists. Raise an error to be displayed to the user.
 
             project_key = Project.objects.filter(Q(pk=project_id))[0].key
 
             raise ErrorDataUpload(
-                u'Se intentó guardar la partida ' + line_item_key + u' para el proyecto ' + project_key
+                u'Se intentó guardar la partida ' + unicode(line_item_key) + u' para el proyecto ' + unicode(project_key)
                 + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
 
