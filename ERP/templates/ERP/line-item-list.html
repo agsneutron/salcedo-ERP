@@ -4,96 +4,92 @@
 
 {% block content %}
 
-    {% include 'ERP/header_list.html' %}
+{% include 'ERP/header_list.html' %}
     <div class="row">
 
-        <div class="item-right">
-            <a class="btn btn-info" style="font-size: 12px;color: white !important;
-                font-weight: bold; background-color: #00bcd4!important;"
-               href="/admin/ERP/uploadedcatalogshistory/add/?project={{ project_id }}">Añadir catálogo de conceptos</a>
-            <a class="btn btn-info" style="font-size: 12px;color: white !important;
-                font-weight: bold; background-color: #00bcd4!important;"
-               href="/admin/ERP/uploadedinputexplotionshistory/add/?project={{ project_id }}">Añadir explosión de
-                insumos</a>
-        </div>
+             <div class="item-right">
+                <a class="btn btn-info" style="font-size: 12px;color: white !important;
+                font-weight: bold; background-color: #00bcd4!important;" href="/admin/ERP/uploadedcatalogshistory/add/?project={{ project_id }}">Añadir catálogo de conceptos</a>
+                    <a class="btn btn-info" style="font-size: 12px;color: white !important;
+                font-weight: bold; background-color: #00bcd4!important;" href="/admin/ERP/uploadedinputexplotionshistory/add/?project={{ project_id }}">Añadir explosión de
+                        insumos</a>
+             </div>
 
     </div>
     <br>
     <br>
-    <div class="row">
+      <div class="row">
 
         <div class="col-xs-12">
 
 
             {% if parent_line_item is not None %}
-                <h3>Partida Actual: {{ parent_line_item.description }}</h3>
+                <h3 >Partida Actual: {{ parent_line_item.description }}</h3>
             {% endif %}
-            <div class="row">
+                <div class="row">
                 <div class="col-xs-12">
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>Partidas</th>
+                     <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Partidas</th>
 
 
-                            </tr>
-                            </thead>
-                            {% for line_item in object_list %}
-                                <tr>
+                                        </tr>
+                                        </thead>
+                                        {% for line_item in object_list %}
+                                            <tr>
 
 
-                                    {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
-                                    <td><span> <a
-                                            href="/admin/ERP/lineitem/{{ current_type_full }}/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.description }}</a></span>
-                                    </td>
-                                    {% empty %}
-                                    <td>No se encontraron Partidas.</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
+                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                 <td><span > <a href="/admin/ERP/lineitem/{{ current_type_full }}/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.description }}</a></span></td>
+                                                {% empty %}
+                                                <td>No se encontraron Partidas.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
 
                 </div>
-            </div>
-            <br>
+                </div>
+<br>
 
             {% include 'ERP/list-pagination.html' %}
-            <div class="row">
-                <div class="col-xs-12">
+ <div class="row">
+             <div class="col-xs-12">
 
-                    <div class="table-responsive">
-                        <table class="table table-bordered">
-                            <thead>
-                            <tr>
-                                <th>{{ current_type_full.title }}</th>
-                                <th></th>
+             <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>{{ current_type_full.title }}</th>
+                                            <th></th>
 
-                            </tr>
-                            </thead>
-                            {% for concept in concepts_inputs %}
-                                <tr>
+                                        </tr>
+                                        </thead>
 
-
-                                    {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
-                                    <td><span> {{ concept.description }}</span></td>
-                                    <td style="width: 7%"><a href="/admin/ERP/estimate/add/?project={{ project_id }}">Agregar
-                                        Estimación</a></td>
-
-                                    {% empty %}
-                                    <td>No se encontraron Conceptos.</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    </div>
+                                         {% for concept in concepts_inputs %}
+                                            <tr>
 
 
-                    <div>
-                    </div>
+                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                 <td><span > {{ concept.description }}</span></td>
+                                                 <td style="width: 7%"><a href="/admin/ERP/estimate/add/?project={{ project_id }}&line_item={{concept.line_item_id }}&concept_input={{ concept.id }}">Nueva Estimación</a></td>
+
+                                                {% empty %}
+                                                <td>No se encontraron {{ current_type_full.title }}.</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
 
 
-                </div>
-            </div>
+             <div>
+                 </div>
 
-            {% include 'ERP/footer_list.html' %}
+
+        </div>
+    </div>
+
+{% include 'ERP/footer_list.html' %}
 {% endblock %}
