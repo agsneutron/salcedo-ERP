@@ -84,16 +84,6 @@ function clearControl(idcontrol) {
         .empty()
         .append('<option value>  Seleccione... </option>');
         break;
-    case id_eje:
-        $j('select#id_eje')
-        .empty()
-        .append('<option value>  Seleccione... </option>');
-        break;
-    case id_tema:
-        $j('select#id_tema')
-        .empty()
-        .append('<option value>  Seleccione... </option>');
-        break;
     default:
         console.log("undefined_control");
     }

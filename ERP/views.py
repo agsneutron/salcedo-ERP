@@ -477,9 +477,20 @@ class ProgressEstimateLogListView(ListView):
         return context
 
 
+'''class ProgressEstimateLogDetailView(generic.DetailView):
+    model = ProgressEstimateLog
+    template_name = "ERP/progressestimatelog-detail.html"'''
+
 class ProgressEstimateLogDetailView(generic.DetailView):
     model = ProgressEstimateLog
     template_name = "ERP/progressestimatelog-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProgressEstimateLogDetailView, self).get_context_data(**kwargs)
+        progressestimatelog = context['progressestimatelog']
+        context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
+
+        return context
 
 
 # Views for the model Estimate.
@@ -489,6 +500,7 @@ class EstimateListView(ListView):
     query = None
     project_id = None
     params = ""
+    title_list="Estimación"
 
     """
        Display a Blog List page filtered by the search query.
@@ -545,7 +557,7 @@ class EstimateListView(ListView):
         context = super(EstimateListView, self).get_context_data(**kwargs)
         context['project'] = EstimateListView.project_id
         context['params'] = EstimateListView.params
-
+        context['title_list'] = EstimateListView.title_list
         context['form'] = EstimateSearchForm(EstimateListView.project_id)
 
         context['add_form'] = AddEstimateForm(EstimateListView.project_id)
@@ -596,4 +608,5 @@ class DashBoardView(ListView):
     def get_context_data(self, **kwargs):
         context = super(DashBoardView, self).get_context_data(**kwargs)
         context['project_id'] = DashBoardView.project_id
+        context['project'] = Project.objects.filter(Q(id=DashBoardView.project_id))
         return context
