@@ -26,11 +26,11 @@ import locale
 
 
 # Mac
-locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+# locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 
 # español para linux
-# locale.setlocale(locale.LC_ALL, "es_MX.utf8")
+locale.setlocale(locale.LC_ALL, "es_MX.utf8")
 
 
 class FileInterface(object):
@@ -285,7 +285,7 @@ class DBObject(object):
 
 
             raise ErrorDataUpload(
-                u'Se intentó guardarr la partida ' + line_item_key + u' para el proyecto ' + project_key
+                u'Se intentó guardar la partida ' + line_item_key + u' para el proyecto ' + project_key
                 + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
 
