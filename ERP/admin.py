@@ -68,6 +68,7 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     list_per_page = 50
     inlines = [LogFileInline, ]
 
+
     def get_form(self, request, obj=None, **kwargs):
         ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
         class ModelFormEMetaClass(ModelFormE):
@@ -87,7 +88,10 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
             url(r'^(?P<pk>\d+)/$', views.ProgressEstimateLogDetailView.as_view(), name='progressestimatelog-detail'),
 
         ]
+
         return my_urls + urls
+
+
 
 
 
@@ -517,6 +521,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
 class EstimateAdmin(admin.ModelAdmin):
     form = EstimateForm
     list_per_page = 50
+
 
     inlines = [
         ProgressEstimateInline
