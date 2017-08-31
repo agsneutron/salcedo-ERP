@@ -288,13 +288,13 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/uploadedinputexplotionshistory/?project=' + project_id)
+            return HttpResponseRedirect('/admin/ERP/uploadedcatalogshistory/?project=' + project_id)
         else:
             return super(UploadedCatalogsHistoryAdmin, self).response_add(request, obj, post_url_continue)
     def response_change(self, request, obj, post_url_continue=None):
         project_id=request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/uploadedinputexplotionshistory/?project='+project_id)
+            return HttpResponseRedirect('/admin/ERP/uploadedcatalogshistory/?project='+project_id)
         else:
             return super(UploadedCatalogsHistoryAdmin, self).response_add(request, obj, post_url_continue)
 
