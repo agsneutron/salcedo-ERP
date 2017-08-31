@@ -227,7 +227,7 @@ class DBObject(object):
                     u'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
                     LoggingConstants.CRITICAL, self.user_id)
         except django.db.utils.IntegrityError as e:
-            print 'ERRROR1'
+
             raise e
 
     def save_all_concept_input(self, record_list, model, project_id):
@@ -240,7 +240,7 @@ class DBObject(object):
                 if record[0] != "":
                     # Validate that the record is not empty
                     # Save the record
-                    # print 'saving' + str(record)
+
                     self.save_concept_input(record, model, project_id)
 
         except Exception, e:
@@ -251,7 +251,7 @@ class DBObject(object):
 
         try:
             for record in record_list:
-                # print 'Single record:' + str(record)
+
                 if record[self.LineItemConstants.get_max_level()] != "":
                     self.save_line_item(record, project_id)
 
