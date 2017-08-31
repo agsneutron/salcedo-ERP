@@ -17,7 +17,7 @@ from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 import locale
 
 # locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
-#locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+# locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 
 # locale.currency(1000, grouping=True)
@@ -329,7 +329,7 @@ class DBObject(object):
             }
             raise ErrorDataUpload(
                 u"Se intentó agregar un " + model_names[
-                    model] + "(" + concept_key + ") correspondiente a una partida que no existe (" + line_item_key + ").",
+                    model] + u"(" + concept_key + u") correspondiente a una partida que no existe (" + line_item_key + u").",
                 LoggingConstants.ERROR, self.user_id)
         else:
             # The line item exists. Use it.
