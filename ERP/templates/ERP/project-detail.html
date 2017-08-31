@@ -227,7 +227,7 @@
                 <div class="card-block">
                     <div class="tab-content">
                         <div role="tabpanel" class="tab-pane active" id="general">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Clave de Proyecto: {{ project.key }} </li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Propietario: {{ project.propietario }} </li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fecha de Inicio: {{ project.fecha_inicial }}</li>
@@ -236,7 +236,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="ubicacion">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> País: {{ project.ubicacion_pais }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Estado: {{ project.ubicacion_estado }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Municipio: {{ project.ubicacion_municipio }}</li>
@@ -247,13 +247,13 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="areas">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="legal">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.documento_propiedad }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Gravamen: {{ project.estadolegal_gravamen }}</li>
@@ -265,7 +265,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="rest">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vial: {{ project.restriccion_vial }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CNA : {{ project.restriccion_cna }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CFE : {{ project.restriccion_cfe }}</li>
@@ -276,7 +276,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="suelo">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> PDMU: {{ project.usosuelo_pmdu }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Densidad: {{ project.usosuelo_densidad }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
@@ -287,7 +287,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="hidra">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Fuente: {{ project.hidraulica_fuente }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.hidraulica_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.hidraulica_observaciones }}</li>
@@ -295,7 +295,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="sanit">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.sanitaria_tipo }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.sanitaria_responsable }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.sanitaria_observaciones }}</li>
@@ -303,7 +303,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="pluvial">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.pluvial_tipo }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Responsable: {{ project.pluvial_responsable }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.pluvial_observaciones }}</li>
@@ -311,7 +311,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="vial">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Vías de Acceso: {{ project.vial_viaacceso }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.vial_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Carriles: {{ project.vial_carriles }}</li>
@@ -323,7 +323,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="elect">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.electricidad_tipo }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.electricidad_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.electricidad_observaciones }}</li>
@@ -331,7 +331,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="alumbrado">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tipo: {{ project.alumbradopublico_tipo }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.alumbradopublico_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.alumbradopublico_observaciones }}</li>
@@ -339,20 +339,20 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="telefon">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.telefonia_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.telefonia_observaciones }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.telefonia_documento }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="tv">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Distancia: {{ project.tvcable_distancia }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Observaciones: {{ project.tvcable_observaciones }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="equip">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 100 : {{ project.equipamiento_a100 }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 200 : {{ project.equipamiento_a200 }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A 500 : {{ project.equipamiento_a500 }}</li>
@@ -360,7 +360,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="costo">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Costo del Predio : {{ project.costo_predio }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2 : {{ project.costo_m2 }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Escrituras M2 : {{ project.costo_escrituras }}</li>
@@ -368,7 +368,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="estudio">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Demanda : {{ project.estudiomercado_demanda }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Oferta : {{ project.estudiomercado_oferta }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
@@ -376,14 +376,14 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="definicion">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Alernativa : {{ project.definicionproyecto_alternativa }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Tamaño : {{ project.definicionproyecto_tamano }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Programa : {{ project.definicionproyecto_programa }}</li>
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="program">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Área Privada : {{ project.programayarea_areaprivativa }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Caseta : {{ project.programayarea_caseta }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Jardín : {{ project.programayarea_jardin }}</li>
@@ -393,7 +393,7 @@
                             </ul>
                         </div>
                         <div role="tabpanel" class="tab-pane" id="afectacion">
-                            <ul class="list-group">
+                            <ul class="list-group top-padding">
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Afectación : {{ project.programayarea_afectacion }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Documento: {{ project.programayarea_documento }}</li>
                                 <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> Latitud: {{ project.latitud }}</li>
