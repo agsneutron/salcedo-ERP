@@ -307,7 +307,7 @@
             {% endif %}
 
         {% endblock messages %}
-
+<a onclick="goBack()" class="btn-circle btn-circle-default" style="position: absolute;top: 0;left: 2%;"><i class="fa fa-arrow-left"></i></a>
     </nav>
 {% endif %}
 
@@ -321,12 +321,14 @@
 {% endblock %}
 {% endcomment %}
 
-
 <!-- Begins MainContainer -->
 <div id="particles-js">
     <div id="content" class=" container">
+
         {% block pretitle %}{% endblock %}
+
         {% block content %}
+
             {% block object-tools %}{% endblock %}
             {{ content }}
         {% endblock %}
@@ -338,9 +340,7 @@
 
 </div>
 
-{% if not is_popup %}
-    {% block usertools %}
-        {% if has_permission %}
+
             <div id="user-tools">
             <div class="ms-slidebar sb-slidebar sb-left sb-style-overlay" id="ms-slidebar">
             <div class="sb-slidebar-container">
@@ -393,13 +393,11 @@
                 {% endblock %}
 
             </ul>
-        {% endif %}
-    {% endblock %}
+
 {% block nav-global %}{% endblock %}
 </div>
 </div>
 
-{% endif %}
 
 <!-- Begins Footer -->
 {% block footer %}
@@ -410,5 +408,11 @@
         </div>
     </footer>
 {% endblock %}
+
+<script>
+function goBack() {
+    window.history.back();
+}
+</script>
 </body>
 </html>
