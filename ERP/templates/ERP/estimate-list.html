@@ -11,18 +11,13 @@
 {% endblock %}
 
 {% block content %}
-    <div id="content-main">
-
-
-
+    {% comment %} <div id="content-main">
         <form action="" method="get">
             {{ form }}
            <button class="searchbutton" type="submit">
                 <i class="fa fa-search"></i>
             </button>
         </form>
-
-
         <h1>Estimaciones</h1>
         <div><a href="/admin/ERP/estimate/add?project={{ project }}">Agregar</a></div>
         <ul>
@@ -40,6 +35,142 @@
         </ul>
 
         {% include 'ERP/list-pagination.html' %}
+
+    </div>{% endcomment %}
+
+
+
+
+
+
+
+
+
+
+    <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
+                        </div>
+                        <div class="item-right">
+
+                            <a href="/admin/ERP/estimate/add?project={{ project }}"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: -25px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-block">
+                        <form class="form-inline" action="" method="get">
+                            <div class="form-group">
+                                <label for="id_start_date">Fecha de Inicio:</label>
+                                <input type="text" name="start_date" value="30/08/2017" id="id_start_date" required
+                                       class="form-control" size="10"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_end_date">Fecha de Término:</label>
+                                <input type="text" name="end_date" value="30/08/2017" id="id_end_date" required
+                                       class="form-control" size="10"/>
+                            </div>
+                            <div class="form-group">
+                                <label for="id_type">Tipo:</label>
+                                <select name="type" id="id_type" class="form-control">
+                                    <option value="C">Concepto</option>
+
+                                    <option value="I">Insumo</option>
+
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <select class="form-control" name="line_item" required id="id_line_item">
+                                    <option value="" selected>Seleccionar Partida</option>
+                                </select>
+                            </div>
+                            <button class="searchbutton" type="submit" style="height: 27px">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </form>
+
+                        <div class="row">
+                            <br>
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Municipio</th>
+                                            <th>Estado</th>
+                                            <th>Teléfono</th>
+                                            <th>Inicio</th>
+                                            <th>Concepto</th>
+
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Eliminar</th>
+                                        </tr>
+                                        </thead>
+                                        {% for estimate in object_list %}
+                                            <tr>
+
+
+                                                {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                <td><span>{{ company.nombreEmpresa }}</span></td>
+                                                <td><span>{{ company.municipio }}</span></td>
+                                                <td><span>{{ company.estado }}</span></td>
+                                                <td><span>{{ company.telefono }}</span></td>
+
+                                                <td class="text-center" style="width: 5%"><a
+                                                        href="Inicio: {{ estimate.id }}"
+                                                        class="btn btn-raised btn-default btn-xs">Del {{ estimate.start_date.date }}
+                                                    al {{ estimate.end_date.date }} - Concepto o
+                                                    Insumo: {{ estimate.concept_input.description }}</a></td>
+                                                <td class="text-center" style="width: 5%"><a
+                                                        href="Inicio: {{ estimate.id }}"
+                                                        class="btn btn-raised btn-default btn-xs">Del {{ estimate.start_date.date }}
+                                                    al {{ estimate.end_date.date }} - Concepto o
+                                                    Insumo: {{ estimate.concept_input.description }}</a></td>
+
+
+                                                <td class="text-center" style="width: 5%"><a href="{{ estimate.id }}"
+                                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 5%"><a
+                                                        href="{{ estimate.id }}/change"
+                                                        class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 2%"><a
+                                                        href="{{ estimate.id }}/delete"
+                                                        class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-trash-o color-danger eliminar"></i></a>
+                                                </td>
+
+
+                                                {% empty %}
+                                                <td>No existen {{ title_list }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                {% include 'ERP/list-pagination.html' %}
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
 
     </div>
 {% endblock %}
