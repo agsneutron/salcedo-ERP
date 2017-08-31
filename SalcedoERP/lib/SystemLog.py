@@ -1,4 +1,5 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
+
 
 import logging
 from django.contrib.admin.models import LogEntry
@@ -7,7 +8,6 @@ from ERP.lib.utilities import Utilities
 from ERP.models import SystemLogEntry
 
 from django.utils.encoding import python_2_unicode_compatible
-
 
 
 class LoggingConstants:
@@ -36,7 +36,10 @@ class LoggingConstants:
 @python_2_unicode_compatible
 class SystemException(Exception):
     def __str__(self):
-        return self.message
+        return self.message.encode('utf-8')
+
+    def __unicode__(self):
+        return self.message.encode('utf-8')
 
     def __init__(self, message, type, priority, user_id):
         self.logger = logging.getLogger(type)
