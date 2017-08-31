@@ -11,7 +11,7 @@ from _mysql_exceptions import IntegrityError
 from django.db import transaction
 from django.db.models import Q
 
-from ERP.models import Concept_Input, Unit, LineItem
+from ERP.models import Concept_Input, Unit, LineItem, Project
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 
 import locale
@@ -267,6 +267,19 @@ class DBObject(object):
                 parent_id = line_item_qs[0].id
         else:
             parent_id = None
+
+
+        #Now We'll check that (line_item_id, concept_key) does not already exist.
+        line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
+        if len(line_item_validation_qs) != 0:
+            # Data already exists. Raise an error to be displayed to the user.
+
+            project_key = Project.objects.filter(Q(pk=project_id))[0].key
+
+            raise ErrorDataUpload(
+                u'Se intentó guardar la partida ' + line_item_key + u' para el proyecto ' + project_key
+                + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.',
+                LoggingConstants.ERROR, self.user_id)
 
         line_item_obj = LineItem(key=line_item_key.upper(),
                                  project_id=project_id,
