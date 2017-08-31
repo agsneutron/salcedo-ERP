@@ -1,4 +1,6 @@
+
 {% extends "admin/base_site.html" %}
+{% load app_filters admin_static%}
 {% block extrahead %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="/static/admin/css/widgets.css"/>
     <script type="text/javascript" src="/admin/jsi18n/"></script>
@@ -10,167 +12,80 @@
     <script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
 {% endblock %}
 
+
+
 {% block content %}
-    {% comment %} <div id="content-main">
-        <form action="" method="get">
-            {{ form }}
-           <button class="searchbutton" type="submit">
-                <i class="fa fa-search"></i>
-            </button>
-        </form>
-        <h1>Estimaciones</h1>
-        <div><a href="/admin/ERP/estimate/add?project={{ project }}">Agregar</a></div>
-        <ul>
-            {% for estimate in object_list %}
-                <li>
-                    <a href="Inicio: {{ estimate.id }}">Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }} - Concepto o Insumo: {{ estimate.concept_input.description }}</a> |
-                    <a href="{{ estimate.id }}">Concepto | Insumo: {{ estimate.line_item.description }}</a> |
-                    <a href="/admin/ERP/estimate/{{ estimate.id }}">Ver</a> |
-                    <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> |
-                    <a href="/admin/ERP/estimate/{{ estimate.id }}/delete">Eliminar</a>
-                </li>
-            {% empty %}
-                <li>Aún no se han generado estimaciones.</li>
-            {% endfor %}
-        </ul>
-
-        {% include 'ERP/list-pagination.html' %}
-
-    </div>{% endcomment %}
-
-
-
-
-
-
-
-
-
-
+    {% include 'ERP/header_list.html' %}
     <div id="content-main">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="item-left">
-                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
-                        </div>
-                        <div class="item-right">
-
-                            <a href="/admin/ERP/estimate/add?project={{ project }}"
-                               class="btn-circle btn-circle-raised btn-circle-success"
-                               style="margin: -4px 1px;top: -25px;">
-                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
-                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="card-block">
-                        <form class="form-inline" action="" method="get">
-                            <div class="form-group">
-                                <label for="id_start_date">Fecha de Inicio:</label>
-                                <input type="text" name="start_date" value="30/08/2017" id="id_start_date" required
-                                       class="form-control" size="10"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="id_end_date">Fecha de Término:</label>
-                                <input type="text" name="end_date" value="30/08/2017" id="id_end_date" required
-                                       class="form-control" size="10"/>
-                            </div>
-                            <div class="form-group">
-                                <label for="id_type">Tipo:</label>
-                                <select name="type" id="id_type" class="form-control">
-                                    <option value="C">Concepto</option>
-
-                                    <option value="I">Insumo</option>
-
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <select class="form-control" name="line_item" required id="id_line_item">
-                                    <option value="" selected>Seleccionar Partida</option>
-                                </select>
-                            </div>
-                            <button class="searchbutton" type="submit" style="height: 27px">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </form>
-
-                        <div class="row">
-                            <br>
-                            <div class="col-xs-12">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered">
-                                        <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Municipio</th>
-                                            <th>Estado</th>
-                                            <th>Teléfono</th>
-                                            <th>Inicio</th>
-                                            <th>Concepto</th>
-
-                                            <th>Ver</th>
-                                            <th>Editar</th>
-                                            <th>Eliminar</th>
-                                        </tr>
-                                        </thead>
-                                        {% for estimate in object_list %}
-                                            <tr>
 
 
-                                                {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
-                                                <td><span>{{ company.nombreEmpresa }}</span></td>
-                                                <td><span>{{ company.municipio }}</span></td>
-                                                <td><span>{{ company.estado }}</span></td>
-                                                <td><span>{{ company.telefono }}</span></td>
 
-                                                <td class="text-center" style="width: 5%"><a
-                                                        href="Inicio: {{ estimate.id }}"
-                                                        class="btn btn-raised btn-default btn-xs">Del {{ estimate.start_date.date }}
-                                                    al {{ estimate.end_date.date }} - Concepto o
-                                                    Insumo: {{ estimate.concept_input.description }}</a></td>
-                                                <td class="text-center" style="width: 5%"><a
-                                                        href="Inicio: {{ estimate.id }}"
-                                                        class="btn btn-raised btn-default btn-xs">Del {{ estimate.start_date.date }}
-                                                    al {{ estimate.end_date.date }} - Concepto o
-                                                    Insumo: {{ estimate.concept_input.description }}</a></td>
-
-
-                                                <td class="text-center" style="width: 5%"><a href="{{ estimate.id }}"
-                                                                                             class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-eye color-default eliminar"></i></a></td>
-                                                <td class="text-center" style="width: 5%"><a
-                                                        href="{{ estimate.id }}/change"
-                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
-                                                <td class="text-center" style="width: 2%"><a
-                                                        href="{{ estimate.id }}/delete"
-                                                        class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-trash-o color-danger eliminar"></i></a>
-                                                </td>
-
-
-                                                {% empty %}
-                                                <td>No existen {{ title_list }}</td>
-                                            </tr>
-                                        {% endfor %}
-                                    </table>
-                                </div>
-
-                                {% include 'ERP/list-pagination.html' %}
-
-                            </div>
-                        </div>
-
-
-                    </div>
-
+        <form action="" method="get">
+            <div class="row">
+                <div class="col-xs-2">{{ form.type|addcss:"form-control"  }}</div>
+                <div class="col-xs-3">{{ form.line_item|addcss:"form-control"  }}</div>
+                <div class="col-xs-3">{{ form.start_date }}</div>
+                <div class="col-xs-3">{{ form.end_date }}</div>
+                <div class="col-xs-1">
+                    <button class="searchbutton" type="submit">
+                        <i class="fa fa-search"></i>
+                    </button>
                 </div>
             </div>
-        </div>
 
+        </form>
+
+
+        <div><a href="/admin/ERP/estimate/add?project={{ project }}">Agregar</a></div>
+        <ul>
+         <div class="row">
+             <div class="col-xs-12">
+                 <div class="table-responsive">
+                     <table class="table table-bordered">
+                         <thead>
+                            <tr>
+                                <th>Periodo</th>
+                                <th>Concepto/Insumo</th>
+                                <th>Partida</th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                         </thead>
+
+                        {% for estimate in object_list %}
+                            <tr>
+                                <td><span>Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }}</span></td>
+                                <td><span>{{ estimate.concept_input.description }}</span></td>
+                                <td><span>{{ estimate.line_item.description }}</span></td>
+
+                                <td style="width: 7%"><a href="/admin/ERP/estimate/{{ estimate.id}}" class="btn btn-raised btn-default btn-xs">
+                                    <i class="fa fa-search color-default eliminar"></i> Ver</a></td>
+                                <td style="width: 9%"><a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}" class="btn btn-raised btn-default btn-xs">
+                                    <i class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
+                                <td style="width: 9%"><a href="/admin/ERP/estimate/{{ estimate.id }}/delete" class="btn btn-raised btn-default btn-xs">
+                                    <i class="fa fa-trash-o color-default eliminar"></i> Eliminar</a></td>
+
+                                {% empty %}
+                                <td colspan="5">No existen estimaciones.</td>
+                            </tr>
+
+{#                            <tr>#}
+{#                                <a href="Inicio: {{ estimate.id }}">Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }} - Concepto o Insumo: {{ estimate.concept_input.description }}</a> |#}
+{#                                <a href="{{ estimate.id }}">Concepto | Insumo: {{ estimate.line_item.description }}</a> |#}
+{#                                <a href="/admin/ERP/estimate/{{ estimate.id }}">Ver</a> |#}
+{#                                <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> |#}
+{#                                <a href="/admin/ERP/estimate/{{ estimate.id }}/delete">Eliminar</a>#}
+{#                                {% empty %}#}
+{#                                <td colspan="5">No existen estimaciones.</td>#}
+{#                            </tr>#}
+                        {% endfor %}
+                     </table>
+                 </div>
+             </div>
+         </div>
+        </ul>
 
     </div>
+{% include 'ERP/footer_list.html' %}
 {% endblock %}

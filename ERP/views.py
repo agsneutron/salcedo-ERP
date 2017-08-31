@@ -485,6 +485,7 @@ class EstimateListView(ListView):
     query = None
     project_id = None
     params = ""
+    title_list="Estimación"
 
     """
        Display a Blog List page filtered by the search query.
@@ -541,7 +542,7 @@ class EstimateListView(ListView):
         context = super(EstimateListView, self).get_context_data(**kwargs)
         context['project'] = EstimateListView.project_id
         context['params'] = EstimateListView.params
-
+        context['title_list'] = EstimateListView.title_list
         context['form'] = EstimateSearchForm(EstimateListView.project_id)
 
         context['add_form'] = AddEstimateForm(EstimateListView.project_id)
