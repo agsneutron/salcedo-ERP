@@ -5,9 +5,11 @@
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
+{% comment %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
+{% endcomment %}
 
     {% if cl.formset %}
         <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
@@ -80,96 +82,97 @@
 
 {% block content %}
     <div id="content-main">
-         <div id="container">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="card">
-                                <div class="card-header">
-                                    <div class="item-left">
-                                        <h3 class="card-title text">{{ cl.opts.verbose_name|capfirst }}</h3>
-                                    </div>
-        {% block object-tools %}
-            {% if has_add_permission %}
-                <ul class="object-tools">
-                    {% block object-tools-items %}
+    <div id="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">{{ cl.opts.verbose_name|capfirst }}</h3>
+                        </div>
+                        {% block object-tools %}
+                            {% if has_add_permission %}
+                                <ul class="object-tools">
+                                    {% block object-tools-items %}
 
-                       {% comment %} <li>
+                                        {% comment %} <li>
                             {% url cl.opts|admin_urlname:'add' as add_url %}
                             <a href="{% add_preserved_filters add_url is_popup to_field %}" class="addlink">
                                 {% blocktrans with cl.opts.verbose_name as name %}Add {{ name }}{% endblocktrans %}
                             </a>
                         </li>{% endcomment %}
 
-                            <div class="item-right">
-                             {% url cl.opts|admin_urlname:'add' as add_url %}
-                                        <a href="{% add_preserved_filters add_url is_popup to_field %}"
-                                           class="btn-circle btn-circle-raised btn-circle-success" style="    margin: -4px 1px;">
-                                            &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x" style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
-                                        </a>
-                            </div>
-                    {% endblock %}
-                </ul>
-            {% endif %}
-        {% endblock %}
-        {% if cl.formset.errors %}
-            <p class="errornote">
-                {% if cl.formset.total_error_count == 1 %}{% trans "Please correct the error below." %}{% else %}
-                    {% trans "Please correct the errors below." %}{% endif %}
-            </p>
-            {{ cl.formset.non_form_errors }}
-        {% endif %}
+                                        <div class="item-right">
+                                            {% url cl.opts|admin_urlname:'add' as add_url %}
+                                            <a href="{% add_preserved_filters add_url is_popup to_field %}"
+                                               class="btn-circle btn-circle-raised btn-circle-success"
+                                               style="margin: -4px 1px;top: -35px;">
+                                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                                            </a>
+                                        </div>
+                                    {% endblock %}
+                                </ul>
+                            {% endif %}
+                        {% endblock %}
+                        {% if cl.formset.errors %}
+                            <p class="errornote">
+                                {% if cl.formset.total_error_count == 1 %}
+                                    {% trans "Please correct the error below." %}{% else %}
+                                    {% trans "Please correct the errors below." %}{% endif %}
+                            </p>
+                            {{ cl.formset.non_form_errors }}
+                        {% endif %}
 
 
+                    </div>
+
+
+                    <div class="card-block">
+                        <div class="">
+                            <div class="form-group">
+                                <div class="input-group col-xs-12">
+                                    {% block search %}{% search_form cl %}{% endblock %}
                                 </div>
-
-
-                <div class="card-block">
-                     <div class="">
-                        <div class="form-group">
-                            <div class="input-group col-xs-12">
-                   {% block search %}{% search_form cl %}{% endblock %}
-                              </div>
-                         </div>
-                     </div>
-
-                         {% comment %} <div id="container-bitacora" style=""></div>{% endcomment %}
-                </div>
 
                             </div>
                         </div>
-                    </div>
-        <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
 
-            {% block date_hierarchy %}{% date_hierarchy cl %}{% endblock %}
+                        {% comment %} <div id="container-bitacora" style=""></div>{% endcomment %}
 
-            {% block filters %}
-                {% if cl.has_filters %}
-                    <div id="changelist-filter">
-                        <h2>{% trans 'Filter' %}</h2>
-                        {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
-                    </div>
-                {% endif %}
-            {% endblock %}
+                        <div class="table-responsive" style="padding-top: 0px">
+                            <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
 
-            <form id="changelist-form" method="post"{% if cl.formset.is_multipart %}
-                  enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
-                {% if cl.formset %}
-                    <div>{{ cl.formset.management_form }}</div>
-                {% endif %}
+                                {% block date_hierarchy %}{% date_hierarchy cl %}{% endblock %}
 
-                {% block result_list %}
-                   {% comment %} {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+                                {% block filters %}
+                                    {% if cl.has_filters %}
+                                        <div id="changelist-filter">
+                                            <h2>{% trans 'Filter' %}</h2>
+                                            {% for spec in cl.filter_specs %}{% admin_list_filter cl spec %}{% endfor %}
+                                        </div>
+                                    {% endif %}
+                                {% endblock %}
+
+                                <form id="changelist-form" method="post"{% if cl.formset.is_multipart %}
+                                      enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
+                                    {% if cl.formset %}
+                                        <div>{{ cl.formset.management_form }}</div>
+                                    {% endif %}
+
+                                    {% block result_list %}
+                                        {% comment %} {% if action_form and actions_on_top and cl.show_admin_actions %}{% admin_actions %}{% endif %}
 {% endcomment %}                    {% result_list cl %}
-                   {% comment %} {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
+                                        {% comment %} {% if action_form and actions_on_bottom and cl.show_admin_actions %}{% admin_actions %}{% endif %}
 {% endcomment %}                {% endblock %}
-                {% block pagination %}{% pagination cl %}{% endblock %}
-            </form>
+                                    {% block pagination %}{% pagination cl %}{% endblock %}
+                                </form>
 
-            {#   -------------------------------#}
-            {#   -------------------------------#}
+                                {#   -------------------------------#}
+                                {#   -------------------------------#}
 
 
-{% comment %}
+                                {% comment %}
 
             <div class="row">
                     <div class="col-xs-12">
@@ -191,9 +194,16 @@
 {% endcomment %}
 
 
-            {#   -------------------------------#}
-            {#   -------------------------------#}
+                                {#   -------------------------------#}
+                                {#   -------------------------------#}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
         </div>
+
     </div>
 
 
@@ -269,11 +279,11 @@
     </script>{% endcomment %}
 
     <script type="text/javascript">
-        $(document).ready(function () {
+    {% comment %}    $(document).ready(function () {
             $(".js-example-placeholder-single").select2({
                 placeholder: "Busqueda por nombre de empresa",
                 allowClear: true
             });
-        });
+        });{% endcomment %}
     </script>
 {% endblock %}
