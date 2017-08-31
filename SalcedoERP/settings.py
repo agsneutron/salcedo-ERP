@@ -135,6 +135,11 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'ERP/media')
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 
+import sys
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # Static files (CSS, JavaScript, Images)

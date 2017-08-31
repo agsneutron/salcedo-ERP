@@ -1,11 +1,6 @@
 # coding=utf-8
 import uuid
 
-import sys
-
-reload(sys)
-sys.setdefaultencoding('utf-8')
-
 from django.utils.encoding import python_2_unicode_compatible
 
 import django
@@ -290,13 +285,9 @@ class DBObject(object):
             project_key = Project.objects.filter(Q(pk=project_id))[0].key
 
             raise ErrorDataUpload(
-                u"Se intentó guardar la partida para el proyecto. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.".encode('utf-8'),
+                u"Se intentó guardar la partida " + line_item_key + u" para el proyecto " + project_key
+                + u". Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.",
                 LoggingConstants.ERROR, self.user_id)
-
-            # raise ErrorDataUpload(
-            #     u"Se intentó guardar la partida " + line_item_key + u" para el proyecto " + project_key
-            #     + u". Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.",
-            #     LoggingConstants.ERROR, self.user_id)
 
         line_item_obj = LineItem(key=line_item_key.upper(),
                                  project_id=project_id,
