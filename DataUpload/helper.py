@@ -279,7 +279,7 @@ class DBObject(object):
 
             raise ErrorDataUpload(
                 u'Se intento guardar la partida ' + unicode(line_item_key) + u' para el proyecto ' + unicode(project_key)
-                + u'. Esta partida esta duplicada en el archivo o ya fue cargada anteriormente. La operacion ha sido cancelada.',
+                + u'. Esta partida est\uxe1 duplicada en el archivo o ya fue cargada anteriormente. La operacion ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
 
         line_item_obj = LineItem(key=line_item_key.upper(),
