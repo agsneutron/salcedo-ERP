@@ -124,6 +124,7 @@ class ProgressEstimateLogForm(forms.ModelForm):
         kwargs['initial'].update({'project': self.project_id})
         kwargs['initial'].update({'user': self.user_id})
 
+
         super(ProgressEstimateLogForm, self).__init__(*args, **kwargs)
         #self.fields['date'].widget = widgets.AdminDateWidget()
     # To override the save method for the form.
