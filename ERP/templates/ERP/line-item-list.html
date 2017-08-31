@@ -67,16 +67,17 @@
 
                                         </tr>
                                         </thead>
+
                                          {% for concept in concepts_inputs %}
                                             <tr>
 
 
                                                {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
                                                  <td><span > {{ concept.description }}</span></td>
-                                                 <td style="width: 7%"><a href="/admin/ERP/estimate/add/?project={{ project_id }}">Nueva Estimación</a></td>
+                                                 <td style="width: 7%"><a href="/admin/ERP/estimate/add/?project={{ project_id }}&line_item={{concept.line_item_id }}&concept_input={{ concept.id }}">Nueva Estimación</a></td>
 
                                                 {% empty %}
-                                                <td>No se encontraron Conceptos.</td>
+                                                <td>No se encontraron {{ current_type_full.title }}.</td>
                                             </tr>
                                         {% endfor %}
                                     </table>
