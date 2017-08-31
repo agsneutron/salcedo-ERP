@@ -70,6 +70,11 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
+        project = ModelFormE.base_fields['project']
+
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        project.widget.can_add_related = False
+        project.widget.can_change_related = False
         class ModelFormEMetaClass(ModelFormE):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
