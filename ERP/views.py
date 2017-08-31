@@ -477,9 +477,20 @@ class ProgressEstimateLogListView(ListView):
         return context
 
 
+'''class ProgressEstimateLogDetailView(generic.DetailView):
+    model = ProgressEstimateLog
+    template_name = "ERP/progressestimatelog-detail.html"'''
+
 class ProgressEstimateLogDetailView(generic.DetailView):
     model = ProgressEstimateLog
     template_name = "ERP/progressestimatelog-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ProgressEstimateLogDetailView, self).get_context_data(**kwargs)
+        progressestimatelog = context['progressestimatelog']
+        context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
+
+        return context
 
 
 # Views for the model Estimate.

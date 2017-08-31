@@ -1,10 +1,40 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "admin/base_site.html" %}
 
-</body>
-</html>
+{% block content %}
+    <h1>Bitácoras</h1>
+    <ul>
+        <li>Proyecto: {{ progressestimatelog.project.nombreProyecto }}</li>
+        <li>Descripción: {{ progressestimatelog.description }}</li>
+        <li>Fecha: {{ progressestimatelog.date }}</li>
+
+    </ul>
+
+
+
+    <h1>Archivos de bitácora</h1>
+    <table border="1">
+        <tr>
+            <td>Archivo</td>
+            <td>MIME</td>
+        </tr>
+        {% for logfile in logfiles %}
+            <tr>
+                <td>
+                    {{ logfile.file }}
+                </td>
+                <td>
+                    {{ logfile.mime }}
+                </td>
+
+            </tr>
+        {% empty %}
+            <li>No Companies yet.</li>
+        {% endfor %}
+    </table>
+
+
+
+
+
+
+{% endblock %}
