@@ -57,7 +57,7 @@ class SystemException(Exception):
         return self.message
 
     def __init__(self, message, type, priority, user_id):
-        print 'message is unicode: ' + message
+
 
         self.logger = logging.getLogger(type)
         self.type = type
@@ -65,23 +65,23 @@ class SystemException(Exception):
         self.message = unicode(message)
         self.user_id = user_id
 
-        # print 'Por procesar error con mensaje: '+message
+
 
 
         self.process_exception()
         Exception.__init__(self, self.message)
 
     def process_exception(self):
-        # print 'Exception of type ' + self.type + ' and priority ' + LoggingConstants.PRIORITIES[self.priority]
-        print 'Guardando error.'
+
+
         obj = SystemLogEntry(
             label=self.type,
             information=Utilities.json_to_safe_string(self.get_information()),
             priority=self.priority,
             user_id=self.user_id)
-        print obj
+
         obj.save()
-        print 'Error guardado.'
+
 
     def get_information(self):
         information = {
