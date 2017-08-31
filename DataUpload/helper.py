@@ -285,7 +285,7 @@ class DBObject(object):
 
 
             raise ErrorDataUpload(
-                u'Se intentó guardar la partida ' + line_item_key + u' para el proyecto ' + project_key
+                u'Se intentó guardarr la partida ' + line_item_key + u' para el proyecto ' + project_key
                 + u'. Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
 
