@@ -246,6 +246,11 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
 class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
     model = UploadedInputExplotionsHistory
 
+    def get_fields(self, request, obj=None):
+        fields = (
+            'project', 'file', )
+        return fields
+
     def save_model(self, request, obj, form, change):
         user_id = request.user.id
         dbo = DBObject(user_id)
