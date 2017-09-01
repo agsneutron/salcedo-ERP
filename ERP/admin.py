@@ -250,6 +250,17 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
     list_display = ('project', 'line_items_file', 'concepts_file', 'upload_date')
     list_per_page = 50
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(UploadedCatalogsHistoryAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        project = ModelForm.base_fields['project']
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        project.widget.can_add_related = False
+        project.widget.can_change_related = False
+
+        return ModelForm
+
+
     def save_model(self, request, obj, form, change):
         user_id = request.user.id
         dbo = DBObject(user_id)
@@ -301,6 +312,16 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
 
 class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
     model = UploadedInputExplotionsHistory
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(UploadedInputExplotionHistoryAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        project = ModelForm.base_fields['project']
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        project.widget.can_add_related = False
+        project.widget.can_change_related = False
+
+        return ModelForm
 
     def get_fields(self, request, obj=None):
         fields = (
