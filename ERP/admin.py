@@ -258,7 +258,7 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             with transaction.atomic():
                 project_id = request.POST.get('project')
 
-                print 'about to save line_items'
+
                 dbo.save_all(request.FILES['line_items_file'],
                              dbo.LINE_ITEM_UPLOAD, project_id)
                 dbo.save_all(request.FILES['concepts_file'],
@@ -271,7 +271,7 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             messages.error(request, e.get_error_message())
         except django.db.utils.IntegrityError as e:
             # Create exception without raising it.
-            print 'Hubo un error de integridad'
+
             edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, user_id)
             messages.set_level(request, messages.ERROR)
             messages.error(request, edu.get_error_message())
@@ -622,7 +622,7 @@ class EstimateAdmin(admin.ModelAdmin):
             url(r'^(?P<pk>\d+)/delete$', views.EstimateDelete.as_view(), name='estimate-delete'),
 
         ]
-        print "My URLS:"
+
         return my_urls + urls
 
     def response_add(self, request, obj, post_url_continue=None):

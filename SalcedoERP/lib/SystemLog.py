@@ -1,3 +1,6 @@
+# coding=utf-8
+
+
 import logging
 from django.contrib.admin.models import LogEntry
 
@@ -33,43 +36,38 @@ class LoggingConstants:
 @python_2_unicode_compatible
 class SystemException(Exception):
     def __str__(self):
-        return self.message
+        return self.message.encode('utf-8')
+
+    def __unicode__(self):
+        return self.message.encode('utf-8')
 
     def __init__(self, message, type, priority, user_id):
-        print 'message is unicode: ' + message
-
         self.logger = logging.getLogger(type)
         self.type = type
         self.priority = priority
-        self.message = unicode(message)
+        self.message = message.encode('utf-8')
         self.user_id = user_id
 
-        # print 'Por procesar error con mensaje: '+message
-
-
         self.process_exception()
-        Exception.__init__(self, self.message)
+        Exception.__init__(self, self.message.encode('utf-8'))
 
     def process_exception(self):
-        # print 'Exception of type ' + self.type + ' and priority ' + LoggingConstants.PRIORITIES[self.priority]
-        print 'Guardando error.'
         obj = SystemLogEntry(
             label=self.type,
             information=Utilities.json_to_safe_string(self.get_information()),
             priority=self.priority,
             user_id=self.user_id)
-        print obj
+
         obj.save()
-        print 'Error guardado.'
 
     def get_information(self):
         information = {
-            "message": self.message
+            "message": self.message.encode('utf-8')
         }
         return information
 
     def get_error_message(self):
-        return self.message
+        return self.message.encode('utf-8')
 
     def save(self):
         self.process_exception()

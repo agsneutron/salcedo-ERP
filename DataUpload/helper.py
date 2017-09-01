@@ -11,19 +11,27 @@ from _mysql_exceptions import IntegrityError
 from django.db import transaction
 from django.db.models import Q
 
-from ERP.models import Concept_Input, Unit, LineItem
+from ERP.models import Concept_Input, Unit, LineItem, Project
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 
 import locale
 
+# locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 
 # locale.currency(1000, grouping=True)
 # español para windows
 # locale.setlocale(locale.LC_ALL, "esp")
+
+
+
+# Mac
+# locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+
+
 # español para linux
-#locale.setlocale(locale.LC_ALL, "es_MX.utf8")
+# locale.setlocale(locale.LC_ALL, "es_MX.utf8")
 
 
 class FileInterface(object):
@@ -219,7 +227,7 @@ class DBObject(object):
                     u'El parámetro model no es correcto. Este parámetro debe estar definido por una consante válida.',
                     LoggingConstants.CRITICAL, self.user_id)
         except django.db.utils.IntegrityError as e:
-            print 'ERRROR1'
+
             raise e
 
     def save_all_concept_input(self, record_list, model, project_id):
@@ -232,7 +240,7 @@ class DBObject(object):
                 if record[0] != "":
                     # Validate that the record is not empty
                     # Save the record
-                    # print 'saving' + str(record)
+
                     self.save_concept_input(record, model, project_id)
 
         except Exception, e:
@@ -243,7 +251,7 @@ class DBObject(object):
 
         try:
             for record in record_list:
-                # print 'Single record:' + str(record)
+
                 if record[self.LineItemConstants.get_max_level()] != "":
                     self.save_line_item(record, project_id)
 
@@ -268,6 +276,18 @@ class DBObject(object):
                 parent_id = line_item_qs[0].id
         else:
             parent_id = None
+
+        # Now We'll check that (line_item_id, concept_key) does not already exist.
+        line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
+        if len(line_item_validation_qs) != 0:
+            # Data already exists. Raise an error to be displayed to the user.
+
+            project_key = Project.objects.filter(Q(pk=project_id))[0].key
+
+            raise ErrorDataUpload(
+                u"Se intentó guardar la partida " + line_item_key + u" para el proyecto " + project_key
+                + u". Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.",
+                LoggingConstants.ERROR, self.user_id)
 
         line_item_obj = LineItem(key=line_item_key.upper(),
                                  project_id=project_id,
@@ -328,7 +348,6 @@ class DBObject(object):
                 u'Se intentó guardar el concepto ' + concept_key + u' para la partida ' + line_item_obj.key
                 + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.',
                 LoggingConstants.ERROR, self.user_id)
-
 
         concept_input = Concept_Input(
             line_item=line_item_obj,
