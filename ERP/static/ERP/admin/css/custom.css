@@ -435,10 +435,20 @@ dt {
 }
 /*estilos para tablas*/
 .table tr td, .table tr th {
-        padding: 10px 12px!important;
+
     border-color: #e0e0e0!important;
     /* line-height: 31px; */
     font-size: 14px;
+}
+.table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th {
+    padding: 8px 12px;
+    line-height: 18px;
+    vertical-align: middle;
+    border-top: 1px solid #ddd;
+}
+.table tr td, .table tr th {
+    padding: 10px!important;
+    border-color: #e0e0e0!important;
 }
 .danger {
     color: #f44336;
@@ -448,8 +458,8 @@ dt {
 }
 
 .list-group .list-group-item, .list-group a.list-group-item {
-    padding: 1px 15px!important;
-    font-size: 12px!important;
+    padding: 1px 10px 1px 25px!important;
+    font-size: 14px!important;
 }
 .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
 padding: 0;
@@ -615,4 +625,16 @@ padding: 0;
 .top-padding {
     border: none;
 
+}
+ul { padding-left:20px; list-style:none; }
+li { margin-bottom:10px; }
+.list-group > li:before {
+    font-family: 'FontAwesome';
+        content: "\f054";
+    color: #00a09b;
+    position: absolute;
+        left: 10px;
+}
+.list-group > li {
+    padding-left:20px;
 }
