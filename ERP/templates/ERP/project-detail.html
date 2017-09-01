@@ -165,11 +165,7 @@
 
 
 
-
-
-
-
-
+    <img src="uploads/{{ imagen_identificativa.name }} ">
     <div class="card nav-tabs-ver-container col-xs-10 col-xs-offset-1">
         <div class="row">
             <h3 class="color-info text-center"> {{ project.nombreProyecto }} </h3>
@@ -266,21 +262,48 @@
                                     <h3 class="color-info text-center">Legal</h3>
                                     <ul class="list-group top-padding">
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento de Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
+                                            Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.documento_propiedad }}</li>
+                                            {% if documento_propiedad_nombre != "" %}
+                                            <a href="/media/{{ project.documento_propiedad }}" target="_blank">
+                                                Documento: {{ documento_propiedad_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
+
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Gravamen: {{ project.estadolegal_gravamen }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.documento_gravamen }}</li>
+                                            {% if documento_gravamen_nombre != "" %}
+                                            <a href="/media/{{ project.documento_gravamen }}" target="_blank">
+                                                Documento: {{ documento_gravamen_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Predial: {{ project.estadolegal_predial }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.documento_predial }}</li>
+                                             {% if documento_predial_nombre != "" %}
+                                            <a href="/media/{{ project.documento_predial }}" target="_blank">
+                                                Documento: {{ documento_predial_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Agua: {{ project.estadolegal_agua }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.documento_agua }}</li>
+                                             {% if documento_agua_nombre != "" %}
+                                            <a href="/media/{{ project.documento_agua }}" target="_blank">
+                                                Documento: {{ documento_agua_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -341,7 +364,14 @@
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Observaciones: {{ project.hidraulica_observaciones }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.hidraulica_documento }}</li>
+                                            {% if documento_hidraulica_nombre != "" %}
+                                            <a href="/media/{{ project.hidraulica_documento }}" target="_blank">
+                                                Documento: {{ documento_hidraulica_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -356,7 +386,14 @@
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Observaciones: {{ project.sanitaria_observaciones }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.sanitaria_documento }}</li>
+                                            {% if documento_sanitaria_nombre != "" %}
+                                            <a href="/media/{{ project.sanitaria_documento }}" target="_blank">
+                                                Documento: {{ documento_sanitaria_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -372,7 +409,14 @@
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Observaciones: {{ project.pluvial_observaciones }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.pluvial_documento }}</li>
+                                            {% if documento_pluvial_nombre != "" %}
+                                            <a href="/media/{{ project.pluvial_documento }}" target="_blank">
+                                                Documento: {{ documento_pluvial_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -401,7 +445,14 @@
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Observaciones: {{ project.vial_observaciones }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.vial_documento }}</li>
+                                            {% if documento_vial_nombre != "" %}
+                                            <a href="/media/{{ project.vial_documento }}" target="_blank">
+                                                Documento: {{ documento_vial_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -416,7 +467,14 @@
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Observaciones: {{ project.electricidad_observaciones }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.electricidad_documento }}</li>
+                                            {% if documento_electricidad_nombre != "" %}
+                                            <a href="/media/{{ project.electricidad_documento }}" target="_blank">
+                                                Documento: {{ documento_electricidad_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -432,7 +490,14 @@
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Observaciones: {{ project.alumbradopublico_observaciones }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.alumbradopublico_documento }}</li>
+                                            {% if documento_alumbrado_nombre != "" %}
+                                            <a href="/media/{{ project.alumbradopublico_documento }}" target="_blank">
+                                                Documento: {{ documento_alumbrado_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
@@ -446,7 +511,14 @@
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
                                             Observaciones: {{ project.telefonia_observaciones }}</li>
                                         <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.telefonia_documento }}</li>
+                                            {% if documento_telefonia_nombre != "" %}
+                                            <a href="/media/{{ project.telefonia_documento }}" target="_blank">
+                                                Documento: {{ documento_telefonia_nombre }}
+                                            </a>
+                                            {% else %}
+                                                Documento: Aún no se ha cargado el documento.
+                                            {% endif %}
+                                        </li>
                                     </ul>
                                 </div>
                             </div>
