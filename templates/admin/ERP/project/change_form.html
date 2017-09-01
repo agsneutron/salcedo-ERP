@@ -9,7 +9,9 @@
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
 <style>
-
+.aligned p.file-upload {
+    margin-left: 5px;
+}
 </style>{% endblock %}
 
 {% block coltype %}colM{% endblock %}

@@ -218,7 +218,7 @@
                                     <div class="col-xs-8 col-xs-offset-2">
                                         <div class="card">
                                             <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Ubicación</h3>
+                                            <h3 class="color-info text-center">Proyecto</h3>
                                             <ul class="list-group top-padding">
                                                 <li class="list-group-item">
                                                     Clave de Proyecto: {{ project.key }} </li>
@@ -278,28 +278,52 @@
                                 </div>
 
                                 <div role="tabpanel" class="tab-pane" id="legal">
-                                    <div class="col-xs-8 col-xs-offset-2">
+                                    <div class="col-xs-10 col-xs-offset-2">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Legal</h3>
                                             <ul class="list-group top-padding">
                                                 <li class="list-group-item">
-                                                    Documento de
-                                                    Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
+                                                    Acreditación de Propiedad: {{ project.estadolegal_documento_propiedad }}
+                                                </li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.documento_propiedad }}</li>
+                                                    Documento:
+                                                    {% if documento_propiedad_nombre != "" %}
+                                                             <a href="/media/{{ project.documento_propiedad }}" target="_blank">{{ documento_propiedad_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                                 <li class="list-group-item">
                                                     Gravamen: {{ project.estadolegal_gravamen }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.documento_gravamen }}</li>
+                                                    Documento:
+                                                    {% if documento_gravamen_nombre != "" %}
+                                                             <a href="/media/{{ project.documento_gravamen }}" target="_blank">{{ documento_gravamen_nombre }}</a>
+                                                    {% else %}
+                                                        Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                 </li>
                                                 <li class="list-group-item">
                                                     Predial: {{ project.estadolegal_predial }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.documento_predial }}</li>
+                                                    Documento:
+                                                    {% if documento_predial_nombre != "" %}
+                                                             <a href="/media/{{ project.documento_predial }}" target="_blank">{{ documento_predial_nombre }}</a>
+                                                    {% else %}
+                                                           Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                                 <li class="list-group-item">
                                                     Agua: {{ project.estadolegal_agua }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.documento_agua }}</li>
+                                                    Documento:
+                                                    {% if documento_agua_nombre != "" %}
+                                                             <a href="/media/{{ project.documento_agua }}" target="_blank">{{ documento_agua_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -329,7 +353,7 @@
                                     </div>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="suelo">
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Uso de suelo</h3>
@@ -351,10 +375,10 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Hidraulica</h3>
+                                            <h3 class="color-info text-center">Hidráulica</h3>
                                             <ul class="list-group top-padding">
                                                 <li class="list-group-item">
                                                     Fuente: {{ project.hidraulica_fuente }}</li>
@@ -363,11 +387,18 @@
                                                 <li class="list-group-item">
                                                     Observaciones: {{ project.hidraulica_observaciones }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.hidraulica_documento }}</li>
+                                                    Documento:
+                                                    {% if documento_hidraulica_nombre != "" %}
+                                                             <a href="/media/{{ project.hidraulica_documento }}" target="_blank">documento_hidraulica_nombre</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
+                                   <div class="clearfix"></div>
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Sanitaria</h3>
@@ -379,12 +410,18 @@
                                                 <li class="list-group-item">
                                                     Observaciones: {{ project.sanitaria_observaciones }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.sanitaria_documento }}</li>
+                                                    Documento:
+                                                    {% if documento_sanitaria_nombre != "" %}
+                                                             <a href="/media/{{ project.sanitaria_documento }}" target="_blank">{{ documento_sanitaria_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="clearfix"></div>
-                                    <div class="col-xs-4">
+
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Pluvial</h3>
@@ -396,14 +433,20 @@
                                                 <li class="list-group-item">
                                                     Observaciones: {{ project.pluvial_observaciones }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.pluvial_documento }}</li>
+                                                    Documento:
+                                                    {% if documento_pluvial_nombre != "" %}
+                                                             <a href="/media/{{ project.pluvial_documento }}" target="_blank">{{ documento_pluvial_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
 
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="suelo-dos">
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Vial</h3>
@@ -426,11 +469,17 @@
                                                 <li class="list-group-item">
                                                     Observaciones: {{ project.vial_observaciones }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.vial_documento }}</li>
+                                                    Documento:
+                                                    {% if documento_vial_nombre != "" %}
+                                                             <a href="/media/{{ project.vial_documento }}" target="_blank">{{ documento_vial_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Electricidad</h3>
@@ -442,12 +491,18 @@
                                                 <li class="list-group-item">
                                                     Observaciones: {{ project.electricidad_observaciones }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.electricidad_documento }}</li>
+                                                    Documento:
+                                                    {% if documento_electricidad_nombre != "" %}
+                                                             <a href="/media/{{ project.electricidad_documento }}" target="_blank">{{ documento_electricidad_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
-
-                                    <div class="col-xs-4">
+                                    <div class="clearfix"></div>
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Alumbrado público</h3>
@@ -459,38 +514,17 @@
                                                 <li class="list-group-item">
                                                     Observaciones: {{ project.alumbradopublico_observaciones }}</li>
                                                 <li class="list-group-item">
-                                                    Documento: {{ project.alumbradopublico_documento }}</li>
+                                                    Documento:
+                                                    {% if documento_alumbrado_nombre != "" %}
+                                                             <a href="/media/{{ project.alumbradopublico_documento }}" target="_blank">{{ documento_alumbrado_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="clearfix"></div>
-                                    <div class="col-xs-4">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Telefonía</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Distancia: {{ project.telefonia_distancia }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.telefonia_observaciones }}</li>
-                                                <li class="list-group-item">
-                                                    Documento: {{ project.telefonia_documento }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Tv cable</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Distancia: {{ project.tvcable_distancia }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.tvcable_observaciones }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Equipamiento</h3>
@@ -509,9 +543,43 @@
                                             </ul>
                                         </div>
                                     </div>
+
+                                 <div class="clearfix"></div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Tv cable</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Distancia: {{ project.tvcable_distancia }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.tvcable_observaciones }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Telefonía</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Distancia: {{ project.telefonia_distancia }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.telefonia_observaciones }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_telefonia_nombre != "" %}
+                                                             <a href="/media/{{ project.telefonia_documento }}" target="_blank">{{ documento_telefonia_nombre }}</a>
+                                                    {% else %}
+                                                           Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="costo">
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Costo</h3>
@@ -528,10 +596,10 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Estudio de mercado</h3>
+                                            <h3 class="color-info text-center">Estudio de Mercado</h3>
                                             <ul class="list-group top-padding">
                                                 <li class="list-group-item">
                                                     Demanda
@@ -546,10 +614,11 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="col-xs-4">
+                                     <div class="clearfix"></div>
+                                    <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Definicion del proyecto</h3>
+                                            <h3 class="color-info text-center">Definicion del Proyecto</h3>
                                             <ul class="list-group top-padding">
                                                 <li class="list-group-item">
                                                     Alernativa : {{ project.definicionproyecto_alternativa }}</li>
