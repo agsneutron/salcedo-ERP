@@ -6,7 +6,16 @@
 {{ media }}
 {% endblock %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<style>
+.inline-deletelink {
+    float: left;
+    text-indent: -9999px;
+
+    width: 16px;
+    height: 16px;
+    border: 0px none;
+</style>{% endblock %}
 
 {% block coltype %}colM{% endblock %}
 
@@ -26,7 +35,7 @@
 {% block content %}<div id="content-main">
 {% block object-tools %}
 {% if change %}{% if not is_popup %}
-  <ul class="object-tools">
+ {% comment %} <ul class="object-tools">
     {% block object-tools-items %}
     <li>
         {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
@@ -34,7 +43,7 @@
     </li>
     {% if has_absolute_url %}<li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif %}
     {% endblock %}
-  </ul>
+  </ul>{% endcomment %}
 {% endif %}{% endif %}
 {% endblock %}
 <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
@@ -60,7 +69,7 @@
 
 {% block inline_field_sets %}
 {% for inline_admin_formset in inline_admin_formsets %}
-    {% include inline_admin_formset.opts.template %}
+    {% include "admin/ERP/progressestimatelog/tabular.html" %}
 {% endfor %}
 {% endblock %}
 
