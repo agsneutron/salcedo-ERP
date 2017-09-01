@@ -6,7 +6,16 @@
 {{ media }}
 {% endblock %}
 
-{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />{% endblock %}
+{% block extrastyle %}{{ block.super }}<link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
+<style>
+.inline-deletelink {
+    float: left;
+    text-indent: -9999px;
+
+    width: 16px;
+    height: 16px;
+    border: 0px none;
+</style>{% endblock %}
 
 {% block coltype %}colM{% endblock %}
 
