@@ -402,6 +402,7 @@ form .aligned ul {
     height: 30px;
     min-width: 30px;
     width: 30px;
+        margin-top: 20px;
 }
 .form-group input[type=file] > .input-group > .form-control {
     height: 25px;
