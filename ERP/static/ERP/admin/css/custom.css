@@ -638,7 +638,7 @@ position: absolute;
 
 }
 ul { padding-left:20px; list-style:none; }
-li { margin-bottom:10px; }
+
 .list-group > li:before {
     font-family: 'FontAwesome';
         content: "\f054";
