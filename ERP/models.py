@@ -83,6 +83,7 @@ class Municipio(models.Model):
 
 
 class TipoConstruccion(models.Model):
+    version = IntegerVersionField()
     nombreTipoConstruccion = models.CharField(max_length=200)
 
     class Meta:
@@ -103,6 +104,7 @@ class TipoConstruccion(models.Model):
 
 
 class Departamento(models.Model):
+    version = IntegerVersionField()
     nombreDepartamento = models.TextField(verbose_name='Departamento', max_length=120, null=False, blank=False,
                                           editable=True)
     descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
@@ -134,6 +136,7 @@ class Departamento(models.Model):
 
 
 class Area(models.Model):
+    version = IntegerVersionField()
     nombreArea = models.TextField(verbose_name='Área', max_length=120, null=False, blank=False, editable=True)
     descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
                                    editable=True)
@@ -166,6 +169,7 @@ class Area(models.Model):
 
 
 class Puesto(models.Model):
+    version = IntegerVersionField()
     nombrePuesto = models.TextField(verbose_name='Puesto', max_length=120, null=False, blank=False, editable=True)
     descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
                                    editable=True)
@@ -198,6 +202,7 @@ class Puesto(models.Model):
 
 
 class ModalidadContrato(models.Model):
+    version = IntegerVersionField()
     modalidadContrato = models.CharField(verbose_name='Contrato', max_length=250, null=False, blank=False,
                                          editable=True)
     duracionContrato = models.CharField(verbose_name='Duración de Contrato', max_length=20, null=False, blank=False,
@@ -233,6 +238,7 @@ class ModalidadContrato(models.Model):
 
 
 class Empleado(models.Model):
+    version = IntegerVersionField()
     nombreEmpleado = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
     calle = models.TextField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
     numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
@@ -291,6 +297,7 @@ class Empleado(models.Model):
 
 
 class Contratista(models.Model):
+    version = IntegerVersionField()
     nombreContratista = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
     calle = models.CharField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
     numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)
@@ -349,7 +356,6 @@ class Contratista(models.Model):
 
 
 class Empresa(models.Model):
-
     version = IntegerVersionField()
 
     nombreEmpresa = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
@@ -413,6 +419,7 @@ class Empresa(models.Model):
 
 
 class ContratoContratista(models.Model):
+    version = IntegerVersionField()
     clave_contrato = models.CharField(verbose_name='Clave del Contrato', max_length=32, null=False, blank=False)
     dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
     fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', editable=True)
@@ -487,6 +494,7 @@ class ContratoContratista(models.Model):
 
 # Propietario
 class Propietario(models.Model):
+    version = IntegerVersionField()
     nombrePropietario = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False)
     calle = models.CharField(verbose_name="Calle", max_length=200, null=False, blank=False)
     numero = models.CharField(verbose_name="Número", max_length=8, null=False, blank=False)
@@ -551,6 +559,7 @@ def content_file_documento_fuente(instance, filename):
 
 
 class DocumentoFuente(models.Model):
+    version = IntegerVersionField()
     descripcion = models.CharField(max_length=50, )
     documento = models.FileField(upload_to=content_file_documento_fuente, )
     tipoProyectoDetalle = models.ForeignKey('TipoProyectoDetalle', )
@@ -568,6 +577,7 @@ class DocumentoFuente(models.Model):
 
 # ProgramaVivienda
 class TipoProyectoDetalle(models.Model):
+    version = IntegerVersionField()
     proyecto = models.ForeignKey('Project', verbose_name="proyecto", null=True, blank=True)
     nombreTipoProyecto = models.CharField(verbose_name="tipo Proyecto", max_length=8, null=False, blank=False)
     numero = models.DecimalField(verbose_name='número', decimal_places=2, blank=False,
@@ -592,12 +602,16 @@ class TipoProyectoDetalle(models.Model):
     def __unicode__(self):
         return self.nombreTipoProyecto
 
+
 def project_file_document_destination(instance, filename):
     return '/'.join(['documentos_del_proyecto', instance.key, filename])
 
+
 # Projects model.
 class Project(models.Model):
-    user = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject',null=False, blank=False)
+    version = IntegerVersionField()
+    user = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
+                                  blank=False)
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     propietario = models.ForeignKey(Propietario, verbose_name="propietario", null=False, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
@@ -772,6 +786,7 @@ def uploaded_catalogs_destination(instance, filename):
 
 
 class UploadedCatalogsHistory(models.Model):
+    version = IntegerVersionField()
     line_items_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
                                        verbose_name="Archivo de partidas")
 
@@ -807,6 +822,7 @@ def uploaded_explotions_destination(instance, filename):
 
 
 class UploadedInputExplotionsHistory(models.Model):
+    version = IntegerVersionField()
     file = models.FileField(upload_to=uploaded_explotions_destination, null=True,
                             verbose_name="Explosión de Insumos")
 
@@ -832,6 +848,7 @@ class UploadedInputExplotionsHistory(models.Model):
 
 
 class LineItem(models.Model):
+    version = IntegerVersionField()
     # Model attributes.
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=False)
     key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=False, default="")
@@ -866,6 +883,7 @@ class LineItem(models.Model):
 
 
 class Unit(models.Model):
+    version = IntegerVersionField()
     name = models.CharField(verbose_name="Nombre de la Unidad", max_length=255, null=False, blank=False, unique=True)
     abbreviation = models.CharField(verbose_name="Abreviación", max_length=16, null=False, blank=False, unique=True)
 
@@ -900,6 +918,7 @@ class Unit(models.Model):
 
 
 class Concept_Input(models.Model):
+    version = IntegerVersionField()
     # Choices (Dictionary) for the status attribute.
     CANCELED = "C"
     ACTIVE = "A"
@@ -955,6 +974,7 @@ class Concept_Input(models.Model):
 
 
 class Estimate(models.Model):
+    version = IntegerVersionField()
     start_date = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Fecha de inicio")
     end_date = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
     period = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Periodo")
@@ -1017,6 +1037,7 @@ def content_file_generador(instance, filename):
 
 
 class ProgressEstimate(models.Model):
+    version = IntegerVersionField()
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
     key = models.CharField(verbose_name="Clave de la Estimación", max_length=8, null=False, blank=False)
     progress = models.DecimalField(verbose_name='Progreso', decimal_places=2, blank=False, null=False, default=0,
@@ -1065,6 +1086,7 @@ class ProgressEstimate(models.Model):
 
 
 class ProgressEstimateLog(models.Model):
+    version = IntegerVersionField()
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=True, blank=True)
     description = models.TextField(verbose_name="Descripción", max_length=512, null=False, blank=False)
@@ -1099,6 +1121,7 @@ def progress_estimate_log_destination(instance, filename):
 
 
 class LogFile(models.Model):
+    version = IntegerVersionField()
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de estimación", null=False,
                                               blank=False)
     file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination,
@@ -1147,7 +1170,6 @@ class SystemLogEntry(models.Model):
         return "Value: " + self.information
 
 
-
 class AccessToProject(models.Model):
     user = models.ForeignKey(ERPUser, verbose_name="Usuario")
     project = models.ForeignKey(Project, verbose_name="Obra", null=False, blank=False)
@@ -1155,7 +1177,7 @@ class AccessToProject(models.Model):
     class Meta:
         verbose_name_plural = 'Accesos a Proyectos'
         verbose_name = 'Acceso a Proyecot'
-        unique_together = ('user','project')
+        unique_together = ('user', 'project')
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
