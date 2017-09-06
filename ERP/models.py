@@ -1,6 +1,7 @@
 # coding=utf-8
 from __future__ import unicode_literals
 
+from concurrency.fields import IntegerVersionField
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -347,6 +348,9 @@ class Contratista(models.Model):
 
 
 class Empresa(models.Model):
+
+    version = IntegerVersionField()
+
     nombreEmpresa = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
     calle = models.CharField(verbose_name='Calle', max_length=50, null=False, blank=False, editable=True)
     numero = models.CharField(verbose_name='Número', max_length=10, null=False, blank=False, editable=True)

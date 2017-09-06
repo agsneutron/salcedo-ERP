@@ -105,10 +105,11 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
             return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project=' + project_id)
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+
     def response_change(self, request, obj, post_url_continue=None):
-        project_id=request.GET.get('project')
+        project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project='+project_id)
+            return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project=' + project_id)
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
 
@@ -258,7 +259,6 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             with transaction.atomic():
                 project_id = request.POST.get('project')
 
-
                 dbo.save_all(request.FILES['line_items_file'],
                              dbo.LINE_ITEM_UPLOAD, project_id)
                 dbo.save_all(request.FILES['concepts_file'],
@@ -276,14 +276,13 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             messages.set_level(request, messages.ERROR)
             messages.error(request, edu.get_error_message())
 
-
     def get_urls(self):
-       urls = super(UploadedCatalogsHistoryAdmin, self).get_urls()
-       my_urls = [
-          url(r'^$', self.admin_site.admin_view(UploadedCatalogsHistoryAdminListView.as_view()),
-              name='uploadedcatalogshistoryadmin-list-view'),
+        urls = super(UploadedCatalogsHistoryAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', self.admin_site.admin_view(UploadedCatalogsHistoryAdminListView.as_view()),
+                name='uploadedcatalogshistoryadmin-list-view'),
         ]
-       return my_urls + urls
+        return my_urls + urls
 
 
 class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
@@ -319,10 +318,12 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(UploadedInputExplotionHistoryAdmin, self).get_urls()
         my_urls = [
-            url(r'^$',self.admin_site.admin_view(UploadedInputExplotionsHistoryListView.as_view()), name='uploadedinputexplotionshistory-list-view'),
+            url(r'^$', self.admin_site.admin_view(UploadedInputExplotionsHistoryListView.as_view()),
+                name='uploadedinputexplotionshistory-list-view'),
 
         ]
         return my_urls + urls
+
 
 # Overriding the admin views to provide a detail view as required.
 
@@ -331,7 +332,7 @@ class CompanyModelAdmin(admin.ModelAdmin):
     def get_fields(self, request, obj=None):
         fields = (
             'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia')
+            'numero', 'colonia', 'version')
         return fields
 
     def get_urls(self):
@@ -606,13 +607,13 @@ class EstimateAdmin(admin.ModelAdmin):
             return HttpResponseRedirect('/admin/ERP/estimate/list/' + project_id + '/')
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+
     def response_change(self, request, obj, post_url_continue=None):
-        project_id=request.GET.get('project')
+        project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/estimate/list/'+project_id+'/')
+            return HttpResponseRedirect('/admin/ERP/estimate/list/' + project_id + '/')
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
-
 
 
 # Simple admin views.
