@@ -99,7 +99,7 @@
                                 {% for logfile in logfiles %}
                                     <tr>
                                         <td>
-                                            {{ logfile.file }}
+                                           <a href="{{ logfile.file }}">{{ logfile.file }}</a>
                                         </td>
                                         <td>
                                             {{ logfile.mime }}
@@ -107,7 +107,7 @@
 
                                     </tr>
                                 {% empty %}
-                                    <li>No Companies yet.</li>
+                                    <li>No se encontraron Estimaciones.</li>
                                 {% endfor %}
                                 </tbody>
                             </table>
