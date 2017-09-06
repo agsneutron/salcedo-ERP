@@ -20,7 +20,6 @@
                     <fieldset class="module {{ inline_admin_formset.classes }}">
                       {% comment %} <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>{% endcomment %}
                        {{ inline_admin_formset.formset.non_form_errors }}
-{#----------AQUI SE  SALE DEL RECUADRO---------------#}
                        <table>
                          <thead><tr>
                            <th class="original"></th>
@@ -69,7 +68,7 @@
                                   {% if field.is_readonly %}
                                       <p>{{ field.contents }}</p>
                                   {% else %}
-                                      {% if field.field.name == "generator_file" %}
+                                      {% if field.field.name == "file" %}
                                             <div class="form-group field-{{ field.field.name }}">
                                                     {{ field.field|addcss:"form-control" }}
                                                     {{ field.errors }}
@@ -116,5 +115,3 @@
     </div>
     </div>
 </div>
-
-

@@ -178,83 +178,117 @@
                     <li role="presentation"><a href="#ubicacion" aria-controls="profile" role="tab" data-toggle="tab"><i
                             class="zmdi zmdi-account"></i> Ubicación/Áreas</a></li>
                     {% comment %}<li role="presentation"><a href="#areas" aria-controls="messages" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-email"></i> Áreas</a></li>{% endcomment %}
-                    <li role="presentation"><a href="#legal" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Estado Legal</a></li>
-                    <li role="presentation"><a href="#rest" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Restricciones</a></li>
-                    <li role="presentation"><a href="#suelo" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Analisis</a></li>
-                     <li role="presentation"><a href="#suelo-dos" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Analisis 2</a></li>
-                    <li role="presentation"><a href="#costo" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Costo/Mercado</a></li>
-                    <li role="presentation"><a href="#program" aria-controls="settings" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-settings"></i> Programa</a></li>
 
 
-                </ul>
+
+
+    <div class="col-xs-10 col-xs-offset-1" style="    padding-bottom: 25px;">
+        <div class="card ">
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">{{ project.nombreProyecto }}</h3>
+                </div>
             </div>
-            <div class="col-md-9 nav-tabs-ver-container-content">
-                <div class="card-block">
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="general">
-                            <div class="col-xs-8 col-xs-offset-2">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Ubicación</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Clave de Proyecto: {{ project.key }} </li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Propietario: {{ project.propietario }} </li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Fecha de Inicio: {{ project.fecha_inicial }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Fecha de Termino: {{ project.fecha_final }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Tipo de Contrucción: {{ project.tipo_construccion }}</li>
-                                    </ul>
-                                </div>
-                            </div>
+            <div class="card nav-tabs-ver-container">
+                <div class="row">
+                    <div class="col-md-3">
+                        <ul class="nav nav-tabs-ver" role="tablist">
+                            <li role="presentation" class="active"><a href="#general" aria-controls="home" role="tab"
+                                                                      data-toggle="tab"><i class="zmdi zmdi-home"></i>
+                                Proyecto</a>
+                            </li>
+                            <li role="presentation"><a href="#ubicacion" aria-controls="profile" role="tab"
+                                                       data-toggle="tab"><i
+                                    class="zmdi zmdi-account"></i> Ubicación/Áreas</a></li>
+                            {% comment %}<li role="presentation"><a href="#areas" aria-controls="messages" role="tab" data-toggle="tab"><i
+                            class="zmdi zmdi-email"></i> Áreas</a></li>{% endcomment %}
+                            <li role="presentation"><a href="#legal" aria-controls="settings" role="tab"
+                                                       data-toggle="tab"><i
+                                    class="zmdi zmdi-settings"></i> Estado Legal</a></li>
+                            <li role="presentation"><a href="#rest" aria-controls="settings" role="tab"
+                                                       data-toggle="tab"><i
+                                    class="zmdi zmdi-settings"></i> Restricciones</a></li>
+                            <li role="presentation"><a href="#suelo" aria-controls="settings" role="tab"
+                                                       data-toggle="tab"><i
+                                    class="zmdi zmdi-settings"></i> Analisis</a></li>
+                            <li role="presentation"><a href="#suelo-dos" aria-controls="settings" role="tab"
+                                                       data-toggle="tab"><i
+                                    class="zmdi zmdi-settings"></i> Analisis 2</a></li>
+                            <li role="presentation"><a href="#costo" aria-controls="settings" role="tab"
+                                                       data-toggle="tab"><i
+                                    class="zmdi zmdi-settings"></i> Costo/Mercado</a></li>
+                            <li role="presentation"><a href="#program" aria-controls="settings" role="tab"
+                                                       data-toggle="tab"><i
+                                    class="zmdi zmdi-settings"></i> Programa</a></li>
 
 
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="ubicacion">
-                            <div class="col-xs-6">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Ubicación</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            País: {{ project.ubicacion_pais }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Estado: {{ project.ubicacion_estado }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Municipio: {{ project.ubicacion_municipio }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Colonia: {{ project.ubicacion_colonia }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Calle: {{ project.ubicacion_calle }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Número: {{ project.ubicacion_numero }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            CP: {{ project.ubicacion_cp }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Áreas</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Superficie de Escritura: {{ project.area_superficie_escritura }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Superficie de Levantamiento: {{ project.area_superficie_levantamiento }}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                        </ul>
+                    </div>
+                    <div class="col-md-9 nav-tabs-ver-container-content">
+                        <div class="card-block">
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="general">
+                                    <div class="col-xs-8 col-xs-offset-2">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Ubicación</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Clave de Proyecto: {{ project.key }} </li>
+                                                <li class="list-group-item">
+                                                    Propietario: {{ project.propietario }} </li>
+                                                <li class="list-group-item">
+                                                    Fecha de Inicio: {{ project.fecha_inicial }}</li>
+                                                <li class="list-group-item">
+                                                    Fecha de Termino: {{ project.fecha_final }}</li>
+                                                <li class="list-group-item">
+                                                    Tipo de Contrucción: {{ project.tipo_construccion }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                        </div>
+
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="ubicacion">
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Ubicación</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    País: {{ project.ubicacion_pais }}</li>
+                                                <li class="list-group-item">
+                                                    Estado: {{ project.ubicacion_estado }}</li>
+                                                <li class="list-group-item">
+                                                    Municipio: {{ project.ubicacion_municipio }}</li>
+                                                <li class="list-group-item">
+                                                    Colonia: {{ project.ubicacion_colonia }}</li>
+                                                <li class="list-group-item">
+                                                    Calle: {{ project.ubicacion_calle }}</li>
+                                                <li class="list-group-item">
+                                                    Número: {{ project.ubicacion_numero }}</li>
+                                                <li class="list-group-item">
+                                                    CP: {{ project.ubicacion_cp }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Áreas</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Superficie de
+                                                    Escritura: {{ project.area_superficie_escritura }}</li>
+                                                <li class="list-group-item">
+                                                    Superficie de
+                                                    Levantamiento: {{ project.area_superficie_levantamiento }}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                </div>
 
                         <div role="tabpanel" class="tab-pane" id="legal">
                             <div class="col-xs-8 col-xs-offset-2">
@@ -601,48 +635,53 @@
                                 </div>
                             </div>
 
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="program">
-                            <div class="col-xs-6">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Programas y Áreas</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Área
-                                            Privada : {{ project.programayarea_areaprivativa }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Caseta
-                                            : {{ project.programayarea_caseta }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Jardín
-                                            : {{ project.programayarea_jardin }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Vialidad: {{ project.programayarea_vialidad }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Área
-                                            Verde : {{ project.programayarea_areaverde }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Estacionamiento Visitas: {{ project.programayarea_estacionamientovisita }}
-                                        </li>
-                                    </ul>
                                 </div>
-                            </div>
-                            <div class="col-xs-6">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Afectación</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Afectación : {{ project.programayarea_afectacion }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Documento: {{ project.programayarea_documento }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Latitud: {{ project.latitud }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Longitud: {{ project.longitud }}</li>
-                                    </ul>
-                                </div>
-                            </div>
+                                <div role="tabpanel" class="tab-pane" id="program">
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Programas y Áreas</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Área
+                                                    Privada : {{ project.programayarea_areaprivativa }}</li>
+                                                <li class="list-group-item">
+                                                    Caseta
+                                                    : {{ project.programayarea_caseta }}</li>
+                                                <li class="list-group-item">
+                                                    Jardín
+                                                    : {{ project.programayarea_jardin }}</li>
+                                                <li class="list-group-item">
+                                                    Vialidad: {{ project.programayarea_vialidad }}</li>
+                                                <li class="list-group-item">
+                                                    Área
+                                                    Verde : {{ project.programayarea_areaverde }}</li>
+                                                <li class="list-group-item">
+                                                    Estacionamiento
+                                                    Visitas: {{ project.programayarea_estacionamientovisita }}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Afectación</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Afectación : {{ project.programayarea_afectacion }}</li>
+                                                <li class="list-group-item">
+                                                    Documento: {{ project.programayarea_documento }}</li>
+                                                <li class="list-group-item">
+                                                    Latitud: {{ project.latitud }}</li>
+                                                <li class="list-group-item">
+                                                    Longitud: {{ project.longitud }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
