@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from concurrency.fields import IntegerVersionField
+import os
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -591,6 +592,8 @@ class TipoProyectoDetalle(models.Model):
     def __unicode__(self):
         return self.nombreTipoProyecto
 
+def project_file_document_destination(instance, filename):
+    return '/'.join(['documentos_del_proyecto', instance.key, filename])
 
 # Projects model.
 class Project(models.Model):
@@ -622,11 +625,11 @@ class Project(models.Model):
     estadolegal_agua = models.CharField(verbose_name="agua", max_length=200, null=True, blank=True)
 
     # File Fields
-    documento_propiedad = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
-    documento_gravamen = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
-    documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
-    documento_predial = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
-    documento_agua = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    documento_propiedad = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+    documento_gravamen = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+    documento_agua = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+    documento_predial = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+    documento_agua = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
 
     restriccion_vial = models.CharField(verbose_name="vial", max_length=200, null=True, blank=True)
     restriccion_cna = models.CharField(verbose_name="cna", max_length=200, null=True, blank=True)
@@ -648,16 +651,16 @@ class Project(models.Model):
     hidraulica_fuente = models.CharField(verbose_name="fuente", max_length=200, null=True, blank=True)
     hidraulica_distancia = models.CharField(verbose_name="distacia", max_length=200, null=True, blank=True)
     hidraulica_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
-    hidraulica_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente,
+    hidraulica_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination,
                                             verbose_name="Documento de hidráulica")
     sanitaria_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     sanitaria_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
     sanitaria_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
-    sanitaria_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    sanitaria_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
     pluvial_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     pluvial_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
     pluvial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
-    pluvial_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    pluvial_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
     vial_viaacceso = models.CharField(verbose_name="vias de acceso", max_length=200, null=True, blank=True)
     vial_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     vial_carriles = models.CharField(verbose_name="carriles", max_length=200, null=True, blank=True)
@@ -666,19 +669,19 @@ class Project(models.Model):
     vial_estadoconstruccion = models.CharField(verbose_name="estado de construcción", max_length=200, null=True,
                                                blank=True)
     vial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
-    vial_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    vial_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
     electricidad_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     electricidad_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     electricidad_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
-    electricidad_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    electricidad_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
     alumbradopublico_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     alumbradopublico_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     alumbradopublico_observaciones = models.CharField(verbose_name="dobservaciones", max_length=200, null=True,
                                                       blank=True)
-    alumbradopublico_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    alumbradopublico_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
     telefonia_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     telefonia_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
-    telefonia_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
+    telefonia_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
     tvcable_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     tvcable_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     equipamiento_a100 = models.CharField(verbose_name="a 100", max_length=200, null=True, blank=True)
@@ -716,7 +719,7 @@ class Project(models.Model):
                                                               blank=True, null=True, default=0, max_digits=20)
     programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=True, null=True,
                                                    default=0, max_digits=20)
-    programayarea_documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente,
+    programayarea_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination,
                                                verbose_name="Documento de programa y área")
     latitud = models.FloatField(default=0, blank=True, null=True, )
     longitud = models.FloatField(default=0, blank=True, null=True, )

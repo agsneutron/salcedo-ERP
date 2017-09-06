@@ -31,6 +31,7 @@ admin.autodiscover()
 
 import DataUpload
 from DataUpload import urls
+from django.conf.urls.static import static
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -44,4 +45,4 @@ urlpatterns = [
     url(r'^admin/contratos', users.views.contratos, name='contratos'),
 
 
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

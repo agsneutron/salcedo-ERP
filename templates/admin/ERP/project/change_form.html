@@ -7,7 +7,12 @@
 {% endblock %}
 
 {% block extrastyle %}{{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+<style>
+.aligned p.file-upload {
+    margin-left: 5px;
+}
+</style>{% endblock %}
 
 {% block coltype %}colM{% endblock %}
 
@@ -32,7 +37,7 @@
     <div id="content-main">
         {% block object-tools %}
             {% if change %}{% if not is_popup %}
-                <ul class="object-tools">
+               {% comment %} <ul class="object-tools">
                     {% block object-tools-items %}
                         <li>
                             {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
@@ -43,7 +48,7 @@
                             <li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>
                         {% endif %}
                     {% endblock %}
-                </ul>
+                </ul>{% endcomment %}
             {% endif %}{% endif %}
         {% endblock %}
 
