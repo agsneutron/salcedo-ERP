@@ -443,17 +443,17 @@ class ProjectDetailView(generic.DetailView):
         project_obj = context['project']
 
         # Getting the files name.
-        context['documento_gravamen_nombre'] = project_obj.documento_gravamen.name.split("/")[-1]
-        context['documento_propiedad_nombre'] = project_obj.documento_propiedad.name.split("/")[-1]
-        context['documento_agua_nombre'] = project_obj.documento_agua.name.split("/")[-1]
-        context['documento_predial_nombre'] = project_obj.documento_predial.name.split("/")[-1]
-        context['documento_hidraulica_nombre'] = project_obj.hidraulica_documento.name.split("/")[-1]
-        context['documento_sanitaria_nombre'] = project_obj.sanitaria_documento.name.split("/")[-1]
-        context['documento_pluvial_nombre'] = project_obj.pluvial_documento.name.split("/")[-1]
-        context['documento_vial_nombre'] = project_obj.vial_documento.name.split("/")[-1]
-        context['documento_electricidad_nombre'] = project_obj.electricidad_documento.name.split("/")[-1]
-        context['documento_alumbrado_nombre'] = project_obj.alumbradopublico_documento.name.split("/")[-1]
-        context['documento_telefonia_nombre'] = project_obj.telefonia_documento.name.split("/")[-1]
+        context['documento_gravamen_nombre'] = str(project_obj.documento_gravamen.name).split("/")[-1]
+        context['documento_propiedad_nombre'] = str(project_obj.documento_propiedad.name).split("/")[-1]
+        context['documento_agua_nombre'] = str(project_obj.documento_agua.name).split("/")[-1]
+        context['documento_predial_nombre'] = str(project_obj.documento_predial.name).split("/")[-1]
+        context['documento_hidraulica_nombre'] = str(project_obj.hidraulica_documento.name).split("/")[-1]
+        context['documento_sanitaria_nombre'] = str(project_obj.sanitaria_documento.name).split("/")[-1]
+        context['documento_pluvial_nombre'] = str(project_obj.pluvial_documento.name).split("/")[-1]
+        context['documento_vial_nombre'] = str(project_obj.vial_documento.name).split("/")[-1]
+        context['documento_electricidad_nombre'] = str(project_obj.electricidad_documento.name).split("/")[-1]
+        context['documento_alumbrado_nombre'] = str(project_obj.alumbradopublico_documento.name).split("/")[-1]
+        context['documento_telefonia_nombre'] = str(project_obj.telefonia_documento.name).split("/")[-1]
 
 
         return context
