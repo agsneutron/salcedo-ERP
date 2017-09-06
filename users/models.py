@@ -17,6 +17,7 @@ class ERPUser(models.Model):
 
     user = models.OneToOneField(User)
     rol = models.CharField(max_length=2, choices=ROLES_CHOICES, default=ADMINISTRATOR)
+    #projects = models.ManyToManyField(through=AccessToProject,null=True,blank=True)
 
 
     class Meta:
@@ -30,3 +31,8 @@ class ERPUser(models.Model):
 
     def __str__(self):
         return self.user.get_username()
+
+
+        # Create your models here.
+
+

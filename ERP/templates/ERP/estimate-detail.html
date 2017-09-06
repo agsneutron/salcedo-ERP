@@ -117,14 +117,14 @@
                                                 {{ progress_estimate.generator_amount }}
                                             </td>
                                             <td>
-                                                {{ progress_estimate.generator_file }}
+                                                <a href="{{ progress_estimate.generator_file }}">{{ progress_estimate.generator_file }}</a>
                                             </td>
                                             <td>
                                                 {{ progress_estimate.type }}
                                             </td>
                                         </tr>
                                     {% empty %}
-                                        <li>No Companies yet.</li>
+                                        <li>No se encontraron Empresas.</li>
                                     {% endfor %}
                                 </tr>
                                 </tbody>

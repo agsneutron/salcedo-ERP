@@ -442,6 +442,7 @@ class ProjectDetailView(generic.DetailView):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         project_obj = context['project']
 
+
         # Getting the files name.
         context['documento_gravamen_nombre'] = str(project_obj.documento_gravamen.name).split("/")[-1]
         context['documento_propiedad_nombre'] = str(project_obj.documento_propiedad.name).split("/")[-1]
@@ -455,6 +456,7 @@ class ProjectDetailView(generic.DetailView):
         context['documento_alumbrado_nombre'] = str(project_obj.alumbradopublico_documento.name).split("/")[-1]
         context['documento_telefonia_nombre'] = str(project_obj.telefonia_documento.name).split("/")[-1]
 
+        print str(project_obj.documento_propiedad.name).split("/")[-1]
 
         return context
 

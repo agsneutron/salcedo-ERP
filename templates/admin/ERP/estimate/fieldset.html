@@ -1,4 +1,4 @@
-{% load app_filters admin_static%}
+{% load app_filters admin_static %}
 <fieldset class="module aligned {{ fieldset.classes }}">
 
     {{ fieldset.management_form }}
@@ -14,11 +14,11 @@
 
         <div class="card-block">
             <div class="tab-content">
-            {% for line in fieldset %}
-                {% for field in line %}
-                    {% if field.field.name == "line_item" %}
-                <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                    <div class="row">
+                {% for line in fieldset %}
+                    {% for field in line %}
+                        {% if field.field.name == "line_item" %}
+                            <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+                            <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
@@ -28,7 +28,7 @@
                                     </div>
                                 </div>
                             </div>
-                    {% endif %}
+                        {% endif %}
 
                     {% if field.field.name == "concept_input" %}
                         </div>
@@ -43,66 +43,70 @@
                                 </div>
                             </div>
 
-                    </div>
+                        </div>
                     {% endif %}
-                    {% if field.field.name == "period" %}
-                    <div class="row">
+                        {% if field.field.name == "period" %}
+                            <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-fecha_final">
-                                <label class="control-label required" for="id_fecha_final_0">Periodo:</label><br>
-                                    {{ field.field}}
+                                    <label class="control-label required" for="id_fecha_final_0">Periodo:</label><br>
+                                    {{ field.field }}
                                     {{ field.errors }}
                                 </div>
                             </div>
 
-                    {% endif %}
+                        {% endif %}
                     {% if field.field.name == "start_date" %}
 
-                            <div class="col-md-4">
-                                <div class="form-group field-fecha_final">
-                                <label class="control-label required" for="id_fecha_final_0">Fecha de Inicio:</label><br>
-                                    {{ field.field}}
-                                    {{ field.errors }}
-                                </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-fecha_final">
+                                <label class="control-label required" for="id_fecha_final_0">Fecha de
+                                    Inicio:</label><br>
+                                {{ field.field }}
+                                {{ field.errors }}
                             </div>
+                        </div>
 
                     {% endif %}
                     {% if field.field.name == "end_date" %}
 
-                            <div class="col-md-4">
-                                <div class="form-group field-fecha_final">
+                        <div class="col-md-4">
+                            <div class="form-group field-fecha_final">
                                 <label class="control-label required" for="id_fecha_final_0">Fecha Final:</label><br>
-                                    {{ field.field}}
-                                    {{ field.errors }}
-                                </div>
+                                {{ field.field }}
+                                {{ field.errors }}
                             </div>
+                        </div>
 
-                    </div>
+                        </div>
                     {% endif %}
+                        {% if field.field.name == "version" %}
+                            {{ field.field|addcss:"form-control" }}
+                        {% endif %}
 
-            {% endfor %}
-            {% endfor %}
+                    {% endfor %}
+                {% endfor %}
+                </div>
             </div>
         </div>
-</div>
 
     </div>
 </fieldset>
 
-    <script src="{% static "ERP/admin/js/custom.js" %}"></script>
-    <script src="{% static "ERP/admin/js/bootstrap-datepicker.min.js" %}"></script>
-    <script src="{% static "ERP/admin/js/bootstrap-datepicker.es.min.js" %}"></script>
-    <script>
+<script src="{% static "ERP/admin/js/custom.js" %}"></script>
+<script src="{% static "ERP/admin/js/bootstrap-datepicker.min.js" %}"></script>
+<script src="{% static "ERP/admin/js/bootstrap-datepicker.es.min.js" %}"></script>
+<script>
 
-        {% comment %}$('.datepicker').datepicker({
-            format: 'mm/dd/yyyy',
-            startDate: '-3d'
-        });{% endcomment %}
+    {% comment %}$('.datepicker').datepicker({
+        format: 'mm/dd/yyyy',
+        startDate: '-3d'
+    });{% endcomment %}
 
-        $('.date').datepicker({
-            autoclose: true,
-            toggleActive: true,
-            language: "es"
-        });
+    $('.date').datepicker({
+        autoclose: true,
+        toggleActive: true,
+        language: "es"
+    });
 
-    </script>
+</script>

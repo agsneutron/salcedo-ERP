@@ -165,19 +165,6 @@
 
 
 
-    <img src="uploads/{{ imagen_identificativa.name }} ">
-    <div class="card nav-tabs-ver-container col-xs-10 col-xs-offset-1">
-        <div class="row">
-            <h3 class="color-info text-center"> {{ project.nombreProyecto }} </h3>
-            <div class="col-md-3">
-                <ul class="nav nav-tabs-ver" role="tablist">
-                    <li role="presentation" class="active"><a href="#general" aria-controls="home" role="tab"
-                                                              data-toggle="tab"><i class="zmdi zmdi-home"></i>
-                        Proyecto</a>
-                    </li>
-                    <li role="presentation"><a href="#ubicacion" aria-controls="profile" role="tab" data-toggle="tab"><i
-                            class="zmdi zmdi-account"></i> Ubicación/Áreas</a></li>
-                    {% comment %}<li role="presentation"><a href="#areas" aria-controls="messages" role="tab" data-toggle="tab"><i
 
 
 
@@ -231,7 +218,7 @@
                                     <div class="col-xs-8 col-xs-offset-2">
                                         <div class="card">
                                             <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Ubicación</h3>
+                                            <h3 class="color-info text-center">Proyecto</h3>
                                             <ul class="list-group top-padding">
                                                 <li class="list-group-item">
                                                     Clave de Proyecto: {{ project.key }} </li>
@@ -290,350 +277,359 @@
 
                                 </div>
 
-                        <div role="tabpanel" class="tab-pane" id="legal">
-                            <div class="col-xs-8 col-xs-offset-2">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Legal</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Propiedad: {{ project.estadolegal_documento_propiedad }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_propiedad_nombre != "" %}
-                                            <a href="/media/{{ project.documento_propiedad }}" target="_blank">
-                                                Documento: {{ documento_propiedad_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
+                                <div role="tabpanel" class="tab-pane" id="legal">
+                                    <div class="col-xs-10 col-xs-offset-2">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Legal</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Acreditación de Propiedad: {{ project.estadolegal_documento_propiedad }}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_propiedad_nombre != "" %}
+                                                             <a href="/media/{{ project.documento_propiedad }}" target="_blank">{{ documento_propiedad_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    Gravamen: {{ project.estadolegal_gravamen }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_gravamen_nombre != "" %}
+                                                             <a href="/media/{{ project.documento_gravamen }}" target="_blank">{{ documento_gravamen_nombre }}</a>
+                                                    {% else %}
+                                                        Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                 </li>
+                                                <li class="list-group-item">
+                                                    Predial: {{ project.estadolegal_predial }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_predial_nombre != "" %}
+                                                             <a href="/media/{{ project.documento_predial }}" target="_blank">{{ documento_predial_nombre }}</a>
+                                                    {% else %}
+                                                           Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                                <li class="list-group-item">
+                                                    Agua: {{ project.estadolegal_agua }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_agua_nombre != "" %}
+                                                             <a href="/media/{{ project.documento_agua }}" target="_blank">{{ documento_agua_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="rest">
+                                    <div class="col-xs-8 col-xs-offset-2">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Restricciones</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Vial: {{ project.restriccion_vial }}</li>
+                                                <li class="list-group-item"> CNA
+                                                    : {{ project.restriccion_cna }}</li>
+                                                <li class="list-group-item"> CFE
+                                                    : {{ project.restriccion_cfe }}</li>
+                                                <li class="list-group-item">
+                                                    PEMEX: {{ project.restriccion_pemex }}</li>
+                                                <li class="list-group-item">
+                                                    INHA: {{ project.restriccion_inha }}</li>
+                                                <li class="list-group-item">
+                                                    Otros: {{ project.restriccion_otros }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.restriccion_observaciones }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="suelo">
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Uso de suelo</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    PDMU: {{ project.usosuelo_pmdu }}</li>
+                                                <li class="list-group-item">
+                                                    Densidad: {{ project.usosuelo_densidad }}</li>
+                                                <li class="list-group-item">
+                                                    Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
+                                                <li class="list-group-item"> M2
+                                                    de Construcción: {{ project.usosuelo_m2construccion }}</li>
+                                                <li class="list-group-item">
+                                                    Área Libre: {{ project.usosuelo_arealibre }}</li>
+                                                <li class="list-group-item">
+                                                    Altura: {{ project.usosuelo_altura }}</li>
+                                                <li class="list-group-item">
+                                                    Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Hidráulica</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Fuente: {{ project.hidraulica_fuente }}</li>
+                                                <li class="list-group-item">
+                                                    Distancia: {{ project.hidraulica_distancia }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.hidraulica_observaciones }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_hidraulica_nombre != "" %}
+                                                             <a href="/media/{{ project.hidraulica_documento }}" target="_blank">documento_hidraulica_nombre</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                   <div class="clearfix"></div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Sanitaria</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Tipo: {{ project.sanitaria_tipo }}</li>
+                                                <li class="list-group-item">
+                                                    Responsable: {{ project.sanitaria_responsable }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.sanitaria_observaciones }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_sanitaria_nombre != "" %}
+                                                             <a href="/media/{{ project.sanitaria_documento }}" target="_blank">{{ documento_sanitaria_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Gravamen: {{ project.estadolegal_gravamen }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_gravamen_nombre != "" %}
-                                            <a href="/media/{{ project.documento_gravamen }}" target="_blank">
-                                                Documento: {{ documento_gravamen_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Predial: {{ project.estadolegal_predial }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                             {% if documento_predial_nombre != "" %}
-                                            <a href="/media/{{ project.documento_predial }}" target="_blank">
-                                                Documento: {{ documento_predial_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Agua: {{ project.estadolegal_agua }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                             {% if documento_agua_nombre != "" %}
-                                            <a href="/media/{{ project.documento_agua }}" target="_blank">
-                                                Documento: {{ documento_agua_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="rest">
-                            <div class="col-xs-8 col-xs-offset-2">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Restricciones</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Vial: {{ project.restriccion_vial }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CNA
-                                            : {{ project.restriccion_cna }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> CFE
-                                            : {{ project.restriccion_cfe }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            PEMEX: {{ project.restriccion_pemex }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            INHA: {{ project.restriccion_inha }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Otros: {{ project.restriccion_otros }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.restriccion_observaciones }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="suelo">
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Uso de suelo</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            PDMU: {{ project.usosuelo_pmdu }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Densidad: {{ project.usosuelo_densidad }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2
-                                            de Construcción: {{ project.usosuelo_m2construccion }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Área Libre: {{ project.usosuelo_arealibre }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Altura: {{ project.usosuelo_altura }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Hidraulica</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Fuente: {{ project.hidraulica_fuente }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Distancia: {{ project.hidraulica_distancia }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.hidraulica_observaciones }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_hidraulica_nombre != "" %}
-                                            <a href="/media/{{ project.hidraulica_documento }}" target="_blank">
-                                                Documento: {{ documento_hidraulica_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Sanitaria</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Tipo: {{ project.sanitaria_tipo }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Responsable: {{ project.sanitaria_responsable }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.sanitaria_observaciones }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_sanitaria_nombre != "" %}
-                                            <a href="/media/{{ project.sanitaria_documento }}" target="_blank">
-                                                Documento: {{ documento_sanitaria_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Pluvial</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Tipo: {{ project.pluvial_tipo }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Responsable: {{ project.pluvial_responsable }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.pluvial_observaciones }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_pluvial_nombre != "" %}
-                                            <a href="/media/{{ project.pluvial_documento }}" target="_blank">
-                                                Documento: {{ documento_pluvial_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Pluvial</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Tipo: {{ project.pluvial_tipo }}</li>
+                                                <li class="list-group-item">
+                                                    Responsable: {{ project.pluvial_responsable }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.pluvial_observaciones }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_pluvial_nombre != "" %}
+                                                             <a href="/media/{{ project.pluvial_documento }}" target="_blank">{{ documento_pluvial_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="suelo-dos">
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Vial</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Vías de
-                                            Acceso: {{ project.vial_viaacceso }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Distancia: {{ project.vial_distancia }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Carriles: {{ project.vial_carriles }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Sección: {{ project.vial_seccion }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Tipo de
-                                            Pavimento: {{ project.vial_tipopavimento }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Estado
-                                            de Construcción: {{ project.vial_estadoconstruccion }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.vial_observaciones }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_vial_nombre != "" %}
-                                            <a href="/media/{{ project.vial_documento }}" target="_blank">
-                                                Documento: {{ documento_vial_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
-                                    </ul>
                                 </div>
-                            </div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Electricidad</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Tipo: {{ project.electricidad_tipo }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Distancia: {{ project.electricidad_distancia }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.electricidad_observaciones }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_electricidad_nombre != "" %}
-                                            <a href="/media/{{ project.electricidad_documento }}" target="_blank">
-                                                Documento: {{ documento_electricidad_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                                <div role="tabpanel" class="tab-pane" id="suelo-dos">
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Vial</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Vías de
+                                                    Acceso: {{ project.vial_viaacceso }}</li>
+                                                <li class="list-group-item">
+                                                    Distancia: {{ project.vial_distancia }}</li>
+                                                <li class="list-group-item">
+                                                    Carriles: {{ project.vial_carriles }}</li>
+                                                <li class="list-group-item">
+                                                    Sección: {{ project.vial_seccion }}</li>
+                                                <li class="list-group-item">
+                                                    Tipo de
+                                                    Pavimento: {{ project.vial_tipopavimento }}</li>
+                                                <li class="list-group-item">
+                                                    Estado
+                                                    de Construcción: {{ project.vial_estadoconstruccion }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.vial_observaciones }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_vial_nombre != "" %}
+                                                             <a href="/media/{{ project.vial_documento }}" target="_blank">{{ documento_vial_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Electricidad</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Tipo: {{ project.electricidad_tipo }}</li>
+                                                <li class="list-group-item">
+                                                    Distancia: {{ project.electricidad_distancia }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.electricidad_observaciones }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_electricidad_nombre != "" %}
+                                                             <a href="/media/{{ project.electricidad_documento }}" target="_blank">{{ documento_electricidad_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Alumbrado público</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Tipo: {{ project.alumbradopublico_tipo }}</li>
+                                                <li class="list-group-item">
+                                                    Distancia: {{ project.alumbradopublico_distancia }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.alumbradopublico_observaciones }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_alumbrado_nombre != "" %}
+                                                             <a href="/media/{{ project.alumbradopublico_documento }}" target="_blank">{{ documento_alumbrado_nombre }}</a>
+                                                    {% else %}
+                                                            Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Equipamiento</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item"> A
+                                                    100
+                                                    : {{ project.equipamiento_a100 }}</li>
+                                                <li class="list-group-item"> A
+                                                    200
+                                                    : {{ project.equipamiento_a200 }}</li>
+                                                <li class="list-group-item"> A
+                                                    500
+                                                    : {{ project.equipamiento_a500 }}</li>
+                                                <li class="list-group-item">
+                                                    Regional : {{ project.equipamiento_regional }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Alumbrado público</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Tipo: {{ project.alumbradopublico_tipo }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Distancia: {{ project.alumbradopublico_distancia }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.alumbradopublico_observaciones }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_alumbrado_nombre != "" %}
-                                            <a href="/media/{{ project.alumbradopublico_documento }}" target="_blank">
-                                                Documento: {{ documento_alumbrado_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
-                                    </ul>
+                                 <div class="clearfix"></div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Tv cable</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Distancia: {{ project.tvcable_distancia }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.tvcable_observaciones }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Telefonía</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Distancia: {{ project.telefonia_distancia }}</li>
+                                                <li class="list-group-item">
+                                                    Observaciones: {{ project.telefonia_observaciones }}</li>
+                                                <li class="list-group-item">
+                                                    Documento:
+                                                    {% if documento_telefonia_nombre != "" %}
+                                                             <a href="/media/{{ project.telefonia_documento }}" target="_blank">{{ documento_telefonia_nombre }}</a>
+                                                    {% else %}
+                                                           Aún no se ha cargado el documento.
+                                                    {% endif %}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="clearfix"></div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Telefonía</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Distancia: {{ project.telefonia_distancia }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.telefonia_observaciones }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            {% if documento_telefonia_nombre != "" %}
-                                            <a href="/media/{{ project.telefonia_documento }}" target="_blank">
-                                                Documento: {{ documento_telefonia_nombre }}
-                                            </a>
-                                            {% else %}
-                                                Documento: Aún no se ha cargado el documento.
-                                            {% endif %}
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Tv cable</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Distancia: {{ project.tvcable_distancia }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Observaciones: {{ project.tvcable_observaciones }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Equipamiento</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A
-                                            100
-                                            : {{ project.equipamiento_a100 }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A
-                                            200
-                                            : {{ project.equipamiento_a200 }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> A
-                                            500
-                                            : {{ project.equipamiento_a500 }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Regional : {{ project.equipamiento_regional }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                        <div role="tabpanel" class="tab-pane" id="costo">
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Costo</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Costo
-                                            del Predio : {{ project.costo_predio }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i> M2
-                                            : {{ project.costo_m2 }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Escrituras M2 : {{ project.costo_escrituras }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Levantamiento M2 : {{ project.costo_levantamiento }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Estudio de mercado</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Demanda
-                                            : {{ project.estudiomercado_demanda }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Oferta
-                                            : {{ project.estudiomercado_oferta }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
-                                    </ul>
-                                </div>
-                            </div>
-                            <div class="col-xs-4">
-                                <div class="card">
-                                    <h3 class="color-info text-center">Definicion del proyecto</h3>
-                                    <ul class="list-group top-padding">
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Alernativa : {{ project.definicionproyecto_alternativa }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Tamaño
-                                            : {{ project.definicionproyecto_tamano }}</li>
-                                        <li class="list-group-item"><i class="fa fa-chevron-right color-active"></i>
-                                            Programa : {{ project.definicionproyecto_programa }}</li>
-                                    </ul>
-                                </div>
-                            </div>
+                                <div role="tabpanel" class="tab-pane" id="costo">
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Costo</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Costo
+                                                    del Predio : {{ project.costo_predio }}</li>
+                                                <li class="list-group-item"> M2
+                                                    : {{ project.costo_m2 }}</li>
+                                                <li class="list-group-item">
+                                                    Escrituras M2 : {{ project.costo_escrituras }}</li>
+                                                <li class="list-group-item">
+                                                    Levantamiento M2 : {{ project.costo_levantamiento }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Estudio de Mercado</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Demanda
+                                                    : {{ project.estudiomercado_demanda }}</li>
+                                                <li class="list-group-item">
+                                                    Oferta
+                                                    : {{ project.estudiomercado_oferta }}</li>
+                                                <li class="list-group-item">
+                                                    Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
+                                                <li class="list-group-item">
+                                                    Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                     <div class="clearfix"></div>
+                                    <div class="col-xs-6">
+                                        <div class="card">
+                                            <div class="clearfix"></div>
+                                            <h3 class="color-info text-center">Definicion del Proyecto</h3>
+                                            <ul class="list-group top-padding">
+                                                <li class="list-group-item">
+                                                    Alernativa : {{ project.definicionproyecto_alternativa }}</li>
+                                                <li class="list-group-item">
+                                                    Tamaño
+                                                    : {{ project.definicionproyecto_tamano }}</li>
+                                                <li class="list-group-item">
+                                                    Programa : {{ project.definicionproyecto_programa }}</li>
+                                            </ul>
+                                        </div>
+                                    </div>
 
                                 </div>
                                 <div role="tabpanel" class="tab-pane" id="program">

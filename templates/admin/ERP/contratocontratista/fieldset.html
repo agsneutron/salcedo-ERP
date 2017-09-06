@@ -91,7 +91,7 @@
 
 
                      {% if field.field.name == "contratista" %}
-
+                    <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
@@ -114,8 +114,21 @@
                                 </div>
                             </div>
 
-                        </div>
+
                      {% endif %}
+                        {% if field.field.name == "dias_pactados" %}
+
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
+                        {% endif %}
                       {% if field.field.name == "codigo_obra" %}
                       <div class="row">
                             <div class="col-md-4">
@@ -145,19 +158,7 @@
                      </div>
 
                     {% endif %}
-                        {% if field.field.name == "dias_pactados" %}
-                                <div class="row">
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                          </div>
-                        {% endif %}
+
 
 
                         {% if field.field.name == "fecha_firma" %}
@@ -165,7 +166,7 @@
                             <div class="col-md-4">
                                 <div class="form-group field-fecha_firma">
                                     <div>
-                                        <label class=" required" for="id_fecha_firma_0">Fecha de Firma:</label><br>
+                                        {{ field.label_tag }}
                                         {{ field.field }}
                                         {{ field.errors }}
                                     </div>
@@ -179,7 +180,7 @@
                             <div class="col-md-4">
                                 <div class="form-group field-fecha_inicio">
                                     <div>
-                                        <label class="control-label required" for="id_fecha_inicio_0">Fecha de Inicio:</label><br>
+                                        {{ field.label_tag }}
                                         {{ field.field }}
                                         {{ field.errors }}
                                     </div>
@@ -190,7 +191,7 @@
                             <div class="col-md-4">
                                 <div class="form-group field-fecha_termino">
                                     <div>
-                                        <label class="control-label required" for="id_fecha_termino_0">Fecha de Termino:</label><br>
+                                        {{ field.label_tag }}
                                         {{ field.field }}
                                         {{ field.errors }}
                                     </div>
@@ -282,6 +283,9 @@
                                 </div>
                             </div>
                          </div>
+                        {% endif %}
+                        {% if field.field.name == "version" %}
+                                        {{ field.field|addcss:"form-control" }}
                         {% endif %}
             {% endfor %}
             {% endfor %}

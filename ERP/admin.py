@@ -32,7 +32,7 @@ class DocumentoFuenteInline(admin.TabularInline):
 class TipoProyectoDetalleInline(admin.TabularInline):
     form = TipoProyectoDetalleAddForm
     model = TipoProyectoDetalle
-    extra = 1
+    extra = 0
     can_delete = False
 
 
@@ -51,20 +51,20 @@ class LineItemAdmin(admin.ModelAdmin):
 
 class LogFileAdmin(admin.ModelAdmin):
     list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime', 'version',)
     model = LogFile
 
 
 class LogFileInline(admin.TabularInline):
     list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime',)
+    fields = ('id', 'progress_estimate_log', 'file', 'mime', 'version',)
     model = LogFile
     extra = 1
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
     form = ProgressEstimateLogForm
-    fields = ('user', 'project', 'date', 'description')
+    fields = ('user', 'project', 'date', 'description', 'version')
     list_display = ('user', 'date', 'description')
     search_fields = ('user', 'date', 'description')
     list_display_links = ('user', 'date', 'description')
@@ -105,10 +105,11 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
             return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project=' + project_id)
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+
     def response_change(self, request, obj, post_url_continue=None):
-        project_id=request.GET.get('project')
+        project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project='+project_id)
+            return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project=' + project_id)
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
 
@@ -220,7 +221,7 @@ class ContratoAdmin(admin.ModelAdmin):
             'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados',
             'fecha_firma',
             'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones')
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version')
         return fields
 
 
@@ -234,21 +235,35 @@ class PropietarioAdmin(admin.ModelAdmin):
         fields = (
             'nombrePropietario', 'rfc', 'empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
             'cp',
-            'calle', 'numero', 'colonia')
+            'calle', 'numero', 'colonia', 'version')
         return fields
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):
     list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
-    fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
+    fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file', 'version',)
     model = ProgressEstimate
+
+
+class AccessToProjectAdmin(admin.ModelAdmin):
+    model = AccessToProject
 
 
 class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
     model = UploadedCatalogsHistory
-    fields = ('project', 'line_items_file', 'concepts_file')
+    fields = ('project', 'line_items_file', 'concepts_file', 'version')
     list_display = ('project', 'line_items_file', 'concepts_file', 'upload_date')
     list_per_page = 50
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(UploadedCatalogsHistoryAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        project = ModelForm.base_fields['project']
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        project.widget.can_add_related = False
+        project.widget.can_change_related = False
+
+        return ModelForm
 
     def save_model(self, request, obj, form, change):
         user_id = request.user.id
@@ -257,7 +272,6 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
         try:
             with transaction.atomic():
                 project_id = request.POST.get('project')
-
 
                 dbo.save_all(request.FILES['line_items_file'],
                              dbo.LINE_ITEM_UPLOAD, project_id)
@@ -276,14 +290,13 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             messages.set_level(request, messages.ERROR)
             messages.error(request, edu.get_error_message())
 
-
     def get_urls(self):
-       urls = super(UploadedCatalogsHistoryAdmin, self).get_urls()
-       my_urls = [
-          url(r'^$', self.admin_site.admin_view(UploadedCatalogsHistoryAdminListView.as_view()),
-              name='uploadedcatalogshistoryadmin-list-view'),
+        urls = super(UploadedCatalogsHistoryAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', self.admin_site.admin_view(UploadedCatalogsHistoryAdminListView.as_view()),
+                name='uploadedcatalogshistoryadmin-list-view'),
         ]
-       return my_urls + urls
+        return my_urls + urls
 
     def response_add(self, request, obj, post_url_continue=None):
         project_id = request.GET.get('project')
@@ -291,10 +304,11 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             return HttpResponseRedirect('/admin/ERP/uploadedcatalogshistory/?project=' + project_id)
         else:
             return super(UploadedCatalogsHistoryAdmin, self).response_add(request, obj, post_url_continue)
+
     def response_change(self, request, obj, post_url_continue=None):
-        project_id=request.GET.get('project')
+        project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/uploadedcatalogshistory/?project='+project_id)
+            return HttpResponseRedirect('/admin/ERP/uploadedcatalogshistory/?project=' + project_id)
         else:
             return super(UploadedCatalogsHistoryAdmin, self).response_add(request, obj, post_url_continue)
 
@@ -302,9 +316,19 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
 class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
     model = UploadedInputExplotionsHistory
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(UploadedInputExplotionHistoryAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        project = ModelForm.base_fields['project']
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        project.widget.can_add_related = False
+        project.widget.can_change_related = False
+
+        return ModelForm
+
     def get_fields(self, request, obj=None):
         fields = (
-            'project', 'file',)
+            'project', 'file', 'version',)
         return fields
 
     def save_model(self, request, obj, form, change):
@@ -332,31 +356,40 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(UploadedInputExplotionHistoryAdmin, self).get_urls()
         my_urls = [
-            url(r'^$',self.admin_site.admin_view(UploadedInputExplotionsHistoryListView.as_view()), name='uploadedinputexplotionshistory-list-view'),
+            url(r'^$', self.admin_site.admin_view(UploadedInputExplotionsHistoryListView.as_view()),
+                name='uploadedinputexplotionshistory-list-view'),
 
         ]
         return my_urls + urls
+
     def response_add(self, request, obj, post_url_continue=None):
         project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
             return HttpResponseRedirect('/admin/ERP/uploadedinputexplotionshistory/?project=' + project_id)
         else:
             return super(UploadedInputExplotionHistoryAdmin, self).response_add(request, obj, post_url_continue)
+
     def response_change(self, request, obj, post_url_continue=None):
-        project_id=request.GET.get('project')
+        project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/uploadedinputexplotionshistory/?project='+project_id)
+            return HttpResponseRedirect('/admin/ERP/uploadedinputexplotionshistory/?project=' + project_id)
         else:
             return super(UploadedInputExplotionHistoryAdmin, self).response_add(request, obj, post_url_continue)
 
+
 # Overriding the admin views to provide a detail view as required.
+class PropietarioInline(admin.TabularInline):
+    model = Propietario
+    extra = 1
+    can_delete = True
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
+    inlines =  (PropietarioInline, )
     def get_fields(self, request, obj=None):
         fields = (
             'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia')
+            'numero', 'colonia', 'version', 'version',)
         return fields
 
     def get_urls(self):
@@ -393,7 +426,7 @@ class ContractorModelAdmin(admin.ModelAdmin):
         fields = (
             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
             'calle',
-            'numero', 'colonia')
+            'numero', 'colonia', 'version')
         return fields
 
     def get_urls(self):
@@ -451,7 +484,7 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
             'codigo_obra', 'dependencia',
             'fecha_firma', 'fecha_inicio', 'fecha_termino',
             'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones')
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version',)
         return fields
 
     def get_urls(self):
@@ -472,7 +505,7 @@ class OwnerModelAdmin(admin.ModelAdmin):
         fields = (
             'nombrePropietario', 'rfc', 'empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
             'cp',
-            'calle', 'numero', 'colonia')
+            'calle', 'numero', 'colonia', 'version',)
         return fields
 
     def get_urls(self):
@@ -585,11 +618,11 @@ class EstimateAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             'Partida', {
-                'fields': ('line_item',)
+                'fields': ('line_item', 'version',)
             }),
         (
             'Estimación', {
-                'fields': ('concept_input', 'period', 'start_date', 'end_date',)
+                'fields': ('concept_input', 'period', 'start_date', 'end_date', 'version',)
             }),
     )
 
@@ -631,13 +664,13 @@ class EstimateAdmin(admin.ModelAdmin):
             return HttpResponseRedirect('/admin/ERP/estimate/list/' + project_id + '/')
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+
     def response_change(self, request, obj, post_url_continue=None):
-        project_id=request.GET.get('project')
+        project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/estimate/list/'+project_id+'/')
+            return HttpResponseRedirect('/admin/ERP/estimate/list/' + project_id + '/')
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
-
 
 
 # Simple admin views.
@@ -663,3 +696,4 @@ admin.site.register(Empleado, EmpleadoAdmin)
 # admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
+admin.site.register(AccessToProject, AccessToProjectAdmin)
