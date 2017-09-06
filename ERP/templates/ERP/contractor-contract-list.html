@@ -43,7 +43,7 @@
                                             <th>Eliminar</th>
                                         </tr>
                                         </thead>
-                                          {% for contrato in object_list %}
+                                          {% for contratocontratista in object_list %}
                                             <tr>
 
 
@@ -57,19 +57,19 @@
 
 
 
-                                                <td style="width: 7%"><a href="{{ contrato.id }}"
+                                                <td style="width: 7%"><a href="{{ contratocontratista.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-eye color-default eliminar"></i></a></td>
-                                                <td class="text-center" style="width: 5%"><a href="{{ contrato.id }}/change"
+                                                <td class="text-center" style="width: 5%"><a href="{{ contratocontratista.id }}/change"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-pencil color-default eliminar"></i></a></td>
-                                                <td class="text-center" style="width: 2%"><a href="{{ contrato.id }}/delete"
+                                                <td class="text-center" style="width: 2%"><a href="{{ contratocontratista.id }}/delete"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-trash-o color-danger eliminar"></i></a>
                                                 </td>
 
                                                 {% empty %}
-                                                <td>No Companies yet.</td>
+                                                <td>Aún no existen Contratos con Contratistas.</td>
                                             </tr>
                                         {% endfor %}
                                     </table>
