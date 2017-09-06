@@ -63,21 +63,20 @@
                             <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group field-{{ field.field.name }}">
-                                     {{ field.label_tag }}
+                                    {{ field.label_tag }}
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                     <div class="input-group">
 
-                                      <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">
-                                      <span class="input-group-btn input-group-sm">
+                                        <input type="text" readonly="" class="form-control"
+                                               placeholder="Seleccionar archivo...">
+                                        <span class="input-group-btn input-group-sm">
                                         <button type="button" class="btn btn-fab btn-fab-mini">
                                           <i class="material-icons">attach_file</i>
                                         </button>
                                       </span>
                                     </div>
                                 </div>
-
-
 
 
                                 {% comment %}<div class="form-group field-{{ field.field.name }}">
@@ -94,18 +93,19 @@
                         <div class="col-md-6">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                    <div class="input-group">
+                                {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
+                                <div class="input-group">
 
-                                      <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">
-                                      <span class="input-group-btn input-group-sm">
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="Seleccionar archivo...">
+                                    <span class="input-group-btn input-group-sm">
                                         <button type="button" class="btn btn-fab btn-fab-mini">
                                           <i class="material-icons">attach_file</i>
                                         </button>
                                       </span>
-                                    </div>
                                 </div>
+                            </div>
 
                             {% comment %}<div class="form-group field-{{ field.field.name }}">
                                 <div>
@@ -116,6 +116,9 @@
                         </div>
                         </div>
                     {% endif %}
+                        {% if field.field.name == "version" %}
+                            {{ field.field|addcss:"form-control" }}
+                        {% endif %}
 
 
 

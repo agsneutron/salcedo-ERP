@@ -60,6 +60,9 @@
 
                     </div>
                     {% endif %}
+                        {% if field.field.name == "version" %}
+                                        {{ field.field|addcss:"form-control" }}
+                        {% endif %}
 
 
             {% endfor %}
