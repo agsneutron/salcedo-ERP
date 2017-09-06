@@ -593,6 +593,7 @@ def project_file_document_destination(instance, filename):
 
 # Projects model.
 class Project(models.Model):
+    user = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject',null=False, blank=False)
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     propietario = models.ForeignKey(Propietario, verbose_name="propietario", null=False, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
@@ -1140,3 +1141,23 @@ class SystemLogEntry(models.Model):
 
     def __str__(self):
         return "Value: " + self.information
+
+
+
+class AccessToProject(models.Model):
+    user = models.ForeignKey(ERPUser, verbose_name="Usuario")
+    project = models.ForeignKey(Project, verbose_name="Obra", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Accesos a Proyectos'
+        verbose_name = 'Acceso a Proyecot'
+        unique_together = ('user','project')
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['name'] = str(self.user.user.first_name)
+        ans['project'] = str(self.project.nombreProyecto)
+        return ans
+
+    def __str__(self):
+        return self.user.user.get_username() + " - " + self.project.nombreProyecto

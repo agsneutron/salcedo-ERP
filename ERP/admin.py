@@ -244,6 +244,10 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
     model = ProgressEstimate
 
 
+class AccessToProjectAdmin(admin.ModelAdmin):
+    model = AccessToProject
+
+
 class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
     model = UploadedCatalogsHistory
     fields = ('project', 'line_items_file', 'concepts_file')
@@ -638,3 +642,4 @@ admin.site.register(Empleado, EmpleadoAdmin)
 # admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
+admin.site.register(AccessToProject, AccessToProjectAdmin)
