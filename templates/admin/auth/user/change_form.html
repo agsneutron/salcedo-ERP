@@ -52,7 +52,7 @@
 
 {% block field_sets %}
 {% for fieldset in adminform %}
-  {% include "admin/ERP/contratista/fieldset.html" %}
+  {% include "admin/auth/user/fieldset.html" %}
 {% endfor %}
 {% endblock %}
 
@@ -60,7 +60,7 @@
 
 {% block inline_field_sets %}
 {% for inline_admin_formset in inline_admin_formsets %}
-    {% include inline_admin_formset.opts.template %}
+    {% include "admin/auth/user/stacked.html" %}
 {% endfor %}
 {% endblock %}
 

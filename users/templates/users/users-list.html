@@ -1,0 +1,87 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+    <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
+                        </div>
+                          <div class="item-right">
+
+                            <a href="add/"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: -25px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-block">
+
+
+                                {% include 'ERP/list-search-fields.html' %}
+
+                        <div class="row">
+                         <br>
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Nombre de usuario</th>
+                                            <th>Correo Electrónico</th>
+                                            <th>Rol</th>
+                                            <th>Estatus</th>
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Eliminar</th>
+                                        </tr>
+                                        </thead>
+                                        {% for user in object_list %}
+                                            <tr>
+
+
+                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                 <td><span >{{ user.username }}</span></td>
+                                                <td><span >{{ user.email }}</span></td>
+                                                <td><span >{{ user.erpuser}}</span></td>
+                                                <td><span >{{ user.is_active }}</span></td>
+
+                                                <td class="text-center" style="width: 5%"><a href="{{ user.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 5%"><a href="{{ user.id }}/change"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 2%"><a href="{{ user.id }}/delete"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-trash-o color-danger eliminar"></i></a>
+                                                </td>
+
+                                                {% empty %}
+                                                <td>No existen {{ title_list }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                {% include 'ERP/list-pagination.html' %}
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+{% endblock %}
