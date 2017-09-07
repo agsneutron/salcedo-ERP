@@ -386,6 +386,7 @@ class Empresa(models.Model):
                                   auto_choose=True,
                                   sort=True)
 
+
     class Meta:
         verbose_name_plural = 'Empresa'
 
@@ -613,7 +614,7 @@ class Project(models.Model):
     user = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
                                   blank=False)
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
-    propietario = models.ForeignKey(Propietario, verbose_name="propietario", null=False, blank=False)
+    empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
     fecha_inicial = models.DateTimeField(default=None, null=False)
     fecha_final = models.DateTimeField(default=None, null=False)
