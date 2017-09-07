@@ -195,12 +195,13 @@ class ContractorContractListView(ListView):
             query_list = query.split()
             result = result.filter(
                 reduce(operator.and_,
-                       (Q(dependencia__icontains=q) for q in query_list)) |
+                       (Q(clave_contrato__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
                        (Q(project__nombreProyecto__icontains=q) for q in query_list))
             )
         else:
             ContractorContractListView.query = ''
+
 
         return result
 

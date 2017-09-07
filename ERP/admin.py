@@ -378,14 +378,16 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 
 
 # Overriding the admin views to provide a detail view as required.
-class PropietarioInline(admin.TabularInline):
+class OwnerInline(admin.TabularInline):
     model = Propietario
-    extra = 1
+    extra = 0
     can_delete = True
+
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
-    inlines =  (PropietarioInline, )
+    inlines = (OwnerInline,)
+
     def get_fields(self, request, obj=None):
         fields = (
             'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',

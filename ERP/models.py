@@ -608,6 +608,10 @@ def project_file_document_destination(instance, filename):
     return '/'.join(['documentos_del_proyecto', instance.key, filename])
 
 
+def cover_file_document_destination(instance, filename):
+    return '/'.join(['documentos_del_proyecto', instance.key, 'cover_' + filename])
+
+
 # Projects model.
 class Project(models.Model):
     version = IntegerVersionField()
@@ -616,6 +620,10 @@ class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
+
+    portada = models.FileField(blank=True, null=True, upload_to=cover_file_document_destination,
+                               verbose_name="Foto de Portada")
+
     fecha_inicial = models.DateTimeField(default=None, null=False)
     fecha_final = models.DateTimeField(default=None, null=False)
     tipo_construccion = models.ForeignKey(TipoConstruccion, verbose_name="Tipo de construcción", null=False,
@@ -741,6 +749,10 @@ class Project(models.Model):
     longitud = models.FloatField(default=0, blank=True, null=True, )
 
     # tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
+
+
+
+
 
     class Meta:
         verbose_name_plural = 'Proyectos'
