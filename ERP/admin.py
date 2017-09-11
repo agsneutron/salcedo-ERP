@@ -383,6 +383,12 @@ class OwnerInline(admin.TabularInline):
     extra = 0
     can_delete = True
 
+# Overriding the admin views to provide a detail view as required.
+class ProjectInline(admin.TabularInline):
+    model = Project
+    extra = 0
+    can_delete = True
+
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
@@ -391,7 +397,7 @@ class CompanyModelAdmin(admin.ModelAdmin):
     def get_fields(self, request, obj=None):
         fields = (
             'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia', 'version', 'version',)
+            'numero', 'colonia', 'version', 'type', 'version',)
         return fields
 
     def get_urls(self):
@@ -424,6 +430,7 @@ class CompanyModelAdmin(admin.ModelAdmin):
 
 @admin.register(Contratista)
 class ContractorModelAdmin(admin.ModelAdmin):
+
     def get_fields(self, request, obj=None):
         fields = (
             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
@@ -604,7 +611,6 @@ class ProjectModelAdmin(admin.ModelAdmin):
         tipo_construccion.widget.can_add_related = False
         tipo_construccion.widget.can_change_related = False
         empresa.widget.can_add_related = False
-
 
         return ModelForm
 
