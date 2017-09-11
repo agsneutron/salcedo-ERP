@@ -129,6 +129,7 @@ class CompanyDetailView(generic.DetailView):
         context = super(CompanyDetailView, self).get_context_data(**kwargs)
         company_id = self.kwargs['pk']
         context['owners'] = Propietario.objects.filter(Q(empresa__id=company_id))
+        context['projects'] = Project.objects.filter(Q(empresa__id=company_id))
         return context
 
 

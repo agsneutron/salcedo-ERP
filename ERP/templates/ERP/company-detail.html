@@ -48,6 +48,7 @@
         This table shows the owner for the given company.
     {% endcomment %}
 
+    <h3>Contactos</h3>
     <table>
         <thead>
             <td style="border:1px solid; font-weight: 700">Nombre</td>
@@ -62,6 +63,32 @@
                 <td style="border:1px solid">{{ owner.email }}</td>
                 <td style="border:1px solid">{{ owner.telefono1 }}</td>
                 <td style="border:1px solid">{{ owner.telefono2 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Proyectos</h3>
+    <table>
+        <thead>
+            <td style="border:1px solid; font-weight: 700">Clave del Proyecto</td>
+            <td style="border:1px solid; font-weight: 700">Nombre</td>
+            <td style="border:1px solid; font-weight: 700">Ubicación</td>
+            <td style="border:1px solid; font-weight: 700">Fecha de inicio</td>
+            <td style="border:1px solid; font-weight: 700">Fecha de término</td>
+            <td style="border:1px solid; font-weight: 700"></td>
+        </thead>
+        <tbody>
+        {% for project in projects%}
+            <tr style="border:1px solid">
+                <td style="border:1px solid">{{ project.key }}</td>
+                <td style="border:1px solid">{{ project.nombreProyecto }}</td>
+                <td style="border:1px solid">{{ project.ubicacion_pais.nombrePais}}</td>
+                <td style="border:1px solid">{{ project.fecha_inicial.date }}</td>
+                <td style="border:1px solid">{{ project.fecha_final.date }}</td>
+                <td style="border:1px solid">
+                    <a href="/admin/ERP/project/{{ project.id }}" target="_blank"> Ver </a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
