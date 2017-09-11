@@ -197,10 +197,10 @@
                                     class="zmdi zmdi-settings"></i> Restricciones</a></li>
                             <li role="presentation"><a href="#suelo" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
-                                    class="zmdi zmdi-settings"></i> Analisis</a></li>
+                                    class="zmdi zmdi-settings"></i> Análisis</a></li>
                             <li role="presentation"><a href="#suelo-dos" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
-                                    class="zmdi zmdi-settings"></i> Analisis 2</a></li>
+                                    class="zmdi zmdi-settings"></i> Análisis II</a></li>
                             <li role="presentation"><a href="#costo" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
                                     class="zmdi zmdi-settings"></i> Costo/Mercado</a></li>
@@ -223,7 +223,7 @@
                                                 <li class="list-group-item">
                                                     Clave de Proyecto: {{ project.key }} </li>
                                                 <li class="list-group-item">
-                                                    Propietario: {{ project.propietario }} </li>
+                                                    Empresa Cliente: {{ project.empresa }} </li>
                                                 <li class="list-group-item">
                                                     Fecha de Inicio: {{ project.fecha_inicial }}</li>
                                                 <li class="list-group-item">
@@ -684,6 +684,33 @@
             </div>
         </div>
     </div>
+
+    <h1>Contratistas en el Proyecto</h1>
+    <table>
+        <thead>
+            <td style="border:1px solid black">Nombre</td>
+            <td style="border:1px solid black">RFC</td>
+            <td style="border:1px solid black">Teléfono</td>
+            <td style="border:1px solid black">Correo</td>
+            <td style="border:1px solid black"></td>
+        </thead>
+        <tbody>
+            {% for contract in contracts %}
+            <tr>
+                <td style="border:1px solid black">{{ contract.contratista.nombreContratista }}</td>
+                <td style="border:1px solid black">{{ contract.contratista.rfc }}</td>
+                <td style="border:1px solid black">{{ contract.contratista.telefono }}</td>
+                <td style="border:1px solid black">{{ contract.contratista.email }}</td>
+                <td style="border:1px solid black">
+                    <a href="http://localhost:8000/admin/ERP/contratista/{{ contract.contratista.id }}" target="_blank">
+                        Ver
+                    </a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 
     {% comment %}
 

@@ -421,9 +421,13 @@ class CompanyModelAdmin(admin.ModelAdmin):
 
         return ModelForm
 
+class ContactInline(admin.TabularInline):
+    model = Contact
+    extra = 0
 
 @admin.register(Contratista)
 class ContractorModelAdmin(admin.ModelAdmin):
+    inlines = (ContactInline, )
     def get_fields(self, request, obj=None):
         fields = (
             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
@@ -698,4 +702,5 @@ admin.site.register(Empleado, EmpleadoAdmin)
 # admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
+admin.site.register(Contact)
 admin.site.register(AccessToProject, AccessToProjectAdmin)

@@ -15,7 +15,7 @@ from django.views.generic.edit import DeleteView
 
 from ERP.forms import EstimateSearchForm, AddEstimateForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory
+    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, Contact
 from django.db.models import Q
 import json
 
@@ -173,6 +173,14 @@ class ContractorListView(ListView):
 class ContractorDetailView(generic.DetailView):
     model = Contratista
     template_name = "ERP/contractor-detail.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ContractorDetailView, self).get_context_data(**kwargs)
+        contractor_id = self.kwargs['pk']
+        context['contacts'] = Contact.objects.filter(Q(contractor__id=contractor_id))
+        context['contracts'] = ContratoContratista.objects.filter(Q(contratista=contractor_id))
+        return context
 
 
 # Views for the model ContratoContratista.
@@ -464,6 +472,9 @@ class ProjectDetailView(generic.DetailView):
         context['documento_electricidad_nombre'] = str(project_obj.electricidad_documento.name).split("/")[-1]
         context['documento_alumbrado_nombre'] = str(project_obj.alumbradopublico_documento.name).split("/")[-1]
         context['documento_telefonia_nombre'] = str(project_obj.telefonia_documento.name).split("/")[-1]
+
+        # Getting the info for the contractors relates to a project.
+        context['contracts'] = ContratoContratista.objects.filter(Q(project__id=project_obj.id))
 
         print str(project_obj.documento_propiedad.name).split("/")[-1]
 
