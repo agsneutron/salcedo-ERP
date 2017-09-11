@@ -355,6 +355,54 @@ class Contratista(models.Model):
             Logs.log("Couldn't save")
 
 
+class Contact(models.Model):
+    version = IntegerVersionField()
+    contractor = models.ForeignKey(Contratista, verbose_name="Contratista", null=False, blank=True)
+    name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle", max_length=200, null=False, blank=False)
+    number = models.CharField(verbose_name="Número", max_length=8, null=False, blank=False)
+    colony = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
+    rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
+    post_code = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
+    phone_number_1 = models.CharField(verbose_name="Teléfono Principal", max_length=20, null=True, blank=True)
+    phone_number_2 = models.CharField(verbose_name="Teléfono Secundario", max_length=20, null=True, blank=True)
+    email = models.CharField(verbose_name="Correo Electrónico", max_length=100, null=True, blank=True)
+
+    # Attribute for the Chained Keys.
+    country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    state = ChainedForeignKey(Estado,
+                              chained_field="country",
+                              chained_model_field="pais",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True,
+                              verbose_name="Estado")
+    town = ChainedForeignKey(Municipio,
+                             chained_field="state",
+                             chained_model_field="estado",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name="Municipio")
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['id'] = str(self.id)
+        ans['number'] = str(self.number)
+        ans['colony'] = str(self.colony)
+        ans['town'] = str(self.town)
+        ans['estado'] = str(self.state)
+        ans['pais'] = str(self.country.nombrePais)
+        ans['post_code'] = str(self.post_code)
+        ans['phone_number_1'] = str(self.phone_number_1)
+        ans['phone_number_2'] = str(self.phone_number_2)
+        ans['contractor'] = str(self.contractor.nombreContratista)
+        return ans
+
+    def __str__(self):
+        return self.name
+
+
 class Empresa(models.Model):
     version = IntegerVersionField()
 
@@ -378,7 +426,8 @@ class Empresa(models.Model):
                                chained_model_field="pais",
                                show_all=False,
                                auto_choose=True,
-                               sort=True)
+                               sort=True,
+                               verbose_name="Estado")
     municipio = ChainedForeignKey(Municipio,
                                   chained_field="estado",
                                   chained_model_field="estado",
@@ -1120,7 +1169,7 @@ class ProgressEstimateLog(models.Model):
 
     def __init__(self, *args, **kwargs):
         super(ProgressEstimateLog, self).__init__(*args, **kwargs)
-        self.user = ERPUser.objects.get(pk=1)
+        # self.user = ERPUser.objects.get(pk=1)
         # print 'user_id: ' + str(self.user.id)
 
 
