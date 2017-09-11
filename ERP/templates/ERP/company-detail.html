@@ -4,8 +4,6 @@
     {% comment %}<h1>Nombre: {{ empresa.nombreEmpresa }}  <a href="change">Editar</a></h1>{% endcomment %}
 
 
-
-
     <div class="col-xs-8 col-xs-offset-2">
         <div class="card card-info">
             <div class="card-block text-center">
@@ -44,4 +42,28 @@
             </div>
         </div>
     </div>
+
+
+    {% comment %}
+        This table shows the owner for the given company.
+    {% endcomment %}
+
+    <table>
+        <thead>
+            <td style="border:1px solid; font-weight: 700">Nombre</td>
+            <td style="border:1px solid; font-weight: 700">Correo</td>
+            <td style="border:1px solid; font-weight: 700">Telefono</td>
+            <td style="border:1px solid; font-weight: 700">Telefono 2</td>
+        </thead>
+        <tbody>
+        {% for owner in owners%}
+            <tr style="border:1px solid">
+                <td style="border:1px solid">{{ owner.nombrePropietario }}</td>
+                <td style="border:1px solid">{{ owner.email }}</td>
+                <td style="border:1px solid">{{ owner.telefono1 }}</td>
+                <td style="border:1px solid">{{ owner.telefono2 }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
 {% endblock %}

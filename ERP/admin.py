@@ -378,14 +378,16 @@ class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
 
 
 # Overriding the admin views to provide a detail view as required.
-class PropietarioInline(admin.TabularInline):
+class OwnerInline(admin.TabularInline):
     model = Propietario
-    extra = 1
+    extra = 0
     can_delete = True
+
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
-    inlines =  (PropietarioInline, )
+    inlines = (OwnerInline,)
+
     def get_fields(self, request, obj=None):
         fields = (
             'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
@@ -590,7 +592,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
         ubicacion_estado = ModelForm.base_fields['ubicacion_estado']
         ubicacion_municipio = ModelForm.base_fields['ubicacion_municipio']
         tipo_construccion = ModelForm.base_fields['tipo_construccion']
-        propietario = ModelForm.base_fields['propietario']
+        empresa = ModelForm.base_fields['empresa']
 
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         ubicacion_pais.widget.can_add_related = False
@@ -601,8 +603,8 @@ class ProjectModelAdmin(admin.ModelAdmin):
         ubicacion_municipio.widget.can_change_related = False
         tipo_construccion.widget.can_add_related = False
         tipo_construccion.widget.can_change_related = False
-        propietario.widget.can_add_related = False
-        propietario.widget.can_change_related = False
+        empresa.widget.can_add_related = False
+
 
         return ModelForm
 

@@ -113,11 +113,11 @@
                     {% endif %}
 
 
-                    {% if field.field.name == "propietario" %}
+                    {% if field.field.name == "empresa" %}
                         <div class="col-md-3">
-                            <div class="form-group field-propietario">
+                            <div class="form-group field-empresa">
                                 <div class="related-widget-wrapper">
-                                    <label class="control-label required" for="id_propietario">Propietario:</label>
+                                    <label class="control-label required" for="id_empresa">Empresa Cliente:</label>
                                     {{ field.field|addcss:"form-control " }}
                                     {{ field.errors }}
                                 </div>
@@ -139,8 +139,24 @@
                         </div>
 
                         </div>
-                        <hr>
 
+                    {% endif %}
+
+
+                    {% if field.field.name == "portada" %}
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group field-estadolegal_predial">
+                                    <div>
+                                        <label class="control-label" for="id_estadolegal_predial">Foto de
+                                            Portada:</label>
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
                     {% endif %}
                     {% if field.field.name == "fecha_inicial" %}
                         <div class="row">

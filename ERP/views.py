@@ -124,6 +124,14 @@ class CompanyDetailView(generic.DetailView):
     template_name = "ERP/company-detail.html"
 
 
+
+    def get_context_data(self, **kwargs):
+        context = super(CompanyDetailView, self).get_context_data(**kwargs)
+        company_id = self.kwargs['pk']
+        context['owners'] = Propietario.objects.filter(Q(empresa__id=company_id))
+        return context
+
+
 class ContractorListView(ListView):
     model = Contratista
     template_name = "ERP/contractor-list.html"
@@ -187,12 +195,13 @@ class ContractorContractListView(ListView):
             query_list = query.split()
             result = result.filter(
                 reduce(operator.and_,
-                       (Q(dependencia__icontains=q) for q in query_list)) |
+                       (Q(clave_contrato__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
                        (Q(project__nombreProyecto__icontains=q) for q in query_list))
             )
         else:
             ContractorContractListView.query = ''
+
 
         return result
 
