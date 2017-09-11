@@ -592,7 +592,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
         ubicacion_estado = ModelForm.base_fields['ubicacion_estado']
         ubicacion_municipio = ModelForm.base_fields['ubicacion_municipio']
         tipo_construccion = ModelForm.base_fields['tipo_construccion']
-        propietario = ModelForm.base_fields['propietario']
+        empresa = ModelForm.base_fields['empresa']
 
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         ubicacion_pais.widget.can_add_related = False
@@ -603,8 +603,8 @@ class ProjectModelAdmin(admin.ModelAdmin):
         ubicacion_municipio.widget.can_change_related = False
         tipo_construccion.widget.can_add_related = False
         tipo_construccion.widget.can_change_related = False
-        propietario.widget.can_add_related = False
-        propietario.widget.can_change_related = False
+        empresa.widget.can_add_related = False
+
 
         return ModelForm
 
