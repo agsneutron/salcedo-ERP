@@ -1,4 +1,3 @@
-
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls admin_static admin_modify %}
 
@@ -29,7 +28,7 @@
 {% if change %}{% if not is_popup %}
   <ul class="object-tools">
     {% block object-tools-items %}
-  {% comment %}  <li>
+    {% comment %}<li>
         {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
         <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
     </li>
@@ -52,7 +51,7 @@
 
 {% block field_sets %}
 {% for fieldset in adminform %}
-  {% include "admin/ERP/empresa/fieldset.html" %}
+  {% include "admin/ERP/contact/fieldset.html" %}
 {% endfor %}
 {% endblock %}
 
@@ -60,8 +59,7 @@
 
 {% block inline_field_sets %}
 {% for inline_admin_formset in inline_admin_formsets %}
-    {% include "admin/ERP/empresa/stacked.html" %}
-    {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
+    {% include inline_admin_formset.opts.template %}
 {% endfor %}
 {% endblock %}
 
