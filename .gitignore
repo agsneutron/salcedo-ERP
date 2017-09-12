@@ -5,6 +5,7 @@ DataUpload/migrations/
 ERP/migrations/
 Logs/migrations/
 Users/migrations/
+.DS_Store
 
 #Folders
 .idea
