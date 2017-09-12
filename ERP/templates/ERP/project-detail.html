@@ -684,32 +684,45 @@
             </div>
         </div>
     </div>
+<hr>
+      <div class="col-xs-10 col-xs-offset-1">
+    <div class="card ">
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">Contratistas en el Proyecto</h3>
+                </div>
+            </div>
 
-    <h1>Contratistas en el Proyecto</h1>
-    <table>
-        <thead>
-            <td style="border:1px solid black">Nombre</td>
-            <td style="border:1px solid black">RFC</td>
-            <td style="border:1px solid black">Teléfono</td>
-            <td style="border:1px solid black">Correo</td>
-            <td style="border:1px solid black"></td>
-        </thead>
-        <tbody>
-            {% for contract in contracts %}
-            <tr>
-                <td style="border:1px solid black">{{ contract.contratista.nombreContratista }}</td>
-                <td style="border:1px solid black">{{ contract.contratista.rfc }}</td>
-                <td style="border:1px solid black">{{ contract.contratista.telefono }}</td>
-                <td style="border:1px solid black">{{ contract.contratista.email }}</td>
-                <td style="border:1px solid black">
-                    <a href="http://localhost:8000/admin/ERP/contratista/{{ contract.contratista.id }}" target="_blank">
-                        Ver
-                    </a>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
+    <div>
+
+                <table>
+                    <thead>
+                        <td style="border:1px solid black">Nombre</td>
+                        <td style="border:1px solid black">RFC</td>
+                        <td style="border:1px solid black">Teléfono</td>
+                        <td style="border:1px solid black">Correo</td>
+                        <td style="border:1px solid black"></td>
+                    </thead>
+                    <tbody>
+                        {% for contract in contracts %}
+                        <tr>
+                            <td style="border:1px solid black">{{ contract.contratista.nombreContratista }}</td>
+                            <td style="border:1px solid black">{{ contract.contratista.rfc }}</td>
+                            <td style="border:1px solid black">{{ contract.contratista.telefono }}</td>
+                            <td style="border:1px solid black">{{ contract.contratista.email }}</td>
+                            <td style="border:1px solid black">
+                                <a href="http://localhost:8000/admin/ERP/contratista/{{ contract.contratista.id }}" target="_blank">
+                                    Ver
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+
+    </div>
+    </div>
+      </div>
 
 
     {% comment %}

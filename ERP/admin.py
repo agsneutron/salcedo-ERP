@@ -608,7 +608,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
         tipo_construccion.widget.can_add_related = False
         tipo_construccion.widget.can_change_related = False
         empresa.widget.can_add_related = False
-
+        empresa.widget.can_change_related = False
 
         return ModelForm
 

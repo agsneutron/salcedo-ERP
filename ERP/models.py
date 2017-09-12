@@ -669,14 +669,13 @@ class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
-
+    fecha_inicial = models.DateField(default=None, null=False)
+    fecha_final = models.DateField(default=None, null=False)
+    tipo_construccion = models.ForeignKey(TipoConstruccion, verbose_name="Tipo de construcción", null=False,
+                                          blank=False)
     portada = models.FileField(blank=True, null=True, upload_to=cover_file_document_destination,
                                verbose_name="Foto de Portada")
 
-    fecha_inicial = models.DateTimeField(default=None, null=False)
-    fecha_final = models.DateTimeField(default=None, null=False)
-    tipo_construccion = models.ForeignKey(TipoConstruccion, verbose_name="Tipo de construcción", null=False,
-                                          blank=False)
     ubicacion_calle = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
     ubicacion_numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
