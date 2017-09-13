@@ -711,6 +711,9 @@ class Project(models.Model):
     restriccion_inha = models.CharField(verbose_name="inha", max_length=200, null=True, blank=True)
     restriccion_otros = models.CharField(verbose_name="otros", max_length=200, null=True, blank=True)
     restriccion_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+
+
+    # Fields required for the 'Uso de Suelo' report in the 'Analisis' section.
     usosuelo_pmdu = models.CharField(verbose_name="pmdu", max_length=200, null=True, blank=True)
     usosuelo_densidad = models.CharField(verbose_name="densidad", max_length=200, null=True, blank=True)
     usosuelo_loteminimo = models.DecimalField(verbose_name='lote mínimo', decimal_places=2, blank=True, null=True,
@@ -721,19 +724,27 @@ class Project(models.Model):
     usosuelo_altura = models.CharField(verbose_name="altura", max_length=200, null=True, blank=True)
     usosuelo_densidadrequerida = models.CharField(verbose_name="densidad requerida", max_length=200, null=True,
                                                   blank=True)
+
+    # Fields required for the 'Hidraulica' report in the 'Analisis' section.
     hidraulica_fuente = models.CharField(verbose_name="fuente", max_length=200, null=True, blank=True)
     hidraulica_distancia = models.CharField(verbose_name="distacia", max_length=200, null=True, blank=True)
     hidraulica_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     hidraulica_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination,
                                             verbose_name="Documento de hidráulica")
+
+    # Fields required for the 'Sanitaria' report in the 'Analisis' section.
     sanitaria_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     sanitaria_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
     sanitaria_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     sanitaria_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+
+    # Fields required for the 'Pluvial' report in the 'Analisis' section.
     pluvial_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     pluvial_responsable = models.CharField(verbose_name="responsable", max_length=200, null=True, blank=True)
     pluvial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     pluvial_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+
+    # Fields required for the 'Vial' report in the 'Analisis II' section.
     vial_viaacceso = models.CharField(verbose_name="vias de acceso", max_length=200, null=True, blank=True)
     vial_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     vial_carriles = models.CharField(verbose_name="carriles", max_length=200, null=True, blank=True)
@@ -743,20 +754,33 @@ class Project(models.Model):
                                                blank=True)
     vial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     vial_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+
+
+    # Fields required for the 'Electricidad' report in the 'Analisis II' section.
     electricidad_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     electricidad_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     electricidad_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     electricidad_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+
+
+    # Fields required for the 'Alumbrado Público' report in the 'Analisis II' section.
     alumbradopublico_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     alumbradopublico_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     alumbradopublico_observaciones = models.CharField(verbose_name="dobservaciones", max_length=200, null=True,
                                                       blank=True)
     alumbradopublico_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+
+
+    # Fields required for the 'Telefonia' report in the 'Analisis II' section.
     telefonia_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     telefonia_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     telefonia_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
+
+    # Fields required for the 'Tv Cable' report in the 'Analisis II' section.
     tvcable_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     tvcable_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
+
+    # Fields required for the 'Equipamiento' report in the 'Analisis II' section.
     equipamiento_a100 = models.CharField(verbose_name="a 100", max_length=200, null=True, blank=True)
     equipamiento_a200 = models.CharField(verbose_name="a 200", max_length=200, null=True, blank=True)
     equipamiento_a500 = models.CharField(verbose_name="da 500", max_length=200, null=True, blank=True)
