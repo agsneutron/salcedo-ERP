@@ -4,6 +4,7 @@ from django.contrib.admin import widgets
 from django.db import models
 from django.db.models import Q
 from django.forms import SelectDateWidget
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
 from users.models import ERPUser
@@ -11,7 +12,7 @@ from users.models import ERPUser
 import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
-    ContratoContratista, Propietario, Empresa
+    ContratoContratista, Propietario, Empresa, Contact, Contratista
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -235,15 +236,37 @@ class OwnerForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
-        self.empresa_id = kwargs.pop('empresa_id', None)
+        self.company_id = kwargs.pop('company_id', None)
 
-        kwargs['initial'].update({'empresa': self.empresa_id})
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        kwargs['initial'].update({'empresa': self.company_id})
         super(OwnerForm, self).__init__(*args, **kwargs)
-        if self.empresa_id is not None:
-            #kwargs['initial'].update({'empresa': self.empresa_id})
-            self.fields['empresa'].queryset = Empresa.objects.filter(pk=self.empresa_id)
+        if self.company_id is not None:
+            self.fields['empresa'].queryset = Empresa.objects.filter(pk=self.company_id)
 
-    def response_add(self, request, obj, post_url_continue=None):
-        return redirect('google.com')
 
+
+class ContactForm(forms.ModelForm):
+    contractor_id = None
+    class Meta:
+        model = Contact
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        self.contractor_id = kwargs.pop('contratista_id', None)
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        # Selecting the current value for the contractor if it exists, otherwise, None.
+        kwargs['initial'].update({'contractor': self.contractor_id})
+
+        super(ContactForm, self).__init__(*args, **kwargs)
+
+        # Filtering the values for the contractor if it , otherwise, None.
+        if self.contractor_id is not None:
+            self.fields['contractor'].queryset = Contratista.objects.filter(pk=self.contractor_id)
 
