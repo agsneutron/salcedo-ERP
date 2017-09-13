@@ -436,8 +436,8 @@ class CompanyModelAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-            'nombreEmpresa', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
-            'numero', 'colonia', 'version', 'type', 'version',)
+            'nombreEmpresa', 'rfc', 'type', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+            'numero', 'colonia', 'version',)
         return fields
 
     def get_urls(self):
