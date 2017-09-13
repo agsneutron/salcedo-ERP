@@ -498,7 +498,7 @@ class ContactModelAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-             'contractor','name', 'rfc', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
+             'name', 'rfc', 'contractor','email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
             'street','number', 'colony', 'version')
         return fields
 

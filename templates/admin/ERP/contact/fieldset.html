@@ -60,7 +60,20 @@
                         {% endif %}
                     {% if field.field.name == "rfc" %}
 
-                            <div class="col-md-6">
+                            <div class="col-md-3">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+
+                    {% endif %}
+                        {% if field.field.name == "contractor" %}
+
+                            <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
