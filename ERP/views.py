@@ -15,7 +15,7 @@ from django.views.generic.edit import DeleteView
 
 from ERP.forms import EstimateSearchForm, AddEstimateForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, Contact
+    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, Contact, AccessToProject
 from django.db.models import Q
 import json
 
@@ -747,3 +747,47 @@ class UploadedCatalogsHistoryAdminListView(ListView):
         context['query_string'] = '&q=' + UploadedCatalogsHistoryAdminListView.query
         context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (UploadedCatalogsHistoryAdminListView.query != "")
         return context
+
+# Views for the model AccessToProjectAdmin.
+class AccessToProjectAdminListView(ListView):
+    model = AccessToProject
+    template_name = "ERP/accesstoproject-list.html"
+    query = None
+    title_list = "Acceso a Proyectos"
+    """
+       Display a Project List page filtered by the search query.
+    """
+    paginate_by = 10
+
+    def get_queryset(self):
+
+        result = super(AccessToProjectAdminListView, self).get_queryset()
+        user = int(self.request.GET.get('user'))
+
+        query = Q()
+        query = query & Q(user_id=int(user))
+        result = result.filter(query)
+
+        query = self.request.GET.get('q')
+        if query:
+            AccessToProjectAdminListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(user_id=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(project_id=q) for q in query_list))
+            )
+        else:
+            AccessToProjectAdminListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(AccessToProjectAdminListView, self).get_context_data(**kwargs)
+        context['title_list'] = AccessToProjectAdminListView.title_list
+        context['query'] = AccessToProjectAdminListView.query
+        context['query_string'] = '&q=' + AccessToProjectAdminListView.query
+        context['has_query'] = (AccessToProjectAdminListView.query is not None) and (AccessToProjectAdminListView.query != "")
+        return context
+
