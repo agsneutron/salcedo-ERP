@@ -10,7 +10,7 @@
                         <div class="item-left">
                             <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
                         </div>
-                          <div class="item-right">
+                        <div class="item-right">
 
                             <a href="add/"
                                class="btn-circle btn-circle-raised btn-circle-success"
@@ -24,10 +24,10 @@
                     <div class="card-block">
 
 
-                                {% include 'ERP/list-search-fields.html' %}
+                        {% include 'ERP/list-search-fields.html' %}
 
                         <div class="row">
-                         <br>
+                            <br>
                             <div class="col-xs-12">
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
@@ -36,7 +36,7 @@
                                             <th>Nombre de usuario</th>
                                             <th>Correo Electrónico</th>
                                             <th>Rol</th>
-                                            <th>Estatus</th>
+                                            <th>Proyectos</th>
                                             <th>Ver</th>
                                             <th>Editar</th>
                                             <th>Proyectos</th>
@@ -48,23 +48,27 @@
                                             <tr>
 
 
-                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
-                                                 <td><span >{{ user.username }}</span></td>
-                                                <td><span >{{ user.email }}</span></td>
-                                                <td><span >{{ user.erpuser }}</span></td>
-                                                <td><span >{{ user.is_active }}</span></td>
+                                                {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                <td><span>{{ user.username }}</span></td>
+                                                <td><span>{{ user.email }}</span></td>
+                                                <td><span>{{ user.erpuser }}</span></td>
+                                                <td class="text-center" style="width: 5%">
+                                                    {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
+                                                    <a href="" data-toggle="modal" data-target="#myModal3" class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-building color-default eliminar"></i></a>
+                                                </td>
 
                                                 <td class="text-center" style="width: 5%"><a href="{{ user.id }}"
-                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                                                             class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-eye color-default eliminar"></i></a></td>
                                                 <td class="text-center" style="width: 5%"><a href="{{ user.id }}/change"
-                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                                                             class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-pencil color-default eliminar"></i></a></td>
                                                 <td class="text-center" style="width: 5%"><a href="/admin/ERP/accesstoproject/?user={{ user.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-pencil color-default eliminar"></i></a></td>
                                                 <td class="text-center" style="width: 2%"><a href="{{ user.id }}/delete"
-                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                                                             class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-trash-o color-danger eliminar"></i></a>
                                                 </td>
 
@@ -87,6 +91,69 @@
             </div>
         </div>
 
+
+        <div class="modal" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+            <div class="modal-dialog animated zoomIn animated-3x" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                        <h3 class="modal-title" id="myModalLabel3">Asignación de proyectos</h3>
+                    </div>
+                    <div class="modal-body">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="form-group">
+                                    <div class="togle-label col-xs-10">
+                                        Proyecto 1
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="togglebutton">
+                                            <label>
+                                                <input type="checkbox" checked="">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="form-group">
+                                    <div class="togle-label col-xs-10">
+                                        Proyecto 1
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="togglebutton">
+                                            <label>
+                                                <input type="checkbox" checked="">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="list-group-item">
+                                <div class="form-group">
+                                    <div class="togle-label col-xs-10">
+                                        Proyecto 1
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <div class="togglebutton">
+                                            <label>
+                                                <input type="checkbox" checked="">
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 {% endblock %}
