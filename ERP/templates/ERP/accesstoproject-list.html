@@ -23,7 +23,7 @@
                     <div class="card-block">
                         {% include 'ERP/list-search-fields.html' %}
                         <div class="row">
-                            <div class="col-xs-12">
+                            <div class="col-xs-12"> Usuario:
                              {% for project in object_list %}
                                  {{ project.user }}
                              {% endfor %}
@@ -39,11 +39,7 @@
                                         <thead>
                                         <tr>
                                             <th>Proyecto</th>
-                                            <th></th>
-                                            <th></th>
-                                            <th></th>
-                                            <th>Ver</th>
-                                            <th>Editar</th>
+
                                             <th>Estatus</th>
                                         </tr>
                                         </thead>
@@ -52,17 +48,8 @@
 
 
                                                {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
-                                                 <td><span >{{ project.user_id }}</span></td>
-                                                <td><span >{{ project.project }}</span></td>
-                                                <td><span ></span></td>
-                                                <td><span ></span></td>
 
-                                                <td class="text-center" style="width: 5%"><a href="{{ company.id }}"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-eye color-default eliminar"></i></a></td>
-                                                <td class="text-center" style="width: 5%"><a href="{{ company.id }}/change"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td><span >{{ project.project }}</span></td>
                                                 <td class="text-center" style="width: 2%"><a href="{{ company.id }}/delete"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-trash-o color-danger eliminar"></i></a>
