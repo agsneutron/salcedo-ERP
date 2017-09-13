@@ -1382,7 +1382,7 @@ class AccessToProject(models.Model):
 
     class Meta:
         verbose_name_plural = 'Accesos a Proyectos'
-        verbose_name = 'Acceso a Proyecot'
+        verbose_name = 'Acceso a Proyectos'
         unique_together = ('user', 'project')
 
     def to_serializable_dict(self):
