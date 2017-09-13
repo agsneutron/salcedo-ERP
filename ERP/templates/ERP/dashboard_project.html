@@ -14,24 +14,52 @@
 {% endblock %}
 {% block content %}
     <div id="container">
-<div class="btn-group btn-group-justified btn-group-raised">
-   <a class="btn btn-info" style="font-size: 12px;color: white !important;
+        <div class="btn-group btn-group-justified btn-group-raised">
+            <a class="btn btn-info" style="font-size: 12px;color: white !important;
     font-weight: bold;" href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/">Catálogo de Conceptos</a>
-        <a class="btn btn-info" style="font-size: 12px;color: white !important;
-    font-weight: bold;"  href="/admin/ERP/lineitem/insumos/{{ project_id }}/0/">Explosión de Insumos</a>
-        <a class="btn btn-info" style="font-size: 12px;color: white !important;
+            <a class="btn btn-info" style="font-size: 12px;color: white !important;
+    font-weight: bold;" href="/admin/ERP/lineitem/insumos/{{ project_id }}/0/">Explosión de Insumos</a>
+            <a class="btn btn-info" style="font-size: 12px;color: white !important;
     font-weight: bold;" href="/admin/ERP/estimate/list/{{ project_id }}">Búsqueda de Estimaciones</a>
 
-        <a class="btn btn-info" style="font-size: 12px;color: white !important;
-    font-weight: bold;" href="/admin/ERP/uploadedcatalogshistory/add/?project={{ project_id }}">Añadir Cat. de conceptos</a>
-        <a class="btn btn-info" style="font-size: 11px;color: white !important;
-    font-weight: bold;" href="/admin/ERP/uploadedinputexplotionshistory/add/?project={{ project_id }}">Añadir explosión de
-            insumos</a>
-    <a class="btn btn-info" style="font-size: 12px;color: white !important;
+            <a class="btn btn-info" style="font-size: 12px;color: white !important;
+    font-weight: bold;" href="/admin/ERP/uploadedcatalogshistory/add/?project={{ project_id }}">Añadir Cat. de
+                conceptos</a>
+            <a class="btn btn-info" style="font-size: 11px;color: white !important;
+    font-weight: bold;" href="/admin/ERP/uploadedinputexplotionshistory/add/?project={{ project_id }}">Añadir explosión
+                de
+                insumos</a>
+            <a class="btn btn-info" style="font-size: 12px;color: white !important;
     font-weight: bold;" href="/admin/ERP/progressestimatelog/?project={{ project_id }}">Bitácoras</a>
-</div>
+        </div>
 
+        {% comment %}        <div class="row">
+            <div class="col-xs-8">
+                <div class="card">
+                    <a href="{% static "ERP/admin/img/proyecto1.jpg" %}" data-lightbox="image-1"
+                       data-title="My caption">
+                        <div class="thumbnail-container" style="height: 200px;
+                                background-position: center center;
+                                background-repeat: no-repeat;
+                                background-size: cover;background-image: url('{% static "ERP/admin/img/proyecto1.jpg" %}')">
 
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-xs-4">
+                <div class="card card-primary">
+                    <div class="card-block text-center">
+                        <span class="ms-icon ms-icon-round ms-icon-inverse color-active ms-icon-lg mb-4"><i
+                                class="zmdi zmdi-city-alt"></i></span>
+                        {% for project in project %}
+                            <h4 class="color-active">{{ project.nombreProyecto }} </h4>
+                            <p>Proyecto</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>{% endcomment %}
 
         <div class="row">
             <div class="col-xs-6">
@@ -41,56 +69,51 @@
                             {% for project in project %}
                                 <h3 class="card-title text">Nombre de Proyecto: {{ project.nombreProyecto }} </h3>
 
-                        </div>
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="" style="">
-                            <h4 class="color-active">Generales</h4>
-                            <ul class="list-group">
-                                    <li href="" class="list-group-item withripple ">
-                                         Clave de Proyecto: {{ project.key }} </li>
-                                <li href="" class="list-group-item withripple ">
-                                         Propietario: {{ project.propietario }} </li>
-                                <li href="" class="list-group-item withripple ">
-                                         Fecha de Inicio: {{ project.fecha_inicial }}
-                                    </li>
-                                <li href="" class="list-group-item withripple ">
-                                         Fecha de Termino: {{ project.fecha_final }}
-                                    </li>
-                                <li href="" class="list-group-item withripple ">
-                                         Tipo de
-                                        Contrucción: {{ project.tipo_construccion }}</li>
-                            </ul>
+                                </div>
+                                </div>
+                                <div class="col-xs-6" style="padding-left: 0">
+                                    <a href="{% static "ERP/admin/img/proyecto1.jpg" %}" data-lightbox="image-1"
+                                       data-title="{{ project.nombreProyecto }}">
+                                        <div class="thumbnail-container" style="height: 340px;
+                                                background-position: center center;
+                                                background-repeat: no-repeat;
+                                                background-size: cover;background-image: url('{% static "ERP/admin/img/proyecto1.jpg" %}')">
 
-                        </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="" style="">
+                                        <h4 class="color-active">Generales</h4>
+                                        <ul class="list-group">
+                                            <li href="" class="list-group-item withripple ">
+                                                Clave de Proyecto: {{ project.key }} </li>
+                                            <li href="" class="list-group-item withripple ">
+                                                Propietario: {{ project.propietario }} </li>
+                                            <li href="" class="list-group-item withripple ">
+                                                Fecha de Inicio: {{ project.fecha_inicial }}
+                                            </li>
+                                            <li href="" class="list-group-item withripple ">
+                                                Fecha de Termino: {{ project.fecha_final }}
+                                            </li>
+                                            <li href="" class="list-group-item withripple ">
+                                                Tipo de
+                                                Contrucción: {{ project.tipo_construccion }}</li>
+                                        </ul>
 
+                                    </div>
+                                     <div class="clearfix"></div>
+                                    <div class="text-right"
+                                         style="display: flex;text-align: right;float: right;">
+                                        <a href="/admin/ERP/project/{{ project_id }}/" class="btn btn-royal">
+                                            <i class="fa fa-search"></i> Ver mas</a>
+                                        <a href="/admin/ERP/project/{{ project_id }}/change" class="btn btn-danger">
+                                            <i class="fa fa-pencil"></i> Editar</a>
+                                    </div>
 
-                    </div>
-                    <div class="col-xs-6">
-                        <div class="">
+                                </div>
 
-                            <h4 class="color-active">Ubicación</h4>
-
-                            <ul class="list-group">
-                                    <li class="list-group-item withripple ">
-                                        País: {{ project.ubicacion_pais }}</li>
-                                <li class="list-group-item withripple ">
-                                        Estado: {{ project.ubicacion_estado }}</li>
-                                <li href="" class="list-group-item withripple ">
-                                        Municipio: {{ project.ubicacion_municipio }}
-                                    </li>
-                                <li href="" class="list-group-item withripple ">
-                                        Colonia: {{ project.ubicacion_colonia }}</li>
-                                <li href="" class="list-group-item withripple ">
-                                        Calle: {{ project.ubicacion_calle }}</li>
-                                <li href="" class="list-group-item withripple ">
-                                        Número: {{ project.ubicacion_numero }}</li>
-                                <li href="" class="list-group-item withripple ">
-                                        CP: {{ project.ubicacion_cp }}</li>
-                            </ul>
-                        </div>
-                    </div>
-                      {% endfor %}
+                            {% endfor %}
                     <hr>
                     {% comment %}<div class="btn-group btn-group-justified btn-group-raised ">
                         <a href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/" class="btn btn-info"
@@ -112,12 +135,7 @@
                             Carga CC/CI
                         </a>
                     </div>{% endcomment %}
-                        <div class="text-right" style="display: inline-block;text-align: right;float: right;">
-                            <a href="/admin/ERP/project/{{ project_id }}/" class="btn btn-royal">
-                                <i class="fa fa-search"></i> Ver mas</a>
-                            <a href="/admin/ERP/project/{{ project_id }}/change" class="btn btn-danger">
-                                <i class="fa fa-pencil"></i> Editar</a>
-                        </div>
+
 
                     <div class="clearfix"></div>
 
@@ -130,7 +148,33 @@
                         <h3 class="card-title">Ubicación</h3>
                     </div>
                     <div class="card-block" style="height: 340px; padding: 0">
-                        <div id="map" style="height: 340px"></div>
+                        <div class="col-xs-6">
+                            <div class="">
+
+                                <h4 class="color-active">Ubicación</h4>
+
+                                <ul class="list-group">
+                                    <li class="list-group-item withripple ">
+                                        País: {{ project.ubicacion_pais }}</li>
+                                    <li class="list-group-item withripple ">
+                                        Estado: {{ project.ubicacion_estado }}</li>
+                                    <li href="" class="list-group-item withripple ">
+                                        Municipio: {{ project.ubicacion_municipio }}
+                                    </li>
+                                    <li href="" class="list-group-item withripple ">
+                                        Colonia: {{ project.ubicacion_colonia }}</li>
+                                    <li href="" class="list-group-item withripple ">
+                                        Calle: {{ project.ubicacion_calle }}</li>
+                                    <li href="" class="list-group-item withripple ">
+                                        Número: {{ project.ubicacion_numero }}</li>
+                                    <li href="" class="list-group-item withripple ">
+                                        CP: {{ project.ubicacion_cp }}</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="col-xs-6" style="padding-right: 0">
+                            <div id="map" style="height: 340px; "></div>
+                        </div>
 
 
                     </div>
@@ -146,7 +190,7 @@
                     </div>
                     <div class="card-block" style="height: 150px; padding: 0">
                         <div id="container-chart-2" style="height: 150px"></div>
-<div id="container-chart" style="height: 0px; display: none;"></div>
+                        <div id="container-chart" style="height: 0px; display: none;"></div>
 
                     </div>
                 </div>
@@ -195,14 +239,13 @@
                 title: 'Hello World!'
             });
             // To add the marker to the map, call setMap();
-marker.setMap(map);
+            marker.setMap(map);
         }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs&callback=initMap"
             async defer></script>
     <script>
         $(document).ready(function () {
-
 
 
             var myCircle = Circles.create({

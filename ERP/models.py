@@ -110,6 +110,9 @@ class Departamento(models.Model):
     descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
                                    editable=True)
 
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name_plural = 'Departamento'
 
@@ -134,6 +137,16 @@ class Departamento(models.Model):
         else:
             Logs.log("Couldn't save")
 
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Department", "Te")
+            self.last_edit_date = now()
+            super(Departamento, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
+
 
 class Area(models.Model):
     version = IntegerVersionField()
@@ -141,6 +154,9 @@ class Area(models.Model):
     descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
                                    editable=True)
     departamento = models.ForeignKey(Departamento, verbose_name="Departamento", null=False, blank=False)
+
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Area'
@@ -167,6 +183,16 @@ class Area(models.Model):
         else:
             Logs.log("Couldn't save")
 
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Empresa", "Te")
+            self.last_edit_date = now()
+            super(Area, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
+
 
 class Puesto(models.Model):
     version = IntegerVersionField()
@@ -174,6 +200,9 @@ class Puesto(models.Model):
     descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
                                    editable=True)
     area = models.ForeignKey(Area, verbose_name='Área', null=False, blank=False)
+
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Puesto'
@@ -200,6 +229,16 @@ class Puesto(models.Model):
         else:
             Logs.log("Couldn't save")
 
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Empresa", "Te")
+            self.last_edit_date = now()
+            super(Puesto, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
+
 
 class ModalidadContrato(models.Model):
     version = IntegerVersionField()
@@ -207,6 +246,9 @@ class ModalidadContrato(models.Model):
                                          editable=True)
     duracionContrato = models.CharField(verbose_name='Duración de Contrato', max_length=20, null=False, blank=False,
                                         editable=True)
+
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'ModalidadContrato'
@@ -232,6 +274,7 @@ class ModalidadContrato(models.Model):
 
         if canSave:
             Logs.log("Saving new ModalidadContrato", "Te")
+            self.last_edit_date = now()
             super(ModalidadContrato, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
@@ -256,6 +299,9 @@ class Empleado(models.Model):
     sueldo_actual = models.DecimalField(verbose_name='Sueldo Actual', decimal_places=2, blank=False, null=False,
                                         default=0, max_digits=20)
     antiguedad = models.CharField(verbose_name='Antigüedad', max_length=50, null=False, blank=False, editable=True)
+
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Empleado'
@@ -291,6 +337,7 @@ class Empleado(models.Model):
 
         if canSave:
             Logs.log("Saving new Empleado", "Te")
+            self.last_edit_date = now()
             super(Empleado, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
@@ -324,6 +371,9 @@ class Contratista(models.Model):
                                   auto_choose=True,
                                   sort=True)
 
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name_plural = 'Contratista'
 
@@ -349,6 +399,7 @@ class Contratista(models.Model):
         can_save = True
 
         if can_save:
+            self.last_edit_date = now()
             Logs.log("Saving new Contratista", "Te")
             super(Contratista, self).save(*args, **kwargs)
         else:
@@ -359,13 +410,13 @@ class Contact(models.Model):
     version = IntegerVersionField()
     contractor = models.ForeignKey(Contratista, verbose_name="Contratista", null=False, blank=True)
     name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False)
+    rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
     street = models.CharField(verbose_name="Calle", max_length=200, null=False, blank=False)
     number = models.CharField(verbose_name="Número", max_length=8, null=False, blank=False)
     colony = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
-    rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
     post_code = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
     phone_number_1 = models.CharField(verbose_name="Teléfono Principal", max_length=20, null=True, blank=True)
-    phone_number_2 = models.CharField(verbose_name="Teléfono Secundario", max_length=20, null=True, blank=True)
+    phone_number_2 = models.CharField(verbose_name="Teléfono Alternativo", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=100, null=True, blank=True)
 
     # Attribute for the Chained Keys.
@@ -435,6 +486,17 @@ class Empresa(models.Model):
                                   auto_choose=True,
                                   sort=True)
 
+    PUBLIC = "pu"
+    PRIVATE = "pr"
+
+    TYPE_CHOICES = (
+        (PUBLIC, 'Público'),
+        (PRIVATE, 'Privado'),
+    )
+
+    type = models.CharField(max_length=2, choices=TYPE_CHOICES, default=PUBLIC, verbose_name="Tipo")
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Empresa'
@@ -463,6 +525,7 @@ class Empresa(models.Model):
 
         if canSave:
             Logs.log("Saving new Empresa", "Te")
+            self.last_edit_date = now()
             super(Empresa, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
@@ -546,13 +609,13 @@ class ContratoContratista(models.Model):
 class Propietario(models.Model):
     version = IntegerVersionField()
     nombrePropietario = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False)
+    rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
     calle = models.CharField(verbose_name="Calle", max_length=200, null=False, blank=False)
     numero = models.CharField(verbose_name="Número", max_length=8, null=False, blank=False)
     colonia = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
     # municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
     # estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
     # pais = models.ForeignKey(Pais, verbose_name="pais", null=False, blank=False)
-    rfc = models.CharField(verbose_name='RFC', max_length=20, null=True, blank=True, editable=True)
     cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
     telefono1 = models.CharField(verbose_name="Teléfono Principal", max_length=20, null=True, blank=True)
     telefono2 = models.CharField(verbose_name="Teléfono Secundario", max_length=20, null=True, blank=True)
@@ -669,14 +732,13 @@ class Project(models.Model):
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
-
+    fecha_inicial = models.DateField(default=None, null=False)
+    fecha_final = models.DateField(default=None, null=False)
+    tipo_construccion = models.ForeignKey(TipoConstruccion, verbose_name="Tipo de construcción", null=False,
+                                          blank=False)
     portada = models.FileField(blank=True, null=True, upload_to=cover_file_document_destination,
                                verbose_name="Foto de Portada")
 
-    fecha_inicial = models.DateTimeField(default=None, null=False)
-    fecha_final = models.DateTimeField(default=None, null=False)
-    tipo_construccion = models.ForeignKey(TipoConstruccion, verbose_name="Tipo de construcción", null=False,
-                                          blank=False)
     ubicacion_calle = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
     ubicacion_numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
@@ -824,8 +886,7 @@ class Project(models.Model):
     # tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
 
 
-
-
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Proyectos'
@@ -857,6 +918,7 @@ class Project(models.Model):
 
         if canSave:
             Logs.log("Saving new project", "Te")
+            self.last_edit_date = now()
             super(Project, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
@@ -943,6 +1005,8 @@ class LineItem(models.Model):
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
 
+    last_edit_date = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name_plural = 'Partidas'
         verbose_name = 'Partida'
@@ -961,6 +1025,16 @@ class LineItem(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.description
+
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Line Item", "Te")
+            self.last_edit_date = now()
+            super(LineItem, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 
 '''
@@ -1034,6 +1108,8 @@ class Concept_Input(models.Model):
     line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
 
+    last_edit_date = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name_plural = 'Conceptos'
         verbose_name = 'Concepto'
@@ -1044,7 +1120,8 @@ class Concept_Input(models.Model):
         ans['id'] = str(self.id)
         ans['unit'] = str(self.unit.name)
         ans['quantity'] = str(self.quantity)
-        ans['unitPrice'] = str(self.unit_price)
+        ans['unit_price'] = str(self.unit_price)
+
         return ans
 
     def __str__(self):
@@ -1052,6 +1129,16 @@ class Concept_Input(models.Model):
 
     def __unicode__(self):
         return self.description
+
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Concept - Input", "Te")
+            self.last_edit_date = now()
+            super(Concept_Input, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 
 '''
@@ -1078,6 +1165,9 @@ class Estimate(models.Model):
                                       verbose_name="Concepto / Insumo"
                                       )
 
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name_plural = 'Estimaciones'
 
@@ -1100,6 +1190,17 @@ class Estimate(models.Model):
             concept_input_display = self.concept_input.description
 
         return "Partida: " + line_item_display + " Concepto: " + concept_input_display + " Periodo: " + str(self.period)
+
+
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Estimate", "Te")
+            self.last_edit_date = now()
+            super(Estimate, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 
 '''
@@ -1135,6 +1236,11 @@ class ProgressEstimate(models.Model):
                                            max_digits=20)
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
                                       verbose_name="Archivo del Generador", blank=True)
+
+
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
+
     RETAINER = "R"
     PROGRESS = "P"
     ESTIMATE = "E"
@@ -1165,6 +1271,16 @@ class ProgressEstimate(models.Model):
     def __unicode__(self):
         return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
 
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Empresa", "Te")
+            self.last_edit_date = now()
+            super(ProgressEstimate, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
+
 
 '''
     Model for handling the progress estimate log.
@@ -1178,6 +1294,9 @@ class ProgressEstimateLog(models.Model):
     description = models.TextField(verbose_name="Descripción", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=now(), null=True, verbose_name="Fecha")
+
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Bitácoras'
@@ -1195,6 +1314,16 @@ class ProgressEstimateLog(models.Model):
         super(ProgressEstimateLog, self).__init__(*args, **kwargs)
         # self.user = ERPUser.objects.get(pk=1)
         # print 'user_id: ' + str(self.user.id)
+
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new Empresa", "Te")
+            self.last_edit_date = now()
+            super(ProgressEstimateLog, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 
 '''
@@ -1214,6 +1343,9 @@ class LogFile(models.Model):
                             default="")
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
+
     def to_serializable_dict(self):
         answer = model_to_dict(self)
         answer['file'] = str(self.file)
@@ -1221,6 +1353,18 @@ class LogFile(models.Model):
 
     class Meta:
         verbose_name_plural = 'Archivo de bitácoras'
+
+    def save(self, *args, **kwargs):
+        canSave = True
+
+        if canSave:
+            Logs.log("Saving new LogFile", "Te")
+            self.last_edit_date = now()
+            super(LogFile, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
+
+
 
 
 class SystemLogEntry(models.Model):
