@@ -42,55 +42,55 @@
             <div class="tab-content">
                 {% for line in fieldset %}
                     {% for field in line %}
-                        {% if field.field.name == "name" %}
-                        <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                            <div class="row">
-                                <h2 class="text-center">Datos generales</h2>
+                        {% if field.field.name == "contractor" %}
 
-                                <hr>
-                                <div class="col-md-6">
-                                    <div class="form-group field-{{ field.field.name }}">
-                                        <div>
-                                            {{ field.label_tag }}
-                                            {{ field.field|addcss:"form-control" }}
-                                            {{ field.errors }}
-                                        </div>
-                                    </div>
-                                </div>
-                        {% endif %}
-                    {% if field.field.name == "rfc" %}
-
-                            <div class="col-md-6">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
-                    {% endif %}
-                    {% if field.field.name == "email" %}
-                        <div class="row">
-                            <div class="col-md-6">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-
-
-                    {% endif %}
-                        {% if field.field.name == "phone_number_1" %}
 
                             <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control selectpicker" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% endif %}
+                        {% if field.field.name == "name" %}
+                            <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+                            <div class="row">
+                            <h2 class="text-center">Datos generales</h2>
+
+                            <hr>
+                            <div class="col-md-6">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% if field.field.name == "rfc" %}
+
+                        <div class="col-md-6">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    {% endif %}
+                        {% if field.field.name == "email" %}
+                            <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
                                         {{ field.field|addcss:"form-control" }}
                                         {{ field.errors }}
                                     </div>
@@ -99,6 +99,20 @@
 
 
                         {% endif %}
+                    {% if field.field.name == "phone_number_1" %}
+
+                        <div class="col-md-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+
+                    {% endif %}
 
                     {% if field.field.name == "phone_number_2" %}
                         <div class="col-md-3">
@@ -110,7 +124,7 @@
                                 </div>
                             </div>
                         </div>
-                     </div>
+                        </div>
                     {% endif %}
 
                         {% if field.field.name == "country" %}
