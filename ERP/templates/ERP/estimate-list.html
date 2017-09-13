@@ -45,6 +45,7 @@
                                 <th>Periodo</th>
                                 <th>Concepto/Insumo</th>
                                 <th>Partida</th>
+                                <th>Fecha de Última Edición</th>
                                 <th>Ver</th>
                                 <th>Editar</th>
                                 <th>Eliminar</th>
@@ -57,6 +58,7 @@
                                     </td>
                                     <td><span>{{ estimate.concept_input.description }}</span></td>
                                     <td><span>{{ estimate.line_item.description }}</span></td>
+                                    <td><span>{{ estimate.line_item.last_edit_date }}</span></td>
 
                                    {% comment %} <td style="width: 7%"><a href="/admin/ERP/estimate/{{ estimate.id }}"
                                                              class="btn btn-raised btn-default btn-xs">

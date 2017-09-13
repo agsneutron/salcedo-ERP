@@ -563,7 +563,7 @@ class ContratoContratista(models.Model):
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
                                            blank=False)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
-
+    last_edit_date = models.DateTimeField(auto_now_add=True)
     class Meta:
         verbose_name_plural = 'Contratos'
 
@@ -621,7 +621,7 @@ class Propietario(models.Model):
     telefono2 = models.CharField(verbose_name="Teléfono Secundario", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=100, null=True, blank=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa", null=False, blank=False)
-
+    last_edit_date = models.DateTimeField(auto_now_add=True)
     # Attribute for the Chained Keys.
     pais = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
     estado = ChainedForeignKey(Estado,

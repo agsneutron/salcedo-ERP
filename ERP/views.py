@@ -235,7 +235,7 @@ class OwnerListView(ListView):
     model = Propietario
     template_name = "ERP/owner-list.html"
     query = None
-    title_list = "Contratistas"
+    title_list = "Propietarios"
     """
        Display a Blog List page filtered by the search query.
     """

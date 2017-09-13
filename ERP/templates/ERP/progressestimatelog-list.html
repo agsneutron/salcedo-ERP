@@ -14,6 +14,7 @@
                                             <th>Nombre Proyecto</th>
                                             <th>Descripci&oacute;n</th>
                                             <th>Fecha</th>
+                                            <th>Fecha de Última Edición</th>
                                             <th>Ver</th>
                                             <th>Editar</th>
                                         </tr>
@@ -26,7 +27,7 @@
                                                  <td><span >{{ bitacora.project.nombreProyecto}}</span></td>
                                                 <td><span >{{ bitacora.description }}</span></td>
                                                 <td><span >{{ bitacora.date  }}</span></td>
-
+                                                <td><span >{{ bitacora.last_edit_date }}</span></td>
 
                                                {% comment %} <td style="width: 7%"><a href="{{ bitacora.id}}"
                                                        class="btn btn-raised btn-default btn-xs"><i
