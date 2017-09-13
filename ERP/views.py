@@ -747,3 +747,46 @@ class UploadedCatalogsHistoryAdminListView(ListView):
         context['query_string'] = '&q=' + UploadedCatalogsHistoryAdminListView.query
         context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (UploadedCatalogsHistoryAdminListView.query != "")
         return context
+
+
+# Views for the model Propietaro.
+class ContactListView(ListView):
+    model = Contact
+    template_name = "ERP/contact-list.html"
+    query = None
+    title_list = "Contactos"
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+
+    def get_queryset(self):
+        result = super(ContactListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            ContactListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(name__contains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(rfc__icontains=q) for q in query_list))
+            )
+        else:
+            ContactListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(ContactListView, self).get_context_data(**kwargs)
+        context['title_list'] = ContactListView.title_list
+        context['query'] = ContactListView.query
+        context['query_string'] = '&q=' + ContactListView.query
+        context['has_query'] = (ContactListView.query is not None) and (ContactListView.query != "")
+        return context
+
+
+class ContactDetailView(generic.DetailView):
+    model = Contact
+    template_name = "ERP/contact-detail.html"

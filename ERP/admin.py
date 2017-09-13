@@ -9,7 +9,8 @@ from django.db import transaction
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
-from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm
+from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm, \
+    ContactForm
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, \
     ProgressEstimateLogForm, OwnerForm
 
@@ -468,16 +469,6 @@ class CompanyModelAdmin(admin.ModelAdmin):
         return ModelForm
 
 
-class ContactModelAdmin(admin.ModelAdmin):
-    model = Contact
-
-    def get_fields(self, request, obj=None):
-        fields = (
-             'contractor','name', 'rfc', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
-            'street','number', 'colony', 'version')
-        return fields
-
-
 class ContactInline(admin.StackedInline):
     model = Contact
     extra = 1
@@ -505,9 +496,61 @@ class ContactInline(admin.StackedInline):
 
         return ModelForm
 
+
+@admin.register(Contact)
+class ContactModelAdmin(admin.ModelAdmin):
+    form = ContactForm
+
+
+    def get_urls(self):
+        urls = super(ContactModelAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(views.ContactListView.as_view()),
+                name='contact-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.ContactDetailView.as_view(), name='contact-detail'),
+
+        ]
+        return my_urls + urls
+
+    def get_form(self, request, obj=None, **kwargs):
+
+        ModelForm = super(ContactModelAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        pais = ModelForm.base_fields['country']
+        estado = ModelForm.base_fields['state']
+        municipio = ModelForm.base_fields['town']
+
+
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        pais.widget.can_add_related = False
+        pais.widget.can_change_related = False
+        estado.widget.can_add_related = False
+        estado.widget.can_change_related = False
+        municipio.widget.can_add_related = False
+        municipio.widget.can_change_related = False
+
+
+
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                kwargs['contratista_id'] = request.GET.get('contratista_id')
+                return ModelForm(*args, **kwargs)
+
+
+        return ModelFormMetaClass
+
+
+    def response_change(self, request, obj):
+        if '_continue' not in request.POST:
+            return HttpResponseRedirect("/admin/ERP/contratista/"+str(obj.contractor.id))
+        else:
+            return super(ContactModelAdmin, self).response_change(request, obj)
+
 @admin.register(Contratista)
 class ContractorModelAdmin(admin.ModelAdmin):
-    inlines = (ContactInline, )
+    #inlines = (ContactInline, )
 
     def get_fields(self, request, obj=None):
         fields = (
@@ -624,11 +667,22 @@ class OwnerModelAdmin(admin.ModelAdmin):
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
-                kwargs['empresa_id'] = request.GET.get('empresa_id')
+                kwargs['company_id'] = request.GET.get('empresa_id')
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
 
+    def response_change(self, request, obj):
+        if '_continue' not in request.POST:
+            return HttpResponseRedirect("/admin/ERP/empresa/"+str(obj.empresa.id))
+        else:
+            return super(OwnerModelAdmin, self).response_change(request, obj)
+
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        if '_continue' not in request.POST:
+            return HttpResponseRedirect("/admin/ERP/empresa/"+str(obj.empresa.id))
+        else:
+            return super(OwnerModelAdmin, self).response_add(request, obj, post_url_continue)
 
 @admin.register(LineItem)
 class LineItemAdmin(admin.ModelAdmin):
@@ -787,5 +841,5 @@ admin.site.register(Empleado, EmpleadoAdmin)
 # admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
-admin.site.register(Contact, ContactModelAdmin)
+#admin.site.register(Contact, ContactModelAdmin)
 admin.site.register(AccessToProject, AccessToProjectAdmin)
