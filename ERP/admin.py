@@ -11,7 +11,7 @@ from ERP import views
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, \
-    ProgressEstimateLogForm
+    ProgressEstimateLogForm, OwnerForm
 
 from django.contrib import admin
 from django.http import HttpResponseRedirect
@@ -224,7 +224,7 @@ class ContratoAdmin(admin.ModelAdmin):
             'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version')
         return fields
 
-
+'''
 class PropietarioAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombrePropietario', 'email', 'empresa', 'telefono1')
     search_fields = ('nombrePropietario', 'empresa')
@@ -253,6 +253,7 @@ class PropietarioAdmin(admin.ModelAdmin):
         municipio.widget.can_change_related = False
 
         return ModelForm
+'''
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):
@@ -457,7 +458,6 @@ class ProjectInline(admin.TabularInline):
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
-    inlines = (OwnerInline,)
 
     def get_fields(self, request, obj=None):
         fields = (
@@ -492,6 +492,17 @@ class CompanyModelAdmin(admin.ModelAdmin):
 
         return ModelForm
 
+
+class ContactModelAdmin(admin.ModelAdmin):
+    model = Contact
+
+    def get_fields(self, request, obj=None):
+        fields = (
+             'contractor','name', 'rfc', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
+            'street','number', 'colony', 'version')
+        return fields
+
+
 class ContactInline(admin.StackedInline):
     model = Contact
     extra = 1
@@ -499,7 +510,7 @@ class ContactInline(admin.StackedInline):
     def get_fields(self, request, obj=None):
         fields = (
             'name', 'rfc', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
-            'street','number', 'colony', 'version')
+            'street','number', 'colony', 'version', 'contractor')
         return fields
 
     def get_form(self, request, obj=None, **kwargs):
@@ -602,11 +613,8 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
 @admin.register(Propietario)
 class OwnerModelAdmin(admin.ModelAdmin):
-    def get_fields(self, request, obj=None):
-        fields = (
-            'nombrePropietario', 'rfc', 'empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
-            'cp', 'calle', 'numero', 'colonia', 'version',)
-        return fields
+    form = OwnerForm
+
 
     def get_urls(self):
         urls = super(OwnerModelAdmin, self).get_urls()
@@ -620,6 +628,7 @@ class OwnerModelAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def get_form(self, request, obj=None, **kwargs):
+
         ModelForm = super(OwnerModelAdmin, self).get_form(request, obj, **kwargs)
         # get the foreign key field I want to restrict
         pais = ModelForm.base_fields['pais']
@@ -637,7 +646,13 @@ class OwnerModelAdmin(admin.ModelAdmin):
         empresa.widget.can_add_related = False
         empresa.widget.can_change_related = False
 
-        return ModelForm
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                kwargs['empresa_id'] = request.GET.get('empresa_id')
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
 
 
 @admin.register(LineItem)
@@ -797,5 +812,5 @@ admin.site.register(Empleado, EmpleadoAdmin)
 # admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
-admin.site.register(Contact)
+admin.site.register(Contact, ContactModelAdmin)
 admin.site.register(AccessToProject, AccessToProjectAdmin)

@@ -4,13 +4,14 @@ from django.contrib.admin import widgets
 from django.db import models
 from django.db.models import Q
 from django.forms import SelectDateWidget
+from django.shortcuts import redirect
 from django.utils import timezone
 from users.models import ERPUser
 
 import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
-    ContratoContratista
+    ContratoContratista, Propietario, Empresa
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -188,9 +189,9 @@ class ContractForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         super(ContractForm, self).__init__(*args, **kwargs)
-        #self.fields['fecha_inicio'].widget = widgets.AdminDateWidget()
-        #self.fields['fecha_termino'].widget = widgets.AdminDateWidget()
-        #self.fields['fecha_firma'].widget = widgets.AdminDateWidget()
+        # self.fields['fecha_inicio'].widget = widgets.AdminDateWidget()
+        # self.fields['fecha_termino'].widget = widgets.AdminDateWidget()
+        # self.fields['fecha_firma'].widget = widgets.AdminDateWidget()
 
 
 class EstimateSearchForm(forms.Form):
@@ -222,3 +223,27 @@ class AddEstimateForm(forms.Form):
         AddEstimateForm.project_id = project_id
 
     project = forms.IntegerField(initial=project_id)
+
+
+class OwnerForm(forms.ModelForm):
+    empresa_id = None
+    class Meta:
+        model = Propietario
+        fields = (
+            'nombrePropietario', 'rfc','empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
+            'cp', 'calle', 'numero', 'colonia', 'version',)
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        self.empresa_id = kwargs.pop('empresa_id', None)
+
+        kwargs['initial'].update({'empresa': self.empresa_id})
+        super(OwnerForm, self).__init__(*args, **kwargs)
+        if self.empresa_id is not None:
+            #kwargs['initial'].update({'empresa': self.empresa_id})
+            self.fields['empresa'].queryset = Empresa.objects.filter(pk=self.empresa_id)
+
+    def response_add(self, request, obj, post_url_continue=None):
+        return redirect('google.com')
+
+
