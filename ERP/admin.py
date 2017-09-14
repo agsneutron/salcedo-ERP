@@ -526,6 +526,12 @@ class ContactInline(admin.StackedInline):
 class ContactModelAdmin(admin.ModelAdmin):
     form = ContactForm
 
+    def get_fields(self, request, obj=None):
+        fields = (
+            'name', 'rfc', 'contractor', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
+            'street', 'number', 'colony', 'version',)
+        return fields
+
 
     def get_urls(self):
         urls = super(ContactModelAdmin, self).get_urls()
