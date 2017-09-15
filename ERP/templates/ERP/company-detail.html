@@ -48,57 +48,95 @@
         This table shows the owner for the given company.
     {% endcomment %}
 
-    <h3>Propietarios</h3>
-    <a href="/admin/ERP/propietario/add/?empresa_id={{ empresa.id }}">Añadir Propietario</a>
-    <table>
-        <thead>
-        <td style="border:1px solid; font-weight: 700">Nombre</td>
-        <td style="border:1px solid; font-weight: 700">Correo</td>
-        <td style="border:1px solid; font-weight: 700">Telefono</td>
-        <td style="border:1px solid; font-weight: 700">Telefono 2</td>
-        <td style="border:1px solid; font-weight: 700"></td>
-        <td style="border:1px solid; font-weight: 700"></td>
-        </thead>
-        <tbody>
-        {% for owner in owners %}
-            <tr style="border:1px solid">
-                <td style="border:1px solid">{{ owner.nombrePropietario }}</td>
-                <td style="border:1px solid">{{ owner.email }}</td>
-                <td style="border:1px solid">{{ owner.telefono1 }}</td>
-                <td style="border:1px solid">{{ owner.telefono2 }}</td>
-                <td style="border:1px solid">
-                    <a href="http://localhost:8000/admin/ERP/propietario/{{ owner.id }}" target="_blank">
-                        Ver
-                    </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    <div class="col-xs-8 col-xs-offset-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">Propietarios</h3>
+                </div>
+                <div class="item-right">
 
-    <h3>Proyectos</h3>
-    <table>
-        <thead>
-        <td style="border:1px solid; font-weight: 700">Clave del Proyecto</td>
-        <td style="border:1px solid; font-weight: 700">Nombre</td>
-        <td style="border:1px solid; font-weight: 700">Ubicación</td>
-        <td style="border:1px solid; font-weight: 700">Fecha de inicio</td>
-        <td style="border:1px solid; font-weight: 700">Fecha de término</td>
-        <td style="border:1px solid; font-weight: 700"></td>
-        </thead>
-        <tbody>
-        {% for project in projects %}
-            <tr style="border:1px solid">
-                <td style="border:1px solid">{{ project.key }}</td>
-                <td style="border:1px solid">{{ project.nombreProyecto }}</td>
-                <td style="border:1px solid">{{ project.ubicacion_pais.nombrePais }}</td>
-                <td style="border:1px solid">{{ project.fecha_inicial.date }}</td>
-                <td style="border:1px solid">{{ project.fecha_final.date }}</td>
-                <td style="border:1px solid">
-                    <a href="/admin/ERP/project/{{ project.id }}" target="_blank"> Ver </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+                            <a href="/admin/ERP/propietario/add/?empresa_id={{ empresa.id }}"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: 6px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 0px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+            </div>
+            <div class="card-block text-center">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <td style="border:1px solid; font-weight: 700">Nombre</td>
+                        <td style="border:1px solid; font-weight: 700">Correo</td>
+                        <td style="border:1px solid; font-weight: 700">Telefono</td>
+                        <td style="border:1px solid; font-weight: 700">Telefono 2</td>
+                        <td style="border:1px solid; font-weight: 700">Ver</td>
+                        <td style="border:1px solid; font-weight: 700">Editar</td>
+                        </thead>
+                        <tbody>
+                        {% for owner in owners %}
+                            <tr style="border:1px solid">
+                                <td style="border:1px solid">{{ owner.nombrePropietario }}</td>
+                                <td style="border:1px solid">{{ owner.email }}</td>
+                                <td style="border:1px solid">{{ owner.telefono1 }}</td>
+                                <td style="border:1px solid">{{ owner.telefono2 }}</td>
+                                <td class="text-center" style="width: 5%"><a href="/admin/ERP/propietario/{{ owner.id }}"
+                                                                             target="_blank"
+                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                <td class="text-center" style="width: 5%"><a href="/admin/ERP/propietario/{{ owner.id }}/change"
+                                                                             target="_blank"
+                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-8 col-xs-offset-2" style="padding-bottom: 25px">
+        <div class="card">
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">Proyectos</h3>
+                </div>
+            </div>
+            <div class="card-block text-center">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                            <td style="border:1px solid; font-weight: 700">Clave del Proyecto</td>
+                            <td style="border:1px solid; font-weight: 700">Nombre</td>
+                            <td style="border:1px solid; font-weight: 700">Ubicación</td>
+                            <td style="border:1px solid; font-weight: 700">Fecha de inicio</td>
+                            <td style="border:1px solid; font-weight: 700">Fecha de término</td>
+                            <td style="border:1px solid; font-weight: 700">Ver</td>
+                        </thead>
+                        <tbody>
+                            {% for project in projects %}
+                                <tr style="border:1px solid">
+                                    <td style="border:1px solid">{{ project.key }}</td>
+                                    <td style="border:1px solid">{{ project.nombreProyecto }}</td>
+                                    <td style="border:1px solid">{{ project.ubicacion_pais.nombrePais }}</td>
+                                    <td style="border:1px solid">{{ project.fecha_inicial.date }}</td>
+                                    <td style="border:1px solid">{{ project.fecha_final.date }}</td>
+                                     <td class="text-center" style="width: 5%"><a href="/admin/ERP/project/{{ project.id }}"
+                                                                                  target="_blank"
+                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
 {% endblock %}
