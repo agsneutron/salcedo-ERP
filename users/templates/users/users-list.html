@@ -1,7 +1,23 @@
 {% extends "admin/base_site.html" %}
 
 
+
 {% block content %}
+    <style>
+    .modal .modal-content {
+        border-radius: 2px;
+        height: 70vh !important;
+    }
+
+    @media (min-width: 768px) {
+        .modal-dialog {
+            width: 65% !important;
+            /* height: 129px; */
+            margin: 30px auto;
+        }
+    }
+
+</style>
     <div id="content-main">
         <div class="row">
             <div class="col-xs-12">
@@ -53,8 +69,10 @@
                                                 <td><span>{{ user.erpuser }}</span></td>
                                                 <td class="text-center" style="width: 5%">
                                                     {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
-                                                    <a href="/admin/ERP/accesstoproject/?user={{ user.id }}" data-toggle="modal" data-target="#myModal3" class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-building color-default eliminar"></i></a>
+                                                    <a href="/admin/ERP/accesstoproject/?user={{ user.id }}"
+                                                       data-toggle="modal" data-target="#myModal3"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-building color-default eliminar"></i></a>
                                                 </td>
 
                                                 <td class="text-center" style="width: 5%"><a href="{{ user.id }}"
@@ -98,6 +116,9 @@
                         <h3 class="modal-title" id="myModalLabel3">Asignación de proyectos</h3>
                     </div>
                     <div class="modal-body">
+
+                        <a class="btn" href="http://127.0.0.1:8000/admin/ERP/accesstoproject/?user={{ user.id }}"></a>
+
                         <ul class="list-group">
                             <li class="list-group-item">
                                 <div class="form-group">
