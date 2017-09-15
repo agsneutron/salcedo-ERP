@@ -102,6 +102,25 @@ class TipoConstruccion(models.Model):
     def __unicode__(self):
         return self.nombreTipoConstruccion
 
+class Section(models.Model):
+    sectionName = models.CharField(max_length=200)
+    shortSectionName = models.CharField(max_length=50)
+
+    class Meta:
+        verbose_name_plural = 'Secciones'
+        verbose_name = 'Sección'
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['id'] = str(self.id)
+        ans['sectionName'] = self.sectionName
+        return ans
+
+    def __str__(self):
+        return self.sectionName
+
+    def __unicode__(self):
+        return self.sectionName
 
 class Departamento(models.Model):
     version = IntegerVersionField()
@@ -932,6 +951,27 @@ class Project(models.Model):
 def uploaded_catalogs_destination(instance, filename):
     return '/'.join(['carga_de_catalogos', instance.project.key, filename])
 
+
+class ProjectSections(models.Model):
+    status = models.IntegerField(verbose_name="Estatus", null=False, blank=False)
+    upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
+    # Foreign keys.
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+    section = models.ForeignKey(Section, verbose_name="Sección", null=False, blank=False)
+
+
+    def __str__(self):
+        return str(self.upload_date)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.upload_date)
+
+    class Meta:
+        verbose_name_plural = 'Secciones de Proyecto'
+        verbose_name = 'Sección de Proyecto'
+
+    def save(self, *args, **kwargs):
+        super(ProjectSections, self).save(*args, **kwargs)
 
 class UploadedCatalogsHistory(models.Model):
     version = IntegerVersionField()

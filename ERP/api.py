@@ -6,9 +6,15 @@ from django.views.generic.list import ListView
 from django.http.response import HttpResponse
 from ERP.lib import utilities
 from ERP.lib.utilities import Utilities
-from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate
+from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections
 import json
 
+
+def get_array_or_none(the_string):
+    if the_string is None or the_string=="":
+        return None
+    else:
+        return map(int, the_string.split(','))
 
 class ProjectEndpoint(View):
     def get(self, request):
@@ -40,6 +46,24 @@ class LineItemsByProject(View):
             json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
             'application/json; charset=utf-8')
 
+class SectionsByProjectSave(View):
+    def get(self, request):
+        secciones_id = get_array_or_none(request.GET.get('secciones'))
+        projectid = request.GET.get('project_id')
+        sections = ProjectSections.objects.filter(project_id=projectid,section_id__in=secciones_id)
+
+        if sections.count() == 0:
+            addPS = ProjectSections.objects.create(project_id=projectid, section=secciones_id, status=1)
+        else:
+            for section in sections:
+                section.status = 1
+                section.save()
+
+        the_list = []
+
+        return HttpResponse(
+            json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
+            'application/json; charset=utf-8')
 
 class EstimatesByLineItems(View):
     def get(self, request):
