@@ -1,0 +1,113 @@
+{% load app_filters admin_static %}
+<fieldset class=" {{ fieldset.classes }}">
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+
+    {% comment %}{% for line in fieldset %}
+        <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+            {% for field in line %}
+                <div{% if not line.fields|length_is:'1' %} class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %} class="checkbox-row"{% endif %}>
+                    {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                    {% if field.is_checkbox %}
+                        {{ field.field }}{{ field.label_tag }}
+                    {% else %}
+                        {{ field.label_tag }}
+                        {% if field.is_readonly %}
+                            <p>{{ field.contents }}</p>
+                        {% else %}
+                            {{ field.field }}
+                        {% endif %}
+                    {% endif %}
+                    {% if field.field.help_text %}
+                        <p class="help">{{ field.field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}{% endcomment %}
+
+    <div class="card ">
+        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+            <li role="presentation" class="active">
+                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                    <span class="hidden-xs">Carga de Explosión de Insumos</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="card-block">
+            <div class="tab-content">
+                {% for line in fieldset %}
+                    {% for field in line %}
+                        {% if field.field.name == "project" %}
+                            <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+                            <div class="row">
+                                <h2 class="text-center">Archivo</h2>
+
+                                <hr>
+                                <div class="col-md-12">
+                                    <div class="form-group field-{{ field.field.name }}">
+                                        <div>
+                                            {{ field.label_tag }}
+                                            {{ field.field|addcss:"form-control" }}
+                                            {{ field.errors }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                    {% if field.field.name == "file" %}
+                        <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group field-{{ field.field.name }}">
+                                {{ field.label_tag }}
+                                {{ field.errors }}
+                                {{ field.field|addcss:"form-control" }}
+                                <div class="input-group">
+
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="Seleccionar archivo...">
+                                    <span class="input-group-btn input-group-sm">
+                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                          <i class="material-icons">attach_file</i>
+                                        </button>
+                                      </span>
+                                </div>
+                            </div>
+
+
+                            {% comment %}<div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                    </div>
+                                </div>{% endcomment %}
+                        </div>
+
+                    {% endif %}
+                    {% if field.field.name == "version" %}
+                        {{ field.field|addcss:"form-control" }}
+                    {% endif %}
+
+                    </div>
+                    </div>
+
+
+
+
+                    {% endfor %}
+                {% endfor %}
+            </div>
+
+
+        </div>
+</fieldset>
+
+
+<script>
+    document.getElementById("id_line_items_file").placeholder = "Type name here..";
+</script>

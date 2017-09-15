@@ -1,6 +1,7 @@
 # Files
 *.pyc
 SalcedoERP/local_settings.py
+DataUpload/migrations/
 ERP/migrations/
 Logs/migrations/
 Users/migrations/

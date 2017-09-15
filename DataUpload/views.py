@@ -1,16 +1,22 @@
 # coding=utf-8
-import uuid
 
+from django.db import transaction
 from django.http import HttpResponse
-from django.shortcuts import render
-from django.template import RequestContext, Template
 from helper import DBObject, ErrorDataUpload
-
-from ERP.models import *
 
 
 def testView(request):
-    o = DBObject('Puebla')
-    o.save_all('/Users/josecarranza/Documents/Trabajo/Salcedo-ERP/DataUpload/ResultadoExportacion_2.xlsx')
+    o = DBObject(request.user.id)
+
+    try:
+        with transaction.atomic():
+            o.save_all('/Users/josecarranza/Documents/Trabajo/Salcedo-ERP/DataUpload/ResultadoExportacion_2.xlsx',
+                       o.INPUT_UPLOAD)
+            # o.save_all('/Users/josecarranza/Documents/Trabajo/Salcedo-ERP/DataUpload/ResultadoExportacion_Partidas.xlsx',
+            #            o.LINE_ITEM_UPLOAD)
+    except ErrorDataUpload as e:
+        e.save()
+        raise e
+
     return HttpResponse('Done')
     # return render(request, 'DataUpload/carga.html')

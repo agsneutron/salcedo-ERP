@@ -1,0 +1,32 @@
+  {% block header_list%}
+    <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">{% block title %}{{ title_list|capfirst }} {% endblock %}</h3>
+                        </div>
+                          <div class="item-right">
+
+                            <a  {% if add_url != "" %}
+                                    href="{{ add_url }}"
+                                {% else%}
+                                    href="add/"
+                                {% endif %}
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: -25px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-block">
+                        {% if title_list != "Estimación" %}
+                           {% include 'ERP/list-search-fields.html' %}
+                        {% endif %}
+                        <div class="row">
+
+                            <div class="col-xs-12">
+{% endblock %}

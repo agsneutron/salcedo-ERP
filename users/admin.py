@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
+from django.conf.urls import url
 from django.contrib import admin
 from users.models import ERPUser
 from django.contrib.auth.admin import UserAdmin
 from django.contrib.auth.models import User
-
+from users import views
+from users.views import UsersListView
 
 
 class ERPUserAdmin(admin.StackedInline):
@@ -24,8 +26,8 @@ class UsuarioAdmin(UserAdmin):
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
-        ('AuthInfo', {'fields': ('username', 'password1', 'password2')}),
         ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
+        ('AuthInfo', {'fields': ('username', 'password1', 'password2')}),
         ('Permissions', {'fields': ('is_active',)}),
     )
 
@@ -35,11 +37,20 @@ class UsuarioAdmin(UserAdmin):
 
     get_rol.short_description = "Rol de Usuario"
 
+    def get_urls(self):
+        urls = super(UsuarioAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(UsersListView.as_view()), name='users-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.UsersDetailView.as_view(), name='users-detail'),
+
+        ]
+        return my_urls + urls
+
     #  Overrriding the 'save' method so the user can have the 'staff' status and access the system.
     def save_model(self, request, obj, form, change):
         obj.is_staff = True
-        print "Obj is:"
-        print obj.erpuser
+
         obj.save()
 
         super(UsuarioAdmin, self).save_model(request, obj, form, change)

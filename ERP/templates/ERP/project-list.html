@@ -1,0 +1,258 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+{% block extrastyle %}{{ block.super }}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
+    <script type="text/javascript" src="{% static "ERP/admin/assets/ajax/project_section.js"%}"></script>
+{% endblock %}
+
+{% block content %}
+    <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
+                        </div>
+                        <div class="item-right">
+
+                            <a href="add/"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: -25px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 1px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-block">
+
+
+                        {% include 'ERP/list-search-fields.html' %}
+
+                        <div class="row">
+                            <br>
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Clave</th>
+                                            <th>Empresa Cliente</th>
+                                            <th>Inicio</th>
+                                            <th>Termino</th>
+                                            <th>Fecha de Última Edición</th>
+                                            <th>Configurar</th>
+                                            <th>Ver</th>
+                                            <th>Editar</th>
+                                            <th>Dashboard</th>
+                                        </tr>
+                                        </thead>
+                                        {% for project in object_list %}
+                                            <tr>
+
+
+                                                {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                <td><span>{{ project.nombreProyecto }}</span></td>
+                                                <td><span>{{ project.key }}</span></td>
+                                                <td><span>{{ project.empresa }}</span></td>
+                                                <td><span>{{ project.fecha_inicial }}</span></td>
+                                                <td><span>{{ project.fecha_final }}</span></td>
+                                                <td><span >{{ project.last_edit_date }}</span></td>
+
+
+                                                {% comment %}   <td style="width: 7%"><a href="{{ project.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-search color-default eliminar"></i> Ver</a></td>
+                                                <td style="width: 9%"><a href="{{ project.id }}/change"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
+                                                <td style="width: 2%"><a href="/admin/ERP/project/dashboard/{{ project.id }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-tachometer color-danger eliminar" style="margin-right: 0"></i> Dashboard</a>
+                                                </td>{% endcomment %}
+                                                <td class="text-center" style="width: 5%">
+                                                    {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
+                                                    <a href="" data-toggle="modal" data-target="#myModal3"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-tasks color-default eliminar"></i></a>
+                                                </td>
+
+
+                                                <td class="text-center" style="width: 5%"><a href="{{ project.id }}"
+                                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 5%"><a
+                                                        href="{{ project.id }}/change"
+                                                        class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                <td class="text-center" style="width: 2%"><a
+                                                        href="/admin/ERP/project/dashboard/{{ project.id }}"
+                                                        class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-tachometer color-danger eliminar"></i></a>
+                                                </td>
+                                                {% empty %}
+                                                <td>No existen {{ title_list }}</td>
+                                            </tr>
+                                        {% endfor %}
+                                    </table>
+                                </div>
+
+                                {% include 'ERP/list-pagination.html' %}
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+            <div class="modal-dialog animated zoomIn animated-3x" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                        <h3 class="modal-title" id="myModalLabel3">Asignación de segmentos</h3>
+                    </div>
+                    <div class="modal-body">
+                         {% include 'ERP/list-pagination.html' %}
+                         <div class="col-xs-6">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="togle-label col-xs-9">
+                                            Proyecto
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="checkSegment" id="proyecto" value="1" checked="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="togle-label col-xs-9">
+                                            Ubicación
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="checkSegment" id="ubicacion" value="2" checked="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="togle-label col-xs-9">
+                                            Estado Legal
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="checkSegment" id="estadoLegal" value="3" checked="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="togle-label col-xs-9">
+                                            Restricciones
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="checkSegment" id="restricciones" value="4" checked="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-6">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="togle-label col-xs-9">
+                                            Análisis
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="checkSegment" id="analisis1" value="5" checked="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="togle-label col-xs-9">
+                                            Análisis II
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="checkSegment" id="analisis2" value="6" checked="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="togle-label col-xs-9">
+                                            Costo/Mercado
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="radioSegment" id="costo-mercado" value="7" checked="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="list-group-item">
+                                    <div class="form-group">
+                                        <div class="togle-label col-xs-9">
+                                            Programa
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <div class="togglebutton">
+                                                <label>
+                                                    <input type="checkbox" name="checkSegment" id="programa" value="8" checked="">
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+
+
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button id = "guardaSegmento" type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

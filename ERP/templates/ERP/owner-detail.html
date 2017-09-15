@@ -1,0 +1,65 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+    {% comment %}    <h1>Nombre: {{ propietario.nombrePropietario }}  <a href="change">Editar</a></h1>
+        <ul>
+            <li>Empresa: {{ propietario.empresa }}</li>
+            <li>RFC: {{ propietario.rfc }}</li>
+            <li>Correo Electrónico: {{ propietario.email }}</li>
+            <li>Teléfono Principal: {{ propietario.telefono1 }}</li>
+            <li>Teléfono Secundario: {{ propietario.telefono2 }}</li>
+            <li>Estado: {{ propietario.estado }}</li>
+            <li>Muncipio: {{ propietario.municipio }}</li>
+            <li>Calle: {{ propietario.calle }}</li>
+            <li>Número: {{ propietario.numero }}</li>
+            <li>Colonia: {{ propietario.colonia }}</li>
+        </ul>{% endcomment %}
+
+    {% comment %}  <h1>Nombre: {{ propietario.nombrePropietario }}  <a href="change">Editar</a></h1>
+        <ul>{% endcomment %}
+
+    <div class="col-xs-8 col-xs-offset-2">
+        <div class="card card-info">
+            <div class="card-block text-center">
+                <div class="row">
+                <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i
+                        class="zmdi zmdi-city-alt"></i></span>
+                    <h3 class="color-info">Nombre: {{ propietario.nombrePropietario }} </h3>
+                    <div class="col-xs-6 text-left">
+
+                         <span href="" class="list-group-item withripple "><i
+                                 class="fa fa-chevron-right color-active"></i> Empresa: {{ propietario.empresa }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> RFC: {{ propietario.rfc }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> Correo Electrónico: {{ propietario.email }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> Teléfono Principal: {{ propietario.telefono1 }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> Teléfono Secundario: {{ propietario.telefono2 }}</span>
+                    </div>
+                    <div class="col-xs-6 text-left">
+
+                      <span href="" class="list-group-item withripple "><i
+                              class="fa fa-chevron-right color-active"></i> Estado: {{ propietario.estado }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> Muncipio: {{ propietario.municipio }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> Calle: {{ propietario.calle }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> Número: {{ propietario.numero }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> Colonia: {{ propietario.colonia }}</span>
+                    </div>
+                </div>
+
+
+                <a href="change" class="btn btn-raised btn-danger"><i class="fa fa-pencil"></i> Editar</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
