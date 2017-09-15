@@ -29,6 +29,7 @@
 
                     <div class="card-block">
 
+                        <input type="text" name="projectID" id="projectID" hidden>
 
                         {% include 'ERP/list-search-fields.html' %}
 
@@ -74,11 +75,13 @@
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-tachometer color-danger eliminar" style="margin-right: 0"></i> Dashboard</a>
                                                 </td>{% endcomment %}
+
                                                 <td class="text-center" style="width: 5%">
+
                                                     {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
                                                     <a href="" data-toggle="modal" data-target="#myModal3"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-tasks color-default eliminar"></i></a>
+                                                       class="btn btn-raised btn-default btn-xs" ><i
+                                                            class="fa fa-tasks color-default eliminar" onClick="configura_segmentos({{ project.id }})" ></i></a>
                                                 </td>
 
 
@@ -161,7 +164,7 @@
                                         <div class="col-xs-3">
                                             <div class="togglebutton">
                                                 <label>
-                                                    <input type="checkbox" name="checkSegment" id="estadoLegal" value="3" checked="">
+                                                    <input type="checkbox" name="checkSegment" id="estadoLegal" value="3" >
                                                 </label>
                                             </div>
                                         </div>
@@ -175,7 +178,7 @@
                                         <div class="col-xs-3">
                                             <div class="togglebutton">
                                                 <label>
-                                                    <input type="checkbox" name="checkSegment" id="restricciones" value="4" checked="">
+                                                    <input type="checkbox" name="checkSegment" id="restricciones" value="4" >
                                                 </label>
                                             </div>
                                         </div>
@@ -193,7 +196,7 @@
                                         <div class="col-xs-3">
                                             <div class="togglebutton">
                                                 <label>
-                                                    <input type="checkbox" name="checkSegment" id="analisis1" value="5" checked="">
+                                                    <input type="checkbox" name="checkSegment" id="analisis1" value="5" >
                                                 </label>
                                             </div>
                                         </div>
@@ -207,7 +210,7 @@
                                         <div class="col-xs-3">
                                             <div class="togglebutton">
                                                 <label>
-                                                    <input type="checkbox" name="checkSegment" id="analisis2" value="6" checked="">
+                                                    <input type="checkbox" name="checkSegment" id="analisis2" value="6" >
                                                 </label>
                                             </div>
                                         </div>
@@ -221,7 +224,7 @@
                                         <div class="col-xs-3">
                                             <div class="togglebutton">
                                                 <label>
-                                                    <input type="checkbox" name="radioSegment" id="costo-mercado" value="7" checked="">
+                                                    <input type="checkbox" name="radioSegment" id="costo-mercado" value="7" >
                                                 </label>
                                             </div>
                                         </div>
@@ -235,7 +238,7 @@
                                         <div class="col-xs-3">
                                             <div class="togglebutton">
                                                 <label>
-                                                    <input type="checkbox" name="checkSegment" id="programa" value="8" checked="">
+                                                    <input type="checkbox" name="checkSegment" id="programa" value="8" >
                                                 </label>
                                             </div>
                                         </div>

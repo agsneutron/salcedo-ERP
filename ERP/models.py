@@ -954,7 +954,7 @@ def uploaded_catalogs_destination(instance, filename):
 
 class ProjectSections(models.Model):
     status = models.IntegerField(verbose_name="Estatus", null=False, blank=False)
-    upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
+    last_edit_date = models.DateTimeField(auto_now_add=True)
     # Foreign keys.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     section = models.ForeignKey(Section, verbose_name="Sección", null=False, blank=False)
