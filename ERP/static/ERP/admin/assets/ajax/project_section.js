@@ -7,7 +7,7 @@ $(document).on('ready', function() {
      Only do the cleanup if the field didn't contain a value already
      this is used for the edit form
      */
-
+    $('#guardaSegmento').on('click', guardaSegmento);
 
 });
 
@@ -36,7 +36,6 @@ function configura_segmentos(project_id){
             data: ajaxData,
             type: 'get',
             success: function(data) {
-                alert("correcto");
                 checkBoxesByProject(data);
             },
             error: function(data) {
@@ -47,9 +46,20 @@ function configura_segmentos(project_id){
 }
 
 function checkBoxesByProject(respuesta){
-    for (var i = 0; i < respuesta.length; i++) {
-        if (respuesta[i].status==1){
-            $(respuesta[i].shortSectionName).attr("checked");
+    if (respuesta.project_sections.length>0) {
+        for (var i = 0; i < respuesta.project_sections.length; i++) {
+            elemento = eval(respuesta.project_sections[i].shortSectionName);
+            if (parseInt(respuesta.project_sections[i].status) == 1) {
+                elemento.checked = true;
+            }
+            else{
+                elemento.checked = false;
+            }
+        }
+    }else{
+        for (var i = 2; i < respuesta.sections.length; i++) {
+           elemento = eval(respuesta.sections[i].shortSectionName);
+           elemento.checked = false;
         }
     }
 }
