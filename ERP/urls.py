@@ -21,5 +21,8 @@ urlpatterns = [
     url(r'^api/line_items_by_projects', api.LineItemsByProject.as_view()),
     url(r'^api/estimates_by_line_item', api.EstimatesByLineItems.as_view(), ),
     url(r'^api/financial_physical_progress_report', api.FinancialHistoricalProgressReport.as_view(), ),
+    url(r'^api/sections_for_project_save', api.SectionsByProjectSave.as_view()),
+    url(r'^api/sections_by_project', api.SectionsByProjectEndpoint.as_view()),
+
 
 ]

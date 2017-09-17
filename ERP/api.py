@@ -1,3 +1,6 @@
+# coding=utf-8
+from __future__ import unicode_literals
+
 from decimal import Decimal
 from django.db.models import F
 from django.db.models import Q, Count, Sum
@@ -6,9 +9,15 @@ from django.views.generic.list import ListView
 from django.http.response import HttpResponse
 from ERP.lib import utilities
 from ERP.lib.utilities import Utilities
-from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate
+from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections
 import json
 
+
+def get_array_or_none(the_string):
+    if the_string is None or the_string=="":
+        return None
+    else:
+        return map(int, the_string.split(','))
 
 class ProjectEndpoint(View):
     def get(self, request):
@@ -40,6 +49,81 @@ class LineItemsByProject(View):
             json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
             'application/json; charset=utf-8')
 
+class SectionsByProjectEndpoint(View):
+    def get(self, request):
+        projectid = request.GET.get('project_id')
+        psections = ProjectSections.objects.filter(project_id=projectid)
+        the_list = []
+
+        for psection in psections:
+            new_item = {
+                'id': psection.id,
+                'shortSectionName': unicode(psection.section.shortSectionName),
+                'status':psection.status
+            }
+            the_list.append(new_item)
+
+        return HttpResponse(
+            json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
+            'application/json; charset=utf-8')
+
+
+
+class SectionsByProjectSave(View):
+    def get(self, request):
+        secciones_id = get_array_or_none(request.GET.get('secciones'))
+        no_seleccionados = get_array_or_none(request.GET.get('noseleccionados'))
+        projectid = request.GET.get('project_id')
+        sections = ProjectSections.objects.filter(project_id=projectid,section_id__in=secciones_id)
+
+        if sections.count() == 0:
+            for section in secciones_id:
+                addPS = ProjectSections.objects.create(project_id=projectid, section_id=section, status=1)
+        else:
+            for section in secciones_id:
+                addPS = ProjectSections.objects.filter(project_id=projectid,section_id=section)
+                if addPS.count() == 0:
+                    addPSN = ProjectSections.objects.create(project_id=projectid, section_id=section, status=1)
+                else:
+                    addPSS = ProjectSections.objects.filter(project_id=projectid, section_id=section).get(section_id=section)
+                    if addPSS:
+                        addPSS.status = 1
+                        addPSS.save()
+                    else:
+                        addPSN = ProjectSections.objects.create(project_id=projectid, section_id=section, status=1)
+
+        #no seleccionados
+        sections = ProjectSections.objects.filter(project_id=projectid, section_id__in=no_seleccionados)
+
+        if sections.count() == 0:
+            for section in no_seleccionados:
+                addPS = ProjectSections.objects.create(project_id=projectid, section_id=section, status=0)
+        else:
+            for section in no_seleccionados:
+                addPS = ProjectSections.objects.filter(project_id=projectid, section_id=section)
+                if addPS.count() == 0:
+                    addPSN = ProjectSections.objects.create(project_id=projectid, section_id=section, status=0)
+                else:
+                    addPSS = ProjectSections.objects.filter(project_id=projectid, section_id=section).get(
+                        section_id=section)
+                    if addPSS:
+                        addPSS.status = 0
+                        addPSS.save()
+                    else:
+                        addPSN = ProjectSections.objects.create(project_id=projectid, section_id=section, status=0)
+
+
+        the_list = []
+        new_item = {
+            'codigo_respuesta': 0,
+            'mensaje': 'Se guardó correctamente la información'
+        }
+
+        the_list.append(new_item)
+
+        return HttpResponse(
+            json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
+            'application/json; charset=utf-8')
 
 class EstimatesByLineItems(View):
     def get(self, request):
