@@ -1,17 +1,19 @@
-{% extends "admin/base_site.html" %}
+
 
 
 {% block content %}
     <div id="content-main">
         <div class="row">
             <div class="col-xs-12">
+                <br><br>
                 <div class="card">
                     <div class="card-header">
+
                         <div class="item-left">
                             <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
                         </div>
-                          <div class="item-right">
-                            <a href="add/?user={% for project in object_list %}{{ project.user_id }}{% endfor %}"
+                        <div class="item-right">
+                            <a href="{% comment %}http://127.0.0.1:8000/admin/auth/user/add/?user={{ user.id }}{% endcomment %}"
                                class="btn-circle btn-circle-raised btn-circle-success"
                                style="margin: -4px 1px;top: -25px;">
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
@@ -24,13 +26,13 @@
                         {% include 'ERP/list-search-fields.html' %}
                         <div class="row">
                             <div class="col-xs-12"> Usuario:
-                             {% for project in object_list %}
-                                 {{ project.user }}
-                             {% endfor %}
+                                {% for project in object_list %}
+                                    {{ project.user }}
+                                {% endfor %}
                             </div>
                         </div>
                         <div class="row">
-                         <br>
+                            <br>
                             <div class="col-xs-12">
                                 <div class="table-responsive">
 
@@ -47,11 +49,12 @@
                                             <tr>
 
 
-                                               {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
 
-                                                <td><span >{{ project.project }}</span></td>
-                                                <td class="text-center" style="width: 2%"><a href="{{ company.id }}/delete"
-                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                <td><span>{{ project.project }}</span></td>
+                                                <td class="text-center" style="width: 2%"><a
+                                                        href="{{ company.id }}/delete"
+                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-trash-o color-danger eliminar"></i></a>
                                                 </td>
 
@@ -66,7 +69,22 @@
 
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="card">
+ {% comment %}------ bloque para boton de agregar acceso a proyectos ------------{% endcomment %}
 
+
+
+    {% include "http://127.0.0.1:8000/admin/auth/user/add/?user={{user.id}}" %}
+
+
+
+
+{% comment %}------ bloque para boton de agregar acceso a proyectos ------------{% endcomment %}
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
 

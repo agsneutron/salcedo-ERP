@@ -12,6 +12,7 @@ from django.urls.base import reverse
 from django.views import generic
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
+from django.views.generic.edit import CreateView
 
 from ERP.forms import EstimateSearchForm, AddEstimateForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \

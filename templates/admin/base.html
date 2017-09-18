@@ -9,8 +9,8 @@
 
 
     <style>
-        .calendarbox.module{
-            z-index:99999999;
+        .calendarbox.module {
+            z-index: 99999999;
         }
     </style>
 
@@ -104,7 +104,7 @@
                     <li class="dropdown active">
                         <a href="/admin"
                            class="dropdown-toggle animated fadeIn animation-delay-4 text-center"
-                            data-hover="dropdown" data-name="home">
+                           data-hover="dropdown" data-name="home">
                             <i class="fa fa-home text-center"></i><br>
                             Inicio
                         </a>
@@ -323,7 +323,8 @@
             {% endif %}
 
         {% endblock messages %}
-<a onclick="goBack()" class="btn-circle btn-circle-default" style="position: absolute;top: 0;left: 2%;"><i class="fa fa-arrow-left"></i></a>
+        <a onclick="goBack()" class="btn-circle btn-circle-default" style="position: absolute;top: 0;left: 2%;"><i
+                class="fa fa-arrow-left"></i></a>
     </nav>
 {% endif %}
 
@@ -357,24 +358,40 @@
 </div>
 
 
-            <div id="user-tools">
-            <div class="ms-slidebar sb-slidebar sb-left sb-style-overlay" id="ms-slidebar">
-            <div class="sb-slidebar-container">
+<div id="user-tools">
+    <div class="ms-slidebar sb-slidebar sb-left sb-style-overlay" id="ms-slidebar">
+        <div class="sb-slidebar-container">
             <header class="ms-slidebar-header">
                 <div class="ms-slidebar-login">
 
                 </div>
                 <div class="ms-slidebar-title">
                     <div class="ms-slidebar-t">
-                        <i class="mr-1 zmdi zmdi-account-circle zmdi-hc-3x" style="color: white;    padding-top: 3px;"></i>
-                        <h3>
+                        {% comment %}<i class="mr-1 zmdi zmdi-account-circle zmdi-hc-4x" style="color: white;padding-top: 3px;"></i>
+                         <h3>
                             {% block welcome-msg %}
-                                &nbsp;{% trans 'Bienvenido &nbsp;' %}
+                                &nbsp;{% trans 'Bienvenido, &nbsp;' %}
                                 <span class="">{% firstof user.get_short_name user.get_username %}</span>&nbsp;
                                 &nbsp;<span class="orange-circle"> <span class="xcontainer"> <span
                                     class="xicon"></span></span></span></a>
                             {% endblock %}
                         </h3>
+                        {% endcomment %}
+
+
+                        <div class="avatar">
+                            <img alt="" src="{% static "ERP/admin/img/user1.jpeg" %}">
+                            <h3 style="margin-top: 0 !important">
+                            {% block welcome-msg %}
+                                &nbsp;{% trans 'Bienvenido, &nbsp;' %}
+                                <span class="">{% firstof user.get_short_name user.get_username %}</span>&nbsp;
+                                &nbsp;<span class="orange-circle"> <span class="xcontainer"> <span
+                                    class="xicon"></span></span></span></a>
+                            {% endblock %}
+                        </h3>
+                        </div>
+
+
                     </div>
                 </div>
             </header>
@@ -408,24 +425,24 @@
 
             </ul>
 
-{% block nav-global %}{% endblock %}
-</div>
-</div>
-
-
-<!-- Begins Footer -->
-{% block footer %}
-    <footer class="ms-footer" id="footer">
-        <div class="container">
-            <p>Copyright &copy; Salcedo ERP 2017</p>
+            {% block nav-global %}{% endblock %}
         </div>
-    </footer>
-{% endblock %}
+    </div>
 
-<script>
-function goBack() {
-    window.history.back();
-}
-</script>
+
+    <!-- Begins Footer -->
+    {% block footer %}
+        <footer class="ms-footer" id="footer">
+            <div class="container">
+                <p>Copyright &copy; Salcedo ERP 2017</p>
+            </div>
+        </footer>
+    {% endblock %}
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 </body>
 </html>
