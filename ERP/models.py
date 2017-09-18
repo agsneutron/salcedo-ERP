@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 
 from concurrency.fields import IntegerVersionField
 import os
+
+from django.db.models.query_utils import Q
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -102,25 +104,6 @@ class TipoConstruccion(models.Model):
     def __unicode__(self):
         return self.nombreTipoConstruccion
 
-class Section(models.Model):
-    sectionName = models.CharField(max_length=200)
-    shortSectionName = models.CharField(max_length=50)
-
-    class Meta:
-        verbose_name_plural = 'Secciones'
-        verbose_name = 'Sección'
-
-    def to_serializable_dict(self):
-        ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['sectionName'] = self.sectionName
-        return ans
-
-    def __str__(self):
-        return self.sectionName
-
-    def __unicode__(self):
-        return self.sectionName
 
 class Departamento(models.Model):
     version = IntegerVersionField()
@@ -867,6 +850,7 @@ class Project(models.Model):
     equipamiento_a500 = models.CharField(verbose_name="da 500", max_length=200, null=True, blank=True)
     equipamiento_regional = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
 
+    # Fields required for the 'Costo' report in the 'Costo / Mercado' section.
     costo_predio = models.DecimalField(verbose_name='costo del predio', decimal_places=2, blank=True, null=True,
                                        default=0, max_digits=20)
     costo_m2 = models.DecimalField(verbose_name='m2', decimal_places=2, blank=True, null=True, default=0,
@@ -875,15 +859,21 @@ class Project(models.Model):
                                            default=0, max_digits=20)
     costo_levantamiento = models.DecimalField(verbose_name='levantamiento m2', decimal_places=2, blank=True,
                                               null=True, default=0, max_digits=20)
+
+    # Fields required for the 'Estudio del Mercado' report in the 'Costo / Mercado' section.
     estudiomercado_demanda = models.CharField(verbose_name="Demanda", max_length=200, null=True, blank=True)
     estudiomercado_oferta = models.CharField(verbose_name="Oferta", max_length=200, null=True, blank=True)
     estudiomercado_conclusiones = models.CharField(verbose_name="Conlusiones", max_length=200, null=True, blank=True)
     estudiomercado_recomendaciones = models.CharField(verbose_name="Recomendaciones", max_length=200, null=True,
                                                       blank=True)
+
+    # Fields required for the 'DEfinición del Proyecto' report in the 'Costo / Mercado' section.
     definicionproyecto_alternativa = models.CharField(verbose_name="Alernativa", max_length=200, null=True, blank=True)
     definicionproyecto_tamano = models.CharField(verbose_name="Tamaño", max_length=200, null=True, blank=True)
     definicionproyecto_programa = models.CharField(verbose_name="Programa", max_length=200, null=True, blank=True)
 
+
+    # Fields required for the 'Programas y Áreas' report in the 'Programa' section.
     programayarea_areaprivativa = models.DecimalField(verbose_name='area privada', decimal_places=2, blank=True,
                                                       null=True, default=0, max_digits=20)
     programayarea_caseta = models.DecimalField(verbose_name='caseta', decimal_places=2, blank=True, null=True,
@@ -896,17 +886,19 @@ class Project(models.Model):
                                                   default=0, max_digits=20)
     programayarea_estacionamientovisita = models.DecimalField(verbose_name='estacionamiento visita', decimal_places=2,
                                                               blank=True, null=True, default=0, max_digits=20)
+
+    # Fields required for the 'Afectacion' report in the 'Costo / Mercado' section.
     programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=True, null=True,
                                                    default=0, max_digits=20)
     programayarea_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination,
-                                               verbose_name="Documento de programa y área")
+        verbose_name="Documento de programa y área")
     latitud = models.FloatField(default=0, blank=True, null=True, )
     longitud = models.FloatField(default=0, blank=True, null=True, )
 
-    # tipoProyectoDetalle = models.ManyToManyField(TipoProyectoDetalle,null=True,blank=True, )
-
-
     last_edit_date = models.DateTimeField(auto_now_add=True)
+
+    # Many to many to create the project / section relation.
+    sections = models.ManyToManyField('Section', through='ProjectSections', name='Secciones')
 
     class Meta:
         verbose_name_plural = 'Proyectos'
@@ -937,6 +929,18 @@ class Project(models.Model):
             canSave = False
 
         if canSave:
+
+            # Creating the sections for each saved project.
+            sections = Section.objects.all()
+            for section in sections:
+                saved_section = ProjectSections.objects.filter(Q(project=self) & Q(section=section))
+
+                # If no record was found for the specific section.
+                if not saved_section.exists():
+                    project_section = ProjectSections(project=self, section=section, last_edit_date=now(), status=1)
+                    print "Saving..."
+                    project_section.save()
+
             Logs.log("Saving new project", "Te")
             self.last_edit_date = now()
             super(Project, self).save(*args, **kwargs)
@@ -944,13 +948,28 @@ class Project(models.Model):
             Logs.log("Couldn't save")
 
 
-'''
-    Model and upload function to the catalogs (lineitem|concepts) history.
-'''
 
+class Section(models.Model):
+    sectionName = models.CharField(max_length=200)
+    shortSectionName = models.CharField(max_length=50)
+    parent_section = models.ForeignKey('Section',  blank=True, default=None, null=True)
 
-def uploaded_catalogs_destination(instance, filename):
-    return '/'.join(['carga_de_catalogos', instance.project.key, filename])
+    class Meta:
+        verbose_name_plural = 'Secciones'
+        verbose_name = 'Sección'
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['id'] = str(self.id)
+        ans['sectionName'] = self.sectionName
+        return ans
+
+    def __str__(self):
+        return self.sectionName + " - " + self.shortSectionName
+
+    def __unicode__(self):
+        return self.sectionName + " - " + self.shortSectionName
+
 
 
 class ProjectSections(models.Model):
@@ -962,10 +981,10 @@ class ProjectSections(models.Model):
 
 
     def __str__(self):
-        return str(self.upload_date)
+        return str(self.project.key + " - " + self.section.sectionName)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.upload_date)
+        return str(self.project.key + " - " + self.section.sectionName)
 
     class Meta:
         verbose_name_plural = 'Secciones de Proyecto'
@@ -973,6 +992,15 @@ class ProjectSections(models.Model):
 
     def save(self, *args, **kwargs):
         super(ProjectSections, self).save(*args, **kwargs)
+
+
+'''
+    Model and upload function to the catalogs (lineitem|concepts) history.
+'''
+
+def uploaded_catalogs_destination(instance, filename):
+    return '/'.join(['carga_de_catalogos', instance.project.key, filename])
+
 
 class UploadedCatalogsHistory(models.Model):
     version = IntegerVersionField()
@@ -1282,11 +1310,9 @@ class ProgressEstimate(models.Model):
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
-    RETAINER = "R"
     PROGRESS = "P"
     ESTIMATE = "E"
     TYPE_CHOICES = (
-        (RETAINER, 'Adelanto'),
         (PROGRESS, 'Avance'),
         (ESTIMATE, 'Estimado'),
     )

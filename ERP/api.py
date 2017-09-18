@@ -51,31 +51,29 @@ class LineItemsByProject(View):
 
 class SectionsByProjectEndpoint(View):
     def get(self, request):
-        projectid = request.GET.get('project_id')
-        psections = ProjectSections.objects.filter(project_id=projectid)
-        sections = Section.objects.all()
-        #the_list = []
-        the_list = {'project_sections': [],
-                    'sections':[]}
+        project_id = request.GET.get('project_id')
 
-        for psection in psections:
-            new_item = {
-                'id': psection.id,
-                'shortSectionName': unicode(psection.section.shortSectionName),
-                'status':psection.status
-            }
-            the_list['project_sections'].append(new_item)
-
+        response = []
+        sections = ProjectSections.objects.filter(Q(project_id=project_id) & Q(section__parent_section=None))
         for section in sections:
-            new_item = {
-                'id': section.id,
-                'shortSectionName': unicode(section.shortSectionName),
-            }
-            the_list['sections'].append(new_item)
 
-        return HttpResponse(
-            json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
-            'application/json; charset=utf-8')
+            temp_json = {
+                "section_id": section.id,
+                "section_name": section.section.sectionName,
+                "status": section.status,
+                "inner_sections": []
+
+            }
+            inner_sections = ProjectSections.objects.filter(Q(project_id=project_id) & Q(section__parent_section__id=section.section.id))
+            for inner_section in inner_sections:
+                temp_json["inner_sections"].append({
+                    "section_id": inner_section.id,
+                    "section_name": inner_section.section.sectionName,
+                    "status": inner_section.status,
+                })
+            response.append(temp_json)
+
+        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
 
 
 
@@ -134,6 +132,8 @@ class SectionsByProjectSave(View):
         return HttpResponse(
             json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
             'application/json; charset=utf-8')
+
+
 
 class EstimatesByLineItems(View):
     def get(self, request):
