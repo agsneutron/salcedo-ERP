@@ -35,6 +35,7 @@
                                             <th>Municipio</th>
                                             <th>Estado</th>
                                             <th>Teléfono</th>
+                                            <th>Fecha de Última Edición</th>
                                             <th>Ver</th>
                                             <th>Editar</th>
                                             <th>Eliminar</th>
@@ -48,7 +49,7 @@
                                                         <td><span >{{ contractor.municipio }}</span></td>
                                                         <td><span >{{ contractor.estado  }}</span></td>
                                                         <td><span >{{ contractor.telefono }}</span></td>
-
+                                                        <td><span >{{ contractor.last_edit_date }}</span></td>
 
                                                 <td class="text-center" style="width: 5%"><a href="{{ contractor.id }}"
                                                        class="btn btn-raised btn-default btn-xs"><i

@@ -42,20 +42,6 @@
             <div class="tab-content">
                 {% for line in fieldset %}
                     {% for field in line %}
-                        {% if field.field.name == "contractor" %}
-
-
-                            <div class="col-md-3">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control selectpicker" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-
-                        {% endif %}
                         {% if field.field.name == "name" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                             <div class="row">
@@ -74,16 +60,29 @@
                         {% endif %}
                     {% if field.field.name == "rfc" %}
 
-                        <div class="col-md-6">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
+                            <div class="col-md-3">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        </div>
+
+                    {% endif %}
+                        {% if field.field.name == "contractor" %}
+
+                            <div class="col-md-3">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                     {% endif %}
                         {% if field.field.name == "email" %}
                             <div class="row">

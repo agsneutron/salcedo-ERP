@@ -44,61 +44,103 @@
         </div>
 
 
-
     </div>
 
-    <h3>Contactos del Contratista</h3>
 
-    <table>
-        <thead>
-            <td style="border:1px solid; font-weight: 700">Nombre</td>
-            <td style="border:1px solid; font-weight: 700">Correo</td>
-            <td style="border:1px solid; font-weight: 700">RFC</td>
-            <td style="border:1px solid; font-weight: 700">Teléfono</td>
-            <td style="border:1px solid; font-weight: 700">Teléfono 2</td>
-            <td style="border:1px solid; font-weight: 700"></td>
-        </thead>
-        <tbody>
-        {% for contact in contacts%}
-            <tr style="border:1px solid">
-                <td style="border:1px solid">{{ contact.name }}</td>
-                <td style="border:1px solid">{{ contact.email }}</td>
-                <td style="border:1px solid">{{ contact.rfc }}</td>
-                <td style="border:1px solid">{{ contact.phone_number_1 }}</td>
-                <td style="border:1px solid">{{ contact.phone_number_2 }}</td>
-                <td style="border:1px solid">
-                    <a href="/admin/ERP/contact/{{ contact.id }}/">Ver</a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+    {% comment %}
+        This table shows the Contacts for the given Contract.
+    {% endcomment %}
 
-    <h3>Proyectos</h3>
-    <table>
-        <thead>
-            <td style="border:1px solid; font-weight: 700">Clave del Proyecto</td>
-            <td style="border:1px solid; font-weight: 700">Nombre</td>
-            <td style="border:1px solid; font-weight: 700">Ubicación</td>
-            <td style="border:1px solid; font-weight: 700">Fecha de inicio</td>
-            <td style="border:1px solid; font-weight: 700">Fecha de término</td>
-            <td style="border:1px solid; font-weight: 700"></td>
-        </thead>
-        <tbody>
-        {% for contract in contracts%}
-            <tr style="border:1px solid">
-                <td style="border:1px solid">{{ contract.project.key }}</td>
-                <td style="border:1px solid">{{ contract.project.nombreProyecto }}</td>
-                <td style="border:1px solid">{{ contract.project.ubicacion_pais.nombrePais}}</td>
-                <td style="border:1px solid">{{ contract.project.fecha_inicial.date }}</td>
-                <td style="border:1px solid">{{ contract.project.fecha_final.date }}</td>
-                <td style="border:1px solid">
-                    <a href="/admin/ERP/project/{{ contract.project.id }}" target="_blank"> Ver </a>
-                </td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+
+    <div class="col-xs-8 col-xs-offset-2">
+        <div class="card">
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">Contactos del Contratista</h3>
+                </div>
+                <div class="item-right">
+
+                            <a href="/admin/ERP/contact/add/?contratista_id={{ contratista.id }}"
+                               class="btn-circle btn-circle-raised btn-circle-success"
+                               style="margin: -4px 1px;top: 6px;">
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
+                                          style="font-size: 24px;margin: 0px 10px 0px 3px;"></i>
+                            </a>
+                        </div>
+            </div>
+            <div class="card-block text-center">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <td>Nombre</td>
+                        <td>Correo</td>
+                        <td>RFC</td>
+                        <td>Teléfono</td>
+                        <td>Teléfono 2</td>
+                        <td>Ver</td>
+                        <td>Editar</td>
+                        </thead>
+                        <tbody>
+                        {% for contact in contacts %}
+                            <tr>
+                                <td>{{ contact.name }}</td>
+                                <td>{{ contact.email }}</td>
+                                <td>{{ contact.rfc }}</td>
+                                <td>{{ contact.phone_number_1 }}</td>
+                                <td>{{ contact.phone_number_2 }}</td>
+                                <td class="text-center" style="width: 5%"><a href="/admin/ERP/contact/{{ contact.id }}/"
+                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                <td class="text-center" style="width: 5%"><a href="/admin/ERP/contact/{{ contact.id }}/change"
+                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                        class="fa fa-pencil color-default eliminar"></i></a></td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="col-xs-8 col-xs-offset-2" style="padding-bottom: 25px">
+        <div class="card">
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">Proyectos</h3>
+                </div>
+            </div>
+            <div class="card-block text-center">
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead>
+                        <td>Clave del Proyecto</td>
+                        <td>Nombre</td>
+                        <td>Ubicación</td>
+                        <td>Fecha de inicio</td>
+                        <td>Fecha de término</td>
+                        <td>Ver</td>
+                        </thead>
+                        <tbody>
+                        {% for contract in contracts %}
+                            <tr>
+                                <td>{{ contract.project.key }}</td>
+                                <td>{{ contract.project.nombreProyecto }}</td>
+                                <td>{{ contract.project.ubicacion_pais.nombrePais }}</td>
+                                <td>{{ contract.project.fecha_inicial.date }}</td>
+                                <td>{{ contract.project.fecha_final.date }}</td>
+                                <td class="text-center" style="width: 5%"><a href="/admin/ERP/project/{{ contract.project.id }}"
+                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                        class="fa fa-eye color-default eliminar"></i></a></td>
+
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 {% endblock %}

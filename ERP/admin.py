@@ -20,7 +20,7 @@ from django.http import HttpResponseRedirect
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
 from ERP.views import CompaniesListView, ContractorListView, ProjectListView, ProgressEstimateLogListView, \
-    EstimateListView, UploadedInputExplotionsHistoryListView, UploadedCatalogsHistoryAdminListView
+    EstimateListView, UploadedInputExplotionsHistoryListView, UploadedCatalogsHistoryAdminListView, AccessToProjectAdminListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
@@ -266,6 +266,31 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 class AccessToProjectAdmin(admin.ModelAdmin):
     model = AccessToProject
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(AccessToProjectAdmin, self).get_form(request, obj, **kwargs)
+        # get the foreign key field I want to restrict
+        user = ModelForm.base_fields['user']
+        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        user.widget.can_add_related = False
+        user.widget.can_change_related = False
+
+        return ModelForm
+
+    def response_add(self, request, obj, post_url_continue=None):
+        user_id = request.GET.get('user')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/ERP/accesstoproject/?user=' + user_id)
+        else:
+            return super(AccessToProjectAdmin, self).response_add(request, obj, post_url_continue)
+
+    def get_urls(self):
+        urls = super(AccessToProjectAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', self.admin_site.admin_view(AccessToProjectAdminListView.as_view()),
+                name='accesstoproject-list-view'),
+        ]
+        return my_urls + urls
+
 
 class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
     model = UploadedCatalogsHistory
@@ -500,6 +525,12 @@ class ContactInline(admin.StackedInline):
 @admin.register(Contact)
 class ContactModelAdmin(admin.ModelAdmin):
     form = ContactForm
+
+    def get_fields(self, request, obj=None):
+        fields = (
+            'name', 'rfc', 'contractor', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
+            'street', 'number', 'colony', 'version',)
+        return fields
 
 
     def get_urls(self):
