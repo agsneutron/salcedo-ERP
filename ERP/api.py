@@ -58,18 +58,18 @@ class SectionsByProjectEndpoint(View):
         for section in sections:
 
             temp_json = {
-                "section_id": section.id,
-                "section_name": section.section.sectionName,
-                "status": section.status,
+                "project_section_id": section.id,
+                "project_section_name": section.section.sectionName,
+                "project_section_status": section.status,
                 "inner_sections": []
 
             }
             inner_sections = ProjectSections.objects.filter(Q(project_id=project_id) & Q(section__parent_section__id=section.section.id))
             for inner_section in inner_sections:
                 temp_json["inner_sections"].append({
-                    "section_id": inner_section.id,
-                    "section_name": inner_section.section.sectionName,
-                    "status": inner_section.status,
+                    "project_section_id": inner_section.id,
+                    "project_section_name": inner_section.section.sectionName,
+                    "project_section_status": inner_section.status,
                 })
             response.append(temp_json)
 
