@@ -61,8 +61,9 @@
                 <div class="item-right">
 
                             <a href="/admin/ERP/contact/add/?contratista_id={{ contratista.id }}"
+                               data-toggle="modal" data-target="#myModal3
                                class="btn-circle btn-circle-raised btn-circle-success"
-                               style="margin: -4px 1px;top: 6px;">
+                               style="margin: -1px 1px;top: -20px;">
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
                                           style="font-size: 24px;margin: 0px 10px 0px 3px;"></i>
                             </a>
@@ -129,8 +130,9 @@
                                 <td>{{ contract.project.ubicacion_pais.nombrePais }}</td>
                                 <td>{{ contract.project.fecha_inicial.date }}</td>
                                 <td>{{ contract.project.fecha_final.date }}</td>
-                                <td class="text-center" style="width: 5%"><a href="/admin/ERP/project/{{ contract.project.id }}"
-                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                <td class="text-center" style="width: 5%"><a
+                                        href="/admin/ERP/project/{{ contract.project.id }}"
+                                        class="btn btn-raised btn-default btn-xs"><i
                                         class="fa fa-eye color-default eliminar"></i></a></td>
 
                             </tr>
@@ -142,7 +144,26 @@
         </div>
     </div>
 
+    <div class="modal" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+        <div class="modal-dialog animated zoomIn animated-3x full-screen" role="document">
+            <div class="modal-content full-height">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                    <h3 class="modal-title" id="myModalLabel3">Asignación de proyectos</h3>
+                </div>
+                <div class="modal-body">
 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    </div>
 {% endblock %}
 
 
