@@ -847,6 +847,7 @@ class Project(models.Model):
     equipamiento_a200 = models.CharField(verbose_name="a 200", max_length=200, null=True, blank=True)
     equipamiento_a500 = models.CharField(verbose_name="da 500", max_length=200, null=True, blank=True)
     equipamiento_regional = models.CharField(verbose_name="regional", max_length=200, null=True, blank=True)
+
     costo_predio = models.DecimalField(verbose_name='costo del predio', decimal_places=2, blank=True, null=True,
                                        default=0, max_digits=20)
     costo_m2 = models.DecimalField(verbose_name='m2', decimal_places=2, blank=True, null=True, default=0,
