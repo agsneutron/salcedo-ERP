@@ -702,3 +702,9 @@ ul { padding-left:20px; list-style:none; }
     border-radius: 50%;
     border: 2px solid rgba(255,255,255,0.5);
 }
+.full-screen {
+        width: 90% !important;
+}
+.full-height {
+        height: 90vh !important;
+}
