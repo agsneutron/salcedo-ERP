@@ -9,7 +9,7 @@ from django.views.generic.list import ListView
 from django.http.response import HttpResponse
 from ERP.lib import utilities
 from ERP.lib.utilities import Utilities
-from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections
+from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections,Section
 import json
 
 
@@ -53,7 +53,10 @@ class SectionsByProjectEndpoint(View):
     def get(self, request):
         projectid = request.GET.get('project_id')
         psections = ProjectSections.objects.filter(project_id=projectid)
-        the_list = []
+        sections = Section.objects.all()
+        #the_list = []
+        the_list = {'project_sections': [],
+                    'sections':[]}
 
         for psection in psections:
             new_item = {
@@ -61,7 +64,14 @@ class SectionsByProjectEndpoint(View):
                 'shortSectionName': unicode(psection.section.shortSectionName),
                 'status':psection.status
             }
-            the_list.append(new_item)
+            the_list['project_sections'].append(new_item)
+
+        for section in sections:
+            new_item = {
+                'id': section.id,
+                'shortSectionName': unicode(section.shortSectionName),
+            }
+            the_list['sections'].append(new_item)
 
         return HttpResponse(
             json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
