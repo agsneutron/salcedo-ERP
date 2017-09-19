@@ -708,3 +708,11 @@ ul { padding-left:20px; list-style:none; }
 .full-height {
         height: 90vh !important;
 }
+ .icon-container {
+     margin: 2px 1px !important;
+    top: -25px;
+ }
+ .center-icon{
+    font-size: 24px !important;
+    margin: 1px 11px 3px 3px !important;
+ }
