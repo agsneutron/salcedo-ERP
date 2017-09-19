@@ -51,7 +51,10 @@
 
 {% block field_sets %}
 {% for fieldset in adminform %}
-  {% include "admin/ERP/contact/fieldset.html" %}
+    <div  style="">
+     {% include "admin/ERP/contact/fieldset.html" %}
+    </div>
+
 {% endfor %}
 {% endblock %}
 

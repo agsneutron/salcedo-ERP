@@ -706,7 +706,7 @@ ul { padding-left:20px; list-style:none; }
         width: 90% !important;
 }
 .full-height {
-        height: 90vh !important;
+        height: 100vh !important;
 }
  .icon-container {
      margin: 2px 1px !important;
