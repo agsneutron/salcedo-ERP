@@ -717,3 +717,28 @@ ul { padding-left:20px; list-style:none; }
     font-size: 24px !important;
     margin: 1px 11px 3px 3px !important;
  }
+ .panel {
+    border: 1px solid #ddd;
+}
+ .panel-default>.panel-heading+.panel-collapse>.panel-body {
+    background-color: #fdfdfd;
+}
+ .divide-item {
+         border-top: 1px solid #e2e2e2 !important;
+    margin: 6px 0 2px !important;
+ }
+ .panel .panel-body {
+    padding: 10px;
+}
+ .ms-collapse .panel .panel-heading .panel-title a {
+    display: block;
+    color: #424242;
+    font-family: Roboto,sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+
+    line-height: 0px;
+
+    padding: 10px 10px;
+    position: relative;
+}

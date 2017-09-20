@@ -4,7 +4,7 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
-    <script type="text/javascript" src="{% static "ERP/admin/assets/ajax/project_section.js"%}"></script>
+    <script type="text/javascript" src="{% static "ERP/admin/assets/ajax/project_section.js" %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -20,9 +20,9 @@
 
                             <a href="add/"
                                class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container"
-                               >
+                            >
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"
-                                          ></i>
+                            ></i>
                             </a>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
                                                 <td><span>{{ project.empresa }}</span></td>
                                                 <td><span>{{ project.fecha_inicial }}</span></td>
                                                 <td><span>{{ project.fecha_final }}</span></td>
-                                                <td><span >{{ project.last_edit_date }}</span></td>
+                                                <td><span>{{ project.last_edit_date }}</span></td>
 
 
                                                 {% comment %}   <td style="width: 7%"><a href="{{ project.id }}"
@@ -80,8 +80,9 @@
 
                                                     {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
                                                     <a href="" data-toggle="modal" data-target="#myModal3"
-                                                       class="btn btn-raised btn-default btn-xs" ><i
-                                                            class="fa fa-tasks color-default eliminar" onClick="configura_segmentos({{ project.id }})" ></i></a>
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-tasks color-default eliminar"
+                                                            onClick="configura_segmentos({{ project.id }})"></i></a>
                                                 </td>
 
 
@@ -125,133 +126,104 @@
                         <h3 class="modal-title" id="myModalLabel3">Asignación de segmentos</h3>
                     </div>
                     <div class="modal-body">
-                         {% include 'ERP/list-pagination.html' %}
-                         <div class="col-xs-6">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="form-group">
-                                        <div class="togle-label col-xs-9">
-                                            Proyecto
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="togglebutton">
-                                                <label>
-                                                    <input type="checkbox" name="checkSegment" id="proyecto" value="1" checked="">
-                                                </label>
+                        <div class="col-xs-6">
+                            <div class="panel-group ms-collapse" id="accordion" role="tablist"
+                                 aria-multiselectable="true">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                        <h4 class="panel-title ms-rotate-icon">
+                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                               data-parent="#accordion" href="#collapseOne" aria-expanded="false"
+                                               aria-controls="collapseOne">
+                                                <i class="zmdi zmdi-attachment-alt"></i> Proyectos
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel"
+                                         aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            <div>
+                                                Proyectos
+                                                <div class="togglebutton" style="float: right">
+                                                    <label>
+                                                        <input type="checkbox" name="checkSegment" id="proyecto"
+                                                               value="1"
+                                                               checked="">
+                                                    </label>
+                                                </div>
                                             </div>
+
                                         </div>
                                     </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="form-group">
-                                        <div class="togle-label col-xs-9">
-                                            Ubicación
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="togglebutton">
-                                                <label>
-                                                    <input type="checkbox" name="checkSegment" id="ubicacion" value="2" checked="">
-                                                </label>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingTwo">
+                                        <h4 class="panel-title ms-rotate-icon">
+                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                               data-parent="#accordion" href="#collapseTwo" aria-expanded="false"
+                                               aria-controls="collapseTwo">
+                                                <i class="zmdi zmdi-attachment-alt"></i> Ubicación
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
+                                         aria-labelledby="headingTwo">
+                                        <div class="panel-body">
+                                            <div>
+                                                Ubicación
+                                                <div class="togglebutton" style="float: right">
+                                                    <label>
+                                                        <input type="checkbox" name="checkSegment" id="proyecto"
+                                                               value="1"
+                                                               checked="">
+                                                    </label>
+                                                </div>
                                             </div>
+                                            <hr class="divide-item">
+                                            <div>
+                                                Áreas
+                                                <div class="togglebutton" style="float: right">
+                                                    <label>
+                                                        <input type="checkbox" name="checkSegment" id="proyecto"
+                                                               value="1"
+                                                               checked="">
+                                                    </label>
+                                                </div>
+                                            </div>
+
                                         </div>
                                     </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="form-group">
-                                        <div class="togle-label col-xs-9">
-                                            Estado Legal
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="togglebutton">
-                                                <label>
-                                                    <input type="checkbox" name="checkSegment" id="estadoLegal" value="3" >
-                                                </label>
-                                            </div>
+                                </div>
+                                <div class="panel panel-default">
+                                    <div class="panel-heading" role="tab" id="headingThree">
+                                        <h4 class="panel-title ms-rotate-icon">
+                                            <a class="collapsed" role="button" data-toggle="collapse"
+                                               data-parent="#accordion" href="#collapseThree" aria-expanded="false"
+                                               aria-controls="collapseThree">
+                                                <i class="zmdi zmdi-attachment-alt"></i> otro
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
+                                         aria-labelledby="headingThree">
+                                        <div class="panel-body">
+                                            ...
                                         </div>
                                     </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="form-group">
-                                        <div class="togle-label col-xs-9">
-                                            Restricciones
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="togglebutton">
-                                                <label>
-                                                    <input type="checkbox" name="checkSegment" id="restricciones" value="4" >
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+                                </div>
+                            </div>
+
+
                         </div>
                         <div class="col-xs-6">
-                            <ul class="list-group">
-                                <li class="list-group-item">
-                                    <div class="form-group">
-                                        <div class="togle-label col-xs-9">
-                                            Análisis
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="togglebutton">
-                                                <label>
-                                                    <input type="checkbox" name="checkSegment" id="analisis1" value="5" >
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="form-group">
-                                        <div class="togle-label col-xs-9">
-                                            Análisis II
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="togglebutton">
-                                                <label>
-                                                    <input type="checkbox" name="checkSegment" id="analisis2" value="6" >
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="form-group">
-                                        <div class="togle-label col-xs-9">
-                                            Costo/Mercado
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="togglebutton">
-                                                <label>
-                                                    <input type="checkbox" name="radioSegment" id="costomercado" value="7" >
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li class="list-group-item">
-                                    <div class="form-group">
-                                        <div class="togle-label col-xs-9">
-                                            Programa
-                                        </div>
-                                        <div class="col-xs-3">
-                                            <div class="togglebutton">
-                                                <label>
-                                                    <input type="checkbox" name="checkSegment" id="programa" value="8" >
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
+
                         </div>
 
-
                     </div>
+                    <div class="clearfix"></div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                        <button id = "guardaSegmento" type="button" class="btn btn-primary">Guardar</button>
+                        <button id="guardaSegmento" type="button" class="btn btn-primary">Guardar</button>
                     </div>
                 </div>
             </div>
