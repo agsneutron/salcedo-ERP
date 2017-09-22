@@ -498,7 +498,7 @@ class ProjectDetailView(generic.DetailView):
                 section_json["inner_sections"].append(inner_json)
             sections_result.append(section_json)
         print sections_result
-
+        context['sections_result'] = sections_result
 
         print str(project_obj.documento_propiedad.name).split("/")[-1]
 

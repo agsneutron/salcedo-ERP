@@ -72,12 +72,12 @@
                                 </div>
                                 </div>
                                 <div class="col-xs-6" style="padding-left: 0">
-                                    <a href="{% static "ERP/admin/img/proyecto1.jpg" %}" data-lightbox="image-1"
+                                    <a href="/media/{{ project.portada }}" data-lightbox="image-1"
                                        data-title="{{ project.nombreProyecto }}">
                                         <div class="thumbnail-container" style="height: 340px;
                                                 background-position: center center;
                                                 background-repeat: no-repeat;
-                                                background-size: cover;background-image: url('{% static "ERP/admin/img/proyecto1.jpg" %}')">
+                                                background-size: cover;background-image: url('/media/{{ project.portada }}')">
 
                                         </div>
                                     </a>
@@ -87,18 +87,18 @@
                                         <h4 class="color-active">Generales</h4>
                                         <ul class="list-group">
                                             <li href="" class="list-group-item withripple ">
-                                                Clave de Proyecto: {{ project.key }} </li>
+                                                <b>Clave de Proyecto:</b> {{ project.key }} </li>
                                             <li href="" class="list-group-item withripple ">
-                                                Propietario: {{ project.propietario }} </li>
+                                                <b>Propietario:</b> {{ project.propietario }} </li>
                                             <li href="" class="list-group-item withripple ">
-                                                Fecha de Inicio: {{ project.fecha_inicial }}
+                                                <b>Fecha de Inicio:</b> {{ project.fecha_inicial }}
                                             </li>
                                             <li href="" class="list-group-item withripple ">
-                                                Fecha de Termino: {{ project.fecha_final }}
+                                                <b>Fecha de Termino:</b> {{ project.fecha_final }}
                                             </li>
                                             <li href="" class="list-group-item withripple ">
-                                                Tipo de
-                                                Contrucción: {{ project.tipo_construccion }}</li>
+                                                <b>Tipo de
+                                                Contrucción:</b> {{ project.tipo_construccion }}</li>
                                         </ul>
 
                                     </div>
@@ -113,7 +113,7 @@
 
                                 </div>
 
-                            {% endfor %}
+
                     <hr>
                     {% comment %}<div class="btn-group btn-group-justified btn-group-raised ">
                         <a href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/" class="btn btn-info"
@@ -142,6 +142,7 @@
 
                 </div>
             </div>
+
             <div class="col-xs-6">
                 <div class="card">
                     <div class="card-header ">
@@ -155,27 +156,27 @@
 
                                 <ul class="list-group">
                                     <li class="list-group-item withripple ">
-                                        País: {{ project.ubicacion_pais }}</li>
+                                        <b>País:</b> {{ project.ubicacion_pais }}</li>
                                     <li class="list-group-item withripple ">
-                                        Estado: {{ project.ubicacion_estado }}</li>
+                                        <b>Estado:</b> {{ project.ubicacion_estado }}</li>
                                     <li href="" class="list-group-item withripple ">
-                                        Municipio: {{ project.ubicacion_municipio }}
+                                        <b>Municipio:</b> {{ project.ubicacion_municipio }}
                                     </li>
                                     <li href="" class="list-group-item withripple ">
-                                        Colonia: {{ project.ubicacion_colonia }}</li>
+                                        <b>Colonia:</b> {{ project.ubicacion_colonia }}</li>
                                     <li href="" class="list-group-item withripple ">
-                                        Calle: {{ project.ubicacion_calle }}</li>
+                                        <b>Calle:</b> {{ project.ubicacion_calle }}</li>
                                     <li href="" class="list-group-item withripple ">
-                                        Número: {{ project.ubicacion_numero }}</li>
+                                        <b>Número:</b> {{ project.ubicacion_numero }}</li>
                                     <li href="" class="list-group-item withripple ">
-                                        CP: {{ project.ubicacion_cp }}</li>
+                                        <b>CP:</b> {{ project.ubicacion_cp }}</li>
                                 </ul>
                             </div>
                         </div>
                         <div class="col-xs-6" style="padding-right: 0">
                             <div id="map" style="height: 340px; "></div>
                         </div>
-
+ {% endfor %}
 
                     </div>
                 </div>
