@@ -128,7 +128,7 @@ function toggleCheckbox(element)
 
      var welChild = $(clasec);
      var welParent = $(clasep);
-alert(clasep);
+    //alert(clasep);
     // check event on parent checkbox
     welParent.on('check', function(e){
       // remove ambiguous;
