@@ -9,15 +9,17 @@ from django.views.generic.list import ListView
 from django.http.response import HttpResponse
 from ERP.lib import utilities
 from ERP.lib.utilities import Utilities
-from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections,Section
+from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections, Section, \
+    AccessToProject
 import json
 
 
 def get_array_or_none(the_string):
-    if the_string is None or the_string=="":
+    if the_string is None or the_string == "":
         return None
     else:
         return map(int, the_string.split(','))
+
 
 class ProjectEndpoint(View):
     def get(self, request):
@@ -49,6 +51,7 @@ class LineItemsByProject(View):
             json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
             'application/json; charset=utf-8')
 
+
 class SectionsByProjectEndpoint(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
@@ -64,7 +67,8 @@ class SectionsByProjectEndpoint(View):
                 "inner_sections": []
 
             }
-            inner_sections = ProjectSections.objects.filter(Q(project_id=project_id) & Q(section__parent_section__id=section.section.id))
+            inner_sections = ProjectSections.objects.filter(
+                Q(project_id=project_id) & Q(section__parent_section__id=section.section.id))
             for inner_section in inner_sections:
                 temp_json["inner_sections"].append({
                     "project_section_id": inner_section.id,
@@ -76,31 +80,31 @@ class SectionsByProjectEndpoint(View):
         return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
 
 
-
 class SectionsByProjectSave(View):
     def get(self, request):
         secciones_id = get_array_or_none(request.GET.get('secciones'))
         no_seleccionados = get_array_or_none(request.GET.get('noseleccionados'))
         projectid = request.GET.get('project_id')
-        sections = ProjectSections.objects.filter(project_id=projectid,section_id__in=secciones_id)
+        sections = ProjectSections.objects.filter(project_id=projectid, section_id__in=secciones_id)
 
         if sections.count() == 0:
             for section in secciones_id:
                 addPS = ProjectSections.objects.create(project_id=projectid, section_id=section, status=1)
         else:
             for section in secciones_id:
-                addPS = ProjectSections.objects.filter(project_id=projectid,section_id=section)
+                addPS = ProjectSections.objects.filter(project_id=projectid, section_id=section)
                 if addPS.count() == 0:
                     addPSN = ProjectSections.objects.create(project_id=projectid, section_id=section, status=1)
                 else:
-                    addPSS = ProjectSections.objects.filter(project_id=projectid, section_id=section).get(section_id=section)
+                    addPSS = ProjectSections.objects.filter(project_id=projectid, section_id=section).get(
+                        section_id=section)
                     if addPSS:
                         addPSS.status = 1
                         addPSS.save()
                     else:
                         addPSN = ProjectSections.objects.create(project_id=projectid, section_id=section, status=1)
 
-        #no seleccionados
+        # no seleccionados
         sections = ProjectSections.objects.filter(project_id=projectid, section_id__in=no_seleccionados)
 
         if sections.count() == 0:
@@ -120,7 +124,6 @@ class SectionsByProjectSave(View):
                     else:
                         addPSN = ProjectSections.objects.create(project_id=projectid, section_id=section, status=0)
 
-
         the_list = []
         new_item = {
             'codigo_respuesta': 0,
@@ -132,7 +135,6 @@ class SectionsByProjectSave(View):
         return HttpResponse(
             json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
             'application/json; charset=utf-8')
-
 
 
 class EstimatesByLineItems(View):
@@ -168,33 +170,70 @@ class EstimatesByLineItems(View):
 
 class FinancialHistoricalProgressReport(View):
     def get(self, request):
-        project_id = request.GET.get('project_id')
+        project_id = request.GET.get('project_id')  # The project for which we will make the report.
+
         line_items = LineItem.objects.filter(project_id=project_id)
         type = 'C'
 
         response = []
-        structured_response = []
+        structured_response = {}
+        structured_line_items = []
         parent_keys = {}
         line_item_general_programmed = {}
         line_item_general_estimated = {}
+
+        global_total_programmed = 0
+        global_total_estimated = 0
 
         for line_item in line_items:
             temp_concepts = Concept_Input.objects.filter(Q(type=type) & Q(line_item_id=line_item.id))
 
             parent_line_item_key = LineItem.objects.filter(pk=line_item.parent_line_item_id)
 
-            tem_obj = {"key": line_item.key, "parent_key": parent_line_item_key}
+            tem_obj = {"key": line_item.key, "parent_key": parent_line_item_key, 'name': line_item.description}
 
+            # Check if line item has parent
             if len(parent_line_item_key) > 0:
+                # There's a parent, assing it's information
                 tem_obj['parent_key'] = parent_line_item_key[0].key
                 parent_keys[str(line_item.key)] = str(parent_line_item_key[0].key)
                 is_sub_line_item = True
             else:
+                # There's no parent, leave empty
                 tem_obj['parent_key'] = ''
                 parent_keys[str(line_item.key)] = ''
                 is_sub_line_item = False
 
-            line_item_concepts = []
+            concepts = []
+            # Get concepts info
+            for concept in temp_concepts:
+
+                concept_info = {
+                    'concept_key': concept.key,
+                    'total_programmed': str(concept.unit_price * concept.quantity)
+                }
+
+                estimated = ProgressEstimate.objects.filter(estimate__concept_input_id=concept.id).values(
+                    'estimate__concept_input_id').annotate(Count('estimate__concept_input_id'),
+                                                           total_estimated=Sum('amount'))
+
+                if estimated.exists():
+                    total_estimated = estimated[0]['total_estimated']
+                    concept_info['total_estimated'] = str(total_estimated)
+                    concept_info['total_pending'] = str(
+                        Decimal(concept_info['total_programmed']) - Decimal(concept_info['total_estimated']))
+
+                    if str(line_item.key) not in line_item_general_estimated.keys():
+                        line_item_general_estimated[str(line_item.key)] = 0
+                        line_item_general_estimated[str(line_item.key)] = line_item_general_estimated[
+                                                                              str(line_item.key)] + total_estimated
+                else:
+                    concept_info['total_estimated'] = '0.00'
+                    concept_info['total_pending'] = concept_info['total_programmed']
+
+                concepts.append(concept_info)
+
+            tem_obj['concepts'] = concepts
 
             programmed = temp_concepts.values('line_item_id').annotate(Count('line_item_id'),
                                                                        total_programmed=Sum(
@@ -204,11 +243,6 @@ class FinancialHistoricalProgressReport(View):
                 'estimate__concept_input__line_item_id').annotate(Count('estimate__concept_input__line_item_id'),
                                                                   total_estimated=Sum('amount'))
 
-            # for concept in temp_concepts:
-            #     line_item_concepts.append(concept.to_serializable_dict())
-
-            # tem_obj['concepts'] = line_item_concepts
-
             if programmed.exists():
                 total_programmed = programmed[0]['total_programmed']
                 if str(line_item.key) not in line_item_general_programmed.keys():
@@ -216,6 +250,7 @@ class FinancialHistoricalProgressReport(View):
                 line_item_general_programmed[str(line_item.key)] = line_item_general_programmed[
                                                                        str(line_item.key)] + total_programmed
                 tem_obj['total_programmed'] = str(total_programmed)
+                global_total_programmed = global_total_programmed + total_programmed
             else:
                 tem_obj['total_programmed'] = '0.00'
 
@@ -224,6 +259,8 @@ class FinancialHistoricalProgressReport(View):
                 tem_obj['total_estimated'] = str(total_estimated)
                 tem_obj['total_pending'] = str(
                     Decimal(tem_obj['total_programmed']) - Decimal(tem_obj['total_estimated']))
+
+                global_total_estimated = global_total_estimated + total_estimated
 
                 if str(line_item.key) not in line_item_general_estimated.keys():
                     line_item_general_estimated[str(line_item.key)] = 0
@@ -234,7 +271,6 @@ class FinancialHistoricalProgressReport(View):
                 tem_obj['total_pending'] = tem_obj['total_programmed']
 
             response.append(tem_obj)
-
 
         for element in response:
             temp_parent_key = element['parent_key']
@@ -274,7 +310,20 @@ class FinancialHistoricalProgressReport(View):
 
                 element['sub_line_items'] = sub_line_items
 
-                structured_response.append(element)
+                structured_line_items.append(element)
+
+            structured_response['line_items'] = structured_line_items
+            structured_response['global_total_programmed'] = str(global_total_programmed)
+            structured_response['global_total_estimated'] = str(global_total_estimated)
+            structured_response['global_total_pending'] = str(global_total_programmed - global_total_estimated)
 
         return HttpResponse(
             Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
+
+
+class AccessToProjectByUser(View):
+    def get(self, request):
+        user_id = request.GET.get('user_id')
+        accesses =AccessToProject.objects.filter(user_id=user_id)
+
+        return HttpResponse(Utilities.query_set_to_dumps(accesses),'application/json; charset=utf-8')

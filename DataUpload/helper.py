@@ -310,7 +310,8 @@ class DBObject(object):
         concept_description = record[self.ConceptConstants.CONCEPT_DESCRIPTION_COL].encode('utf-8')
         unit = record[self.ConceptConstants.UNIT_COL].encode('utf-8')
         quantity = Decimal(record[self.ConceptConstants.QUANTITY_COL].replace(',', ''))
-        unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL][1:].replace(',', ''))
+        # unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL][1:].replace(',', ''))
+        unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL].replace(',', ''))
 
         # Check if the unit exists. If not, add it.
         unit_qs = Unit.objects.filter(abbreviation=unit.upper())
