@@ -66,7 +66,7 @@ function putSections(data){
         sHTML = sHTML + '   <h4 class="panel-title ms-rotate-icon">';
         sHTML = sHTML + '   <div class="togglebutton" style="position: relative">';
         sHTML = sHTML + '       <label class="switch-right">';
-        sHTML = sHTML + '           <input onchange="toggleCheckbox(this)" class = "parent-' + i + '" type="checkbox" name="checkSegment" id="'+ data[i].project_section_name+'" value="'+ data[i].project_section_id +'"  '  +chk+ '>';
+        sHTML = sHTML + '           <input onchange="toggleCheckboxParent(this)" class = "parent-' + i + '" type="checkbox" name="checkSegment" id="'+ data[i].project_section_name+'" value="'+ data[i].project_section_id +'"  '  +chk+ '>';
         sHTML = sHTML + '           <span class="toggle"></span>';
         sHTML = sHTML + '       </label>';
         sHTML = sHTML + '   </div>';
@@ -96,7 +96,7 @@ function putSections(data){
             sHTML = sHTML + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data[i].inner_sections[j].project_section_name;
             sHTML = sHTML + '           <div class="togglebutton" style="float: right">';
             sHTML = sHTML + '               <label>';
-            sHTML = sHTML + '                   <input onchange="toggleCheckbox(this)" class = "child-' + i + '"type="checkbox" name="checkSegment" id="'+data[i].inner_sections[j].project_section_name+'" value="'+data[i].inner_sections[j].project_section_id+'" ' +subchk+ '>';
+            sHTML = sHTML + '                   <input onchange="toggleCheckboxChild(this)" class = "child-' + i + '"type="checkbox" name="checkSegment" id="'+data[i].inner_sections[j].project_section_name+'" value="'+data[i].inner_sections[j].project_section_id+'" ' +subchk+ '>';
             sHTML = sHTML + '               <span class="toggle"></span>';
             sHTML = sHTML + '               </label>';
             sHTML = sHTML + '           </div>';
@@ -116,40 +116,43 @@ function putSections(data){
 
 }
 
-function toggleCheckbox(element)
+function toggleCheckboxParent(element)
  {
-     element.checked = !element.checked;
+
      str = element.className.split("-");
+     clasep="parent-" + str[1];
+     clasec="child-" + str[1];
+     var welParent = document.getElementsByClassName(clasep);
+     var welChild = document.getElementsByClassName(clasec);
 
-     clasep="[class='parent-" + str[1] + "']";
-     clasec="[class='child-" + str[1] + "']";
+     welParent[0].checked = !welParent[0].checked;
 
-     //$("[class~='alergia']")
+     if (welParent[0].checked){welParent[0].checked = false}
+     else {welParent[0].checked = true;}
+     for (var j = 0; j<welChild.length; j++) {
+        if (welChild[j].checked){welChild[j].checked = false}
+        else {welChild[j].checked = true;}
+     }
+ }
 
-     var welChild = $(clasec);
-     var welParent = $(clasep);
-    //alert(clasep);
-    // check event on parent checkbox
-    welParent.on('check', function(e){
-      // remove ambiguous;
+ function toggleCheckboxChild(element)
+ {
 
-      welParent.chbxChecked(e.checked);
-      welChild.each(function(i, element) {
-        $(element).chbxChecked(e.checked);
-      });
-    });
+     str = element.className.split("-");
+     clasep="parent-" + str[1];
+     clasec="child-" + str[1];
+     var welParent = document.getElementsByClassName(clasep);
+     var welChild = document.getElementsByClassName(clasec);
+     var status=false;
 
-    // check event on child checkbox
-    welChild.on('check', function(e) {
-      var bAnd = true, bOr = false;
-      welChild.each(function(i, element){
-        var bChecked = $(element).chbxChecked();
-        bAnd = bAnd && bChecked, bOr = bOr || bChecked;
-      });
+     element.checked = !element.checked;
 
-      var bChecked = bAnd === true || (bAnd === false && bOr === false ? false : null);
-      welParent.chbxChecked(bChecked);
-    });
+     if (element.checked){element.checked = false}
+     else {element.checked = true;}
+     for (var j = 0; j<welChild.length; j++) {
+        if (welChild[j].checked){status=true}
+     }
+     welParent[0].checked = status;
  }
 
 
