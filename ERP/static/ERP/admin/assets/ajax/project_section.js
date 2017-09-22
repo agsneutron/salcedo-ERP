@@ -66,11 +66,10 @@ function putSections(data){
         sHTML = sHTML + '   <div class="togglebutton" style="position: relative">';
         sHTML = sHTML + '       <label class="switch-right">';
         sHTML = sHTML + '           <input type="checkbox" name="checkSegment" id="'+ data[i].project_section_name+'" value="'+ data[i].project_section_id +'" checked="'+chk+'">';
+        sHTML = sHTML + '           <span class="toggle"></span>';
         sHTML = sHTML + '       </label>';
         sHTML = sHTML + '   </div>';
-        sHTML = sHTML + '   <a class="collapsed" role="button" data-toggle="collapse"';
-        sHTML = sHTML + '   data-parent="#accordion" href="#collapse'+ data[i].project_section_id +'" aria-expanded="false"';
-        sHTML = sHTML + '   aria-controls="collapse'+ data[i].project_section_id +'">';
+        sHTML = sHTML + '   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'+ data[i].project_section_id +'" aria-expanded="false" aria-controls="collapse'+ data[i].project_section_id +'">';
         sHTML = sHTML + '       <i class="zmdi zmdi-chevron-up"></i>'+data[i].project_section_name;
         sHTML = sHTML + '   </a>';
         sHTML = sHTML + '   </h4>';
@@ -97,6 +96,7 @@ function putSections(data){
             sHTML = sHTML + '           <div class="togglebutton" style="float: right">';
             sHTML = sHTML + '               <label>';
             sHTML = sHTML + '                   <input type="checkbox" name="checkSegment" id="'+data[i].inner_sections[j].project_section_name+'" value="'+data[i].inner_sections[j].project_section_id+'" checked="'+subchk+'">';
+            sHTML = sHTML + '               <span class="toggle"></span>';
             sHTML = sHTML + '               </label>';
             sHTML = sHTML + '           </div>';
             sHTML = sHTML + '       </div>';
@@ -106,6 +106,7 @@ function putSections(data){
         sHTML = sHTML + '   </div>';
         sHTML = sHTML + '</div>';
         sHTML = sHTML + '</div>';
+        sHTML = sHTML + '<div class="clearfix"></div>';
         //sHTML = sHTML + '<div class="clearfix"></div>';
     }
 
