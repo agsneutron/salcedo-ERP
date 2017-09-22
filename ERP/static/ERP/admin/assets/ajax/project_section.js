@@ -36,7 +36,7 @@ function configura_segmentos(project_id){
             type: 'get',
             success: function(data) {
                 putSections(data);
-                //checkBoxesByProject(data);
+
             },
             error: function(data) {
                 alert('error!! ' + data.status);
@@ -50,14 +50,15 @@ function putSections(data){
     var sHTML = "";
     var  chk = true;
     var subchk= true;
+    document.getElementById('accordion').innerHTML='';
     for (var i = 0; i < data.length; i++) {
         //alert(data[i].project_section_id)
         //data[i].project_section_name
         if (data[i].project_section_status == "1") {
-            chk = true;
+            chk = "checked";
         }
         else{
-            chk= false;
+            chk= "";
         }
 
         sHTML= sHTML +'<div class="panel panel-default">';
@@ -65,7 +66,7 @@ function putSections(data){
         sHTML = sHTML + '   <h4 class="panel-title ms-rotate-icon">';
         sHTML = sHTML + '   <div class="togglebutton" style="position: relative">';
         sHTML = sHTML + '       <label class="switch-right">';
-        sHTML = sHTML + '           <input type="checkbox" name="checkSegment" id="'+ data[i].project_section_name+'" value="'+ data[i].project_section_id +'" checked="'+chk+'">';
+        sHTML = sHTML + '           <input onchange="toggleCheckbox(this)" class = "parent-' + i + '" type="checkbox" name="checkSegment" id="'+ data[i].project_section_name+'" value="'+ data[i].project_section_id +'"  '  +chk+ '>';
         sHTML = sHTML + '           <span class="toggle"></span>';
         sHTML = sHTML + '       </label>';
         sHTML = sHTML + '   </div>';
@@ -83,19 +84,19 @@ function putSections(data){
             //alert(data[i].inner_sections[j].project_section_name);
             pss= data[i].inner_sections[j].project_section_status;
             if (pss == "1") {
-                subchk = true;
+                subchk = "checked";
             }
             else{
-                subchk= false;
+                subchk= "";
             }
             //data[i].inner_sections[j].project_section_status
             //alert(data[i].inner_sections[j].project_section_name);
             //data[i].inner_sections[j].project_section_id
             sHTML = sHTML + '       <div>';
-            sHTML = sHTML + data[i].inner_sections[j].project_section_name;
+            sHTML = sHTML + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data[i].inner_sections[j].project_section_name;
             sHTML = sHTML + '           <div class="togglebutton" style="float: right">';
             sHTML = sHTML + '               <label>';
-            sHTML = sHTML + '                   <input type="checkbox" name="checkSegment" id="'+data[i].inner_sections[j].project_section_name+'" value="'+data[i].inner_sections[j].project_section_id+'" checked="'+subchk+'">';
+            sHTML = sHTML + '                   <input onchange="toggleCheckbox(this)" class = "child-' + i + '"type="checkbox" name="checkSegment" id="'+data[i].inner_sections[j].project_section_name+'" value="'+data[i].inner_sections[j].project_section_id+'" ' +subchk+ '>';
             sHTML = sHTML + '               <span class="toggle"></span>';
             sHTML = sHTML + '               </label>';
             sHTML = sHTML + '           </div>';
@@ -107,29 +108,71 @@ function putSections(data){
         sHTML = sHTML + '</div>';
         sHTML = sHTML + '</div>';
         sHTML = sHTML + '<div class="clearfix"></div>';
-        //sHTML = sHTML + '<div class="clearfix"></div>';
+
+
     }
 
     $('#accordion').append(sHTML);
+
 }
 
-function checkBoxesByProject(respuesta){
-    if (respuesta.project_sections.length>0) {
-        for (var i = 0; i < respuesta.project_sections.length; i++) {
-            elemento = eval(respuesta.project_sections[i].shortSectionName);
-            if (parseInt(respuesta.project_sections[i].status) == 1) {
+function toggleCheckbox(element)
+ {
+     element.checked = !element.checked;
+     str = element.className.split("-");
+
+     clasep="[class='parent-" + str[1] + "']";
+     clasec="[class='child-" + str[1] + "']";
+
+     //$("[class~='alergia']")
+
+     var welChild = $(clasec);
+     var welParent = $(clasep);
+alert(clasep);
+    // check event on parent checkbox
+    welParent.on('check', function(e){
+      // remove ambiguous;
+
+      welParent.chbxChecked(e.checked);
+      welChild.each(function(i, element) {
+        $(element).chbxChecked(e.checked);
+      });
+    });
+
+    // check event on child checkbox
+    welChild.on('check', function(e) {
+      var bAnd = true, bOr = false;
+      welChild.each(function(i, element){
+        var bChecked = $(element).chbxChecked();
+        bAnd = bAnd && bChecked, bOr = bOr || bChecked;
+      });
+
+      var bChecked = bAnd === true || (bAnd === false && bOr === false ? false : null);
+      welParent.chbxChecked(bChecked);
+    });
+ }
+
+
+function checkBoxesByProject(data){
+        for (var i = 0; i < data.length; i++) {
+            elemento = eval(data[i].project_section_name);
+            if (parseInt(data[i].project_section_status) == 1) {
                 elemento.checked = true;
             }
             else{
                 elemento.checked = false;
             }
+            for (var j = 0; j < data[i].inner_sections.length; j++) {
+                elemento = eval(data[i].inner_sections[j].project_section_name);
+                if (parseInt(data[i].inner_sections[j].project_section_status) == 1) {
+                    elemento.checked = true;
+                }
+                else{
+                    elemento.checked = false;
+                }
+            }
+
         }
-    }else{
-        for (var i = 2; i < respuesta.sections.length; i++) {
-           elemento = eval(respuesta.sections[i].shortSectionName);
-           elemento.checked = false;
-        }
-    }
 }
 
 function  guardaSegmento() {
