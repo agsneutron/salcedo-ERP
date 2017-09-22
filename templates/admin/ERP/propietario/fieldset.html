@@ -1,5 +1,21 @@
 {% load app_filters admin_static %}
-
+   <style>
+    #ms-preload {
+        display: none!important;
+    }
+    header {
+        display: none !important;
+    }
+    nav {
+        display: none !important;
+    }
+    footer {
+        display: none !important;
+    }
+    #lightbox {
+        display: none !important;
+    }
+</style>
 <fieldset class="module aligned {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
