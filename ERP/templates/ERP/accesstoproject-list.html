@@ -1,3 +1,4 @@
+{% extends "admin/base_site.html" %}
 
 
 
@@ -5,19 +6,18 @@
     <div id="content-main">
         <div class="row">
             <div class="col-xs-12">
-                <br><br>
                 <div class="card">
                     <div class="card-header">
-
                         <div class="item-left">
                             <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
                         </div>
                         <div class="item-right">
-                            <a href="{% comment %}http://127.0.0.1:8000/admin/auth/user/add/?user={{ user.id }}{% endcomment %}"
+
+                            <a href="/admin/ERP/accesstoproject/add?user={{ user.id }}"
                                class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container"
-                               >
+                            >
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"
-                                          ></i>
+                            ></i>
                             </a>
                         </div>
                     </div>
@@ -74,9 +74,6 @@
                                 <div class="card">
  {% comment %}------ bloque para boton de agregar acceso a proyectos ------------{% endcomment %}
 
-
-
-    {% include "http://127.0.0.1:8000/admin/auth/user/add/?user={{user.id}}" %}
 
 
 

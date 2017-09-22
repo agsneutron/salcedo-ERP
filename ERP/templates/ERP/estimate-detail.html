@@ -96,8 +96,8 @@
                                 <tr>
                                     <th>Clave de la estimación</th>
                                     <th>Progreso</th>
-                                    <th>Cantidad</th>
-                                    <th>Cantidad del Generador</th>
+                                    <th>Monto</th>
+                                    <th>Estado</th>
                                     <th>Archivo del generador</th>
                                     <th>Tipo</th>
                                 </tr>
@@ -116,7 +116,7 @@
                                                 {{ progress_estimate.amount }}
                                             </td>
                                             <td>
-                                                {{ progress_estimate.generator_amount }}
+                                                P/P{% comment %}{{ progress_estimate.generator_amount }}{% endcomment %}
                                             </td>
                                             <td>
                                                 <a href="{{ progress_estimate.generator_file }}">{{ progress_estimate.generator_file }}</a>
