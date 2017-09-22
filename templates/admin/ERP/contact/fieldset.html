@@ -1,6 +1,22 @@
 {% load app_filters admin_static %}
-
-<fieldset class="module aligned {{ fieldset.classes }}">
+<style>
+    #ms-preload {
+        display: none!important;
+    }
+    header {
+        display: none !important;
+    }
+    nav {
+        display: none !important;
+    }
+    footer {
+        display: none !important;
+    }
+    #lightbox {
+        display: none !important;
+    }
+</style>
+<fieldset class=" {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
@@ -29,7 +45,7 @@
         </div>
     {% endfor %}{% endcomment %}
 
-    <div class="card ">
+    <div class="card " style="">
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
@@ -44,45 +60,46 @@
                     {% for field in line %}
                         {% if field.field.name == "name" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                            <div class="row">
-                            <h2 class="text-center">Datos generales</h2>
+                                <div class="">
+                                    <div class="col-xs-12">
+                                        <h2 class="text-center">Datos generales</h2>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr>
+                                    <div class="col-md-6">
+                                        <div class="form-group field-{{ field.field.name }}">
+                                            <div>
+                                                {{ field.label_tag }}
+                                                {{ field.field|addcss:"form-control" }}
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endif %}
 
-                            <hr>
-                            <div class="col-md-6">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
+                            {% if field.field.name == "rfc" %}
+                                    <div class="col-md-3">
+                                        <div class="form-group field-{{ field.field.name }}">
+                                            <div>
+                                                {{ field.label_tag }}
+                                                {{ field.field|addcss:"form-control" }}
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endif %}
+
+                            {% if field.field.name == "contractor" %}
+                                    <div class="col-md-3">
+                                        <div class="form-group field-{{ field.field.name }}">
+                                            <div>
+                                                {{ field.label_tag }}
+                                                {{ field.field|addcss:"form-control" }}
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endif %}
-                    {% if field.field.name == "rfc" %}
-
-                            <div class="col-md-3">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-
-                    {% endif %}
-                        {% if field.field.name == "contractor" %}
-
-                            <div class="col-md-3">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                    </div>
                     {% endif %}
                         {% if field.field.name == "email" %}
                             <div class="row">

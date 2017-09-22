@@ -46,12 +46,6 @@
 
     </div>
 
-
-    {% comment %}
-        This table shows the Contacts for the given Contract.
-    {% endcomment %}
-
-
     <div class="col-xs-8 col-xs-offset-2">
         <div class="card">
             <div class="card-header">
@@ -60,14 +54,12 @@
                 </div>
                 <div class="item-right">
 
-                            <a href="/admin/ERP/contact/add/?contratista_id={{ contratista.id }}"
-                               data-toggle="modal" data-target="#myModal3
-                               class="btn-circle btn-circle-raised btn-circle-success"
-                               style="margin: -1px 1px;top: -20px;">
-                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x"
-                                          style="font-size: 24px;margin: 0px 10px 0px 3px;"></i>
-                            </a>
-                        </div>
+                    <a onclick="myFunction()" href=""
+                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container">
+                        &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"></i>
+                    </a>
+
+                </div>
             </div>
             <div class="card-block text-center">
                 <div class="table-responsive">
@@ -92,7 +84,7 @@
                                 <td class="text-center" style="width: 5%"><a href="/admin/ERP/contact/{{ contact.id }}/"
                                                                              class="btn btn-raised btn-default btn-xs"><i
                                         class="fa fa-eye color-default eliminar"></i></a></td>
-                                <td class="text-center" style="width: 5%"><a href="/admin/ERP/contact/{{ contact.id }}/change"
+                                <td class="text-center" style="width: 5%"><a href="{{ contact.id }}/change"
                                                                              class="btn btn-raised btn-default btn-xs"><i
                                         class="fa fa-pencil color-default eliminar"></i></a></td>
                             </tr>
@@ -164,6 +156,31 @@
     </div>
 
     </div>
+    <script>
+        function PopupCenter(url, title, w, h) {
+            // Fixes dual-screen position                         Most browsers      Firefox
+            var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+            var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+            var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+            var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+            var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+            var top = ((height / 2) - (h / 2)) + dualScreenTop;
+            var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+            // Puts focus on the newWindow
+            if (window.focus) {
+                newWindow.focus();
+            }
+        }
+    </script>
+    <script>
+        function myFunction() {
+            PopupCenter('http://127.0.0.1:8000/admin/ERP/contact/add/?contratista_id={{ user.id }}','xtf','1024','500');
+
+        }
+    </script>
 {% endblock %}
 
 

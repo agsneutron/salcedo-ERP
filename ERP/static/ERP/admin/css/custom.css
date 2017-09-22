@@ -146,7 +146,7 @@ hr {
     font-weight: 300;
     word-spacing: -4px;
     font-size: 20px;
-    padding-top: 1px;
+    padding-top: 6px;
     margin: 0 20px;
     color: #f5f5f5;
     display: none;
@@ -191,17 +191,20 @@ hr {
 
 .panel {
     margin-bottom: 20px;
-    background-color: #262626;
+    background-color: #fff;
     border: 1px solid transparent;
     border-radius: 4px;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 }
-
+.panel-group .panel {
+    margin-top: 5px;
+}
 .ms-slidebar .ms-slidebar-header {
     min-height: 175px;
-    background-image: url(../img/bg-slidebar.png);
+    background-image: url(../img/bg-slidebar.svg);
     position: relative;
+        background-color: white;
 }
 
 .ms-slidebar .ms-slidebar-menu > li > a.collapsed:after {
@@ -706,5 +709,44 @@ ul { padding-left:20px; list-style:none; }
         width: 90% !important;
 }
 .full-height {
-        height: 90vh !important;
+        height: 100vh !important;
+}
+ .icon-container {
+     margin: 2px 1px !important;
+    top: -25px;
+ }
+ .center-icon{
+    font-size: 24px !important;
+    margin: 1px 11px 3px 3px !important;
+ }
+ .panel {
+    border: 0px solid #ddd;
+}
+ .panel-default>.panel-heading+.panel-collapse>.panel-body {
+    background-color: #fdfdfd;
+}
+ .divide-item {
+         border-top: 1px solid #e2e2e2 !important;
+    margin: 6px 0 2px !important;
+ }
+ .panel .panel-body {
+    padding: 10px;
+}
+ .ms-collapse .panel .panel-heading .panel-title a {
+    display: block;
+    color: #424242;
+    font-family: Roboto,sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+
+    line-height: 0px;
+
+    padding: 10px 10px;
+    position: relative;
+}
+.switch-right {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 9;
 }
