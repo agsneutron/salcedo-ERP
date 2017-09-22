@@ -3,6 +3,7 @@ from django import forms
 from django.contrib.admin import widgets
 from django.db import models
 from django.db.models import Q
+from django.contrib import messages
 from django.forms import SelectDateWidget
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect
@@ -91,14 +92,42 @@ class EstimateForm(forms.ModelForm):
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
+
         self.request = kwargs.pop('request', None)
         super(EstimateForm, self).__init__(*args, **kwargs)
         project_id = self.request.GET.get('project')
-        print "Project ID: " + str(project_id)
-        # self.fields['start_date'].widget = widgets.AdminDateWidget()
-        # self.fields['end_date'].widget = widgets.AdminDateWidget()
-        # self.fields['period'].widget = widgets.AdminDateWidget()
-        self.fields['line_item'].queryset = LineItem.objects.filter(project__id=project_id)
+
+        if kwargs.get('instance'):
+            line_item_id = kwargs['instance'].concept_input.line_item.id
+            self.fields['line_item'].queryset = LineItem.objects.filter(id=line_item_id)
+        else:
+            self.fields['line_item'].queryset = LineItem.objects.filter(project_id=project_id)
+            # self.fields['start_date'].widget = widgets.AdminDateWidget()
+            # self.fields['end_date'].widget = widgets.AdminDateWidget()
+            # self.fields['period'].widget = widgets.AdminDateWidget()
+
+    # def save(self, commit=True):
+    #
+    #     if self.fields['advance_payment_status'] == Estimate.PAID and self.fields[
+    #         'advance_payment_amount'] is not None and self.fields['advance_payment_amount'] > 0:
+    #         return super(EstimateForm, self).save(commit)
+    #     else:
+    #         # return super(EstimateForm, self).save(commit)
+    #         messages.set_level(self.request, messages.ERROR)
+    #         messages.error(self.request, 'El estatus del pago no puede ser "Pagado" si la cantidad es inválida.')
+
+    def clean(self):
+        cleaned_data = super(EstimateForm, self).clean()
+        status = cleaned_data.get("advance_payment_status")
+        amount = cleaned_data.get("advance_payment_amount")
+
+        print 'cleaning'
+
+        if status == Estimate.PAID and amount <= 0:
+
+            self._errors["advance_payment_status"] = self.error_class(['El estatus del pago no puede ser "Pagado" si la cantidad es 0.0.'])
+            # self.fields['advance_payment_amount'].
+            raise forms.ValidationError("Error")
 
 
 '''
@@ -228,10 +257,11 @@ class AddEstimateForm(forms.Form):
 
 class OwnerForm(forms.ModelForm):
     empresa_id = None
+
     class Meta:
         model = Propietario
         fields = (
-            'nombrePropietario', 'rfc','empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
+            'nombrePropietario', 'rfc', 'empresa', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
             'cp', 'calle', 'numero', 'colonia', 'version',)
 
     def __init__(self, *args, **kwargs):
@@ -247,9 +277,9 @@ class OwnerForm(forms.ModelForm):
             self.fields['empresa'].queryset = Empresa.objects.filter(pk=self.company_id)
 
 
-
 class ContactForm(forms.ModelForm):
     contractor_id = None
+
     class Meta:
         model = Contact
         fields = '__all__'
@@ -269,4 +299,3 @@ class ContactForm(forms.ModelForm):
         # Filtering the values for the contractor if it , otherwise, None.
         if self.contractor_id is not None:
             self.fields['contractor'].queryset = Contratista.objects.filter(pk=self.contractor_id)
-
