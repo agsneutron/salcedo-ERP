@@ -191,13 +191,15 @@ hr {
 
 .panel {
     margin-bottom: 20px;
-    background-color: #262626;
+    background-color: #fff;
     border: 1px solid transparent;
     border-radius: 4px;
     -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
     box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
 }
-
+.panel-group .panel {
+    margin-top: 5px;
+}
 .ms-slidebar .ms-slidebar-header {
     min-height: 175px;
     background-image: url(../img/bg-slidebar.svg);
@@ -718,7 +720,7 @@ ul { padding-left:20px; list-style:none; }
     margin: 1px 11px 3px 3px !important;
  }
  .panel {
-    border: 1px solid #ddd;
+    border: 0px solid #ddd;
 }
  .panel-default>.panel-heading+.panel-collapse>.panel-body {
     background-color: #fdfdfd;
