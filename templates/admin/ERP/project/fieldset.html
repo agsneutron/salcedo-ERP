@@ -296,6 +296,34 @@
                         </div>
                     {% endif %}
 
+                        {% if field.field.name == "latitud" %}
+                        <div class="row">
+
+                        <div class="col-md-3 col-md-offset-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    <label class="control-label required" for="id_{{ field.field.name }}">Latitud:</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if field.field.name == "longitud" %}
+                        <div class="col-md-3  ">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    <label class="control-label required" for="id_{{ field.field.name }}">Longitud:</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+
+                        </div>
+                    {% endif %}
+
                     {% if field.field.name == "area_superficie_escritura" %}
                         <div class="row">
                         <h2 class="text-center">Áreas</h2>

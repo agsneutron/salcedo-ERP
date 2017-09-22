@@ -381,11 +381,11 @@
 
 
                         <div class="avatar">
-                            <img alt="" src="{% static "ERP/admin/img/user1.jpeg" %}">
+                            <img alt="" src="/media/{{ user.erpuser.profile_picture }}">
                             <h3 style="margin-top: 0 !important">
                             {% block welcome-msg %}
                                 &nbsp;{% trans 'Bienvenido, &nbsp;' %}
-                                <span class="">{% firstof user.get_short_name user.get_username %}</span>&nbsp;
+                                <span class="">{% firstof user.get_short_name user.get_username %} </span>&nbsp;
                                 &nbsp;<span class="orange-circle"> <span class="xcontainer"> <span
                                     class="xicon"></span></span></span></a>
                             {% endblock %}

@@ -22,8 +22,8 @@ class UsuarioAdmin(UserAdmin):
     fieldsets = (
         ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
         ('AuthInfo', {'fields': ('username', 'password')}),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Permissions', {'fields': ('is_active',)}),
+
     )
     add_fieldsets = (
         ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),

@@ -168,11 +168,12 @@
 {% endif %}
 
 {% if inline_admin_formset.opts.verbose_name_plural == "Usuarios" %}
-     <div class="col-md-4">
+ <div class="col-md-8">
         <fieldset class="module  {{ fieldset.classes }}">
          {% for line in fieldset %}
             {% for field in line %}
                {% if field.field.name == "rol" %}
+                   <div class="col-md-6">
                      <div class="form-group field-{{ field.field.name }}">
                         <div>
                                    {{ field.label_tag }}
@@ -180,14 +181,32 @@
                                    {{ field.errors }}
                         </div>
                      </div>
+                   </div>
+               {% endif %}
+                {% if field.field.name == "profile_picture" %}
+                   <div class="col-md-6">
+                     <div class="form-group field-{{ field.field.name }}">
+                                {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
+                           <div class="input-group">
+                                    <label class="control-label required"
+                                           for="id_{{ field.field.name }}">Foto de Perfil:</label>
+                                    <input type="text" readonly="" class="form-control"
+                                           placeholder="Seleccionar archivo...">
+                                    <span class="input-group-btn input-group-sm">
+                                                        <button type="button" class="btn btn-fab btn-fab-mini">
+                                                          <i class="material-icons">attach_file</i>
+                                                        </button>
+                                                      </span>
+                           </div>
+                     </div>
+                   </div>
                {% endif %}
             {% endfor %}
          {% endfor %}
         </fieldset>
-     </div>
-    <div class="col-md-4">
-    &nbsp;
-    </div>
+
+</div>
   {#    cerrar último row#}
   </div>
     {#    cerrar card block#}

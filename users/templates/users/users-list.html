@@ -42,10 +42,10 @@
                                             <th>Nombre de usuario</th>
                                             <th>Correo Electrónico</th>
                                             <th>Rol</th>
-                                            <th>Proyectos</th>
+                                            {% comment %}<th>Proyectos</th>{% endcomment %}
                                             <th>Ver</th>
                                             <th>Editar</th>
-                                            <th>Ver Proyectos</th>
+                                            <th>Proyectos</th>
                                             <th>Eliminar</th>
                                         </tr>
                                         </thead>
@@ -57,14 +57,14 @@
                                                 {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
                                                 <td><span>{{ user.username }}</span></td>
                                                 <td><span>{{ user.email }}</span></td>
-                                                <td><span>{{ user.erpuser }}</span></td>
-                                                <td class="text-center" style="width: 5%">
-                                                    {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
+                                                <td><span>{{ user.erpuser.rol }}</span></td>
+                                                {% comment %}<td class="text-center" style="width: 5%">
+
                                                     <a href="#"
                                                        data-toggle="modal" data-target="#myModal3"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-building color-default eliminar"></i></a>
-                                                </td>
+                                                </td>{% endcomment %}
 
                                                 <td class="text-center" style="width: 5%"><a href="{{ user.id }}"
                                                                                              class="btn btn-raised btn-default btn-xs"><i
