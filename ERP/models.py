@@ -5,6 +5,7 @@ from concurrency.fields import IntegerVersionField
 import os
 
 from django.db.models.query_utils import Q
+from django.dispatch import receiver
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
@@ -13,7 +14,11 @@ from django.utils.encoding import smart_text
 from django.utils.timezone import now
 from users.models import ERPUser
 from smart_selects.db_fields import ChainedForeignKey
+
 from django.db import models
+
+from django.db.models.signals import post_save
+
 from Logs.controller import Logs
 from django import forms
 import datetime
@@ -112,7 +117,6 @@ class Departamento(models.Model):
     descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
                                    editable=True)
 
-
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -156,7 +160,6 @@ class Area(models.Model):
     descripcion = models.TextField(verbose_name='Descripción', max_length=250, null=False, blank=False,
                                    editable=True)
     departamento = models.ForeignKey(Departamento, verbose_name="Departamento", null=False, blank=False)
-
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -203,7 +206,6 @@ class Puesto(models.Model):
                                    editable=True)
     area = models.ForeignKey(Area, verbose_name='Área', null=False, blank=False)
 
-
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -248,7 +250,6 @@ class ModalidadContrato(models.Model):
                                          editable=True)
     duracionContrato = models.CharField(verbose_name='Duración de Contrato', max_length=20, null=False, blank=False,
                                         editable=True)
-
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -301,7 +302,6 @@ class Empleado(models.Model):
     sueldo_actual = models.DecimalField(verbose_name='Sueldo Actual', decimal_places=2, blank=False, null=False,
                                         default=0, max_digits=20)
     antiguedad = models.CharField(verbose_name='Antigüedad', max_length=50, null=False, blank=False, editable=True)
-
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -372,7 +372,6 @@ class Contratista(models.Model):
                                   show_all=False,
                                   auto_choose=True,
                                   sort=True)
-
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -566,6 +565,7 @@ class ContratoContratista(models.Model):
                                            blank=False)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
     last_edit_date = models.DateTimeField(auto_now_add=True)
+
     class Meta:
         verbose_name_plural = 'Contratos'
 
@@ -729,7 +729,7 @@ def cover_file_document_destination(instance, filename):
 # Projects model.
 class Project(models.Model):
     version = IntegerVersionField()
-    user = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
+    users = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
                                   blank=False)
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
@@ -776,7 +776,6 @@ class Project(models.Model):
     restriccion_otros = models.CharField(verbose_name="otros", max_length=200, null=True, blank=True)
     restriccion_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
 
-
     # Fields required for the 'Uso de Suelo' report in the 'Analisis' section.
     usosuelo_pmdu = models.CharField(verbose_name="pmdu", max_length=200, null=True, blank=True)
     usosuelo_densidad = models.CharField(verbose_name="densidad", max_length=200, null=True, blank=True)
@@ -819,13 +818,11 @@ class Project(models.Model):
     vial_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     vial_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
 
-
     # Fields required for the 'Electricidad' report in the 'Analisis II' section.
     electricidad_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
     electricidad_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
     electricidad_observaciones = models.CharField(verbose_name="observaciones", max_length=200, null=True, blank=True)
     electricidad_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
-
 
     # Fields required for the 'Alumbrado Público' report in the 'Analisis II' section.
     alumbradopublico_tipo = models.CharField(verbose_name="tipo", max_length=200, null=True, blank=True)
@@ -833,7 +830,6 @@ class Project(models.Model):
     alumbradopublico_observaciones = models.CharField(verbose_name="dobservaciones", max_length=200, null=True,
                                                       blank=True)
     alumbradopublico_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination, )
-
 
     # Fields required for the 'Telefonia' report in the 'Analisis II' section.
     telefonia_distancia = models.CharField(verbose_name="distancia", max_length=200, null=True, blank=True)
@@ -872,7 +868,6 @@ class Project(models.Model):
     definicionproyecto_tamano = models.CharField(verbose_name="Tamaño", max_length=200, null=True, blank=True)
     definicionproyecto_programa = models.CharField(verbose_name="Programa", max_length=200, null=True, blank=True)
 
-
     # Fields required for the 'Programas y Áreas' report in the 'Programa' section.
     programayarea_areaprivativa = models.DecimalField(verbose_name='area privada', decimal_places=2, blank=True,
                                                       null=True, default=0, max_digits=20)
@@ -891,7 +886,7 @@ class Project(models.Model):
     programayarea_afectacion = models.DecimalField(verbose_name='afectación', decimal_places=2, blank=True, null=True,
                                                    default=0, max_digits=20)
     programayarea_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination,
-        verbose_name="Documento de programa y área")
+                                               verbose_name="Documento de programa y área")
     latitud = models.FloatField(default=0, blank=True, null=True, )
     longitud = models.FloatField(default=0, blank=True, null=True, )
 
@@ -929,18 +924,6 @@ class Project(models.Model):
             canSave = False
 
         if canSave:
-
-            # Creating the sections for each saved project.
-            sections = Section.objects.all()
-            for section in sections:
-                saved_section = ProjectSections.objects.filter(Q(project=self) & Q(section=section))
-
-                # If no record was found for the specific section.
-                if not saved_section.exists():
-                    project_section = ProjectSections(project=self, section=section, last_edit_date=now(), status=1)
-                    print "Saving..."
-                    project_section.save()
-
             Logs.log("Saving new project", "Te")
             self.last_edit_date = now()
             super(Project, self).save(*args, **kwargs)
@@ -948,11 +931,24 @@ class Project(models.Model):
             Logs.log("Couldn't save")
 
 
+@receiver(post_save, sender=Project, dispatch_uid='assing_sections')
+def assign_sections(sender, instance, **kwargs):
+    # Creating the sections for each saved project.
+    sections = Section.objects.all()
+    for section in sections:
+        saved_section = ProjectSections.objects.filter(Q(project=instance) & Q(section=section))
+
+        # If no record was found for the specific section.
+        if not saved_section.exists():
+            project_section = ProjectSections(project=instance, section=section, last_edit_date=now(), status=1)
+            print "Saving..."
+            project_section.save()
+
 
 class Section(models.Model):
     sectionName = models.CharField(max_length=200)
     shortSectionName = models.CharField(max_length=50)
-    parent_section = models.ForeignKey('Section',  blank=True, default=None, null=True)
+    parent_section = models.ForeignKey('Section', blank=True, default=None, null=True)
 
     class Meta:
         verbose_name_plural = 'Secciones'
@@ -971,14 +967,12 @@ class Section(models.Model):
         return self.sectionName + " - " + self.shortSectionName
 
 
-
 class ProjectSections(models.Model):
     status = models.IntegerField(verbose_name="Estatus", null=False, blank=False)
     last_edit_date = models.DateTimeField(auto_now_add=True)
     # Foreign keys.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     section = models.ForeignKey(Section, verbose_name="Sección", null=False, blank=False)
-
 
     def __str__(self):
         return str(self.project.key + " - " + self.section.sectionName)
@@ -997,6 +991,7 @@ class ProjectSections(models.Model):
 '''
     Model and upload function to the catalogs (lineitem|concepts) history.
 '''
+
 
 def uploaded_catalogs_destination(instance, filename):
     return '/'.join(['carga_de_catalogos', instance.project.key, filename])
@@ -1234,7 +1229,6 @@ class Estimate(models.Model):
                                       verbose_name="Concepto / Insumo"
                                       )
 
-
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -1259,7 +1253,6 @@ class Estimate(models.Model):
             concept_input_display = self.concept_input.description
 
         return "Partida: " + line_item_display + " Concepto: " + concept_input_display + " Periodo: " + str(self.period)
-
 
     def save(self, *args, **kwargs):
         canSave = True
@@ -1306,8 +1299,6 @@ class ProgressEstimate(models.Model):
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
                                       verbose_name="Archivo del Generador", blank=True)
 
-
-
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     PROGRESS = "P"
@@ -1318,6 +1309,8 @@ class ProgressEstimate(models.Model):
     )
 
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS, verbose_name="Tipo")
+
+
 
     class Meta:
         verbose_name_plural = 'Avances de la Estimación'
@@ -1361,7 +1354,6 @@ class ProgressEstimateLog(models.Model):
     description = models.TextField(verbose_name="Descripción", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=now(), null=True, verbose_name="Fecha")
-
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -1410,7 +1402,6 @@ class LogFile(models.Model):
                             default="")
     mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
-
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     def to_serializable_dict(self):
@@ -1430,8 +1421,6 @@ class LogFile(models.Model):
             super(LogFile, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
-
-
 
 
 class SystemLogEntry(models.Model):

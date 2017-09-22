@@ -16,7 +16,8 @@ from django.views.generic.edit import CreateView
 
 from ERP.forms import EstimateSearchForm, AddEstimateForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, Contact, AccessToProject
+    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, Contact, AccessToProject, \
+    ProjectSections
 from django.db.models import Q
 import json
 
@@ -477,6 +478,27 @@ class ProjectDetailView(generic.DetailView):
 
         # Getting the info for the contractors relates to a project.
         context['contracts'] = ContratoContratista.objects.filter(Q(project__id=project_obj.id))
+
+        # Getting the settings for the current project, to know which card details to show.
+        project_sections = ProjectSections.objects.filter(Q(project_id=project_obj.id) & Q(section__parent_section=None))
+        sections_result = []
+        for section in project_sections:
+            section_json = {
+                "section_name"  : section.section.sectionName,
+                "section_id"  : section.section.id,
+                "inner_sections" :  []
+            }
+            inner_sections = ProjectSections.objects.filter(Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
+            for inner_section in inner_sections:
+                inner_json = {
+                    "inner_section_name": inner_section.section.sectionName,
+                    "inner_section_id": inner_section.section.id,
+                    "inner_section_status": inner_section.status,
+                }
+                section_json["inner_sections"].append(inner_json)
+            sections_result.append(section_json)
+        print sections_result
+
 
         print str(project_obj.documento_propiedad.name).split("/")[-1]
 
