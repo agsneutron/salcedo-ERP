@@ -20,10 +20,15 @@ from django.contrib.auth import views as auth_views
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.http import HttpResponseRedirect
 from django.conf import settings
+
+import reporting
 from users import urls
 import users
 from ERP import urls
 import ERP
+
+
+from reporting import urls
 
 from users import views
 
@@ -39,6 +44,7 @@ urlpatterns = [
     url(r'^erp/', include(ERP.urls)),
     url(r'^$', RedirectView.as_view(url='/admin')),
     url(r'^data_upload/', include(DataUpload.urls)),
+    url(r'^reporting/', include(reporting.urls)),
     url(r'^chaining/', include('smart_selects.urls')),
 
     url(r'^admin/empresas', users.views.empresas, name='empresas'),
