@@ -5,6 +5,8 @@ import django
 from django.conf.urls import url
 from django.contrib import messages
 from django.db import transaction
+from django.http import Http404
+from django.shortcuts import redirect
 
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
@@ -20,7 +22,8 @@ from django.http import HttpResponseRedirect
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
 from ERP.views import CompaniesListView, ContractorListView, ProjectListView, ProgressEstimateLogListView, \
-    EstimateListView, UploadedInputExplotionsHistoryListView, UploadedCatalogsHistoryAdminListView, AccessToProjectAdminListView
+    EstimateListView, UploadedInputExplotionsHistoryListView, UploadedCatalogsHistoryAdminListView, \
+    AccessToProjectAdminListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
 
@@ -225,6 +228,7 @@ class ContratoAdmin(admin.ModelAdmin):
             'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version')
         return fields
 
+
 '''
 class PropietarioAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombrePropietario', 'email', 'empresa', 'telefono1')
@@ -258,9 +262,55 @@ class PropietarioAdmin(admin.ModelAdmin):
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):
-    list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file')
-    fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file', 'version',)
+    list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file', 'payment_status')
+    fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file', 'payment_status', 'version',)
     model = ProgressEstimate
+
+    def response_change(self, request, obj):
+        """This makes the response after adding go to another apps changelist for some model"""
+        return HttpResponseRedirect('/admin/ERP/estimate/' + str(obj.estimate.id))
+
+    def response_add(self, request, obj, post_url_continue=None):
+        """This makes the response after adding go to another apps changelist for some model"""
+        return HttpResponseRedirect('/admin/ERP/estimate/' + str(obj.estimate.id))
+
+    def get_form(self, request, obj=None, **kwargs):
+        estimate_id = request.GET.get('estimate')
+
+        if obj is not None:
+            obj.progress *= 100
+
+        form = super(ProgressEstimateAdmin, self).get_form(request, obj, **kwargs)
+
+        if obj is None and estimate_id is not None:
+            qs = Estimate.objects.filter(pk=estimate_id)
+            if qs.exists():
+
+                estimate_field = form.base_fields['estimate']
+                estimate_field.queryset = Estimate.objects.filter(pk=estimate_id)
+
+                estimate_field.widget.can_add_related = False
+                estimate_field.widget.can_change_related = False
+            else:
+                raise Http404(
+                    'No existe la estimación especificada.')
+        elif obj is not None:
+            estimate_field = form.base_fields['estimate']
+            estimate_field.queryset = Estimate.objects.filter(pk=obj.estimate.id)
+
+            estimate_field.widget.can_add_related = False
+            estimate_field.widget.can_change_related = False
+
+        else:
+            raise Http404(
+                'No existe esta página. Para editar una estimación, hazlo a través de las opciones del sistema.')
+
+        return form
+
+    def save_model(self, request, obj, form, change):
+        obj.progress = obj.progress / Decimal(100.00)
+        print obj.progress
+        return super(ProgressEstimateAdmin, self).save_model(request, obj, form, change)
 
 
 class AccessToProjectAdmin(admin.ModelAdmin):
@@ -447,8 +497,8 @@ class OwnerInline(admin.StackedInline):
         municipio.widget.can_add_related = False
         municipio.widget.can_change_related = False
 
-
         return ModelForm
+
 
 # Overriding the admin views to provide a detail view as required.
 class ProjectInline(admin.TabularInline):
@@ -459,10 +509,10 @@ class ProjectInline(admin.TabularInline):
 
 @admin.register(Empresa)
 class CompanyModelAdmin(admin.ModelAdmin):
-
     def get_fields(self, request, obj=None):
         fields = (
-            'nombreEmpresa', 'rfc', 'type', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp', 'calle',
+            'nombreEmpresa', 'rfc', 'type', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
+            'calle',
             'numero', 'colonia', 'version',)
         return fields
 
@@ -501,7 +551,7 @@ class ContactInline(admin.StackedInline):
     def get_fields(self, request, obj=None):
         fields = (
             'name', 'rfc', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
-            'street','number', 'colony', 'version', 'contractor')
+            'street', 'number', 'colony', 'version', 'contractor')
         return fields
 
     def get_form(self, request, obj=None, **kwargs):
@@ -528,10 +578,10 @@ class ContactModelAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-            'name', 'rfc', 'contractor', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town', 'post_code',
+            'name', 'rfc', 'contractor', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town',
+            'post_code',
             'street', 'number', 'colony', 'version',)
         return fields
-
 
     def get_urls(self):
         urls = super(ContactModelAdmin, self).get_urls()
@@ -552,7 +602,6 @@ class ContactModelAdmin(admin.ModelAdmin):
         estado = ModelForm.base_fields['state']
         municipio = ModelForm.base_fields['town']
 
-
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         pais.widget.can_add_related = False
         pais.widget.can_change_related = False
@@ -561,27 +610,24 @@ class ContactModelAdmin(admin.ModelAdmin):
         municipio.widget.can_add_related = False
         municipio.widget.can_change_related = False
 
-
-
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
                 kwargs['contratista_id'] = request.GET.get('contratista_id')
                 return ModelForm(*args, **kwargs)
 
-
         return ModelFormMetaClass
-
 
     def response_change(self, request, obj):
         if '_continue' not in request.POST:
-            return HttpResponseRedirect("/admin/ERP/contratista/"+str(obj.contractor.id))
+            return HttpResponseRedirect("/admin/ERP/contratista/" + str(obj.contractor.id))
         else:
             return super(ContactModelAdmin, self).response_change(request, obj)
 
+
 @admin.register(Contratista)
 class ContractorModelAdmin(admin.ModelAdmin):
-    #inlines = (ContactInline, )
+    # inlines = (ContactInline, )
 
     def get_fields(self, request, obj=None):
         fields = (
@@ -664,7 +710,6 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 class OwnerModelAdmin(admin.ModelAdmin):
     form = OwnerForm
 
-
     def get_urls(self):
         urls = super(OwnerModelAdmin, self).get_urls()
         my_urls = [
@@ -705,15 +750,16 @@ class OwnerModelAdmin(admin.ModelAdmin):
 
     def response_change(self, request, obj):
         if '_continue' not in request.POST:
-            return HttpResponseRedirect("/admin/ERP/empresa/"+str(obj.empresa.id))
+            return HttpResponseRedirect("/admin/ERP/empresa/" + str(obj.empresa.id))
         else:
             return super(OwnerModelAdmin, self).response_change(request, obj)
 
     def response_add(self, request, obj, post_url_continue="../%s/"):
         if '_continue' not in request.POST:
-            return HttpResponseRedirect("/admin/ERP/empresa/"+str(obj.empresa.id))
+            return HttpResponseRedirect("/admin/ERP/empresa/" + str(obj.empresa.id))
         else:
             return super(OwnerModelAdmin, self).response_add(request, obj, post_url_continue)
+
 
 @admin.register(LineItem)
 class LineItemAdmin(admin.ModelAdmin):
@@ -779,7 +825,6 @@ class ProjectModelAdmin(admin.ModelAdmin):
         empresa.widget.can_add_related = False
         empresa.widget.can_change_related = False
 
-
         return ModelForm
 
 
@@ -788,9 +833,6 @@ class EstimateAdmin(admin.ModelAdmin):
     form = EstimateForm
     list_per_page = 50
 
-    inlines = [
-        ProgressEstimateInline
-    ]
     fieldsets = (
         (
             'Partida', {
@@ -798,7 +840,10 @@ class EstimateAdmin(admin.ModelAdmin):
             }),
         (
             'Estimación', {
-                'fields': ('concept_input', 'period', 'start_date', 'end_date', 'version',)
+                'fields': (
+                    'concept_input', 'period', 'start_date', 'end_date', 'advance_payment_amount',
+                    'advance_payment_date',
+                    'advance_payment_status', 'version',)
             }),
     )
 
@@ -837,16 +882,16 @@ class EstimateAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         if '_addanother' not in request.POST:
             project_id = request.GET.get('project')
-            return HttpResponseRedirect('/admin/ERP/estimate/list/' + project_id + '/')
+            return HttpResponseRedirect('/admin/ERP/estimate/' + str(obj.id) + '/')
         else:
-            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+            return super(EstimateAdmin, self).response_add(request, obj, post_url_continue)
 
     def response_change(self, request, obj, post_url_continue=None):
         project_id = request.GET.get('project')
         if '_addanother' not in request.POST:
-            return HttpResponseRedirect('/admin/ERP/estimate/list/' + project_id + '/')
+            return HttpResponseRedirect('/admin/ERP/estimate/' + str(obj.id) + '/')
         else:
-            return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+            return super(EstimateAdmin, self).response_add(request, obj, post_url_continue)
 
 
 # Simple admin views.
@@ -872,7 +917,7 @@ admin.site.register(Empleado, EmpleadoAdmin)
 # admin.site.register(Propietario, PropietarioAdmin)
 admin.site.register(ProgressEstimate, ProgressEstimateAdmin)
 admin.site.register(LogFile, LogFileAdmin)
-#admin.site.register(Contact, ContactModelAdmin)
+# admin.site.register(Contact, ContactModelAdmin)
 admin.site.register(AccessToProject, AccessToProjectAdmin)
 admin.site.register(Section)
 admin.site.register(ProjectSections)

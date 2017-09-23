@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 from concurrency.fields import IntegerVersionField
 import os
 
+from decimal import Decimal
+from django.core.validators import MinValueValidator
 from django.db.models.query_utils import Q
 from django.dispatch import receiver
 from django.utils import timezone
@@ -730,7 +732,7 @@ def cover_file_document_destination(instance, filename):
 class Project(models.Model):
     version = IntegerVersionField()
     users = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
-                                  blank=False)
+                                   blank=False)
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
     nombreProyecto = models.CharField(verbose_name="nombre del proyecto", max_length=100, null=False, blank=False)
@@ -931,6 +933,55 @@ class Project(models.Model):
             super(Project, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
+
+
+class PaymentSchedule(models.Model):
+    JANUARY = 1
+    FEBRUARY = 2
+    MARCH = 3
+    APRIL = 4
+    MAY = 5
+    JUNE = 6
+    JULY = 7
+    AUGUST = 8
+    SEPTEMBER = 9
+    OCTOBER = 10
+    NOVEMBER = 11
+    DECEMBER = 12
+
+    MONTH_CHOICES = (
+        (JANUARY, 'Enero'),
+        (FEBRUARY, 'Febrero'),
+        (MARCH, 'Marzo'),
+        (APRIL, 'Abril'),
+        (MAY, 'Mayo'),
+        (JUNE, 'Junio'),
+        (JULY, 'Julio'),
+        (AUGUST, 'Agosto'),
+        (SEPTEMBER, 'Septiembre'),
+        (OCTOBER, 'Octubre'),
+        (NOVEMBER, 'Noviembre'),
+        (DECEMBER, 'Diciembre'),
+    )
+    month = models.CharField(max_length=10, choices=MONTH_CHOICES, default=JANUARY)
+
+    YEAR_CHOICES = (
+        ('2016', '2016'),
+        ('2017', '2017'),
+        ('2018', '2018'),
+        ('2019', '2019'),
+        ('2020', '2020'), ('2021', '2021'), ('2022', '2022'), ('2023', '2023'), ('2024', '2024'), ('2025', '2025'),
+        ('2026', '2026'), ('2027', '2027'), ('2028', '2028'), ('2029', '2029'), ('2030', '2030')
+    )
+
+    year = models.CharField(max_length=4,
+                            choices=YEAR_CHOICES, default='2017')
+
+    amount = models.DecimalField(verbose_name='Mount', decimal_places=2, blank=False, null=False,
+                                 default=0, max_digits=20,
+                                 validators=[MinValueValidator(Decimal('0.0'))])
+
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
 
 
 @receiver(post_save, sender=Project, dispatch_uid='assing_sections')
@@ -1233,6 +1284,23 @@ class Estimate(models.Model):
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
+    # Fields to provide the Advance (payment) functionality.
+    advance_payment_amount = models.DecimalField(verbose_name='Anticipo', decimal_places=2, blank=False, null=False,
+                                                 default=0, max_digits=20,
+                                                 validators=[MinValueValidator(Decimal('0.0'))])
+
+    advance_payment_date = models.DateField(verbose_name="Fecha de Pago del Anticipo", null=True, blank=True)
+
+    PAID = "P"
+    NOT_PAID = "NP"
+
+    ADVANCE_PAYMENT_STATUS_CHOICES = (
+        (PAID, 'Pagado'),
+        (NOT_PAID, 'No Pagado'),
+    )
+    advance_payment_status = models.CharField(max_length=2, choices=ADVANCE_PAYMENT_STATUS_CHOICES, default=NOT_PAID,
+                                              verbose_name="Estatus del Anticipo")
+
     class Meta:
         verbose_name_plural = 'Estimaciones'
 
@@ -1291,10 +1359,10 @@ class ProgressEstimate(models.Model):
     version = IntegerVersionField()
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
     key = models.CharField(verbose_name="Clave de la Estimación", max_length=8, null=False, blank=False)
-    progress = models.DecimalField(verbose_name='Progreso', decimal_places=2, blank=False, null=False, default=0,
-                                   max_digits=5)
-    amount = models.DecimalField(verbose_name='Cantidad', decimal_places=1, blank=False, null=False, default=0,
-                                 max_digits=4)
+    progress = models.DecimalField(verbose_name='Progreso (%)', decimal_places=4, blank=False, null=False, default=0,
+                                   max_digits=20)
+    amount = models.DecimalField(verbose_name='Cantidad', decimal_places=6, blank=False, null=False, default=0,
+                                 max_digits=20)
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
@@ -1312,7 +1380,15 @@ class ProgressEstimate(models.Model):
 
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS, verbose_name="Tipo")
 
+    PAID = "P"
+    NOT_PAID = "NP"
 
+    PAYMENT_STATUS_CHOICES = (
+        (PAID, 'Pagado'),
+        (NOT_PAID, 'No Pagado'),
+    )
+    payment_status = models.CharField(max_length=2, choices=PAYMENT_STATUS_CHOICES, default=NOT_PAID,
+                                      verbose_name="Estatus del Pago")
 
     class Meta:
         verbose_name_plural = 'Avances de la Estimación'
