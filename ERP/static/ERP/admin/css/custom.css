@@ -587,9 +587,9 @@ dt {
 }
 
 .errorlist {
-    position: absolute;
-    top: 25px;
-    right: 15px;
+        position: absolute;
+    top: 51px;
+    right: 2px;
     font-size: 10px;
     /* width: 100%; */
     /* text-align: right; */
