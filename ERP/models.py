@@ -25,7 +25,9 @@ from Logs.controller import Logs
 from django import forms
 import datetime
 
+import locale
 
+from django.template import Library
 # Create your models here.
 
 # *********************************************************************

@@ -1,7 +1,7 @@
 {% load app_filters admin_static %}
 
 
-    {% comment %} {% for line in fieldset %}
+{% comment %} {% for line in fieldset %}
         <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
             {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
             {% for field in line %}
@@ -25,42 +25,40 @@
         </div>
     {% endfor %}{% endcomment %}
 {% if fieldset.name == "Personal info" %}
-     <div class="card ">
-        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
-            <li role="presentation" class="active">
-                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Usuarios</span>
-                </a>
-            </li>
-        </ul>
+    <div class="card ">
+    <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+        <li role="presentation" class="active">
+            <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                <span class="hidden-xs">Usuarios</span>
+            </a>
+        </li>
+    </ul>
 
-        <div class="card-block">
-            <div class="tab-content">
-                <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                            <h2 class="text-center">Datos Generales</h2>
-                 <div class="row">
-    <fieldset class=" {{ fieldset.classes }}">
-        {% if fieldset.name %}{% endif %}
-        {% if fieldset.description %}
-            <div class="description">{{ fieldset.description|safe }}</div>
-        {% endif %}
+    <div class="card-block">
+    <div class="tab-content">
+    <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+    <h2 class="text-center">Datos Generales</h2>
+    <div class="row">
+        <fieldset class=" {{ fieldset.classes }}">
+            {% if fieldset.name %}{% endif %}
+            {% if fieldset.description %}
+                <div class="description">{{ fieldset.description|safe }}</div>
+            {% endif %}
 
-                {% for line in fieldset %}
-                    {% for field in line %}
-                        {% if field.field.name == "first_name" %}
-
-
-                            <hr>
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
+            {% for line in fieldset %}
+                {% for field in line %}
+                    {% if field.field.name == "first_name" %}
+                        <hr>
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
-                        {% endif %}
+                        </div>
+                    {% endif %}
 
                     {% if field.field.name == "last_name" %}
 
@@ -76,57 +74,31 @@
 
 
                     {% endif %}
-                        {% if field.field.name == "email" %}
+                    {% if field.field.name == "email" %}
 
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
-                        {% endif %}
+                        </div>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </fieldset>
-     </div>
+        </fieldset>
+    </div>
 {% endif %}
 
 {% if fieldset.name == "AuthInfo" %}
     <div class="row">
-    <fieldset class="module {{ fieldset.classes }}" style="border: 0px;">
-        {% for line in fieldset %}
-            {% for field in line %}
-                 {% if field.field.name == "username" %}
+        <fieldset class="module {{ fieldset.classes }}" style="border: 0px;">
+            {% for line in fieldset %}
+                {% for field in line %}
+                    {% if field.field.name == "username" %}
 
-                     <div class="col-md-4">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
-
-                {% endif %}
-
-                {% if field.field.name == "password1" %}
-                    <div class="col-md-4">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
-
-                {% endif %}
-
-                {% if field.field.name == "password2" %}
                         <div class="col-md-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
@@ -137,58 +109,84 @@
                             </div>
                         </div>
 
-                 {% endif %}
+                    {% endif %}
+
+                    {% if field.field.name == "password1" %}
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                    {% if field.field.name == "password2" %}
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </fieldset>
+        </fieldset>
     </div>
 {% endif %}
 
 {% if fieldset.name  == "Permissions" %}
-<div class="row">
+    <div class="row">
     <div class="col-md-4">
         <fieldset class="module {{ fieldset.classes }}" style="border: 0px;">
-             {% for line in fieldset %}
+            {% for line in fieldset %}
                 {% for field in line %}
-                   {% if field.field.name == "is_active" %}
-                           <div class="form-group field-{{ field.field.name }}">
-                               <div>
-                                   {{ field.label_tag }}
-                                   {{ field.field|addcss:"form-control" }}
-                                   {{ field.errors }}
-                               </div>
+                    {% if field.field.name == "is_active" %}
+                        <div class="form-group field-{{ field.field.name }}">
+                            <div>
+                                {{ field.label_tag }}
+                                {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
                             </div>
-                   {% endif %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
             {% endfor %}
         </fieldset>
-     </div>
+    </div>
 
 
 {% endif %}
 
 {% if inline_admin_formset.opts.verbose_name_plural == "Usuarios" %}
- <div class="col-md-8">
+    <div class="col-md-8">
         <fieldset class="module  {{ fieldset.classes }}">
-         {% for line in fieldset %}
-            {% for field in line %}
-               {% if field.field.name == "rol" %}
-                   <div class="col-md-6">
-                     <div class="form-group field-{{ field.field.name }}">
-                        <div>
-                                   {{ field.label_tag }}
-                                   {{ field.field|addcss:"form-control" }}
-                                   {{ field.errors }}
+            {% for line in fieldset %}
+                {% for field in line %}
+                    {% if field.field.name == "rol" %}
+                        <div class="col-md-6">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
                         </div>
-                     </div>
-                   </div>
-               {% endif %}
-                {% if field.field.name == "profile_picture" %}
-                   <div class="col-md-6">
-                     <div class="form-group field-{{ field.field.name }}">
+                    {% endif %}
+                    {% if field.field.name == "profile_picture" %}
+                        <div class="col-md-6">
+                            <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
-                           <div class="input-group">
+                                <div class="input-group">
                                     <label class="control-label required"
                                            for="id_{{ field.field.name }}">Foto de Perfil:</label>
                                     <input type="text" readonly="" class="form-control"
@@ -198,19 +196,19 @@
                                                           <i class="material-icons">attach_file</i>
                                                         </button>
                                                       </span>
-                           </div>
-                     </div>
-                   </div>
-               {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
             {% endfor %}
-         {% endfor %}
         </fieldset>
 
-</div>
-  {#    cerrar último row#}
-  </div>
+    </div>
+    {#    cerrar último row#}
+    </div>
     {#    cerrar card block#}
-      </div>
+    </div>
     </div>
     </div>
     </div>

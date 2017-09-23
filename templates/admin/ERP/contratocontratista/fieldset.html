@@ -1,10 +1,10 @@
-{% load app_filters admin_static%}
+{% load app_filters admin_static %}
 <fieldset class="module aligned {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
     {% endif %}
-{% comment %}    {% for line in fieldset %}
+    {% comment %}    {% for line in fieldset %}
         <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
             {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
             {% for field in line %}
@@ -39,13 +39,13 @@
 
         <div class="card-block">
             <div class="tab-content">
-            {% for line in fieldset %}
-                {% for field in line %}
+                {% for line in fieldset %}
+                    {% for field in line %}
 
-                    {% if field.field.name == "clave_contrato" %}
-                <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                    <div class="row">
-                        <h2 class="text-center">Datos generales</h2>
+                        {% if field.field.name == "clave_contrato" %}
+                            <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+                            <div class="row">
+                            <h2 class="text-center">Datos generales</h2>
 
                             <hr>
                             <div class="col-md-4">
@@ -58,40 +58,40 @@
                                 </div>
 
                             </div>
-                    {% endif %}
+                        {% endif %}
                     {% if field.field.name == "project" %}
 
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
+                        </div>
 
 
                     {% endif %}
                     {% if field.field.name == "no_licitacion" %}
 
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
-                    </div>
+                        </div>
+                        </div>
 
                     {% endif %}
 
 
 
-                     {% if field.field.name == "contratista" %}
-                    <div class="row">
+                        {% if field.field.name == "contratista" %}
+                            <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
@@ -102,67 +102,67 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% if field.field.name == "modalidad_contrato" %}
+                    {% if field.field.name == "modalidad_contrato" %}
 
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
+                        </div>
 
 
-                     {% endif %}
-                        {% if field.field.name == "dias_pactados" %}
+                    {% endif %}
+                    {% if field.field.name == "dias_pactados" %}
 
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
-                         </div>
-                        {% endif %}
-                      {% if field.field.name == "codigo_obra" %}
-                      <div class="row">
+                        </div>
+                        </div>
+                    {% endif %}
+                        {% if field.field.name == "codigo_obra" %}
+                            <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-codigo_obra">
-                                   <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                                </div>
-                            </div>
-
-                    {% endif %}
-                     {% if field.field.name == "dependencia" %}
-
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
+                                    <div class="form-group field-{{ field.field.name }}">
+                                        <div>
+                                            {{ field.label_tag }}
+                                            {{ field.field|addcss:"form-control" }}
+                                            {{ field.errors }}
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                     </div>
+
+                        {% endif %}
+                    {% if field.field.name == "dependencia" %}
+
+                        <div class="col-md-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        </div>
 
                     {% endif %}
 
 
 
                         {% if field.field.name == "fecha_firma" %}
-                         <div class="row">
+                            <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-fecha_firma">
                                     <div>
@@ -175,80 +175,93 @@
 
                         {% endif %}
 
-                        {% if field.field.name == "fecha_inicio" %}
+                    {% if field.field.name == "fecha_inicio" %}
 
-                            <div class="col-md-4">
-                                <div class="form-group field-fecha_inicio">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if field.field.name == "fecha_termino" %}
-                            <div class="col-md-4">
-                                <div class="form-group field-fecha_termino">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field }}
-                                        {{ field.errors }}
-                                    </div>
+                        <div class="col-md-4">
+                            <div class="form-group field-fecha_inicio">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
                         </div>
-                        {% endif %}
+                    {% endif %}
+                    {% if field.field.name == "fecha_termino" %}
+                        <div class="col-md-4">
+                            <div class="form-group field-fecha_termino">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    {% endif %}
 
                         {% if field.field.name == "monto_contrato" %}
-                         <div class="row">
+                            <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if field.field.name == "monto_contrato_iva" %}
-                            <div class="col-md-3">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if field.field.name == "pago_inicial" %}
-                            <div class="col-md-3">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                        {% if field.field.name == "pago_final" %}
-                            <div class="col-md-3">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                        {% endif %}
 
-                     {% if field.field.name == "objeto_contrato" %}
-                    <div class="row">
+                                        {{ field.label_tag }}
+                                        <div class="input-group">
+                                            <div class="input-group-addon">$</div>
+                                            {{ field.field|addcss:"form-control"}}
+                                        </div>
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% if field.field.name == "monto_contrato_iva" %}
+                        <div class="col-md-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    <div class="input-group">
+                                        <div class="input-group-addon">$</div>
+                                        {{ field.field|addcss:"form-control f-number2" }}
+                                    </div>
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if field.field.name == "pago_inicial" %}
+                        <div class="col-md-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    <div class="input-group">
+                                        <div class="input-group-addon">$</div>
+                                        {{ field.field|addcss:"form-control f-number3" }}
+                                    </div>
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if field.field.name == "pago_final" %}
+                        <div class="col-md-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    <div class="input-group">
+                                        <div class="input-group-addon">$</div>
+                                        {{ field.field|addcss:"form-control f-number4" }}
+                                    </div>
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    {% endif %}
+
+                        {% if field.field.name == "objeto_contrato" %}
+                            <div class="row">
                             <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
@@ -259,38 +272,62 @@
                                 </div>
                             </div>
                         {% endif %}
-                        {% if field.field.name == "lugar_ejecucion" %}
-                            <div class="col-md-3">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
+                    {% if field.field.name == "lugar_ejecucion" %}
+                        <div class="col-md-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
+                        </div>
 
-                        {% endif %}
-                        {% if field.field.name == "observaciones" %}
+                    {% endif %}
+                    {% if field.field.name == "observaciones" %}
 
-                            <div class="col-md-6">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
+                        <div class="col-md-6">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
                                 </div>
                             </div>
-                         </div>
-                        {% endif %}
+                        </div>
+                        </div>
+                    {% endif %}
                         {% if field.field.name == "version" %}
-                                        {{ field.field|addcss:"form-control" }}
+                            {{ field.field|addcss:"form-control" }}
                         {% endif %}
-            {% endfor %}
-            {% endfor %}
-        </div>
+                    {% endfor %}
+                {% endfor %}
+                </div>
 
 
-    </div>
+            </div>
 </fieldset>
+
+{% comment %}<script src="https://nosir.github.io/cleave.js/dist/cleave.min.js"></script>
+<script>
+    $(document).ready(function () {
+
+        var cleave = new Cleave('.f-number1', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+        var cleave = new Cleave('.f-number2', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+         var cleave = new Cleave('.f-number3', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+         var cleave = new Cleave('.f-number4', {
+            numeral: true,
+            numeralThousandsGroupStyle: 'thousand'
+        });
+
+    });
+</script>{% endcomment %}

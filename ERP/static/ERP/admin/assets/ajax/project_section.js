@@ -64,14 +64,14 @@ function putSections(data){
         sHTML= sHTML +'<div class="panel panel-default">';
         sHTML = sHTML + '<div class="panel-heading" role="tab" id="headingTwo">';
         sHTML = sHTML + '   <h4 class="panel-title ms-rotate-icon">';
-        sHTML = sHTML + '   <div class="togglebutton" style="position: relative">';
+/*        sHTML = sHTML + '   <div class="togglebutton" style="position: relative">';
         sHTML = sHTML + '       <label class="switch-right">';
-        sHTML = sHTML + '           <input onchange="toggleCheckboxParent(this)" class = "parent-' + i + '" type="checkbox" name="checkSegment" id="'+ data[i].project_section_name+'" value="'+ data[i].project_section_id +'"  '  +chk+ '>';
-        sHTML = sHTML + '           <span class="toggle"></span>';
+        //sHTML = sHTML + '           <input onchange="toggleCheckboxParent(this)" class = "parent-' + i + '" type="checkbox" name="checkSegment" id="'+ data[i].project_section_name+'" value="'+ data[i].project_section_id +'"  '  +chk+ '>';
+        //sHTML = sHTML + '           <span class="toggle"></span>';
         sHTML = sHTML + '       </label>';
-        sHTML = sHTML + '   </div>';
+        sHTML = sHTML + '   </div>';*/
         sHTML = sHTML + '   <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse'+ data[i].project_section_id +'" aria-expanded="false" aria-controls="collapse'+ data[i].project_section_id +'">';
-        sHTML = sHTML + '       <i class="zmdi zmdi-chevron-up"></i>'+data[i].project_section_name;
+        sHTML = sHTML + '       <i class="zmdi ">&nbsp;</i>'+data[i].project_section_name;
         sHTML = sHTML + '   </a>';
         sHTML = sHTML + '   </h4>';
         sHTML = sHTML + '</div>';
@@ -96,7 +96,8 @@ function putSections(data){
             sHTML = sHTML + '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;'+data[i].inner_sections[j].project_section_name;
             sHTML = sHTML + '           <div class="togglebutton" style="float: right">';
             sHTML = sHTML + '               <label>';
-            sHTML = sHTML + '                   <input onchange="toggleCheckboxChild(this)" class = "child-' + i + '"type="checkbox" name="checkSegment" id="'+data[i].inner_sections[j].project_section_name+'" value="'+data[i].inner_sections[j].project_section_id+'" ' +subchk+ '>';
+            sHTML = sHTML + '                   <input class = "child-' + i + '" type="checkbox" name="checkSegment" id="'+data[i].inner_sections[j].project_section_name+'" value="'+data[i].inner_sections[j].project_section_id+'" ' +subchk+ '>';
+            //onchange="toggleCheckboxChild(this)"
             sHTML = sHTML + '               <span class="toggle"></span>';
             sHTML = sHTML + '               </label>';
             sHTML = sHTML + '           </div>';
@@ -108,6 +109,7 @@ function putSections(data){
         sHTML = sHTML + '</div>';
         sHTML = sHTML + '</div>';
         sHTML = sHTML + '<div class="clearfix"></div>';
+
 
 
     }

@@ -41,8 +41,11 @@
                                         <thead>
                                         <tr>
                                             <th>Proyecto</th>
+                                            <th>Cliente</th>
+                                            <th>Fecha Inicio</th>
+                                            <th>Fecha Término</th>
 
-                                            <th>Estatus</th>
+                                            <th>Eliminar</th>
                                         </tr>
                                         </thead>
                                         {% for project in object_list %}
@@ -52,6 +55,9 @@
                                                 {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
 
                                                 <td><span>{{ project.project }}</span></td>
+                                                <td><span>{{ project.project.empresa }}</span></td>
+                                                <td><span>{{ project.project.fecha_inicial }}</span></td>
+                                                <td><span>{{ project.project.fecha_final }}</span></td>
                                                 <td class="text-center" style="width: 2%"><a
                                                         href="{{ company.id }}/delete"
                                                         class="btn btn-raised btn-default btn-xs"><i
@@ -59,7 +65,7 @@
                                                 </td>
 
                                                 {% empty %}
-                                                <td>No existen {{ title_list }}</td>
+                                                <td colspan="4">No hay {{ title_list }}</td>
                                             </tr>
                                         {% endfor %}
                                     </table>
@@ -72,13 +78,7 @@
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="card">
- {% comment %}------ bloque para boton de agregar acceso a proyectos ------------{% endcomment %}
 
-
-
-
-
-{% comment %}------ bloque para boton de agregar acceso a proyectos ------------{% endcomment %}
                                 </div>
                             </div>
                         </div>

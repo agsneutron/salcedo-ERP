@@ -2,6 +2,8 @@ __author__ = 'ariaocho'
 
 from django import template
 from django import forms
+from django.contrib.humanize.templatetags.humanize import intcomma
+import locale
 register = template.Library()
 
 @register.filter(name='add_attributes')
@@ -39,3 +41,12 @@ def is_file(field):
 @register.filter(name='addcss')
 def addcss(field, css):
     return field.as_widget(attrs={"class":css})
+
+
+@register.filter(name='formatoNumero')
+def currency(field):
+    if field=='-' or field == "None": field=0
+    return locale.currency(field, grouping=True)
+    #moneda = round(float(field), 2)
+    #return "$%s%s" % (intcomma(int(moneda)), ("%0.2f" % moneda)[-3:])
+    #return field

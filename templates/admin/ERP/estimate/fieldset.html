@@ -11,21 +11,20 @@
                 </a>
             </li>
         </ul>
-
         <div class="card-block">
             <div class="tab-content">
                 {% for line in fieldset %}
                     {% for field in line %}
-
-
-
                         {% if field.field.name == "advance_payment_amount" %}
                             <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
+                                        <div class="input-group">
+                                            <div class="input-group-addon">$</div>
+                                            {{ field.field|addcss:"form-control" }}
+                                        </div>
                                         {{ field.errors }}
                                     </div>
                                 </div>
@@ -75,7 +74,7 @@
                     {% if field.field.name == "concept_input" %}
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-md-12">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
