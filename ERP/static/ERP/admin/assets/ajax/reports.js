@@ -69,4 +69,7 @@ function Get_Financial_Report(){
     if (parseInt(project_id) !=0 && detail_level.toString()!= "" ) {
         window.open("/reporting/get_financial_report?project_id=" + parseInt(project_id) + "&detail_level=" + detail_level.toString());
     }
+    else{
+        alert("Para generar el reporte debe seleccionar un Proyecto");
+    }
 }
