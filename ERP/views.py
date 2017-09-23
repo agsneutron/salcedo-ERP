@@ -94,7 +94,7 @@ class CompaniesListView(ListView):
        Display a Blog List page filtered by the search query.
     """
     paginate_by = 10
-    title_list = 'Empresas'
+    title_list = 'Clientes'
 
     def get_queryset(self):
         result = super(CompaniesListView, self).get_queryset()

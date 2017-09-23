@@ -65,6 +65,13 @@
             <div class="card-block text-center">
                 <div class="table-responsive">
                     <table class="table table-bordered">
+                     {% if owners.count == 0 %}
+                        <tbody>
+                            <tr>
+                                <td align="left">No hay Propietarios registrados para el Cliente</td>
+                            </tr>
+                        </tbody>
+                     {% else %}
                         <thead>
                         <td style="border:1px solid; font-weight: 700">Nombre</td>
                         <td style="border:1px solid; font-weight: 700">Correo</td>
@@ -91,6 +98,7 @@
                             </tr>
                         {% endfor %}
                         </tbody>
+                    {% endif %}
                     </table>
                 </div>
             </div>
@@ -107,6 +115,13 @@
             <div class="card-block text-center">
                 <div class="table-responsive">
                     <table class="table table-bordered">
+                    {% if projects.count == 0 %}
+                        <tbody>
+                            <tr>
+                                <td align="left">No hay Proyectos registrados para el Cliente</td>
+                            </tr>
+                        </tbody>
+                     {% else %}
                         <thead>
                             <td style="border:1px solid; font-weight: 700">Clave del Proyecto</td>
                             <td style="border:1px solid; font-weight: 700">Nombre</td>
@@ -130,6 +145,7 @@
                                 </tr>
                             {% endfor %}
                         </tbody>
+                      {% endif %}
                     </table>
                 </div>
             </div>
