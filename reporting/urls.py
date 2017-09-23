@@ -6,7 +6,7 @@ from . import views
 app_name = 'Reporting'
 
 urlpatterns = [
-    # /DataUpload/
+    url(r'^get_financial_report$', views.GetFinancialReport.as_view()),
     url(r'^$', views.testView, name='test'),
     url(r'^', views.report, name='report'),
 ]

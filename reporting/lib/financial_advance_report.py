@@ -1,4 +1,9 @@
 from decimal import Decimal
+
+import StringIO
+from rexec import FileWrapper
+
+from django.http.response import StreamingHttpResponse
 from xlsxwriter.workbook import Workbook
 
 
@@ -8,8 +13,13 @@ class FinancialAdvanceReport(object):
     @staticmethod
     def generate_report(information_json, show_concepts=True):
         FinancialAdvanceReport.show_concepts = show_concepts
+
+        output = StringIO.StringIO()
+
+
         # Create an new Excel file and add a worksheet.
-        workbook = Workbook('report.xlsx')
+        #workbook = Workbook('report.xlsx')
+        workbook = Workbook(output)
         worksheet = workbook.add_worksheet('Avance Financiero Interno')
 
         # Widen the first column to make the text clearer.
@@ -29,6 +39,16 @@ class FinancialAdvanceReport(object):
         # worksheet.insert_image('B5', 'logo.png')
 
         workbook.close()
+
+        response = StreamingHttpResponse(FileWrapper(output),
+                                        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+
+        response['Content-Disposition'] = 'attachment; filename=Reporte_Avance_Financiero.xlsx'
+        response['Content-Length'] = output.tell()
+
+        output.seek(0)
+
+        return response
 
     @staticmethod
     def add_headers(workbook, worksheet):

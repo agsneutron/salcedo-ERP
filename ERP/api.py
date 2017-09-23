@@ -29,7 +29,7 @@ class ProjectEndpoint(View):
             the_list.append(register)
 
         return HttpResponse(
-            json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
+            Utilities.json_to_dumps(the_list),
             'application/json', )
 
 
@@ -169,8 +169,10 @@ class EstimatesByLineItems(View):
 
 
 class FinancialHistoricalProgressReport(View):
-    def get(self, request):
-        project_id = request.GET.get('project_id')  # The project for which we will make the report.
+
+    @staticmethod
+    def get_report(project_id):
+        #project_id = request.GET.get('project_id')  # The project for which we will make the report.
 
         line_items = LineItem.objects.filter(project_id=project_id)
         type = 'C'
@@ -317,8 +319,9 @@ class FinancialHistoricalProgressReport(View):
             structured_response['global_total_estimated'] = str(global_total_estimated)
             structured_response['global_total_pending'] = str(global_total_programmed - global_total_estimated)
 
-        return HttpResponse(
-            Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
+        #return HttpResponse(
+        #    Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
+        return structured_response
 
 
 class AccessToProjectByUser(View):
