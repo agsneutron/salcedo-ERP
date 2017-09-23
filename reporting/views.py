@@ -1,12 +1,23 @@
 # coding=utf-8
-
+from braces.views._access import StreamingHttpResponse
 from django.db import transaction
 from django.http import HttpResponse
+
+import ERP
+from ERP.api import FinancialHistoricalProgressReport
+from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
 from django.shortcuts import render, redirect, render_to_response
+from django.views.generic import View
 
 def report(request):
     return render(request, 'reporting/report.html')
+
+
+
+
+# class GetFinancialReport()
+
 
 def testView(request):
     json = {
@@ -777,3 +788,21 @@ def testView(request):
 
     # return HttpResponse('Done')
     # return render(request, 'DataUpload/carga.html')
+
+
+class GetFinancialReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        detail_level = request.GET.get('detail_level')
+
+        if detail_level == "c":
+            show_concepts = True
+        else:
+            show_concepts = False
+
+
+        report_json = FinancialHistoricalProgressReport.get_report(project_id)
+        file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
+        return file
+
+        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
