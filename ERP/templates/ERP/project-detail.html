@@ -163,10 +163,6 @@
 {% endcomment %}
 
 
---{{ sections_result }}--
-
-
-
 
     <div class="col-xs-10 col-xs-offset-1" style="    padding-bottom: 25px;">
         <div class="card ">
@@ -180,34 +176,53 @@
                     <div class="col-md-3">
                         <ul class="nav nav-tabs-ver" role="tablist">
 
-                            <li role="presentation" class="active"><a href="#general" aria-controls="home" role="tab"
-                                                                      data-toggle="tab"><i class="zmdi zmdi-home"></i>
-                                Proyecto</a>
-                            </li>
-                            <li role="presentation"><a href="#ubicacion" aria-controls="profile" role="tab"
+
+                            {% for section in sections_result %}
+                            {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
+                                <li role="presentation" class="active"><a href="#general" aria-controls="home" role="tab"
+                                                                          data-toggle="tab"><i class="zmdi zmdi-home"></i>
+                                    Proyecto</a>
+                                </li>
+                            {% endif %}
+                            {% if section.section_name == "Ubicación / Áreas" and section.total_inner_sections >= 0 %}
+                            <li role="presentation" disabled="true"><a href="#ubicacion" aria-controls="profile" role="tab"
                                                        data-toggle="tab"><i
                                     class="zmdi zmdi-account"></i> Ubicación/Áreas</a></li>
+                            {% endif %}
                             {% comment %}<li role="presentation"><a href="#areas" aria-controls="messages" role="tab" data-toggle="tab"><i
                             class="zmdi zmdi-email"></i> Áreas</a></li>{% endcomment %}
+                            {% if section.section_name == "Estado Legal" and section.total_inner_sections > 0 %}
                             <li role="presentation"><a href="#legal" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
                                     class="zmdi zmdi-settings"></i> Estado Legal</a></li>
+                            {% endif %}
+                            {% if section.section_name == "Restricciones" and section.total_inner_sections > 0 %}
                             <li role="presentation"><a href="#rest" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
                                     class="zmdi zmdi-settings"></i> Restricciones</a></li>
+                            {% endif %}
+                            {% if section.section_name == "Análisis" and section.total_inner_sections > 0 %}
                             <li role="presentation"><a href="#suelo" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
                                     class="zmdi zmdi-settings"></i> Análisis</a></li>
+                            {% endif %}
+                            {% if section.section_name == "Análisis II" and section.total_inner_sections > 0 %}
                             <li role="presentation"><a href="#suelo-dos" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
                                     class="zmdi zmdi-settings"></i> Análisis II</a></li>
+                            {% endif %}
+                            {% if section.section_name == "Costo / Mercado" and section.total_inner_sections > 0 %}
                             <li role="presentation"><a href="#costo" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
                                     class="zmdi zmdi-settings"></i> Costo/Mercado</a></li>
+                            {% endif %}
+                            {% if section.section_name == "Programa" and section.total_inner_sections > 0 %}
                             <li role="presentation"><a href="#program" aria-controls="settings" role="tab"
                                                        data-toggle="tab"><i
                                     class="zmdi zmdi-settings"></i> Programa</a></li>
+                            {% endif %}
 
+                            {% endfor %}
 
                         </ul>
                     </div>
@@ -215,8 +230,12 @@
                     <div class="col-md-9 nav-tabs-ver-container-content">
                         <div class="card-block">
                             <div class="tab-content">
+                            {% for section in sections_result %}
+                                {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane active" id="general">
                                     <div class="col-xs-8 col-xs-offset-2">
+                                        {% for inner in section.inner_sections %}
+                                        {% if inner.inner_section_name == "Proyecto" %}
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Proyecto</h3>
@@ -233,11 +252,15 @@
                                                     Tipo de Contrucción: {{ project.tipo_construccion }}</li>
                                             </ul>
                                         </div>
+                                        {% endif %}
+                                        {% endfor %}
                                     </div>
-
-
                                 </div>
+                                {% endif %}
+                                {% if section.section_name == "Ubicación / Áreas" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane" id="ubicacion">
+                                    {% for inner in section.inner_sections %}
+                                    {% if inner.inner_section_name == "Ubicación" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -260,6 +283,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Áreas" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -275,10 +300,14 @@
                                             </ul>
                                         </div>
                                     </div>
-
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
-
+                                {% endif %}
+                                {% if section.section_name == "Estado Legal" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane" id="legal">
+                                    {% for inner in section.inner_sections %}
+                                    {% if inner.inner_section_name == "Legal" %}
                                     <div class="col-xs-10 col-xs-offset-2">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -333,8 +362,14 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
+                                {% endif %}
+                                {% if section.section_name == "Restricciones" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane" id="rest">
+                                    {% for inner in section.inner_sections %}
+                                    {% if inner.inner_section_name == "Restricciones" %}
                                     <div class="col-xs-8 col-xs-offset-2">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -357,8 +392,14 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
+                                {% endif %}
+                                {% if section.section_name == "Análisis" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane" id="suelo">
+                                    {% for inner in section.inner_sections %}
+                                    {% if inner.inner_section_name == "Uso de Suelo" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -381,6 +422,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Hidráulica" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -404,6 +447,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Sanitaria" %}
                                     <div class="clearfix"></div>
                                     <div class="col-xs-6">
                                         <div class="card">
@@ -428,7 +473,8 @@
                                             </ul>
                                         </div>
                                     </div>
-
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Pluvial" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -452,9 +498,14 @@
                                             </ul>
                                         </div>
                                     </div>
-
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
+                                {% endif %}
+                                {% if section.section_name == "Análisis II" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane" id="suelo-dos">
+                                    {% for inner in section.inner_sections %}
+                                    {% if inner.inner_section_name == "Vial" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -489,6 +540,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Electricidad" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -512,6 +565,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Alambrado Público" %}
                                     <div class="clearfix"></div>
                                     <div class="col-xs-6">
                                         <div class="card">
@@ -536,6 +591,9 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Equipamiento" %}
+
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -555,7 +613,8 @@
                                             </ul>
                                         </div>
                                     </div>
-
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "TV y Cable" %}
                                     <div class="clearfix"></div>
                                     <div class="col-xs-6">
                                         <div class="card">
@@ -569,6 +628,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Telefonía" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -590,8 +651,14 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
+                                {% endif %}
+                                {% if section.section_name == "Costo / Mercado" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane" id="costo">
+                                    {% for inner in section.inner_sections %}
+                                    {% if inner.inner_section_name == "Costo" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -609,6 +676,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Estudio de Mercado" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -627,6 +696,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Definición del Proyecto" %}
                                     <div class="clearfix"></div>
                                     <div class="col-xs-6">
                                         <div class="card">
@@ -643,9 +714,14 @@
                                             </ul>
                                         </div>
                                     </div>
-
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
+                                {% endif %}
+                                {% if section.section_name == "Programa" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane" id="program">
+                                    {% for inner in section.inner_sections %}
+                                    {% if inner.inner_section_name == "Programas y Áreas" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -672,6 +748,8 @@
                                             </ul>
                                         </div>
                                     </div>
+                                    {% endif %}
+                                    {% if inner.inner_section_name == "Afectación" %}
                                     <div class="col-xs-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
@@ -688,8 +766,12 @@
                                             </ul>
                                         </div>
                                     </div>
-
+                                    {% endif %}
+                                    {% endfor %}
                                 </div>
+                                {% endif %}
+
+                            {% endfor %}
                             </div>
                         </div>
                     </div>
