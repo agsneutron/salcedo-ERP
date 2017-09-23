@@ -67,10 +67,10 @@
                             <div style="padding-top: 10px;">
                                 <dl>
                                     <dt>Partida:</dt>
-                                    <dd>{{ estimate.concept_input.line_item.description }}</dd>
+                                    <dd style="padding-top: 4px">{{ estimate.concept_input.line_item.description }}</dd>
 
                                     <dt>Descripción:</dt>
-                                    <dd>{{ estimate.concept_input.description }}</dd>
+                                    <dd style="padding-top: 4px">{{ estimate.concept_input.description }}</dd>
                                     <hr>
 
                                 </dl>
@@ -147,7 +147,11 @@
                                                         </td>
                                                         <td>
                                                             <div class="progress" id="progressbar">
-                                                                <div class="progress-bar progress-bar-custom"
+                                                                <div class="progress-bar progress-bar-{% if progress_estimate.progress|slice:":-1"  < 15 %}danger
+                                                                  {% elif progress_estimate.progress|slice:":-1" > 15 and progress_estimate.progress|slice:":-1" < 50 %}warning
+                                                                  {% elif progress_estimate.progress|slice:":-1" >= 50 and progress_estimate.progress|slice:":-1" <= 75 %}info
+                                                                  {% elif progress_estimate.progress|slice:":-1" > 75  %}success
+                                                                  {% endif %}"
                                                                      role="progressbar"
                                                                      aria-valuenow="{{ progress_estimate.progress }}"
                                                                      aria-valuemin="0" aria-valuemax="100"
@@ -187,7 +191,7 @@
                                     </div>
                                 </div>
                             {% else %}
-                                <div>No se se ha agregado ningún avance.</div>
+                                <div>&nbsp;&nbsp;&nbsp;&nbsp;No se ha agregado ningún avance.</div>
                             {% endif %}
                         </div>
 
