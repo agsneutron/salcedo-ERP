@@ -25,7 +25,10 @@
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
+                                        <div class="input-group">
+                                            <div class="input-group-addon">$</div>
+                                            {{ field.field|addcss:"form-control" }}
+                                        </div>
                                         {{ field.errors }}
                                     </div>
                                 </div>

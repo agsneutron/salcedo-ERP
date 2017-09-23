@@ -3,7 +3,10 @@
 from django.db import transaction
 from django.http import HttpResponse
 from lib.financial_advance_report import FinancialAdvanceReport
+from django.shortcuts import render, redirect, render_to_response
 
+def report(request):
+    return render(request, 'report.html')
 
 def testView(request):
     json = {
@@ -772,5 +775,5 @@ def testView(request):
 
     FinancialAdvanceReport.generate_report(json)
 
-    return HttpResponse('Done')
+    # return HttpResponse('Done')
     # return render(request, 'DataUpload/carga.html')
