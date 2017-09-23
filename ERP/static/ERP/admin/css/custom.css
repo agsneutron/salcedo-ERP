@@ -448,6 +448,7 @@ dd, dt {
 }
 dt {
     color: #00a09b;
+    padding-top: 8px;
 }
 .circle-primary {
     stroke: #00a09b;
@@ -766,4 +767,9 @@ ul { padding-left:20px; list-style:none; }
 }
 .add-related, .change-related {
     display: none;
+}
+.progress {
+    height: 7px;
+    margin-bottom: 1px;
+
 }

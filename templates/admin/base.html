@@ -102,7 +102,7 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li class="dropdown active">
+                    <li{% if template_name == "admin" %} class="dropdown active"{% endif %}>
                         <a href="/admin"
                            class="dropdown-toggle animated fadeIn animation-delay-4 text-center"
                            data-hover="dropdown" data-name="home">
@@ -383,13 +383,13 @@
                         <div class="avatar">
                             <img alt="" src="{% static "ERP/admin/img/user1.jpeg" %}">
                             <h3 style="margin-top: 0 !important">
-                            {% block welcome-msg %}
-                                &nbsp;{% trans 'Bienvenido, &nbsp;' %}
-                                <span class="">{% firstof user.get_short_name user.get_username %}</span>&nbsp;
-                                &nbsp;<span class="orange-circle"> <span class="xcontainer"> <span
-                                    class="xicon"></span></span></span></a>
-                            {% endblock %}
-                        </h3>
+                                {% block welcome-msg %}
+                                    &nbsp;{% trans 'Bienvenido, &nbsp;' %}
+                                    <span class="">{% firstof user.get_short_name user.get_username %}</span>&nbsp;
+                                    &nbsp;<span class="orange-circle"> <span class="xcontainer"> <span
+                                        class="xicon"></span></span></span></a>
+                                {% endblock %}
+                            </h3>
                         </div>
 
 
@@ -444,6 +444,12 @@
         function goBack() {
             window.history.back();
         }
+
     </script>
+
+    <script>
+
+    </script>
+
 </body>
 </html>

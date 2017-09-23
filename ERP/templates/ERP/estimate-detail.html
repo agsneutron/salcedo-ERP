@@ -64,20 +64,20 @@
 
                     <div class="col-xs-8 text-left">
                         <ul class="list-group">
-                            <li href="" class="list-group-item withripple "> <h4 class="color-active">Partida:</h4>  {{ estimate.concept_input.line_item.description }}</li>
+                            <li href="" class="list-group-item withripple "><strong
+                                    class="color-active">Partida:</strong> {{ estimate.concept_input.line_item.description }}
+                            </li>
                             <li href="" class="list-group-item withripple ">
-                                Descripción: {{ estimate.concept_input.description }}</li>
+                                <strong class="color-active">
+                                    Descripción:</strong> {{ estimate.concept_input.description }}</li>
                         </ul>
-
-
-                        <hr>
 
 
                         <div class="">
                             {% if estimate.advance_payment_amount > 0 %}
-                                <div>{{ estimate.advance_payment_amount }}</div>
-                                <div>{{ estimate.advance_payment_date }}</div>
-                                <div>{{ estimate.get_advance_payment_status_display }}</div>
+                                <div class="col-xs-3 text-center"><strong class="color-active">Adelanto: </strong>{{ estimate.advance_payment_amount }}</div>
+                                <div class="col-xs-6 text-center"><strong class="color-active">Fecha: </strong>{{ estimate.advance_payment_date }}</div>
+                                <div class="col-xs-3 text-center"><strong class="color-active">Estado: </strong>{{ estimate.get_advance_payment_status_display }}</div>
                             {% elif estimate.advance_payment_amount == 0 %}
                                 <div>No se ha definido un anticipo</div>
                             {% endif %}
@@ -104,72 +104,85 @@
 
                     </div>
                     <div class="clearfix"></div>
+                    <hr>
                     <div class="col-xs-12 text-left">
-                        <hr>
-                        <div class="card card-primary">
+
+                        <div class="card card-default">
                             <div class="card-header">
                                 <h3 class="card-title">
-                                    <i class="zmdi zmdi-graduation-cap"></i> Avances
+                                    Avances
                                 </h3>
-                                <div class="item-right">
-
-                                    <a href="/admin/ERP/progressestimate/add/?estimate={{ estimate.id }}"
-                                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container"
-                                    >
-                                        &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"
-                                    ></i>
-                                    </a>
-                                </div>
                             </div>
-                            
+                            <div class="item-right">
+                                <a href="/admin/ERP/progressestimate/add/?estimate={{ estimate.id }}"
+                                   class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container">
+                                    &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"></i>
+                                </a>
+
+                            </div>
 
                             {% if progress_estimates %}
-                                <table class="table  table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>Clave de la estimación</th>
-                                        <th>Progreso</th>
-                                        <th>Monto</th>
-                                        <th>Estatus del Pago</th>
-                                        <th>Archivo del generador</th>
-                                        <th></th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr>
-                                        {% for progress_estimate in progress_estimates %}
+                                <div class="card-block text-center">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped text-center">
+                                            <thead>
                                             <tr>
-                                                <td>
-                                                    {{ progress_estimate.key }}
-                                                </td>
-                                                <td>
-                                                    {{ progress_estimate.progress }}
-                                                </td>
-                                                <td>
-                                                    {{ progress_estimate.amount }}
-                                                </td>
-                                                <td>
-                                                    {{ progress_estimate.get_payment_status_display }}
-                                                </td>
-                                                <td>
-                                                    {% if progress_estimate.generator_file %}
-                                                        <a href="/media/{{ progress_estimate.generator_file }}" download
-                                                           class="btn btn-raised btn-default btn-xs">
-                                                            <i class="fa fa-cloud-download fa-2x color-default eliminar"></i>
-                                                        </a>
-                                                    {% endif %}
-
-                                                </td>
-                                                <td>
-                                                    <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-pencil color-default eliminar"></i></a>
-                                                </td>
+                                                <th class="text-center">Clave de la estimación</th>
+                                                <th class="text-center">Progreso</th>
+                                                <th class="text-center">Monto</th>
+                                                <th class="text-center">Estatus del Pago</th>
+                                                <th class="text-center">Archivo del generador</th>
+                                                <th class="text-center">Editar</th>
                                             </tr>
-                                        {% endfor %}
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                {% for progress_estimate in progress_estimates %}
+                                                    <tr class="text-center">
+                                                        <td>
+                                                            {{ progress_estimate.key }}
+                                                        </td>
+                                                        <td>
+                                                            <div class="progress" id="progressbar">
+                                                                <div class="progress-bar progress-bar-custom"
+                                                                     role="progressbar"
+                                                                     aria-valuenow="{{ progress_estimate.progress }}"
+                                                                     aria-valuemin="0" aria-valuemax="100"
+                                                                     style="width: {{ progress_estimate.progress }}">
+                                                                </div>
+
+                                                            </div>
+                                                            <small>{{ progress_estimate.progress }}</small>
+
+                                                        </td>
+                                                        <td>
+                                                            {{ progress_estimate.amount }}
+                                                        </td>
+                                                        <td>
+                                                            {{ progress_estimate.get_payment_status_display }}
+                                                        </td>
+                                                        <td>
+                                                            {% if progress_estimate.generator_file %}
+                                                                <a href="/media/{{ progress_estimate.generator_file }}"
+                                                                   download
+                                                                   class="btn btn-raised btn-default btn-xs">
+                                                                    <i class="fa fa-cloud-download fa-2x color-info eliminar"></i>
+                                                                </a>
+                                                            {% endif %}
+
+                                                        </td>
+                                                        <td class="text-center" style="width: 2%">
+                                                            <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
+                                                               class="btn btn-raised btn-default btn-xs"><i
+                                                                    class="fa fa-pencil color-default eliminar"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
                             {% else %}
                                 <div>No se se ha agregado ningun avance.</div>
                             {% endif %}
@@ -183,6 +196,16 @@
             </div>
         </div>
     </div>
+<script>
+{% comment %}var progressBarColor;
 
+var someValueToCheck = {{ progress_estimate.progress }};
+
+if(someValueToCheck >= 4) progressBarColor = "#ff0000";
+else if(someValueToCheck >=5) progressBarColor = "orange";
+else progressBarColor = "green";
+
+$("#progressbar").css('background-color', progressBarColor);{% endcomment %}
+</script>
 
 {% endblock %}
