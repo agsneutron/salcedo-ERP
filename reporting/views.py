@@ -6,7 +6,7 @@ from lib.financial_advance_report import FinancialAdvanceReport
 from django.shortcuts import render, redirect, render_to_response
 
 def report(request):
-    return render(request, 'report.html')
+    return render(request, 'reporting/report.html')
 
 def testView(request):
     json = {

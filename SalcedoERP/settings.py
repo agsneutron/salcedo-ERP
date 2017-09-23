@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'users',
     'ERP',
+    'reporting',
     'DataUpload'
 ]
 
