@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-
+{% load i18n admin_static app_filters %}
 {% block content %}
     {% comment %}    <h1>Clave del Contrato: {{ contratocontratista.clave_contrato }}  <a href="change">Editar</a></h1>
         <ul>
@@ -25,13 +25,14 @@
 
 
 
-    <div class="col-xs-8 col-xs-offset-2">
+
+    <div class="col-xs-10 col-xs-offset-1">
         <div class="card card-info">
             <div class="card-block text-center">
                 <div class="row">
                 <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i
                         class="zmdi zmdi-city-alt"></i></span>
-                    <h3 class="color-info">Clave del Contrato: {{ contratocontratista.clave_contrato }}</h3>
+                    <h3 class="color-info"><b>Clave del Contrato:</b> {{ contratocontratista.clave_contrato }}</h3>
                     <div class="col-xs-6 text-left">
 
                         {% if contratocontratista.no_licitacion != "" %}
@@ -60,20 +61,17 @@
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Fecha de Término:</span> {{ contratocontratista.fecha_termino }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Lugar de Ejecución:</span> {{ contratocontratista.lugar_ejecucion }}</span>
-                        <span href="" class="list-group-item withripple"><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Monto del Contrato:</span> <span class="f-number1">{{ contratocontratista.monto_contrato }}</span></span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Lugar de Ejecución:</b></span>  {{ contratocontratista.lugar_ejecucion }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active">IVA Aplicable al Contrato:</span> {{ contratocontratista.monto_contrato_iva }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Monto del Contrato:</b></span>  {{ contratocontratista.monto_contrato|formatoNumero }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Pago Inicial:</span> {{ contratocontratista.pago_inicial }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>IVA Aplicable al Contrato:</b></span>  {{ contratocontratista.monto_contrato_iva|formatoNumero }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Pago Final:</span> {{ contratocontratista.pago_final }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Pago Inicial:</b></span>  {{ contratocontratista.pago_inicial|formatoNumero }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Observaciones:</span> {{ contratocontratista.observaciones }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Pago Final:</b></span>  {{ contratocontratista.pago_final|formatoNumero }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Observaciones:</b></span>  {{ contratocontratista.observaciones }}</span>
                     </div>
                 </div>
 

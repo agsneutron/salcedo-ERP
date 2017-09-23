@@ -64,6 +64,13 @@
             <div class="card-block text-center">
                 <div class="table-responsive">
                     <table class="table table-bordered">
+                    {% if contacts.count == 0 %}
+                        <tbody>
+                            <tr>
+                                <td align="left">No hay Contactos registrados para el Contratista</td>
+                            </tr>
+                        </tbody>
+                    {% else %}
                         <thead>
                         <td>Nombre</td>
                         <td>Correo</td>
@@ -90,6 +97,7 @@
                             </tr>
                         {% endfor %}
                         </tbody>
+                    {% endif %}
                     </table>
                 </div>
             </div>
@@ -106,6 +114,13 @@
             <div class="card-block text-center">
                 <div class="table-responsive">
                     <table class="table table-bordered">
+                    {% if contracts.count == 0 %}
+                        <tbody>
+                            <tr>
+                                <td align="left">No hay Proyectos asignados al Contratista</td>
+                            </tr>
+                        </tbody>
+                    {% else %}
                         <thead>
                         <td>Clave del Proyecto</td>
                         <td>Nombre</td>
@@ -130,6 +145,7 @@
                             </tr>
                         {% endfor %}
                         </tbody>
+                    {% endif %}
                     </table>
                 </div>
             </div>
@@ -177,7 +193,7 @@
     </script>
     <script>
         function myFunction() {
-            PopupCenter('http://127.0.0.1:8000/admin/ERP/contact/add/?contratista_id={{ user.id }}','xtf','1024','500');
+            PopupCenter('/admin/ERP/contact/add/?contratista_id={{ contratista.id }}','xtf','1024','500');
 
         }
     </script>
