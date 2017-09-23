@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 import operator
 import urllib
+import locale
 from datetime import date
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext, loader
@@ -16,7 +17,8 @@ from django.views.generic.edit import CreateView
 
 from ERP.forms import EstimateSearchForm, AddEstimateForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
-    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, Contact, AccessToProject, \
+    Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
+    Contact, AccessToProject, \
     ProjectSections
 from django.db.models import Q
 import json
@@ -125,8 +127,6 @@ class CompanyDetailView(generic.DetailView):
     model = Empresa
     template_name = "ERP/company-detail.html"
 
-
-
     def get_context_data(self, **kwargs):
         context = super(CompanyDetailView, self).get_context_data(**kwargs)
         company_id = self.kwargs['pk']
@@ -177,7 +177,6 @@ class ContractorDetailView(generic.DetailView):
     model = Contratista
     template_name = "ERP/contractor-detail.html"
 
-
     def get_context_data(self, **kwargs):
         context = super(ContractorDetailView, self).get_context_data(**kwargs)
         contractor_id = self.kwargs['pk']
@@ -212,7 +211,6 @@ class ContractorContractListView(ListView):
             )
         else:
             ContractorContractListView.query = ''
-
 
         return result
 
@@ -462,7 +460,6 @@ class ProjectDetailView(generic.DetailView):
         context = super(ProjectDetailView, self).get_context_data(**kwargs)
         project_obj = context['project']
 
-
         # Getting the files name.
         context['documento_gravamen_nombre'] = str(project_obj.documento_gravamen.name).split("/")[-1]
         context['documento_propiedad_nombre'] = str(project_obj.documento_propiedad.name).split("/")[-1]
@@ -480,15 +477,17 @@ class ProjectDetailView(generic.DetailView):
         context['contracts'] = ContratoContratista.objects.filter(Q(project__id=project_obj.id))
 
         # Getting the settings for the current project, to know which card details to show.
-        project_sections = ProjectSections.objects.filter(Q(project_id=project_obj.id) & Q(section__parent_section=None))
+        project_sections = ProjectSections.objects.filter(
+            Q(project_id=project_obj.id) & Q(section__parent_section=None))
         sections_result = []
         for section in project_sections:
             section_json = {
-                "section_name"  : section.section.sectionName,
-                "section_id"  : section.section.id,
-                "inner_sections" :  []
+                "section_name": section.section.sectionName,
+                "section_id": section.section.id,
+                "inner_sections": []
             }
-            inner_sections = ProjectSections.objects.filter(Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
+            inner_sections = ProjectSections.objects.filter(
+                Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
             for inner_section in inner_sections:
                 inner_json = {
                     "inner_section_name": inner_section.section.sectionName,
@@ -498,6 +497,7 @@ class ProjectDetailView(generic.DetailView):
                 section_json["inner_sections"].append(inner_json)
             sections_result.append(section_json)
         print sections_result
+
         context['sections_result'] = sections_result
 
         print str(project_obj.documento_propiedad.name).split("/")[-1]
@@ -511,7 +511,7 @@ class ProgressEstimateLogListView(ListView):
     # search_fields = ("empresaNombre",)
     query = None
     title_list = "Bitácoras"
-    add_url="/admin/ERP/progressestimatelog/add?project="
+    add_url = "/admin/ERP/progressestimatelog/add?project="
 
     """
        Display a Blog List page filtered by the search query.
@@ -562,6 +562,7 @@ class ProgressEstimateLogListView(ListView):
     model = ProgressEstimateLog
     template_name = "ERP/progressestimatelog-detail.html"'''
 
+
 class ProgressEstimateLogDetailView(generic.DetailView):
     model = ProgressEstimateLog
     template_name = "ERP/progressestimatelog-detail.html"
@@ -581,13 +582,13 @@ class EstimateListView(ListView):
     query = None
     project_id = None
     params = ""
-    title_list="Estimación"
+    title_list = "Estimación"
     add_url = "/admin/ERP/estimate/add?project="
 
     """
        Display a Blog List page filtered by the search query.
     """
-    paginate_by = 1
+    paginate_by = 10
 
     def get_queryset(self):
 
@@ -673,7 +674,14 @@ class EstimateDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(EstimateDetailView, self).get_context_data(**kwargs)
         estimate = context['estimate']
-        context['progress_estimates'] = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
+        progress_estimates = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
+        # locale.setlocale(locale.LC_ALL, '')
+
+        for record in progress_estimates:
+            record.amount = locale.currency(record.amount, grouping=True)
+            record.progress = "{0:.0f}%".format(record.progress * 100)
+
+        context['progress_estimates'] = progress_estimates
 
         return context
 
@@ -730,7 +738,8 @@ class UploadedInputExplotionsHistoryListView(ListView):
         context['title_list'] = UploadedInputExplotionsHistoryListView.title_list
         context['query'] = UploadedInputExplotionsHistoryListView.query
         context['query_string'] = '&q=' + UploadedInputExplotionsHistoryListView.query
-        context['has_query'] = (UploadedInputExplotionsHistoryListView.query is not None) and (UploadedInputExplotionsHistoryListView.query != "")
+        context['has_query'] = (UploadedInputExplotionsHistoryListView.query is not None) and (
+            UploadedInputExplotionsHistoryListView.query != "")
         return context
 
 
@@ -768,8 +777,10 @@ class UploadedCatalogsHistoryAdminListView(ListView):
         context['title_list'] = UploadedCatalogsHistoryAdminListView.title_list
         context['query'] = UploadedCatalogsHistoryAdminListView.query
         context['query_string'] = '&q=' + UploadedCatalogsHistoryAdminListView.query
-        context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (UploadedCatalogsHistoryAdminListView.query != "")
+        context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (
+            UploadedCatalogsHistoryAdminListView.query != "")
         return context
+
 
 # Views for the model AccessToProjectAdmin.
 class AccessToProjectAdminListView(ListView):
@@ -811,9 +822,9 @@ class AccessToProjectAdminListView(ListView):
         context['title_list'] = AccessToProjectAdminListView.title_list
         context['query'] = AccessToProjectAdminListView.query
         context['query_string'] = '&q=' + AccessToProjectAdminListView.query
-        context['has_query'] = (AccessToProjectAdminListView.query is not None) and (AccessToProjectAdminListView.query != "")
+        context['has_query'] = (AccessToProjectAdminListView.query is not None) and (
+            AccessToProjectAdminListView.query != "")
         return context
-
 
 
 # Views for the model Propietaro.
