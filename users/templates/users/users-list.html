@@ -45,7 +45,7 @@
                                             {% comment %}<th>Proyectos</th>{% endcomment %}
                                             <th>Ver</th>
                                             <th>Editar</th>
-                                            <th>Ver Proyectos</th>
+                                            <th>Proyectos</th>
                                             <th>Eliminar</th>
                                         </tr>
                                         </thead>
@@ -57,6 +57,9 @@
                                                 {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
                                                 <td><span>{{ user.username }}</span></td>
                                                 <td><span>{{ user.email }}</span></td>
+                                                <td><span>{{ user.erpuser.rol }}</span></td>
+                                                {% comment %}<td class="text-center" style="width: 5%">
+
                                                 <td><span>{{ user.erpuser }}</span></td>
                                                 {% comment %}<td class="text-center" style="width: 5%">
                                                     <span >{{ user.is_active }}</span>

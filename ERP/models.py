@@ -751,6 +751,9 @@ class Project(models.Model):
     ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
     ubicacion_cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
 
+    latitud = models.FloatField(default=0, blank=True, null=True, )
+    longitud = models.FloatField(default=0, blank=True, null=True, )
+
     area_superficie_escritura = models.DecimalField(verbose_name='superficie escritura', decimal_places=2, blank=False,
                                                     null=False, default=0, max_digits=20)
     area_superficie_levantamiento = models.DecimalField(verbose_name='superficie levantamiento', decimal_places=2,
@@ -889,8 +892,7 @@ class Project(models.Model):
                                                    default=0, max_digits=20)
     programayarea_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination,
                                                verbose_name="Documento de programa y área")
-    latitud = models.FloatField(default=0, blank=True, null=True, )
-    longitud = models.FloatField(default=0, blank=True, null=True, )
+
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
