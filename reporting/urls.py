@@ -7,6 +7,7 @@ app_name = 'Reporting'
 
 urlpatterns = [
     url(r'^get_financial_report$', views.GetFinancialReport.as_view()),
+    url(r'^get_physical_financial_advance_report$', views.GetPhysicalFinancialAdvanceReport.as_view()),
     url(r'^$', views.testView, name='test'),
     url(r'^', views.report, name='report'),
 ]

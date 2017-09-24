@@ -4,16 +4,20 @@ from django.db import transaction
 from django.http import HttpResponse
 
 import ERP
+import reporting
+from ERP import api
 from ERP.api import FinancialHistoricalProgressReport
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
 from django.shortcuts import render, redirect, render_to_response
 from django.views.generic import View
 
+from reporting import lib
+from reporting.lib.physical_financial_advance_report import PhysicalFinancialAdvanceReport
+
+
 def report(request):
     return render(request, 'reporting/report.html')
-
-
 
 
 # class GetFinancialReport()
@@ -800,9 +804,25 @@ class GetFinancialReport(View):
         else:
             show_concepts = False
 
-
         report_json = FinancialHistoricalProgressReport.get_report(project_id)
         file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
 
-        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+
+
+class GetPhysicalFinancialAdvanceReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        detail_level = request.GET.get('detail_level')
+
+        if detail_level == "c":
+            show_concepts = True
+        else:
+            show_concepts = False
+
+        report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id)
+        file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
+        return file
+
+        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')

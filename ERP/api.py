@@ -330,3 +330,14 @@ class AccessToProjectByUser(View):
         accesses =AccessToProject.objects.filter(user_id=user_id)
 
         return HttpResponse(Utilities.query_set_to_dumps(accesses),'application/json; charset=utf-8')
+
+
+class PhysicalFinancialAdvanceReport(View):
+
+    @staticmethod
+    def get_report(project_id):
+
+        structured_response = {}
+
+
+        return structured_response
