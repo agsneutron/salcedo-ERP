@@ -71,13 +71,14 @@
 
                                 </div>
                                 </div>
-                                <div class="col-xs-6" style="padding-left: 0">
+                                <div class="col-xs-6" style="display:none; padding-left: 0" id="noImage">
 
-                                        <div class="no-imagen" text-center id="NoImagen" style="display:none;">Para ver
-                                            la imagen ingresa en la seccion:
+                                        <div class="no-imagen" text-center id="NoImagen" >Para ver
+                                            la imagen ingresa en la seccion: Proyecto
                                         </div>
-
-                                   {% comment %} <a href="/media/{{ project.portada }}" data-lightbox="image-1"
+                                </div>
+                                <div class="col-xs-6" style="padding-left: 0" id="siImage">
+                                       <a href="/media/{{ project.portada }}" data-lightbox="image-1"
                                        data-title="{{ project.nombreProyecto }}">
                                         <div class="thumbnail-container" style="height: 340px;
                                                 background-position: center center;
@@ -85,7 +86,7 @@
                                                 background-size: cover;background-image: url('/media/{{ project.portada }}')">
 
                                         </div>
-                                    </a>{% endcomment %}
+                                    </a>
                                 </div>
                                 <div class="col-xs-6">
                                     <div class="" style="">
