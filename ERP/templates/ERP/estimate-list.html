@@ -54,7 +54,7 @@
 
                             {% for estimate in object_list %}
                                 <tr>
-                                    <td><span>Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }}</span>
+                                    <td><span>De {{ estimate.start_date|date:"M d, Y" }} a {{ estimate.end_date }}</span>
                                     </td>
                                     <td><span>{{ estimate.concept_input.description }}</span></td>
                                     <td><span>{{ estimate.line_item.description }}</span></td>

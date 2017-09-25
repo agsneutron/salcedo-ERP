@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static %}
+{% load i18n admin_static app_filters %}
 
 
 
@@ -136,6 +136,9 @@
                         </a>
                     </div>{% endcomment %}
 
+                                <input type="hidden" id="latitud" name="latitud" value="{{ project.latitud }}">
+                                <input type="hidden" id="longitud" name="longitud" value="{{ project.longitud }}">
+                                <input type="hidden" id="nombreProyecto" name="nombreProyecto" value="{{ project.nombreProyecto }}">
 
                                 <div class="clearfix"></div>
 
@@ -155,7 +158,7 @@
                                         <h4 class="color-active">Ubicación</h4>
 
                                         <ul class="list-group">
-                                            <li class="list-group-item withripple ">
+                                            <li class="list-group-item withripple " onclick="muestraValores('{{ project.ubicacion_pais }}');">
                                                 <b>País:</b> {{ project.ubicacion_pais }}</li>
                                             <li class="list-group-item withripple ">
                                                 <b>Estado:</b> {{ project.ubicacion_estado }}</li>
@@ -174,9 +177,9 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-6" style="padding-right: 0">
-                                    {% comment %}<div class="no-mapa" text-center>Para ver el mapa ingresa Latitud y longitud
-                                        en la sección Ubicación
-                                    </div>{% endcomment %}
+                                    <div class="no-mapa" text-center id="NoMap" style="display:none;">Para ver el mapa ingresa Latitud y Longitud
+                                        en la sección: Ubicación
+                                    </div>
                                     <div id="map" style="height: 340px; "></div>
                                 </div>
                             {% endfor %}
@@ -231,24 +234,45 @@
 
     <script>
         var map;
+
         function initMap() {
+            var latitud = parseFloat(document.getElementById("latitud").value);
+            var longitud = parseFloat(document.getElementById("longitud").value);
+            var nombreProyecto = document.getElementById("nombreProyecto").value;
+
             map = new google.maps.Map(document.getElementById('map'), {
-                center: {lat: 19.4160065, lng: -99.2944344},
+                center: {lat: latitud, lng: longitud},
                 zoom: 10,
 
             });
             var marker = new google.maps.Marker({
-                position: {lat: 19.4160065, lng: -99.2944344},
+                position: {lat: latitud, lng: longitud},
                 map: map,
-                title: 'Hello World!'
+                title: nombreProyecto
             });
             // To add the marker to the map, call setMap();
             marker.setMap(map);
         }
+        function muestraMapa(){
+            var latitud = parseInt(document.getElementById("latitud").value);
+            var longitud = parseInt(document.getElementById("longitud").value);
+
+            if (latitud>0 && longitud!=0){
+                document.getElementById('map').style.display = 'block';
+                document.getElementById('NoMap').style.display = 'none';
+                initMap();
+            }else{
+                document.getElementById('NoMap').style.display = 'block';
+                document.getElementById('map').style.display = 'none';
+            }
+
+        }
     </script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs&callback=muestraMapa"
             async defer></script>
     <script>
+
+
         $(document).ready(function () {
 
 

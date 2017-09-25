@@ -7,7 +7,8 @@ $(document).on('ready', function() {
      this is used for the edit form
      */
     get_Projects();
-    $('#get_report').on('click',Get_Financial_Report);
+    $('#get_report_AFI').on('click',Get_Financial_Report);
+    $('#get_report_AFF').on('click',Get_Physical_Financial);
 
 });
 
@@ -43,9 +44,17 @@ function get_Projects(){
 }
 
 function set_Projects(data){
-    clearControl("project_id");
+    clearControl("project_id_AFI");
     for (var i = 0; i < data.length; i++) {
-        $("select#project_id").append(
+        $("select#project_id_AFI").append(
+            '<option value="'+data[i].id+'">' +
+            data[i].nombreProyecto +
+            '</option>'
+        );
+    }
+    clearControl("project_id_AFF");
+    for (var i = 0; i < data.length; i++) {
+        $("select#project_id_AFF").append(
             '<option value="'+data[i].id+'">' +
             data[i].nombreProyecto +
             '</option>'
@@ -64,10 +73,23 @@ function clearControl(idcontrol) {
 
 
 function Get_Financial_Report(){
-    var project_id = $('select#project_id').find('option:selected').val();
+    var project_id = $('select#project_id_AFI').find('option:selected').val();
     var detail_level = $('select#detail_level').find('option:selected').val();
-    if (parseInt(project_id) !=0 && detail_level.toString()!= "" ) {
+
+    if (project_id != "" && detail_level.toString()!= "" ) {
         window.open("/reporting/get_financial_report?project_id=" + parseInt(project_id) + "&detail_level=" + detail_level.toString());
+    }
+    else{
+        alert("Para generar el reporte debe seleccionar un Proyecto");
+    }
+}
+
+function Get_Physical_Financial(){
+    var project_id = $('select#project_id_AFF').find('option:selected').val();
+    
+
+    if (project_id != "") {
+        window.open("/reporting/get_physical_financial_advance_report?project_id=" + parseInt(project_id));
     }
     else{
         alert("Para generar el reporte debe seleccionar un Proyecto");
