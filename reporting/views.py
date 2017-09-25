@@ -1,12 +1,6 @@
 # coding=utf-8
-from braces.views._access import StreamingHttpResponse
-from django.db import transaction
-from django.http import HttpResponse
-
-import ERP
-import reporting
 from ERP import api
-from ERP.api import FinancialHistoricalProgressReport
+from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
 from django.shortcuts import render, redirect, render_to_response
@@ -804,7 +798,7 @@ class GetFinancialReport(View):
         else:
             show_concepts = False
 
-        report_json = FinancialHistoricalProgressReport.get_report(project_id)
+        report_json = api.FinancialHistoricalProgressReport.get_report(project_id)
         file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
 
