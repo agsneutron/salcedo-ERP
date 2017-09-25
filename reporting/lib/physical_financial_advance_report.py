@@ -13,7 +13,6 @@ class PhysicalFinancialAdvanceReport(object):
 
     @staticmethod
     def generate_report(information_json, show_concepts=True):
-
         print 'json'
         print information_json
 
@@ -21,9 +20,8 @@ class PhysicalFinancialAdvanceReport(object):
 
         output = StringIO.StringIO()
 
-
         # Create an new Excel file and add a worksheet.
-        #workbook = Workbook('report.xlsx')
+        # workbook = Workbook('report.xlsx')
         workbook = Workbook(output)
         worksheet = workbook.add_worksheet('Avance Físico Financiero')
 
@@ -36,11 +34,13 @@ class PhysicalFinancialAdvanceReport(object):
         # Write some simple text.
         worksheet.write('A1', 'Avance Físico Financiero', bold)
 
+        PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet)
+        PhysicalFinancialAdvanceReport.add_progress_table(workbook, worksheet)
 
         workbook.close()
 
         response = StreamingHttpResponse(FileWrapper(output),
-                                        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                                         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
         response['Content-Disposition'] = 'attachment; filename=Avance_Fisico_Financiero.xlsx'
         response['Content-Length'] = output.tell()
@@ -48,7 +48,6 @@ class PhysicalFinancialAdvanceReport(object):
         output.seek(0)
 
         return response
-
 
     @staticmethod
     def get_formats(workbook):
@@ -111,3 +110,11 @@ class PhysicalFinancialAdvanceReport(object):
         formats['light_red_currency'] = workbook.add_format(info)
 
         return formats
+
+    @staticmethod
+    def add_programmed_table(workbook, worksheet):
+        pass
+
+    @staticmethod
+    def add_progress_table(workbook, worksheet):
+        pass
