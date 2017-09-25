@@ -2,6 +2,122 @@
  * Created by Wop on 25/07/17.
  */
 
+var $j = jQuery.noConflict();
+
+$j(document).on('ready', main_consulta);
+
+var datosJson
+var newToken
+
+
+function main_consulta() {
+    $j.ajaxSetup({
+		beforeSend: function(xhr, settings) {
+			if(settings.type == "POST"){
+				xhr.setRequestHeader("X-CSRFToken", $j('[name="csrfmiddlewaretoken"]').val());
+                //xhr.overrideMimeType( "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8" );
+			}
+            if(settings.type == "GET"){
+				xhr.setRequestHeader("X-CSRFToken", $j('[name="csrfmiddlewaretoken"]').val());
+                //xhr.overrideMimeType( "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet; charset=utf-8" );
+			}
+		}
+	});
+
+    callGraphicOne();
+
+
+}
+
+
+function callGraphicOne() {
+    //$j.get("/obras/register_by_token", function(respu) {
+        var projectID = parseInt(document.getElementById("projectID").value);
+        var ajax_data = {
+            "project_id": projectID
+        };
+
+        $j.ajax({
+            url: '/reporting/get_dashboard_by_project',
+            type: 'get',
+            data: ajax_data,
+            success: function(data) {
+                datosJson=data;
+                putDatosGrafica("GC_Basica");
+            },
+            error: function(data) {
+                alert('se generó un error!!! ' + data.error);
+                //$j("#ajaxProgress").hide();
+            }
+        });
+    //});
+}
+
+function obtenSeries_Mensual_Grupo(datosJson2) {
+    var Series = {
+      'serie': [],
+      'categoria': []
+    };
+    var datos=[];
+    var nombres=[];
+    var arrMeses=[];
+    var arrMesesAnio=[];
+    var indiceMesInicial = 0;
+    var indiceMesFinal = 0;
+    var indiceArrMes = 0; // este índice lo definimos para poder controlar el llenado del arrego de meses
+    var nombreMesAnio="";
+
+
+    var arrMeses=["accumulated_paid_estimate","accumulated_programmed","accumulated_total_estimate","month_paid_estimate","month_program"];
+    for (var i = 0; i <= datosJson2.length-1; i++) {
+        indiceArrMes = 0; // lo inicializamos en cero para que cada cambio de año se agregen los meses que correspondan
+        for (var j = 0; j <= datosJson2.months[i].length-1; j++) {
+            // Si el nombre de la categoría aún no existe en el arreglo asociativo, se genera
+            if (datos[datosJson2.ventas[i].ventas[j].categoria]==undefined)
+            {
+                datos[datosJson2.ventas[i].ventas[j].categoria] = []; // se genera el arreglo asociativo con el nombre de la categoria
+                nombres.push(datosJson2.ventas[i].ventas[j].categoria); // se agrega el nombre de la categoria al arreglo nombres, para usarlo despúes para recorrer el arreglo asociativo
+            }
+
+            indiceMesInicial = 0;
+           /* if (i==0){ // si es el primer año, entonces obtenemos el mes inicial para que a partir de este, se recorra el json de meses
+               indiceMesInicial = mesInicial();
+            }*/
+            indiceMesFinal = datosJson2.ventas[i].ventas[j].meses.length-1;
+            /*if (i==datosJson2.ventas.length-1){ // si es el último año, entonces obtenemos el mes final para que a hasta este, se recorra el json de meses
+               indiceMesFinal = mesFinal();
+            }*/
+            // se agrega al arreglo asociativo cada valor que trae cada total de cada mes.
+            for (var k = indiceMesInicial; k <= indiceMesFinal; k++) {
+                datos[datosJson2.ventas[i].ventas[j].categoria].push(datosJson2.ventas[i].ventas[j].meses[k].total);
+                nombreMesAnio = datosJson2.ventas[i].ventas[j].meses[k].mes + datosJson2.ventas[i].anio;
+                //uso arrMesesAnio para identificar si el mes+anio ya estan en el arreglo y poder agregar o no el mes a arrMeses
+                //esto por que en algunos casos no vienen todos los meses en el json.
+                if (arrMesesAnio[nombreMesAnio]==undefined){
+                    arrMesesAnio[nombreMesAnio]=[];
+                    arrMeses.push(datosJson2.ventas[i].ventas[j].meses[k].mes);
+                }
+
+                /*if (indiceArrMes ==0) { // cada cambio de año indiceArrMes sera CERO
+                    arrMeses.push(datosJson2.ventas[i].ventas[j].meses[k].mes);
+                }*/
+            }
+            indiceArrMes +=1; // una ves terminado un ciclo de los meses de cada año se incrementa para evitar que se dupliquen, tripiquen, etc los meses.
+            console.log(datos[datosJson2.ventas[i].ventas[j].categoria]);
+        }
+    }
+    console.log(arrMeses);
+    // con el arreglo nombres se recorre el arreglo asociativo para llenar el json de series.
+    for (var i = 0; i <= nombres.length-1; i++) {
+        Series.serie.push({
+            'name': nombres[i],
+            'data': datos[nombres[i]]
+        });
+    }
+    Series.categoria = arrMeses;
+    return Series;
+}
+
             Highcharts.chart('container-chart', {
                 chart: {
                     type: 'spline',

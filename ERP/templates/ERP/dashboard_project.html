@@ -71,7 +71,21 @@
 
                                 </div>
                                 </div>
-                                <div class="col-xs-6" style="padding-left: 0">
+
+                                <div class="col-xs-6" style="display:none;padding-left: 0" id="noImage">
+                                    <a href="/static/ERP/admin/img/no-image.jpg" data-lightbox="image-1"
+                                       data-title="{{ project.nombreProyecto }}">
+                                        <div class="thumbnail-container" style="height: 340px;
+                                                background-position: center center;
+                                                background-repeat: no-repeat;
+                                                background-size: cover;background-image: url('/static/ERP/admin/img/no-image.jpg')">
+
+                                        </div>
+                                    </a>
+                                </div>
+
+
+                                <div class="col-xs-6" style="padding-left: 0" id="siImage">
                                     <a href="/media/{{ project.portada }}" data-lightbox="image-1"
                                        data-title="{{ project.nombreProyecto }}">
                                         <div class="thumbnail-container" style="height: 340px;
@@ -139,6 +153,9 @@
                                 <input type="hidden" id="latitud" name="latitud" value="{{ project.latitud }}">
                                 <input type="hidden" id="longitud" name="longitud" value="{{ project.longitud }}">
                                 <input type="hidden" id="nombreProyecto" name="nombreProyecto" value="{{ project.nombreProyecto }}">
+                                <input type="hidden" id="portada" name="portada" value="{{ project.portada }}">
+                                <input type="hidden" id="projectID" name="projectID" value="{{ project.id }}">
+
 
                                 <div class="clearfix"></div>
 
@@ -267,6 +284,17 @@
             }
 
         }
+        function mostrarPortada(){
+            var portada = document.getElementById("portada").value;
+            if (portada==""){
+                document.getElementById('noImage').style.display = 'block';
+                document.getElementById('siImage').style.display = 'none';
+            }else{
+                document.getElementById('siImage').style.display = 'block';
+                document.getElementById('noImage').style.display = 'none';
+            }
+        }
+        mostrarPortada();
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs&callback=muestraMapa"
             async defer></script>
