@@ -854,6 +854,16 @@ ul {
     text-align: center;
     padding-top: 130px;
 }
+.no-imagen {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-image: url('../img/no-image.jpg');
+        min-height: 342px;
+    color: #1a1a1a;
+    text-align: center;
+    padding-top: 130px;
+}
 .input-group-addon {
     padding: 0px 7px;
     font-size: 16px;
@@ -869,4 +879,7 @@ ul {
     width: 1%;
     white-space: nowrap;
     vertical-align: inherit;
+}
+.nav-tabs-ver-container .nav-tabs-ver li.active a {
+    color: #00a09b;
 }
