@@ -173,7 +173,7 @@ class PhysicalFinancialAdvanceReport(View):
 		structured_response[
 			'physical_financial_advance'] = PhysicalFinancialAdvanceReport.get_physical_financial_advance(project_id,
 																										  type)
-		structured_response['biddings_programs'] = PhysicalFinancialAdvanceReport.get_biddings_report(project_id, type)
+		structured_response['biddings_programs'] = PhysicalFinancialAdvanceReport.get_biddings_report(project_id)
 
 		return structured_response
 

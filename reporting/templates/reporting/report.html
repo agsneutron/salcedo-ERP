@@ -9,6 +9,8 @@
 {% block content %}
 
     <div id="content-main">
+
+{#    Avance Financiero Interno#}
         <div class="row">
             <div class="col-xs-12">
                 <div class="card">
@@ -16,21 +18,21 @@
                         <div class="item-left">
                             <h3 class="card-title text">Avance Financiero Interno</h3>
                         </div>
-                        <div class="item-right">
+                        {% comment %}<div class="item-right">
                             <a href="" id=""
                                class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container"
                             >
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"
                             ></i>
                             </a>
-                        </div>
+                        </div>{% endcomment %}
                     </div>
 
                     <div class="card-block">
                         <div class="row">
                             <br>
                             <div class="col-xs-6">Proyectos
-                                <select id="project_id" class="form-control selectpicker">
+                                <select id="project_id_AFI" class="form-control selectpicker">
                                 </select>
                             </div>
                             <div class="col-xs-6">Nivel de Detalle
@@ -42,7 +44,7 @@
                                 </select>
                             </div>
                             <div class="row">
-                                <div class="col-xs-12 text-center" id="get_report">
+                                <div class="col-xs-12 text-center" id="get_report_AFI">
                                      <a href="#" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-area-chart"></i> Generar</a>
                                 </div>
                             </div>
@@ -51,7 +53,41 @@
                 </div>
             </div>
         </div>
+{# Avance Físico#}
+    <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">Avance Físico-Financiero</h3>
+                        </div>
+                        {% comment %}<div class="item-right">
+                            <a href="" id=""
+                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container"
+                            >
+                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"
+                            ></i>
+                            </a>
+                        </div>{% endcomment %}
+                    </div>
 
+                    <div class="card-block">
+                        <div class="row">
+                            <br>
+                            <div class="col-xs-6">Proyectos
+                                <select id="project_id_AFF" class="form-control selectpicker">
+                                </select>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12 text-center" id="get_report_AFF">
+                                     <a href="#" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-area-chart"></i> Generar</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 {% endblock %}
