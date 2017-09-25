@@ -226,23 +226,20 @@ class PhysicalFinancialAdvanceReport(View):
 		return response
 
 	@staticmethod
-	def get_biddings_report(project_id, type):
+	def get_biddings_report(project_id):
 
 		response = []
-
-		# Getting the project info.
-		project = Project.objects.get(pk=project_id)
 
 		# Getting the years found in the schedule.
 		schedule_years = PaymentSchedule.objects.filter(project_id=project_id).values('year').annotate(Count('year')) \
 			.order_by('year')
 
 		payment_schedule_grouped = schedule_years.values('project_id').annotate(Count('project_id'), total=Sum('amount'))
-		payment_schedule_total = payment_schedule_grouped[0]['total']
 
 		# Years JSON.
 
-		accumulated_estimate = 0
+		accumulated_paid_estimate = 0
+		accumulated_total_estimate = 0
 		acummulated_program = 0
 
 		for year in schedule_years:
@@ -256,35 +253,42 @@ class PhysicalFinancialAdvanceReport(View):
 
 			for record in monthly_program:
 
-				month_estimate = 0
+				month_paid_estimate = 0
+				month_total_estimate = 0
 				# Obtaining all the estimates for the current month and year.
 				progress_estimate_set = ProgressEstimate.objects.filter(Q(estimate__concept_input__line_item__project=project_id)
 											   & Q(estimate__start_date__month=record.month)
 											   & Q(estimate__start_date__year=temp_year))\
 					.values('estimate__concept_input__line_item__project__id')\
 					.annotate(Count('estimate__concept_input__line_item__project__id'), total = Sum('amount'))
+
+				paid_progress_estimate_set = progress_estimate_set.filter(Q(payment_status='P'))
+
+				# Total amount for every estimate
+				# Estimates that have been paid.
 				if progress_estimate_set.exists():
-					month_estimate = progress_estimate_set[0]['total']
+					month_total_estimate = progress_estimate_set[0]['total']
 
-				accumulated_estimate += month_estimate
-				acummulated_program += record.amount
+				# Estimates that have been paid.
+				if paid_progress_estimate_set.exists():
+					month_paid_estimate = paid_progress_estimate_set[0]['total']
 
-				percentage_estimate =  round((accumulated_estimate * 100) / payment_schedule_total,2)
-				percentage_program =  round((acummulated_program * 100) / payment_schedule_total,2)
+				accumulated_total_estimate += round(month_total_estimate, 2)
+				accumulated_paid_estimate += round(month_paid_estimate, 2)
+				acummulated_program += round(record.amount, 2)
+
 
 				yearly_json['months'].append({
 					"month": record.get_month_display(),
-					"accumulated_programmed": str(acummulated_program),
-					"accumulated_estimated": str(accumulated_estimate),
+					"accumulated_programmed": acummulated_program,
+					"accumulated_paid_estimate": accumulated_paid_estimate,
+					"accumulated_total_estimate": accumulated_total_estimate,
 					"month_program": str(record.amount),
-					"month_estimate": str(month_estimate),
-					"percentage_estimated": str(percentage_estimate),
-					"percentage_programmed": str(percentage_program)
+					"month_paid_estimate": str(month_paid_estimate),
 				})
 
-			print yearly_json
 
-			#print "Yearly: "
-			#print yearly_json
+			response.append(yearly_json)
+
 
 		return response

@@ -34,9 +34,9 @@ class PhysicalFinancialAdvanceReport(object):
         bold = workbook.add_format({'bold': True})
 
         # Write some simple text.
-        worksheet_1.write('A1', 'Avance Físico Financiero', bold)
+        worksheet_1.write('A1', 'Programa Licitación', bold)
 
-        PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet_1)
+        PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet_1, information_json)
         PhysicalFinancialAdvanceReport.add_progress_table(workbook, worksheet_2, information_json)
 
         workbook.close()
@@ -189,8 +189,57 @@ class PhysicalFinancialAdvanceReport(object):
         return formats
 
     @staticmethod
-    def add_programmed_table(workbook, worksheet):
-        pass
+    def add_programmed_table(workbook, worksheet, info):
+        worksheet.set_column('A:A', 30)
+        worksheet.set_column('B:H', 15)
+
+        START_ROW = 3
+        DATE_COL = 0
+        PROGRAMMED_COL = 1
+        PROGRAMMED_COL_ALPHA = "B"
+        PROGRAMMED_PERCENTAGE_COL = 2
+        PROGRAMMED_PERCENTAGE_COL_ALPHA = "C"
+        ESTIMATED_COL = 3
+        ESTIMATED_COL_ALPHA = "D"
+        ESTIMATED_PERCENTAGE_COL = 4
+        ESTIMATED_PERCENTAGE_COL_ALPHA = "E"
+
+        # Add all the headers of the report
+        PhysicalFinancialAdvanceReport.add_headers_for_programmed_report(workbook, worksheet)
+
+        formats = PhysicalFinancialAdvanceReport.get_formats(workbook)
+        bold_format = formats['bold']
+        currency_format = formats['currency']
+        percentage_format = formats['percentage']
+
+        yellow_bold_format = formats['yellow_bold']
+        yellow_currency_format = formats['yellow_currency']
+        yellow_percentage_format = formats['yellow_percentage']
+        blue_bold_format = formats['blue_bold']
+        blue_currency_format = formats['blue_currency']
+
+        row_count = START_ROW
+        for year in info['biddings_programs']:
+            for month in year['months']:
+                worksheet.write(row_count, DATE_COL, month['month'] + ", " + year['year'],
+                                bold_format)
+                worksheet.write(row_count, PROGRAMMED_COL, month['accumulated_programmed'],
+                                currency_format)
+                worksheet.write(row_count, ESTIMATED_COL, month['accumulated_paid_estimate'],
+                                currency_format)
+                row_count += 1
+
+        # Generating the automatic columns.
+                for i in range(START_ROW, row_count):
+                    conditional = '=IF(' + PROGRAMMED_COL_ALPHA + str(row_count) + '=0,0,' + PROGRAMMED_COL_ALPHA + ''\
+                                  + str(i+1) + '/' + PROGRAMMED_COL_ALPHA + str(row_count) + ')'
+                    worksheet.write(i, PROGRAMMED_PERCENTAGE_COL, conditional,percentage_format)
+
+                    conditional = '=IF(' + PROGRAMMED_COL_ALPHA + str(row_count) + '=0,0,' + ESTIMATED_COL_ALPHA + '' \
+                                  + str(i + 1) + '/' + PROGRAMMED_COL_ALPHA + str(row_count) + ')'
+                    worksheet.write(i, ESTIMATED_PERCENTAGE_COL, conditional, percentage_format)
+
+    #month['percentage_estimated']
 
     @staticmethod
     def add_progress_table(workbook, worksheet, info):
@@ -334,3 +383,33 @@ class PhysicalFinancialAdvanceReport(object):
         worksheet.merge_range('E2:F2', 'Avance Físico', header_format)
         worksheet.write('E3', 'Estimado', header_format)
         worksheet.write('F3', 'Avance', header_format)
+
+    @staticmethod
+    def add_headers_for_programmed_report(workbook, worksheet):
+        # Create a format to use in the merged range.
+        header_format_info = {
+            'bold': 1,
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'fg_color': '#A9C1F4'}
+
+        header_format = workbook.add_format(header_format_info)
+
+        #header_format_info['fg_color'] = '#F43C37'  # Red
+
+        #header_format_info['fg_color'] = '#6BB067'  # Green
+
+        worksheet.merge_range('A2:A3', 'Mes', header_format)
+
+        worksheet.merge_range('A1:E1', 'Programa Licitación', header_format)
+
+        # Programado
+        worksheet.merge_range('B2:C2', 'Programado de Licitación', header_format)
+        worksheet.write('B3', 'Importe S/IVA', header_format)
+        worksheet.write('C3', 'Porcentaje', header_format)
+
+        # Estimado
+        worksheet.merge_range('D2:E2', 'Estimado', header_format)
+        worksheet.write('D3', 'Importe S/IVA', header_format)
+        worksheet.write('E3', 'Porcentaje', header_format)

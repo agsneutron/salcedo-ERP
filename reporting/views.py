@@ -819,7 +819,17 @@ class GetPhysicalFinancialAdvanceReport(View):
 
         report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id)
 
-        #file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
-        #return file
+        file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
+        return file
 
-        return HttpResponse(Utilities.json_to_dumps({}),'application/json; charset=utf-8')
+        #return HttpResponse(Utilities.json_to_dumps({}),'application/json; charset=utf-8')
+
+
+class GetDashboardByProject(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        response = api.PhysicalFinancialAdvanceReport.get_biddings_report(project_id)
+
+        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
+
+
