@@ -228,10 +228,14 @@ class PhysicalFinancialAdvanceReport(object):
 
             total_physical_advance = line_item['total_physical_advance']
             # total_physical_advance / total_programmed
-            total_physical_advance_percentage = '=C' + str(count_cell + 1) + '/B' + str(count_cell + 1)
+
+            # =IF(B4=0,0,E4/B4)
+            total_physical_advance_percentage = '=IF(B' + str(count_cell + 1) + '=0,0, E' + str(
+                count_cell + 1) + '/B' + str(count_cell + 1) + ')'
             total_financial_advance = line_item['total_financial_advance']
             # total_financial_advance / total_programmed
-            total_financial_advance_percentage = '=E' + str(count_cell + 1) + '/B' + str(count_cell + 1)
+            total_financial_advance_percentage = '=IF(B' + str(count_cell + 1) + '=0,0, C' + str(
+                count_cell + 1) + '/B' + str(count_cell + 1) + ')'
 
             worksheet.write(count_cell, LINE_ITEM_COL, line_item['line_item_name'], bold_format)
             worksheet.write(count_cell, IMPORT_COL, total_programmed, currency_format)
