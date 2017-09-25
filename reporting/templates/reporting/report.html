@@ -1,5 +1,11 @@
 {% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+{% block extrastyle %}{{ block.super }}
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
 
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
+    <script type="text/javascript" src="{% static "ERP/admin/assets/ajax/reports.js" %}"></script>
+{% endblock %}
 {% block content %}
 
     <div id="content-main">
@@ -11,8 +17,7 @@
                             <h3 class="card-title text">Avance Financiero Interno</h3>
                         </div>
                         <div class="item-right">
-
-                            <a href="add/"
+                            <a href="" id="get_report"
                                class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container"
                             >
                                 &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"
@@ -24,19 +29,15 @@
                     <div class="card-block">
                         <div class="row">
                             <br>
-                            <div class="col-xs-6">
-                                <select id="" class="form-control selectpicker">
-                                    <label>Etiqueta</label>
-                                    <option>Seleccione</option>
-                                    <option>2</option>
-
+                            <div class="col-xs-6">Proyectos
+                                <select id="project_id" class="form-control selectpicker">
                                 </select>
                             </div>
-                            <div class="col-xs-6">
-                                <select id="" class="form-control selectpicker">
-                                    <label>Etiqueta</label>
-                                    <option>Seleccione</option>
-                                    <option>2</option>
+                            <div class="col-xs-6">Nivel de Detalle
+                                <select id="detail_level" class="form-control selectpicker">
+                                    <label>Seleccionar...</label>
+                                    <option value="c">Conceptos</option>
+                                    <option value="p">Partidas</option>
 
                                 </select>
                             </div>

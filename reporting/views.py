@@ -1,12 +1,23 @@
 # coding=utf-8
+from django.http.response import HttpResponse
 
-from django.db import transaction
-from django.http import HttpResponse
+from ERP import api
+from reporting import api
+from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
 from django.shortcuts import render, redirect, render_to_response
+from django.views.generic import View
+
+from reporting import lib
+from reporting.lib.physical_financial_advance_report import PhysicalFinancialAdvanceReport
+
 
 def report(request):
     return render(request, 'reporting/report.html')
+
+
+# class GetFinancialReport()
+
 
 def testView(request):
     json = {
@@ -777,3 +788,48 @@ def testView(request):
 
     # return HttpResponse('Done')
     # return render(request, 'DataUpload/carga.html')
+
+
+class GetFinancialReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        detail_level = request.GET.get('detail_level')
+
+        if detail_level == "c":
+            show_concepts = True
+        else:
+            show_concepts = False
+
+        report_json = api.FinancialHistoricalProgressReport.get_report(project_id)
+        file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
+        return file
+
+        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+
+
+class GetPhysicalFinancialAdvanceReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        detail_level = request.GET.get('detail_level')
+
+        if detail_level == "c":
+            show_concepts = True
+        else:
+            show_concepts = False
+
+        report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id)
+
+        file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
+        return file
+
+        #return HttpResponse(Utilities.json_to_dumps({}),'application/json; charset=utf-8')
+
+
+class GetDashboardByProject(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        response = api.PhysicalFinancialAdvanceReport.get_biddings_report(project_id)
+
+        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
+
+

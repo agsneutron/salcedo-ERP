@@ -73,7 +73,13 @@
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Tipo Construcción</span>
+                    <span class="hidden-xs">Tipo de Construcción</span>
+                </a>
+            </li>
+
+            <li role="presentation">
+                <a class="withoutripple" href="#otro9" aria-controls="otro9" role="tab" data-toggle="tab">
+                    <span class="hidden-xs">Programación</span>
                 </a>
             </li>
         </ul>
@@ -178,13 +184,11 @@
                             </div>
                         </div>
 
-
-
                     {% endif %}
-                        {% if field.field.name == "portada" %}
+                    {% if field.field.name == "portada" %}
 
-                            <div class="col-md-3">
-                                <div class="form-group field-{{ field.field.name }}">
+                        <div class="col-md-3">
+                            <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
@@ -199,8 +203,8 @@
                                                       </span>
                                 </div>
                             </div>
-                            </div>
-                         </div>
+                        </div>
+                        </div>
                         </div>
 
                     {% endif %}
@@ -296,13 +300,14 @@
                         </div>
                     {% endif %}
 
-                        {% if field.field.name == "latitud" %}
+                    {% if field.field.name == "latitud" %}
                         <div class="row">
 
                         <div class="col-md-3 col-md-offset-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required" for="id_{{ field.field.name }}">Latitud:</label>
+                                    <label class="control-label required"
+                                           for="id_{{ field.field.name }}">Latitud:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -313,7 +318,8 @@
                         <div class="col-md-3  ">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required" for="id_{{ field.field.name }}">Longitud:</label>
+                                    <label class="control-label required"
+                                           for="id_{{ field.field.name }}">Longitud:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1444,14 +1450,27 @@
                                 {% endif %}
                             {% endfor %}
                         </div>
+
+                        <!-- Added block for the payment schedule -->
+                        <div role="tabpanel" class="tab-pane fade" id="otro9">
+                            {% for inline_admin_formset in inline_admin_formsets %}
+                                {% if inline_admin_formset.formset.prefix == "paymentschedule_set" %}
+                                    <!-- proyecto detalle-->
+                                    {% include "admin/ERP/project/tabular.html" %}
+                                {% endif %}
+                            {% endfor %}
                         </div>
+                        <!-- Ends block for the payment schedule -->
+
+
+
                     {% endif %}
                         {% if field.field.name == "version" %}
                             {{ field.field|addcss:"form-control" }}
                         {% endif %}
                     {% endfor %}
                 {% endfor %}
-
+            </div>
         </div>
     </div>
 </fieldset>

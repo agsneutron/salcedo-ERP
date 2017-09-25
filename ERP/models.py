@@ -709,6 +709,8 @@ class TipoProyectoDetalle(models.Model):
 
     class Meta:
         unique_together = [("proyecto", "nombreTipoProyecto")]
+        verbose_name = "Detalle del Tipo de Proyecto"
+        verbose_name_plural = "Detalles del Tipo de Proyecto"
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -965,25 +967,29 @@ class PaymentSchedule(models.Model):
         (NOVEMBER, 'Noviembre'),
         (DECEMBER, 'Diciembre'),
     )
-    month = models.CharField(max_length=10, choices=MONTH_CHOICES, default=JANUARY)
+    month = models.IntegerField(max_length=2, choices=MONTH_CHOICES, default=JANUARY)
 
     YEAR_CHOICES = (
-        ('2016', '2016'),
-        ('2017', '2017'),
-        ('2018', '2018'),
-        ('2019', '2019'),
-        ('2020', '2020'), ('2021', '2021'), ('2022', '2022'), ('2023', '2023'), ('2024', '2024'), ('2025', '2025'),
-        ('2026', '2026'), ('2027', '2027'), ('2028', '2028'), ('2029', '2029'), ('2030', '2030')
+        (2016, '2016'),
+        (2017, '2017'),
+        (2018, '2018'),
+        (2019, '2019'),
+        (2020, '2020'), (2021, '2021'), (2022, '2022'), (2023, '2023'), (2024, '2024'), (2025, '2025'),
+        (2026, '2026'), (2027, '2027'), (2028, '2028'), (2029, '2029'), (2030, '2030')
     )
 
-    year = models.CharField(max_length=4,
-                            choices=YEAR_CHOICES, default='2017')
+    year = models.IntegerField(max_length=4,
+                            choices=YEAR_CHOICES, default=2017)
 
     amount = models.DecimalField(verbose_name='Mount', decimal_places=2, blank=False, null=False,
                                  default=0, max_digits=20,
                                  validators=[MinValueValidator(Decimal('0.0'))])
 
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Programación de Pagos'
+        verbose_name = 'Programación de Pagos'
 
 
 @receiver(post_save, sender=Project, dispatch_uid='assing_sections')
@@ -1267,9 +1273,9 @@ class Concept_Input(models.Model):
 
 class Estimate(models.Model):
     version = IntegerVersionField()
-    start_date = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Fecha de inicio")
-    end_date = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
-    period = models.DateTimeField(default=now(), null=True, blank=False, verbose_name="Periodo")
+    start_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de inicio")
+    end_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
+    period = models.DateField(default=now(), null=True, blank=False, verbose_name="Periodo")
 
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
     line_item = models.ForeignKey(LineItem, verbose_name="Partidas", null=True, blank=False, default=None)

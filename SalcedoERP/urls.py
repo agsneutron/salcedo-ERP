@@ -42,6 +42,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^users/', include(users.urls)),
     url(r'^erp/', include(ERP.urls)),
+    url(r'^reporting/', include(ERP.urls)),
     url(r'^$', RedirectView.as_view(url='/admin')),
     url(r'^data_upload/', include(DataUpload.urls)),
     url(r'^reporting/', include(reporting.urls)),
