@@ -138,6 +138,7 @@
 
                                 <input type="hidden" id="latitud" name="latitud" value="{{ project.latitud }}">
                                 <input type="hidden" id="longitud" name="longitud" value="{{ project.longitud }}">
+                                <input type="hidden" id="nombreProyecto" name="nombreProyecto" value="{{ project.nombreProyecto }}">
 
                                 <div class="clearfix"></div>
 
@@ -176,8 +177,8 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-6" style="padding-right: 0">
-                                    <div class="no-mapa" text-center id="NoMap" style="display:none;">Para ver el mapa ingresa Latitud y longitud
-                                        en la sección Ubicación
+                                    <div class="no-mapa" text-center id="NoMap" style="display:none;">Para ver el mapa ingresa Latitud y Longitud
+                                        en la sección: Ubicación
                                     </div>
                                     <div id="map" style="height: 340px; "></div>
                                 </div>
@@ -235,10 +236,9 @@
         var map;
 
         function initMap() {
-            var latitud = parseInt(document.getElementById("latitud").value);
-            var longitud = parseInt(document.getElementById("longitud").value);
-
-
+            var latitud = parseFloat(document.getElementById("latitud").value);
+            var longitud = parseFloat(document.getElementById("longitud").value);
+            var nombreProyecto = document.getElementById("nombreProyecto").value;
 
             map = new google.maps.Map(document.getElementById('map'), {
                 center: {lat: latitud, lng: longitud},
@@ -248,7 +248,7 @@
             var marker = new google.maps.Marker({
                 position: {lat: latitud, lng: longitud},
                 map: map,
-                title: 'Hello World!'
+                title: nombreProyecto
             });
             // To add the marker to the map, call setMap();
             marker.setMap(map);
