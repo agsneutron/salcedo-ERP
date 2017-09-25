@@ -709,6 +709,8 @@ class TipoProyectoDetalle(models.Model):
 
     class Meta:
         unique_together = [("proyecto", "nombreTipoProyecto")]
+        verbose_name = "Detalle del Tipo de Proyecto"
+        verbose_name_plural = "Detalles del Tipo de Proyecto"
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -984,6 +986,10 @@ class PaymentSchedule(models.Model):
                                  validators=[MinValueValidator(Decimal('0.0'))])
 
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Programación de Pagos'
+        verbose_name = 'Programación de Pagos'
 
 
 @receiver(post_save, sender=Project, dispatch_uid='assing_sections')
