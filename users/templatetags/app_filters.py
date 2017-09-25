@@ -4,6 +4,11 @@ from django import template
 from django import forms
 from django.contrib.humanize.templatetags.humanize import intcomma
 import locale
+
+from django.utils.safestring import mark_safe
+
+import json
+
 register = template.Library()
 
 @register.filter(name='add_attributes')
@@ -50,3 +55,7 @@ def currency(field):
     #moneda = round(float(field), 2)
     #return "$%s%s" % (intcomma(int(moneda)), ("%0.2f" % moneda)[-3:])
     #return field
+
+@register.filter(is_safe=True)
+def js(obj):
+    return mark_safe(json.dumps(obj))
