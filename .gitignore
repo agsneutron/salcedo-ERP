@@ -4,7 +4,7 @@ SalcedoERP/local_settings.py
 DataUpload/migrations/
 ERP/migrations/
 Logs/migrations/
-Users/migrations/
+users/migrations/
 
 #Folders
 .idea
