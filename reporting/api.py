@@ -271,7 +271,7 @@ class PhysicalFinancialAdvanceReport(View):
 
 				# Estimates that have been paid.
 				if paid_progress_estimate_set.exists():
-					month_paid_estimate = paid_progress_estimate_set[0]['total']
+					month_paid_estimate = round(paid_progress_estimate_set[0]['total'], 2)
 
 				accumulated_total_estimate += round(month_total_estimate, 2)
 				accumulated_paid_estimate += round(month_paid_estimate, 2)
@@ -283,8 +283,8 @@ class PhysicalFinancialAdvanceReport(View):
 					"accumulated_programmed": acummulated_program,
 					"accumulated_paid_estimate": accumulated_paid_estimate,
 					"accumulated_total_estimate": accumulated_total_estimate,
-					"month_program": str(record.amount),
-					"month_paid_estimate": str(month_paid_estimate),
+					"month_program": round(record.amount, 2),
+					"month_paid_estimate": month_paid_estimate,
 				})
 
 
