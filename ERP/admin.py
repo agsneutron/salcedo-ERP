@@ -788,10 +788,13 @@ class ConceptInputAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+class PaymentScheduleInline(admin.TabularInline):
+    model= PaymentSchedule
+    extra = 0
 
 @admin.register(Project)
 class ProjectModelAdmin(admin.ModelAdmin):
-    inlines = (TipoProyectoDetalleInline,)
+    inlines = (TipoProyectoDetalleInline, PaymentScheduleInline)
 
     def get_urls(self):
         urls = super(ProjectModelAdmin, self).get_urls()
