@@ -23,19 +23,20 @@ class PhysicalFinancialAdvanceReport(object):
         # Create an new Excel file and add a worksheet.
         # workbook = Workbook('report.xlsx')
         workbook = Workbook(output)
-        worksheet = workbook.add_worksheet('Avance Físico Financiero')
+        worksheet_1 = workbook.add_worksheet('Programado')
+        worksheet_2 = workbook.add_worksheet('Avance Físico Financiero')
 
         # Widen the first column to make the text clearer.
-        worksheet.set_column('A:H', 20)
+        worksheet_1.set_column('A:H', 20)
 
         # Add a bold format to use to highlight cells.
         bold = workbook.add_format({'bold': True})
 
         # Write some simple text.
-        worksheet.write('A1', 'Avance Físico Financiero', bold)
+        worksheet_1.write('A1', 'Avance Físico Financiero', bold)
 
-        PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet)
-        PhysicalFinancialAdvanceReport.add_progress_table(workbook, worksheet)
+        PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet_1)
+        PhysicalFinancialAdvanceReport.add_progress_table(workbook, worksheet_2)
 
         workbook.close()
 
