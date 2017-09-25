@@ -990,6 +990,7 @@ class PaymentSchedule(models.Model):
     class Meta:
         verbose_name_plural = 'Programación de Pagos'
         verbose_name = 'Programación de Pagos'
+        unique_together = ('project', 'year', 'month')
 
 
 @receiver(post_save, sender=Project, dispatch_uid='assing_sections')

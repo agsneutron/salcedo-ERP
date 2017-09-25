@@ -791,6 +791,8 @@ class ConceptInputAdmin(admin.ModelAdmin):
 class PaymentScheduleInline(admin.TabularInline):
     model= PaymentSchedule
     extra = 0
+    ordering = ("year", )
+    fields = ('project','year', 'month', 'amount')
 
 @admin.register(Project)
 class ProjectModelAdmin(admin.ModelAdmin):
