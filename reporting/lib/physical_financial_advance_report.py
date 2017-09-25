@@ -13,6 +13,10 @@ class PhysicalFinancialAdvanceReport(object):
 
     @staticmethod
     def generate_report(information_json, show_concepts=True):
+
+        print 'json'
+        print information_json
+
         PhysicalFinancialAdvanceReport.show_concepts = show_concepts
 
         output = StringIO.StringIO()

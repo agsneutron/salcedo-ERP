@@ -169,10 +169,9 @@ class EstimatesByLineItems(View):
 
 
 class FinancialHistoricalProgressReport(View):
-
     @staticmethod
     def get_report(project_id):
-        #project_id = request.GET.get('project_id')  # The project for which we will make the report.
+        # project_id = request.GET.get('project_id')  # The project for which we will make the report.
 
         line_items = LineItem.objects.filter(project_id=project_id)
         type = 'C'
@@ -319,7 +318,7 @@ class FinancialHistoricalProgressReport(View):
             structured_response['global_total_estimated'] = str(global_total_estimated)
             structured_response['global_total_pending'] = str(global_total_programmed - global_total_estimated)
 
-        #return HttpResponse(
+        # return HttpResponse(
         #    Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
         return structured_response
 
@@ -327,17 +326,66 @@ class FinancialHistoricalProgressReport(View):
 class AccessToProjectByUser(View):
     def get(self, request):
         user_id = request.GET.get('user_id')
-        accesses =AccessToProject.objects.filter(user_id=user_id)
+        accesses = AccessToProject.objects.filter(user_id=user_id)
 
-        return HttpResponse(Utilities.query_set_to_dumps(accesses),'application/json; charset=utf-8')
+        return HttpResponse(Utilities.query_set_to_dumps(accesses), 'application/json; charset=utf-8')
 
 
 class PhysicalFinancialAdvanceReport(View):
-
     @staticmethod
-    def get_report(project_id):
-
+    def get_report(project_id, type='C'):
         structured_response = {}
 
+        structured_response[
+            'physical_financial_advance'] = PhysicalFinancialAdvanceReport.get_physical_financial_advance(project_id,
+                                                                                                          type)
 
         return structured_response
+
+    @staticmethod
+    def get_physical_financial_advance(project_id, type):
+        # Get Line Items
+        response = []
+
+        line_items = LineItem.objects.filter(project_id=project_id)
+
+        for line_item in line_items:
+            line_item_record = {
+                'line_item_name': line_item.description
+            }
+
+            # Get programmed
+            line_item_concepts = Concept_Input.objects.filter(Q(type=type) & Q(line_item_id=line_item.id))
+            total_programmed = 0  # The amount programmed for the line item
+            total_physical_advance = 0
+            total_financial_advance = 0
+            for concept in line_item_concepts:
+                programmed_for_concept = concept.quantity * concept.unit_price
+                total_programmed += programmed_for_concept
+
+                #  All the estimates for the concept
+                estimated = ProgressEstimate.objects.filter(estimate__concept_input_id=concept.id).values(
+                    'estimate__concept_input_id').annotate(Count('estimate__concept_input_id'),
+                                                           total_estimated=Sum('amount'))
+
+                if estimated.exists():
+                    total_estimated = estimated[0]['total_estimated']
+                    total_physical_advance += total_estimated
+
+                # All the PAID estimates for the concept
+                estimated = ProgressEstimate.objects.filter(
+                    Q(estimate__concept_input_id=concept.id) & Q(payment_status=ProgressEstimate.PAID)).values(
+                    'estimate__concept_input_id').annotate(Count('estimate__concept_input_id'),
+                                                           total_estimated=Sum('amount'))
+
+                if estimated.exists():
+                    total_estimated = estimated[0]['total_estimated']
+                    total_financial_advance += total_estimated
+
+            line_item_record['total_programmed'] = total_programmed
+            line_item_record['total_physical_advance'] = total_physical_advance
+            line_item_record['total_financial_advance'] = total_financial_advance
+
+            response.append(line_item_record)
+
+        return response
