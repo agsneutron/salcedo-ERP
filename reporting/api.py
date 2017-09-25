@@ -248,6 +248,7 @@ class PhysicalFinancialAdvanceReport(View):
 			yearly_json['year'] = str(temp_year)
 			yearly_json['months'] = []
 
+
 			monthly_program = PaymentSchedule.objects.filter(Q(project_id=project_id) & Q(year=temp_year)) \
 				.order_by('month')
 
@@ -277,15 +278,32 @@ class PhysicalFinancialAdvanceReport(View):
 				accumulated_paid_estimate += round(month_paid_estimate, 2)
 				acummulated_program += round(record.amount, 2)
 
-
-				yearly_json['months'].append({
-					"month": record.get_month_display(),
-					"accumulated_programmed": acummulated_program,
-					"accumulated_paid_estimate": accumulated_paid_estimate,
-					"accumulated_total_estimate": accumulated_total_estimate,
-					"month_program": round(record.amount, 2),
-					"month_paid_estimate": month_paid_estimate,
+				cjson={}
+				cjson['month']=record.get_month_display()
+				cjson['category']=[]
+				cjson['category'].append({
+					"total": acummulated_program,
+					"name": "Programado Acumulado",
 				})
+				cjson['category'].append({
+					"total": accumulated_paid_estimate,
+					"name": "Estimación Pagada Acumulada",
+				})
+				cjson['category'].append({
+					"total": accumulated_total_estimate,
+					"name": "Estimación Total Acumulada",
+				})
+				cjson['category'].append({
+					"total": round(record.amount, 2),
+					"name": "Progamado Mensual",
+				})
+				cjson['category'].append({
+					"total": month_paid_estimate,
+					"name": "Pago Estimado Mensual",
+				})
+
+
+				yearly_json['months'].append(cjson)
 
 
 			response.append(yearly_json)
