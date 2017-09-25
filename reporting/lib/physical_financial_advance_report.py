@@ -1,4 +1,5 @@
 # coding=utf-8
+import fractions
 from decimal import Decimal
 
 import StringIO
@@ -28,6 +29,7 @@ class PhysicalFinancialAdvanceReport(object):
 
         # Widen the first column to make the text clearer.
         worksheet_1.set_column('A:H', 20)
+        worksheet_2.set_column('A:H', 30)
 
         # Add a bold format to use to highlight cells.
         bold = workbook.add_format({'bold': True})
@@ -36,7 +38,7 @@ class PhysicalFinancialAdvanceReport(object):
         worksheet_1.write('A1', 'Avance Físico Financiero', bold)
 
         PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet_1)
-        PhysicalFinancialAdvanceReport.add_progress_table(workbook, worksheet_2)
+        PhysicalFinancialAdvanceReport.add_progress_table(workbook, worksheet_2, information_json)
 
         workbook.close()
 
@@ -69,6 +71,24 @@ class PhysicalFinancialAdvanceReport(object):
             'num_format': '$#,#00.00'}
 
         formats['currency_centered'] = workbook.add_format(centered_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
+            'align': 'right',
+            'valign': 'vcenter',
+            'border': 1,
+            'num_format': '$#,#00.00'}
+
+        formats['currency'] = workbook.add_format(centered_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
+            'align': 'right',
+            'valign': 'vcenter',
+            'border': 1,
+            'num_format': '0.00%'}
+
+        formats['percentage'] = workbook.add_format(centered_info)
 
         # Create a format to use in the merged range.
         centered_info = {
@@ -117,5 +137,73 @@ class PhysicalFinancialAdvanceReport(object):
         pass
 
     @staticmethod
-    def add_progress_table(workbook, worksheet):
-        pass
+    def add_progress_table(workbook, worksheet, info):
+        worksheet.write(0, 0, 'Avance Físico Financiero')
+
+        # Add all the headers of the report
+        PhysicalFinancialAdvanceReport.add_headers_for_progress_report(workbook, worksheet)
+
+        start_cell = 3
+
+        LINE_ITEM_COL = 0
+        IMPORT_COL = 1
+        FINANCIAL_ESTIMATED_COL = 2
+        FINANCIAL_ADVANCE_COL = 3
+        PHYSICAL_ESTIMATED_COL = 4
+        PHYSICAL_ADVANCE_COL = 5
+
+        formats = PhysicalFinancialAdvanceReport.get_formats(workbook)
+        currency_format = formats['currency']
+        percentage_format = formats['percentage']
+
+        for line_item in info['physical_financial_advance']:
+            total_programmed = line_item['total_programmed']
+
+            total_physical_advance = line_item['total_physical_advance']
+            # total_physical_advance / total_programmed
+            total_physical_advance_percentage = '=C' + str(start_cell + 1) + '/B' + str(start_cell + 1)
+            total_financial_advance = line_item['total_financial_advance']
+            # total_financial_advance / total_programmed
+            total_financial_advance_percentage = '=E' + str(start_cell + 1) + '/B' + str(start_cell + 1)
+
+            worksheet.write(start_cell, LINE_ITEM_COL, line_item['line_item_name'])
+            worksheet.write(start_cell, IMPORT_COL, total_programmed, currency_format)
+            worksheet.write(start_cell, FINANCIAL_ESTIMATED_COL, total_physical_advance, currency_format)
+            worksheet.write(start_cell, FINANCIAL_ADVANCE_COL, total_physical_advance_percentage, percentage_format)
+            worksheet.write(start_cell, PHYSICAL_ESTIMATED_COL, total_financial_advance, currency_format)
+            worksheet.write(start_cell, PHYSICAL_ADVANCE_COL, fractions.Fraction(0.05), percentage_format)
+
+            start_cell += 1
+
+    @staticmethod
+    def add_headers_for_progress_report(workbook, worksheet):
+        # Create a format to use in the merged range.
+        header_format_info = {
+            'bold': 1,
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'fg_color': '#A9C1F4'}
+
+        header_format = workbook.add_format(header_format_info)
+
+        header_format_info['fg_color'] = '#F43C37'  # Red
+
+        red_header_format = workbook.add_format(header_format_info)
+
+        header_format_info['fg_color'] = '#6BB067'  # Green
+
+        green_header_format = workbook.add_format(header_format_info)
+
+        worksheet.merge_range('A2:A3', 'Partida', header_format)
+
+        worksheet.write('B2', 'Presupuesto Base', header_format)
+        worksheet.write('B3', 'Importe', header_format)
+
+        worksheet.merge_range('C2:D2', 'Avance Financiero', header_format)
+        worksheet.write('C3', 'Estimado', header_format)
+        worksheet.write('D3', 'Avance', header_format)
+
+        worksheet.merge_range('E2:F2', 'Avance Físico', header_format)
+        worksheet.write('E3', 'Estimado', header_format)
+        worksheet.write('F3', 'Avance', header_format)
