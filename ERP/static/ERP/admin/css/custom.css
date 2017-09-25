@@ -363,6 +363,7 @@ form .aligned ul {
     line-height: 1.07143;
     font-weight: 400;
     margin: 2px 0 0;
+        margin-bottom: 5px;
 }
 
 .aligned label:not(.vCheckboxLabel):after {
@@ -412,7 +413,7 @@ form .aligned ul {
 
 .nav.nav-tabs li a {
     font-weight: 400;
-    padding: 1.7rem 2rem;
+    padding: 1.7rem 13px;
     color: rgba(255, 255, 255, .5) !important;
     text-align: center;
 }
