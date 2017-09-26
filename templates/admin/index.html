@@ -9,7 +9,6 @@
 
 {% block breadcrumbs %}{% endblock %}
 {% block extrastyle %}{{ block.super }}
-     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA_mropBsWL2rzBE6CQkJ4kjbZ_-CV_dkI" type="text/javascript"></script>
 
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}"/>
     {#    <script src="{% static "admin/assets/Highcharts/code/themes/dark-unica.js" %}"></script>#}
@@ -32,7 +31,7 @@
                     </div>
                     <div class="card-block" style="height: 345px; padding: 0">
                         <div id="container-chart" style="height: 0px; display: none"></div>
-                            <div id="map" style="height: 342px;"></div>
+                            <div id="map" style="height: 345px;"></div>
 
                     </div>
                 </div>
@@ -362,7 +361,7 @@
             async defer></script>
 
         <script type="text/javascript">
-         google.maps.event.addDomListener(window, 'load', initialize);
+         //google.maps.event.addDomListener(window, 'load', initialize);
          function initialize() {
           var mapOptions = {
             zoom: 3,
