@@ -29,11 +29,14 @@ from SalcedoERP.lib.constants import Constants
 
 from django.forms import formset_factory
 
+
 def custom_404(request):
     return render_to_response('404.html', RequestContext(request))
 
+
 def custom_500(request):
     return render_to_response('500.html', RequestContext(request))
+
 
 # Create your views here.
 def progress_estimate_log_view(request):
@@ -431,6 +434,13 @@ class ProjectListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
+        user_id = self.request.user.id
+        access_set = AccessToProject.objects.filter(user_id=user_id)
+
+        projects_array = []
+        for access in access_set:
+            projects_array.append(access.project.id)
+
         result = super(ProjectListView, self).get_queryset()
 
         query = self.request.GET.get('q')
@@ -441,10 +451,15 @@ class ProjectListView(ListView):
                 reduce(operator.and_,
                        (Q(nombreProyecto__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
-                       (Q(ubicacion_calle__icontains=q) for q in query_list))
-            )
+                       (Q(ubicacion_calle__icontains=q) for q in query_list)))
+
         else:
             ProjectListView.query = ''
+
+        if len(projects_array) > 0:
+            result = result.filter(reduce(operator.or_, (Q(pk=q) for q in projects_array)))
+        else:
+            result = Project.objects.none()
 
         return result
 
@@ -482,26 +497,28 @@ class ProjectDetailView(generic.DetailView):
         context['contracts'] = ContratoContratista.objects.filter(Q(project__id=project_obj.id))
 
         # Getting the settings for the current project, to know which card details to show.
-        project_sections = ProjectSections.objects.filter(Q(project_id=project_obj.id) & Q(section__parent_section=None))
+        project_sections = ProjectSections.objects.filter(
+            Q(project_id=project_obj.id) & Q(section__parent_section=None))
         sections_result = []
         for section in project_sections:
             section_json = {
-                "section_name"  : section.section.sectionName,
-                "section_id"  : section.section.id,
-                "total_inner_sections" : 0,
-                "inner_sections" :  []
+                "section_name": section.section.sectionName,
+                "section_id": section.section.id,
+                "total_inner_sections": 0,
+                "inner_sections": []
             }
-            i=0
-            inner_sections = ProjectSections.objects.filter(Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
+            i = 0
+            inner_sections = ProjectSections.objects.filter(
+                Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
             for inner_section in inner_sections:
                 inner_json = {
                     "inner_section_name": inner_section.section.sectionName,
                     "inner_section_id": inner_section.section.id,
                     "inner_section_status": inner_section.status,
                 }
-                i+=1
+                i += 1
                 section_json["inner_sections"].append(inner_json)
-            section_json["total_inner_sections"]=i
+            section_json["total_inner_sections"] = i
             sections_result.append(section_json)
         print sections_result
         context['sections_result'] = sections_result
@@ -814,9 +831,9 @@ class AccessToProjectAdminListView(ListView):
             query_list = query.split()
             result = result.filter(
                 reduce(operator.and_,
-                       (Q(user_id=q) for q in query_list)) |
+                       (Q(project__nombreProyecto__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
-                       (Q(project_id=q) for q in query_list))
+                       (Q(project__empresa__nombreEmpresa__icontains=q) for q in query_list))
             )
         else:
             AccessToProjectAdminListView.query = ''
@@ -830,6 +847,8 @@ class AccessToProjectAdminListView(ListView):
         context['query_string'] = '&q=' + AccessToProjectAdminListView.query
         context['has_query'] = (AccessToProjectAdminListView.query is not None) and (
             AccessToProjectAdminListView.query != "")
+
+        context['user_id'] = self.request.GET.get('user')
         return context
 
 

@@ -56,17 +56,22 @@
                 <div class="row">
                 <span class="ms-icon ms-icon-circle ms-icon mb-4 color-info" style="margin-bottom: 0rem !important"><i
                         class="zmdi zmdi-city-alt"></i></span>
-                    <h3 class="color-info">Estimación
-                        &nbsp;&nbsp;&nbsp;&nbsp;<a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
-                            <i class="fa fa-pencil color-default eliminar"></i>
-                        </a>
+                    <h3 class="color-info">
+                        Estimación<a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
+                        <i class="fa fa-pencil color-default eliminar"></i>
+                    </a>
                     </h3>
+
                     <br>
-                <div class="col-xs-12">
+                    <div class="col-xs-12">
                         <div class="col-xs-8 text-left">
                             <div style="padding-top: 10px;">
                                 <dl>
-                                    <dt>Partida:</dt>
+
+
+                                    <dt>Contratista:</dt>
+                                    <dd style="padding-top: 4px"> {{ estimate.contractor.nombreContratista }}</dd>
+                                     <dt>Partida:</dt>
                                     <dd style="padding-top: 4px">{{ estimate.concept_input.line_item.description }}</dd>
 
                                     <dt>Descripción:</dt>
@@ -75,11 +80,17 @@
 
                                 </dl>
 
-                                <div class="">
+                                <div class="" >
                                     {% if estimate.advance_payment_amount > 0 %}
-                                        <div class="col-xs-3 text-center"><strong class="color-active">Adelanto: </strong>{{ estimate.advance_payment_amount|formatoNumero }}</div>
-                                        <div class="col-xs-6 text-center"><strong class="color-active">Fecha: </strong>{{ estimate.advance_payment_date }}</div>
-                                        <div class="col-xs-3 text-center"><strong class="color-active">Estado: </strong>{{ estimate.get_advance_payment_status_display }}</div>
+                                        <div class="col-xs-3 text-center"><strong
+                                                class="color-active">Adelanto: </strong>{{ estimate.advance_payment_amount|formatoNumero }}
+                                        </div>
+                                        <div class="col-xs-6 text-center"><strong
+                                                class="color-active">Fecha: </strong>{{ estimate.advance_payment_date }}
+                                        </div>
+                                        <div class="col-xs-3 text-center"><strong
+                                                class="color-active">Estado: </strong>{{ estimate.get_advance_payment_status_display }}
+                                        </div>
                                     {% elif estimate.advance_payment_amount == 0 %}
                                         <div>No se ha definido un anticipo</div>
                                     {% endif %}
@@ -89,7 +100,7 @@
 
 
                         <div class="col-xs-4 text-left">
-                            <div style="    padding-top: 10px;">
+                            <div style="    padding-top: 52px;">
                                 <dl>
 
                                     <dd>Periodo</dd>
@@ -150,7 +161,7 @@
                                                                 <div class="progress-bar progress-bar-{% if progress_estimate.progress|slice:":-1"  < 15 %}danger
                                                                   {% elif progress_estimate.progress|slice:":-1" > 15 and progress_estimate.progress|slice:":-1" < 50 %}warning
                                                                   {% elif progress_estimate.progress|slice:":-1" >= 50 and progress_estimate.progress|slice:":-1" <= 75 %}info
-                                                                  {% elif progress_estimate.progress|slice:":-1" > 75  %}success
+                                                                  {% elif progress_estimate.progress|slice:":-1" > 75 %}success
                                                                   {% endif %}"
                                                                      role="progressbar"
                                                                      aria-valuenow="{{ progress_estimate.progress }}"
@@ -203,16 +214,16 @@
             </div>
         </div>
     </div>
-<script>
-{% comment %}var progressBarColor;
+    <script>
+        {% comment %}var progressBarColor;
 
-var someValueToCheck = {{ progress_estimate.progress }};
+        var someValueToCheck = {{ progress_estimate.progress }};
 
-if(someValueToCheck >= 4) progressBarColor = "#ff0000";
-else if(someValueToCheck >=5) progressBarColor = "orange";
-else progressBarColor = "green";
+        if(someValueToCheck >= 4) progressBarColor = "#ff0000";
+        else if(someValueToCheck >=5) progressBarColor = "orange";
+        else progressBarColor = "green";
 
-$("#progressbar").css('background-color', progressBarColor);{% endcomment %}
-</script>
+        $("#progressbar").css('background-color', progressBarColor);{% endcomment %}
+    </script>
 
 {% endblock %}

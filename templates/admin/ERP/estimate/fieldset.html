@@ -1,7 +1,7 @@
 {% load app_filters admin_static %}
 <style>
-    .no_change{
-        pointer-events:none;
+    .no_change {
+        pointer-events: none;
     }
 
 </style>
@@ -127,6 +127,19 @@
 
                         </div>
                     {% endif %}
+
+                        {% if field.field.name == "contractor" %}
+
+                                <div class="col-md-12">
+                                    <div class="form-group field-{{ field.field.name }}">
+                                        <div>
+                                            <div style="position: relative">{{ field.label_tag }}</div>
+                                            <div style="position: relative">{{ field.field|addcss:"form-control" }}</div>
+                                            <div style="position: relative">{{ field.errors }}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                        {% endif %}
                         {% if field.field.name == "version" %}
                             {{ field.field|addcss:"form-control" }}
                         {% endif %}

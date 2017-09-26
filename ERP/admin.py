@@ -341,6 +341,14 @@ class AccessToProjectAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+    def response_delete(self, request, obj_display, obj_id):
+        user_id = request.GET.get('user')
+
+        return HttpResponseRedirect("/admin/ERP/accesstoproject/?user="+str(user_id))
+
+
+
+
 
 class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
     model = UploadedCatalogsHistory
@@ -791,7 +799,7 @@ class ConceptInputAdmin(admin.ModelAdmin):
 class PaymentScheduleInline(admin.TabularInline):
     model= PaymentSchedule
     extra = 0
-    ordering = ("year", )
+    ordering = ("year", "month")
     fields = ('project','year', 'month', 'amount')
 
 @admin.register(Project)
@@ -848,7 +856,7 @@ class EstimateAdmin(admin.ModelAdmin):
                 'fields': (
                     'concept_input', 'period', 'start_date', 'end_date', 'advance_payment_amount',
                     'advance_payment_date',
-                    'advance_payment_status', 'version',)
+                    'advance_payment_status', 'version','contractor')
             }),
     )
 
