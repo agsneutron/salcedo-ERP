@@ -103,6 +103,55 @@ function obtenSeries_Mensual_Grupo(datosJson2) {
     return Series;
 }
 
+function obtenSeries_Mensual_Grupo_ant(datosJson2) {
+    var Series = {
+      'serie': [],
+      'categoria': []
+    };
+    var datos=[];
+    var nombres=[];
+    var arrMeses=[];
+    var arrMesesAnio=[];
+    var indiceArrMes = 0; // este índice lo definimos para poder controlar el llenado del arrego de meses
+    var nombreMesAnio="";
+
+
+
+    for (var i = 0; i <= datosJson2.length-1; i++) {
+        indiceArrMes = 0; // lo inicializamos en cero para que cada cambio de año se agregen los meses que correspondan
+        for (var j = 0; j <= datosJson2[i].months.length-1; j++) {
+            // Si el nombre de la categoría aún no existe en el arreglo asociativo, se genera
+            if (datos[datosJson2[i].months[j].month+"-"+datosJson2[i].year]==undefined)
+            {
+                datos[datosJson2[i].months[j].month+"-"+datosJson2[i].year] = []; // se genera el arreglo asociativo con el nombre de la categoria
+                nombres.push(datosJson2[i].months[j].month+"-"+datosJson2[i].year); // se agrega el nombre de la categoria al arreglo nombres, para usarlo despúes para recorrer el arreglo asociativo
+            }
+            for (var k = 0; k <= datosJson2[i].months[j].category.length-1; k++) {
+                datos[datosJson2[i].months[j].month+"-"+datosJson2[i].year].push(datosJson2[i].months[j].category[k].total);
+                nombreMesAnio = datosJson2[i].months[j].category[k].name;
+                //uso arrMesesAnio para identificar si el mes+anio ya estan en el arreglo y poder agregar o no el mes a arrMeses
+                //esto por que en algunos casos no vienen todos los meses en el json.
+                if (arrMesesAnio[nombreMesAnio]==undefined){
+                    arrMesesAnio[nombreMesAnio]=[];
+                    arrMeses.push(datosJson2[i].months[j].category[k].name);
+                }
+
+            }
+
+        }
+    }
+    console.log(arrMeses);
+    // con el arreglo nombres se recorre el arreglo asociativo para llenar el json de series.
+    for (var i = 0; i <= nombres.length-1; i++) {
+        Series.serie.push({
+            'name': nombres[i],
+            'data': datos[nombres[i]]
+        });
+    }
+    Series.categoria = arrMeses;
+    return Series;
+}
+
             Highcharts.chart('container-chart', {
                 chart: {
                     type: 'spline',

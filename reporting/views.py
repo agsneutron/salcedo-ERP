@@ -2,6 +2,7 @@
 from django.http.response import HttpResponse
 
 from ERP import api
+from ERP.models import AccessToProject, Project
 from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
@@ -825,11 +826,84 @@ class GetPhysicalFinancialAdvanceReport(View):
         #return HttpResponse(Utilities.json_to_dumps({}),'application/json; charset=utf-8')
 
 
+class GetMainDashboard(View):
+    def get(self, request):
+
+        response_by_project = []
+        print "User is: " + str(request.user)
+        access_set = AccessToProject.objects.filter(user__id=request.user.id)
+        for access in access_set:
+
+            structured_response = {}
+            response = api.PhysicalFinancialAdvanceReport.get_biddings_report(access.project.id)
+
+            total_programmed = 0
+            total_estimated = 0
+            total_paid_estimated = 0
+            for year in response:
+                for month in year['months']:
+                    total_programmed += month['month_program']
+                    total_estimated += month['month_estimate']
+                    total_paid_estimated += month['month_paid_estimate']
+
+            structured_response['schedule'] = response
+            structured_response['general'] = {
+                "general_programmed": total_programmed,
+                "general_estimated": total_estimated,
+                "general_paid_estimated": total_paid_estimated,
+                "percentaje_paid_estimated": round((total_paid_estimated * 100/ total_programmed), 2),
+                "percentaje_estimated": round((total_estimated * 100 / total_programmed), 2),
+                "project_name" : access.project.nombreProyecto,
+                "project_key" : access.project.key,
+                "project_latitud" : access.project.latitud,
+                "project_longitud" : access.project.longitud,
+                "project_id" : access.project.id
+            }
+
+            response_by_project.append(structured_response)
+
+
+        return HttpResponse(Utilities.json_to_dumps(response_by_project), 'application/json; charset=utf-8')
+
+
 class GetDashboardByProject(View):
     def get(self, request):
+
         project_id = request.GET.get('project_id')
-        response = api.PhysicalFinancialAdvanceReport.get_biddings_report_aux(project_id)
+        project = Project.objects.get(pk=project_id)
 
-        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
+        structured_response = {}
+        response = api.PhysicalFinancialAdvanceReport.get_biddings_report(project.id)
 
+        total_programmed = 0
+        total_estimated = 0
+        total_paid_estimated = 0
+        for year in response:
+            for month in year['months']:
+                total_programmed += month['month_program']
+                total_estimated += month['month_estimate']
+                total_paid_estimated += month['month_paid_estimate']
+
+        percentaje_paid_estimated=0
+        percentaje_estimated = 0
+        if total_programmed > 0:
+            percentaje_paid_estimated = round((total_paid_estimated * 100 / total_programmed), 2)
+            percentaje_estimated = round((total_estimated * 100 / total_programmed), 2),
+
+        structured_response['schedule'] = response
+        structured_response['general'] = {
+            "general_programmed": total_programmed,
+            "general_estimated": total_estimated,
+            "general_paid_estimated": total_paid_estimated,
+            "percentaje_paid_estimated": percentaje_paid_estimated,
+            "percentaje_estimated": percentaje_estimated,
+            "project_name" : project.nombreProyecto,
+            "project_key" : project.key,
+            "project_latitud" : project.latitud,
+            "project_longitud" : project.longitud,
+            "project_id" : project.id
+        }
+
+
+        return HttpResponse(Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
 
