@@ -489,7 +489,7 @@ class Empresa(models.Model):
                                   chained_model_field="estado",
                                   show_all=False,
                                   auto_choose=True,
-                                  sort=True)
+                                  sort=True,)
 
     PUBLIC = "pu"
     PRIVATE = "pr"
@@ -751,8 +751,21 @@ class Project(models.Model):
     ubicacion_numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
     ubicacion_pais = models.ForeignKey(Pais, verbose_name="país", null=False, blank=False)
-    ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
-    ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
+    ubicacion_estado = ChainedForeignKey(Estado,
+                               chained_field="ubicacion_pais",
+                               chained_model_field="pais",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True)
+
+    ubicacion_municipio = ChainedForeignKey(Municipio,
+                              chained_field="ubicacion_estado",
+                              chained_model_field="estado",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True)
+    #ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
+    #ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
     ubicacion_cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
 
     latitud = models.FloatField(default=0, blank=True, null=True, )
