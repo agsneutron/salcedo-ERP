@@ -846,13 +846,19 @@ class GetMainDashboard(View):
                     total_estimated += month['month_estimate']
                     total_paid_estimated += month['month_paid_estimate']
 
+            percentaje_paid_estimated = 0
+            percentaje_estimated = 0
+            if total_programmed > 0:
+                percentaje_paid_estimated = round((total_paid_estimated * 100 / total_programmed), 2)
+                percentaje_estimated = round((total_estimated * 100 / total_programmed), 2)
+
             structured_response['schedule'] = response
             structured_response['general'] = {
                 "general_programmed": total_programmed,
                 "general_estimated": total_estimated,
                 "general_paid_estimated": total_paid_estimated,
-                "percentaje_paid_estimated": round((total_paid_estimated * 100/ total_programmed), 2),
-                "percentaje_estimated": round((total_estimated * 100 / total_programmed), 2),
+                "percentaje_paid_estimated": percentaje_paid_estimated,
+                "percentaje_estimated": percentaje_estimated,
                 "project_name" : access.project.nombreProyecto,
                 "project_key" : access.project.key,
                 "project_latitud" : access.project.latitud,
@@ -888,7 +894,7 @@ class GetDashboardByProject(View):
         percentaje_estimated = 0
         if total_programmed > 0:
             percentaje_paid_estimated = round((total_paid_estimated * 100 / total_programmed), 2)
-            percentaje_estimated = round((total_estimated * 100 / total_programmed), 2),
+            percentaje_estimated = round((total_estimated * 100 / total_programmed), 2)
 
         structured_response['schedule'] = response
         structured_response['general'] = {
