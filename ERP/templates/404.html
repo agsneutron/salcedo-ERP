@@ -1,0 +1,13 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block title %}{% trans 'Page not found' %}{% endblock %}
+
+{% block content %}
+
+<h2>--CUSTOM THIS PAGE---{% trans 'Page not found' %}--</h2>
+
+<p>******{% trans "We're sorry, but the requested page could not be found." %}</p>
+    <p>Ingresa a través de las opciones del sistema.</p>
+
+{% endblock %}

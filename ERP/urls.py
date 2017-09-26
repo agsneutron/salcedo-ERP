@@ -27,3 +27,6 @@ urlpatterns = [
     url(r'^api/get_access_to_project_by_user', api.AccessToProjectByUser.as_view()),
 
 ]
+
+handler404 = 'views.custom404'
+handler500 = 'views.custom500'
