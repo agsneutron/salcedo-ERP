@@ -387,11 +387,12 @@ function puntosMapa(Datos) {
   var arregloSimple=new Array();
   var arregloDoble=new Array();
     var arregloObjeto = new Object();
+
     for(var i= 0;i<Datos.length;i++){
         var arregloSimple=new Array();
         arregloSimple.push("<b>Obra:</b>" + Datos[i].general.project_name + " <br> ");
-        arregloSimple.push(Datos[i].general.latitud);
-        arregloSimple.push(Datos[i].general.longitud);
+        arregloSimple.push(Datos[i].general.project_latitud);
+        arregloSimple.push(Datos[i].general.project_longitud);
         arregloSimple.push(i);
         arregloDoble.push(arregloSimple);
     }
@@ -416,13 +417,15 @@ function puntosMapaObra(Datos) {
 }
 function setMarkers(mapa, lugares) {
   var infowindow = new google.maps.InfoWindow();
+
+
   for (var i = 0; i < lugares.length; i++) {
     var puntos = lugares[i];
     var myLatLng = new google.maps.LatLng(puntos[1], puntos[2]);
     var marker = new google.maps.Marker({
         position: myLatLng,
         map: mapa,
-        icon: '../../static/ERP/admin/img/pin4.png',
+        icon: '../static/ERP/admin/img/pin4.png',
         title: puntos[0],
         zIndex: puntos[3]
     });
