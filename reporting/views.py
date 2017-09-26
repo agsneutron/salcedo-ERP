@@ -843,14 +843,16 @@ class GetMainDashboard(View):
             for year in response:
                 for month in year['months']:
                     total_programmed += month['month_program']
-                    total_estimated += month['month_paid_estimate']
-                    total_paid_estimated += month['month_estimate']
+                    total_estimated += month['month_estimate']
+                    total_paid_estimated += month['month_paid_estimate']
 
             structured_response['schedule'] = response
             structured_response['general'] = {
                 "general_programmed": total_programmed,
                 "general_estimated": total_estimated,
                 "general_paid_estimated": total_paid_estimated,
+                "percentaje_paid_estimated": round((total_paid_estimated * 100/ total_programmed), 2),
+                "percentaje_estimated": round((total_estimated * 100 / total_programmed), 2),
                 "project_name" : access.project.nombreProyecto,
                 "project_key" : access.project.key,
                 "project_latitud" : access.project.latitud,
@@ -878,14 +880,16 @@ class GetDashboardByProject(View):
         for year in response:
             for month in year['months']:
                 total_programmed += month['month_program']
-                total_estimated += month['month_paid_estimate']
-                total_paid_estimated += month['month_estimate']
+                total_estimated += month['month_estimate']
+                total_paid_estimated += month['month_paid_estimate']
 
         structured_response['schedule'] = response
         structured_response['general'] = {
             "general_programmed": total_programmed,
             "general_estimated": total_estimated,
             "general_paid_estimated": total_paid_estimated,
+            "percentaje_paid_estimated": round((total_paid_estimated * 100/ total_programmed), 2),
+            "percentaje_estimated": round((total_estimated * 100 / total_programmed), 2),
             "project_name" : project.nombreProyecto,
             "project_key" : project.key,
             "project_latitud" : project.latitud,
