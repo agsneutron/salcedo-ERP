@@ -1,7 +1,7 @@
 /**
  * Created by Wop on 25/07/17.
  */
-
+/*
             Highcharts.chart('container-chart', {
                 chart: {
                     type: 'spline',
@@ -982,3 +982,4 @@
 
 
         });
+*/
