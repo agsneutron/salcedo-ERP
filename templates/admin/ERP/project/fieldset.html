@@ -250,9 +250,9 @@
                     {% if field.field.name == "ubicacion_pais" %}
                         <div class="row">
                         <div class="col-md-3">
-                            <div class="form-group field-ubicacion_pais">
+                            <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required" for="id_ubicacion_pais">País:</label>
+                                    <label class="control-label required" for="id_{{ field.field.name }}">País:</label>
                                     {{ field.field|addcss:"form-control " }}
                                     {{ field.errors }}
                                 </div>
@@ -261,26 +261,24 @@
 
 
                     {% endif %}
-                    {% if field.field.name == "ubicacion_municipio" %}
 
-
-
-                        <div class="col-md-3">
-                            <div class="form-group field-ubicacion_municipio">
-                                <div>
-                                    <label class="control-label required"
-                                           for="id_ubicacion_municipio">Municipio:</label>
-                                    {{ field.field|addcss:"form-control " }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
                     {% if field.field.name == "ubicacion_estado" %}
                         <div class="col-md-3">
-                            <div class="form-group field-ubicacion_estado">
+                            <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required" for="id_ubicacion_estado">Estado:</label>
+                                    <label class="control-label required" for="id_{{ field.field.name }}">Estado:</label>
+                                    {{ field.field|addcss:"form-control " }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                        {% if field.field.name == "ubicacion_municipio" %}
+                        <div class="col-md-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    <label class="control-label required"
+                                           for="id_{{ field.field.name }}">Municipio:</label>
                                     {{ field.field|addcss:"form-control " }}
                                     {{ field.errors }}
                                 </div>
