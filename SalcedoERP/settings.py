@@ -16,7 +16,7 @@ import os
 
 import locale
 
-locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
 # locale.currency(1000, grouping=True)
 # español para windows
 #locale.setlocale(locale.LC_ALL, "esp")
@@ -36,6 +36,8 @@ SECRET_KEY = '9+ue&u-t+v6s8_^7ivxbxfec%pszd8rhxm%0_$@*#$j2@a_6$$'
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+LANGUAGE_CODE = 'es'
 
 # Application definition
 

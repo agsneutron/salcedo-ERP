@@ -1,3 +1,4 @@
+# coding=utf-8
 from decimal import Decimal
 
 import StringIO
@@ -12,36 +13,45 @@ class FinancialAdvanceReport(object):
 
     @staticmethod
     def generate_report(information_json, show_concepts=True):
-        FinancialAdvanceReport.show_concepts = show_concepts
 
-        output = StringIO.StringIO()
+        if len(information_json) == 0:
+            output = StringIO.StringIO()
+            workbook = Workbook(output)
+            worksheet = workbook.add_worksheet('Avance Financiero Interno')
 
+            # Widen the first column to make the text clearer.
+            worksheet.set_column('A:A', 20)
+            worksheet.write('A1', 'Aún no se ha agregado el catálogo de conceptos.')
+        else:
 
-        # Create an new Excel file and add a worksheet.
-        #workbook = Workbook('report.xlsx')
-        workbook = Workbook(output)
-        worksheet = workbook.add_worksheet('Avance Financiero Interno')
+            FinancialAdvanceReport.show_concepts = show_concepts
 
-        # Widen the first column to make the text clearer.
-        worksheet.set_column('A:H', 20)
+            output = StringIO.StringIO()
 
-        # Add a bold format to use to highlight cells.
-        bold = workbook.add_format({'bold': True})
+            # Create an new Excel file and add a worksheet.
+            # workbook = Workbook('report.xlsx')
+            workbook = Workbook(output)
+            worksheet = workbook.add_worksheet('Avance Financiero Interno')
 
-        # Write some simple text.
-        worksheet.write('A1', 'Avance Financiero Interno', bold)
+            # Widen the first column to make the text clearer.
+            worksheet.set_column('A:H', 20)
 
-        FinancialAdvanceReport.add_headers(workbook, worksheet)
+            # Add a bold format to use to highlight cells.
+            bold = workbook.add_format({'bold': True})
 
-        FinancialAdvanceReport.add_concepts(workbook, worksheet, information_json['line_items'])
+            # Write some simple text.
+            worksheet.write('A1', 'Avance Financiero Interno', bold)
 
-        # Insert an image.
-        # worksheet.insert_image('B5', 'logo.png')
+            FinancialAdvanceReport.add_headers(workbook, worksheet)
+
+            FinancialAdvanceReport.add_concepts(workbook, worksheet, information_json['line_items'])
+
+            # Insert an image.
+            # worksheet.insert_image('B5', 'logo.png')
 
         workbook.close()
-
         response = StreamingHttpResponse(FileWrapper(output),
-                                        content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+                                         content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
         response['Content-Disposition'] = 'attachment; filename=Reporte_Avance_Financiero.xlsx'
         response['Content-Length'] = output.tell()
@@ -177,11 +187,14 @@ class FinancialAdvanceReport(object):
                                 formats['currency_centered_bold'])
                 worksheet.write(row_count, PENDING_COL, '=SUM(E' + str(START_ROW + 1) + ':E' + str(row_count) + ')',
                                 formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_PROGRAMMED_COL, '=SUM(F' + str(START_ROW + 1) + ':F' + str(row_count) + ')',
+                worksheet.write(row_count, GENERAL_PROGRAMMED_COL,
+                                '=SUM(F' + str(START_ROW + 1) + ':F' + str(row_count) + ')',
                                 formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_ESTIMATED_COL, '=SUM(G' + str(START_ROW + 1) + ':G' + str(row_count) + ')',
+                worksheet.write(row_count, GENERAL_ESTIMATED_COL,
+                                '=SUM(G' + str(START_ROW + 1) + ':G' + str(row_count) + ')',
                                 formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_PENDING_COL, '=SUM(H' + str(START_ROW + 1) + ':H' + str(row_count) + ')',
+                worksheet.write(row_count, GENERAL_PENDING_COL,
+                                '=SUM(H' + str(START_ROW + 1) + ':H' + str(row_count) + ')',
                                 formats['currency_centered_bold'])
             else:
 
