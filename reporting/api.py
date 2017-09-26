@@ -285,6 +285,7 @@ class PhysicalFinancialAdvanceReport(View):
 					"accumulated_total_estimate": accumulated_total_estimate,
 					"month_program": float(record.amount),
 					"month_paid_estimate": float(month_paid_estimate),
+					"month_estimate": float(month_total_estimate),
 				})
 
 
