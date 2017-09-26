@@ -967,7 +967,7 @@ class PaymentSchedule(models.Model):
         (NOVEMBER, 'Noviembre'),
         (DECEMBER, 'Diciembre'),
     )
-    month = models.IntegerField(max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    month = models.IntegerField(verbose_name="Mes",max_length=2, choices=MONTH_CHOICES, default=JANUARY)
 
     YEAR_CHOICES = (
         (2016, '2016'),
@@ -978,10 +978,10 @@ class PaymentSchedule(models.Model):
         (2026, '2026'), (2027, '2027'), (2028, '2028'), (2029, '2029'), (2030, '2030')
     )
 
-    year = models.IntegerField(max_length=4,
+    year = models.IntegerField(verbose_name="Año", max_length=4,
                             choices=YEAR_CHOICES, default=2017)
 
-    amount = models.DecimalField(verbose_name='Mount', decimal_places=2, blank=False, null=False,
+    amount = models.DecimalField(verbose_name='Monto', decimal_places=2, blank=False, null=False,
                                  default=0, max_digits=20,
                                  validators=[MinValueValidator(Decimal('0.0'))])
 
