@@ -172,21 +172,21 @@ function obtenSeries_Mensual_Grupo(datosJson2) {
     var nombreMesAnio="";
 
 
-    datos["accumulated_programmed"] = [];
-    datos["accumulated_paid_estimate"] = [];
-    datos["accumulated_total_estimate"] = [];
+    datos["Total Programado"] = [];
+    datos["Total Estimado Pagado"] = [];
+    datos["Total Estimado"] = [];
 
-    nombres.push("accumulated_programmed");
-    nombres.push("accumulated_paid_estimate");
-    nombres.push("accumulated_total_estimate");
+    nombres.push("Total Programado");
+    nombres.push("Total Estimado Pagado");
+    nombres.push("Total Estimado");
 
     for (var i = 0; i <= datosJson2.length-1; i++) {
         indiceArrMes = 0; // lo inicializamos en cero para que cada cambio de año se agregen los meses que correspondan
         for (var j = 0; j <= datosJson2[i].months.length-1; j++) {
 
-            datos["accumulated_programmed"].push(datosJson2[i].months[j].accumulated_programmed)
-            datos["accumulated_paid_estimate"].push(datosJson2[i].months[j].accumulated_paid_estimate)
-            datos["accumulated_total_estimate"].push(datosJson2[i].months[j].accumulated_total_estimate)
+            datos["Total Programado"].push(datosJson2[i].months[j].accumulated_programmed)
+            datos["Total Estimado Pagado"].push(datosJson2[i].months[j].accumulated_paid_estimate)
+            datos["Total Estimado"].push(datosJson2[i].months[j].accumulated_total_estimate)
 
             nombreMesAnio = datosJson2[i].months[j].month+"-"+datosJson2[i].year; //datosJson2[i].months[j].category[k].name;
             //uso arrMesesAnio para identificar si el mes+anio ya estan en el arreglo y poder agregar o no el mes a arrMeses
@@ -213,7 +213,7 @@ function obtenSeries_Mensual_Grupo(datosJson2) {
 
 
 
-
+function graficaX(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
             Highcharts.chart('container-chart', {
                 chart: {
                     type: 'spline',
@@ -277,7 +277,7 @@ function obtenSeries_Mensual_Grupo(datosJson2) {
                     data: [1052, 954, 4250, 740, 38]
                 }]
             });
-
+}
 
 function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
     Highcharts.chart('container-chart-2', {
@@ -494,6 +494,8 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
 
     });
 }
+
+function graficaTres(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
         Highcharts.chart('container-chart-3', {
             colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
                 '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'
@@ -722,7 +724,9 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
 
 
         });
+}
 
+function graficaCuatro(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
         Highcharts.chart('container-chart-4', {
             colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
                 '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'
@@ -951,7 +955,8 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
 
 
         });
-
+}
+function graficaCinco(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
         Highcharts.chart('container-chart-5', {
             colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
                 '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'
@@ -1181,3 +1186,4 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
 
         });
 
+}
