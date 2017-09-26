@@ -173,20 +173,20 @@ function obtenSeries_Mensual_Grupo(datosJson2) {
 
 
     datos["Total Programado"] = [];
-    datos["Total Estimado Pagado"] = [];
-    datos["Total Estimado"] = [];
+    datos["Avance Financiero"] = [];
+    datos["Avance Físico"] = [];
 
     nombres.push("Total Programado");
-    nombres.push("Total Estimado Pagado");
-    nombres.push("Total Estimado");
+    nombres.push("Avance Financiero");
+    nombres.push("Avance Físico");
 
     for (var i = 0; i <= datosJson2.length-1; i++) {
         indiceArrMes = 0; // lo inicializamos en cero para que cada cambio de año se agregen los meses que correspondan
         for (var j = 0; j <= datosJson2[i].months.length-1; j++) {
 
             datos["Total Programado"].push(datosJson2[i].months[j].accumulated_programmed)
-            datos["Total Estimado Pagado"].push(datosJson2[i].months[j].accumulated_paid_estimate)
-            datos["Total Estimado"].push(datosJson2[i].months[j].accumulated_total_estimate)
+            datos["Avance Financiero"].push(datosJson2[i].months[j].accumulated_paid_estimate)
+            datos["Avance Físico"].push(datosJson2[i].months[j].accumulated_total_estimate)
 
             nombreMesAnio = datosJson2[i].months[j].month+"-"+datosJson2[i].year; //datosJson2[i].months[j].category[k].name;
             //uso arrMesesAnio para identificar si el mes+anio ya estan en el arreglo y poder agregar o no el mes a arrMeses
