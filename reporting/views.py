@@ -856,7 +856,8 @@ class GetMainDashboard(View):
                 "project_name" : access.project.nombreProyecto,
                 "project_key" : access.project.key,
                 "project_latitud" : access.project.latitud,
-                "project_longitud" : access.project.longitud
+                "project_longitud" : access.project.longitud,
+                "project_id" : access.project.id
             }
 
             response_by_project.append(structured_response)
@@ -893,7 +894,8 @@ class GetDashboardByProject(View):
             "project_name" : project.nombreProyecto,
             "project_key" : project.key,
             "project_latitud" : project.latitud,
-            "project_longitud" : project.longitud
+            "project_longitud" : project.longitud,
+            "project_id" : project.id
         }
 
 
