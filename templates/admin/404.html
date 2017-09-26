@@ -4,9 +4,22 @@
 {% block title %}{% trans 'Page not found' %}{% endblock %}
 
 {% block content %}
+<div class="container">
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+            <div class="card animated fadeInUp animation-delay-7 color-primary withripple">
+              <div class="card-block-big color-dark">
+                <div class="text-center">
+                  <h1 class="color-primary">Error 404</h1>
+                  <h2>{% trans 'Page not found' %}</h2>
+                  <p class="lead lead-sm">{% trans "We're sorry, but the requested page could not be found." %}</p>
+                  <a href="/admin" class="btn btn-primary btn-raised">
+                    <i class="zmdi zmdi-home"></i> Ir a inicio</a>
+                </div>
+              </div>
 
-<h2>{% trans 'Page not found' %}--</h2>
-
-<p>{% trans "We're sorry, but the requested page could not be found." %}</p>
+        </div>
+      </div>
+</div>
 
 {% endblock %}
