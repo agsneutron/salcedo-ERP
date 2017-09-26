@@ -307,7 +307,7 @@ class PhysicalFinancialAdvanceReport(object):
                         '=SUM(D' + str(start_cell + 1) + ':D' + str(count_cell) + ')', yellow_percentage_format)
         worksheet.write(count_cell, PHYSICAL_ESTIMATED_COL,
                         '=SUM(E' + str(start_cell + 1) + ':E' + str(count_cell) + ')', yellow_currency_format)
-        worksheet.write(count_cell, PHYSICAL_ADVANCE_COL, '=SUM(F' + str(start_cell + 1) + ':F' + str(count_cell) + ')',
+        worksheet.write(count_cell, PHYSICAL_ADVANCE_COL, '=IF(B' + str(count_cell + 1 ) + '=0, 0, E' + str(count_cell +1 ) + '/B' + str(count_cell + 1 ) +')',
                         yellow_percentage_format)
 
         count_cell += 1
@@ -402,10 +402,10 @@ class PhysicalFinancialAdvanceReport(object):
 
         worksheet.merge_range('A2:A3', 'Mes', header_format)
 
-        worksheet.merge_range('A1:E1', 'Programa Licitación', header_format)
+        worksheet.merge_range('A1:E1', 'Programa General', header_format)
 
         # Programado
-        worksheet.merge_range('B2:C2', 'Programado de Licitación', header_format)
+        worksheet.merge_range('B2:C2', 'Programado de Proyecto', header_format)
         worksheet.write('B3', 'Importe S/IVA', header_format)
         worksheet.write('C3', 'Porcentaje', header_format)
 

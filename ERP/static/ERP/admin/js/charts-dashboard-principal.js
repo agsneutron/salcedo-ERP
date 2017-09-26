@@ -34,20 +34,21 @@ function main_consulta() {
 
 function callGraphicOne() {
     //$j.get("/obras/register_by_token", function(respu) {
-        var projectID = parseInt(document.getElementById("projectID").value);
-        var ajax_data = {
-            "project_id": projectID
-        };
 
         $j.ajax({
-            url: '/reporting/get_dashboard_by_project',
+            url: '/reporting/get_main_dashboard',
             type: 'get',
-            data: ajax_data,
             success: function(data) {
                 datosJson=data;
-                Series = obtenSeries_Mensual_Grupo(data.schedule);
-                graficaUno("",Series.serie,Series.categoria,"","","");
-                //putDatosGrafica("GC_Basica");
+                setMapa(data);
+                for (var i = 0; i <= data.length-1; i++) {
+                    $("#cardGrafica"+i).show();
+                    $("#tituloGrafica"+i).html('<h3 class="card-title">' + data[i].general.project_name + '</h3>');
+
+                    setDataCircles(data[i].general.percentaje_estimated, data[i].general.percentaje_paid_estimated,i);
+                    Series = obtenSeries_Mensual_Grupo(data[i].schedule);
+                    graficaUno("container-chart-"+i, Series.serie, Series.categoria, "", "", "");
+                }
             },
             error: function(data) {
                 alert('se generó un error!!! ' + data.error);
@@ -57,7 +58,44 @@ function callGraphicOne() {
     //});
 }
 
-
+function setDataCircles(porcentaje_fisico, porcentaje_financiero,indice){
+    var myCircle = Circles.create({
+                id: 'circles-'+indice,
+                radius: 50,
+                value: porcentaje_fisico,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+             var myCircle = Circles.create({
+                id: 'circles-'+indice+'-'+indice,
+                radius: 50,
+                value: porcentaje_financiero,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+}
 
 function obtenSeries_Mensual_Grupo(datosJson2) {
     var Series = {
@@ -114,7 +152,7 @@ function obtenSeries_Mensual_Grupo(datosJson2) {
 
 
 function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
-    Highcharts.chart('container-chart-2', {
+    Highcharts.chart(contenedor, {
         colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
             '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'
         ],
@@ -327,4 +365,76 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
         series: Series
 
     });
+}
+
+
+function setMapa(Datos){
+
+     var mapOptions = {
+                zoom: 4,
+                center: new google.maps.LatLng(19.39068,-99.2837006),
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+                mapTypeIds: ['roadmap', 'terrain']
+            }
+            var map = new google.maps.Map(document.getElementById('map'),
+                    mapOptions);
+
+
+    setMarkers(map,puntosMapa(Datos));
+
+}
+function puntosMapa(Datos) {
+  var arregloSimple=new Array();
+  var arregloDoble=new Array();
+    var arregloObjeto = new Object();
+
+    for(var i= 0;i<Datos.length;i++){
+        var arregloSimple=new Array();
+        arregloSimple.push("<b>Obra:</b>" + Datos[i].general.project_name + " <br> ");
+        arregloSimple.push(Datos[i].general.project_latitud);
+        arregloSimple.push(Datos[i].general.project_longitud);
+        arregloSimple.push(i);
+        arregloDoble.push(arregloSimple);
+    }
+    arregloObjeto = arregloDoble;
+    return arregloObjeto;
+}
+
+function puntosMapaObra(Datos) {
+  var arregloSimple=new Array();
+  var arregloDoble=new Array();
+    var arregloObjeto = new Object();
+    for(var i= 0;i<Datos.obras.length;i++){
+        var arregloSimple=new Array();
+        arregloSimple.push(Datos.obras[i].identificador_unico+ ", " + Datos.obras[i].estado__nombreEstado);
+        arregloSimple.push(Datos.obras[i].latitud);
+        arregloSimple.push(Datos.obras[i].longitud);
+        arregloSimple.push(i);
+        arregloDoble.push(arregloSimple);
+    }
+    arregloObjeto = arregloDoble;
+    return arregloObjeto;
+}
+function setMarkers(mapa, lugares) {
+  var infowindow = new google.maps.InfoWindow();
+
+
+  for (var i = 0; i < lugares.length; i++) {
+    var puntos = lugares[i];
+    var myLatLng = new google.maps.LatLng(puntos[1], puntos[2]);
+    var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: mapa,
+        icon: '../static/ERP/admin/img/pin4.png',
+        title: puntos[0],
+        zIndex: puntos[3]
+    });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, puntos) {
+        return function() {
+          infowindow.setContent(puntos[0]);
+          infowindow.open(mapa, marker);
+        }
+      })(marker, puntos));
+  }
 }

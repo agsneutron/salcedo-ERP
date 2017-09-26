@@ -940,6 +940,7 @@ class Project(models.Model):
     def save(self, *args, **kwargs):
         canSave = True
 
+
         if self.fecha_final is not None and self.fecha_inicial >= self.fecha_final:
             Logs.log("The start date is greater than the end date")
             canSave = False
@@ -1291,6 +1292,9 @@ class Estimate(models.Model):
     end_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
     period = models.DateField(default=now(), null=True, blank=False, verbose_name="Periodo")
 
+
+    contractor = models.ForeignKey(Contratista, verbose_name="Contratista", null=False, blank=False)
+
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
     line_item = models.ForeignKey(LineItem, verbose_name="Partidas", null=True, blank=False, default=None)
     concept_input = ChainedForeignKey(Concept_Input,
@@ -1380,16 +1384,16 @@ def content_file_generador(instance, filename):
 class ProgressEstimate(models.Model):
     version = IntegerVersionField()
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
-    key = models.CharField(verbose_name="Clave de la Estimación", max_length=8, null=False, blank=False)
+    key = models.CharField(verbose_name="Clave del Avance", max_length=8, null=False, blank=False)
     progress = models.DecimalField(verbose_name='Progreso (%)', decimal_places=4, blank=False, null=False, default=0,
                                    max_digits=20)
-    amount = models.DecimalField(verbose_name='Cantidad', decimal_places=6, blank=False, null=False, default=0,
+    amount = models.DecimalField(verbose_name='Monto ($)', decimal_places=6, blank=False, null=False, default=0,
                                  max_digits=20)
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
-                                      verbose_name="Archivo del Generador", blank=True)
+                                      verbose_name="Justificación", blank=True)
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
