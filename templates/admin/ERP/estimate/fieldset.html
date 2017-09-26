@@ -1,4 +1,10 @@
 {% load app_filters admin_static %}
+<style>
+    .no_change{
+        pointer-events:none;
+    }
+
+</style>
 <fieldset class="module aligned {{ fieldset.classes }}">
 
     {{ fieldset.management_form }}
@@ -64,7 +70,7 @@
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.field|addcss:"form-control no_change " }}
                                         {{ field.errors }}
                                     </div>
                                 </div>

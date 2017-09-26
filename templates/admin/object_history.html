@@ -14,29 +14,50 @@
 {% block content %}
 <div id="content-main">
 <div class="module">
+<div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
+                        </div>
+                        <div class="item-right">
 
+
+                        </div>
+                    </div>
+
+                    <div class="card-block">
 {% if action_list %}
-    <table id="change-history">
+    <div class="row">
+        <br>
+        <div class="col-xs-12">
+    <div class="table-responsive">
+    <table id="table table-bordered">
         <thead>
         <tr>
-            <th scope="col">{% trans 'Date/time' %}</th>
-            <th scope="col">{% trans 'User' %}</th>
-            <th scope="col">{% trans 'Action' %}</th>
+            <th>{% trans 'Date/time' %}</th>
+            <th>{% trans 'User' %}</th>
+            <th>{% trans 'Action' %}</th>
         </tr>
         </thead>
         <tbody>
         {% for action in action_list %}
         <tr>
-            <th scope="row">{{ action.action_time|date:"DATETIME_FORMAT" }}</th>
+            <th>{{ action.action_time|date:"DATETIME_FORMAT" }}</th>
             <td>{{ action.user.get_username }}{% if action.user.get_full_name %} ({{ action.user.get_full_name }}){% endif %}</td>
             <td>{{ action.change_message }}</td>
         </tr>
         {% endfor %}
         </tbody>
     </table>
+    </div>
+    </div>
+    </div>
 {% else %}
     <p>{% trans "This object doesn't have a change history. It probably wasn't added via this admin site." %}</p>
 {% endif %}
+                    </div></div></div></div>
 </div>
 </div>
 {% endblock %}

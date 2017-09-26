@@ -15,6 +15,9 @@
     #lightbox {
         display: none !important;
     }
+    .no_change{
+        pointer-events:none;
+    }
 </style>
 <fieldset class="module aligned {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
@@ -93,7 +96,7 @@
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.field|addcss:"form-control no_change" }}
                                         {{ field.errors }}
                                     </div>
                                 </div>
