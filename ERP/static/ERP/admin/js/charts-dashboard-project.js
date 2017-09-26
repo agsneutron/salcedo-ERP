@@ -54,7 +54,7 @@ function callGraphicOne() {
     //});
 }
 
-function obtenSeries_Mensual_Grupo(datosJson2) {
+function obtenSeries_Mensual_Grupo_auax(datosJson2) {
     var Series = {
       'serie': [],
       'categoria': []
@@ -102,7 +102,7 @@ function obtenSeries_Mensual_Grupo(datosJson2) {
     Series.categoria = arrMeses;
     return Series;
 }
-function obtenSeries_Mensual_Grupo_otro(datosJson2) {
+function obtenSeries_Mensual_Grupo_ant(datosJson2) {
     var Series = {
       'serie': [],
       'categoria': []
@@ -157,6 +157,59 @@ function obtenSeries_Mensual_Grupo_otro(datosJson2) {
     Series.categoria = arrMeses;
     return Series;
 }
+
+
+function obtenSeries_Mensual_Grupo(datosJson2) {
+    var Series = {
+      'serie': [],
+      'categoria': []
+    };
+    var datos=[];
+    var nombres=[];
+    var arrMeses=[];
+    var arrMesesAnio=[];
+    var indiceArrMes = 0; // este índice lo definimos para poder controlar el llenado del arrego de meses
+    var nombreMesAnio="";
+
+
+    datos["accumulated_programmed"] = [];
+    datos["accumulated_paid_estimate"] = [];
+    datos["accumulated_total_estimate"] = [];
+
+    nombres.push("accumulated_programmed");
+    nombres.push("accumulated_paid_estimate");
+    nombres.push("accumulated_total_estimate");
+
+    for (var i = 0; i <= datosJson2.length-1; i++) {
+        indiceArrMes = 0; // lo inicializamos en cero para que cada cambio de año se agregen los meses que correspondan
+        for (var j = 0; j <= datosJson2[i].months.length-1; j++) {
+
+            datos["accumulated_programmed"].push(datosJson2[i].months[j].accumulated_programmed)
+            datos["accumulated_paid_estimate"].push(datosJson2[i].months[j].accumulated_paid_estimate)
+            datos["accumulated_total_estimate"].push(datosJson2[i].months[j].accumulated_total_estimate)
+
+            nombreMesAnio = datosJson2[i].months[j].month+"-"+datosJson2[i].year; //datosJson2[i].months[j].category[k].name;
+            //uso arrMesesAnio para identificar si el mes+anio ya estan en el arreglo y poder agregar o no el mes a arrMeses
+            //esto por que en algunos casos no vienen todos los meses en el json.
+            if (arrMesesAnio[nombreMesAnio]==undefined){
+                arrMesesAnio[nombreMesAnio]=[];
+                arrMeses.push(datosJson2[i].months[j].month+"-"+datosJson2[i].year);
+            }
+
+        }
+    }
+    console.log(arrMeses);
+    // con el arreglo nombres se recorre el arreglo asociativo para llenar el json de series.
+    for (var i = 0; i <= nombres.length-1; i++) {
+        Series.serie.push({
+            'name': nombres[i],
+            'data': datos[nombres[i]]
+        });
+    }
+    Series.categoria = arrMeses;
+    return Series;
+}
+
 
 
 
@@ -285,6 +338,7 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
             }
         },
         yAxis: {
+            minRange: 10000,
             gridLineColor: '#707073',
             labels: {
                 style: {

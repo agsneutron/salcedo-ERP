@@ -828,7 +828,7 @@ class GetPhysicalFinancialAdvanceReport(View):
 class GetDashboardByProject(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
-        response = api.PhysicalFinancialAdvanceReport.get_biddings_report_aux(project_id)
+        response = api.PhysicalFinancialAdvanceReport.get_biddings_report(project_id)
 
         return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
 
