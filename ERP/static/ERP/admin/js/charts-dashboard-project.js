@@ -42,7 +42,7 @@ function callGraphicOne() {
             data: ajax_data,
             success: function(data) {
                 datosJson=data;
-                Series = obtenSeries_Mensual_Grupo(data);
+                Series = obtenSeries_Mensual_Grupo(data.schedule);
                 graficaUno("",Series.serie,Series.categoria,"","","");
                 //putDatosGrafica("GC_Basica");
             },
@@ -338,7 +338,6 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
             }
         },
         yAxis: {
-            minRange: 10000,
             gridLineColor: '#707073',
             labels: {
                 style: {
