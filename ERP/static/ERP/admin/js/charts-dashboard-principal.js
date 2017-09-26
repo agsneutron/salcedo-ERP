@@ -40,7 +40,7 @@ function callGraphicOne() {
             type: 'get',
             success: function(data) {
                 datosJson=data;
-
+                setMapa(data);
                 for (var i = 0; i <= data.length-1; i++) {
                     $("#cardGrafica"+i).show();
                     $("#tituloGrafica"+i).html('<h3 class="card-title">' + data[i].general.project_name + '</h3>');
@@ -365,4 +365,73 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
         series: Series
 
     });
+}
+
+
+function setMapa(Datos){
+
+     var mapOptions = {
+                zoom: 4,
+                center: new google.maps.LatLng(19.39068,-99.2837006),
+                style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+                mapTypeIds: ['roadmap', 'terrain']
+            }
+            var map = new google.maps.Map(document.getElementById('map'),
+                    mapOptions);
+
+
+    setMarkers(map,puntosMapa(Datos));
+
+}
+function puntosMapa(Datos) {
+  var arregloSimple=new Array();
+  var arregloDoble=new Array();
+    var arregloObjeto = new Object();
+    for(var i= 0;i<Datos.length;i++){
+        var arregloSimple=new Array();
+        arregloSimple.push("<b>Obra:</b>" + Datos[i].general.project_name + " <br> ");
+        arregloSimple.push(Datos[i].general.latitud);
+        arregloSimple.push(Datos[i].general.longitud);
+        arregloSimple.push(i);
+        arregloDoble.push(arregloSimple);
+    }
+    arregloObjeto = arregloDoble;
+    return arregloObjeto;
+}
+
+function puntosMapaObra(Datos) {
+  var arregloSimple=new Array();
+  var arregloDoble=new Array();
+    var arregloObjeto = new Object();
+    for(var i= 0;i<Datos.obras.length;i++){
+        var arregloSimple=new Array();
+        arregloSimple.push(Datos.obras[i].identificador_unico+ ", " + Datos.obras[i].estado__nombreEstado);
+        arregloSimple.push(Datos.obras[i].latitud);
+        arregloSimple.push(Datos.obras[i].longitud);
+        arregloSimple.push(i);
+        arregloDoble.push(arregloSimple);
+    }
+    arregloObjeto = arregloDoble;
+    return arregloObjeto;
+}
+function setMarkers(mapa, lugares) {
+  var infowindow = new google.maps.InfoWindow();
+  for (var i = 0; i < lugares.length; i++) {
+    var puntos = lugares[i];
+    var myLatLng = new google.maps.LatLng(puntos[1], puntos[2]);
+    var marker = new google.maps.Marker({
+        position: myLatLng,
+        map: mapa,
+        icon: '../../static/ERP/admin/img/pin4.png',
+        title: puntos[0],
+        zIndex: puntos[3]
+    });
+
+      google.maps.event.addListener(marker, 'click', (function(marker, puntos) {
+        return function() {
+          infowindow.setContent(puntos[0]);
+          infowindow.open(mapa, marker);
+        }
+      })(marker, puntos));
+  }
 }

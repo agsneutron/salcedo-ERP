@@ -336,24 +336,8 @@
             });
         });
     </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs&callback=initialize"
-            async defer></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs"></script>
 
-        <script type="text/javascript">
-         //google.maps.event.addDomListener(window, 'load', initialize);
-         function initialize() {
-          var mapOptions = {
-            zoom: 3,
-            center: new google.maps.LatLng(19.39068,-99.2837006),
-              style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
-              mapTypeIds: ['roadmap', 'terrain']
-          }
-          var map = new google.maps.Map(document.getElementById('map'),
-                                        mapOptions);
-
-          //setMarkers(map, beaches);
-        }
-    </script>
 
 
     <script src="{% static "ERP/admin/assets/Highcharts/code/highcharts.js" %}"></script>
