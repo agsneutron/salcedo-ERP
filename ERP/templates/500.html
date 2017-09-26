@@ -1,17 +1,25 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
-
-{% block breadcrumbs %}
-<div class="breadcrumbs">
-<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
-&rsaquo; {% trans 'Server error' %}
-</div>
-{% endblock %}
-
-{% block title %}{% trans 'Server error (500)' %}--{% endblock %}
-
+{% block title %}{% trans 'Home' %}{% endblock %}
 {% block content %}
-<h1>******************{% trans 'Server Error <em>(500)</em>' %}</h1>
-<p>{% trans "There's been an error. It's been reported to the site administrators via email and should be fixed shortly. Thanks for your patience." %}</p>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+                <div class="card animated fadeInUp animation-delay-7 color-primary withripple">
+                    <div class="card-block-big color-dark">
+                        <img class="text-center center-block" src="/static/ERP/admin/img/logo404.jpg"
+                             style="max-height: 150px">
+                        <div class="text-center">
+                            <h1 class="color-primary">{% trans 'Error de Servidor (500)' %}</h1>
 
+                            <p>{% trans "There's been an error. It's been reported to the site administrators via email and should be fixed shortly. Thanks for your patience." %}</p>
+                            <p>Ingresa a través de las opciones del sistema.</p>
+                            <a href="/admin" class="btn btn-primary btn-raised">
+                                <i class="zmdi zmdi-home"></i> Ir a inicio</a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
 {% endblock %}
