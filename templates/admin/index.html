@@ -9,6 +9,7 @@
 
 {% block breadcrumbs %}{% endblock %}
 {% block extrastyle %}{{ block.super }}
+
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}"/>
     {#    <script src="{% static "admin/assets/Highcharts/code/themes/dark-unica.js" %}"></script>#}
 {% endblock %}
@@ -19,17 +20,19 @@
                 <div class="card">
                     <div class="card-header light">
                         <div class="item-left">
-                            <h3 class="card-title text">Consulta</h3>
+                            <h3 class="card-title text">Mapa</h3>
                         </div>
                         <div class="item-right">
-                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-pie-chart"></i></a>
+                           {% comment %} <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-pie-chart"></i></a>
                             <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-line-chart"></i></a>
                             <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-area-chart"></i></a>
                             <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-bar-chart"></i></a>
-                        </div>
+{% endcomment %}                        </div>
                     </div>
-                    <div class="card-block">
+                    <div class="card-block" style="height: 345px; padding: 0">
                         <div id="container-chart" style="height: 0px; display: none"></div>
+                            <div id="map" style="height: 345px;"></div>
+
                     </div>
                 </div>
             </div>
@@ -333,6 +336,25 @@
             });
         });
     </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs&callback=initialize"
+            async defer></script>
+
+        <script type="text/javascript">
+         //google.maps.event.addDomListener(window, 'load', initialize);
+         function initialize() {
+          var mapOptions = {
+            zoom: 3,
+            center: new google.maps.LatLng(19.39068,-99.2837006),
+              style: google.maps.MapTypeControlStyle.DROPDOWN_MENU,
+              mapTypeIds: ['roadmap', 'terrain']
+          }
+          var map = new google.maps.Map(document.getElementById('map'),
+                                        mapOptions);
+
+          //setMarkers(map, beaches);
+        }
+    </script>
+
 
     <script src="{% static "ERP/admin/assets/Highcharts/code/highcharts.js" %}"></script>
     <script src="{% static "ERP/admin/assets/Highcharts/code/modules/no-data-to-display.js" %}"></script>
