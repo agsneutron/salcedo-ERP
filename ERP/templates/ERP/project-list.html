@@ -47,7 +47,7 @@
                                                 <th>Inicio</th>
                                                 <th>Termino</th>
                                                 <th>Fecha de Última Edición</th>
-                                                <!--<th>Configurar</th>-->
+                                                <th>Configurar</th>
                                                 <th>Ver</th>
                                                 <th>Editar</th>
                                                 <th>Dashboard</th>
@@ -76,16 +76,15 @@
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-tachometer color-danger eliminar" style="margin-right: 0"></i> Dashboard</a>
                                                 </td>{% endcomment %}
-                                                    <!--
-                                                    <td class="text-center" style="width: 5%">
 
-                                                        {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
-                                                        <a href="" data-toggle="modal" data-target="#myModal3"
-                                                           class="btn btn-raised btn-default btn-xs"><i
-                                                                class="fa fa-tasks color-default eliminar"
-                                                                onClick="configura_segmentos({{ project.id }})"></i></a>
-                                                    </td>
-                                                    -->
+                                                <td class="text-center" style="width: 5%">
+
+                                                    {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
+                                                    <a href="#" onClick="configura_segmentos({{ project.id }})" data-toggle="modal" data-target="#myModal3"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-tasks color-default eliminar"></i></a>
+                                                </td>
+
 
                                                     <td class="text-center" style="width: 5%"><a href="{{ project.id }}"
                                                                                                  class="btn btn-raised btn-default btn-xs"><i
