@@ -883,3 +883,11 @@ ul {
 .nav-tabs-ver-container .nav-tabs-ver li.active a {
     color: #00a09b;
 }
+.ms-header .header-right {
+    margin: 15px;
+    float: right;
+}
+.circles-text {
+    font-size: 30px!important;
+    font-size: 2.5rem!important;
+}
