@@ -1455,7 +1455,7 @@ class ProgressEstimateLog(models.Model):
     version = IntegerVersionField()
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
     user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=True, blank=True)
-    description = models.TextField(verbose_name="Descripción", max_length=512, null=False, blank=False)
+    description = models.TextField(verbose_name="Notas", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=now(), null=True, verbose_name="Fecha")
 

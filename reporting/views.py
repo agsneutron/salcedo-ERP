@@ -831,7 +831,7 @@ class GetMainDashboard(View):
 
         response_by_project = []
         print "User is: " + str(request.user)
-        access_set = AccessToProject.objects.filter(user__id=request.user.id)
+        access_set = AccessToProject.objects.filter(user__id=request.user.erpuser.id)
         for access in access_set:
 
             structured_response = {}

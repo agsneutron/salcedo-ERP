@@ -31,7 +31,13 @@
                                     <button class="searchbutton" type="submit" style="    margin-right: -6px;">
                                         <i class="fa fa-search"></i>
                                     </button>
-                                    <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Buscar" value="{{ query }}">
+                                    {% if query %}
+                                        <input class="searchfield" id="searchbox" name="q" type="text"
+                                               placeholder="Buscar" value="{{ query }}">
+                                    {% else %}
+                                        <input class="searchfield" id="searchbox" name="q" type="text"
+                                               placeholder="Buscar">
+                                    {% endif %}
                                     <input type="hidden" id="user" name="user" value="{{ user_id }}">
                                 </form>
 
