@@ -291,7 +291,7 @@ hr {
 }
 
 .ms-navbar-white.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-white.navbar-mode .navbar-nav > li > a:focus, .ms-navbar-dark.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-dark.navbar-mode .navbar-nav > li > a:focus, .ms-navbar-primary.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-primary.navbar-mode .navbar-nav > li > a:focus, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a:hover, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a:focus, .ms-header-white + .ms-navbar-white .navbar-nav > li > a:hover, .ms-header-white + .ms-navbar-white .navbar-nav > li > a:focus, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a:hover, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a:focus {
-
+color: white !important;
 }
 
 .ms-footer {
@@ -890,4 +890,10 @@ ul {
 .circles-text {
     font-size: 30px!important;
     font-size: 2.5rem!important;
+}
+body .sb-site-container {
+    -webkit-transform: none;
+    transform: none;
+    background-color: #fcfcfc;
+    min-height: 0;
 }
