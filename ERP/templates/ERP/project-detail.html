@@ -173,7 +173,7 @@
             </div>
             <div class="card nav-tabs-ver-container">
                 <div class="row">
-                    <div class="col-md-3">
+                    <div class="col-sm-3">
                         <ul class="nav nav-tabs-ver" role="tablist">
 
 
@@ -227,13 +227,13 @@
                         </ul>
                     </div>
 
-                    <div class="col-md-9 nav-tabs-ver-container-content">
+                    <div class="col-sm-9 nav-tabs-ver-container-content">
                         <div class="card-block">
                             <div class="tab-content">
                             {% for section in sections_result %}
                                 {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
                                 <div role="tabpanel" class="tab-pane active" id="general">
-                                    <div class="col-xs-8 col-xs-offset-2">
+                                    <div class="col-xs-12 col-md-8 col-md-offset-2">
                                         {% for inner in section.inner_sections %}
                                         {% if inner.inner_section_name == "Proyecto" %}
                                         <div class="card">
@@ -261,7 +261,7 @@
                                 <div role="tabpanel" class="tab-pane" id="ubicacion">
                                     {% for inner in section.inner_sections %}
                                     {% if inner.inner_section_name == "Ubicación" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Ubicación</h3>
@@ -285,7 +285,7 @@
                                     </div>
                                     {% endif %}
                                     {% if inner.inner_section_name == "Áreas" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Áreas</h3>
@@ -308,7 +308,7 @@
                                 <div role="tabpanel" class="tab-pane" id="legal">
                                     {% for inner in section.inner_sections %}
                                     {% if inner.inner_section_name == "Legal" %}
-                                    <div class="col-xs-10 col-xs-offset-2">
+                                    <div class="col-xs-12 col-md-10 col-md-offset-2">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Legal</h3>
@@ -370,7 +370,7 @@
                                 <div role="tabpanel" class="tab-pane" id="rest">
                                     {% for inner in section.inner_sections %}
                                     {% if inner.inner_section_name == "Restricciones" %}
-                                    <div class="col-xs-8 col-xs-offset-2">
+                                    <div class="col-xs-12 col-md-8 col-md-offset-2">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Restricciones</h3>
@@ -400,7 +400,7 @@
                                 <div role="tabpanel" class="tab-pane" id="suelo">
                                     {% for inner in section.inner_sections %}
                                     {% if inner.inner_section_name == "Uso de Suelo" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Uso de suelo</h3>
@@ -424,7 +424,7 @@
                                     </div>
                                     {% endif %}
                                     {% if inner.inner_section_name == "Hidráulica" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Hidráulica</h3>
@@ -450,7 +450,7 @@
                                     {% endif %}
                                     {% if inner.inner_section_name == "Sanitaria" %}
                                     <div class="clearfix"></div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Sanitaria</h3>
@@ -475,7 +475,7 @@
                                     </div>
                                     {% endif %}
                                     {% if inner.inner_section_name == "Pluvial" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Pluvial</h3>
@@ -506,7 +506,7 @@
                                 <div role="tabpanel" class="tab-pane" id="suelo-dos">
                                     {% for inner in section.inner_sections %}
                                     {% if inner.inner_section_name == "Vial" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Vial</h3>
@@ -542,7 +542,7 @@
                                     </div>
                                     {% endif %}
                                     {% if inner.inner_section_name == "Electricidad" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Electricidad</h3>
@@ -568,7 +568,7 @@
                                     {% endif %}
                                     {% if inner.inner_section_name == "Alambrado Público" %}
                                     {% comment %}<div class="clearfix"></div>{% endcomment %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Alumbrado público</h3>
@@ -594,7 +594,7 @@
                                     {% endif %}
                                     {% if inner.inner_section_name == "Equipamiento" %}
 
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Equipamiento</h3>
@@ -616,7 +616,7 @@
                                     {% endif %}
                                     {% if inner.inner_section_name == "TV y Cable" %}
                                     {% comment %}<div class="clearfix"></div>{% endcomment %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Tv cable</h3>
@@ -630,7 +630,7 @@
                                     </div>
                                     {% endif %}
                                     {% if inner.inner_section_name == "Telefonía" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Telefonía</h3>
@@ -659,7 +659,7 @@
                                 <div role="tabpanel" class="tab-pane" id="costo">
                                     {% for inner in section.inner_sections %}
                                     {% if inner.inner_section_name == "Costo" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Costo</h3>
@@ -678,7 +678,7 @@
                                     </div>
                                     {% endif %}
                                     {% if inner.inner_section_name == "Estudio de Mercado" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Estudio de Mercado</h3>
@@ -699,7 +699,7 @@
                                     {% endif %}
                                     {% if inner.inner_section_name == "Definición del Proyecto" %}
                                     <div class="clearfix"></div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Definicion del Proyecto</h3>
@@ -722,7 +722,7 @@
                                 <div role="tabpanel" class="tab-pane" id="program">
                                     {% for inner in section.inner_sections %}
                                     {% if inner.inner_section_name == "Programas y Áreas" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Programas y Áreas</h3>
@@ -750,7 +750,7 @@
                                     </div>
                                     {% endif %}
                                     {% if inner.inner_section_name == "Afectación" %}
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-md-6">
                                         <div class="card">
                                             <div class="clearfix"></div>
                                             <h3 class="color-info text-center">Afectación</h3>
