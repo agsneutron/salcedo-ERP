@@ -5,13 +5,16 @@ html {
 
 body {
     background-color: #fff;
-
+margin-bottom: -48px;
 }
 
 #content {
     padding-bottom: 30px;
 }
+#wrapper {
 
+
+}
 .text-center {
     text-align: center;
 }
@@ -295,13 +298,13 @@ color: white !important;
 }
 
 .ms-footer {
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    /* Set the fixed height of the footer here */
-    height: 48px;
-    padding: 12px 0;
-    padding: 1.2rem 0;
+
+     position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 48px;
+  line-height: 25px; /* Vertically center the text there */
     text-align: center;
     background-color: #204280;
     color: #fff;
@@ -895,7 +898,10 @@ body .sb-site-container {
     -webkit-transform: none;
     transform: none;
     background-color: #fcfcfc;
-    min-height: 0;
+
+    min-height: 100%;
+  /* equal to footer height */
+
 }
 .table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
     border-top: 0;
@@ -955,6 +961,10 @@ body .sb-site-container {
         .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
             margin: 0px;
         }
+        .submit-row input {
+            margin: 0 0 5px 0 !important;
+            width: 100%;
+        }
     }
 
     /* Extra Small Devices, Phones */
@@ -1007,6 +1017,10 @@ body .sb-site-container {
         }
         .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
             margin: 0px ;
+        }
+        .submit-row input {
+            margin: 0 0 0 0 !important;
+            width: inherit;
         }
     }
 
