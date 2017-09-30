@@ -5,16 +5,17 @@ html {
 
 body {
     background-color: #fff;
-margin-bottom: -48px;
+    margin-bottom: -48px;
 }
 
 #content {
     padding-bottom: 30px;
 }
+
 #wrapper {
 
-
 }
+
 .text-center {
     text-align: center;
 }
@@ -294,17 +295,17 @@ hr {
 }
 
 .ms-navbar-white.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-white.navbar-mode .navbar-nav > li > a:focus, .ms-navbar-dark.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-dark.navbar-mode .navbar-nav > li > a:focus, .ms-navbar-primary.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-primary.navbar-mode .navbar-nav > li > a:focus, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a:hover, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a:focus, .ms-header-white + .ms-navbar-white .navbar-nav > li > a:hover, .ms-header-white + .ms-navbar-white .navbar-nav > li > a:focus, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a:hover, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a:focus {
-color: white !important;
+    color: white !important;
 }
 
 .ms-footer {
 
-     position: absolute;
-  bottom: 0;
-  width: 100%;
-  /* Set the fixed height of the footer here */
-  height: 48px;
-  line-height: 25px; /* Vertically center the text there */
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /* Set the fixed height of the footer here */
+    height: 48px;
+    line-height: 25px; /* Vertically center the text there */
     text-align: center;
     background-color: #204280;
     color: #fff;
@@ -366,7 +367,7 @@ form .aligned ul {
     line-height: 1.07143;
     font-weight: 400;
     margin: 2px 0 0;
-        margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .aligned label:not(.vCheckboxLabel):after {
@@ -591,7 +592,7 @@ dt {
 }
 
 .errorlist {
-        position: absolute;
+    position: absolute;
     top: 51px;
     right: 2px;
     font-size: 10px;
@@ -852,21 +853,23 @@ ul {
     background-repeat: no-repeat;
     background-size: cover;
     background-image: url('../img/no.mapa.jpg');
-        min-height: 342px;
+    min-height: 342px;
     color: white;
     text-align: center;
     padding-top: 130px;
 }
+
 .no-imagen {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     background-image: url('../img/no-image.jpg');
-        min-height: 342px;
+    min-height: 342px;
     color: #1a1a1a;
     text-align: center;
     padding-top: 130px;
 }
+
 .input-group-addon {
     padding: 0px 7px;
     font-size: 16px;
@@ -878,178 +881,244 @@ ul {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 .input-group-addon, .input-group-btn {
     width: 1%;
     white-space: nowrap;
     vertical-align: inherit;
 }
+
 .nav-tabs-ver-container .nav-tabs-ver li.active a {
     color: #00a09b;
 }
+
 .ms-header .header-right {
     margin: 15px;
     float: right;
 }
+
 .circles-text {
-    font-size: 30px!important;
-    font-size: 2.5rem!important;
+    font-size: 30px !important;
+    font-size: 2.5rem !important;
 }
+
 body .sb-site-container {
     -webkit-transform: none;
     transform: none;
     background-color: #fcfcfc;
 
     min-height: 100%;
-  /* equal to footer height */
+    /* equal to footer height */
 
 }
-.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+
+.table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
     border-top: 0;
     background-color: #00a09b;
     color: white;
 }
+
 .ms-navbar .navbar-nav.navbar-right {
     margin-right: 0px;
 }
-.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
     margin-left: 40px;
 }
+
 .navbar .navbar-toggle .icon-bar {
     border: 1px solid;
     color: #999;
 }
 
 .navbar .navbar-toggle {
-    border: 0;
+        border: 0;
     position: absolute;
     right: 25px;
     z-index: 999;
+    margin: 13px 20px;
 }
+
 .ms-navbar-white.navbar-mode .navbar-nav > li > a, .ms-navbar-dark.navbar-mode .navbar-nav > li > a, .ms-navbar-primary.navbar-mode .navbar-nav > li > a, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a, .ms-header-white + .ms-navbar-white .navbar-nav > li > a, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a {
     background-color: transparent;
     color: #666;
     font-weight: 400;
 }
+
 /*==========  Mobile First Method  ==========*/
 
-    /* Custom, iPhone Retina */
-    @media only screen and (min-width : 320px) {
-        .ms-navbar .navbar-brand img {
-            display: inline-block;
-            margin-right: 10px;
-            position: absolute;
-            left: calc(50% - 25px);
-        }
-        .navbar-header {
-            width:100%;
-        }
-        .navbar-brand {
-            width:100%;
-        }
-        .ms-navbar .btn-navbar-menu {
-            color: #333;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
-            display: inline;
-        }
-        .ms-navbar .navbar-nav li a {
-            padding: 10px 20px;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
-            padding: 10px 35px 10px 45px;
-        }
-        .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
-            margin: 0px;
-        }
-        .submit-row input {
-            margin: 0 0 5px 0 !important;
-            width: 100%;
-        }
+/* Custom, iPhone Retina */
+@media only screen and (min-width: 320px) {
+    .ms-navbar .navbar-brand img {
+        display: inline-block;
+        margin-right: 10px;
+        position: absolute;
+        left: calc(50% - 25px);
     }
 
-    /* Extra Small Devices, Phones */
-    @media only screen and (min-width : 480px) {
-
+    .navbar-header {
+        width: 100%;
     }
 
-    /* Small Devices, Tablets */
-    @media only screen and (min-width : 768px) {
-        .ms-navbar .navbar-nav li a {
-            padding: 5px 10px;
-        }
-        .ms-navbar .navbar-nav li {
-            font-size: 1.3rem;
-        }
-        .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
-            margin-left: 32px;
-            margin-right: 0px;
-        }
-        .ms-navbar .navbar-brand .ms-logo {
-            margin-top: -5px;
-            margin-right: 0px;
-        }
-        .ms-navbar .navbar-brand img {
-            display: inline-block;
-            margin-right: 10px;
-            position: inherit;
-            /* width: 100%; */
-            left: inherit;
-        }
-        .navbar-header {
-            width:auto;
-        }
-        .navbar-brand {
-            width: inherit;
-        }
-        .ms-navbar .btn-navbar-menu {
-            color: #fff;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
-            display: block;
-        }
-        .ms-navbar .navbar-nav li a {
-            padding: 5px 13px;
-            font-size: 11px;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
-            padding: 10px 35px 10px 20px;
-            font-size: 11px;
-        }
-        .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
-            margin: 0px ;
-        }
-        .submit-row input {
-            margin: 0 0 0 0 !important;
-            width: inherit;
-        }
+    .navbar-brand {
+        width: 100%;
     }
 
-    /* Medium Devices, Desktops */
-    @media only screen and (min-width : 992px) {
-        .ms-navbar .navbar-nav li a {
-            padding: 5px 15px;
-            font-size: inherit;
-        }
-        .ms-navbar .navbar-nav li {
-            font-size: 1.4rem;
-        }
-        .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
-            margin-left: 40px;
-            margin-right: 0px;
-        }
-        .ms-navbar .navbar-brand .ms-logo {
-            margin-top: -5px;
-            margin-right: 10px;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
-            padding: 10px 35px 10px 20px;
-            font-size: 1.4rem;
-        }
+    .ms-navbar .btn-navbar-menu {
+        color: #333;
     }
 
-    /* Large Devices, Wide Screens */
-    @media only screen and (min-width : 1200px) {
-        .ms-navbar .navbar-nav li a {
-            padding: 5px 20px;
-        }
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+        display: inline;
     }
+
+    .ms-navbar .navbar-nav li a {
+        padding: 10px 20px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+        padding: 10px 35px 10px 45px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
+        margin: 0px;
+    }
+
+    .submit-row input {
+        margin: 0 0 5px 0 !important;
+        width: 100%;
+    }
+
+    .table tr td, .table tr th {
+        font-size: 12px;
+    }
+
+    .ms-navbar .container .navbar-collapse in {
+        display: block !important;
+    }
+    .go-back-btn {
+        position: absolute;
+        top: 4px;
+        left: 2%;
+    }
+    .user-btn{
+               margin: 4px 0px;
+    }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width: 480px) {
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {
+    .go-back-btn {
+        position: absolute;
+        top: 2px;
+        left: 2%;
+    }
+
+    .ms-navbar .container .navbar-collapse in {
+        display: none !important;
+    }
+
+    .ms-navbar .navbar-nav li a {
+        padding: 5px 10px;
+    }
+
+    .ms-navbar .navbar-nav li {
+        font-size: 1.3rem;
+    }
+
+    .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+        margin-left: 32px;
+        margin-right: 0px;
+    }
+
+    .ms-navbar .navbar-brand .ms-logo {
+        margin-top: -5px;
+        margin-right: 0px;
+    }
+
+    .ms-navbar .navbar-brand img {
+        display: inline-block;
+        margin-right: 10px;
+        position: inherit;
+        /* width: 100%; */
+        left: inherit;
+    }
+
+    .navbar-header {
+        width: auto;
+    }
+
+    .navbar-brand {
+        width: inherit;
+    }
+
+    .ms-navbar .btn-navbar-menu {
+        color: #fff;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+        display: block;
+    }
+
+    .ms-navbar .navbar-nav li a {
+        padding: 5px 17px;
+        font-size: 11px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+        padding: 10px 35px 10px 20px;
+        font-size: 11px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
+        margin: 0px;
+    }
+
+    .submit-row input {
+        margin: 0 0 0 0 !important;
+        width: inherit;
+    }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 992px) {
+    .ms-navbar .navbar-nav li a {
+        padding: 5px 25px;
+        font-size: inherit;
+    }
+
+    .ms-navbar .navbar-nav li {
+        font-size: 1.4rem;
+    }
+
+    .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+        margin-left: 40px;
+        margin-right: 0px;
+    }
+
+    .ms-navbar .navbar-brand .ms-logo {
+        margin-top: -5px;
+        margin-right: 10px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+        padding: 10px 35px 10px 20px;
+        font-size: 1.4rem;
+    }
+
+    .table tr td, .table tr th {
+        font-size: 14px;
+    }
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1200px) {
+    .ms-navbar .navbar-nav li a {
+        padding: 5px 20px;
+    }
+}
