@@ -850,6 +850,7 @@ class AccessToProjectAdminListView(ListView):
             AccessToProjectAdminListView.query != "")
 
         context['user_id'] = self.request.GET.get('user')
+
         return context
 
 
