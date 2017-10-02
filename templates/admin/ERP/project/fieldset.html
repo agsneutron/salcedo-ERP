@@ -33,53 +33,53 @@
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Proyecto</span>
+                    <span class="">Proyecto</span>
                 </a>
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro1" aria-controls="otro1" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Ubicación/Áreas</span>
+                    <span class="">Ubicación/Áreas</span>
                 </a>
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro2" aria-controls="otro2" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Legal</span>
+                    <span class="">Legal</span>
                 </a>
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro3" aria-controls="otro3" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Restricciones</span>
+                    <span class="">Restricciones</span>
                 </a>
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro4" aria-controls="otro4" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Análisis</span>
+                    <span class="">Análisis</span>
                 </a>
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro5" aria-controls="otro5" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Análisis 2</span>
+                    <span class="">Análisis 2</span>
                 </a>
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro6" aria-controls="otro6" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Costo/Mercado</span>
+                    <span class="">Costo/Mercado</span>
                 </a>
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro7" aria-controls="otro7" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Programas</span>
+                    <span class="">Programas</span>
                 </a>
             </li>
             <li role="presentation">
                 <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Tipo de Construcción</span>
+                    <span class="">Tipo de Construcción</span>
                 </a>
             </li>
 
             <li role="presentation">
                 <a class="withoutripple" href="#otro9" aria-controls="otro9" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Programación</span>
+                    <span class="">Programación</span>
                 </a>
             </li>
         </ul>
@@ -94,7 +94,7 @@
                             <h2 class="text-center">Datos Generales</h2>
 
                             <hr>
-                            <div class="col-md-3">
+                            <div class="col-sm-4 col-md-3">
                                 <div class="form-group field-key">
                                     <div>
                                         <label class="control-label required" for="id_key">Clave del Proyecto:</label>
@@ -106,7 +106,7 @@
                         {% endif %}
 
                     {% if field.field.name == "contrato" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-4 col-md-3">
                             <div class="form-group field-contrato">
                                 <div class="related-widget-wrapper">
                                     <label class="required" for="id_contrato">Contrato:</label>
@@ -120,7 +120,7 @@
 
 
                     {% if field.field.name == "empresa" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-4 col-md-3">
                             <div class="form-group field-empresa">
                                 <div class="related-widget-wrapper">
                                     <label class="control-label required" for="id_empresa">Cliente:</label>
@@ -133,7 +133,7 @@
                     {% endif %}
 
                     {% if field.field.name == "nombreProyecto" %}
-                        <div class="col-md-6">
+                        <div class="col-sm-4 col-md-6">
                             <div class="form-group field-nombreProyecto">
                                 <div>
                                     <label class="control-label required" for="id_nombreProyecto">Nombre del
@@ -151,7 +151,7 @@
                     {% if field.field.name == "fecha_inicial" %}
                         <div class="row">
 
-                        <div class="col-md-3">
+                        <div class="col-sm-4 col-md-3">
                             <div class="form-group field-fecha_inicial">
                                 <label class="control-label required" for="id_fecha_inicial_0">Fecha
                                     Inicial:</label><br>
@@ -162,7 +162,7 @@
 
                     {% endif %}
                     {% if field.field.name == "fecha_final" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-4 col-md-3">
                             <div class="form-group field-fecha_final">
                                 <label class="control-label required" for="id_fecha_final_0">Fecha Final:</label><br>
                                 {{ field.field }}
@@ -172,7 +172,7 @@
 
                     {% endif %}
                     {% if field.field.name == "tipo_construccion" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-4 col-md-3">
 
                             <div class="form-group field-tipo_construccion">
                                 <div>
@@ -187,7 +187,7 @@
                     {% endif %}
                     {% if field.field.name == "portada" %}
 
-                        <div class="col-md-3">
+                        <div class="col-sm-12 col-md-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -214,7 +214,7 @@
                             <h2 class="text-center">Ubicación</h2>
                             <hr>
 
-                            <div class="col-md-6">
+                            <div class="col-sm-6">
                                 <div class="form-group field-ubicacion_calle">
                                     <div>
                                         <label class="control-label required" for="id_ubicacion_calle">Calle:</label>
@@ -225,7 +225,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "ubicacion_numero" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-ubicacion_numero">
                                 <div>
                                     <label class="control-label required" for="id_ubicacion_numero">Número:</label>
@@ -236,7 +236,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "ubicacion_colonia" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-ubicacion_colonia">
                                 <div>
                                     <label class="control-label required" for="id_ubicacion_colonia">Colonia:</label>
@@ -249,7 +249,7 @@
                     {% endif %}
                     {% if field.field.name == "ubicacion_pais" %}
                         <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     <label class="control-label required" for="id_{{ field.field.name }}">País:</label>
@@ -263,7 +263,7 @@
                     {% endif %}
 
                     {% if field.field.name == "ubicacion_estado" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     <label class="control-label required" for="id_{{ field.field.name }}">Estado:</label>
@@ -274,7 +274,7 @@
                         </div>
                     {% endif %}
                         {% if field.field.name == "ubicacion_municipio" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     <label class="control-label required"
@@ -286,7 +286,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "ubicacion_cp" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-ubicacion_cp">
                                 <div>
                                     <label class="control-label required" for="id_ubicacion_cp">C.P.</label>
@@ -301,7 +301,7 @@
                     {% if field.field.name == "latitud" %}
                         <div class="row">
 
-                        <div class="col-md-3 col-md-offset-3">
+                        <div class="col-sm-3 col-sm-offset-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     <label class="control-label required"
@@ -313,7 +313,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "longitud" %}
-                        <div class="col-md-3  ">
+                        <div class="col-sm-3  ">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     <label class="control-label required"
@@ -333,7 +333,7 @@
                         <h2 class="text-center">Áreas</h2>
                         <hr>
 
-                        <div class="col-md-3 col-md-offset-3">
+                        <div class="col-sm-4 col-sm-offset-2">
                             <div class="form-group field-area_superficie_escritura">
                                 <div>
                                     <label class="control-label required" for="id_area_superficie_escritura">Superficie
@@ -345,7 +345,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "area_superficie_levantamiento" %}
-                        <div class="col-md-3  ">
+                        <div class="col-sm-4  ">
                             <div class="form-group field-area_superficie_levantamiento">
                                 <div>
                                     <label class="control-label required" for="id_area_superficie_levantamiento">Superficie
@@ -365,7 +365,7 @@
                             <h2 class="text-center">Estado Legal</h2>
                             <hr>
 
-                            <div class="col-md-3">
+                            <div class="col-sm-3">
                                 <div class="form-group field-estadolegal_documento_propiedad">
                                     <div>
                                         <label class="control-label" for="id_estadolegal_documento_propiedad">Acreditación
@@ -378,7 +378,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "estadolegal_gravamen" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-estadolegal_gravamen">
                                 <div>
                                     <label class="control-label" for="id_estadolegal_gravamen">Gravamen:</label>
@@ -389,7 +389,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "estadolegal_predial" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-estadolegal_predial">
                                 <div>
                                     <label class="control-label" for="id_estadolegal_predial">Predial:</label>
@@ -400,7 +400,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "estadolegal_agua" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-estadolegal_agua">
                                 <div>
                                     <label class="control-label" for="id_estadolegal_agua">Agua:</label>
@@ -414,7 +414,7 @@
                     {% endif %}
                     {% if field.field.name == "documento_propiedad" %}
                         <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
@@ -435,7 +435,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "documento_gravamen" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -454,7 +454,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "documento_predial" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -473,7 +473,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "documento_agua" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -499,7 +499,7 @@
                             <h2 class="text-center">Restricciones</h2>
                             <hr>
                             <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-sm-4">
                                 <div class="form-group field-restriccion_vial">
                                     <div>
                                         <label class="control-label required" for="id_restriccion_vial">Vial:</label>
@@ -510,7 +510,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "restriccion_cna" %}
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <div class="form-group field-restriccion_cna">
                                 <div>
                                     <label class="control-label required" for="id_restriccion_cna">CNA:</label>
@@ -521,7 +521,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "restriccion_cfe" %}
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <div class="form-group field-restriccion_cfe">
                                 <div>
                                     <label class="control-label required" for="id_restriccion_cfe">CFE:</label>
@@ -534,7 +534,7 @@
                     {% endif %}
                     {% if field.field.name == "restriccion_pemex" %}
                         <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <div class="form-group field-restriccion_pemex">
                                 <div>
                                     <label class="control-label required" for="id_restriccion_pemex">PEMEX:</label>
@@ -545,7 +545,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "restriccion_inha" %}
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <div class="form-group field-restriccion_inha">
                                 <div>
                                     <label class="control-label required" for="id_restriccion_inha">INHA:</label>
@@ -556,7 +556,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "restriccion_otros" %}
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <div class="form-group field-restriccion_otros">
                                 <div>
                                     <label class="control-label required" for="id_restriccion_otros">Otros:</label>
@@ -569,7 +569,7 @@
                     {% endif %}
                     {% if field.field.name == "restriccion_observaciones" %}
                         <div class="row">
-                            <div class="col-md-6 col-md-offset-3">
+                            <div class="col-sm-6 col-sm-offset-3">
                                 <div class="form-group field-restriccion_observaciones">
                                     <div>
                                         <label class="control-label required" for="id_restriccion_observaciones">Observaciones:</label>
@@ -586,7 +586,7 @@
                             <h2 class="text-center">Uso del Suelo</h2>
                             <hr>
                             <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-sm-3">
                                 <div class="form-group field-usosuelo_pmdu">
                                     <div>
                                         <label class="control-label required" for="id_usosuelo_pmdu">PMDU:</label>
@@ -597,7 +597,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "usosuelo_densidad" %}
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <div class="form-group field-usosuelo_densidad">
                                 <div>
                                     <label class="control-label required" for="id_usosuelo_densidad">Densidad:</label>
@@ -608,7 +608,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "usosuelo_loteminimo" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-usosuelo_loteminimo">
                                 <div>
                                     <label class="control-label required" for="id_usosuelo_loteminimo">Lote
@@ -622,7 +622,7 @@
                     {% endif %}
                     {% if field.field.name == "usosuelo_m2construccion" %}
                         <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-usosuelo_m2construccion">
                                 <div>
                                     <label class="control-label required" for="id_usosuelo_m2construccion">M2 de
@@ -634,7 +634,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "usosuelo_arealibre" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-usosuelo_arealibre">
                                 <div>
                                     <label class="control-label required" for="id_usosuelo_arealibre">Área
@@ -646,7 +646,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "usosuelo_altura" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-usosuelo_altura">
                                 <div>
                                     <label class="control-label required" for="id_usosuelo_altura">Altura:</label>
@@ -657,7 +657,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "usosuelo_altura" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-usosuelo_densidadrequerida">
                                 <div>
                                     <label class="control-label required" for="id_usosuelo_densidadrequerida">Densidad
@@ -673,7 +673,7 @@
                         <div class="row">
                         <h2 class="text-center">Hidráulica</h2>
                         <hr>
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-hidraulica_fuente">
                                 <div>
                                     <label class="control-label required" for="id_hidraulica_fuente">Fuente:</label>
@@ -684,7 +684,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "hidraulica_distancia" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-hidraulica_distancia">
                                 <div>
                                     <label class="control-label required"
@@ -696,7 +696,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "hidraulica_observaciones" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-hidraulica_observaciones">
                                 <div>
                                     <label class="control-label required" for="id_hidraulica_observaciones">Observaciones:</label>
@@ -707,7 +707,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "hidraulica_documento" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -730,7 +730,7 @@
                         <div class="row">
                         <h2 class="text-center">Sanitaria</h2>
                         <hr>
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-sanitaria_tipo">
                                 <div>
                                     <label class="control-label" for="id_sanitaria_tipo">Tipo:</label>
@@ -741,7 +741,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "sanitaria_responsable" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-sanitaria_responsable">
                                 <div>
                                     <label class="control-label" for="id_sanitaria_responsable">Responsable:</label>
@@ -752,7 +752,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "sanitaria_observaciones" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-sanitaria_observaciones">
                                 <div>
                                     <label class="control-label" for="id_sanitaria_observaciones">Observaciones:</label>
@@ -763,7 +763,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "sanitaria_documento" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -786,7 +786,7 @@
                         <div class="row">
                         <h2 class="text-center">Pluvial</h2>
                         <hr>
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-pluvial_tipo">
                                 <div>
                                     <label class="control-label" for="id_pluvial_tipo">Tipo:</label>
@@ -797,7 +797,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "pluvial_responsable" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-pluvial_responsable">
                                 <div>
                                     <label class="control-label" for="id_pluvial_responsable">Responsable:</label>
@@ -808,7 +808,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "pluvial_observaciones" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-pluvial_observaciones">
                                 <div>
@@ -820,7 +820,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "pluvial_documento" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -845,7 +845,7 @@
                             <h2 class="text-center">Vial</h2>
                             <hr>
                             <div class="row">
-                            <div class="col-md-3">
+                            <div class="col-sm-3">
                                 <div class="form-group field-vial_viaacceso">
                                     <div>
                                         <label class="control-label" for="id_vial_viaacceso">Vías de acceso:</label>
@@ -856,7 +856,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "vial_distancia" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-vial_distancia">
                                 <div>
                                     <label class="control-label" for="id_vial_distancia">Distancia:</label>
@@ -867,7 +867,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "vial_carriles" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-vial_carriles">
                                 <div>
                                     <label class="control-label" for="id_vial_carriles">Carriles:</label>
@@ -878,7 +878,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "vial_seccion" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-vial_seccion">
                                 <div>
                                     <label class="control-label" for="id_vial_seccion">Sección:</label>
@@ -891,7 +891,7 @@
                     {% endif %}
                     {% if field.field.name == "vial_tipopavimento" %}
                         <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-vial_tipopavimento">
                                 <div>
                                     <label class="control-label" for="id_vial_tipopavimento">Tipo de Pavimento:</label>
@@ -902,7 +902,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "vial_estadoconstruccion" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-vial_estadoconstruccion">
                                 <div>
                                     <label class="control-label" for="id_vial_estadoconstruccion">Estado de
@@ -914,7 +914,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "vial_observaciones" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-vial_observaciones">
                                 <div>
@@ -926,7 +926,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "vial_documento" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -949,7 +949,7 @@
                         <h2 class="text-center">Electricidad</h2>
                         <hr>
                         <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-electricidad_tipo">
                                 <div>
                                     <label class="control-label" for="id_electricidad_tipo">Tipo:</label>
@@ -960,7 +960,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "electricidad_distancia" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-electricidad_distancia">
                                 <div>
                                     <label class="control-label" for="id_electricidad_distancia">Distancia:</label>
@@ -971,7 +971,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "electricidad_observaciones" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-electricidad_observaciones">
                                 <div>
                                     <label class="control-label"
@@ -983,7 +983,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "electricidad_documento" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -1006,7 +1006,7 @@
                         <h2 class="text-center">Alumbrado Público</h2>
                         <hr>
                         <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-alumbradopublico_tipo">
                                 <div>
                                     <label class="control-label" for="id_alumbradopublico_tipo">Tipo:</label>
@@ -1017,7 +1017,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "alumbradopublico_distancia" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-alumbradopublico_distancia">
                                 <div>
                                     <label class="control-label" for="id_alumbradopublico_distancia">Distancia:</label>
@@ -1028,7 +1028,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "alumbradopublico_observaciones" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-alumbradopublico_observaciones">
                                 <div>
                                     <label class="control-label"
@@ -1040,7 +1040,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "alumbradopublico_documento" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -1063,7 +1063,7 @@
                         <h2 class="text-center">Telefonía</h2>
                         <hr>
                         <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <div class="form-group field-telefonia_distancia">
                                 <div>
                                     <label class="control-label" for="id_telefonia_distancia">Distancia:</label>
@@ -1074,7 +1074,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "telefonia_observaciones" %}
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <div class="form-group field-telefonia_observaciones">
                                 <div>
                                     <label class="control-label" for="id_telefonia_observaciones">Observaciones:</label>
@@ -1085,7 +1085,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "telefonia_documento" %}
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -1108,7 +1108,7 @@
                         <h2 class="text-center">TV Cable</h2>
                         <hr>
                         <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <div class="form-group field-tvcable_distancia">
                                 <div>
                                     <label class="control-label" for="id_tvcable_distancia">Distancia:</label>
@@ -1119,7 +1119,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "tvcable_observaciones" %}
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <div class="form-group field-tvcable_observaciones">
                                 <div>
                                     <label class="control-label" for="id_tvcable_observaciones">Observaciones:</label>
@@ -1134,7 +1134,7 @@
                         <h2 class="text-center">Equipamiento</h2>
                         <hr>
                         <div class="row">
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-equipamiento_a100">
                                 <div>
@@ -1146,7 +1146,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "equipamiento_a200" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-equipamiento_a200">
                                 <div>
@@ -1158,7 +1158,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "equipamiento_a500" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-equipamiento_a500">
                                 <div>
@@ -1170,7 +1170,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "equipamiento_a500" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-equipamiento_regional">
                                 <div>
@@ -1188,7 +1188,7 @@
                             <div class="row">
                             <h2 class="text-center">Costo</h2>
                             <hr>
-                            <div class="col-md-3">
+                            <div class="col-sm-3">
 
                                 <div class="form-group field-costo_predio">
                                     <div>
@@ -1200,7 +1200,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "costo_m2" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-costo_m2">
                                 <div>
@@ -1212,7 +1212,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "costo_escrituras" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-costo_escrituras">
                                 <div>
@@ -1224,7 +1224,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "costo_escrituras" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
 
                             <div class="form-group field-costo_levantamiento">
                                 <div>
@@ -1240,7 +1240,7 @@
                         <div class="row">
                         <h2 class="text-center">Estudio de Mercado</h2>
                         <hr>
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-estudiomercado_demanda">
                                 <div>
                                     <label class="control-label" for="id_estudiomercado_demanda">Demanda:</label>
@@ -1251,7 +1251,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "estudiomercado_oferta" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-estudiomercado_oferta">
                                 <div>
                                     <label class="control-label" for="id_estudiomercado_oferta">Oferta:</label>
@@ -1262,7 +1262,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "estudiomercado_conclusiones" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-estudiomercado_conclusiones">
                                 <div>
                                     <label class="control-label"
@@ -1274,7 +1274,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "estudiomercado_recomendaciones" %}
-                        <div class="col-md-3">
+                        <div class="col-sm-3">
                             <div class="form-group field-estudiomercado_recomendaciones">
                                 <div>
                                     <label class="control-label" for="id_estudiomercado_recomendaciones">Recomendaciones:</label>
@@ -1289,7 +1289,7 @@
                         <div class="row">
                         <h2 class="text-center">Definición del Proyecto</h2>
                         <hr>
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
 
                             <div class="form-group field-definicionproyecto_alternativa">
                                 <div>
@@ -1302,7 +1302,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "definicionproyecto_tamano" %}
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
 
                             <div class="form-group field-definicionproyecto_tamano">
                                 <div>
@@ -1314,7 +1314,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "definicionproyecto_programa" %}
-                        <div class="col-md-4">
+                        <div class="col-sm-4">
 
                             <div class="form-group field-definicionproyecto_programa">
                                 <div>
@@ -1332,7 +1332,7 @@
                             <div class="row">
                             <h2 class="text-center">Programas y Áreas</h2>
                             <hr>
-                            <div class="col-md-2">
+                            <div class="col-sm-2">
                                 <div class="form-group field-programayarea_areaprivativa">
                                     <div>
                                         <label class="control-label" for="id_programayarea_areaprivativa">Área
@@ -1344,7 +1344,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "programayarea_caseta" %}
-                        <div class="col-md-2">
+                        <div class="col-sm-2">
                             <div class="form-group field-programayarea_caseta">
                                 <div>
                                     <label class="control-label" for="id_programayarea_caseta">Caseta:</label>
@@ -1355,7 +1355,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "programayarea_jardin" %}
-                        <div class="col-md-2">
+                        <div class="col-sm-2">
 
                             <div class="form-group field-programayarea_jardin">
                                 <div>
@@ -1367,7 +1367,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "programayarea_vialidad" %}
-                        <div class="col-md-2">
+                        <div class="col-sm-2">
 
                             <div class="form-group field-programayarea_vialidad">
                                 <div>
@@ -1379,7 +1379,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "programayarea_areaverde" %}
-                        <div class="col-md-2">
+                        <div class="col-sm-2">
 
                             <div class="form-group field-programayarea_areaverde">
                                 <div>
@@ -1391,7 +1391,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "programayarea_estacionamientovisita" %}
-                        <div class="col-md-2">
+                        <div class="col-sm-2">
 
                             <div class="form-group field-programayarea_estacionamientovisita">
                                 <div>
@@ -1408,7 +1408,7 @@
                         <div class="row">
                         <h2 class="text-center">Afectación</h2>
                         <hr>
-                        <div class="col-md-3 col-md-offset-3">
+                        <div class="col-sm-3 col-sm-offset-3">
 
                             <div class="form-group field-programayarea_afectacion">
                                 <div>
@@ -1420,7 +1420,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "programayarea_documento" %}
-                        <div class="col-md-3  ">
+                        <div class="col-sm-3  ">
 
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
