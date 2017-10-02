@@ -540,11 +540,11 @@ class ContratoContratista(models.Model):
     version = IntegerVersionField()
     clave_contrato = models.CharField(verbose_name='Clave del Contrato', max_length=32, null=False, blank=False)
     dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
-    fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', editable=True)
+    fecha_firma = models.DateField(verbose_name='Fecha de Firma', editable=True)
     dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False,
                                      editable=True)
-    fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', editable=True)
-    fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', editable=True)
+    fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
+    fecha_termino = models.DateField(verbose_name='Fecha de Termino', editable=True)
     lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False,
                                        editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
