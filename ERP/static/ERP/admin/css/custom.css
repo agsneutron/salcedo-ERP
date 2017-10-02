@@ -944,7 +944,9 @@ body .sb-site-container {
     color: #666;
     font-weight: 400;
 }
-
+.timezonewarning {
+    display: none !important;
+}
 /*==========  Mobile First Method  ==========*/
 
 /* Custom, iPhone Retina */
@@ -1028,6 +1030,9 @@ body .sb-site-container {
     .h3, h3 {
     font-size: 21px;
 }
+    .vDateField {
+            min-width: 80% !important;
+        }
 }
 
 /* Extra Small Devices, Phones */
@@ -1115,8 +1120,17 @@ body .sb-site-container {
     .nav-tabs-ver-container .nav-tabs-ver li {
         display: block !important;
     }
-
-
+.aligned p.file-upload {
+        margin-left: 5px;
+        width: 199px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 0 !important;
+    }
+    .vDateField {
+            min-width: 65% !important;
+        }
 }
 
 /* Medium Devices, Desktops */
@@ -1155,12 +1169,22 @@ body .sb-site-container {
         font-size: 14px;
     }
     .form-group .checkbox label, .form-group .radio label, .form-group label {
-        font-size: 16px;
+        font-size: 15px;
     }
     .form-control {
         font-size: 16px;
     }
-
+    .aligned p.file-upload {
+        margin-left: 5px;
+        width: 199px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 0 !important;
+    }
+    .vDateField {
+            min-width: 75% !important;
+        }
 }
 
 /* Large Devices, Wide Screens */
@@ -1168,7 +1192,18 @@ body .sb-site-container {
     .ms-navbar .navbar-nav li a {
         padding: 5px 20px;
     }
-     .col-lg-offset-12 {
+    .aligned p.file-upload {
+        margin-left: 5px;
+        width: 248px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 0 !important;
+    }
+    .vDateField {
+        min-width: 80% !important;
+    }
+  .col-lg-offset-12 {
     margin-left: 100%;
   }
   .col-lg-offset-11 {
