@@ -803,6 +803,7 @@ class UploadedCatalogsHistoryAdminListView(ListView):
         context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (
             UploadedCatalogsHistoryAdminListView.query != "")
         return context
+    
 
 
 # Views for the model AccessToProjectAdmin.
