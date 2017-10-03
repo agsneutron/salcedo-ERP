@@ -5,11 +5,15 @@ html {
 
 body {
     background-color: #fff;
-
+    margin-bottom: -48px;
 }
 
 #content {
     padding-bottom: 30px;
+}
+
+#wrapper {
+
 }
 
 .text-center {
@@ -291,17 +295,17 @@ hr {
 }
 
 .ms-navbar-white.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-white.navbar-mode .navbar-nav > li > a:focus, .ms-navbar-dark.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-dark.navbar-mode .navbar-nav > li > a:focus, .ms-navbar-primary.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-primary.navbar-mode .navbar-nav > li > a:focus, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a:hover, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a:focus, .ms-header-white + .ms-navbar-white .navbar-nav > li > a:hover, .ms-header-white + .ms-navbar-white .navbar-nav > li > a:focus, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a:hover, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a:focus {
-color: white !important;
+    color: white !important;
 }
 
 .ms-footer {
+
     position: absolute;
     bottom: 0;
     width: 100%;
     /* Set the fixed height of the footer here */
     height: 48px;
-    padding: 12px 0;
-    padding: 1.2rem 0;
+    line-height: 25px; /* Vertically center the text there */
     text-align: center;
     background-color: #204280;
     color: #fff;
@@ -323,7 +327,7 @@ color: white !important;
 
 .btn.btn-raised.btn-info, .btn.btn-fab.btn-info, .btn-group-raised .btn.btn-info, .input-group-btn .btn.btn-raised.btn-info, .input-group-btn .btn.btn-fab.btn-info, .btn-group-raised .input-group-btn .btn.btn-info {
     background-color: #00bcd4 !important;
-    color: rgba(255, 255, 255, .84) !important;
+    color: rgba(255, 255, 255, 1) !important;
 }
 
 .card.card-primary {
@@ -363,7 +367,7 @@ form .aligned ul {
     line-height: 1.07143;
     font-weight: 400;
     margin: 2px 0 0;
-        margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .aligned label:not(.vCheckboxLabel):after {
@@ -588,7 +592,7 @@ dt {
 }
 
 .errorlist {
-        position: absolute;
+    position: absolute;
     top: 51px;
     right: 2px;
     font-size: 10px;
@@ -672,6 +676,7 @@ dt {
 
 .searchfield {
     width: 25%;
+    padding-left: 10px;
 }
 
 #searchform {
@@ -683,7 +688,7 @@ dt {
     height: 80px;
     line-height: 80px;
     font-size: 36px;
-    margin-bottom: 2px !important;
+    margin-bottom: 0px !important;
 }
 
 .highcharts-credits {
@@ -832,7 +837,7 @@ ul {
 }
 
 .button-center-top {
-    margin-top: 25px;
+    margin-top: 30px;
 }
 
 .add-related, .change-related {
@@ -849,21 +854,23 @@ ul {
     background-repeat: no-repeat;
     background-size: cover;
     background-image: url('../img/no.mapa.jpg');
-        min-height: 342px;
+    min-height: 342px;
     color: white;
     text-align: center;
     padding-top: 130px;
 }
+
 .no-imagen {
     background-position: center center;
     background-repeat: no-repeat;
     background-size: cover;
     background-image: url('../img/no-image.jpg');
-        min-height: 342px;
+    min-height: 342px;
     color: #1a1a1a;
     text-align: center;
     padding-top: 130px;
 }
+
 .input-group-addon {
     padding: 0px 7px;
     font-size: 16px;
@@ -875,39 +882,51 @@ ul {
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+
 .input-group-addon, .input-group-btn {
     width: 1%;
     white-space: nowrap;
     vertical-align: inherit;
 }
+
 .nav-tabs-ver-container .nav-tabs-ver li.active a {
     color: #00a09b;
 }
+
 .ms-header .header-right {
     margin: 15px;
     float: right;
 }
+
 .circles-text {
-    font-size: 30px!important;
-    font-size: 2.5rem!important;
+    font-size: 30px !important;
+    font-size: 2.5rem !important;
 }
+
 body .sb-site-container {
     -webkit-transform: none;
     transform: none;
     background-color: #fcfcfc;
-    min-height: 0;
+
+    min-height: 100%;
+    /* equal to footer height */
+
 }
-.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+
+.table > caption + thead > tr:first-child > td, .table > caption + thead > tr:first-child > th, .table > colgroup + thead > tr:first-child > td, .table > colgroup + thead > tr:first-child > th, .table > thead:first-child > tr:first-child > td, .table > thead:first-child > tr:first-child > th {
     border-top: 0;
     background-color: #00a09b;
     color: white;
 }
+
 .ms-navbar .navbar-nav.navbar-right {
     margin-right: 0px;
 }
-.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+
+.navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
     margin-left: 40px;
 }
+
 .navbar .navbar-toggle .icon-bar {
     border: 1px solid;
     color: #999;
@@ -918,124 +937,425 @@ body .sb-site-container {
     position: absolute;
     right: 25px;
     z-index: 999;
+    margin: 13px 20px;
 }
+
 .ms-navbar-white.navbar-mode .navbar-nav > li > a, .ms-navbar-dark.navbar-mode .navbar-nav > li > a, .ms-navbar-primary.navbar-mode .navbar-nav > li > a, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a, .ms-header-white + .ms-navbar-white .navbar-nav > li > a, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a {
     background-color: transparent;
     color: #666;
     font-weight: 400;
 }
+
+.timezonewarning {
+    display: none !important;
+}
+
+
+
 /*==========  Mobile First Method  ==========*/
 
-    /* Custom, iPhone Retina */
-    @media only screen and (min-width : 320px) {
-        .ms-navbar .navbar-brand img {
-            display: inline-block;
-            margin-right: 10px;
-            position: absolute;
-            left: calc(50% - 25px);
-        }
-        .navbar-header {
-            width:100%;
-        }
-        .navbar-brand {
-            width:100%;
-        }
-        .ms-navbar .btn-navbar-menu {
-            color: #333;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
-            display: inline;
-        }
-        .ms-navbar .navbar-nav li a {
-            padding: 10px 20px;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
-            padding: 10px 35px 10px 45px;
-        }
-        .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
-            margin: 0px;
-        }
+/* Custom, iPhone Retina */
+@media only screen and (min-width: 320px) {
+    .ms-navbar .navbar-brand img {
+        display: inline-block;
+        margin-right: 10px;
+        position: absolute;
+        left: calc(50% - 25px);
     }
 
-    /* Extra Small Devices, Phones */
-    @media only screen and (min-width : 480px) {
-
+    .navbar-header {
+        width: 100%;
     }
 
-    /* Small Devices, Tablets */
-    @media only screen and (min-width : 768px) {
-        .ms-navbar .navbar-nav li a {
-            padding: 5px 10px;
-        }
-        .ms-navbar .navbar-nav li {
-            font-size: 1.3rem;
-        }
-        .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
-            margin-left: 32px;
-            margin-right: 0px;
-        }
-        .ms-navbar .navbar-brand .ms-logo {
-            margin-top: -5px;
-            margin-right: 0px;
-        }
-        .ms-navbar .navbar-brand img {
-            display: inline-block;
-            margin-right: 10px;
-            position: inherit;
-            /* width: 100%; */
-            left: inherit;
-        }
-        .navbar-header {
-            width:auto;
-        }
-        .navbar-brand {
-            width: inherit;
-        }
-        .ms-navbar .btn-navbar-menu {
-            color: #fff;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
-            display: block;
-        }
-        .ms-navbar .navbar-nav li a {
-            padding: 5px 13px;
-            font-size: 11px;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
-            padding: 10px 35px 10px 20px;
-            font-size: 11px;
-        }
-        .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
-            margin: 0px ;
-        }
+    .navbar-brand {
+        width: 100%;
     }
 
-    /* Medium Devices, Desktops */
-    @media only screen and (min-width : 992px) {
-        .ms-navbar .navbar-nav li a {
-            padding: 5px 15px;
-            font-size: inherit;
-        }
-        .ms-navbar .navbar-nav li {
-            font-size: 1.4rem;
-        }
-        .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
-            margin-left: 40px;
-            margin-right: 0px;
-        }
-        .ms-navbar .navbar-brand .ms-logo {
-            margin-top: -5px;
-            margin-right: 10px;
-        }
-        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
-            padding: 10px 35px 10px 20px;
-            font-size: 1.4rem;
-        }
+    .ms-navbar .btn-navbar-menu {
+        color: #333;
     }
 
-    /* Large Devices, Wide Screens */
-    @media only screen and (min-width : 1200px) {
-        .ms-navbar .navbar-nav li a {
-            padding: 5px 20px;
-        }
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+        display: inline;
     }
+
+    .ms-navbar .navbar-nav li a {
+        padding: 10px 20px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+        padding: 10px 35px 10px 45px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
+        margin: 0px;
+    }
+
+    .submit-row input {
+        margin: 0 0 5px 0 !important;
+        width: 100%;
+    }
+
+    .table tr td, .table tr th {
+        font-size: 12px;
+    }
+
+    .ms-navbar .container .navbar-collapse in {
+        display: block !important;
+    }
+
+    .go-back-btn {
+        position: absolute;
+        top: 4px;
+        left: 2%;
+    }
+
+    .user-btn {
+        margin: 4px 0px;
+    }
+
+    .form-group .checkbox label, .form-group .radio label, .form-group label {
+        font-size: 13px;
+    }
+
+    .form-control {
+        font-size: 13px;
+    }
+
+    .btn-eliminar {
+        width: 100%;
+        margin: 0 0 5px 0;
+    }
+
+    .nav-tabs-ver-container .nav-tabs-ver li {
+        display: inline-block !important;
+    }
+
+    .nav-tabs-ver-container .nav-tabs-ver li a {
+        color: #424242;
+        font-size: 11px;
+        padding: 5px 9px;
+    }
+
+    .list-group .list-group-item, .list-group a.list-group-item {
+        font-size: 12px !important;
+    }
+
+    .h3, h3 {
+        font-size: 21px;
+    }
+
+    .vDateField {
+        min-width: 80% !important;
+    }
+
+    .nav.nav-tabs li a {
+        font-weight: bold;
+        padding: 1.7rem 4px;
+        color: rgba(255, 255, 255, .5) !important;
+        text-align: center;
+        font-size: 10px;
+    }
+
+    .aligned p.file-upload {
+        margin-left: 0 !important;
+    }
+
+    .btn, .input-group-btn .btn {
+        padding: 8px 15px;
+    }
+    .dash-menu {
+            font-size: 7px;
+    color: white !important;
+    font-weight: bold;
+    text-transform: initial;
+    padding: 8px 1px !important;
+    }
+    .mobile-pad-right {
+        padding-right: 0;
+    }
+    .mobile-pad-left {
+        padding-left: 0;
+    }
+}
+
+/* Extra Small Devices, Phones */
+@media only screen and (min-width: 480px) {
+
+}
+
+/* Small Devices, Tablets */
+@media only screen and (min-width: 768px) {
+     .mobile-pad-right {
+        padding-right: 15px;
+    }
+    .mobile-pad-left {
+        padding-left: 15px;
+    }
+    .dash-menu {
+        font-size: 13px;
+        color: white !important;
+        font-weight: bold;
+        text-transform: initial !important;
+    }
+    .go-back-btn {
+        position: absolute;
+        top: 2px;
+        left: 2%;
+    }
+
+    .ms-navbar .container .navbar-collapse in {
+        display: none !important;
+    }
+
+    .ms-navbar .navbar-nav li a {
+        padding: 5px 10px;
+    }
+
+    .ms-navbar .navbar-nav li {
+        font-size: 1.3rem;
+    }
+
+    .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+        margin-left: 32px;
+        margin-right: 0px;
+    }
+
+    .ms-navbar .navbar-brand .ms-logo {
+        margin-top: -5px;
+        margin-right: 0px;
+    }
+
+    .ms-navbar .navbar-brand img {
+        display: inline-block;
+        margin-right: 10px;
+        position: inherit;
+        /* width: 100%; */
+        left: inherit;
+    }
+
+    .navbar-header {
+        width: auto;
+    }
+
+    .navbar-brand {
+        width: inherit;
+    }
+
+    .ms-navbar .btn-navbar-menu {
+        color: #fff;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+        display: block;
+    }
+
+    .ms-navbar .navbar-nav li a {
+        padding: 5px 17px;
+        font-size: 11px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+        padding: 10px 35px 10px 20px;
+        font-size: 11px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
+        margin: 0px;
+    }
+
+    .submit-row input {
+        margin: 0 0 0 0 !important;
+        width: inherit;
+    }
+
+    .btn-eliminar {
+        width: inherit;
+        margin: 0 0 0 0;
+        padding: 11px;
+    }
+
+    .nav-tabs-ver-container .nav-tabs-ver li {
+        display: block !important;
+    }
+
+    .aligned p.file-upload {
+        margin-left: 5px;
+        width: 199px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 0 !important;
+    }
+
+    .vDateField {
+            min-width: 59% !important;
+    font-size: 12px;
+    }
+
+    .nav.nav-tabs li a {
+        font-weight: 400;
+        padding: 1.7rem 5px;
+        color: rgba(255, 255, 255, .5) !important;
+        text-align: center;
+        font-size: 11px;
+    }
+}
+
+/* Medium Devices, Desktops */
+@media only screen and (min-width: 992px) {
+    .nav-tabs-ver-container .nav-tabs-ver li a {
+    color: #424242;
+    font-size: 15px;
+    padding: 10px 10px;
+}s
+    .h3, h3 {
+        font-size: 24px;
+    }
+
+    .list-group .list-group-item, .list-group a.list-group-item {
+        font-size: 14px !important;
+    }
+
+    .ms-navbar .navbar-nav li a {
+        padding: 5px 25px;
+        font-size: inherit;
+    }
+
+    .ms-navbar .navbar-nav li {
+        font-size: 1.4rem;
+    }
+
+    .navbar > .container .navbar-brand, .navbar > .container-fluid .navbar-brand {
+        margin-left: 40px;
+        margin-right: 0px;
+    }
+
+    .ms-navbar .navbar-brand .ms-logo {
+        margin-top: -5px;
+        margin-right: 10px;
+    }
+
+    .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+        padding: 10px 35px 10px 20px;
+        font-size: 1.4rem;
+    }
+
+    .table tr td, .table tr th {
+        font-size: 14px;
+    }
+
+    .form-group .checkbox label, .form-group .radio label, .form-group label {
+        font-size: 15px;
+    }
+
+    .form-control {
+        font-size: 16px;
+    }
+
+    .aligned p.file-upload {
+        margin-left: 5px;
+        width: 199px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 0 !important;
+    }
+
+    .vDateField {
+        min-width: 70% !important;
+    }
+
+    .nav.nav-tabs li a {
+        font-weight: 400;
+        padding: 1.7rem 11px;
+        color: rgba(255, 255, 255, .5) !important;
+        text-align: center;
+        font-size: 13px;
+    }
+
+}
+
+/* Large Devices, Wide Screens */
+@media only screen and (min-width: 1200px) {
+    .ms-navbar .navbar-nav li a {
+        padding: 5px 20px;
+    }
+
+    .aligned p.file-upload {
+        margin-left: 5px;
+        width: 248px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        margin-left: 0 !important;
+    }
+
+    .vDateField {
+        min-width: 75% !important;
+    }
+
+    .nav.nav-tabs li a {
+        font-weight: 400;
+        padding: 1.7rem 13px;
+        color: rgba(255, 255, 255, .5) !important;
+        text-align: center;
+        font-size: 1.5rem;
+    }
+
+    .btn, .input-group-btn .btn {
+        padding: 8px 30px;
+    }
+
+    .col-lg-offset-12 {
+        margin-left: 100%;
+    }
+
+    .col-lg-offset-11 {
+        margin-left: 91.66666667%;
+    }
+
+    .col-lg-offset-10 {
+        margin-left: 83.33333333%;
+    }
+
+    .col-lg-offset-9 {
+        margin-left: 75%;
+    }
+
+    .col-lg-offset-8 {
+        margin-left: 66.66666667%;
+    }
+
+    .col-lg-offset-7 {
+        margin-left: 58.33333333%;
+    }
+
+    .col-lg-offset-6 {
+        margin-left: 50%;
+    }
+
+    .col-lg-offset-5 {
+        margin-left: 41.66666667%;
+    }
+
+    .col-lg-offset-4 {
+        margin-left: 33.33333333%;
+    }
+
+    .col-lg-offset-3 {
+        margin-left: 25%;
+    }
+
+    .col-lg-offset-2 {
+        margin-left: 16.66666667%;
+    }
+
+    .col-lg-offset-1 {
+        margin-left: 8.33333333%;
+    }
+
+    .col-lg-offset-0 {
+        margin-left: 0%;
+    }
+}

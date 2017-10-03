@@ -67,7 +67,8 @@
         </div>
     </div>
 </div>
-<div class="sb-site-container">
+<div id="wrapper">
+
     <header class="ms-header ms-header-primary" id="header">
         <div class="container container-full">
             <div class="ms-title">
@@ -97,17 +98,16 @@
     <!-- begins navigation -- request.resolver_match.view_name }}---->
 
     {% if user.is_active and user.is_staff %}
-        <nav class="navbar navbar-static-top yamm ms-navbar ms-navbar-primary">
-
-
+        <nav class="navbar fixed-top yamm ms-navbar ms-navbar-primary">
             <div class="container container-full container-nav">
                 <div class="navbar-header">
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                            data-target="#navbar" aria-expanded="false">
                         <span class="sr-only">Toggle navigation</span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
-                      </button>
+                    </button>
                     <a class="navbar-brand" href="/admin">
                     <span class="ms-logo"><img
                             src="{% static "ERP/admin/img/logo_mini.svg" %}" style="max-height: 50px"> </span>
@@ -124,10 +124,7 @@
                                 Inicio
                             </a>
                         </li>
-                        <li class="dropdown
-
-
-                                {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li class="dropdown {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -165,21 +162,18 @@
 
                             </ul>
                         </li>
-                        <li class="dropdown
-
-
-                                {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="#" class="dropdown-toggle  "
+                        <li class="dropdown {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                            <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                               data-name="">
+                               data-name="blog">
                                 <i class="fa fa-file-text-o text-center"></i><br class="hidden-xs">
                                 Contratación
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                             </a>
                             <ul id="op_contratos" class="dropdown-menu dropdown-menu-left">
 
-                               <li class="dropdown-submenu">
+                                <li class="dropdown-submenu">
                                     <a href="#" class="has_children">
                                         <i class="zmdi zmdi-view-dashboard"></i>Contratos</a>
 
@@ -205,10 +199,7 @@
                         </a>
 
                     </li>{% endcomment %}
-                        <li class="dropdown
-
-
-                                {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li class="dropdown {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -218,7 +209,8 @@
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                             </a>
 
-                            <ul id="op_proyectos" class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
+                            <ul id="op_proyectos"
+                                class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
                                 <li class="dropdown">
                                     <a href="/admin/ERP/project/">
                                         <i class="zmdi zmdi-view-compact"></i> Proyectos</a>
@@ -282,10 +274,7 @@
                             </li>{% endcomment %}
                             </ul>
                         </li>
-                        <li class="dropdown
-
-
-                                {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li class="dropdown {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-8"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -296,7 +285,7 @@
                             </a>
                             <ul id="op_usuarios" class="dropdown-menu dropdown-menu-left">
 
-                               <li class="dropdown-submenu">
+                                <li class="dropdown-submenu">
                                     <a href="#" class="has_children">
                                         <i class="zmdi zmdi-view-dashboard"></i>Usuarios</a>
 
@@ -312,10 +301,7 @@
                             </ul>
 
                         </li>
-                        <li id="op_reportes" class="dropdown
-
-
-                                {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li id="op_reportes" class="dropdown {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle animated fadeIn animation-delay-4"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
@@ -327,7 +313,7 @@
                 </div>
                 <!-- navbar-collapse collapse -->
 
-                <a href="" class="sb-toggle-left btn-navbar-menu">
+                <a href="" class="sb-toggle-left btn-navbar-menu user-btn visible-xs">
                     <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                 </a>
 
@@ -339,13 +325,14 @@
                 {% if messages %}
                     <ul class="messagelist">
                         {% for message in messages %}
-                            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
+                            <li{% if message.tags %}
+                                class="{{ message.tags }}"{% endif %}>{{ message|capfirst }}</li>
                         {% endfor %}
                     </ul>
                 {% endif %}
 
             {% endblock messages %}
-            <a onclick="goBack()" class="btn-circle btn-circle-default" style="position: absolute;top: 1px;left: 2%;"><i
+            <a onclick="goBack()" class="btn-circle btn-circle-default go-back-btn"><i
                     class="fa fa-arrow-left"></i></a>
         </nav>
     {% endif %}
@@ -376,25 +363,13 @@
             <br class="clear"/>
         </div>
         <!-- END mainContainer -->
-
-
     </div>
-
-
-    <!-- Begins Footer -->
-    {% block footer %}
-        <footer class="ms-footer" id="footer">
-            <div class="container">
-                <p>Copyright &copy; Salcedo ERP 2017</p>
-            </div>
-        </footer>
-    {% endblock %}
 </div>
+
 <div class="ms-slidebar sb-slidebar sb-left sb-style-overlay" id="ms-slidebar">
     <div class="sb-slidebar-container">
         <header class="ms-slidebar-header">
             <div class="ms-slidebar-login">
-
             </div>
             <div class="ms-slidebar-title">
                 <div class="ms-slidebar-t">
@@ -408,8 +383,6 @@
                             {% endblock %}
                         </h3>
                         {% endcomment %}
-
-
                     <div class="avatar">
                         <img alt="" src="/media/{{ user.erpuser.profile_picture }}">
                         <h3 style="margin-top: 0 !important">
@@ -421,13 +394,10 @@
                             {% endblock %}
                         </h3>
                     </div>
-
-
                 </div>
             </div>
         </header>
         <ul class="ms-slidebar-menu" id="slidebar-menu" role="tablist" aria-multiselectable="true">
-
             {% block userlinks %}
                 {% if user.is_active and user.is_staff %}
                     {% url 'django-admindocs-docroot' as docsroot %}
@@ -436,7 +406,6 @@
                             <a class="collapsed" role="button" href="{{ docsroot }}">
                                 <i class="fa fa-info-circle" aria-hidden="true"></i>
                                 Ayuda </a>
-
                         </li>
                     {% endif %}
                 {% endif %}
@@ -454,12 +423,19 @@
                         sesión </a>
                 </li>
             {% endblock %}
-
         </ul>
-
         {% block nav-global %}{% endblock %}
     </div>
+
 </div>
+<!-- Begins Footer -->
+{% block footer %}
+    <footer class="ms-footer" id="footer">
+        <div class="container">
+            <p>Copyright &copy; Salcedo ERP 2017</p>
+        </div>
+    </footer>
+{% endblock %}
 <script>
     function goBack() {
         window.history.back();

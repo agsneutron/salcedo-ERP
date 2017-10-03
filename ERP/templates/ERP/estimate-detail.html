@@ -64,7 +64,7 @@
 
                     <br>
                     <div class="col-xs-12">
-                        <div class="col-xs-8 text-left">
+                        <div class="col-xs-12 col-sm-8 text-left">
                             <div style="padding-top: 10px;">
                                 <dl>
 
@@ -82,13 +82,13 @@
 
                                 <div class="" >
                                     {% if estimate.advance_payment_amount > 0 %}
-                                        <div class="col-xs-3 text-center"><strong
+                                        <div class="col-xs-12 col-sm-3  text-center"><strong
                                                 class="color-active">Adelanto: </strong>{{ estimate.advance_payment_amount|formatoNumero }}
                                         </div>
-                                        <div class="col-xs-6 text-center"><strong
+                                        <div class="col-xs-12 col-sm-6  text-center"><strong
                                                 class="color-active">Fecha: </strong>{{ estimate.advance_payment_date }}
                                         </div>
-                                        <div class="col-xs-3 text-center"><strong
+                                        <div class="col-xs-12 col-sm-3  text-center"><strong
                                                 class="color-active">Estado: </strong>{{ estimate.get_advance_payment_status_display }}
                                         </div>
                                     {% elif estimate.advance_payment_amount == 0 %}
@@ -99,7 +99,7 @@
                         </div>
 
 
-                        <div class="col-xs-4 text-left">
+                        <div class="col-xs-12 col-sm-4  text-left">
                             <div style="    padding-top: 52px;">
                                 <dl>
 

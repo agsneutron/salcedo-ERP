@@ -20,13 +20,14 @@
 
         <form action="" method="get">
             <div class="row">
-                <div class="col-xs-2">{{ form.type|addcss:"form-control" }}</div>
-                <div class="col-xs-3">{{ form.line_item|addcss:"form-control" }}</div>
-                <div class="col-xs-3">{{ form.start_date }}</div>
-                <div class="col-xs-3">{{ form.end_date }}</div>
-                <div class="col-xs-1">
-                    <button class="searchbutton" type="submit">
-                        <i class="fa fa-search"></i>
+                <div class="col-xs-12 col-sm-3">{{ form.type|addcss:"form-control" }}</div>
+                <div class="col-xs-12 col-sm-3">{{ form.line_item|addcss:"form-control" }}</div>
+                <div class="col-xs-6 col-sm-3">{{ form.start_date }}</div>
+                <div class="col-xs-6 col-sm-3">{{ form.end_date }}</div>
+                <div class="clearfix"></div>
+                <div class="col-xs-12 col-sm-12 text-center">
+                    <button class="btn btn-raised btn-primary text-center" type="submit">
+                        <i class="fa fa-search"></i> Buscar
                     </button>
                 </div>
             </div>
