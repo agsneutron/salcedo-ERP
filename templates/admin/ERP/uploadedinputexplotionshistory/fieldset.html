@@ -33,7 +33,7 @@
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Carga de Explosión de Insumos</span>
+                    <span class="">Carga de Explosión de Insumos</span>
                 </a>
             </li>
         </ul>
@@ -48,7 +48,7 @@
                                 <h2 class="text-center">Archivo</h2>
 
                                 <hr>
-                                <div class="col-md-12">
+                                <div class="col-xs-12 col-sm-6">
                                     <div class="form-group field-{{ field.field.name }}">
                                         <div>
                                             {{ field.label_tag }}
@@ -57,12 +57,12 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+
                         {% endif %}
 
                     {% if field.field.name == "file" %}
-                        <div class="row">
-                        <div class="col-md-6">
+
+                        <div class="col-xs-12 col-sm-6">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.label_tag }}
                                 {{ field.errors }}
@@ -88,15 +88,15 @@
                                 </div>{% endcomment %}
                         </div>
 
-                    {% endif %}
+
+
+                    </div>
+                    </div>
+
+  {% endif %}
                     {% if field.field.name == "version" %}
                         {{ field.field|addcss:"form-control" }}
                     {% endif %}
-
-                    </div>
-                    </div>
-
-
 
 
                     {% endfor %}
