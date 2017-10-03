@@ -1,4 +1,5 @@
 {% load app_filters admin_static %}
+
 <fieldset class="module aligned {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
@@ -31,57 +32,78 @@
 
     <div class="card ">
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
-            <li role="presentation" class="active">
-                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="">Proyecto</span>
-                </a>
-            </li>
-            <li role="presentation">
-                <a class="withoutripple" href="#otro1" aria-controls="otro1" role="tab" data-toggle="tab">
-                    <span class="">Ubicación/Áreas</span>
-                </a>
-            </li>
-            <li role="presentation">
-                <a class="withoutripple" href="#otro2" aria-controls="otro2" role="tab" data-toggle="tab">
-                    <span class="">Legal</span>
-                </a>
-            </li>
-            <li role="presentation">
-                <a class="withoutripple" href="#otro3" aria-controls="otro3" role="tab" data-toggle="tab">
-                    <span class="">Restricciones</span>
-                </a>
-            </li>
-            <li role="presentation">
-                <a class="withoutripple" href="#otro4" aria-controls="otro4" role="tab" data-toggle="tab">
-                    <span class="">Análisis</span>
-                </a>
-            </li>
-            <li role="presentation">
-                <a class="withoutripple" href="#otro5" aria-controls="otro5" role="tab" data-toggle="tab">
-                    <span class="">Análisis 2</span>
-                </a>
-            </li>
-            <li role="presentation">
-                <a class="withoutripple" href="#otro6" aria-controls="otro6" role="tab" data-toggle="tab">
-                    <span class="">Costo/Mercado</span>
-                </a>
-            </li>
-            <li role="presentation">
-                <a class="withoutripple" href="#otro7" aria-controls="otro7" role="tab" data-toggle="tab">
-                    <span class="">Programas</span>
-                </a>
-            </li>
-            <li role="presentation">
-                <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
-                    <span class="">Tipo de Construcción</span>
-                </a>
-            </li>
-
-            <li role="presentation">
-                <a class="withoutripple" href="#otro9" aria-controls="otro9" role="tab" data-toggle="tab">
-                    <span class="">Programación</span>
-                </a>
-            </li>
+            {% for section in sections_result %}
+                {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
+                    <li role="presentation" class="active">
+                        <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                            <span class="">Proyecto</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Ubicación / Áreas" and section.total_inner_sections >= 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro1" aria-controls="otro1" role="tab" data-toggle="tab">
+                            <span class="">Ubicación/Áreas</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Estado Legal" and section.total_inner_sections > 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro2" aria-controls="otro2" role="tab" data-toggle="tab">
+                            <span class="">Legal</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Restricciones" and section.total_inner_sections > 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro3" aria-controls="otro3" role="tab" data-toggle="tab">
+                            <span class="">Restricciones</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Análisis" and section.total_inner_sections > 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro4" aria-controls="otro4" role="tab" data-toggle="tab">
+                            <span class="">Análisis</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Análisis II" and section.total_inner_sections > 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro5" aria-controls="otro5" role="tab" data-toggle="tab">
+                            <span class="">Análisis II</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Costo / Mercado" and section.total_inner_sections > 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro6" aria-controls="otro6" role="tab" data-toggle="tab">
+                            <span class="">Costo/Mercado</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Programa" and section.total_inner_sections > 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro7" aria-controls="otro7" role="tab" data-toggle="tab">
+                            <span class="">Programas</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Tipo de Construcción" and section.total_inner_sections > 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
+                            <span class="">Tipo de Construcción</span>
+                        </a>
+                    </li>
+                {% endif %}
+                {% if section.section_name == "Programación" and section.total_inner_sections > 0 %}
+                    <li role="presentation">
+                        <a class="withoutripple" href="#otro9" aria-controls="otro9" role="tab" data-toggle="tab">
+                            <span class="">Programación</span>
+                        </a>
+                    </li>
+                {% endif %}
+            {% endfor %}
         </ul>
 
         <div class="card-block">
