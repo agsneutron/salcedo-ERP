@@ -291,7 +291,7 @@ hr {
 }
 
 .ms-navbar-white.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-white.navbar-mode .navbar-nav > li > a:focus, .ms-navbar-dark.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-dark.navbar-mode .navbar-nav > li > a:focus, .ms-navbar-primary.navbar-mode .navbar-nav > li > a:hover, .ms-navbar-primary.navbar-mode .navbar-nav > li > a:focus, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a:hover, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a:focus, .ms-header-white + .ms-navbar-white .navbar-nav > li > a:hover, .ms-header-white + .ms-navbar-white .navbar-nav > li > a:focus, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a:hover, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a:focus {
-
+color: white !important;
 }
 
 .ms-footer {
@@ -494,7 +494,7 @@ dt {
 }
 
 .table tr td, .table tr th {
-    padding: 10px !important;
+    padding: 6px 10px !important;
     border-color: #e0e0e0 !important;
 }
 
@@ -883,3 +883,159 @@ ul {
 .nav-tabs-ver-container .nav-tabs-ver li.active a {
     color: #00a09b;
 }
+.ms-header .header-right {
+    margin: 15px;
+    float: right;
+}
+.circles-text {
+    font-size: 30px!important;
+    font-size: 2.5rem!important;
+}
+body .sb-site-container {
+    -webkit-transform: none;
+    transform: none;
+    background-color: #fcfcfc;
+    min-height: 0;
+}
+.table>caption+thead>tr:first-child>td, .table>caption+thead>tr:first-child>th, .table>colgroup+thead>tr:first-child>td, .table>colgroup+thead>tr:first-child>th, .table>thead:first-child>tr:first-child>td, .table>thead:first-child>tr:first-child>th {
+    border-top: 0;
+    background-color: #00a09b;
+    color: white;
+}
+.ms-navbar .navbar-nav.navbar-right {
+    margin-right: 0px;
+}
+.navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+    margin-left: 40px;
+}
+.navbar .navbar-toggle .icon-bar {
+    border: 1px solid;
+    color: #999;
+}
+
+.navbar .navbar-toggle {
+    border: 0;
+    position: absolute;
+    right: 25px;
+    z-index: 999;
+}
+.ms-navbar-white.navbar-mode .navbar-nav > li > a, .ms-navbar-dark.navbar-mode .navbar-nav > li > a, .ms-navbar-primary.navbar-mode .navbar-nav > li > a, .ms-header-dark + .ms-navbar-dark .navbar-nav > li > a, .ms-header-white + .ms-navbar-white .navbar-nav > li > a, .ms-header-primary + .ms-navbar-primary .navbar-nav > li > a {
+    background-color: transparent;
+    color: #666;
+    font-weight: 400;
+}
+/*==========  Mobile First Method  ==========*/
+
+    /* Custom, iPhone Retina */
+    @media only screen and (min-width : 320px) {
+        .ms-navbar .navbar-brand img {
+            display: inline-block;
+            margin-right: 10px;
+            position: absolute;
+            left: calc(50% - 25px);
+        }
+        .navbar-header {
+            width:100%;
+        }
+        .navbar-brand {
+            width:100%;
+        }
+        .ms-navbar .btn-navbar-menu {
+            color: #333;
+        }
+        .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+            display: inline;
+        }
+        .ms-navbar .navbar-nav li a {
+            padding: 10px 20px;
+        }
+        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+            padding: 10px 35px 10px 45px;
+        }
+        .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
+            margin: 0px;
+        }
+    }
+
+    /* Extra Small Devices, Phones */
+    @media only screen and (min-width : 480px) {
+
+    }
+
+    /* Small Devices, Tablets */
+    @media only screen and (min-width : 768px) {
+        .ms-navbar .navbar-nav li a {
+            padding: 5px 10px;
+        }
+        .ms-navbar .navbar-nav li {
+            font-size: 1.3rem;
+        }
+        .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+            margin-left: 32px;
+            margin-right: 0px;
+        }
+        .ms-navbar .navbar-brand .ms-logo {
+            margin-top: -5px;
+            margin-right: 0px;
+        }
+        .ms-navbar .navbar-brand img {
+            display: inline-block;
+            margin-right: 10px;
+            position: inherit;
+            /* width: 100%; */
+            left: inherit;
+        }
+        .navbar-header {
+            width:auto;
+        }
+        .navbar-brand {
+            width: inherit;
+        }
+        .ms-navbar .btn-navbar-menu {
+            color: #fff;
+        }
+        .ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+            display: block;
+        }
+        .ms-navbar .navbar-nav li a {
+            padding: 5px 13px;
+            font-size: 11px;
+        }
+        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+            padding: 10px 35px 10px 20px;
+            font-size: 11px;
+        }
+        .ms-navbar .navbar-nav li.dropdown.open .dropdown-menu {
+            margin: 0px ;
+        }
+    }
+
+    /* Medium Devices, Desktops */
+    @media only screen and (min-width : 992px) {
+        .ms-navbar .navbar-nav li a {
+            padding: 5px 15px;
+            font-size: inherit;
+        }
+        .ms-navbar .navbar-nav li {
+            font-size: 1.4rem;
+        }
+        .navbar>.container .navbar-brand, .navbar>.container-fluid .navbar-brand {
+            margin-left: 40px;
+            margin-right: 0px;
+        }
+        .ms-navbar .navbar-brand .ms-logo {
+            margin-top: -5px;
+            margin-right: 10px;
+        }
+        .ms-navbar .navbar-nav li.dropdown .dropdown-menu li a {
+            padding: 10px 35px 10px 20px;
+            font-size: 1.4rem;
+        }
+    }
+
+    /* Large Devices, Wide Screens */
+    @media only screen and (min-width : 1200px) {
+        .ms-navbar .navbar-nav li a {
+            padding: 5px 20px;
+        }
+    }
