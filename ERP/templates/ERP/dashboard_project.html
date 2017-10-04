@@ -11,6 +11,13 @@
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}"/>
     {#    <script src="{% static "admin/assets/Highcharts/code/themes/dark-unica.js" %}"></script>#}
+    <style>
+    hr{
+            display: block;
+    border-top: 1px solid #00a09b;
+    margin: 5px 0 ;
+    }
+</style>
 {% endblock %}
 {% block content %}
     <div id="container">
@@ -193,7 +200,7 @@
                             </div>
                             </div>
         </div>
-<hr class="visible-xs">
+<hr style="margin: 25px 0;" class="visible-xs">
         <div class="row">
             <div class="col-xs-12">
                 <div class="card">

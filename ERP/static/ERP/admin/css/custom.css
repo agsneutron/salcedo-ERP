@@ -35,7 +35,7 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
     margin: 20px 0 15px;
-    margin: 1rem 0 0rem;
+    margin: 1rem 0 1rem;
 }
 
 hr {
@@ -676,6 +676,7 @@ dt {
 
 .searchfield {
     width: 25%;
+    padding-left: 10px;
 }
 
 #searchform {
@@ -687,7 +688,7 @@ dt {
     height: 80px;
     line-height: 80px;
     font-size: 36px;
-    margin-bottom: 2px !important;
+    margin-bottom: 0px !important;
 }
 
 .highcharts-credits {
@@ -1100,7 +1101,7 @@ body .sb-site-container {
     .go-back-btn {
         position: absolute;
         top: 2px;
-        left: 2%;
+        left: 1%;
     }
 
     .ms-navbar .container .navbar-collapse in {
@@ -1188,7 +1189,8 @@ body .sb-site-container {
     }
 
     .vDateField {
-        min-width: 65% !important;
+            min-width: 59% !important;
+    font-size: 12px;
     }
 
     .nav.nav-tabs li a {
@@ -1202,6 +1204,11 @@ body .sb-site-container {
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width: 992px) {
+    .nav-tabs-ver-container .nav-tabs-ver li a {
+    color: #424242;
+    font-size: 15px;
+    padding: 10px 10px;
+}s
     .h3, h3 {
         font-size: 24px;
     }
@@ -1256,7 +1263,7 @@ body .sb-site-container {
     }
 
     .vDateField {
-        min-width: 75% !important;
+        min-width: 70% !important;
     }
 
     .nav.nav-tabs li a {
@@ -1285,7 +1292,7 @@ body .sb-site-container {
     }
 
     .vDateField {
-        min-width: 80% !important;
+        min-width: 75% !important;
     }
 
     .nav.nav-tabs li a {

@@ -1,13 +1,14 @@
 {% load i18n admin_urls static admin_modify app_filters%}
-<div class="card ">
-        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+<div class=" ">
+        {% comment %}<ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
                     <span class="hidden-xs">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</span>
                 </a>
             </li>
-        </ul>
-    <div class="card-block">
+        </ul>{% endcomment %}
+    <div class="">
+    <h2 class="text-center">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                  <div class="row" style="margin-left: -5px; margin-right: -5px;">
@@ -21,7 +22,7 @@
                       {% comment %} <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>{% endcomment %}
                        {{ inline_admin_formset.formset.non_form_errors }}
 {#----------AQUI SE  SALE DEL RECUADRO---------------#}
-                       <table>
+                       <table class="table">
                          <thead><tr>
                            <th class="original"></th>
                          {% for field in inline_admin_formset.fields %}
@@ -116,3 +117,6 @@
     </div>
     </div>
 </div>
+
+
+
