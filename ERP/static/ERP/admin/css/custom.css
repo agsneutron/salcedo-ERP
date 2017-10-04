@@ -902,7 +902,12 @@ ul {
     font-size: 30px !important;
     font-size: 2.5rem !important;
 }
-
+.circle {
+    margin-top: -2px;
+}
+.highcharts-no-data text {
+    font-size: 10px !important;
+}
 body .sb-site-container {
     -webkit-transform: none;
     transform: none;
@@ -962,7 +967,11 @@ body .sb-site-container {
         position: absolute;
         left: calc(50% - 25px);
     }
-
+    .yamm .nav, .yamm .collapse, .yamm .dropup, .yamm .dropdown {
+        position: static;
+        z-index: 9999999;
+        background-color: white;
+    }
     .navbar-header {
         width: 100%;
     }
@@ -1007,7 +1016,7 @@ body .sb-site-container {
     .go-back-btn {
         position: absolute;
         top: 4px;
-        left: 2%;
+        left: 3%;
     }
 
     .user-btn {
@@ -1077,6 +1086,16 @@ body .sb-site-container {
     .mobile-pad-left {
         padding-left: 0;
     }
+    .ms-navbar .container .navbar-header .navbar-brand {
+        display: inline-block;
+    margin: 0px 15px;
+    padding: 9px 15px;
+    height: 58px;
+    }
+    .container-full {
+        padding: 0;
+        height: 58px;
+    }
 }
 
 /* Extra Small Devices, Phones */
@@ -1086,6 +1105,18 @@ body .sb-site-container {
 
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px) {
+    .highcharts-no-data text {
+    font-size: 12px !important;
+}
+    .yamm .nav, .yamm .collapse, .yamm .dropup, .yamm .dropdown {
+        position: static;
+        z-index: 9;
+        background-color: white;
+    }
+    .container-full {
+        padding: 0;
+        height: inherit;
+    }
      .mobile-pad-right {
         padding-right: 15px;
     }
