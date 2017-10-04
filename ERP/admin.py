@@ -37,7 +37,7 @@ class TipoProyectoDetalleInline(admin.TabularInline):
     form = TipoProyectoDetalleAddForm
     model = TipoProyectoDetalle
     extra = 0
-    can_delete = False
+
 
 
 # class ProjectAdmin(admin.ModelAdmin):
