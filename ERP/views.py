@@ -511,7 +511,7 @@ class ProjectDetailView(generic.DetailView):
         sections_result = []
         for section in project_sections:
             section_json = {
-                "section_name": section.section.sectionName,
+                "section_name": section.section.section_name,
                 "section_id": section.section.id,
                 "total_inner_sections": 0,
                 "inner_sections": []
@@ -521,7 +521,7 @@ class ProjectDetailView(generic.DetailView):
                 Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
             for inner_section in inner_sections:
                 inner_json = {
-                    "inner_section_name": inner_section.section.sectionName,
+                    "inner_section_name": inner_section.section.section_name,
                     "inner_section_id": inner_section.section.id,
                     "inner_section_status": inner_section.status,
                 }

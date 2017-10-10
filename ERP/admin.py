@@ -842,6 +842,39 @@ class PaymentScheduleInline(admin.TabularInline):
 class ProjectModelAdmin(admin.ModelAdmin):
     inlines = (TipoProyectoDetalleInline, PaymentScheduleInline)
 
+    @staticmethod
+    def get_project_settings(project_id):
+        # Getting the settings for the current project, to know which card details to show.
+
+        project_obj = Project.objects.get(pk=project_id)
+
+        project_sections = ProjectSections.objects.filter(
+            Q(project_id=project_obj.id) & Q(section__parent_section=None))
+        sections_result = []
+        for section in project_sections:
+            section_json = {
+                "section_name": section.section.section_name,
+                "section_id": section.section.id,
+                "total_inner_sections": 0,
+                "inner_sections": []
+            }
+            i = 0
+            inner_sections = ProjectSections.objects.filter(
+                Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
+            for inner_section in inner_sections:
+                inner_json = {
+                    "inner_section_name": inner_section.section.section_name,
+                    "inner_section_id": inner_section.section.id,
+                    "inner_section_status": inner_section.status,
+                    "inner_section_short_name": inner_section.section.short_section_name
+                }
+                i += 1
+                section_json["inner_sections"].append(inner_json)
+            section_json["total_inner_sections"] = i
+            sections_result.append(section_json)
+
+        return sections_result
+
     def get_urls(self):
         urls = super(ProjectModelAdmin, self).get_urls()
         my_urls = [
@@ -874,6 +907,62 @@ class ProjectModelAdmin(admin.ModelAdmin):
         empresa.widget.can_add_related = False
         empresa.widget.can_change_related = False
 
+
+        if obj is not None:
+            self.exclude = []
+            sections_dictionary = {
+                'legal' : [
+                    'estadolegal_documento_propiedad',
+                    'estadolegal_gravamen',
+                    'estadolegal_predial',
+                    'estadolegal_agua',
+                    'documento_propiedad',
+                    'documento_gravamen',
+                    'documento_agua',
+                    'documento_predial',
+                    'documento_agua'
+                ],
+                'afectacion' : [
+                    'programayarea_afectacion',
+                    'programayarea_documento'
+                ],
+                'programas_y_areas' : [
+                    'programayarea_areaprivativa',
+                    'programayarea_caseta',
+                    'programayarea_jardin',
+                    'programayarea_vialidad',
+                    'programayarea_areaverde',
+                    'programayarea_estacionamientovisita'
+                ],
+                'definicion_de_proyecto' : [
+                    'definicionproyecto_alternativa',
+                    'definicionproyecto_tamano',
+                    'definicionproyecto_programa'
+                ],
+                'estudio_mercado' : [
+                    'estudiomercado_demanda',
+                    'estudiomercado_oferta',
+                    'estudiomercado_conclusiones',
+                    'estudiomercado_recomendaciones'
+                ],
+                'costo': [
+                    'costo_predio',
+                    'costo_m2',
+                    'costo_escrituras',
+                    'costo_levantamiento'
+                ]
+            }
+
+            # This means we are not trying to add a new project, but to edit an existing one.
+            sections = ProjectModelAdmin.get_project_settings(obj.id)
+
+            for top_section in sections:
+                for inner_section in top_section['inner_sections']:
+                    if inner_section['inner_section_status'] == 0: # and inner_section['inner_section_short_name'] == 'costo':
+                        self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
+
+
+
         return ModelForm
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -881,35 +970,9 @@ class ProjectModelAdmin(admin.ModelAdmin):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
-        project_obj = Project.objects.get(pk=object_id)
-
-        # Getting the settings for the current project, to know which card details to show.
-        project_sections = ProjectSections.objects.filter(
-            Q(project_id=project_obj.id) & Q(section__parent_section=None))
-        sections_result = []
-        for section in project_sections:
-            section_json = {
-                "section_name": section.section.sectionName,
-                "section_id": section.section.id,
-                "total_inner_sections": 0,
-                "inner_sections": []
-            }
-            i = 0
-            inner_sections = ProjectSections.objects.filter(
-                Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
-            for inner_section in inner_sections:
-                inner_json = {
-                    "inner_section_name": inner_section.section.sectionName,
-                    "inner_section_id": inner_section.section.id,
-                    "inner_section_status": inner_section.status,
-                }
-                i += 1
-                section_json["inner_sections"].append(inner_json)
-            section_json["total_inner_sections"] = i
-            sections_result.append(section_json)
-
+        project_id = object_id
+        sections_result = ProjectModelAdmin.get_project_settings(project_id)
         extra['sections_result'] = sections_result
-
 
         return super(ProjectModelAdmin, self).change_view(request, object_id,
                                                      form_url, extra_context=extra)
