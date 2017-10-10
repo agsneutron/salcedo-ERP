@@ -1324,7 +1324,9 @@ class Estimate(models.Model):
     contractor = models.ForeignKey(Contratista, verbose_name="Contratista", null=False, blank=False)
 
     # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
-    line_item = models.ForeignKey(LineItem, verbose_name="Partidas", null=True, blank=False, default=None)
+
+    contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False, default=None)
+
     concept_input = ChainedForeignKey(Concept_Input,
                                       chained_field="line_item",
                                       chained_model_field="line_item",
@@ -1337,6 +1339,14 @@ class Estimate(models.Model):
                                       )
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
+
+
+    contract_amount_override = models.DecimalField(verbose_name='Total Real', decimal_places=2, blank=False, null=False,
+                                                 default=0, max_digits=20,
+                                                 validators=[MinValueValidator(Decimal('0.0'))])
+
+
+
 
     # Fields to provide the Advance (payment) functionality.
     advance_payment_amount = models.DecimalField(verbose_name='Anticipo', decimal_places=2, blank=False, null=False,
