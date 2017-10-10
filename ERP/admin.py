@@ -12,7 +12,7 @@ from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm, \
-    ContactForm
+    ContactForm, ContractConceptsForm
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, \
     ProgressEstimateLogForm, OwnerForm
 
@@ -225,7 +225,7 @@ class ContratoAdmin(admin.ModelAdmin):
             'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados',
             'fecha_firma',
             'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version')
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')
         return fields
 
 
@@ -699,7 +699,7 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
             'codigo_obra', 'dependencia',
             'fecha_firma', 'fecha_inicio', 'fecha_termino',
             'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version',)
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')
         return fields
 
     def get_urls(self):
@@ -712,6 +712,42 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
         ]
         return my_urls + urls
+
+
+class ConceptForContractsInlines(admin.TabularInline):
+    model = Concept_Input
+
+
+@admin.register(ContractConcepts)
+class ContractConceptsAdmin(admin.ModelAdmin):
+    form = ContractConceptsForm
+
+    def get_form(self, request, obj=None, **kwargs):
+
+        ModelForm = super(ContractConceptsAdmin, self).get_form(request, obj, **kwargs)
+
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                kwargs['contract_id'] = request.GET.get('contract_id')
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    def response_change(self, request, obj):
+        if '_continue' not in request.POST:
+            return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.contract.id))
+        else:
+            return HttpResponseRedirect(
+                "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
+
+
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        if '_continue' not in request.POST:
+            return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.contract.id))
+        else:
+            return HttpResponseRedirect(
+                "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
 
 
 @admin.register(Propietario)

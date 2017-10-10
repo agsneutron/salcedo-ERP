@@ -6,6 +6,7 @@ import os
 
 from decimal import Decimal
 from django.core.validators import MinValueValidator
+from django.db.models.fields.related import ManyToManyField
 from django.db.models.query_utils import Q
 from django.dispatch import receiver
 from django.utils import timezone
@@ -15,7 +16,7 @@ from django.forms.models import model_to_dict
 from django.utils.encoding import smart_text
 from django.utils.timezone import now
 from users.models import ERPUser
-from smart_selects.db_fields import ChainedForeignKey
+from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
 from django.db import models
 
@@ -540,11 +541,11 @@ class ContratoContratista(models.Model):
     version = IntegerVersionField()
     clave_contrato = models.CharField(verbose_name='Clave del Contrato', max_length=32, null=False, blank=False)
     dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
-    fecha_firma = models.DateTimeField(verbose_name='Fecha de Firma', editable=True)
+    fecha_firma = models.DateField(verbose_name='Fecha de Firma', editable=True)
     dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False,
                                      editable=True)
-    fecha_inicio = models.DateTimeField(verbose_name='Fecha de Inicio', editable=True)
-    fecha_termino = models.DateTimeField(verbose_name='Fecha de Termino', editable=True)
+    fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
+    fecha_termino = models.DateField(verbose_name='Fecha de Termino', editable=True)
     lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False,
                                        editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
@@ -562,13 +563,25 @@ class ContratoContratista(models.Model):
     codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
     objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
                                        editable=True)
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     # Foreign Keys:
     project = models.ForeignKey('Project', verbose_name='Proyecto', null=False, blank=False)
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
                                            blank=False)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
-    last_edit_date = models.DateTimeField(auto_now_add=True)
+
+    line_item = ChainedForeignKey(
+        'LineItem',
+        chained_field="project",
+        chained_model_field="project",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        verbose_name = "Partida"
+    )
+
+    concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
 
     class Meta:
         verbose_name_plural = 'Contratos'
@@ -596,10 +609,10 @@ class ContratoContratista(models.Model):
         return ans
 
     def __str__(self):
-        return self.codigo_obra
+        return self.clave_contrato + " - " + self.codigo_obra + " - " + self.contratista.nombreContratista
 
     def __unicode__(self):
-        return self.codigo_obra
+        return self.clave_contrato + " - " + self.codigo_obra + " - " + self.contratista.nombreContratista
 
         # def save(self, *args, **kwargs):
         #    canSave = True
@@ -609,6 +622,13 @@ class ContratoContratista(models.Model):
         #    super(Contrato, self).save(*args, **kwargs)
         # else:
         #    Logs.log("Couldn't save")
+
+
+# Class to define the concepts in a Contractor Contract.
+class ContractConcepts(models.Model):
+    contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False)
+    concept = models.ForeignKey('Concept_Input', verbose_name="Concepto", null=False, blank=False)
+    amount = models.DecimalField(verbose_name="Cantidad", null=False, blank=False, decimal_places=2, max_digits=12)
 
 
 # Propietario
@@ -1143,7 +1163,8 @@ class LineItem(models.Model):
 
     # Foreign keys for the model.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
+    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True, related_name='parent')
+    top_parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True, related_name='top_parent')
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -1245,7 +1266,8 @@ class Concept_Input(models.Model):
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
 
     # Foreign Keys.
-    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
+    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False, related_name='line_item')
+    top_line_item = models.ForeignKey(LineItem, verbose_name="Partida Superior", null=True, blank=False, related_name='top_line_item')
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
 
     last_edit_date = models.DateTimeField(auto_now_add=True)

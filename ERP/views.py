@@ -5,6 +5,8 @@ import operator
 import urllib
 import locale
 from datetime import date
+
+from django.forms.models import modelformset_factory
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext, loader
 import datetime
@@ -15,11 +17,11 @@ from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 from django.views.generic.edit import CreateView
 
-from ERP.forms import EstimateSearchForm, AddEstimateForm
+from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
     Contact, AccessToProject, \
-    ProjectSections
+    ProjectSections, ContractConcepts
 from django.db.models import Q
 import json
 
@@ -236,6 +238,13 @@ class ContractorContractListView(ListView):
 class ContractorContractDetailView(generic.DetailView):
     model = ContratoContratista
     template_name = "ERP/contractor-contract-detail.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ContractorContractDetailView, self).get_context_data(**kwargs)
+        contract_id = self.kwargs['pk']
+        context['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id))
+        return context
 
 
 # Views for the model Propietaro.

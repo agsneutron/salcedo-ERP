@@ -13,7 +13,7 @@ from users.models import ERPUser
 import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
-    ContratoContratista, Propietario, Empresa, Contact, Contratista
+    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -222,6 +222,31 @@ class ContractForm(forms.ModelForm):
         # self.fields['fecha_inicio'].widget = widgets.AdminDateWidget()
         # self.fields['fecha_termino'].widget = widgets.AdminDateWidget()
         # self.fields['fecha_firma'].widget = widgets.AdminDateWidget()
+
+
+class ContractConceptsForm(forms.ModelForm):
+    contract_id = None
+
+    class Meta:
+        model = ContractConcepts
+        fields = ('contract', 'concept', 'amount')
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        self.contract_id = kwargs.pop('contract_id', None)
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        kwargs['initial'].update({'contract': self.contract_id})
+        super(ContractConceptsForm, self).__init__(*args, **kwargs)
+        if self.contract_id is not None:
+            contract_obj = ContratoContratista.objects.get(pk=self.contract_id)
+
+            self.fields['contract'].queryset = ContratoContratista.objects.filter(pk=self.contract_id)
+            self.fields['concept'].queryset = Concept_Input.objects.filter(line_item__id=contract_obj.line_item.id)
+
+
 
 
 class EstimateSearchForm(forms.Form):
