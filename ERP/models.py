@@ -6,6 +6,7 @@ import os
 
 from decimal import Decimal
 from django.core.validators import MinValueValidator
+from django.db.models.fields.related import ManyToManyField
 from django.db.models.query_utils import Q
 from django.dispatch import receiver
 from django.utils import timezone
@@ -15,7 +16,7 @@ from django.forms.models import model_to_dict
 from django.utils.encoding import smart_text
 from django.utils.timezone import now
 from users.models import ERPUser
-from smart_selects.db_fields import ChainedForeignKey
+from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
 from django.db import models
 
@@ -28,6 +29,8 @@ import datetime
 import locale
 
 from django.template import Library
+
+
 # Create your models here.
 
 # *********************************************************************
@@ -489,7 +492,7 @@ class Empresa(models.Model):
                                   chained_model_field="estado",
                                   show_all=False,
                                   auto_choose=True,
-                                  sort=True,)
+                                  sort=True, )
 
     PUBLIC = "pu"
     PRIVATE = "pr"
@@ -562,13 +565,25 @@ class ContratoContratista(models.Model):
     codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
     objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
                                        editable=True)
+    last_edit_date = models.DateTimeField(auto_now_add=True)
 
     # Foreign Keys:
     project = models.ForeignKey('Project', verbose_name='Proyecto', null=False, blank=False)
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
                                            blank=False)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
-    last_edit_date = models.DateTimeField(auto_now_add=True)
+
+    line_item = ChainedForeignKey(
+        'LineItem',
+        chained_field="project",
+        chained_model_field="project",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        verbose_name="Partida"
+    )
+
+    concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
 
     class Meta:
         verbose_name_plural = 'Contratos'
@@ -596,10 +611,10 @@ class ContratoContratista(models.Model):
         return ans
 
     def __str__(self):
-        return self.codigo_obra
+        return "Clave del Contrato: " + self.clave_contrato +" -  Contratista: " +  self.contratista.nombreContratista
 
     def __unicode__(self):
-        return self.codigo_obra
+        return "Clave del Contrato: " + self.clave_contrato + " -  Contratista: " + self.contratista.nombreContratista
 
         # def save(self, *args, **kwargs):
         #    canSave = True
@@ -609,6 +624,13 @@ class ContratoContratista(models.Model):
         #    super(Contrato, self).save(*args, **kwargs)
         # else:
         #    Logs.log("Couldn't save")
+
+
+# Class to define the concepts in a Contractor Contract.
+class ContractConcepts(models.Model):
+    contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False)
+    concept = models.ForeignKey('Concept_Input', verbose_name="Concepto", null=False, blank=False)
+    amount = models.DecimalField(verbose_name="Cantidad", null=False, blank=False, decimal_places=2, max_digits=12)
 
 
 # Propietario
@@ -752,20 +774,20 @@ class Project(models.Model):
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
     ubicacion_pais = models.ForeignKey(Pais, verbose_name="país", null=False, blank=False)
     ubicacion_estado = ChainedForeignKey(Estado,
-                               chained_field="ubicacion_pais",
-                               chained_model_field="pais",
-                               show_all=False,
-                               auto_choose=True,
-                               sort=True)
+                                         chained_field="ubicacion_pais",
+                                         chained_model_field="pais",
+                                         show_all=False,
+                                         auto_choose=True,
+                                         sort=True)
 
     ubicacion_municipio = ChainedForeignKey(Municipio,
-                              chained_field="ubicacion_estado",
-                              chained_model_field="estado",
-                              show_all=False,
-                              auto_choose=True,
-                              sort=True)
-    #ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
-    #ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
+                                            chained_field="ubicacion_estado",
+                                            chained_model_field="estado",
+                                            show_all=False,
+                                            auto_choose=True,
+                                            sort=True)
+    # ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
+    # ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
     ubicacion_cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
 
     latitud = models.FloatField(default=0, blank=True, null=True, )
@@ -881,7 +903,7 @@ class Project(models.Model):
     # Fields required for the 'Estudio del Mercado' report in the 'Costo / Mercado' section.
     estudiomercado_demanda = models.CharField(verbose_name="Demanda", max_length=200, null=True, blank=True)
     estudiomercado_oferta = models.CharField(verbose_name="Oferta", max_length=200, null=True, blank=True)
-    estudiomercado_conclusiones = models.CharField(verbose_name="Conlusiones", max_length=200, null=True, blank=True)
+    estudiomercado_conclusiones = models.CharField(verbose_name="Conclusiones", max_length=200, null=True, blank=True)
     estudiomercado_recomendaciones = models.CharField(verbose_name="Recomendaciones", max_length=200, null=True,
                                                       blank=True)
 
@@ -909,7 +931,6 @@ class Project(models.Model):
                                                    default=0, max_digits=20)
     programayarea_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination,
                                                verbose_name="Documento de programa y área")
-
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -939,7 +960,6 @@ class Project(models.Model):
 
     def save(self, *args, **kwargs):
         canSave = True
-
 
         if self.fecha_final is not None and self.fecha_inicial >= self.fecha_final:
             Logs.log("The start date is greater than the end date")
@@ -981,7 +1001,7 @@ class PaymentSchedule(models.Model):
         (NOVEMBER, 'Noviembre'),
         (DECEMBER, 'Diciembre'),
     )
-    month = models.IntegerField(verbose_name="Mes",max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
 
     YEAR_CHOICES = (
         (2016, '2016'),
@@ -993,7 +1013,7 @@ class PaymentSchedule(models.Model):
     )
 
     year = models.IntegerField(verbose_name="Año", max_length=4,
-                            choices=YEAR_CHOICES, default=2017)
+                               choices=YEAR_CHOICES, default=2017)
 
     amount = models.DecimalField(verbose_name='Monto', decimal_places=2, blank=False, null=False,
                                  default=0, max_digits=20,
@@ -1022,8 +1042,8 @@ def assign_sections(sender, instance, **kwargs):
 
 
 class Section(models.Model):
-    sectionName = models.CharField(max_length=200)
-    shortSectionName = models.CharField(max_length=50)
+    section_name = models.CharField(max_length=200)
+    short_section_name = models.CharField(max_length=50)
     parent_section = models.ForeignKey('Section', blank=True, default=None, null=True)
 
     class Meta:
@@ -1033,14 +1053,20 @@ class Section(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
-        ans['sectionName'] = self.sectionName
+        ans['section_name'] = self.section_name
         return ans
 
     def __str__(self):
-        return self.sectionName + " - " + self.shortSectionName
+        if self.parent_section is not None:
+            return self.parent_section.section_name + " - " + self.section_name
+        else:
+            return self.section_name
 
     def __unicode__(self):
-        return self.sectionName + " - " + self.shortSectionName
+        if self.parent_section is not None:
+            return self.parent_section.section_name + " - " + self.section_name
+        else:
+            return self.section_name
 
 
 class ProjectSections(models.Model):
@@ -1051,10 +1077,10 @@ class ProjectSections(models.Model):
     section = models.ForeignKey(Section, verbose_name="Sección", null=False, blank=False)
 
     def __str__(self):
-        return str(self.project.key + " - " + self.section.sectionName)
+        return str(self.project.key + " - " + self.section.section_name)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.project.key + " - " + self.section.sectionName)
+        return str(self.project.key + " - " + self.section.section_name)
 
     class Meta:
         verbose_name_plural = 'Secciones de Proyecto'
@@ -1143,7 +1169,10 @@ class LineItem(models.Model):
 
     # Foreign keys for the model.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True)
+    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True,
+                                         related_name='parent')
+    top_parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True,
+                                             related_name='top_parent')
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -1245,7 +1274,7 @@ class Concept_Input(models.Model):
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=CONCEPT)
 
     # Foreign Keys.
-    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False)
+    line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False, related_name='line_item')
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
@@ -1292,23 +1321,18 @@ class Estimate(models.Model):
     end_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
     period = models.DateField(default=now(), null=True, blank=False, verbose_name="Periodo")
 
+    # Chained key attributes 'project'. Might be unnecessary, but it is required to reach the expected behaviour.
+    contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False, default=None)
 
-    contractor = models.ForeignKey(Contratista, verbose_name="Contratista", null=False, blank=False)
-
-    # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
-    line_item = models.ForeignKey(LineItem, verbose_name="Partidas", null=True, blank=False, default=None)
-    concept_input = ChainedForeignKey(Concept_Input,
-                                      chained_field="line_item",
-                                      chained_model_field="line_item",
-                                      show_all=False,
-                                      auto_choose=True,
-                                      sort=True,
-                                      null=False,
-                                      blank=False,
-                                      verbose_name="Concepto / Insumo"
-                                      )
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
+
+
+    contract_amount_override = models.DecimalField(verbose_name='Total Real', decimal_places=2, blank=False, null=False,
+                                                 default=0, max_digits=20,
+                                                 validators=[MinValueValidator(Decimal('0.0'))])
+
+
 
     # Fields to provide the Advance (payment) functionality.
     advance_payment_amount = models.DecimalField(verbose_name='Anticipo', decimal_places=2, blank=False, null=False,
@@ -1331,24 +1355,12 @@ class Estimate(models.Model):
         verbose_name_plural = 'Estimaciones'
 
     def __str__(self):
-        return "Partida: " + self.line_item.description[
-                             :45] + " Concepto: " + self.concept_input.description + " Periodo: " + str(self.period)
+        return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
 
     def __unicode__(self):  # __unicode__ on Python 2
-        line_item_display = ""
-        concept_input_display = ""
+        return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
 
-        if len(self.line_item.description) > 40:
-            line_item_display = self.line_item.description[0:40] + "..."
-        else:
-            line_item_display = self.line_item.description
 
-        if len(self.concept_input.description) > 40:
-            concept_input_display = self.concept_input.description[0:40] + "..."
-        else:
-            concept_input_display = self.concept_input.description
-
-        return "Partida: " + line_item_display + " Concepto: " + concept_input_display + " Periodo: " + str(self.period)
 
     def save(self, *args, **kwargs):
         canSave = True
