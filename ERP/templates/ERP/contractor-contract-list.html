@@ -39,7 +39,7 @@
                                                 <th>Código de Obra</th>
                                                 <th>Objeto Contrato</th>
                                                 <th>Fecha de Firma</th>
-                                                <th>Fecha de Última Edición</th>
+                                                {% comment %}<th>Fecha de Última Edición</th>{% endcomment %}
                                                 <th>Ver</th>
                                                 <th>Editar</th>
                                                 <th>Eliminar</th>
@@ -55,7 +55,7 @@
                                                     <td><span>{{ contratocontratista.codigo_obra }}</span></td>
                                                     <td><span>{{ contratocontratista.objeto_contrato }}</span></td>
                                                     <td><span>{{ contratocontratista.fecha_firma }}</span></td>
-                                                    <td><span>{{ contratocontratista.last_edit_date }}</span></td>
+                                                    {% comment %}<td><span>{{ contratocontratista.last_edit_date }}</span></td>{% endcomment %}
 
 
                                                     <td style="width: 2%"><a href="{{ contratocontratista.id }}"
