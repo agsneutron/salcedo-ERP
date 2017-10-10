@@ -846,7 +846,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         project_obj = Project.objects.get(pk=object_id)
-
+        secciones = dict()
         # Getting the settings for the current project, to know which card details to show.
         project_sections = ProjectSections.objects.filter(
             Q(project_id=project_obj.id) & Q(section__parent_section=None))
@@ -867,12 +867,16 @@ class ProjectModelAdmin(admin.ModelAdmin):
                     "inner_section_id": inner_section.section.id,
                     "inner_section_status": inner_section.status,
                 }
+
+                if inner_section.status==1:
+                    secciones[inner_section.section.sectionName] = inner_section.status
+
                 i += 1
                 section_json["inner_sections"].append(inner_json)
             section_json["total_inner_sections"] = i
             sections_result.append(section_json)
 
-        extra['sections_result'] = sections_result
+        extra['sections_result'] = secciones
 
 
         return super(ProjectModelAdmin, self).change_view(request, object_id,

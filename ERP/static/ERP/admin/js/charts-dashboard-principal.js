@@ -43,7 +43,7 @@ function callGraphicOne() {
                 setMapa(data);
                 for (var i = 0; i <= data.length-1; i++) {
                     $("#cardGrafica"+i).show();
-                    $("#tituloGrafica"+i).html('<h3 class="card-title">' + data[i].general.project_name + '</h3>');
+                    $("#tituloGrafica"+i).html('<h3 class="card-title"><a href="/admin/ERP/project/dashboard/'+data[i].general.project_id+'/">' + data[i].general.project_name + '</a></h3>');
 
                     setDataCircles(data[i].general.percentaje_estimated, data[i].general.percentaje_paid_estimated,i);
                     Series = obtenSeries_Mensual_Grupo(data[i].schedule);
