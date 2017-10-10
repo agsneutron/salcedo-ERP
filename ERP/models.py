@@ -29,6 +29,8 @@ import datetime
 import locale
 
 from django.template import Library
+
+
 # Create your models here.
 
 # *********************************************************************
@@ -490,7 +492,7 @@ class Empresa(models.Model):
                                   chained_model_field="estado",
                                   show_all=False,
                                   auto_choose=True,
-                                  sort=True,)
+                                  sort=True, )
 
     PUBLIC = "pu"
     PRIVATE = "pr"
@@ -578,7 +580,7 @@ class ContratoContratista(models.Model):
         show_all=False,
         auto_choose=True,
         sort=True,
-        verbose_name = "Partida"
+        verbose_name="Partida"
     )
 
     concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
@@ -772,20 +774,20 @@ class Project(models.Model):
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
     ubicacion_pais = models.ForeignKey(Pais, verbose_name="país", null=False, blank=False)
     ubicacion_estado = ChainedForeignKey(Estado,
-                               chained_field="ubicacion_pais",
-                               chained_model_field="pais",
-                               show_all=False,
-                               auto_choose=True,
-                               sort=True)
+                                         chained_field="ubicacion_pais",
+                                         chained_model_field="pais",
+                                         show_all=False,
+                                         auto_choose=True,
+                                         sort=True)
 
     ubicacion_municipio = ChainedForeignKey(Municipio,
-                              chained_field="ubicacion_estado",
-                              chained_model_field="estado",
-                              show_all=False,
-                              auto_choose=True,
-                              sort=True)
-    #ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
-    #ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
+                                            chained_field="ubicacion_estado",
+                                            chained_model_field="estado",
+                                            show_all=False,
+                                            auto_choose=True,
+                                            sort=True)
+    # ubicacion_estado = models.ForeignKey(Estado, verbose_name="estado", null=False, blank=False)
+    # ubicacion_municipio = models.ForeignKey(Municipio, verbose_name="municipio", null=False, blank=False)
     ubicacion_cp = models.IntegerField(verbose_name="C.P.", null=False, blank=False)
 
     latitud = models.FloatField(default=0, blank=True, null=True, )
@@ -930,7 +932,6 @@ class Project(models.Model):
     programayarea_documento = models.FileField(blank=True, null=True, upload_to=project_file_document_destination,
                                                verbose_name="Documento de programa y área")
 
-
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     # Many to many to create the project / section relation.
@@ -959,7 +960,6 @@ class Project(models.Model):
 
     def save(self, *args, **kwargs):
         canSave = True
-
 
         if self.fecha_final is not None and self.fecha_inicial >= self.fecha_final:
             Logs.log("The start date is greater than the end date")
@@ -1001,7 +1001,7 @@ class PaymentSchedule(models.Model):
         (NOVEMBER, 'Noviembre'),
         (DECEMBER, 'Diciembre'),
     )
-    month = models.IntegerField(verbose_name="Mes",max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
 
     YEAR_CHOICES = (
         (2016, '2016'),
@@ -1013,7 +1013,7 @@ class PaymentSchedule(models.Model):
     )
 
     year = models.IntegerField(verbose_name="Año", max_length=4,
-                            choices=YEAR_CHOICES, default=2017)
+                               choices=YEAR_CHOICES, default=2017)
 
     amount = models.DecimalField(verbose_name='Monto', decimal_places=2, blank=False, null=False,
                                  default=0, max_digits=20,
@@ -1163,8 +1163,10 @@ class LineItem(models.Model):
 
     # Foreign keys for the model.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True, related_name='parent')
-    top_parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True, related_name='top_parent')
+    parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True,
+                                         related_name='parent')
+    top_parent_line_item = models.ForeignKey('self', verbose_name="Partida Padre", null=True, blank=True,
+                                             related_name='top_parent')
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -1267,7 +1269,6 @@ class Concept_Input(models.Model):
 
     # Foreign Keys.
     line_item = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False, related_name='line_item')
-    top_line_item = models.ForeignKey(LineItem, verbose_name="Partida Superior", null=True, blank=False, related_name='top_line_item')
     unit = models.ForeignKey(Unit, verbose_name="Unidad", null=False, blank=False)
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
@@ -1313,7 +1314,6 @@ class Estimate(models.Model):
     start_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de inicio")
     end_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
     period = models.DateField(default=now(), null=True, blank=False, verbose_name="Periodo")
-
 
     contractor = models.ForeignKey(Contratista, verbose_name="Contratista", null=False, blank=False)
 
