@@ -43,10 +43,10 @@
                             <table class="table table-bordered">
                                 <thead>
                                 <tr>
-                                    <th>Periodo</th>
-                                    <th>Concepto/Insumo</th>
+                                    <th>Fecha de la Estimación</th>
+                                    <th>Contrato</th>
+                                    <th>Contratista</th>
                                     <th>Partida</th>
-                                    <th>Fecha de Última Edición</th>
                                     <th>Ver</th>
                                     <th>Editar</th>
                                     <th>Eliminar</th>
@@ -58,9 +58,9 @@
                                         <td>
                                             <span>De {{ estimate.start_date|date:"M d, Y" }} a {{ estimate.end_date }}</span>
                                         </td>
-                                        <td><span>{{ estimate.concept_input.description }}</span></td>
-                                        <td><span>{{ estimate.line_item.description }}</span></td>
-                                        <td><span>{{ estimate.line_item.last_edit_date }}</span></td>
+                                        <td><span>{{ estimate.contract.clave_contrato }}</span></td>
+                                        <td><span>{{ estimate.contract.contratista.nombreContratista }}</span></td>
+                                        <td><span>{{ estimate.contract.line_item.description }}</span></td>
 
                                         {% comment %} <td style="width: 7%"><a href="/admin/ERP/estimate/{{ estimate.id }}"
                                                              class="btn btn-raised btn-default btn-xs">

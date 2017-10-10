@@ -98,13 +98,11 @@ class EstimateForm(forms.ModelForm):
         project_id = self.request.GET.get('project')
 
         if kwargs.get('instance'):
-            line_item_id = kwargs['instance'].concept_input.line_item.id
-            self.fields['line_item'].queryset = LineItem.objects.filter(id=line_item_id)
+            contract_id = kwargs['instance'].contract.id
+            self.fields['contract'].queryset = ContratoContratista.objects.filter(id=contract_id)
         else:
-            self.fields['line_item'].queryset = LineItem.objects.filter(project_id=project_id)
-            # self.fields['start_date'].widget = widgets.AdminDateWidget()
-            # self.fields['end_date'].widget = widgets.AdminDateWidget()
-            # self.fields['period'].widget = widgets.AdminDateWidget()
+            self.fields['contract'].queryset = ContratoContratista.objects.filter(project_id=project_id)
+
 
     # def save(self, commit=True):
     #

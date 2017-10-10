@@ -985,28 +985,27 @@ class EstimateAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            'Partida', {
-                'fields': ('line_item', 'version',)
+            'Contrato', {
+                'fields': ('contract',)
             }),
         (
             'Estimación', {
                 'fields': (
-                    'concept_input', 'period', 'start_date', 'end_date', 'advance_payment_amount',
+                    'period', 'start_date', 'end_date', 'advance_payment_amount',
                     'advance_payment_date',
-                    'advance_payment_status', 'version','contractor')
+                    'advance_payment_status', 'version')
             }),
     )
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EstimateAdmin, self).get_form(request, obj, **kwargs)
         # get the foreign key field I want to restrict
-        line_item = ModelForm.base_fields['line_item']
-        concept_input = ModelForm.base_fields['concept_input']
+        contract = ModelForm.base_fields['contract']
+
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
-        line_item.widget.can_add_related = False
-        line_item.widget.can_change_related = False
-        concept_input.widget.can_add_related = False
-        concept_input.widget.can_change_related = False
+        contract.widget.can_add_related = False
+        contract.widget.can_change_related = False
+
 
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):

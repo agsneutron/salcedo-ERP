@@ -611,10 +611,10 @@ class ContratoContratista(models.Model):
         return ans
 
     def __str__(self):
-        return self.clave_contrato + " - " + self.codigo_obra + " - " + self.contratista.nombreContratista
+        return "Clave del Contrato: " + self.clave_contrato +" -  Contratista: " +  self.contratista.nombreContratista
 
     def __unicode__(self):
-        return self.clave_contrato + " - " + self.codigo_obra + " - " + self.contratista.nombreContratista
+        return "Clave del Contrato: " + self.clave_contrato + " -  Contratista: " + self.contratista.nombreContratista
 
         # def save(self, *args, **kwargs):
         #    canSave = True
@@ -1321,22 +1321,9 @@ class Estimate(models.Model):
     end_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
     period = models.DateField(default=now(), null=True, blank=False, verbose_name="Periodo")
 
-    contractor = models.ForeignKey(Contratista, verbose_name="Contratista", null=False, blank=False)
-
-    # Chained key attributes. Might be duplicated, but it is required to reach the expected behaviour.
-
+    # Chained key attributes 'project'. Might be unnecessary, but it is required to reach the expected behaviour.
     contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False, default=None)
 
-    concept_input = ChainedForeignKey(Concept_Input,
-                                      chained_field="line_item",
-                                      chained_model_field="line_item",
-                                      show_all=False,
-                                      auto_choose=True,
-                                      sort=True,
-                                      null=False,
-                                      blank=False,
-                                      verbose_name="Concepto / Insumo"
-                                      )
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -1344,7 +1331,6 @@ class Estimate(models.Model):
     contract_amount_override = models.DecimalField(verbose_name='Total Real', decimal_places=2, blank=False, null=False,
                                                  default=0, max_digits=20,
                                                  validators=[MinValueValidator(Decimal('0.0'))])
-
 
 
 
@@ -1369,24 +1355,12 @@ class Estimate(models.Model):
         verbose_name_plural = 'Estimaciones'
 
     def __str__(self):
-        return "Partida: " + self.line_item.description[
-                             :45] + " Concepto: " + self.concept_input.description + " Periodo: " + str(self.period)
+        return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
 
     def __unicode__(self):  # __unicode__ on Python 2
-        line_item_display = ""
-        concept_input_display = ""
+        return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
 
-        if len(self.line_item.description) > 40:
-            line_item_display = self.line_item.description[0:40] + "..."
-        else:
-            line_item_display = self.line_item.description
 
-        if len(self.concept_input.description) > 40:
-            concept_input_display = self.concept_input.description[0:40] + "..."
-        else:
-            concept_input_display = self.concept_input.description
-
-        return "Partida: " + line_item_display + " Concepto: " + concept_input_display + " Periodo: " + str(self.period)
 
     def save(self, *args, **kwargs):
         canSave = True

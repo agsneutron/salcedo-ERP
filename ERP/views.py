@@ -636,16 +636,19 @@ class EstimateListView(ListView):
         query = Q()
 
         # Must filter by project id.
-        query = query & Q(concept_input__line_item__project__id=EstimateListView.project_id)
+        query = query & Q(contract__project__id=EstimateListView.project_id)
 
         params_copy = self.request.GET.copy()
         params_copy.pop('page', None)
 
         EstimateListView.params = urllib.urlencode(params_copy)
 
+        '''
+        Commented while fixing the estimate model.
         type = self.request.GET.get('type')
         if type is not None:
             query = query & Q(concept_input__type=type)
+        '''
 
         start_date = self.request.GET.get('start_date')
         if start_date is not None:
@@ -657,9 +660,9 @@ class EstimateListView(ListView):
             query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
             query = query & Q(start_date__lte=query_date)
 
-        line_item_filter = self.request.GET.get('line_item')
-        if line_item_filter is not None:
-            query = query & Q(concept_input__line_item__id=line_item_filter)
+        contract_filter = self.request.GET.get('contract')
+        if contract_filter is not None:
+            query = query & Q(contract__id=contract_filter)
 
         print "The Query"
         print query
@@ -705,9 +708,13 @@ class EstimateDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(EstimateDetailView, self).get_context_data(**kwargs)
+
+        # Shallow copy for the main object.
         estimate = context['estimate']
+        estimate.contract.monto_contrato = Utilities.number_to_currency(estimate.contract.monto_contrato)
+        estimate.contract_amount_override = Utilities.number_to_currency(estimate.contract_amount_override)
+
         progress_estimates = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
-        # locale.setlocale(locale.LC_ALL, '')
 
         for record in progress_estimates:
             record.amount = locale.currency(record.amount, grouping=True)
