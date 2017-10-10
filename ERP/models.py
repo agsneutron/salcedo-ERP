@@ -901,7 +901,7 @@ class Project(models.Model):
     # Fields required for the 'Estudio del Mercado' report in the 'Costo / Mercado' section.
     estudiomercado_demanda = models.CharField(verbose_name="Demanda", max_length=200, null=True, blank=True)
     estudiomercado_oferta = models.CharField(verbose_name="Oferta", max_length=200, null=True, blank=True)
-    estudiomercado_conclusiones = models.CharField(verbose_name="Conlusiones", max_length=200, null=True, blank=True)
+    estudiomercado_conclusiones = models.CharField(verbose_name="Conclusiones", max_length=200, null=True, blank=True)
     estudiomercado_recomendaciones = models.CharField(verbose_name="Recomendaciones", max_length=200, null=True,
                                                       blank=True)
 
@@ -1042,8 +1042,8 @@ def assign_sections(sender, instance, **kwargs):
 
 
 class Section(models.Model):
-    sectionName = models.CharField(max_length=200)
-    shortSectionName = models.CharField(max_length=50)
+    section_name = models.CharField(max_length=200)
+    short_section_name = models.CharField(max_length=50)
     parent_section = models.ForeignKey('Section', blank=True, default=None, null=True)
 
     class Meta:
@@ -1053,14 +1053,20 @@ class Section(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
-        ans['sectionName'] = self.sectionName
+        ans['section_name'] = self.section_name
         return ans
 
     def __str__(self):
-        return self.sectionName + " - " + self.shortSectionName
+        if self.parent_section is not None:
+            return self.parent_section.section_name + " - " + self.section_name
+        else:
+            return self.section_name
 
     def __unicode__(self):
-        return self.sectionName + " - " + self.shortSectionName
+        if self.parent_section is not None:
+            return self.parent_section.section_name + " - " + self.section_name
+        else:
+            return self.section_name
 
 
 class ProjectSections(models.Model):
@@ -1071,10 +1077,10 @@ class ProjectSections(models.Model):
     section = models.ForeignKey(Section, verbose_name="Sección", null=False, blank=False)
 
     def __str__(self):
-        return str(self.project.key + " - " + self.section.sectionName)
+        return str(self.project.key + " - " + self.section.section_name)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.project.key + " - " + self.section.sectionName)
+        return str(self.project.key + " - " + self.section.section_name)
 
     class Meta:
         verbose_name_plural = 'Secciones de Proyecto'
