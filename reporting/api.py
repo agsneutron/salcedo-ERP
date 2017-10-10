@@ -257,11 +257,11 @@ class PhysicalFinancialAdvanceReport(View):
 				month_paid_estimate = 0
 				month_total_estimate = 0
 				# Obtaining all the estimates for the current month and year.
-				progress_estimate_set = ProgressEstimate.objects.filter(Q(estimate__concept_input__line_item__project=project_id)
+				progress_estimate_set = ProgressEstimate.objects.filter(Q(estimate__contract__project__id=project_id)
 											   & Q(estimate__start_date__month=record.month)
 											   & Q(estimate__start_date__year=temp_year))\
-					.values('estimate__concept_input__line_item__project__id')\
-					.annotate(Count('estimate__concept_input__line_item__project__id'), total = Sum('amount'))
+					.values('estimate__contract__project__id')\
+					.annotate(Count('estimate__contract__project__id'), total = Sum('amount'))
 
 				paid_progress_estimate_set = progress_estimate_set.filter(Q(payment_status='P'))
 
