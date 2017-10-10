@@ -38,6 +38,7 @@
                                                 <th>Estado</th>
                                                 <th>Teléfono</th>
                                                 {% comment %}<th>Fecha de Última Edición</th>{% endcomment %}
+                                                <th>País</th>
                                                 <th>Ver</th>
                                                 <th>Editar</th>
                                                 <th>Eliminar</th>
@@ -52,6 +53,7 @@
                                                     <td><span>{{ company.municipio }}</span></td>
                                                     <td><span>{{ company.estado }}</span></td>
                                                     <td><span>{{ company.telefono }}</span></td>
+                                                    <td><span>{{ company.pais }}</span></td>
                                                    {% comment %} <td><span>{{ company.last_edit_date }}</span></td>{% endcomment %}
 
                                                     <td class="text-center" style="width: 5%"><a href="{{ company.id }}"

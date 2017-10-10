@@ -1076,10 +1076,10 @@ def uploaded_catalogs_destination(instance, filename):
 class UploadedCatalogsHistory(models.Model):
     version = IntegerVersionField()
     line_items_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
-                                       verbose_name="Archivo de partidas")
+                                       verbose_name="Archivo de Partidas")
 
     concepts_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
-                                     verbose_name="Archivo de conceptos")
+                                     verbose_name="Archivo de Conceptos")
 
     upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
 

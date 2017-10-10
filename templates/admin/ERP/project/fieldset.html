@@ -97,11 +97,11 @@
                             <div class="col-sm-4 col-md-3">
                                 <div class="form-group field-key">
                                     <div>
-                                        <label class="control-label required" for="id_key">Clave del Proyecto:</label>
+                                        <label class=" required" for="id_key">Clave del Proyecto:</label>
                                         {{ field.field|addcss:"form-control" }}
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
 
                         {% endif %}
 
@@ -123,7 +123,7 @@
                         <div class="col-sm-4 col-md-3">
                             <div class="form-group field-empresa">
                                 <div class="related-widget-wrapper">
-                                    <label class="control-label required" for="id_empresa">Cliente:</label>
+                                    <label class=" required" for="id_empresa">Cliente:</label>
                                     {{ field.field|addcss:"form-control " }}
                                     {{ field.errors }}
                                 </div>
@@ -136,7 +136,7 @@
                         <div class="col-sm-4 col-md-6">
                             <div class="form-group field-nombreProyecto">
                                 <div>
-                                    <label class="control-label required" for="id_nombreProyecto">Nombre del
+                                    <label class=" required" for="id_nombreProyecto">Nombre del
                                         Proyecto:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -153,7 +153,7 @@
 
                         <div class="col-sm-4 col-md-3">
                             <div class="form-group field-fecha_inicial">
-                                <label class="control-label required" for="id_fecha_inicial_0">Fecha
+                                <label class=" required" for="id_fecha_inicial_0">Fecha
                                     Inicial:</label><br>
                                 {{ field.field }}
                                 {{ field.errors }}
@@ -164,7 +164,7 @@
                     {% if field.field.name == "fecha_final" %}
                         <div class="col-sm-4 col-md-3">
                             <div class="form-group field-fecha_final">
-                                <label class="control-label required" for="id_fecha_final_0">Fecha Final:</label><br>
+                                <label class=" required" for="id_fecha_final_0">Fecha Final:</label><br>
                                 {{ field.field }}
                                 {{ field.errors }}
                             </div>
@@ -176,7 +176,7 @@
 
                             <div class="form-group field-tipo_construccion">
                                 <div>
-                                    <label class="control-label required" for="id_tipo_construccion">Tipo de
+                                    <label class=" required" for="id_tipo_construccion">Tipo de
                                         Construcción:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -192,7 +192,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Foto de Portada:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -217,7 +217,7 @@
                             <div class="col-sm-6">
                                 <div class="form-group field-ubicacion_calle">
                                     <div>
-                                        <label class="control-label required" for="id_ubicacion_calle">Calle:</label>
+                                        <label class=" required" for="id_ubicacion_calle">Calle:</label>
                                         {{ field.field|addcss:"form-control" }}
                                         {{ field.errors }}
                                     </div>
@@ -228,7 +228,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-ubicacion_numero">
                                 <div>
-                                    <label class="control-label required" for="id_ubicacion_numero">Número:</label>
+                                    <label class=" required" for="id_ubicacion_numero">Número:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -239,7 +239,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-ubicacion_colonia">
                                 <div>
-                                    <label class="control-label required" for="id_ubicacion_colonia">Colonia:</label>
+                                    <label class=" required" for="id_ubicacion_colonia">Colonia:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -252,7 +252,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required" for="id_{{ field.field.name }}">País:</label>
+                                    <label class=" required" for="id_{{ field.field.name }}">País:</label>
                                     {{ field.field|addcss:"form-control " }}
                                     {{ field.errors }}
                                 </div>
@@ -266,7 +266,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required" for="id_{{ field.field.name }}">Estado:</label>
+                                    <label class=" required" for="id_{{ field.field.name }}">Estado:</label>
                                     {{ field.field|addcss:"form-control " }}
                                     {{ field.errors }}
                                 </div>
@@ -277,7 +277,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Municipio:</label>
                                     {{ field.field|addcss:"form-control " }}
                                     {{ field.errors }}
@@ -289,7 +289,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-ubicacion_cp">
                                 <div>
-                                    <label class="control-label required" for="id_ubicacion_cp">C.P.</label>
+                                    <label class=" required" for="id_ubicacion_cp">C.P.</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -304,7 +304,7 @@
                         <div class="col-sm-3 col-sm-offset-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Latitud:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -316,7 +316,7 @@
                         <div class="col-sm-3  ">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Longitud:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -336,7 +336,7 @@
                         <div class="col-sm-4 col-sm-offset-2">
                             <div class="form-group field-area_superficie_escritura">
                                 <div>
-                                    <label class="control-label required" for="id_area_superficie_escritura">Superficie
+                                    <label class=" required" for="id_area_superficie_escritura">Superficie
                                         Escritura:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -348,7 +348,7 @@
                         <div class="col-sm-4  ">
                             <div class="form-group field-area_superficie_levantamiento">
                                 <div>
-                                    <label class="control-label required" for="id_area_superficie_levantamiento">Superficie
+                                    <label class=" required" for="id_area_superficie_levantamiento">Superficie
                                         Levantamiento:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -368,7 +368,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group field-estadolegal_documento_propiedad">
                                     <div>
-                                        <label class="control-label" for="id_estadolegal_documento_propiedad">Acreditación
+                                        <label class="" for="id_estadolegal_documento_propiedad">Acreditación
                                             de
                                             propiedad:</label>
                                         {{ field.field|addcss:"form-control" }}
@@ -381,7 +381,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-estadolegal_gravamen">
                                 <div>
-                                    <label class="control-label" for="id_estadolegal_gravamen">Gravamen:</label>
+                                    <label class="" for="id_estadolegal_gravamen">Gravamen:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -392,7 +392,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-estadolegal_predial">
                                 <div>
-                                    <label class="control-label" for="id_estadolegal_predial">Predial:</label>
+                                    <label class="" for="id_estadolegal_predial">Predial:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -403,7 +403,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-estadolegal_agua">
                                 <div>
-                                    <label class="control-label" for="id_estadolegal_agua">Agua:</label>
+                                    <label class="" for="id_estadolegal_agua">Agua:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -420,7 +420,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento de Propiedad:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -440,7 +440,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento de Gravamen:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -459,7 +459,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento de Predial:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -478,7 +478,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Agua:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -502,7 +502,7 @@
                             <div class="col-sm-4">
                                 <div class="form-group field-restriccion_vial">
                                     <div>
-                                        <label class="control-label required" for="id_restriccion_vial">Vial:</label>
+                                        <label class=" required" for="id_restriccion_vial">Vial:</label>
                                         {{ field.field|addcss:"form-control" }}
                                         {{ field.errors }}
                                     </div>
@@ -513,7 +513,7 @@
                         <div class="col-sm-4">
                             <div class="form-group field-restriccion_cna">
                                 <div>
-                                    <label class="control-label required" for="id_restriccion_cna">CNA:</label>
+                                    <label class=" required" for="id_restriccion_cna">CNA:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -524,7 +524,7 @@
                         <div class="col-sm-4">
                             <div class="form-group field-restriccion_cfe">
                                 <div>
-                                    <label class="control-label required" for="id_restriccion_cfe">CFE:</label>
+                                    <label class=" required" for="id_restriccion_cfe">CFE:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -537,7 +537,7 @@
                         <div class="col-sm-4">
                             <div class="form-group field-restriccion_pemex">
                                 <div>
-                                    <label class="control-label required" for="id_restriccion_pemex">PEMEX:</label>
+                                    <label class=" required" for="id_restriccion_pemex">PEMEX:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -548,7 +548,7 @@
                         <div class="col-sm-4">
                             <div class="form-group field-restriccion_inha">
                                 <div>
-                                    <label class="control-label required" for="id_restriccion_inha">INHA:</label>
+                                    <label class=" required" for="id_restriccion_inha">INHA:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -559,7 +559,7 @@
                         <div class="col-sm-4">
                             <div class="form-group field-restriccion_otros">
                                 <div>
-                                    <label class="control-label required" for="id_restriccion_otros">Otros:</label>
+                                    <label class=" required" for="id_restriccion_otros">Otros:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -572,7 +572,7 @@
                             <div class="col-sm-6 col-sm-offset-3">
                                 <div class="form-group field-restriccion_observaciones">
                                     <div>
-                                        <label class="control-label required" for="id_restriccion_observaciones">Observaciones:</label>
+                                        <label class=" required" for="id_restriccion_observaciones">Observaciones:</label>
                                         {{ field.field|addcss:"form-control" }}
                                         {{ field.errors }}
                                     </div>
@@ -589,7 +589,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group field-usosuelo_pmdu">
                                     <div>
-                                        <label class="control-label required" for="id_usosuelo_pmdu">PMDU:</label>
+                                        <label class=" required" for="id_usosuelo_pmdu">PMDU:</label>
                                         {{ field.field|addcss:"form-control" }}
                                         {{ field.errors }}
                                     </div>
@@ -600,7 +600,7 @@
                         <div class="col-sm-6">
                             <div class="form-group field-usosuelo_densidad">
                                 <div>
-                                    <label class="control-label required" for="id_usosuelo_densidad">Densidad:</label>
+                                    <label class=" required" for="id_usosuelo_densidad">Densidad:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -611,7 +611,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-usosuelo_loteminimo">
                                 <div>
-                                    <label class="control-label required" for="id_usosuelo_loteminimo">Lote
+                                    <label class=" required" for="id_usosuelo_loteminimo">Lote
                                         Mínimo:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -625,7 +625,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-usosuelo_m2construccion">
                                 <div>
-                                    <label class="control-label required" for="id_usosuelo_m2construccion">M2 de
+                                    <label class=" required" for="id_usosuelo_m2construccion">M2 de
                                         Construcción:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -637,7 +637,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-usosuelo_arealibre">
                                 <div>
-                                    <label class="control-label required" for="id_usosuelo_arealibre">Área
+                                    <label class=" required" for="id_usosuelo_arealibre">Área
                                         Libre:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -649,7 +649,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-usosuelo_altura">
                                 <div>
-                                    <label class="control-label required" for="id_usosuelo_altura">Altura:</label>
+                                    <label class=" required" for="id_usosuelo_altura">Altura:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -660,7 +660,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-usosuelo_densidadrequerida">
                                 <div>
-                                    <label class="control-label required" for="id_usosuelo_densidadrequerida">Densidad
+                                    <label class=" required" for="id_usosuelo_densidadrequerida">Densidad
                                         Requerida:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -676,7 +676,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-hidraulica_fuente">
                                 <div>
-                                    <label class="control-label required" for="id_hidraulica_fuente">Fuente:</label>
+                                    <label class=" required" for="id_hidraulica_fuente">Fuente:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -687,7 +687,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-hidraulica_distancia">
                                 <div>
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_hidraulica_distancia">Distacia:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -699,7 +699,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-hidraulica_observaciones">
                                 <div>
-                                    <label class="control-label required" for="id_hidraulica_observaciones">Observaciones:</label>
+                                    <label class=" required" for="id_hidraulica_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -712,7 +712,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Hidráulica:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -733,7 +733,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-sanitaria_tipo">
                                 <div>
-                                    <label class="control-label" for="id_sanitaria_tipo">Tipo:</label>
+                                    <label class="" for="id_sanitaria_tipo">Tipo:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -744,7 +744,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-sanitaria_responsable">
                                 <div>
-                                    <label class="control-label" for="id_sanitaria_responsable">Responsable:</label>
+                                    <label class="" for="id_sanitaria_responsable">Responsable:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -755,7 +755,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-sanitaria_observaciones">
                                 <div>
-                                    <label class="control-label" for="id_sanitaria_observaciones">Observaciones:</label>
+                                    <label class="" for="id_sanitaria_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -768,7 +768,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Sanitaria:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -789,7 +789,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-pluvial_tipo">
                                 <div>
-                                    <label class="control-label" for="id_pluvial_tipo">Tipo:</label>
+                                    <label class="" for="id_pluvial_tipo">Tipo:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -800,7 +800,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-pluvial_responsable">
                                 <div>
-                                    <label class="control-label" for="id_pluvial_responsable">Responsable:</label>
+                                    <label class="" for="id_pluvial_responsable">Responsable:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -812,7 +812,7 @@
 
                             <div class="form-group field-pluvial_observaciones">
                                 <div>
-                                    <label class="control-label" for="id_pluvial_observaciones">Observaciones:</label>
+                                    <label class="" for="id_pluvial_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -825,7 +825,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Pluvial:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -848,7 +848,7 @@
                             <div class="col-sm-3">
                                 <div class="form-group field-vial_viaacceso">
                                     <div>
-                                        <label class="control-label" for="id_vial_viaacceso">Vías de acceso:</label>
+                                        <label class="" for="id_vial_viaacceso">Vías de acceso:</label>
                                         {{ field.field|addcss:"form-control" }}
                                         {{ field.errors }}
                                     </div>
@@ -859,7 +859,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-vial_distancia">
                                 <div>
-                                    <label class="control-label" for="id_vial_distancia">Distancia:</label>
+                                    <label class="" for="id_vial_distancia">Distancia:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -870,7 +870,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-vial_carriles">
                                 <div>
-                                    <label class="control-label" for="id_vial_carriles">Carriles:</label>
+                                    <label class="" for="id_vial_carriles">Carriles:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -881,7 +881,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-vial_seccion">
                                 <div>
-                                    <label class="control-label" for="id_vial_seccion">Sección:</label>
+                                    <label class="" for="id_vial_seccion">Sección:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -894,7 +894,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-vial_tipopavimento">
                                 <div>
-                                    <label class="control-label" for="id_vial_tipopavimento">Tipo de Pavimento:</label>
+                                    <label class="" for="id_vial_tipopavimento">Tipo de Pavimento:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -905,7 +905,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-vial_estadoconstruccion">
                                 <div>
-                                    <label class="control-label" for="id_vial_estadoconstruccion">Estado de
+                                    <label class="" for="id_vial_estadoconstruccion">Estado de
                                         Construcción:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -918,7 +918,7 @@
 
                             <div class="form-group field-vial_observaciones">
                                 <div>
-                                    <label class="control-label" for="id_vial_observaciones">Observaciones:</label>
+                                    <label class="" for="id_vial_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -931,7 +931,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Vial:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -952,7 +952,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-electricidad_tipo">
                                 <div>
-                                    <label class="control-label" for="id_electricidad_tipo">Tipo:</label>
+                                    <label class="" for="id_electricidad_tipo">Tipo:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -963,7 +963,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-electricidad_distancia">
                                 <div>
-                                    <label class="control-label" for="id_electricidad_distancia">Distancia:</label>
+                                    <label class="" for="id_electricidad_distancia">Distancia:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -974,7 +974,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-electricidad_observaciones">
                                 <div>
-                                    <label class="control-label"
+                                    <label class=""
                                            for="id_electricidad_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -988,7 +988,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Electricidad:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -1009,7 +1009,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-alumbradopublico_tipo">
                                 <div>
-                                    <label class="control-label" for="id_alumbradopublico_tipo">Tipo:</label>
+                                    <label class="" for="id_alumbradopublico_tipo">Tipo:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1020,7 +1020,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-alumbradopublico_distancia">
                                 <div>
-                                    <label class="control-label" for="id_alumbradopublico_distancia">Distancia:</label>
+                                    <label class="" for="id_alumbradopublico_distancia">Distancia:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1031,7 +1031,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-alumbradopublico_observaciones">
                                 <div>
-                                    <label class="control-label"
+                                    <label class=""
                                            for="id_alumbradopublico_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -1045,7 +1045,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Alumbrado Público:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -1066,7 +1066,7 @@
                         <div class="col-sm-4">
                             <div class="form-group field-telefonia_distancia">
                                 <div>
-                                    <label class="control-label" for="id_telefonia_distancia">Distancia:</label>
+                                    <label class="" for="id_telefonia_distancia">Distancia:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1077,7 +1077,7 @@
                         <div class="col-sm-4">
                             <div class="form-group field-telefonia_observaciones">
                                 <div>
-                                    <label class="control-label" for="id_telefonia_observaciones">Observaciones:</label>
+                                    <label class="" for="id_telefonia_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1090,7 +1090,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Telefonía:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -1111,7 +1111,7 @@
                         <div class="col-sm-6">
                             <div class="form-group field-tvcable_distancia">
                                 <div>
-                                    <label class="control-label" for="id_tvcable_distancia">Distancia:</label>
+                                    <label class="" for="id_tvcable_distancia">Distancia:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1122,7 +1122,7 @@
                         <div class="col-sm-6">
                             <div class="form-group field-tvcable_observaciones">
                                 <div>
-                                    <label class="control-label" for="id_tvcable_observaciones">Observaciones:</label>
+                                    <label class="" for="id_tvcable_observaciones">Observaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1138,7 +1138,7 @@
 
                             <div class="form-group field-equipamiento_a100">
                                 <div>
-                                    <label class="control-label" for="id_equipamiento_a100">A 100:</label>
+                                    <label class="" for="id_equipamiento_a100">A 100:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1150,7 +1150,7 @@
 
                             <div class="form-group field-equipamiento_a200">
                                 <div>
-                                    <label class="control-label" for="id_equipamiento_a200">A 200:</label>
+                                    <label class="" for="id_equipamiento_a200">A 200:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1162,7 +1162,7 @@
 
                             <div class="form-group field-equipamiento_a500">
                                 <div>
-                                    <label class="control-label" for="id_equipamiento_a500">A 500:</label>
+                                    <label class="" for="id_equipamiento_a500">A 500:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1174,7 +1174,7 @@
 
                             <div class="form-group field-equipamiento_regional">
                                 <div>
-                                    <label class="control-label" for="id_equipamiento_regional">Regional:</label>
+                                    <label class="" for="id_equipamiento_regional">Regional:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1192,7 +1192,7 @@
 
                                 <div class="form-group field-costo_predio">
                                     <div>
-                                        <label class="control-label" for="id_costo_predio">Costo del Predio:</label>
+                                        <label class="" for="id_costo_predio">Costo del Predio:</label>
                                         {{ field.field|addcss:"form-control" }}
                                         {{ field.errors }}
                                     </div>
@@ -1204,7 +1204,7 @@
 
                             <div class="form-group field-costo_m2">
                                 <div>
-                                    <label class="control-label" for="id_costo_m2">M2:</label>
+                                    <label class="" for="id_costo_m2">M2:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1216,7 +1216,7 @@
 
                             <div class="form-group field-costo_escrituras">
                                 <div>
-                                    <label class="control-label" for="id_costo_escrituras">Escrituras m2:</label>
+                                    <label class="" for="id_costo_escrituras">Escrituras m2:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1228,7 +1228,7 @@
 
                             <div class="form-group field-costo_levantamiento">
                                 <div>
-                                    <label class="control-label" for="id_costo_levantamiento">Levantamiento m2:</label>
+                                    <label class="" for="id_costo_levantamiento">Levantamiento m2:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1243,7 +1243,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-estudiomercado_demanda">
                                 <div>
-                                    <label class="control-label" for="id_estudiomercado_demanda">Demanda:</label>
+                                    <label class="" for="id_estudiomercado_demanda">Demanda:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1254,7 +1254,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-estudiomercado_oferta">
                                 <div>
-                                    <label class="control-label" for="id_estudiomercado_oferta">Oferta:</label>
+                                    <label class="" for="id_estudiomercado_oferta">Oferta:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1265,7 +1265,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-estudiomercado_conclusiones">
                                 <div>
-                                    <label class="control-label"
+                                    <label class=""
                                            for="id_estudiomercado_conclusiones">Conclusiones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -1277,7 +1277,7 @@
                         <div class="col-sm-3">
                             <div class="form-group field-estudiomercado_recomendaciones">
                                 <div>
-                                    <label class="control-label" for="id_estudiomercado_recomendaciones">Recomendaciones:</label>
+                                    <label class="" for="id_estudiomercado_recomendaciones">Recomendaciones:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1293,7 +1293,7 @@
 
                             <div class="form-group field-definicionproyecto_alternativa">
                                 <div>
-                                    <label class="control-label"
+                                    <label class=""
                                            for="id_definicionproyecto_alternativa">Alernativa:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -1306,7 +1306,7 @@
 
                             <div class="form-group field-definicionproyecto_tamano">
                                 <div>
-                                    <label class="control-label" for="id_definicionproyecto_tamano">Tamaño:</label>
+                                    <label class="" for="id_definicionproyecto_tamano">Tamaño:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1318,7 +1318,7 @@
 
                             <div class="form-group field-definicionproyecto_programa">
                                 <div>
-                                    <label class="control-label" for="id_definicionproyecto_programa">Programa:</label>
+                                    <label class="" for="id_definicionproyecto_programa">Programa:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1335,7 +1335,7 @@
                             <div class="col-sm-2">
                                 <div class="form-group field-programayarea_areaprivativa">
                                     <div>
-                                        <label class="control-label" for="id_programayarea_areaprivativa">Área
+                                        <label class="" for="id_programayarea_areaprivativa">Área
                                             Privada:</label>
                                         {{ field.field|addcss:"form-control" }}
                                         {{ field.errors }}
@@ -1347,7 +1347,7 @@
                         <div class="col-sm-2">
                             <div class="form-group field-programayarea_caseta">
                                 <div>
-                                    <label class="control-label" for="id_programayarea_caseta">Caseta:</label>
+                                    <label class="" for="id_programayarea_caseta">Caseta:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1359,7 +1359,7 @@
 
                             <div class="form-group field-programayarea_jardin">
                                 <div>
-                                    <label class="control-label" for="id_programayarea_jardin">Jardín:</label>
+                                    <label class="" for="id_programayarea_jardin">Jardín:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1371,7 +1371,7 @@
 
                             <div class="form-group field-programayarea_vialidad">
                                 <div>
-                                    <label class="control-label" for="id_programayarea_vialidad">Vialidad:</label>
+                                    <label class="" for="id_programayarea_vialidad">Vialidad:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1383,7 +1383,7 @@
 
                             <div class="form-group field-programayarea_areaverde">
                                 <div>
-                                    <label class="control-label" for="id_programayarea_areaverde">Área Verde:</label>
+                                    <label class="" for="id_programayarea_areaverde">Área Verde:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1395,7 +1395,7 @@
 
                             <div class="form-group field-programayarea_estacionamientovisita">
                                 <div>
-                                    <label class="control-label" for="id_programayarea_estacionamientovisita">Estacionamiento
+                                    <label class="" for="id_programayarea_estacionamientovisita">Estacionamiento
                                         visita:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -1412,7 +1412,7 @@
 
                             <div class="form-group field-programayarea_afectacion">
                                 <div>
-                                    <label class="control-label" for="id_programayarea_afectacion">Afectación:</label>
+                                    <label class="" for="id_programayarea_afectacion">Afectación:</label>
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
                                 </div>
@@ -1426,7 +1426,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class=" required"
                                            for="id_{{ field.field.name }}">Documento Programa y Área:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">

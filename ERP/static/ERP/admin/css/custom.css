@@ -8,10 +8,16 @@ body {
     margin-bottom: -48px;
 }
 
+.btn, .input-group-btn .btn {
+    text-transform: none !important;
+}
+
 #content {
     padding-bottom: 30px;
 }
-
+.vDateField, .vTimeField {
+    margin-top: 0 !important;
+}
 #sb-site, .sb-site-container, .sb-slide, .sb-slidebar {
     -webkit-transform: translate(0px);
     -moz-transform: translate(0px);
@@ -1243,7 +1249,7 @@ body .sb-site-container {
     .btn-eliminar {
         width: inherit;
         margin: 0 0 0 0;
-        padding: 11px;
+        padding: 11px !important;
     }
 
     .nav-tabs-ver-container .nav-tabs-ver li {
