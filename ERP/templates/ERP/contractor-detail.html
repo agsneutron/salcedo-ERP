@@ -76,9 +76,10 @@
                         <td>Correo</td>
                         <td>RFC</td>
                         <td>Teléfono</td>
-                        <td>Teléfono 2</td>
+                       {% comment %} <td>Teléfono 2</td>{% endcomment %}
                         <td>Ver</td>
                         <td>Editar</td>
+                        <td>Eliminar</td>
                         </thead>
                         <tbody>
                         {% for contact in contacts %}
@@ -87,13 +88,17 @@
                                 <td>{{ contact.email }}</td>
                                 <td>{{ contact.rfc }}</td>
                                 <td>{{ contact.phone_number_1 }}</td>
-                                <td>{{ contact.phone_number_2 }}</td>
+                                {% comment %}<td>{{ contact.phone_number_2 }}</td>{% endcomment %}
                                 <td class="text-center" style="width: 5%"><a href="/admin/ERP/contact/{{ contact.id }}/"
                                                                              class="btn btn-raised btn-default btn-xs"><i
                                         class="fa fa-eye color-default eliminar"></i></a></td>
-                                <td class="text-center" style="width: 5%"><a href="{{ contact.id }}/change"
-                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                <td class="text-center" style="width: 5%"><a onclick="change_contacto()" href="" class="btn btn-raised btn-default btn-xs"><i
                                         class="fa fa-pencil color-default eliminar"></i></a></td>
+                            <td class="text-center" style="width: 2%"><a
+                                                            href="/admin/ERP/contact/{{ contact.id }}/delete"
+                                                            class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-trash-o color-danger eliminar"></i></a>
+                                                    </td>
                             </tr>
                         {% endfor %}
                         </tbody>
@@ -196,6 +201,12 @@
             PopupCenter('/admin/ERP/contact/add/?contratista_id={{ contratista.id }}','xtf','1024','500');
 
         }
+        {% for contact in contacts %}
+        function change_contacto() {
+            PopupCenter('/admin/ERP/contact/{{ contact.id }}/change','xtf','1024','500');
+
+        }
+        {% endfor %}
     </script>
 {% endblock %}
 
