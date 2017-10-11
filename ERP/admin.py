@@ -875,7 +875,8 @@ class ProjectModelAdmin(admin.ModelAdmin):
                     "inner_section_status": inner_section.status,
                     "inner_section_short_name": inner_section.section.short_section_name
                 }
-                i += 1
+                if inner_section.status == 1:
+                    i += 1
                 section_json["inner_sections"].append(inner_json)
             section_json["total_inner_sections"] = i
             sections_result.append(section_json)
