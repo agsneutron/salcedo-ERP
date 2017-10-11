@@ -358,8 +358,11 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(UploadedCatalogsHistoryAdmin, self).get_form(request, obj, **kwargs)
-        # get the foreign key field I want to restrict
+
+        # Fet the field for the project to restrict.
         project = ModelForm.base_fields['project']
+
+
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
         project.widget.can_change_related = False
@@ -1035,7 +1038,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
-                    if inner_section['inner_section_status'] == 0:
+                    if inner_section['inner_section_status'] == 0 and inner_section['inner_section_short_name'] in sections_dictionary:
                         self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
         return ModelForm
 
