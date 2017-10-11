@@ -97,6 +97,7 @@ class EstimateForm(forms.ModelForm):
         super(EstimateForm, self).__init__(*args, **kwargs)
         project_id = self.request.GET.get('project')
 
+
         if kwargs.get('instance'):
             contract_id = kwargs['instance'].contract.id
             self.fields['contract'].queryset = ContratoContratista.objects.filter(id=contract_id)
