@@ -318,11 +318,35 @@ class AccessToProjectAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(AccessToProjectAdmin, self).get_form(request, obj, **kwargs)
-        # get the foreign key field I want to restrict
-        user = ModelForm.base_fields['user']
-        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
-        user.widget.can_add_related = False
-        user.widget.can_change_related = False
+
+        # Field objects.
+        user_field = ModelForm.base_fields['user']
+        project_field = ModelForm.base_fields['project']
+
+        user = request.GET.get('user')
+        projects_set = AccessToProject.objects.filter(user__id=user).values('project__id')
+
+        projects_array = []
+
+
+        for project in projects_set:
+            projects_array.append(project['project__id'])
+
+        available_projects = Project.objects.exclude(Q(id__in=projects_array))
+
+        '''
+        if not available_projects.exists():
+            messages_list = messages.get_messages(request)
+            for each in messages_list:
+                print each
+            messages.error(request, "Hola")
+        '''
+
+        project_field.queryset = available_projects
+
+        # Remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        user_field.widget.can_add_related = False
+        user_field.widget.can_change_related = False
 
         return ModelForm
 
@@ -341,12 +365,11 @@ class AccessToProjectAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+
     def response_delete(self, request, obj_display, obj_id):
         user_id = request.GET.get('user')
 
         return HttpResponseRedirect("/admin/ERP/accesstoproject/?user="+str(user_id))
-
-
 
 
 
@@ -358,8 +381,14 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(UploadedCatalogsHistoryAdmin, self).get_form(request, obj, **kwargs)
-        # get the foreign key field I want to restrict
+
+        project_id = request.GET.get('project')
+
+        # Fet the field for the project to restrict.
         project = ModelForm.base_fields['project']
+        project.queryset = Project.objects.filter(pk=project_id)
+
+
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
         project.widget.can_change_related = False
@@ -1035,7 +1064,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
-                    if inner_section['inner_section_status'] == 0:
+                    if inner_section['inner_section_status'] == 0 and inner_section['inner_section_short_name'] in sections_dictionary:
                         self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
 
 
