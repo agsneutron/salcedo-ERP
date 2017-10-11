@@ -101,7 +101,12 @@ class EstimateForm(forms.ModelForm):
             contract_id = kwargs['instance'].contract.id
             self.fields['contract'].queryset = ContratoContratista.objects.filter(id=contract_id)
         else:
-            self.fields['contract'].queryset = ContratoContratista.objects.filter(project_id=project_id)
+            estimated_contracts = Estimate.objects.filter(contract__project_id=project_id).values('contract_id')
+            contract_id_array = []
+            for estimated_contract in estimated_contracts:
+                contract_id_array.append(estimated_contract['contract_id'])
+
+            self.fields['contract'].queryset = ContratoContratista.objects.filter(Q(project_id=project_id)).exclude(Q(id__in=contract_id_array))
 
 
     # def save(self, commit=True):
