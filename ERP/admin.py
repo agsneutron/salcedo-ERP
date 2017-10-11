@@ -911,7 +911,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
         if obj is not None:
             self.exclude = []
             sections_dictionary = {
-                'legal' : [
+                'legal': [
                     'estadolegal_documento_propiedad',
                     'estadolegal_gravamen',
                     'estadolegal_predial',
@@ -922,11 +922,11 @@ class ProjectModelAdmin(admin.ModelAdmin):
                     'documento_predial',
                     'documento_agua'
                 ],
-                'afectacion' : [
+                'afectacion': [
                     'programayarea_afectacion',
                     'programayarea_documento'
                 ],
-                'programas_y_areas' : [
+                'programas_y_areas': [
                     'programayarea_areaprivativa',
                     'programayarea_caseta',
                     'programayarea_jardin',
@@ -934,12 +934,12 @@ class ProjectModelAdmin(admin.ModelAdmin):
                     'programayarea_areaverde',
                     'programayarea_estacionamientovisita'
                 ],
-                'definicion_de_proyecto' : [
+                'definicion_de_proyecto': [
                     'definicionproyecto_alternativa',
                     'definicionproyecto_tamano',
                     'definicionproyecto_programa'
                 ],
-                'estudio_mercado' : [
+                'estudio_mercado': [
                     'estudiomercado_demanda',
                     'estudiomercado_oferta',
                     'estudiomercado_conclusiones',
@@ -950,6 +950,79 @@ class ProjectModelAdmin(admin.ModelAdmin):
                     'costo_m2',
                     'costo_escrituras',
                     'costo_levantamiento'
+                ],
+                'telefonia': [
+                    'telefonia_distancia',
+                    'telefonia_observaciones',
+                    'telefonia_documento'
+                ],
+                'tv_y_cable': [
+                    'tvcable_distancia',
+                    'tvcable_observaciones'
+                ],
+                'equipamiento': [
+                    'equipamiento_a100',
+                    'equipamiento_a200',
+                    'equipamiento_a500',
+                    'equipamiento_regional'
+                ],
+                'alambrado_publico': [
+                    'alumbradopublico_tipo',
+                    'alumbradopublico_distancia',
+                    'alumbradopublico_observaciones',
+                    'alumbradopublico_documento'
+                ],
+                'electricidad': [
+                    'electricidad_tipo',
+                    'electricidad_distancia',
+                    'electricidad_observaciones',
+                    'electricidad_documento'
+                ],
+                'vial': [
+                    'vial_viaacceso',
+                    'vial_distancia',
+                    'vial_carriles',
+                    'vial_seccion',
+                    'vial_tipopavimento',
+                    'vial_estadoconstruccion',
+                    'vial_observaciones',
+                    'vial_documento'
+                ],
+                'pluvial': [
+                    'pluvial_tipo',
+                    'pluvial_responsable',
+                    'pluvial_observaciones',
+                    'pluvial_documento'
+                ],
+                'sanitaria': [
+                    'sanitaria_tipo',
+                    'sanitaria_responsable',
+                    'sanitaria_observaciones',
+                    'sanitaria_documento'
+                ],
+                'hidraulica': [
+                    'hidraulica_fuente',
+                    'hidraulica_distancia',
+                    'hidraulica_observaciones',
+                    'hidraulica_documento'
+                ],
+                'uso_de_suelo':[
+                    'usosuelo_pmdu',
+                    'usosuelo_densidad',
+                    'usosuelo_loteminimo',
+                    'usosuelo_m2construccion',
+                    'usosuelo_arealibre',
+                    'usosuelo_altura',
+                    'usosuelo_densidadrequerida'
+                ],
+                'restricciones_detalle': [
+                    'restriccion_vial',
+                    'restriccion_cna',
+                    'restriccion_cfe',
+                    'restriccion_pemex',
+                    'restriccion_inha',
+                    'restriccion_otros',
+                    'restriccion_observaciones'
                 ]
             }
 
@@ -958,7 +1031,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
-                    if inner_section['inner_section_status'] == 0: # and inner_section['inner_section_short_name'] == 'costo':
+                    if inner_section['inner_section_status'] == 0: #and inner_section['inner_section_short_name'] == 'legal':
                         self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
 
 

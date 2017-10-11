@@ -32,7 +32,7 @@
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="">Contrato de Contratistas</span>
+                    <span class="hidden-xs">Contrato de Contratistas</span>
                 </a>
             </li>
         </ul>
@@ -48,7 +48,7 @@
                             <h2 class="text-center">Datos generales</h2>
 
                             <hr>
-                            <div class="col-sm-4">
+                            <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
@@ -59,40 +59,53 @@
 
                             </div>
                         {% endif %}
-                    {% if field.field.name == "project" %}
 
-                        <div class="col-sm-4">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
+                        {% if field.field.name == "project" %}
+
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
+                        {% endif %}
 
-                    {% endif %}
-                    {% if field.field.name == "no_licitacion" %}
-
-                        <div class="col-sm-4">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
+                        {% if field.field.name == "line_item" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        </div>
+                        {% endif %}
 
-                    {% endif %}
+                        {% if field.field.name == "no_licitacion" %}
+
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                            </div>
+
+                        {% endif %}
 
 
 
                         {% if field.field.name == "contratista" %}
                             <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
@@ -104,7 +117,7 @@
                         {% endif %}
                     {% if field.field.name == "modalidad_contrato" %}
 
-                        <div class="col-sm-4">
+                        <div class="col-md-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -118,7 +131,7 @@
                     {% endif %}
                     {% if field.field.name == "dias_pactados" %}
 
-                        <div class="col-sm-4">
+                        <div class="col-md-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -131,7 +144,7 @@
                     {% endif %}
                         {% if field.field.name == "codigo_obra" %}
                             <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-md-4">
                                 <div class="form-group field-codigo_obra">
                                     <div class="form-group field-{{ field.field.name }}">
                                         <div>
@@ -146,7 +159,7 @@
                         {% endif %}
                     {% if field.field.name == "dependencia" %}
 
-                        <div class="col-sm-8">
+                        <div class="col-md-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -163,11 +176,11 @@
 
                         {% if field.field.name == "fecha_firma" %}
                             <div class="row">
-                            <div class="col-sm-4">
+                            <div class="col-md-4">
                                 <div class="form-group field-fecha_firma">
                                     <div>
                                         {{ field.label_tag }}
-                                        {{ field.field}}
+                                        {{ field.field }}
                                         {{ field.errors }}
                                     </div>
                                 </div>
@@ -177,7 +190,7 @@
 
                     {% if field.field.name == "fecha_inicio" %}
 
-                        <div class="col-sm-4">
+                        <div class="col-md-4">
                             <div class="form-group field-fecha_inicio">
                                 <div>
                                     {{ field.label_tag }}
@@ -188,7 +201,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "fecha_termino" %}
-                        <div class="col-sm-4">
+                        <div class="col-md-4">
                             <div class="form-group field-fecha_termino">
                                 <div>
                                     {{ field.label_tag }}
@@ -202,14 +215,14 @@
 
                         {% if field.field.name == "monto_contrato" %}
                             <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
 
                                         {{ field.label_tag }}
                                         <div class="input-group">
                                             <div class="input-group-addon">$</div>
-                                            {{ field.field|addcss:"form-control"}}
+                                            {{ field.field|addcss:"form-control" }}
                                         </div>
                                         {{ field.errors }}
                                     </div>
@@ -217,7 +230,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "monto_contrato_iva" %}
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -231,7 +244,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "pago_inicial" %}
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -245,7 +258,7 @@
                         </div>
                     {% endif %}
                     {% if field.field.name == "pago_final" %}
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -262,7 +275,7 @@
 
                         {% if field.field.name == "objeto_contrato" %}
                             <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-md-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
@@ -273,7 +286,7 @@
                             </div>
                         {% endif %}
                     {% if field.field.name == "lugar_ejecucion" %}
-                        <div class="col-sm-3">
+                        <div class="col-md-3">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -286,7 +299,7 @@
                     {% endif %}
                     {% if field.field.name == "observaciones" %}
 
-                        <div class="col-sm-6">
+                        <div class="col-md-6">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
