@@ -35,11 +35,9 @@
                                             <thead>
                                             <tr>
                                                 <th>Clave del Contrato</th>
-                                                <th>Dependencia</th>
-                                                <th>Código de Obra</th>
-                                                <th>Objeto Contrato</th>
+                                                <th>Proyecto</th>
+                                                <th>Contratista</th>
                                                 <th>Fecha de Firma</th>
-                                                <th>Fecha de Última Edición</th>
                                                 <th>Ver</th>
                                                 <th>Editar</th>
                                                 <th>Eliminar</th>
@@ -51,11 +49,9 @@
 
                                                     {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
                                                     <td><span> {{ contratocontratista.clave_contrato }} </span></td>
-                                                    <td><span>{{ contratocontratista.dependencia }}</span></td>
-                                                    <td><span>{{ contratocontratista.codigo_obra }}</span></td>
-                                                    <td><span>{{ contratocontratista.objeto_contrato }}</span></td>
+                                                    <td><span> {{ contratocontratista.project.nombreProyecto}} </span></td>
+                                                    <td><span> {{ contratocontratista.contratista.nombreContratista}} </span></td>
                                                     <td><span>{{ contratocontratista.fecha_firma }}</span></td>
-                                                    <td><span>{{ contratocontratista.last_edit_date }}</span></td>
 
 
                                                     <td style="width: 2%"><a href="{{ contratocontratista.id }}"

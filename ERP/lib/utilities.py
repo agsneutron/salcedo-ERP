@@ -81,3 +81,11 @@ class Utilities():
             object_as_dict.pop(key)
 
         return object_as_dict
+
+
+    @staticmethod
+    def number_to_currency(number):
+        if number >= 0:
+            return '${:,.2f}'.format(number)
+        else:
+            return '-${:,.2f}'.format(-number)

@@ -20,14 +20,13 @@
 
         <form action="" method="get">
             <div class="row">
-                <div class="col-xs-12 col-sm-3">{{ form.type|addcss:"form-control" }}</div>
-                <div class="col-xs-12 col-sm-3">{{ form.line_item|addcss:"form-control" }}</div>
-                <div class="col-xs-6 col-sm-3">{{ form.start_date }}</div>
-                <div class="col-xs-6 col-sm-3">{{ form.end_date }}</div>
-                <div class="clearfix"></div>
-                <div class="col-xs-12 col-sm-12 text-center">
-                    <button class="btn btn-raised btn-primary text-center" type="submit">
-                        <i class="fa fa-search"></i> Buscar
+                <div class="col-xs-2">{{ form.type|addcss:"form-control" }}</div>
+                <div class="col-xs-3">{{ form.line_item|addcss:"form-control" }}</div>
+                <div class="col-xs-3">{{ form.start_date }}</div>
+                <div class="col-xs-3">{{ form.end_date }}</div>
+                <div class="col-xs-1">
+                    <button class="searchbutton" type="submit">
+                        <i class="fa fa-search"></i>
                     </button>
                 </div>
             </div>
@@ -40,28 +39,30 @@
             <div class="row">
                 <div class="col-xs-12">
                     <div class="table-responsive">
-                        <table class="table table-striped">
-                            <thead>
-                            <tr>
-                                <th>Periodo</th>
-                                <th>Concepto/Insumo</th>
-                                <th>Partida</th>
-                                <th>Fecha de Última Edición</th>
-                                <th>Ver</th>
-                                <th>Editar</th>
-                                <th>Eliminar</th>
-                            </tr>
-                            </thead>
-
-                            {% for estimate in object_list %}
+                        {% if object_list %}
+                            <table class="table table-bordered">
+                                <thead>
                                 <tr>
-                                    <td><span>De {{ estimate.start_date|date:"M d, Y" }} a {{ estimate.end_date }}</span>
-                                    </td>
-                                    <td><span>{{ estimate.concept_input.description }}</span></td>
-                                    <td><span>{{ estimate.line_item.description }}</span></td>
-                                    <td><span>{{ estimate.line_item.last_edit_date }}</span></td>
+                                    <th>Fecha de la Estimación</th>
+                                    <th>Contrato</th>
+                                    <th>Contratista</th>
+                                    <th>Partida</th>
+                                    <th>Ver</th>
+                                    <th>Editar</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                                </thead>
 
-                                   {% comment %} <td style="width: 7%"><a href="/admin/ERP/estimate/{{ estimate.id }}"
+                                {% for estimate in object_list %}
+                                    <tr>
+                                        <td>
+                                            <span>De {{ estimate.start_date|date:"M d, Y" }} a {{ estimate.end_date }}</span>
+                                        </td>
+                                        <td><span>{{ estimate.contract.clave_contrato }}</span></td>
+                                        <td><span>{{ estimate.contract.contratista.nombreContratista }}</span></td>
+                                        <td><span>{{ estimate.contract.line_item.description }}</span></td>
+
+                                        {% comment %} <td style="width: 7%"><a href="/admin/ERP/estimate/{{ estimate.id }}"
                                                              class="btn btn-raised btn-default btn-xs">
                                         <i class="fa fa-search color-default eliminar"></i> Ver</a></td>
                                     <td style="width: 9%"><a
@@ -73,35 +74,39 @@
                                         <i class="fa fa-trash-o color-default eliminar"></i> Eliminar</a></td>{% endcomment %}
 
 
+                                        <td class="text-center" style="width: 5%"><a
+                                                href="/admin/ERP/estimate/{{ estimate.id }}"
+                                                class="btn btn-raised btn-default btn-xs"><i
+                                                class="fa fa-eye color-default eliminar"></i></a></td>
+                                        <td class="text-center" style="width: 5%"><a
+                                                href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}"
+                                                class="btn btn-raised btn-default btn-xs"><i
+                                                class="fa fa-pencil color-default eliminar"></i></a></td>
+                                        <td class="text-center" style="width: 2%"><a
+                                                href="/admin/ERP/estimate/{{ estimate.id }}/delete"
+                                                class="btn btn-raised btn-default btn-xs"><i
+                                                class="fa fa-trash-o color-danger eliminar"></i></a>
+                                        </td>
 
 
-                                    <td class="text-center" style="width: 5%"><a href="/admin/ERP/estimate/{{ estimate.id }}"
-                                                                                 class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-eye color-default eliminar"></i></a></td>
-                                    <td class="text-center" style="width: 5%"><a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}"
-                                                                                 class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-pencil color-default eliminar"></i></a></td>
-                                    <td class="text-center" style="width: 2%"><a href="/admin/ERP/estimate/{{ estimate.id }}/delete"
-                                                                                 class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-trash-o color-danger eliminar"></i></a>
-                                    </td>
+                                        {% empty %}
+                                        <td colspan="5">No existen estimaciones.</td>
+                                    </tr>
 
-
-                                    {% empty %}
-                                    <td colspan="5">No existen estimaciones.</td>
-                                </tr>
-
-                                {#                            <tr>#}
-                                {#                                <a href="Inicio: {{ estimate.id }}">Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }} - Concepto o Insumo: {{ estimate.concept_input.description }}</a> |#}
-                                {#                                <a href="{{ estimate.id }}">Concepto | Insumo: {{ estimate.line_item.description }}</a> |#}
-                                {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}">Ver</a> |#}
-                                {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> |#}
-                                {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}/delete">Eliminar</a>#}
-                                {#                                {% empty %}#}
-                                {#                                <td colspan="5">No existen estimaciones.</td>#}
-                                {#                            </tr>#}
-                            {% endfor %}
-                        </table>
+                                    {#                            <tr>#}
+                                    {#                                <a href="Inicio: {{ estimate.id }}">Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }} - Concepto o Insumo: {{ estimate.concept_input.description }}</a> |#}
+                                    {#                                <a href="{{ estimate.id }}">Concepto | Insumo: {{ estimate.line_item.description }}</a> |#}
+                                    {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}">Ver</a> |#}
+                                    {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> |#}
+                                    {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}/delete">Eliminar</a>#}
+                                    {#                                {% empty %}#}
+                                    {#                                <td colspan="5">No existen estimaciones.</td>#}
+                                    {#                            </tr>#}
+                                {% endfor %}
+                            </table>
+                        {% else %}
+                            No existen estimaciones.
+                        {% endif %}
                     </div>
                 </div>
             </div>

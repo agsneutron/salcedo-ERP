@@ -1,0 +1,254 @@
+[
+  {
+    "model": "ERP.section",
+    "pk": 1,
+    "fields": {
+      "section_name": "Proyecto",
+      "short_section_name": "Proyecto-General",
+      "parent_section": null
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 2,
+    "fields": {
+      "section_name": "Proyecto",
+      "short_section_name": "Proyecto-Datos",
+      "parent_section": 1
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 3,
+    "fields": {
+      "section_name": "Ubicaci\u00f3n / \u00c1reas",
+      "short_section_name": "UbicYAreas",
+      "parent_section": null
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 4,
+    "fields": {
+      "section_name": "Ubicaci\u00f3n",
+      "short_section_name": "Ubic.",
+      "parent_section": 3
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 5,
+    "fields": {
+      "section_name": "\u00c1reas",
+      "short_section_name": "areas",
+      "parent_section": 3
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 6,
+    "fields": {
+      "section_name": "Estado Legal",
+      "short_section_name": "Est.-Legal",
+      "parent_section": null
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 7,
+    "fields": {
+      "section_name": "Legal",
+      "short_section_name": "legal",
+      "parent_section": 6
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 8,
+    "fields": {
+      "section_name": "Restricciones",
+      "short_section_name": "Rest-General",
+      "parent_section": null
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 9,
+    "fields": {
+      "section_name": "Restricciones",
+      "short_section_name": "restricciones_detalle",
+      "parent_section": 8
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 10,
+    "fields": {
+      "section_name": "An\u00e1lisis",
+      "short_section_name": "An\u00e1lisis",
+      "parent_section": null
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 11,
+    "fields": {
+      "section_name": "Uso de Suelo",
+      "short_section_name": "uso_de_suelo",
+      "parent_section": 10
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 12,
+    "fields": {
+      "section_name": "Hidr\u00e1ulica",
+      "short_section_name": "hidraulica",
+      "parent_section": 10
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 13,
+    "fields": {
+      "section_name": "Sanitaria",
+      "short_section_name": "sanitaria",
+      "parent_section": 10
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 14,
+    "fields": {
+      "section_name": "Pluvial",
+      "short_section_name": "pluvial",
+      "parent_section": 10
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 15,
+    "fields": {
+      "section_name": "An\u00e1lisis II",
+      "short_section_name": "An\u00e1lisisII",
+      "parent_section": null
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 16,
+    "fields": {
+      "section_name": "Vial",
+      "short_section_name": "vial",
+      "parent_section": 15
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 17,
+    "fields": {
+      "section_name": "Electricidad",
+      "short_section_name": "electricidad",
+      "parent_section": 15
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 18,
+    "fields": {
+      "section_name": "Alambrado P\u00fablico",
+      "short_section_name": "alambrado_publico",
+      "parent_section": 15
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 19,
+    "fields": {
+      "section_name": "Equipamiento",
+      "short_section_name": "equipamiento",
+      "parent_section": 15
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 20,
+    "fields": {
+      "section_name": "TV y Cable",
+      "short_section_name": "tv_y_cable",
+      "parent_section": 15
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 21,
+    "fields": {
+      "section_name": "Telefon\u00eda",
+      "short_section_name": "telefonia",
+      "parent_section": 15
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 22,
+    "fields": {
+      "section_name": "Costo / Mercado",
+      "short_section_name": "Cost-Merc",
+      "parent_section": null
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 23,
+    "fields": {
+      "section_name": "Costo",
+      "short_section_name": "costo",
+      "parent_section": 22
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 24,
+    "fields": {
+      "section_name": "Estudio de Mercado",
+      "short_section_name": "estudio_mercado",
+      "parent_section": 22
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 25,
+    "fields": {
+      "section_name": "Definici\u00f3n del Proyecto",
+      "short_section_name": "definicion_de_proyecto",
+      "parent_section": 22
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 26,
+    "fields": {
+      "section_name": "Programa",
+      "short_section_name": "Prog.",
+      "parent_section": null
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 27,
+    "fields": {
+      "section_name": "Programas y \u00c1reas",
+      "short_section_name": "programas_y_areas",
+      "parent_section": 26
+    }
+  },
+  {
+    "model": "ERP.section",
+    "pk": 28,
+    "fields": {
+      "section_name": "Afectaci\u00f3n",
+      "short_section_name": "afectacion",
+      "parent_section": 26
+    }
+  }
+]

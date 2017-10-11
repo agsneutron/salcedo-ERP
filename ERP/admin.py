@@ -12,7 +12,7 @@ from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm, \
-    ContactForm
+    ContactForm, ContractConceptsForm
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, \
     ProgressEstimateLogForm, OwnerForm
 
@@ -225,7 +225,7 @@ class ContratoAdmin(admin.ModelAdmin):
             'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados',
             'fecha_firma',
             'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version')
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')
         return fields
 
 
@@ -699,7 +699,7 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
             'codigo_obra', 'dependencia',
             'fecha_firma', 'fecha_inicio', 'fecha_termino',
             'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version',)
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')
         return fields
 
     def get_urls(self):
@@ -712,6 +712,46 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
         ]
         return my_urls + urls
+
+
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id))
+
+
+class ConceptForContractsInlines(admin.TabularInline):
+    model = Concept_Input
+
+
+@admin.register(ContractConcepts)
+class ContractConceptsAdmin(admin.ModelAdmin):
+    form = ContractConceptsForm
+
+    def get_form(self, request, obj=None, **kwargs):
+
+        ModelForm = super(ContractConceptsAdmin, self).get_form(request, obj, **kwargs)
+
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                kwargs['contract_id'] = request.GET.get('contract_id')
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    def response_change(self, request, obj):
+        if '_continue' not in request.POST:
+            return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.contract.id))
+        else:
+            return HttpResponseRedirect(
+                "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
+
+
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        if '_continue' not in request.POST:
+            return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.contract.id))
+        else:
+            return HttpResponseRedirect(
+                "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
 
 
 @admin.register(Propietario)
@@ -806,6 +846,39 @@ class PaymentScheduleInline(admin.TabularInline):
 class ProjectModelAdmin(admin.ModelAdmin):
     inlines = (TipoProyectoDetalleInline, PaymentScheduleInline)
 
+    @staticmethod
+    def get_project_settings(project_id):
+        # Getting the settings for the current project, to know which card details to show.
+
+        project_obj = Project.objects.get(pk=project_id)
+
+        project_sections = ProjectSections.objects.filter(
+            Q(project_id=project_obj.id) & Q(section__parent_section=None))
+        sections_result = []
+        for section in project_sections:
+            section_json = {
+                "section_name": section.section.section_name,
+                "section_id": section.section.id,
+                "total_inner_sections": 0,
+                "inner_sections": []
+            }
+            i = 0
+            inner_sections = ProjectSections.objects.filter(
+                Q(project_id=project_obj.id) & Q(section__parent_section=section.section))
+            for inner_section in inner_sections:
+                inner_json = {
+                    "inner_section_name": inner_section.section.section_name,
+                    "inner_section_id": inner_section.section.id,
+                    "inner_section_status": inner_section.status,
+                    "inner_section_short_name": inner_section.section.short_section_name
+                }
+                i += 1
+                section_json["inner_sections"].append(inner_json)
+            section_json["total_inner_sections"] = i
+            sections_result.append(section_json)
+
+        return sections_result
+
     def get_urls(self):
         urls = super(ProjectModelAdmin, self).get_urls()
         my_urls = [
@@ -838,6 +911,135 @@ class ProjectModelAdmin(admin.ModelAdmin):
         empresa.widget.can_add_related = False
         empresa.widget.can_change_related = False
 
+
+        if obj is not None:
+            self.exclude = []
+            sections_dictionary = {
+                'legal': [
+                    'estadolegal_documento_propiedad',
+                    'estadolegal_gravamen',
+                    'estadolegal_predial',
+                    'estadolegal_agua',
+                    'documento_propiedad',
+                    'documento_gravamen',
+                    'documento_agua',
+                    'documento_predial',
+                    'documento_agua'
+                ],
+                'afectacion': [
+                    'programayarea_afectacion',
+                    'programayarea_documento'
+                ],
+                'programas_y_areas': [
+                    'programayarea_areaprivativa',
+                    'programayarea_caseta',
+                    'programayarea_jardin',
+                    'programayarea_vialidad',
+                    'programayarea_areaverde',
+                    'programayarea_estacionamientovisita'
+                ],
+                'definicion_de_proyecto': [
+                    'definicionproyecto_alternativa',
+                    'definicionproyecto_tamano',
+                    'definicionproyecto_programa'
+                ],
+                'estudio_mercado': [
+                    'estudiomercado_demanda',
+                    'estudiomercado_oferta',
+                    'estudiomercado_conclusiones',
+                    'estudiomercado_recomendaciones'
+                ],
+                'costo': [
+                    'costo_predio',
+                    'costo_m2',
+                    'costo_escrituras',
+                    'costo_levantamiento'
+                ],
+                'telefonia': [
+                    'telefonia_distancia',
+                    'telefonia_observaciones',
+                    'telefonia_documento'
+                ],
+                'tv_y_cable': [
+                    'tvcable_distancia',
+                    'tvcable_observaciones'
+                ],
+                'equipamiento': [
+                    'equipamiento_a100',
+                    'equipamiento_a200',
+                    'equipamiento_a500',
+                    'equipamiento_regional'
+                ],
+                'alambrado_publico': [
+                    'alumbradopublico_tipo',
+                    'alumbradopublico_distancia',
+                    'alumbradopublico_observaciones',
+                    'alumbradopublico_documento'
+                ],
+                'electricidad': [
+                    'electricidad_tipo',
+                    'electricidad_distancia',
+                    'electricidad_observaciones',
+                    'electricidad_documento'
+                ],
+                'vial': [
+                    'vial_viaacceso',
+                    'vial_distancia',
+                    'vial_carriles',
+                    'vial_seccion',
+                    'vial_tipopavimento',
+                    'vial_estadoconstruccion',
+                    'vial_observaciones',
+                    'vial_documento'
+                ],
+                'pluvial': [
+                    'pluvial_tipo',
+                    'pluvial_responsable',
+                    'pluvial_observaciones',
+                    'pluvial_documento'
+                ],
+                'sanitaria': [
+                    'sanitaria_tipo',
+                    'sanitaria_responsable',
+                    'sanitaria_observaciones',
+                    'sanitaria_documento'
+                ],
+                'hidraulica': [
+                    'hidraulica_fuente',
+                    'hidraulica_distancia',
+                    'hidraulica_observaciones',
+                    'hidraulica_documento'
+                ],
+                'uso_de_suelo':[
+                    'usosuelo_pmdu',
+                    'usosuelo_densidad',
+                    'usosuelo_loteminimo',
+                    'usosuelo_m2construccion',
+                    'usosuelo_arealibre',
+                    'usosuelo_altura',
+                    'usosuelo_densidadrequerida'
+                ],
+                'restricciones_detalle': [
+                    'restriccion_vial',
+                    'restriccion_cna',
+                    'restriccion_cfe',
+                    'restriccion_pemex',
+                    'restriccion_inha',
+                    'restriccion_otros',
+                    'restriccion_observaciones'
+                ]
+            }
+
+            # This means we are not trying to add a new project, but to edit an existing one.
+            sections = ProjectModelAdmin.get_project_settings(obj.id)
+
+            for top_section in sections:
+                for inner_section in top_section['inner_sections']:
+                    if inner_section['inner_section_status'] == 0:
+                        self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
+
+
+
         return ModelForm
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
@@ -845,35 +1047,9 @@ class ProjectModelAdmin(admin.ModelAdmin):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
-        project_obj = Project.objects.get(pk=object_id)
-
-        # Getting the settings for the current project, to know which card details to show.
-        project_sections = ProjectSections.objects.filter(
-            Q(project_id=project_obj.id) & Q(section__parent_section=None))
-        sections_result = []
-        for section in project_sections:
-            section_json = {
-                "section_name": section.section.sectionName,
-                "section_id": section.section.id,
-                "total_inner_sections": 0,
-                "inner_sections": []
-            }
-            i = 0
-            inner_sections = ProjectSections.objects.filter(
-                Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
-            for inner_section in inner_sections:
-                inner_json = {
-                    "inner_section_name": inner_section.section.sectionName,
-                    "inner_section_id": inner_section.section.id,
-                    "inner_section_status": inner_section.status,
-                }
-                i += 1
-                section_json["inner_sections"].append(inner_json)
-            section_json["total_inner_sections"] = i
-            sections_result.append(section_json)
-
+        project_id = object_id
+        sections_result = ProjectModelAdmin.get_project_settings(project_id)
         extra['sections_result'] = sections_result
-
 
         return super(ProjectModelAdmin, self).change_view(request, object_id,
                                                      form_url, extra_context=extra)
@@ -886,28 +1062,27 @@ class EstimateAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            'Partida', {
-                'fields': ('line_item', 'version',)
+            'Contrato', {
+                'fields': ('contract',)
             }),
         (
             'Estimación', {
                 'fields': (
-                    'concept_input', 'period', 'start_date', 'end_date', 'advance_payment_amount',
+                    'period', 'start_date', 'end_date', 'advance_payment_amount',
                     'advance_payment_date',
-                    'advance_payment_status', 'version','contractor')
+                    'advance_payment_status', 'version')
             }),
     )
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EstimateAdmin, self).get_form(request, obj, **kwargs)
         # get the foreign key field I want to restrict
-        line_item = ModelForm.base_fields['line_item']
-        concept_input = ModelForm.base_fields['concept_input']
+        contract = ModelForm.base_fields['contract']
+
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
-        line_item.widget.can_add_related = False
-        line_item.widget.can_change_related = False
-        concept_input.widget.can_add_related = False
-        concept_input.widget.can_change_related = False
+        contract.widget.can_add_related = False
+        contract.widget.can_change_related = False
+
 
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
