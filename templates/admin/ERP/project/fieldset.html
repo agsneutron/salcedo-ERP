@@ -30,6 +30,8 @@
     {% endfor %}{% endcomment %}
     <!-- card -->
 
+
+
     <div class="card ">
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             {% for section in sections_result %}
@@ -109,12 +111,13 @@
         <div class="card-block">
             <div class="tab-content">
                 {% for line in fieldset %}
+
                     {% for field in line %}
 
-                         {% for section in sections_result %}
+                       {% comment %}  {% for section in sections_result %}
                                 {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
                                      {% for inner in section.inner_sections %}
-                                        {% if inner.inner_section_name == "Proyecto" %}
+                                        {% if inner.inner_section_name == "Proyecto" %}{% endcomment %}
                                             {% if field.field.name == "key" %}
                                                 <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                                                 <div class="row">
@@ -236,13 +239,13 @@
                                                 </div>
 
                                             {% endif %}
-                                          {% endif %}
+                                       {% comment %}   {% endif %}
                                      {% endfor %}
                                 {% endif %}
 
                                 {% if section.section_name == "Ubicación / Áreas" and section.total_inner_sections > 0 %}
                                      {% for inner in section.inner_sections %}
-                                        {% if inner.inner_section_name == "Ubicación" %}
+                                        {% if inner.inner_section_name == "Ubicación" %}{% endcomment %}
 
                                             {% if field.field.name == "ubicacion_calle" %}
                                                 <div role="tabpanel" class="tab-pane fade" id="otro1">
@@ -364,9 +367,9 @@
                                                 </div>
                                             {% endif %}
 
-                                        {% endif %}
+                                        {% comment %}{% endif %}
                                         {% if inner.inner_section_name == "Áreas" %}
-
+{% endcomment %}
                                             {% if field.field.name == "area_superficie_escritura" %}
                                                 <div class="row">
                                                 <h2 class="text-center">Áreas</h2>
@@ -398,12 +401,12 @@
                                                 </div>
                                                 </div>
                                             {% endif %}
-                                        {% endif %}
+                                       {% comment %} {% endif %}
                                      {% endfor %}
                                 {% endif %}
                          {% if section.section_name == "Estado Legal" and section.total_inner_sections > 0 %}
                                     {% for inner in section.inner_sections %}
-                                        {% if inner.inner_section_name == "Legal" %}
+                                        {% if inner.inner_section_name == "Legal" %}{% endcomment %}
                                             {% if field.field.name == "estadolegal_documento_propiedad" %}
                                                 <div role="tabpanel" class="tab-pane fade" id="otro2">
                                                 <div class="row">
@@ -539,13 +542,13 @@
                                                 </div>
                                                 </div>
                                             {% endif %}
-                                        {% endif %}
+                                       {% comment %} {% endif %}
                                     {% endfor %}
                          {% endif %}
 
                          {% if section.section_name == "Restricciones" and section.total_inner_sections > 0 %}
                               {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Restricciones" %}
+                                    {% if inner.inner_section_name == "Restricciones" %}{% endcomment %}
                                             {% if field.field.name == "restriccion_vial" %}
                                                 <div role="tabpanel" class="tab-pane fade" id="otro3">
                                                 <h2 class="text-center">Restricciones</h2>
@@ -633,13 +636,13 @@
                                                 </div>
                                                 </div>
                                             {% endif %}
-                                    {% endif %}
+                                 {% comment %}   {% endif %}
                               {% endfor %}
                          {% endif %}
 
                          {% if section.section_name == "Análisis" and section.total_inner_sections > 0 %}
                               {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Uso de Suelo" %}
+                                    {% if inner.inner_section_name == "Uso de Suelo" %}{% endcomment %}
 
                                             {% if field.field.name == "usosuelo_pmdu" %}
                                                 <div role="tabpanel" class="tab-pane fade" id="otro4">
@@ -729,9 +732,9 @@
                                                 </div>
                                                 </div>
                                             {% endif %}
-                                    {% endif%}
-                                    {% if inner.inner_section_name == "Hidráulica" %}
-
+                                  {% comment %}   {% endif%}
+                                   {% if inner.inner_section_name == "Hidráulica" %}
+{% endcomment %}
                                         {% if field.field.name == "hidraulica_fuente" %}
                                             <div class="row">
                                             <h2 class="text-center">Hidráulica</h2>
@@ -789,9 +792,9 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                   {% comment %} {% endif %}
 
-                                    {% if inner.inner_section_name == "Sanitaria" %}
+                                    {% if inner.inner_section_name == "Sanitaria" %}{% endcomment %}
                                         {% if field.field.name == "sanitaria_tipo" %}
                                             <div class="row">
                                             <h2 class="text-center">Sanitaria</h2>
@@ -848,10 +851,10 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                 {% comment %}   {% endif %}
 
                                     {% if inner.inner_section_name == "Pluvial" %}
-
+{% endcomment %}
                                         {% if field.field.name == "pluvial_tipo" %}
                                             <div class="row">
                                             <h2 class="text-center">Pluvial</h2>
@@ -910,13 +913,13 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                   {% comment %} {% endif %}
                               {% endfor %}
                          {% endif %}
 
                          {% if section.section_name == "Análisis II" and section.total_inner_sections > 0 %}
                              {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Vial" %}
+                                    {% if inner.inner_section_name == "Vial" %}{% endcomment %}
 
 
                                         {% if field.field.name == "vial_viaacceso" %}
@@ -1025,9 +1028,10 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                   {% comment %} {% endif %}
                                     {% if inner.inner_section_name == "Electricidad" %}
 
+                                    {% endcomment %}
                                         {% if field.field.name == "electricidad_tipo" %}
                                             <h2 class="text-center">Electricidad</h2>
                                             <hr>
@@ -1085,9 +1089,9 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                   {% comment %} {% endif %}
 
-                                    {% if inner.inner_section_name == "Alambrado Público" %}
+                                    {% if inner.inner_section_name == "Alambrado Público" %}{% endcomment %}
 
                                         {% if field.field.name == "alumbradopublico_tipo" %}
                                             <h2 class="text-center">Alumbrado Público</h2>
@@ -1147,8 +1151,8 @@
                                             </div>
                                         {% endif %}
 
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Telefonía" %}
+                                    {% comment %}{% endif %}
+                                    {% if inner.inner_section_name == "Telefonía" %}{% endcomment %}
 
                                         {% if field.field.name == "telefonia_distancia" %}
                                             <h2 class="text-center">Telefonía</h2>
@@ -1196,8 +1200,8 @@
                                             </div>
                                         {% endif %}
 
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "TV y Cable" %}
+                                    {% comment %}{% endif %}
+                                    {% if inner.inner_section_name == "TV y Cable" %}{% endcomment %}
                                         {% if field.field.name == "tvcable_distancia" %}
                                             <h2 class="text-center">TV Cable</h2>
                                             <hr>
@@ -1240,8 +1244,8 @@
                                             </div>
                                         {% endif %}
 
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Equipamiento" %}
+                                   {% comment %} {% endif %}
+                                    {% if inner.inner_section_name == "Equipamiento" %}{% endcomment %}
 
                                         {% if field.field.name == "equipamiento_a200" %}
                                             <div class="col-sm-3">
@@ -1282,13 +1286,13 @@
                                             </div>
                                         {% endif %}
 
-                                    {% endif %}
+                                 {% comment %}   {% endif %}
                              {% endfor %}
                          {% endif %}
 
                          {% if section.section_name == "Costo / Mercado" and section.total_inner_sections > 0 %}
                              {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Costo" %}
+                                    {% if inner.inner_section_name == "Costo" %}{% endcomment %}
                                         {% if field.field.name == "costo_predio" %}
                                             <div role="tabpanel" class="tab-pane fade" id="otro6">
                                             <div class="row">
@@ -1342,9 +1346,9 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                   {% comment %} {% endif %}
                                     {% if inner.inner_section_name == "Estudio de Mercado" %}
-
+{% endcomment %}
                                         {% if field.field.name == "estudiomercado_demanda" %}
                                             <div class="row">
                                             <h2 class="text-center">Estudio de Mercado</h2>
@@ -1394,8 +1398,8 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Definición del Proyecto" %}
+                                   {% comment %} {% endif %}
+                                    {% if inner.inner_section_name == "Definición del Proyecto" %}{% endcomment %}
 
                                         {% if field.field.name == "definicionproyecto_alternativa" %}
                                             <div class="row">
@@ -1439,13 +1443,13 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                   {% comment %} {% endif %}
                              {% endfor %}
                          {% endif %}
 
                          {% if section.section_name == "Programa" and section.total_inner_sections > 0 %}
                              {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Programas y Áreas" %}
+                                    {% if inner.inner_section_name == "Programas y Áreas" %}{% endcomment %}
 
                                         {% if field.field.name == "programayarea_areaprivativa" %}
                                             <div role="tabpanel" class="tab-pane fade" id="otro7">
@@ -1524,9 +1528,9 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                   {% comment %} {% endif %}
 
-                                    {% if inner.inner_section_name == "Afectación" %}
+                                    {% if inner.inner_section_name == "Afectación" %}{% endcomment %}
 
                                         {% if field.field.name == "programayarea_afectacion" %}
                                             <div class="row">
@@ -1565,13 +1569,13 @@
                                             </div>
                                             </div>
                                         {% endif %}
-                                    {% endif %}
+                                   {% comment %} {% endif %}
                              {% endfor %}
                          {% endif %}
 
 
                          {% if section.section_name == "Tipo de Construcción" and section.total_inner_sections > 0 %}
-
+{% endcomment %}
                             {% for inline_admin_formset in inline_admin_formsets %}
                                 {% if inline_admin_formset.formset.prefix == "tipoproyectodetalle_set" %}
                                     <!-- proyecto detalle-->
@@ -1581,10 +1585,9 @@
                                 {% endif %}
                             {% endfor %}
 
-                         {% endif %}
+                         {% comment %}     {% endif %}{% endcomment %}
 
-                         {% if section.section_name == "Programación" and section.total_inner_sections > 0 %}
-
+                        {% comment %} {% if section.section_name == "Programación" and section.total_inner_sections > 0 %}{% endcomment %}
 
                         <!-- Added block for the payment schedule -->
 
@@ -1598,15 +1601,16 @@
                             {% endfor %}
 
                         <!-- Ends block for the payment schedule -->
-                        {% endif %}
+                     {% comment %}    {% endif %}
 
-                        {% endfor %}
+                       {% endfor %}{% endcomment %}
 
                         {% if field.field.name == "version" %}
                             {{ field.field|addcss:"form-control" }}
                         {% endif %}
+
                     {% endfor %}
-                {% endfor %}
+               {% endfor %}
             </div>
         </div>
     </div>

@@ -1033,9 +1033,6 @@ class ProjectModelAdmin(admin.ModelAdmin):
                 for inner_section in top_section['inner_sections']:
                     if inner_section['inner_section_status'] == 0: #and inner_section['inner_section_short_name'] == 'legal':
                         self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
-
-
-
         return ModelForm
 
     def change_view(self, request, object_id, form_url='', extra_context=None):

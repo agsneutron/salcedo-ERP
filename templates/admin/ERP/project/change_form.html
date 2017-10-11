@@ -51,9 +51,9 @@
             {% endif %}{% endif %}
         {% endblock %}
 
-        {% if change %}
+        {% comment %}{% if change %}
           --- {{ sections_result }}----
-        {% endif %}
+        {% endif %}{% endcomment %}
 
 
         <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post"
