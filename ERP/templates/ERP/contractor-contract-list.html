@@ -38,6 +38,7 @@
                                                 <th>Proyecto</th>
                                                 <th>Contratista</th>
                                                 <th>Fecha de Firma</th>
+                                                {% comment %}<th>Fecha de Última Edición</th>{% endcomment %}
                                                 <th>Ver</th>
                                                 <th>Editar</th>
                                                 <th>Eliminar</th>
@@ -52,6 +53,7 @@
                                                     <td><span> {{ contratocontratista.project.nombreProyecto}} </span></td>
                                                     <td><span> {{ contratocontratista.contratista.nombreContratista}} </span></td>
                                                     <td><span>{{ contratocontratista.fecha_firma }}</span></td>
+                                                    {% comment %}<td><span>{{ contratocontratista.last_edit_date }}</span></td>{% endcomment %}
 
 
                                                     <td style="width: 2%"><a href="{{ contratocontratista.id }}"

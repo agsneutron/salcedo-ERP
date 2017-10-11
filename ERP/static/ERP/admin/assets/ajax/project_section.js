@@ -39,7 +39,7 @@ function configura_segmentos(project_id){
 
             },
             error: function(data) {
-                alert('error!! ' + data.status);
+                                alert('Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error: ' + data.status);
             }
         });
 
@@ -214,11 +214,15 @@ function segmentsSave(segmentos,no_seleccionados,project_id) {
             url: '/erp/api/sections_for_project_save/',
             data: ajaxData,
             type: 'get',
+            dataType: "html",
             success: function(data) {
                 alert(data[0].mensaje);
             },
             error: function(data) {
-                alert('error!! ' + data.status);
+
+                /*alert('error!! ' + data.status);*/
+                                alert('Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error: ' + data.status);
+
             }
         });
 

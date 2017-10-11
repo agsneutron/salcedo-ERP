@@ -17,6 +17,9 @@
         .calendarbox.module {
             z-index: 99999999;
         }
+        .sb-site-container {
+
+        }
     </style>
 
 
@@ -67,7 +70,7 @@
         </div>
     </div>
 </div>
-<div id="wrapper">
+<div class="{% comment %}sb-site-container{% endcomment %}" >
 
     <header class="ms-header ms-header-primary" id="header">
         <div class="container container-full">
@@ -108,7 +111,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="/admin">
+                    <a class="navbar-brand visible-xs" href="/admin">
                     <span class="ms-logo"><img
                             src="{% static "ERP/admin/img/logo_mini.svg" %}" style="max-height: 50px"> </span>
                     </a>
@@ -124,7 +127,10 @@
                                 Inicio
                             </a>
                         </li>
-                        <li class="dropdown {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li class="dropdown
+
+
+                                {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -162,7 +168,10 @@
 
                             </ul>
                         </li>
-                        <li class="dropdown {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li class="dropdown
+
+
+                                {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -199,13 +208,16 @@
                         </a>
 
                     </li>{% endcomment %}
-                        <li class="dropdown {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li class="dropdown
+
+
+                                {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="blog">
                                 <i class="fa fa-building text-center"></i><br class="hidden-xs">
-                                Seguimiento de obra
+                                Seguimiento de Obra
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                             </a>
 
@@ -274,13 +286,16 @@
                             </li>{% endcomment %}
                             </ul>
                         </li>
-                        <li class="dropdown {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li class="dropdown
+
+
+                                {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-8"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="portfolio">
                                 <i class="fa fa-user-circle-o text-center"></i><br class="hidden-xs">
-                                Recursos humanos
+                                Recursos Humanos
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                             </a>
                             <ul id="op_usuarios" class="dropdown-menu dropdown-menu-left">
@@ -301,7 +316,10 @@
                             </ul>
 
                         </li>
-                        <li id="op_reportes" class="dropdown {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li id="op_reportes" class="dropdown
+
+
+                                {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle animated fadeIn animation-delay-4"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
@@ -316,7 +334,6 @@
                 <a href="" class="sb-toggle-left btn-navbar-menu user-btn visible-xs">
                     <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                 </a>
-
 
             </div>
             <!-- container -->
@@ -364,8 +381,8 @@
         </div>
         <!-- END mainContainer -->
     </div>
-</div>
 
+</div>
 <div class="ms-slidebar sb-slidebar sb-left sb-style-overlay" id="ms-slidebar">
     <div class="sb-slidebar-container">
         <header class="ms-slidebar-header">
@@ -426,8 +443,8 @@
         </ul>
         {% block nav-global %}{% endblock %}
     </div>
-
 </div>
+
 <!-- Begins Footer -->
 {% block footer %}
     <footer class="ms-footer" id="footer">
@@ -440,6 +457,15 @@
     function goBack() {
         window.history.back();
     }
+</script>
+<script>
+    $(document).ready(function () {
+        (".sb-toggle-left").on("touchend click",function(e){l(e,t(this)),s("left")})
+        (".sb-toggle-right").on("touchend click",function(e){l(e,t(this)),s("right")})
+        (".sb-open-left").on("touchend click",function(e){l(e,t(this)),r("left")})
+        (".sb-open-right").on("touchend click",function(e){l(e,t(this)),r("right")})
+        (".sb-toggle-left").on("touchend click",function(e){if(t(this).is("a")||t(this).children().is("a")){if("click"===e.type){e.stopPropagation(),e.preventDefault();var n=t(this).is("a")?t(this):t(this).find("a");a(n.attr("href"),n.attr("target")?n.attr("target"):"_self")}}else l(e,t(this)),a()}),m.on("touchend click",function(e){u.siteClose&&(y||x)&&(l(e,t(this)),a())})}}(jQuery)
+    });
 </script>
 </body>
 </html>

@@ -1,5 +1,5 @@
 {% load app_filters admin_static %}
-
+<fieldset class=" {{ fieldset.classes }}">
 
 {% comment %} {% for line in fieldset %}
         <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
@@ -39,7 +39,7 @@
     <div role="tabpanel" class="tab-pane fade active in" id="otro0">
     <h2 class="text-center">Datos Generales</h2>
     <div class="row">
-        <fieldset class=" {{ fieldset.classes }}">
+        <fieldset class=" aligned{{ fieldset.classes }}">
             {% if fieldset.name %}{% endif %}
             {% if fieldset.description %}
                 <div class="description">{{ fieldset.description|safe }}</div>
@@ -187,7 +187,7 @@
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
                                 <div class="input-group">
-                                    <label class="control-label required"
+                                    <label class="required"
                                            for="id_{{ field.field.name }}">Foto de Perfil:</label>
                                     <input type="text" readonly="" class="form-control"
                                            placeholder="Seleccionar archivo...">
@@ -210,6 +210,5 @@
     {#    cerrar card block#}
     </div>
     </div>
-    </div>
-    </div>
+
 {% endif %}

@@ -8,14 +8,54 @@ body {
     margin-bottom: -48px;
 }
 
+.btn, .input-group-btn .btn {
+    text-transform: none !important;
+}
+
 #content {
     padding-bottom: 30px;
 }
-
-#wrapper {
-
+.vDateField, .vTimeField {
+    margin-top: 0 !important;
 }
-
+#sb-site, .sb-site-container, .sb-slide, .sb-slidebar {
+    -webkit-transform: translate(0px);
+    -moz-transform: translate(0px);
+    -o-transform: translate(0px);
+    transform: translate(0px);
+    -webkit-transition: -webkit-transform 400ms ease;
+    -moz-transition: -moz-transform 400ms ease;
+    -o-transition: -o-transform 400ms ease;
+    transition: transform 400ms ease;
+    -webkit-transition-property: -webkit-transform,left,right;
+    -webkit-backface-visibility: hidden;
+}
+#sb-site, .sb-site-container, .sb-slidebar, body, html {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+#sb-site, .sb-site-container {
+    width: 100%;
+    min-height: 100vh;
+    position: relative;
+    z-index: 1;
+    background-color: #fff;
+}
+#sb-site, .sb-site-container, .sb-slide, .sb-slidebar {
+    -webkit-transform: translate(0px);
+    -moz-transform: translate(0px);
+    -o-transform: translate(0px);
+    transform: translate(0px);
+    -webkit-transition: -webkit-transform 400ms ease;
+    -moz-transition: -moz-transform 400ms ease;
+    -o-transition: -o-transform 400ms ease;
+    transition: transform 400ms ease;
+    -webkit-transition-property: -webkit-transform,left,right;
+    -webkit-backface-visibility: hidden;
+}
 .text-center {
     text-align: center;
 }
@@ -677,12 +717,18 @@ dt {
 .searchfield {
     width: 25%;
     padding-left: 10px;
+    float: left !important;
 }
 
 #searchform {
-    padding-bottom: 20px;
+    height:30px;
 }
-
+.vDateField {
+    min-width: 6.85em;
+    border: 1px solid #e2e2e2;
+        margin: 5px 0 0;
+    border-radius: 5px;
+}
 .ms-icon.ms-icon-xxlg {
     width: 80px;
     height: 80px;
@@ -828,7 +874,7 @@ ul {
     /* margin: 0 -6px 0 0; */
     background-color: #f1f1f1;
     border: 1px solid #f1f1f1;
-    height: 32px;
+    height: 30px;
     padding: 2px 10px;
 }
 
@@ -902,7 +948,12 @@ ul {
     font-size: 30px !important;
     font-size: 2.5rem !important;
 }
-
+.circle {
+    margin-top: -2px;
+}
+.highcharts-no-data text {
+    font-size: 10px !important;
+}
 body .sb-site-container {
     -webkit-transform: none;
     transform: none;
@@ -962,7 +1013,11 @@ body .sb-site-container {
         position: absolute;
         left: calc(50% - 25px);
     }
-
+    .yamm .nav, .yamm .collapse, .yamm .dropup, .yamm .dropdown {
+        position: static;
+        z-index: 9999999;
+        background-color: white;
+    }
     .navbar-header {
         width: 100%;
     }
@@ -1007,7 +1062,7 @@ body .sb-site-container {
     .go-back-btn {
         position: absolute;
         top: 4px;
-        left: 2%;
+        left: 3%;
     }
 
     .user-btn {
@@ -1077,6 +1132,16 @@ body .sb-site-container {
     .mobile-pad-left {
         padding-left: 0;
     }
+    .ms-navbar .container .navbar-header .navbar-brand {
+        display: inline-block;
+    margin: 0px 15px;
+    padding: 9px 15px;
+    height: 58px;
+    }
+    .container-full {
+        padding: 0;
+        height: 58px;
+    }
 }
 
 /* Extra Small Devices, Phones */
@@ -1086,6 +1151,18 @@ body .sb-site-container {
 
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px) {
+    .highcharts-no-data text {
+    font-size: 12px !important;
+}
+    .yamm .nav, .yamm .collapse, .yamm .dropup, .yamm .dropdown {
+        position: static;
+        z-index: 9;
+        background-color: white;
+    }
+    .container-full {
+        padding: 0;
+        height: inherit;
+    }
      .mobile-pad-right {
         padding-right: 15px;
     }
@@ -1101,7 +1178,7 @@ body .sb-site-container {
     .go-back-btn {
         position: absolute;
         top: 2px;
-        left: 2%;
+        left: 1%;
     }
 
     .ms-navbar .container .navbar-collapse in {
@@ -1172,7 +1249,7 @@ body .sb-site-container {
     .btn-eliminar {
         width: inherit;
         margin: 0 0 0 0;
-        padding: 11px;
+        padding: 11px !important;
     }
 
     .nav-tabs-ver-container .nav-tabs-ver li {
