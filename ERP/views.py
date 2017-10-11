@@ -5,6 +5,8 @@ import operator
 import urllib
 import locale
 from datetime import date
+
+from django.forms.models import modelformset_factory
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext, loader
 import datetime
@@ -15,11 +17,11 @@ from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 from django.views.generic.edit import CreateView
 
-from ERP.forms import EstimateSearchForm, AddEstimateForm
+from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
     Contact, AccessToProject, \
-    ProjectSections
+    ProjectSections, ContractConcepts
 from django.db.models import Q
 import json
 
@@ -236,6 +238,13 @@ class ContractorContractListView(ListView):
 class ContractorContractDetailView(generic.DetailView):
     model = ContratoContratista
     template_name = "ERP/contractor-contract-detail.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super(ContractorContractDetailView, self).get_context_data(**kwargs)
+        contract_id = self.kwargs['pk']
+        context['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id))
+        return context
 
 
 # Views for the model Propietaro.
@@ -502,7 +511,7 @@ class ProjectDetailView(generic.DetailView):
         sections_result = []
         for section in project_sections:
             section_json = {
-                "section_name": section.section.sectionName,
+                "section_name": section.section.section_name,
                 "section_id": section.section.id,
                 "total_inner_sections": 0,
                 "inner_sections": []
@@ -512,7 +521,7 @@ class ProjectDetailView(generic.DetailView):
                 Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
             for inner_section in inner_sections:
                 inner_json = {
-                    "inner_section_name": inner_section.section.sectionName,
+                    "inner_section_name": inner_section.section.section_name,
                     "inner_section_id": inner_section.section.id,
                     "inner_section_status": inner_section.status,
                 }
@@ -627,16 +636,19 @@ class EstimateListView(ListView):
         query = Q()
 
         # Must filter by project id.
-        query = query & Q(concept_input__line_item__project__id=EstimateListView.project_id)
+        query = query & Q(contract__project__id=EstimateListView.project_id)
 
         params_copy = self.request.GET.copy()
         params_copy.pop('page', None)
 
         EstimateListView.params = urllib.urlencode(params_copy)
 
+        '''
+        Commented while fixing the estimate model.
         type = self.request.GET.get('type')
         if type is not None:
             query = query & Q(concept_input__type=type)
+        '''
 
         start_date = self.request.GET.get('start_date')
         if start_date is not None:
@@ -648,9 +660,9 @@ class EstimateListView(ListView):
             query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
             query = query & Q(start_date__lte=query_date)
 
-        line_item_filter = self.request.GET.get('line_item')
-        if line_item_filter is not None:
-            query = query & Q(concept_input__line_item__id=line_item_filter)
+        contract_filter = self.request.GET.get('contract')
+        if contract_filter is not None:
+            query = query & Q(contract__id=contract_filter)
 
         print "The Query"
         print query
@@ -696,9 +708,13 @@ class EstimateDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(EstimateDetailView, self).get_context_data(**kwargs)
+
+        # Shallow copy for the main object.
         estimate = context['estimate']
+        estimate.contract.monto_contrato = Utilities.number_to_currency(estimate.contract.monto_contrato)
+        estimate.contract_amount_override = Utilities.number_to_currency(estimate.contract_amount_override)
+
         progress_estimates = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
-        # locale.setlocale(locale.LC_ALL, '')
 
         for record in progress_estimates:
             record.amount = locale.currency(record.amount, grouping=True)
@@ -803,6 +819,7 @@ class UploadedCatalogsHistoryAdminListView(ListView):
         context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (
             UploadedCatalogsHistoryAdminListView.query != "")
         return context
+    
 
 
 # Views for the model AccessToProjectAdmin.
@@ -849,6 +866,7 @@ class AccessToProjectAdminListView(ListView):
             AccessToProjectAdminListView.query != "")
 
         context['user_id'] = self.request.GET.get('user')
+
         return context
 
 

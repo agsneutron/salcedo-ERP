@@ -71,9 +71,21 @@
                             </div>
                         </div>
 
+                        {% endif %}
 
-                    {% endif %}
-                    {% if field.field.name == "no_licitacion" %}
+                        {% if field.field.name == "line_item" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if field.field.name == "no_licitacion" %}
 
                         <div class="col-sm-4">
                             <div class="form-group field-{{ field.field.name }}">
@@ -86,7 +98,7 @@
                         </div>
                         </div>
 
-                    {% endif %}
+                        {% endif %}
 
 
 
@@ -209,7 +221,7 @@
                                         {{ field.label_tag }}
                                         <div class="input-group">
                                             <div class="input-group-addon">$</div>
-                                            {{ field.field|addcss:"form-control"}}
+                                            {{ field.field|addcss:"form-control" }}
                                         </div>
                                         {{ field.errors }}
                                     </div>

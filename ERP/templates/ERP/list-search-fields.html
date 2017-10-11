@@ -6,17 +6,22 @@
 </form>{% endcomment %}
 {% block header_list %}
 
-                    <div class="row">
-                         <div class="col-xs-12" style="margin-bottom: 20px;">
-                                <form id="searchform" action="" method="get" accept-charset="utf-8">
-                                    <button class="searchbutton" type="submit" style="    margin-right: 0px; float: left">
-                                        <i class="fa fa-search"></i>
-                                    </button>
-                                    <input class="form-control searchfield" id="searchbox" name="q" type="text" placeholder="Buscar" value="{{ query }}">
-                                </form>
+    <div class="row">
+        <div class="col-xs-12"  style="margin-bottom: 20px;">
+            <form id="searchform" action="" method="get" accept-charset="utf-8">
+                <button class="searchbutton" type="submit" style="margin-right: 0px; float: left">
+                    <i class="fa fa-search"></i>
+                </button>
+                {% if query %}
+                    <input class="form-control searchfield" id="searchbox" name="q" type="text" placeholder="Buscar"
+                           value="{{ query }}">
+                {% else %}
+                    <input class="form-control searchfield" id="searchbox" name="q" type="text" placeholder="Buscar">
+                {% endif %}
+            </form>
 
 
-                        </div>
-                    </div>
+        </div>
+    </div>
 
 {% endblock %}

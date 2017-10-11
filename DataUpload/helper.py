@@ -22,7 +22,7 @@ locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 # locale.currency(1000, grouping=True)
 # español para windows
-#locale.setlocale(locale.LC_ALL, "esp")
+# locale.setlocale(locale.LC_ALL, "esp")
 
 
 
@@ -167,6 +167,20 @@ class DBObject(object):
             return record[cls.max_level - 2]
 
         @classmethod
+        def get_top_parent_key(cls, record):
+            """ Locates the key of the parent of a line item on a particular record and returns it.
+            :param record: a line item record obtained from a file, in the form of a one-dimensional array.
+            :return: The key of the parent line item of the line item associated with the record, if it has one.
+                     None, if the line item does not have a parent.
+            """
+
+            for i in range(0, cls.max_level - 1):
+                if record[i] != "":
+                    return record[i]
+
+            return None
+
+        @classmethod
         def get_key(cls, record):
             """ Locates the key of a line item on a particular record and returns it.
             :param record: a line item record obtained from a file, in the form of a one-dimensional array.
@@ -261,10 +275,14 @@ class DBObject(object):
     def save_line_item(self, record, project_id):
         # First, we get each all the attributes.
         line_item_parent_key = self.LineItemConstants.get_parent_key(record)
+        line_item_top_parent_key = self.LineItemConstants.get_top_parent_key(record)
         line_item_key = self.LineItemConstants.get_key(record)
         line_item_description = self.LineItemConstants.get_description(record)
 
         line_item_has_parent = line_item_parent_key is not None
+
+        parent_id = None
+        top_parent_id = None
 
         if line_item_has_parent:
             line_item_qs = LineItem.objects.filter(key=line_item_parent_key.upper())
@@ -274,8 +292,20 @@ class DBObject(object):
                     LoggingConstants.ERROR, self.user_id)
             else:
                 parent_id = line_item_qs[0].id
+
+
+            # Now we'll check if the top parent exists
+            if line_item_top_parent_key is not None:
+                line_item_qs = LineItem.objects.filter(key=line_item_top_parent_key.upper())
+                if line_item_top_parent_key is not None and len(line_item_qs) == 0:
+                    raise ErrorDataUpload(
+                        'No existe la partida padre con clave ' + line_item_top_parent_key + ' para la partida ' + line_item_key + '.',
+                        LoggingConstants.ERROR, self.user_id)
+                else:
+                    top_parent_id = line_item_qs[0].id
+
         else:
-            parent_id = None
+            top_parent_id = None
 
         # Now We'll check that (line_item_id, concept_key) does not already exist.
         line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
@@ -292,6 +322,7 @@ class DBObject(object):
         line_item_obj = LineItem(key=line_item_key.upper(),
                                  project_id=project_id,
                                  parent_line_item_id=parent_id,
+                                 top_parent_line_item_id=top_parent_id,
                                  description=line_item_description)
         line_item_obj.save()
 

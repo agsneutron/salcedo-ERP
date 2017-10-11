@@ -1,53 +1,6 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_static app_filters %}
 {% block content %}
-    {% comment %}   <h1>Estimación</h1>
-    <ul>
-        <li>Nombre de la partida: {{ estimate.concept_input.line_item.description }}</li>
-        <li>Descripción: {{ estimate.concept_input.description }}</li>
-        <li>Periodo: {{ estimate.period }}</li>
-        <li>Fecha de inicio: {{ estimate.start_date }}</li>
-        <li>Fecha Final: {{ estimate.end_date }}</li>
-    </ul>
-
-
-
-    <h1>Progress Estimates</h1>
-    <table border="1">
-        <tr>
-            <td>Clave de la estimación</td>
-            <td>Progreso</td>
-            <td>Cantidad</td>
-            <td>Cantidad del Generador</td>
-            <td>Archivo del generador</td>
-            <td>Tipo</td>
-        </tr>
-        {% for progress_estimate in progress_estimates %}
-            <tr>
-                <td>
-                    {{ progress_estimate.key }}
-                </td>
-                <td>
-                    {{ progress_estimate.progress }}
-                </td>
-                <td>
-                    {{ progress_estimate.amount }}
-                </td>
-                <td>
-                    {{ progress_estimate.generator_amount }}
-                </td>
-                <td>
-                    {{ progress_estimate.generator_file }}
-                </td>
-                <td>
-                    {{ progress_estimate.type }}
-                </td>
-            </tr>
-        {% empty %}
-            <li>No Companies yet.</li>
-        {% endfor %}
-    </table>{% endcomment %}
-
 
 
     <div class="col-xs-12" style="margin-bottom: 25px">
@@ -67,15 +20,17 @@
                         <div class="col-xs-12 col-sm-8 text-left">
                             <div style="padding-top: 10px;">
                                 <dl>
-
-
+                                    <dt>Clave del Contrato:</dt>
+                                    <dd style="padding-top: 4px">{{ estimate.contract.clave_contrato }}</dd>
                                     <dt>Contratista:</dt>
-                                    <dd style="padding-top: 4px"> {{ estimate.contractor.nombreContratista }}</dd>
-                                     <dt>Partida:</dt>
-                                    <dd style="padding-top: 4px">{{ estimate.concept_input.line_item.description }}</dd>
+                                    <dd style="padding-top: 4px"> {{ estimate.contract.contratista.nombreContratista }}</dd>
+                                    <dt>Partida:</dt>
+                                    <dd style="padding-top: 4px">{{ estimate.contract.line_item.description }}</dd>
+                                    <dt>Monto del Contrato:</dt>
+                                    <dd style="padding-top: 4px">{{ estimate.contract.monto_contrato }}</dd>
+                                    <dt>Monto Actual:</dt>
+                                    <dd style="padding-top: 4px">{{ estimate.contract_amount_override }}</dd>
 
-                                    <dt>Descripción:</dt>
-                                    <dd style="padding-top: 4px">{{ estimate.concept_input.description }}</dd>
                                     <hr>
 
                                 </dl>

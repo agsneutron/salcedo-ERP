@@ -831,11 +831,14 @@ class GetMainDashboard(View):
 
         response_by_project = []
         print "User is: " + str(request.user)
-        access_set = AccessToProject.objects.filter(user__id=request.user.id)
+        access_set = AccessToProject.objects.filter(user__id=request.user.erpuser.id)
         for access in access_set:
 
             structured_response = {}
+            print "Here!"
             response = api.PhysicalFinancialAdvanceReport.get_biddings_report(access.project.id)
+            print "Response: "
+            print response
 
             total_programmed = 0
             total_estimated = 0
@@ -909,7 +912,6 @@ class GetDashboardByProject(View):
             "project_longitud" : project.longitud,
             "project_id" : project.id
         }
-
 
         return HttpResponse(Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
 
