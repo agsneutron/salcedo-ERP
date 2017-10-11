@@ -714,6 +714,10 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         return my_urls + urls
 
 
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id))
+
+
 class ConceptForContractsInlines(admin.TabularInline):
     model = Concept_Input
 
@@ -860,7 +864,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
             }
             i = 0
             inner_sections = ProjectSections.objects.filter(
-                Q(project_id=project_obj.id) & Q(section__parent_section=section.section) & Q(status=1))
+                Q(project_id=project_obj.id) & Q(section__parent_section=section.section))
             for inner_section in inner_sections:
                 inner_json = {
                     "inner_section_name": inner_section.section.section_name,
@@ -1031,7 +1035,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
-                    if inner_section['inner_section_status'] == 0: #and inner_section['inner_section_short_name'] == 'legal':
+                    if inner_section['inner_section_status'] == 0:
                         self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
         return ModelForm
 
