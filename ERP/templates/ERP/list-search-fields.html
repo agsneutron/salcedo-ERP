@@ -4,19 +4,23 @@
     </button>
     <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Search">
 </form>{% endcomment %}
+
+
+
+{% comment %}
 {% block header_list %}
 
     <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-12"  style="margin-bottom: 20px;">
             <form id="searchform" action="" method="get" accept-charset="utf-8">
-                <button class="searchbutton" type="submit" style="    margin-right: -6px;">
+                <button class="searchbutton" type="submit" style="margin-right: 0px; float: left">
                     <i class="fa fa-search"></i>
                 </button>
                 {% if query %}
-                    <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Buscar"
+                    <input class="form-control searchfield" id="searchbox" name="q" type="text" placeholder="Buscar"
                            value="{{ query }}">
                 {% else %}
-                    <input class="searchfield" id="searchbox" name="q" type="text" placeholder="Buscar">
+                    <input class="form-control searchfield" id="searchbox" name="q" type="text" placeholder="Buscar">
                 {% endif %}
             </form>
 
@@ -24,4 +28,4 @@
         </div>
     </div>
 
-{% endblock %}
+{% endblock %}{% endcomment %}

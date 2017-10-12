@@ -39,7 +39,9 @@ function configura_segmentos(project_id){
 
             },
             error: function(data) {
-                alert('error!! ' + data.status);
+                var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+            $('#alertModal').find('.modal-body p').text(message);
+            $('#alertModal').modal('show')
             }
         });
 
@@ -218,7 +220,9 @@ function segmentsSave(segmentos,no_seleccionados,project_id) {
                 alert(data[0].mensaje);
             },
             error: function(data) {
-                alert('error!! ' + data.status);
+                var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+            $('#alertModal').find('.modal-body p').text(message);
+            $('#alertModal').modal('show')
             }
         });
 

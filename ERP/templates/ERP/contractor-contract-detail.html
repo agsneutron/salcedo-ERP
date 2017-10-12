@@ -61,24 +61,24 @@
                                 class="color-active">Días Pactados:</span> {{ contratocontratista.dias_pactados }}</span>
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Fecha de Inicio:</span> {{ contratocontratista.fecha_inicio }}</span>
+                    <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Fecha de Término:</span> {{ contratocontratista.fecha_termino }}</span>
                     </div>
-                    <div class="col-xs-6 text-left">
+                    <div class="col-xs-12 col-sm-6 text-left">
+
 
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Fecha de Término:</span> {{ contratocontratista.fecha_termino }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Lugar de Ejecución:</span>  {{ contratocontratista.lugar_ejecucion }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Lugar de Ejecución:</b></span> {{ contratocontratista.lugar_ejecucion }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Monto del Contrato:</span>  {{ contratocontratista.monto_contrato|formatoNumero }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Monto del Contrato:</b></span> {{ contratocontratista.monto_contrato|formatoNumero }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active">IVA Aplicable al Contrato:</span>  {{ contratocontratista.monto_contrato_iva|formatoNumero }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>IVA Aplicable al Contrato:</b></span> {{ contratocontratista.monto_contrato_iva|formatoNumero }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Pago Inicial:</span>  {{ contratocontratista.pago_inicial|formatoNumero }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Pago Inicial:</b></span> {{ contratocontratista.pago_inicial|formatoNumero }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Pago Final:</span>  {{ contratocontratista.pago_final|formatoNumero }}</span>
                         <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active"><b>Pago Final:</b></span> {{ contratocontratista.pago_final|formatoNumero }}</span>
-                        <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span class="color-active"><b>Observaciones:</b></span> {{ contratocontratista.observaciones }}</span>
+                                class="fa fa-chevron-right color-active"></i> <span class="color-active">Observaciones:</span>  {{ contratocontratista.observaciones }}</span>
                     </div>
                 </div>
 
@@ -108,7 +108,7 @@
 
             <div class="card-block text-center">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table id="table_s" class="table table-bordered">
                         {% if concepts.count == 0 %}
                             <tbody>
                             <tr>
@@ -117,12 +117,12 @@
                             </tbody>
                         {% else %}
                             <thead>
-                            <td style="border:1px solid; font-weight: 700">Clave</td>
-                            <td style="border:1px solid; font-weight: 700">Descripción</td>
-                            <td style="border:1px solid; font-weight: 700">Unidad</td>
-                            <td style="border:1px solid; font-weight: 700">Precio Unitario</td>
-                            <td style="border:1px solid; font-weight: 700">Cantidad del Contrato</td>
-                            <td style="border:1px solid; font-weight: 700">Editar</td>
+                            <td >Clave</td>
+                            <td >Descripción</td>
+                            <td >Unidad</td>
+                            <td >Precio Unitario</td>
+                            <td >Cantidad del Contrato</td>
+                            <td  class="no-sorting">Editar</td>
                             </thead>
                             <tbody>
                             {% for concept in concepts %}

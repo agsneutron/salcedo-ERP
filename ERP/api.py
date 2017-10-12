@@ -62,7 +62,7 @@ class SectionsByProjectEndpoint(View):
 
             temp_json = {
                 "project_section_id": section.id,
-                "project_section_name": section.section.sectionName,
+                "project_section_name": section.section.section_name,
                 "project_section_status": section.status,
                 "inner_sections": []
 
@@ -72,7 +72,7 @@ class SectionsByProjectEndpoint(View):
             for inner_section in inner_sections:
                 temp_json["inner_sections"].append({
                     "project_section_id": inner_section.id,
-                    "project_section_name": inner_section.section.sectionName,
+                    "project_section_name": inner_section.section.section_name,
                     "project_section_status": inner_section.status,
                 })
             response.append(temp_json)
@@ -99,45 +99,47 @@ class SectionsByProjectSave(View):
     def get(self, request):
         secciones_id = get_array_or_none(request.GET.get('secciones'))
         no_seleccionados = get_array_or_none(request.GET.get('noseleccionados'))
-        projectid = request.GET.get('project_id')
-        sections = ProjectSections.objects.filter(project_id=projectid, id__in=secciones_id)
 
-        if sections.count() == 0:
-            for section in secciones_id:
-                addPS = ProjectSections.objects.create(project_id=projectid, id=section, status=1)
-        else:
-            for section in secciones_id:
-                addPS = ProjectSections.objects.filter(project_id=projectid, id=section)
-                if addPS.count() == 0:
-                    addPSN = ProjectSections.objects.create(project_id=projectid, id=section, status=1)
-                else:
-                    addPSS = ProjectSections.objects.filter(project_id=projectid, id=section).get(
-                        id=section)
-                    if addPSS:
-                        addPSS.status = 1
-                        addPSS.save()
-                    else:
+        if secciones_id is not None:
+            projectid = request.GET.get('project_id')
+            sections = ProjectSections.objects.filter(project_id=projectid, id__in=secciones_id)
+            if sections.count() == 0:
+                for section in secciones_id:
+                    addPS = ProjectSections.objects.create(project_id=projectid, id=section, status=1)
+            else:
+                for section in secciones_id:
+                    addPS = ProjectSections.objects.filter(project_id=projectid, id=section)
+                    if addPS.count() == 0:
                         addPSN = ProjectSections.objects.create(project_id=projectid, id=section, status=1)
+                    else:
+                        addPSS = ProjectSections.objects.filter(project_id=projectid, id=section).get(
+                            id=section)
+                        if addPSS:
+                            addPSS.status = 1
+                            addPSS.save()
+                        else:
+                            addPSN = ProjectSections.objects.create(project_id=projectid, id=section, status=1)
 
         # no seleccionados
-        sections = ProjectSections.objects.filter(project_id=projectid, id__in=no_seleccionados)
+        if no_seleccionados is not None:
+            sections = ProjectSections.objects.filter(project_id=projectid, id__in=no_seleccionados)
 
-        if sections.count() == 0:
-            for section in no_seleccionados:
-                addPS = ProjectSections.objects.create(project_id=projectid, id=section, status=0)
-        else:
-            for section in no_seleccionados:
-                addPS = ProjectSections.objects.filter(project_id=projectid, id=section)
-                if addPS.count() == 0:
-                    addPSN = ProjectSections.objects.create(project_id=projectid, id=section, status=0)
-                else:
-                    addPSS = ProjectSections.objects.filter(project_id=projectid, id=section).get(
-                        id=section)
-                    if addPSS:
-                        addPSS.status = 0
-                        addPSS.save()
-                    else:
+            if sections.count() == 0:
+                for section in no_seleccionados:
+                    addPS = ProjectSections.objects.create(project_id=projectid, id=section, status=0)
+            else:
+                for section in no_seleccionados:
+                    addPS = ProjectSections.objects.filter(project_id=projectid, id=section)
+                    if addPS.count() == 0:
                         addPSN = ProjectSections.objects.create(project_id=projectid, id=section, status=0)
+                    else:
+                        addPSS = ProjectSections.objects.filter(project_id=projectid, id=section).get(
+                            id=section)
+                        if addPSS:
+                            addPSS.status = 0
+                            addPSS.save()
+                        else:
+                            addPSN = ProjectSections.objects.create(project_id=projectid, id=section, status=0)
 
         the_list = []
         new_item = {

@@ -30,16 +30,16 @@
                             <div class="col-xs-12">
                                 <div class="table-responsive">
                                     {% if object_list %}
-                                        <table class="table table-bordered">
+                                        <table id="table_s" class="table table-striped">
                                             <thead>
                                             <tr>
                                                 <th>Nombre</th>
                                                 <th>RFC:</th>
                                                 <th>E-mail</th>
                                                 <th>Teléfono</th>
-                                                <th>Ver</th>
-                                                <th>Editar</th>
-                                                <th>Eliminar</th>
+                                                <th class="no-sorting">Ver</th>
+                                                <th class="no-sorting">Editar</th>
+                                                <th class="no-sorting">Eliminar</th>
                                             </tr>
                                             </thead>
                                             {% for contact in object_list %}
