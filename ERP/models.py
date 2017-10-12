@@ -608,6 +608,7 @@ class ContratoContratista(models.Model):
         ans['pago_final'] = str(self.pago_final)
         ans['observaciones'] = str(self.observaciones)
 
+
         return ans
 
     def __str__(self):

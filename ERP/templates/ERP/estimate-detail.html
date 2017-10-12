@@ -35,7 +35,7 @@
 
                                 </dl>
 
-                                <div class="" >
+                                <div class="">
                                     {% if estimate.advance_payment_amount > 0 %}
                                         <div class="col-xs-3 text-center"><strong
                                                 class="color-active">Adelanto: </strong>{{ estimate.advance_payment_amount|formatoNumero }}
@@ -180,5 +180,25 @@
 
         $("#progressbar").css('background-color', progressBarColor);{% endcomment %}
     </script>
+
+
+
+
+    <div>
+        <table border="1">
+        <tr>
+            <td>Key</td>
+            <td>Descripción</td>
+            <td>Cantidad Pactada</td>
+        </tr>
+            {% for c in contract_concepts %}
+                <tr>
+                    <td width="10%">{{ c.concept.key }}</td>
+                    <td>{{ c.concept.description }}</td>
+                    <td>{{ c.amount }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 
 {% endblock %}
