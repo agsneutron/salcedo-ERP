@@ -14,14 +14,14 @@
 
 
 {% block content %}
-    {% include 'ERP/header_list.html' %}
+    {% include "ERP/header_list.html" %}
     <div id="content-main">
 
 
         <form action="" method="get">
             <div class="row">
-<<<<<<< Temporary merge branch 1
-                <div class="col-xs-12 col-sm-3">{{ form.type|addcss:"form-control" }}</div>
+
+                <div class="col-xs-12 col-sm-3">{{ form.contractor|addcss:"form-control" }}</div>
                 <div class="col-xs-12 col-sm-3">{{ form.line_item|addcss:"form-control" }}</div>
                 <div class="col-xs-6 col-sm-3">{{ form.start_date }}</div>
                 <div class="col-xs-6 col-sm-3">{{ form.end_date }}</div>
@@ -29,15 +29,6 @@
                 <div class="col-xs-12 col-sm-12 text-center">
                     <button class="btn btn-raised btn-primary text-center" type="submit">
                         <i class="fa fa-search"></i> Buscar
-=======
-                <div class="col-xs-3">{{ form.contractor|addcss:"form-control" }}</div>
-                <div class="col-xs-3">{{ form.line_item|addcss:"form-control" }}</div>
-                <div class="col-xs-3">{{ form.start_date }}</div>
-                <div class="col-xs-3">{{ form.end_date }}</div>
-                <div class="col-xs-1">
-                    <button class="searchbutton" type="submit">
-                        <i class="fa fa-search"></i>
->>>>>>> Temporary merge branch 2
                     </button>
                 </div>
             </div>
@@ -127,5 +118,5 @@
 
 
     </div>
-    {% include 'ERP/footer_list.html' %}
+    {% include "ERP/footer_list.html" %}
 {% endblock %}

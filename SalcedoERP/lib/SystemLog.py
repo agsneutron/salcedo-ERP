@@ -15,6 +15,7 @@ class LoggingConstants:
         pass
 
     DATA_UPLOAD = 'erp.dataupload'
+    OPERATION_LOGIC = 'erp.operationlogic'
 
     DEBUG = logging.DEBUG
     INFO = logging.INFO
