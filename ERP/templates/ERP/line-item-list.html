@@ -39,7 +39,13 @@
 
                             {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
                             <td><span> <a
-                                    href="/admin/ERP/lineitem/{{ current_type_full }}/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.description }}</a></span>
+                                    href="/admin/ERP/lineitem/{{ current_type_full }}/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.key }} - {{ line_item.description }}</a></span>
+                                {% if line_item.can_be_deleted %}
+
+                                    -
+                                    <a href="/admin/ERP/lineitem/{{ line_item.id }}/delete/">Delete</a>
+                                {% endif %}
+
                             </td>
                             {% empty %}
                             <td colspan="2">No se encontraron Partidas.</td>
@@ -89,7 +95,7 @@
 
 
         </div>
-    <div class="clearfix"></div>
+        <div class="clearfix"></div>
     </div>
 
     {% include 'ERP/footer_list.html' %}

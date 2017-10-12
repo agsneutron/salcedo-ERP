@@ -398,6 +398,9 @@ class LineItemListView(ListView):
         else:
             LineItemListView.query = ''
 
+        for element in result:
+            element.can_be_deleted = element.can_be_deleted()
+
         return result
 
     def get_context_data(self, **kwargs):
