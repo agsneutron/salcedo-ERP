@@ -167,9 +167,10 @@
                     {% for field in line %}
                         {% if field.field.name == "version" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                            {{ field.field|addcss:"form-control" }}
+
                                 <div class="row">
                                     <h2 class="text-center">Datos Generales</h2>
+                                    {{ field.field|addcss:"form-control" }}
                                     <hr>
 
                         {% endif %}
@@ -438,7 +439,8 @@
                         </div>
                     {% endif %}
 
-                        {% if field.field.name == "estado_legal_documento_propiedad" %}
+                        {% if field.field.name == "estadolegal_documento_propiedad" %}
+
                             <div role="tabpanel" class="tab-pane fade" id="otro2">
                             <div class="row">
                             <h2 class="text-center">Estado Legal</h2>
@@ -1539,10 +1541,6 @@
                     {% endif %}
                     {% endfor %}
                {% endfor %}
-            </div>
-        </div>
-    </div>
-</fieldset>
 
 
                          {% for inline_admin_formset in inline_admin_formsets %}
@@ -1562,3 +1560,7 @@
                             <!-- Ends block for the payment schedule -->
                         {% endfor %}
 
+            </div>
+        </div>
+    </div>
+</fieldset>
