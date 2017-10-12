@@ -334,13 +334,14 @@ class AccessToProjectAdmin(admin.ModelAdmin):
 
         available_projects = Project.objects.exclude(Q(id__in=projects_array))
 
-        '''
+
         if not available_projects.exists():
+            custom_message = "No hay proyectos pendientes de asignación para el usuario actual."
             messages_list = messages.get_messages(request)
-            for each in messages_list:
-                print each
-            messages.error(request, "Hola")
-        '''
+
+            if len(messages_list) <= 0:
+                messages.error(request, custom_message)
+
 
         project_field.queryset = available_projects
 
@@ -944,6 +945,9 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(ProjectModelAdmin, self).get_form(request, obj, **kwargs)
+
+        self.exclude = []
+
         # get the foreign key field I want to restrict
         ubicacion_pais = ModelForm.base_fields['ubicacion_pais']
         ubicacion_estado = ModelForm.base_fields['ubicacion_estado']
@@ -964,7 +968,6 @@ class ProjectModelAdmin(admin.ModelAdmin):
         empresa.widget.can_change_related = False
 
         if obj is not None:
-            self.exclude = []
             sections_dictionary = {
                 'legal': [
                     'estadolegal_documento_propiedad',
@@ -1080,15 +1083,26 @@ class ProjectModelAdmin(admin.ModelAdmin):
                     'restriccion_observaciones'
                 ]
             }
+            fields_to_exclude = []
 
             # This means we are not trying to add a new project, but to edit an existing one.
             sections = ProjectModelAdmin.get_project_settings(obj.id)
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
+                    if inner_section['inner_section_status'] == 0 and inner_section['inner_section_short_name'] in sections_dictionary:
+                        fields_to_exclude += sections_dictionary[inner_section['inner_section_short_name']]
                     if inner_section['inner_section_status'] == 0 and inner_section[
                         'inner_section_short_name'] in sections_dictionary:
                         self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
+
+
+            print "Exclude: "
+            print fields_to_exclude
+
+
+            if len(fields_to_exclude) > 0:
+                self.exclude = fields_to_exclude
 
         return ModelForm
 
