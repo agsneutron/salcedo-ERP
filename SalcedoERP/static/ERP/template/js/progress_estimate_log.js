@@ -192,7 +192,9 @@ $(document).ready(function () {
 
             },
             error: function(error){
-              alert(error.responseText)
+               var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + error.responseText;
+            $('#alertModal').find('.modal-body p').text(message);
+            $('#alertModal').modal('show')
             },
             dataType: "json"
         });

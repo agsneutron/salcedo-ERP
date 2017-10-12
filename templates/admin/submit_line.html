@@ -5,7 +5,7 @@
     {% url opts|admin_urlname:'delete' original.pk|admin_urlquote as delete_url %}
     <a href="{% add_preserved_filters delete_url %}" class="btn btn-raised btn-danger btn-eliminar">{% trans "Delete" %}</a>
 {% endif %}
-{% if show_save_as_new %}<input type="submit" class="btn btn-raised btn-primary" value="{% trans 'Save as new' %}" name="_saveasnew" />{% endif %}
-{% if show_save_and_add_another %}<input type="submit" class="btn btn-raised btn-primary" value="{% trans 'Save and add another' %}" name="_addanother" />{% endif %}
-{% if show_save_and_continue %}<input type="submit" class="btn btn-raised btn-primary" value="{% trans 'Save and continue editing' %}" name="_continue" />{% endif %}
+{% if show_save_as_new %}<input type="submit" class="btn btn-raised btn-primary" value="{% comment %}{% trans 'Save as new' %}{% endcomment %}Guardar" name="_saveasnew" />{% endif %}
+{% if show_save_and_add_another %}<input type="submit" class="btn btn-raised btn-primary" value="Guardar y Agregar Otro{% comment %}{% trans 'Save and add another' %}{% endcomment %}" name="_addanother" />{% endif %}
+{% if show_save_and_continue %}<input type="submit" class="btn btn-raised btn-primary" value="Guardar y Continuar Editando{% comment %}{% trans 'Save and continue editing' %}{% endcomment %}" name="_continue" />{% endif %}
 </div>
