@@ -643,12 +643,9 @@ class EstimateListView(ListView):
 
         EstimateListView.params = urllib.urlencode(params_copy)
 
-        '''
-        Commented while fixing the estimate model.
-        type = self.request.GET.get('type')
-        if type is not None:
-            query = query & Q(concept_input__type=type)
-        '''
+        line_item = self.request.GET.get('line_item')
+        if line_item is not None and line_item is not "":
+            query = query & Q(contract__line_item__id=line_item)
 
         start_date = self.request.GET.get('start_date')
         if start_date is not None:
@@ -660,14 +657,15 @@ class EstimateListView(ListView):
             query_date = datetime.datetime.strptime(end_date, Constants.DATE_FORMAT).date()
             query = query & Q(start_date__lte=query_date)
 
-        contract_filter = self.request.GET.get('contract')
-        if contract_filter is not None:
-            query = query & Q(contract__id=contract_filter)
+        contractor = self.request.GET.get('contractor')
+        if contractor is not None and contractor is not "":
+            query = query & Q(contract__contratista__id=contractor)
 
-        print "The Query"
-        print query
 
-        result = result.filter(query)
+        if query is not None:
+            print "Query: "
+            print query
+            result = result.filter(query)
 
         return result
 
@@ -697,7 +695,7 @@ class EstimateDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         print "About to delete."
         obj = self.get_object()
-        project_id = obj.concept_input.line_item.project.id
+        project_id = obj.contract.project.id
         EstimateDelete.success_url = "/admin/ERP/estimate/list/" + str(project_id)
         return super(EstimateDelete, self).delete(request, *args, **kwargs)
 

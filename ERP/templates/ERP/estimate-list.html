@@ -20,7 +20,7 @@
 
         <form action="" method="get">
             <div class="row">
-                <div class="col-xs-2">{{ form.type|addcss:"form-control" }}</div>
+                <div class="col-xs-3">{{ form.contractor|addcss:"form-control" }}</div>
                 <div class="col-xs-3">{{ form.line_item|addcss:"form-control" }}</div>
                 <div class="col-xs-3">{{ form.start_date }}</div>
                 <div class="col-xs-3">{{ form.end_date }}</div>
@@ -58,7 +58,11 @@
                                         <td>
                                             <span>De {{ estimate.start_date|date:"M d, Y" }} a {{ estimate.end_date }}</span>
                                         </td>
-                                        <td><span>{{ estimate.contract.clave_contrato }}</span></td>
+                                        <td>
+                                            <a href="/admin/ERP/contratocontratista/{{ estimate.contract.id }}" target="_blank">
+                                                <span>{{ estimate.contract.clave_contrato }}</span>
+                                            </a>
+                                        </td>
                                         <td><span>{{ estimate.contract.contratista.nombreContratista }}</span></td>
                                         <td><span>{{ estimate.contract.line_item.description }}</span></td>
 
