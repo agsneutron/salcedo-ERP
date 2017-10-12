@@ -875,6 +875,8 @@ class PaymentScheduleInline(admin.TabularInline):
 @admin.register(Project)
 class ProjectModelAdmin(admin.ModelAdmin):
     inlines = (TipoProyectoDetalleInline, PaymentScheduleInline)
+    exclude = None
+
 
     @staticmethod
     def get_project_settings(project_id):
@@ -921,31 +923,10 @@ class ProjectModelAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(ProjectModelAdmin, self).get_form(request, obj, **kwargs)
 
-        self.exclude = []
+        self.exclude = None
 
-        # get the foreign key field I want to restrict
-        ubicacion_pais = ModelForm.base_fields['ubicacion_pais']
-        ubicacion_estado = ModelForm.base_fields['ubicacion_estado']
-        ubicacion_municipio = ModelForm.base_fields['ubicacion_municipio']
-        tipo_construccion = ModelForm.base_fields['tipo_construccion']
-        empresa = ModelForm.base_fields['empresa']
-
-        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
-        ubicacion_pais.widget.can_add_related = False
-        ubicacion_pais.widget.can_change_related = False
-        ubicacion_estado.widget.can_add_related = False
-        ubicacion_estado.widget.can_change_related = False
-        ubicacion_municipio.widget.can_add_related = False
-        ubicacion_municipio.widget.can_change_related = False
-        tipo_construccion.widget.can_add_related = False
-        tipo_construccion.widget.can_change_related = False
-        empresa.widget.can_add_related = False
-        empresa.widget.can_change_related = False
-
-
-        if obj is not None:
+        if obj:
             sections_dictionary = {
                 'legal': [
                     'estadolegal_documento_propiedad',
@@ -1072,14 +1053,13 @@ class ProjectModelAdmin(admin.ModelAdmin):
                         fields_to_exclude += sections_dictionary[inner_section['inner_section_short_name']]
 
 
-            print "Exclude: "
-            print fields_to_exclude
-
 
             if len(fields_to_exclude) > 0:
                 self.exclude = fields_to_exclude
+        else:
+            self.exclude = None
 
-        return ModelForm
+        return super(ProjectModelAdmin, self).get_form(request, obj, **kwargs)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
 
