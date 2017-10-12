@@ -272,6 +272,12 @@ class ContractConceptsForm(forms.ModelForm):
             self.fields['concept'].queryset = Concept_Input.objects.filter(
                 line_item__id=contract_obj.line_item.id).exclude(id__in=exclude)
 
+            if len(self.fields['concept'].queryset) == 0:
+                messages.error(self.request,
+                               "Ya no hay más conceptos que se puedan agregar al contrato.")
+
+
+
 
 class EstimateSearchForm(forms.Form):
     current_project_id = 0
