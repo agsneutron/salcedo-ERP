@@ -51,8 +51,9 @@ function callGraphicOne() {
                 }
             },
             error: function(data) {
-                alert('se generó un error!!! ' + data.error);
-                //$j("#ajaxProgress").hide();
+var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+            $('#alertModal').find('.modal-body p').text(message);
+            $('#alertModal').modal('show')                //$j("#ajaxProgress").hide();
             }
         });
     //});

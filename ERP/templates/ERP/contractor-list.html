@@ -29,7 +29,7 @@
                             <div class="col-xs-12">
                                 <div class="table-responsive">
                                     {% if object_list %}
-                                        <table class="table table-striped">
+                                        <table id="table_s" class="table table-striped">
                                             <thead>
                                             <tr>
                                                 <th>Nombre</th>
@@ -37,9 +37,9 @@
                                                 <th>Estado</th>
                                                 <th>Teléfono</th>
                                                 <th>País</th>
-                                                <th>Ver</th>
-                                                <th>Editar</th>
-                                                <th>Eliminar</th>
+                                                <th class="no-sorting">Ver</th>
+                                                <th class="no-sorting">Editar</th>
+                                                <th class="no-sorting">Eliminar</th>
                                             </tr>
                                             </thead>
                                             {% for contractor in object_list %}
@@ -51,7 +51,7 @@
                                                     <td><span>{{ contractor.estado }}</span></td>
 
                                                     <td><span>{{ contractor.telefono }}</span></td>
-                                                     <td><span>{{ contractor.pais }}</span></td>
+                                                    <td><span>{{ contractor.pais }}</span></td>
                                                     {% comment %}<td><span>{{ contractor.last_edit_date }}</span></td>{% endcomment %}
 
                                                     <td class="text-center" style="width: 5%"><a
@@ -90,4 +90,5 @@
             </div>
         </div>
     </div>
+
 {% endblock %}

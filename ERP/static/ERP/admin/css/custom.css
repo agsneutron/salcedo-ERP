@@ -18,6 +18,13 @@ body {
 .vDateField, .vTimeField {
     margin-top: 0 !important;
 }
+.modal.modal-primary .modal-header {
+    background-color: #204280 !important;
+    color: #fff;
+}
+.modal.modal-primary .modal-content {
+    border-bottom: solid 3px #204280 !important;
+}
 #sb-site, .sb-site-container, .sb-slide, .sb-slidebar {
     -webkit-transform: translate(0px);
     -moz-transform: translate(0px);

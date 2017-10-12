@@ -17,6 +17,7 @@
         .calendarbox.module {
             z-index: 99999999;
         }
+
         .sb-site-container {
 
         }
@@ -33,6 +34,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/animate.css" %}"/>
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+    <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/assets/dataTables/dataTables.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/bootstrap.min.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/theme.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/custom.css" %}"/>
@@ -51,6 +53,9 @@
 
     {% block blockbots %}
         <script src="{% static "ERP/admin/js/theme.js" %}"></script>
+
+        {% comment %}DataTables{% endcomment %}
+        <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
     {% endblock %}
 
     <!-- Jquery Library js -->
@@ -70,7 +75,7 @@
         </div>
     </div>
 </div>
-<div class="{% comment %}sb-site-container{% endcomment %}" >
+<div class="{% comment %}sb-site-container{% endcomment %}">
 
     <header class="ms-header ms-header-primary" id="header">
         <div class="container container-full">
@@ -130,6 +135,8 @@
                         <li class="dropdown
 
 
+
+
                                 {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
@@ -171,6 +178,8 @@
                         <li class="dropdown
 
 
+
+
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
@@ -209,6 +218,8 @@
 
                     </li>{% endcomment %}
                         <li class="dropdown
+
+
 
 
                                 {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
@@ -289,6 +300,8 @@
                         <li class="dropdown
 
 
+
+
                                 {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-8"
                                data-toggle="dropdown"
@@ -317,6 +330,8 @@
 
                         </li>
                         <li id="op_reportes" class="dropdown
+
+
 
 
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
@@ -453,19 +468,111 @@
         </div>
     </footer>
 {% endblock %}
+
+
+
+{% comment %}
+<button type="button" class="btn btn-warning btn-raised" data-toggle="modal" data-target="#alertModal"> mensaje alertas <div class="ripple-container"></div></button>
+{% endcomment %}
+
+{% comment %}Ventana de errores{% endcomment %}
+<div class="modal modal-primary" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel6">
+    <div class="modal-dialog animated zoomIn animated-3x" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                <h3 class="modal-title" id="myModalLabel6"><strong>Ha ocurrido un error</strong></h3>
+            </div>
+            <div class="modal-body test-center">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+if (errors) {
+    var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+    $('#alertModal').find('.modal-body p').text(message);
+    $('#alertModal').modal('show')
+}
+</script>
+{% comment %}Ventana de errores{% endcomment %}
 <script>
     function goBack() {
         window.history.back();
     }
 </script>
 <script>
-    $(document).ready(function () {
-        (".sb-toggle-left").on("touchend click",function(e){l(e,t(this)),s("left")})
-        (".sb-toggle-right").on("touchend click",function(e){l(e,t(this)),s("right")})
-        (".sb-open-left").on("touchend click",function(e){l(e,t(this)),r("left")})
-        (".sb-open-right").on("touchend click",function(e){l(e,t(this)),r("right")})
-        (".sb-toggle-left").on("touchend click",function(e){if(t(this).is("a")||t(this).children().is("a")){if("click"===e.type){e.stopPropagation(),e.preventDefault();var n=t(this).is("a")?t(this):t(this).find("a");a(n.attr("href"),n.attr("target")?n.attr("target"):"_self")}}else l(e,t(this)),a()}),m.on("touchend click",function(e){u.siteClose&&(y||x)&&(l(e,t(this)),a())})}}(jQuery)
-    });
+{% comment %}    $(document).ready(function () {
+        (".sb-toggle-left").on("touchend click", function (e) {
+            l(e, t(this)), s("left")
+        })
+        (".sb-toggle-right").on("touchend click", function (e) {
+            l(e, t(this)), s("right")
+        })
+        (".sb-open-left").on("touchend click", function (e) {
+            l(e, t(this)), r("left")
+        })
+        (".sb-open-right").on("touchend click", function (e) {
+            l(e, t(this)), r("right")
+        })
+        (".sb-toggle-left").on("touchend click", function (e) {
+            if (t(this).is("a") || t(this).children().is("a")) {
+                if ("click" === e.type) {
+                    e.stopPropagation(), e.preventDefault();
+                    var n = t(this).is("a") ? t(this) : t(this).find("a");
+                    a(n.attr("href"), n.attr("target") ? n.attr("target") : "_self")
+                }
+            } else l(e, t(this)), a()
+        }), m.on("touchend click", function (e) {
+            u.siteClose && (y || x) && (l(e, t(this)), a())
+        })
+    }
+    }
+    (jQuery)
+    })
+    ;{% endcomment %}
+
 </script>
+ <script>
+        $(document).ready(function () {
+            $('#table_s, #table_s2').DataTable({
+                columnDefs: [
+                    {
+                        className: 'mdl-data-table__cell--non-numeric'
+                    }
+                ],
+
+                responsive: true,
+                "bInfo": false,
+                "pageLength": 10,
+                "bLengthChange": false, //used to hide the property
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+                    "sInfo": "",
+                    "sInfoEmpty": "",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Ãšltimo",
+                        "sNext": "»",
+                        "sPrevious": "«"
+                    }
+                },
+            });
+        });
+    </script>
 </body>
 </html>
