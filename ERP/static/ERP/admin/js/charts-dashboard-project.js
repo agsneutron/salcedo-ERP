@@ -47,7 +47,9 @@ function callGraphicOne() {
                 //putDatosGrafica("GC_Basica");
             },
             error: function(data) {
-                alert('se generó un error!!! ' + data.error);
+                /*alert('se generó un error!!! ' + data.error);*/
+                alert('Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error: ' + data.status);
+
                 //$j("#ajaxProgress").hide();
             }
         });

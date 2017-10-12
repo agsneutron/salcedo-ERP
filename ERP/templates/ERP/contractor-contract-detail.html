@@ -105,7 +105,7 @@
 
             <div class="card-block text-center">
                 <div class="table-responsive">
-                    <table class="table table-bordered">
+                    <table id="table_s" class="table table-bordered">
                         {% if concepts.count == 0 %}
                             <tbody>
                             <tr>
@@ -114,12 +114,12 @@
                             </tbody>
                         {% else %}
                             <thead>
-                            <td style="border:1px solid; font-weight: 700">Clave</td>
-                            <td style="border:1px solid; font-weight: 700">Descripción</td>
-                            <td style="border:1px solid; font-weight: 700">Unidad</td>
-                            <td style="border:1px solid; font-weight: 700">Precio Unitario</td>
-                            <td style="border:1px solid; font-weight: 700">Cantidad del Contrato</td>
-                            <td style="border:1px solid; font-weight: 700">Editar</td>
+                            <td >Clave</td>
+                            <td >Descripción</td>
+                            <td >Unidad</td>
+                            <td >Precio Unitario</td>
+                            <td >Cantidad del Contrato</td>
+                            <td  class="no-sorting">Editar</td>
                             </thead>
                             <tbody>
                             {% for concept in concepts %}
