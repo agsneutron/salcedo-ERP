@@ -36,7 +36,7 @@
                                             <tr>
                                                 <th>Clave del Contrato</th>
                                                 <th>Proyecto</th>
-                                                <th>Dependencia</th>
+                                                <th>Contratista</th>
                                                 <th>Fecha de Firma</th>
                                                 {% comment %}<th>Fecha de Última Edición</th>{% endcomment %}
                                                 <th class="no-sorting">Ver</th>
@@ -51,7 +51,7 @@
                                                     {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
                                                     <td><span> {{ contratocontratista.clave_contrato }} </span></td>
                                                     <td><span> {{ contratocontratista.project.nombreProyecto}} </span></td>
-                                                    <td><span>{{ contratocontratista.dependencia }}</span></td>
+                                                    <td><span> {{ contratocontratista.contratista.nombreContratista}} </span></td>
                                                     <td><span>{{ contratocontratista.fecha_firma }}</span></td>
                                                     {% comment %}<td><span>{{ contratocontratista.last_edit_date }}</span></td>{% endcomment %}
 
