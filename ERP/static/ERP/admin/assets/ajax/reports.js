@@ -37,7 +37,9 @@ function get_Projects(){
 
             },
             error: function(data) {
-                alert('error!! ' + data.status);
+                var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+            $('#alertModal').find('.modal-body p').text(message);
+            $('#alertModal').modal('show')
             }
         });
 

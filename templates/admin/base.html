@@ -468,6 +468,39 @@
         </div>
     </footer>
 {% endblock %}
+
+
+
+{% comment %}
+<button type="button" class="btn btn-warning btn-raised" data-toggle="modal" data-target="#alertModal"> mensaje alertas <div class="ripple-container"></div></button>
+{% endcomment %}
+
+{% comment %}Ventana de errores{% endcomment %}
+<div class="modal modal-primary" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel6">
+    <div class="modal-dialog animated zoomIn animated-3x" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                <h3 class="modal-title" id="myModalLabel6"><strong>Ha ocurrido un error</strong></h3>
+            </div>
+            <div class="modal-body test-center">
+                <p></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+if (errors) {
+    var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+    $('#alertModal').find('.modal-body p').text(message);
+    $('#alertModal').modal('show')
+}
+</script>
+{% comment %}Ventana de errores{% endcomment %}
 <script>
     function goBack() {
         window.history.back();
