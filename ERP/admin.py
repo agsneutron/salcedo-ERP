@@ -10,6 +10,7 @@ from django.shortcuts import redirect
 
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
+from ERP.lib.errors import OperationLogicError
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm, \
     ContactForm, ContractConceptsForm
@@ -328,7 +329,6 @@ class AccessToProjectAdmin(admin.ModelAdmin):
 
         projects_array = []
 
-
         for project in projects_set:
             projects_array.append(project['project__id'])
 
@@ -366,12 +366,10 @@ class AccessToProjectAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-
     def response_delete(self, request, obj_display, obj_id):
         user_id = request.GET.get('user')
 
-        return HttpResponseRedirect("/admin/ERP/accesstoproject/?user="+str(user_id))
-
+        return HttpResponseRedirect("/admin/ERP/accesstoproject/?user=" + str(user_id))
 
 
 class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
@@ -388,7 +386,6 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
         # Fet the field for the project to restrict.
         project = ModelForm.base_fields['project']
         project.queryset = Project.objects.filter(pk=project_id)
-
 
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
@@ -743,7 +740,6 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-
     def response_add(self, request, obj, post_url_continue="../%s/"):
         return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id))
 
@@ -774,7 +770,6 @@ class ContractConceptsAdmin(admin.ModelAdmin):
         else:
             return HttpResponseRedirect(
                 "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
-
 
     def response_add(self, request, obj, post_url_continue="../%s/"):
         if '_continue' not in request.POST:
@@ -852,6 +847,32 @@ class LineItemAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+    def delete_model(self, request, obj):
+
+
+
+        request.obj_parent = obj.parent_line_item_id
+        request.obj_project = obj.project_id
+
+        if obj.can_be_deleted():
+            return super(LineItemAdmin, self).delete_model(request, obj)
+        else:
+            e = OperationLogicError(
+                u'Error al borrar la partida con clave ' + obj.key + '. Alguno de sus conceptos internos ya ha sido estimado.',
+                LoggingConstants.ERROR, request.user.id)
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, e.get_error_message())
+
+
+    def response_delete(self, request, obj_display, obj_id):
+        # te quedaste aquí
+        if hasattr(request, "obj_parent") and request.obj_parent is not None:
+            parent_line_item = request.obj_parent
+        else:
+            parent_line_item = 0
+        project_id = request.obj_project
+        return redirect('/admin/ERP/lineitem/conceptos/'+str(project_id)+'/'+str(parent_line_item)+'/')
+
 
 @admin.register(Concept_Input)
 class ConceptInputAdmin(admin.ModelAdmin):
@@ -866,11 +887,13 @@ class ConceptInputAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+
 class PaymentScheduleInline(admin.TabularInline):
-    model= PaymentSchedule
+    model = PaymentSchedule
     extra = 0
     ordering = ("year", "month")
-    fields = ('project','year', 'month', 'amount')
+    fields = ('project', 'year', 'month', 'amount')
+
 
 @admin.register(Project)
 class ProjectModelAdmin(admin.ModelAdmin):
@@ -946,7 +969,6 @@ class ProjectModelAdmin(admin.ModelAdmin):
         tipo_construccion.widget.can_change_related = False
         empresa.widget.can_add_related = False
         empresa.widget.can_change_related = False
-
 
         if obj is not None:
             sections_dictionary = {
@@ -1074,6 +1096,9 @@ class ProjectModelAdmin(admin.ModelAdmin):
                 for inner_section in top_section['inner_sections']:
                     if inner_section['inner_section_status'] == 0 and inner_section['inner_section_short_name'] in sections_dictionary:
                         fields_to_exclude += sections_dictionary[inner_section['inner_section_short_name']]
+                    if inner_section['inner_section_status'] == 0 and inner_section[
+                        'inner_section_short_name'] in sections_dictionary:
+                        self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
 
 
             print "Exclude: "
@@ -1095,7 +1120,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
         extra['sections_result'] = sections_result
 
         return super(ProjectModelAdmin, self).change_view(request, object_id,
-                                                     form_url, extra_context=extra)
+                                                          form_url, extra_context=extra)
 
 
 @admin.register(Estimate)
@@ -1125,7 +1150,6 @@ class EstimateAdmin(admin.ModelAdmin):
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         contract.widget.can_add_related = False
         contract.widget.can_change_related = False
-
 
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):

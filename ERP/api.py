@@ -80,6 +80,21 @@ class SectionsByProjectEndpoint(View):
         return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
 
 
+class CleanProject(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+
+
+        items = LineItem.objects.filter(project_id=project_id)
+
+        for item in items:
+            item.delete()
+
+
+
+        return HttpResponse('ok', 'application/json; charset=utf-8')
+
+
 class SectionsByProjectSave(View):
     def get(self, request):
         secciones_id = get_array_or_none(request.GET.get('secciones'))
