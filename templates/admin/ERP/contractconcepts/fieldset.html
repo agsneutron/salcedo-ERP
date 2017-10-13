@@ -1,0 +1,99 @@
+
+{% load app_filters admin_static %}
+<fieldset class="module aligned {{ fieldset.classes }}">
+    {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    {% comment %}{% for line in fieldset %}
+        <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+            {% for field in line %}
+                <div{% if not line.fields|length_is:'1' %} class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %} class="checkbox-row"{% endif %}>
+                    {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                    {% if field.is_checkbox %}
+                        {{ field.field }}{{ field.label_tag }}
+                    {% else %}
+                        {{ field.label_tag }}
+                        {% if field.is_readonly %}
+                            <div class="readonly">{{ field.contents }}</div>
+                        {% else %}
+                            {{ field.field }}
+                        {% endif %}
+                    {% endif %}
+                    {% if field.field.help_text %}
+                        <div class="help">{{ field.field.help_text|safe }}</div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}{% endcomment %}
+
+
+    <div class="card " style="">
+        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+            <li role="presentation" class="active">
+                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                    <span class="hidden-xs">Conceptos del Contrato</span>
+                </a>
+            </li>
+        </ul>
+
+        <div class="card-block">
+            <div class="tab-content">
+                {% for line in fieldset %}
+                    {% for field in line %}
+                        {% if field.field.name == "contract" %}
+                            <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h2 class="text-center"></h2>
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <hr>
+                                    <div class="col-md-4">
+                                        <div class="form-group field-{{ field.field.name }}">
+                                            <div>
+                                                {{ field.label_tag }}
+                                                {{ field.field|addcss:"form-control" }}
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                            {% endif %}
+
+                            {% if field.field.name == "concept" %}
+                                    <div class="col-md-4">
+                                        <div class="form-group field-{{ field.field.name }}">
+                                            <div>
+                                                {{ field.label_tag }}
+                                                {{ field.field|addcss:"form-control" }}
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                            {% endif %}
+                            {% if field.field.name == "amount" %}
+                                    <div class="col-md-4">
+                                        <div class="form-group field-{{ field.field.name }}">
+                                            <div>
+                                                {{ field.label_tag }}
+                                                {{ field.field|addcss:"form-control" }}
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+
+                        {% if field.field.name == "version" %}
+                            {{ field.field|addcss:"form-control" }}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</fieldset>
