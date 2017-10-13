@@ -103,13 +103,13 @@
 
             var amounts = {
                 {%  for c in adminform.form.amounts_per_concept %}
-                    '{{ c.key }}': {{  c.amount }},
+                    '{{ c.key }}': '{{  c.amount }}',
                 {% endfor %}
             };
 
             var resting_amounts = {
                 {%  for c in adminform.form.amounts_per_concept %}
-                    '{{ c.key }}': {{  c.resting }},
+                    '{{ c.key }}': '{{  c.resting }}',
                 {% endfor %}
             };
             $('#id_concept').change(function (e) {
