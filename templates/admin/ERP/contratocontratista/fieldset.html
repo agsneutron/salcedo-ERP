@@ -71,23 +71,10 @@
                             </div>
                         </div>
 
-                        {% endif %}
+                    {% endif %}
 
-                        {% if field.field.name == "line_item" %}
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-
-                        {% if field.field.name == "no_licitacion" %}
-
-                        <div class="col-sm-4">
+                    {% if field.field.name == "line_item" %}
+                        <div class="col-md-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -97,13 +84,16 @@
                             </div>
                         </div>
                         </div>
-
-                        {% endif %}
-
+                    {% endif %}
 
 
-                        {% if field.field.name == "contratista" %}
+
+
+
+                        {% if field.field.name == "no_licitacion" %}
                             <div class="row">
+
+
                             <div class="col-sm-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
@@ -113,7 +103,20 @@
                                     </div>
                                 </div>
                             </div>
+
+
                         {% endif %}
+                    {% if field.field.name == "contratista" %}
+                        <div class="col-sm-4">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
                     {% if field.field.name == "modalidad_contrato" %}
 
                         <div class="col-sm-4">
@@ -125,40 +128,40 @@
                                 </div>
                             </div>
                         </div>
-
+                        </div>
 
                     {% endif %}
-                    {% if field.field.name == "dias_pactados" %}
 
-                        <div class="col-sm-4">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
-                        </div>
-                    {% endif %}
-                        {% if field.field.name == "codigo_obra" %}
+
+                        {% if field.field.name == "dias_pactados" %}
                             <div class="row">
                             <div class="col-sm-4">
-                                <div class="form-group field-codigo_obra">
-                                    <div class="form-group field-{{ field.field.name }}">
-                                        <div>
-                                            {{ field.label_tag }}
-                                            {{ field.field|addcss:"form-control" }}
-                                            {{ field.errors }}
-                                        </div>
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
                             </div>
-
                         {% endif %}
+                    {% if field.field.name == "codigo_obra" %}
+                        <div class="col-sm-4">
+                            <div class="form-group field-codigo_obra">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
                     {% if field.field.name == "dependencia" %}
 
-                        <div class="col-sm-8">
+                        <div class="col-sm-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
@@ -179,7 +182,7 @@
                                 <div class="form-group field-fecha_firma">
                                     <div>
                                         {{ field.label_tag }}
-                                        {{ field.field}}
+                                        {{ field.field }}
                                         {{ field.errors }}
                                     </div>
                                 </div>
