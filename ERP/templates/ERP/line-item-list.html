@@ -20,12 +20,12 @@
 
 
     {% if parent_line_item is not None %}
-        <h3>Partida Actual: {{ parent_line_item.description }}</h3>
+        <h3 class="color-info text-center">Partida Actual: {{ parent_line_item.description }}</h3>
     {% endif %}
     <div class="row">
         <div class="col-xs-12">
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table id="table_s" class="table table-striped">
                     <thead>
                     <tr>
                         <th>Partidas</th>
@@ -39,7 +39,13 @@
 
                             {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
                             <td><span> <a
-                                    href="/admin/ERP/lineitem/{{ current_type_full }}/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.description }}</a></span>
+                                    href="/admin/ERP/lineitem/{{ current_type_full }}/{{ line_item.project_id }}/{{ line_item.id }}">{{ line_item.key }} - {{ line_item.description }}</a></span>
+                                {% if line_item.can_be_deleted %}
+
+                                    -
+                                    <a href="/admin/ERP/lineitem/{{ line_item.id }}/delete/">Delete</a>
+                                {% endif %}
+
                             </td>
                             {% empty %}
                             <td colspan="2">No se encontraron Partidas.</td>
@@ -57,7 +63,7 @@
         <div class="col-xs-12">
 
             <div class="table-responsive">
-                <table class="table table-bordered">
+                <table id="" class="table table-striped">
                     <thead>
                     <tr>
                         <th>{{ current_type_full.title }}</th>
@@ -89,7 +95,7 @@
 
 
         </div>
-    <div class="clearfix"></div>
+        <div class="clearfix"></div>
     </div>
 
     {% include 'ERP/footer_list.html' %}

@@ -34,11 +34,11 @@
                         {% include 'ERP/list-search-fields.html' %}
 
                         <div class="row">
-                            <br>
+
                             <div class="col-xs-12">
                                 <div class="table-responsive">
                                     {% if object_list %}
-                                        <table class="table table-bordered">
+                                        <table id="table_s" class="table table-striped">
                                             <thead>
                                             <tr>
                                                 <th>Nombre</th>
@@ -47,10 +47,10 @@
                                                 <th>Inicio</th>
                                                 <th>Termino</th>
                                                 <th>Fecha de Última Edición</th>
-                                                <th>Configurar</th>
-                                                <th>Ver</th>
-                                                <th>Editar</th>
-                                                <th>Dashboard</th>
+                                                <th class="no-sorting">Configurar</th>
+                                                <th class="no-sorting">Ver</th>
+                                                <th class="no-sorting">Editar</th>
+                                                <th class="no-sorting">Dashboard</th>
                                             </tr>
                                             </thead>
                                             {% for project in object_list %}

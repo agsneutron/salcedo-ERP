@@ -725,11 +725,11 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-            'clave_contrato', 'project', 'no_licitacion', 'contratista', 'modalidad_contrato', 'dias_pactados',
+            'clave_contrato', 'project', 'line_item', 'no_licitacion', 'contratista', 'modalidad_contrato', 'dias_pactados',
             'codigo_obra', 'dependencia',
             'fecha_firma', 'fecha_inicio', 'fecha_termino',
             'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', )
         return fields
 
     def get_urls(self):
@@ -756,6 +756,23 @@ class ConceptForContractsInlines(admin.TabularInline):
 class ContractConceptsAdmin(admin.ModelAdmin):
     form = ContractConceptsForm
 
+    def get_amounts_per_contract(self, contract_id):
+        line_item_id = ContratoContratista.objects.get(pk=contract_id).line_item.id
+
+        concepts = Concept_Input.objects.filter(line_item_id=line_item_id)
+        response = []
+
+        for c in concepts:
+            contract_concept = ContractConcepts.objects.filter(Q(concept_id=c.id))
+
+            if len(contract_concept) == 0:
+                response.append({'key': str(c.id), 'amount': str(c.quantity), 'resting': str(c.quantity)})
+            else:
+                contracted_amount = contract_concept[0].amount
+                response.append(
+                    {'key': str(c.id), 'amount': str(c.quantity), 'resting': str(c.quantity - contracted_amount)})
+        return response
+
     def get_form(self, request, obj=None, **kwargs):
 
         ModelForm = super(ContractConceptsAdmin, self).get_form(request, obj, **kwargs)
@@ -764,6 +781,7 @@ class ContractConceptsAdmin(admin.ModelAdmin):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
                 kwargs['contract_id'] = request.GET.get('contract_id')
+                self.form.amounts_per_concept = self.get_amounts_per_contract(kwargs['contract_id'])
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass

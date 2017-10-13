@@ -37,7 +37,9 @@ function get_Projects(){
 
             },
             error: function(data) {
-                alert('error!! ' + data.status);
+                var message = 'Ocurrió un error al generar la lista de proyectos, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+                $('#alertModal').find('.modal-body p').text(message);
+                $('#alertModal').modal('show')
             }
         });
 
@@ -80,7 +82,11 @@ function Get_Financial_Report(){
         window.open("/reporting/get_financial_report?project_id=" + parseInt(project_id) + "&detail_level=" + detail_level.toString());
     }
     else{
-        alert("Para generar el reporte debe seleccionar un Proyecto");
+        //alert("Para generar el reporte debe seleccionar un Proyecto");
+        var message = 'Para generar el reporte debe seleccionar un Proyecto';
+        $('#alertModal').find('.modal-title strong').text("Aviso ...");
+        $('#alertModal').find('.modal-body p').text(message);
+        $('#alertModal').modal('show')
     }
 }
 
@@ -92,6 +98,10 @@ function Get_Physical_Financial(){
         window.open("/reporting/get_physical_financial_advance_report?project_id=" + parseInt(project_id));
     }
     else{
-        alert("Para generar el reporte debe seleccionar un Proyecto");
+        //alert("Para generar el reporte debe seleccionar un Proyecto");
+        var message = 'Para generar el reporte debe seleccionar un Proyecto';
+        $('#alertModal').find('.modal-title strong').text("Aviso ...");
+        $('#alertModal').find('.modal-body p').text(message);
+        $('#alertModal').modal('show')
     }
 }

@@ -9,9 +9,9 @@ from decimal import Decimal
 
 from _mysql_exceptions import IntegrityError
 from django.db import transaction
-from django.db.models import Q
+from django.db.models import Q, Count
 
-from ERP.models import Concept_Input, Unit, LineItem, Project
+from ERP.models import Concept_Input, Unit, LineItem, Project, ContratoContratista, ContractConcepts, Estimate
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 
 import locale
@@ -266,6 +266,8 @@ class DBObject(object):
         try:
             for record in record_list:
 
+                print record
+
                 if record[self.LineItemConstants.get_max_level()] != "":
                     self.save_line_item(record, project_id)
 
@@ -284,6 +286,7 @@ class DBObject(object):
         parent_id = None
         top_parent_id = None
 
+        # If the file defines a parent for the line item, we will check if it exists.
         if line_item_has_parent:
             line_item_qs = LineItem.objects.filter(key=line_item_parent_key.upper())
             if line_item_parent_key is not None and len(line_item_qs) == 0:
@@ -292,7 +295,6 @@ class DBObject(object):
                     LoggingConstants.ERROR, self.user_id)
             else:
                 parent_id = line_item_qs[0].id
-
 
             # Now we'll check if the top parent exists
             if line_item_top_parent_key is not None:
@@ -307,24 +309,54 @@ class DBObject(object):
         else:
             top_parent_id = None
 
-        # Now We'll check that (line_item_id, concept_key) does not already exist.
+        # Now we will validate that a line item with a duplicated key is not being added.
+        # We will do that by first checking if the key already exists on the database.
+        # If the key already exists, we have to make sure the description is also the same.
         line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
         if len(line_item_validation_qs) != 0:
-            # Data already exists. Raise an error to be displayed to the user.
+            # The key already exists. Make sure the description is the same for both instances.
+            old_description = line_item_validation_qs[0].description
+            new_description = line_item_description
 
-            project_key = Project.objects.filter(Q(pk=project_id))[0].key
+            if old_description != new_description:
+                project_key = Project.objects.filter(Q(pk=project_id))[0].key
 
-            raise ErrorDataUpload(
-                u"Se intentó guardar la partida " + line_item_key + u" para el proyecto " + project_key
-                + u". Esta partida está duplicada en el archivo o ya fue cargada anteriormente. La operación ha sido cancelada.",
-                LoggingConstants.ERROR, self.user_id)
+                raise ErrorDataUpload(
+                    u"Problema al guardar la partida " + line_item_key + u" para el proyecto " + project_key
+                    + u". Esta partida ya existe y se intentó agregar con una descripción diferente. La operación ha sido cancelada.",
+                    LoggingConstants.ERROR, self.user_id)
 
-        line_item_obj = LineItem(key=line_item_key.upper(),
-                                 project_id=project_id,
-                                 parent_line_item_id=parent_id,
-                                 top_parent_line_item_id=top_parent_id,
-                                 description=line_item_description)
-        line_item_obj.save()
+        else:
+            line_item_obj = LineItem(key=line_item_key.upper(),
+                                     project_id=project_id,
+                                     parent_line_item_id=parent_id,
+                                     top_parent_line_item_id=top_parent_id,
+                                     description=line_item_description)
+            line_item_obj.save()
+
+    def concept_has_been_estimated(self, concept_id):
+        # Check if there are contracts with the concept
+        contracts = ContractConcepts.objects.filter(concept_id=concept_id).values('contract_id')
+
+        if concept_id == 3792:
+            debug = True
+        else:
+            debug = False
+
+        if debug:
+            print '-----'
+            print 'Contracts:'
+            print contracts
+
+        for contract in contracts:
+            # Check if there are estimates with the contract
+            contract_id = contract['contract_id']
+            estimates = Estimate.objects.filter(contract_id=contract_id)
+
+            if len(estimates) > 0:
+                return True
+
+        return False
 
     '''
         Método save:
@@ -373,26 +405,90 @@ class DBObject(object):
             line_item_obj = line_item_qs[0]
 
         # Now We'll check that (line_item_id, concept_key) does not already exist.
+        # If it already exists, we have to check the following:
+        #  - If it has been estimated, unit, price and quantity have to be the same.
+        #  - If it has NOT been estimated, we have to update the values.
         concepts_validation_qs = Concept_Input.objects.filter(Q(line_item_id=line_item_obj.id) & Q(key=concept_key))
-        if len(concepts_validation_qs) != 0:
-            # Data already exists. Raise an error to be displayed to the user.
-            raise ErrorDataUpload(
-                u'Se intentó guardar el concepto ' + concept_key + u' para la partida ' + line_item_obj.key
-                + u'. Este concepto está duplicado en el archivo o ya fue cargado anteriormente. La operación ha sido cancelada.',
-                LoggingConstants.ERROR, self.user_id)
 
-        concept_input = Concept_Input(
-            line_item=line_item_obj,
-            unit=unit_obj,
-            key=concept_key,
-            description=concept_description,
-            quantity=quantity,
-            unit_price=unit_price,
-            type=self.CONCEPT_INPUT_TYPES[model]
-        )
-        concept_input.save()
+        if len(concepts_validation_qs) != 0:
+            old_concept = concepts_validation_qs[0]
+            concept_has_been_estimated = self.concept_has_been_estimated(old_concept.id)
+
+            if concept_has_been_estimated:
+
+                errors = []  # This is only to create the error message, in case it exists
+
+                # Check unit is the same:
+                old_unit = old_concept.unit.abbreviation
+                new_unit = unit.upper()
+
+                if old_unit != new_unit:
+                    errors.append('unidad')
+
+                # Check price is the same:
+                old_price = old_concept.unit_price
+                new_price = unit_price
+
+                if old_price != new_price:
+                    errors.append('precio')
+
+                # Check quantity is the same
+                old_quantity = old_concept.quantity
+                new_quantity = quantity
+
+                if old_quantity != new_quantity:
+                    errors.append('cantidad')
+
+                if len(errors) > 0:
+                    # There are errors. Create message and throw an exception.
+                    message_properties = ''
+                    for i in range(0, len(errors)):
+                        message_properties += errors[i]
+                        if i <= len(errors) - 3:
+                            message_properties += ', '
+                        if i == len(errors) - 2:
+                            message_properties += ' y '
+
+                    if len(errors) == 1:
+                        error_message = u'Error al guardar el concepto ' + concept_key + u' para la partida ' \
+                                        + line_item_obj.key + u'. Este concepto ya ha sido estimado y se ha intentado cambiar la propiedad ' + message_properties + u'.'
+                    else:
+                        error_message = u'Error al guardar el concepto ' + concept_key + u' para la partida ' \
+                                        + line_item_obj.key + u'. Este concepto ya ha sido estimado y se han intentado cambiar las propiedades ' + message_properties + u'.'
+                    # Data already exists. Raise an error to be displayed to the user.
+                    raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.user_id)
+            else:
+                # Concept has not been estimated. Update its data and move on.
+                new_unit = unit_obj
+                new_price = unit_price
+                new_quantity = quantity
+
+                # Update values
+                old_concept.unit = new_unit
+                old_concept.unit_price = new_price
+                old_concept.quantity = new_quantity
+
+                # Save the concept
+                old_concept.save()
+
+
+
+
+
+        else:
+            # The concept or input did not exist, we just have to create it and save it to the database.
+            concept_input = Concept_Input(
+                line_item=line_item_obj,
+                unit=unit_obj,
+                key=concept_key,
+                description=concept_description,
+                quantity=quantity,
+                unit_price=unit_price,
+                type=self.CONCEPT_INPUT_TYPES[model]
+            )
+            concept_input.save()
 
 
 class ErrorDataUpload(SystemException):
     def __init__(self, message, priority, user_id):
-        SystemException.__init__(self, message, LoggingConstants.DATA_UPLOAD, priority, user_id)
+        SystemException.__init__(self, message, LoggingConstants.OPERATION_LOGIC, priority, user_id)

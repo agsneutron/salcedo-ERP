@@ -54,14 +54,18 @@
 {% for fieldset in adminform %}
   {% include "admin/auth/user/fieldset.html" %}
 {% endfor %}
+
 {% endblock %}
 
 {% block after_field_sets %}{% endblock %}
 
 {% block inline_field_sets %}
+
 {% for inline_admin_formset in inline_admin_formsets %}
+
     {% include "admin/auth/user/stacked.html" %}
 {% endfor %}
+
 {% endblock %}
 
 {% block after_related_objects %}{% endblock %}

@@ -239,7 +239,6 @@ class ContractorContractDetailView(generic.DetailView):
     model = ContratoContratista
     template_name = "ERP/contractor-contract-detail.html"
 
-
     def get_context_data(self, **kwargs):
         context = super(ContractorContractDetailView, self).get_context_data(**kwargs)
         contract_id = self.kwargs['pk']
@@ -397,6 +396,9 @@ class LineItemListView(ListView):
             )
         else:
             LineItemListView.query = ''
+
+        for element in result:
+            element.can_be_deleted = element.can_be_deleted()
 
         return result
 
@@ -661,7 +663,6 @@ class EstimateListView(ListView):
         if contractor is not None and contractor is not "":
             query = query & Q(contract__contratista__id=contractor)
 
-
         if query is not None:
             print "Query: "
             print query
@@ -719,6 +720,11 @@ class EstimateDetailView(generic.DetailView):
             record.progress = "{0:.0f}%".format(record.progress * 100)
 
         context['progress_estimates'] = progress_estimates
+
+        # Get the concepts specified for the contract
+        concepts = estimate.contract.contractconcepts_set.all()
+
+        context['contract_concepts'] = concepts
 
         return context
 
@@ -817,7 +823,6 @@ class UploadedCatalogsHistoryAdminListView(ListView):
         context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (
             UploadedCatalogsHistoryAdminListView.query != "")
         return context
-    
 
 
 # Views for the model AccessToProjectAdmin.

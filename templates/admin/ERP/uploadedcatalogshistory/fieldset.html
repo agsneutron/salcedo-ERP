@@ -32,7 +32,7 @@
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Catálogo de Conceptos</span>
+                    <span class="">Catálogo de Conceptos</span>
                 </a>
             </li>
         </ul>
@@ -47,7 +47,7 @@
                                 <h2 class="text-center">Archivos</h2>
 
                                 <hr>
-                                <div class="col-md-12">
+                                <div class="col-sm-12">
                                     <div class="form-group field-{{ field.field.name }}">
                                         <div>
                                             {{ field.label_tag }}
@@ -61,7 +61,7 @@
 
                         {% if field.field.name == "line_items_file" %}
                             <div class="row">
-                            <div class="col-md-6">
+                            <div class="col-sm-6">
                                 <div class="form-group field-{{ field.field.name }}">
                                     {{ field.label_tag }}
                                     {{ field.field|addcss:"form-control" }}
@@ -90,7 +90,7 @@
                         {% endif %}
                     {% if field.field.name == "concepts_file" %}
 
-                        <div class="col-md-6">
+                        <div class="col-sm-6">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.label_tag }}
                                 {{ field.field|addcss:"form-control" }}

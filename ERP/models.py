@@ -608,10 +608,11 @@ class ContratoContratista(models.Model):
         ans['pago_final'] = str(self.pago_final)
         ans['observaciones'] = str(self.observaciones)
 
+
         return ans
 
     def __str__(self):
-        return "Clave del Contrato: " + self.clave_contrato +" -  Contratista: " +  self.contratista.nombreContratista
+        return "Clave del Contrato: " + self.clave_contrato + " -  Contratista: " + self.contratista.nombreContratista
 
     def __unicode__(self):
         return "Clave del Contrato: " + self.clave_contrato + " -  Contratista: " + self.contratista.nombreContratista
@@ -1102,10 +1103,10 @@ def uploaded_catalogs_destination(instance, filename):
 class UploadedCatalogsHistory(models.Model):
     version = IntegerVersionField()
     line_items_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
-                                       verbose_name="Archivo de partidas")
+                                       verbose_name="Archivo de Partidas")
 
     concepts_file = models.FileField(upload_to=uploaded_catalogs_destination, null=True,
-                                     verbose_name="Archivo de conceptos")
+                                     verbose_name="Archivo de Conceptos")
 
     upload_date = models.DateTimeField(null=False, verbose_name="Fecha de carga", auto_now=True)
 
@@ -1165,7 +1166,7 @@ class LineItem(models.Model):
     version = IntegerVersionField()
     # Model attributes.
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=False)
-    key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=False, default="")
+    key = models.CharField(verbose_name="Clave", max_length=15, null=False, blank=True, unique=False, default="")
 
     # Foreign keys for the model.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
@@ -1204,6 +1205,39 @@ class LineItem(models.Model):
             super(LineItem, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
+
+    # Gets a query used by the can_be_deleted method. This helps find recursively if any child has been estimated.
+    def get_query_for_estimate_search(self):
+        # Get all the elements that have this object as parent
+        q = Q(id=self.id)
+        items = LineItem.objects.filter(parent_line_item=self.id)
+        for item in items:
+            q = q | item.get_query_for_estimate_search()
+        return q
+
+    def can_be_deleted(self):
+        # Get all Line items with this line item as top_parent
+
+        query = self.get_query_for_estimate_search()
+
+        line_items = LineItem.objects.filter(query).values('id')
+
+        for li in line_items:
+            contracts = ContractConcepts.objects.filter(concept__line_item_id=li['id']).values('contract_id')
+            for contract in contracts:
+                contract_id = contract['contract_id']
+                estimates = Estimate.objects.filter(contract_id=contract_id)
+
+                if len(estimates) > 0:
+                    return False
+
+        return True
+
+    def delete(self, using=None, keep_parents=False):
+        if self.can_be_deleted():
+            return super(LineItem, self).delete(using, keep_parents)
+        print 'LineItem can\'t be deleted, it has already been estimated in the Line Item Tree'
+        return False
 
 
 '''
@@ -1303,7 +1337,6 @@ class Concept_Input(models.Model):
         canSave = True
 
         if canSave:
-            Logs.log("Saving new Concept - Input", "Te")
             self.last_edit_date = now()
             super(Concept_Input, self).save(*args, **kwargs)
         else:
@@ -1324,15 +1357,11 @@ class Estimate(models.Model):
     # Chained key attributes 'project'. Might be unnecessary, but it is required to reach the expected behaviour.
     contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False, default=None)
 
-
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
-
     contract_amount_override = models.DecimalField(verbose_name='Total Real', decimal_places=2, blank=False, null=False,
-                                                 default=0, max_digits=20,
-                                                 validators=[MinValueValidator(Decimal('0.0'))])
-
-
+                                                   default=0, max_digits=20,
+                                                   validators=[MinValueValidator(Decimal('0.0'))])
 
     # Fields to provide the Advance (payment) functionality.
     advance_payment_amount = models.DecimalField(verbose_name='Anticipo', decimal_places=2, blank=False, null=False,
@@ -1359,8 +1388,6 @@ class Estimate(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
-
-
 
     def save(self, *args, **kwargs):
         canSave = True

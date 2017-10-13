@@ -9,15 +9,15 @@
         <div class="col-xs-12">
             <div class="table-responsive">
                 {% if object_list %}
-                    <table class="table table-bordered">
+                    <table id="table_s" class="table table-striped">
                         <thead>
                         <tr>
                             <th>Nombre Proyecto</th>
                             <th>Notas</th>
                             <th>Fecha</th>
                             <th>Fecha de Última Edición</th>
-                            <th>Ver</th>
-                            <th>Editar</th>
+                            <th class="no-sorting">Ver</th>
+                            <th class="no-sorting">Editar</th>
                         </tr>
                         </thead>
                         {% for bitacora in object_list %}
