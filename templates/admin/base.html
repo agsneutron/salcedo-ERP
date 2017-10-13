@@ -103,7 +103,7 @@
         </div>
     </header>
     <!-- End Header -->
-    <!-- begins navigation -- request.resolver_match.view_name }}---->
+    <!-- begins navigation  request.resolver_match.view_name }}------>
 
     {% if user.is_active and user.is_staff %}
         <nav class="navbar fixed-top yamm ms-navbar ms-navbar-primary">
@@ -180,7 +180,7 @@
 
 
 
-                                {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                                {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete,admin:ERP_contractconcepts_add,admin:ERP_contractconcepts_change"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -298,10 +298,6 @@
                             </ul>
                         </li>
                         <li class="dropdown
-
-
-
-
                                 {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle animated fadeIn animation-delay-8"
                                data-toggle="dropdown"
@@ -330,10 +326,6 @@
 
                         </li>
                         <li id="op_reportes" class="dropdown
-
-
-
-
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle animated fadeIn animation-delay-4"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
