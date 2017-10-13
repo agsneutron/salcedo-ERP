@@ -1442,10 +1442,12 @@ class ProgressEstimate(models.Model):
         return ans
 
     def __str__(self):
-        return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
+        return "Estimación " + self.key + "del Contrato " + self.estimate.contract.clave_contrato + " en el periodo: " \
+               + str(self.estimate.period)
 
     def __unicode__(self):
-        return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
+        return "Estimación " + self.key + "del Contrato " + self.estimate.contract.clave_contrato + " en el periodo: " \
+               + str(self.estimate.period)
 
     def save(self, *args, **kwargs):
         canSave = True

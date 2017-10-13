@@ -140,7 +140,7 @@ class FinancialAdvanceReport(object):
 
         for line_item in info:
 
-            number_of_concepts = len(line_item['concepts'])
+            number_of_concepts = len(line_item['sub_line_items'])
 
             if FinancialAdvanceReport.show_concepts:
                 worksheet.merge_range(row_count, LINE_ITEM_COL, row_count + number_of_concepts - 1, LINE_ITEM_COL,
@@ -166,13 +166,13 @@ class FinancialAdvanceReport(object):
 
             if FinancialAdvanceReport.show_concepts:
                 i = row_count
-                for concept in line_item['concepts']:
-                    worksheet.write(i, CONCEPT_COL, concept['concept_key'], formats['centered'])
-                    worksheet.write(i, PROGRAMMED_COL, Decimal(concept['total_programmed']),
+                for sub_line_item in line_item['sub_line_items']:
+                    worksheet.write(i, CONCEPT_COL, sub_line_item['name'], formats['centered'])
+                    worksheet.write(i, PROGRAMMED_COL, Decimal(sub_line_item['total_programmed']),
                                     formats['currency_centered'])
-                    worksheet.write(i, ESTIMATED_COL, Decimal(concept['total_estimated']),
+                    worksheet.write(i, ESTIMATED_COL, Decimal(sub_line_item['total_estimated']),
                                     formats['light_green_currency'])
-                    worksheet.write(i, PENDING_COL, Decimal(concept['total_pending']), formats['light_red_currency'])
+                    worksheet.write(i, PENDING_COL, Decimal(sub_line_item['total_pending']), formats['light_red_currency'])
 
                     i = i + 1
 
