@@ -82,7 +82,7 @@ function Get_Financial_Report(){
         window.open("/reporting/get_financial_report?project_id=" + parseInt(project_id) + "&detail_level=" + detail_level.toString());
     }
     else{
-        alert("Para generar el reporte debe seleccionar un Proyecto");
+        alert("Para generar el rephhhorte debe seleccionar un Proyecto");
     }
 }
 
@@ -94,6 +94,6 @@ function Get_Physical_Financial(){
         window.open("/reporting/get_physical_financial_advance_report?project_id=" + parseInt(project_id));
     }
     else{
-        alert("Para generar el reporte debe seleccionar un Proyecto");
+        alert("Para generar el reporhhhhte debe seleccionar un Proyecto");
     }
 }
