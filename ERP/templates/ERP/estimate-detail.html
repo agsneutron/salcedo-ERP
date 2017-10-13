@@ -38,7 +38,7 @@
 
 
                         <span href="#" class="color-active exp" data-toggle="collapse" data-target="#verconceptos">
-                            Ver Conceptos <span class="glyphicon  glyphicon-plus-sign"></span> </span>
+                            Ver Conceptos <span class="glyphicon  glyphicon-plus-sign" style="font-size: 17px;top: 3px;"></span> </span>
                             <br>
                     </div>
 
@@ -64,7 +64,7 @@
                                 class="color-active">Fecha Final:</span> {{ estimate.end_date }}</span>
                     </div>
                     <div class="col-xs-12">
-                       {% comment %} <div class="col-xs-12 col-sm-4 text-left">
+                        {% comment %} <div class="col-xs-12 col-sm-4 text-left">
                             <div style="padding-top: 10px;">
                                 <dl>
                                     <dt>Clave del Contrato:</dt>
@@ -87,7 +87,7 @@
                             </div>
                         </div>
 {% endcomment %}
-                       {% comment %} <div class="col-xs-12 col-sm-4  text-left">
+                        {% comment %} <div class="col-xs-12 col-sm-4  text-left">
                             <div style="padding-top: 12px;">
                                 <dl>
                                     {% if estimate.advance_payment_amount > 0 %}
@@ -127,147 +127,156 @@
                         </div>
 
                     </div>{% endcomment %}
-                    <div class="clearfix"></div>
+                        <div class="clearfix"></div>
+                        <br>
+                        {% comment %}begin concepts{% endcomment %}
+                        <div id="verconceptos" class="collapse">
+                            <div class="row">
 
-
-                    {% comment %}begin concepts{% endcomment %}
-                     <div id="verconceptos" class="collapse">
-                        <table border="1">
-                        <tr>
-                            <td>Key</td>
-                            <td>Descripción</td>
-                            <td>Cantidad Pactada</td>
-                        </tr>
-                            {% for c in contract_concepts %}
-                                <tr>
-                                    <td width="10%">{{ c.concept.key }}</td>
-                                    <td>{{ c.concept.description }}</td>
-                                    <td>{{ c.amount }}</td>
-                                </tr>
-                            {% endfor %}
-                        </table>
-                    <hr>
-                    </div>
-                    {% comment %}end concepts{% endcomment %}
-
-                     <div class="clearfix"></div>
-                    <div class="col-xs-12 text-left">
-
-                        <div class="card card-default">
-                            <div class="card-header">
-                                <h3 class="card-title">
-                                    Avances
-                                </h3>
-                            </div>
-                            <div class="item-right">
-                                <a href="/admin/ERP/progressestimate/add/?estimate={{ estimate.id }}"
-                                   class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container">
-                                    &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"></i>
-                                </a>
-
-                            </div>
-
-                            {% if progress_estimates %}
-                                <div class="card-block text-center">
+                                <div class="col-xs-12">
                                     <div class="table-responsive">
-                                        <table id="table_s" class="table table-striped text-center">
-                                            <thead>
+                                        <table class="table table-striped">
+                                             <thead>
                                             <tr>
-                                                <th class="text-center">Clave de la Estimación</th>
-                                                <th class="text-center">Progreso</th>
-                                                <th class="text-center">Monto</th>
-                                                <th class="text-center">Estatus del Pago</th>
-                                                <th class="text-center">Archivo del Generador</th>
-                                                <th class="text-center no-sorting" >Editar</th>
+                                                <th class="text-center">Key</th>
+                                                <th class="text-center">Descripción</th>
+                                                <th class="text-center">Cantidad Pactada</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr>
-                                                {% for progress_estimate in progress_estimates %}
-                                                    <tr class="text-center">
-                                                        <td>
-                                                            {{ progress_estimate.key }}
-                                                        </td>
-                                                        <td>
-                                                            <div class="progress" id="progressbar">
-                                                                <div class="progress-bar progress-bar-{% if progress_estimate.progress|slice:":-1"  < 15 %}danger
+                                            {% for c in contract_concepts %}
+                                                <tr>
+                                                    <td width="10%">{{ c.concept.key }}</td>
+                                                    <td>{{ c.concept.description }}</td>
+                                                    <td>{{ c.amount }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                        <br>
+                        </div>
+                        {% comment %}end concepts{% endcomment %}
+
+                        <div class="clearfix"></div>
+                        <div class="col-xs-12 text-left">
+
+                            <div class="card card-default">
+                                <div class="card-header">
+                                    <h3 class="card-title">
+                                        Avances
+                                    </h3>
+                                </div>
+                                <div class="item-right">
+                                    <a href="/admin/ERP/progressestimate/add/?estimate={{ estimate.id }}"
+                                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container">
+                                        &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"></i>
+                                    </a>
+
+                                </div>
+
+                                {% if progress_estimates %}
+                                    <div class="card-block text-center">
+                                        <div class="table-responsive">
+                                            <table id="table_s" class="table table-striped text-center">
+                                                <thead>
+                                                <tr>
+                                                    <th class="text-center">Clave de la Estimación</th>
+                                                    <th class="text-center">Progreso</th>
+                                                    <th class="text-center">Monto</th>
+                                                    <th class="text-center">Estatus del Pago</th>
+                                                    <th class="text-center">Archivo del Generador</th>
+                                                    <th class="text-center no-sorting">Editar</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    {% for progress_estimate in progress_estimates %}
+                                                        <tr class="text-center">
+                                                            <td>
+                                                                {{ progress_estimate.key }}
+                                                            </td>
+                                                            <td>
+                                                                <div class="progress" id="progressbar">
+                                                                    <div class="progress-bar progress-bar-{% if progress_estimate.progress|slice:":-1"  < 15 %}danger
                                                                   {% elif progress_estimate.progress|slice:":-1" > 15 and progress_estimate.progress|slice:":-1" < 50 %}warning
                                                                   {% elif progress_estimate.progress|slice:":-1" >= 50 and progress_estimate.progress|slice:":-1" <= 75 %}info
                                                                   {% elif progress_estimate.progress|slice:":-1" > 75 %}success
                                                                   {% endif %}"
-                                                                     role="progressbar"
-                                                                     aria-valuenow="{{ progress_estimate.progress }}"
-                                                                     aria-valuemin="0" aria-valuemax="100"
-                                                                     style="width: {{ progress_estimate.progress }}">
+                                                                         role="progressbar"
+                                                                         aria-valuenow="{{ progress_estimate.progress }}"
+                                                                         aria-valuemin="0" aria-valuemax="100"
+                                                                         style="width: {{ progress_estimate.progress }}">
+                                                                    </div>
+
                                                                 </div>
+                                                                <small>{{ progress_estimate.progress }}</small>
 
-                                                            </div>
-                                                            <small>{{ progress_estimate.progress }}</small>
+                                                            </td>
+                                                            <td>
+                                                                {{ progress_estimate.amount }}
+                                                            </td>
+                                                            <td>
+                                                                {{ progress_estimate.get_payment_status_display }}
+                                                            </td>
+                                                            <td>
+                                                                {% if progress_estimate.generator_file %}
+                                                                    <a href="/media/{{ progress_estimate.generator_file }}"
+                                                                       download
+                                                                       class="btn btn-raised btn-default btn-xs">
+                                                                        <i class="fa fa-cloud-download fa-2x color-info eliminar"></i>
+                                                                    </a>
+                                                                {% endif %}
 
-                                                        </td>
-                                                        <td>
-                                                            {{ progress_estimate.amount }}
-                                                        </td>
-                                                        <td>
-                                                            {{ progress_estimate.get_payment_status_display }}
-                                                        </td>
-                                                        <td>
-                                                            {% if progress_estimate.generator_file %}
-                                                                <a href="/media/{{ progress_estimate.generator_file }}"
-                                                                   download
-                                                                   class="btn btn-raised btn-default btn-xs">
-                                                                    <i class="fa fa-cloud-download fa-2x color-info eliminar"></i>
-                                                                </a>
-                                                            {% endif %}
-
-                                                        </td>
-                                                        <td class="text-center" style="width: 2%">
-                                                            <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
-                                                               class="btn btn-raised btn-default btn-xs"><i
-                                                                    class="fa fa-pencil color-default eliminar"></i></a>
-                                                        </td>
-                                                    </tr>
-                                                {% endfor %}
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                                            </td>
+                                                            <td class="text-center" style="width: 2%">
+                                                                <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
+                                                                   class="btn btn-raised btn-default btn-xs"><i
+                                                                        class="fa fa-pencil color-default eliminar"></i></a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
-                                </div>
-                            {% else %}
-                                <div>&nbsp;&nbsp;&nbsp;&nbsp;No se ha agregado ningún avance.</div>
-                            {% endif %}
+                                {% else %}
+                                    <div>&nbsp;&nbsp;&nbsp;&nbsp;No se ha agregado ningún avance.</div>
+                                {% endif %}
+                            </div>
+
+
                         </div>
-
-
                     </div>
+
+
                 </div>
-
-
             </div>
         </div>
-    </div>
-    <script>
-        {% comment %}var progressBarColor;
+        <script>
+            {% comment %}var progressBarColor;
 
-        var someValueToCheck = {{ progress_estimate.progress }};
+            var someValueToCheck = {{ progress_estimate.progress }};
 
-        if(someValueToCheck >= 4) progressBarColor = "#ff0000";
-        else if(someValueToCheck >=5) progressBarColor = "orange";
-        else progressBarColor = "green";
+            if(someValueToCheck >= 4) progressBarColor = "#ff0000";
+            else if(someValueToCheck >=5) progressBarColor = "orange";
+            else progressBarColor = "green";
 
-        $("#progressbar").css('background-color', progressBarColor);{% endcomment %}
-    </script>
+            $("#progressbar").css('background-color', progressBarColor);{% endcomment %}
+        </script>
 
-<script>
-$(document).ready(function(){
-  $("#verconceptos").on("hide.bs.collapse", function(){
-    $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-plus-sign"></span>');
-  });
-  $("#verconceptos").on("show.bs.collapse", function(){
-    $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-minus-sign"></span>');
-  });
-});
-</script>
+        <script>
+            $(document).ready(function () {
+                $("#verconceptos").on("hide.bs.collapse", function () {
+                    $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-plus-sign"></span>');
+                });
+                $("#verconceptos").on("show.bs.collapse", function () {
+                    $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-minus-sign"></span>');
+                });
+            });
+        </script>
 
 
 
