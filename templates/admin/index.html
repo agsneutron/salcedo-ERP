@@ -13,12 +13,12 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}"/>
     {#    <script src="{% static "admin/assets/Highcharts/code/themes/dark-unica.js" %}"></script>#}
     <style>
-hr{
-        display: block;
-    border-top: 1px solid #00a09b;
-    margin: 2px 0 !important;
-}
-</style>
+        hr {
+            display: block;
+            border-top: 1px solid #00a09b;
+            margin: 2px 0 !important;
+        }
+    </style>
 {% endblock %}
 {% block content %}
     <div id="container">
@@ -30,7 +30,7 @@ hr{
                             <h3 class="card-title text">Mapa</h3>
                         </div>
                         <div class="item-right">
-                           {% comment %} <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-pie-chart"></i></a>
+                            {% comment %} <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-pie-chart"></i></a>
                             <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-line-chart"></i></a>
                             <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-area-chart"></i></a>
                             <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-bar-chart"></i></a>
@@ -38,13 +38,13 @@ hr{
                     </div>
                     <div class="card-block" style="height: 345px; padding: 0">
                         <div id="container-chart" style="height: 0px; display: none"></div>
-                            <div id="map" style="height: 345px;"></div>
+                        <div id="map" style="height: 345px;"></div>
 
                     </div>
                 </div>
             </div>
             <div class="col-xs-12 col-sm-6">
-                <div class="card" id="cardGrafica0" style ="display:none">
+                <div class="card" id="cardGrafica0" style="display:none">
                     <div class="card-header light" id="tituloGrafica0">
                         <h3 class="card-title">Proyecto 1</h3>
                     </div>
@@ -52,18 +52,18 @@ hr{
                         <div id="container-chart-0" style="height: 170px"></div>
 
                         <br>
-                         <div class="col-xs-6 text-center">
+                        <div class="col-xs-6 text-center">
                             <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-0"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Físico
                                     </span>
                             </div>
                         </div>
-                         <div class="col-xs-6 text-center">
-                             <div style="padding: 0px 0px">
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-0-0"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Finaciero
                                     </span>
                             </div>
@@ -74,7 +74,7 @@ hr{
         </div>
         <div class="row">
             <div class="col-xs-12 col-sm-6">
-                <div class="card" id="cardGrafica1" style ="display:none">
+                <div class="card" id="cardGrafica1" style="display:none">
                     <div class="card-header light" id="tituloGrafica1">
                         <h3 class="card-title">Proyecto 1</h3>
                     </div>
@@ -82,18 +82,18 @@ hr{
                         <div id="container-chart-1" style="height: 170px"></div>
 
                         <br>
-                         <div class="col-xs-6 text-center">
+                        <div class="col-xs-6 text-center">
                             <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-1"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Físico
                                     </span>
                             </div>
                         </div>
-                         <div class="col-xs-6 text-center">
-                             <div style="padding: 0px 0px">
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-1-1"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Finaciero
                                     </span>
                             </div>
@@ -103,7 +103,7 @@ hr{
             </div>
 
             <div class="col-xs-12 col-sm-6">
-                <div class="card" id="cardGrafica2" style ="display:none">
+                <div class="card" id="cardGrafica2" style="display:none">
                     <div class="card-header light" id="tituloGrafica2">
                         <h3 class="card-title">Proyecto 1</h3>
                     </div>
@@ -111,18 +111,18 @@ hr{
                         <div id="container-chart-2" style="height: 170px"></div>
 
                         <br>
-                         <div class="col-xs-6 text-center">
+                        <div class="col-xs-6 text-center">
                             <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-2"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Físico
                                     </span>
                             </div>
                         </div>
-                         <div class="col-xs-6 text-center">
-                             <div style="padding: 0px 0px">
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-2-2"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Finaciero
                                     </span>
                             </div>
@@ -134,7 +134,7 @@ hr{
         </div>
         <div class="row">
             <div class="col-xs-12 col-sm-6">
-                <div class="card" id="cardGrafica3" style ="display:none">
+                <div class="card" id="cardGrafica3" style="display:none">
                     <div class="card-header light" id="tituloGrafica3">
                         <h3 class="card-title">Proyecto 1</h3>
                     </div>
@@ -142,18 +142,18 @@ hr{
                         <div id="container-chart-3" style="height: 170px"></div>
 
                         <br>
-                         <div class="col-xs-6 text-center">
+                        <div class="col-xs-6 text-center">
                             <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-3"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Físico
                                     </span>
                             </div>
                         </div>
-                         <div class="col-xs-6 text-center">
-                             <div style="padding: 0px 0px">
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-3-3"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Finaciero
                                     </span>
                             </div>
@@ -163,7 +163,7 @@ hr{
             </div>
 
             <div class="col-xs-12 col-sm-6">
-                <div class="card" id="cardGrafica4" style ="display:none">
+                <div class="card" id="cardGrafica4" style="display:none">
                     <div class="card-header light" id="tituloGrafica4">
                         <h3 class="card-title">Proyecto 1</h3>
                     </div>
@@ -171,18 +171,18 @@ hr{
                         <div id="container-chart-4" style="height: 170px"></div>
 
                         <br>
-                         <div class="col-xs-6 text-center">
+                        <div class="col-xs-6 text-center">
                             <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-4"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Físico
                                     </span>
                             </div>
                         </div>
-                         <div class="col-xs-6 text-center">
-                             <div style="padding: 0px 0px">
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
                                 <div class="circle" id="circles-4-4"></div>
-                                    <span class="color-active circle-font">
+                                <span class="color-active circle-font">
                                         Avance Finaciero
                                     </span>
                             </div>
@@ -215,7 +215,7 @@ hr{
                 styleWrapper: true,
                 styleText: true
             });
-             var myCircle = Circles.create({
+            var myCircle = Circles.create({
                 id: 'circles-1-1',
                 radius: 50,
                 value: 43,
@@ -343,7 +343,7 @@ hr{
             });
         });
     </script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs"></script>
 
 
 

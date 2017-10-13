@@ -15,6 +15,10 @@ body {
 #content {
     padding-bottom: 30px;
 }
+.modal-dialog {
+    width: 600px;
+    margin: 80px auto;
+}
 .vDateField, .vTimeField {
     margin-top: 0 !important;
 }
@@ -1177,7 +1181,7 @@ body .sb-site-container {
         padding-left: 15px;
     }
     .dash-menu {
-        font-size: 13px;
+        font-size: 14px;
         color: white !important;
         font-weight: bold;
         text-transform: initial !important;

@@ -21,6 +21,12 @@
         .sb-site-container {
 
         }
+        .fixed {
+	position: fixed;
+	top: 0;
+	height: 70px;
+	z-index: 1;
+}
     </style>
 
 
@@ -52,10 +58,11 @@
 
 
     {% block blockbots %}
+        <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
         <script src="{% static "ERP/admin/js/theme.js" %}"></script>
 
         {% comment %}DataTables{% endcomment %}
-        <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
+
     {% endblock %}
 
     <!-- Jquery Library js -->
@@ -106,7 +113,7 @@
     <!-- begins navigation  request.resolver_match.view_name }}------>
 
     {% if user.is_active and user.is_staff %}
-        <nav class="navbar fixed-top yamm ms-navbar ms-navbar-primary">
+        <nav class="navbar  yamm ms-navbar ms-navbar-primary">
             <div class="container container-full container-nav">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -130,6 +137,7 @@
                                data-hover="dropdown" data-name="home">
                                 <i class="fa fa-home text-center"></i><br class="hidden-xs">
                                 Inicio
+                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
                             </a>
                         </li>
                         <li class="dropdown
@@ -332,6 +340,8 @@
                                data-name="ecommerce">
                                 <i class="fa fa-line-chart text-center"></i><br class="hidden-xs">
                                 Reportes
+                                                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
+
                             </a>
                         </li>
                     </ul>
@@ -549,7 +559,7 @@ if (errors) {
 </script>
  <script>
         $(document).ready(function () {
-            $('#table_s, #table_s2').DataTable({
+            $('#table_s').DataTable({
                 columnDefs: [
                     {
                         className: 'mdl-data-table__cell--non-numeric'
@@ -583,5 +593,54 @@ if (errors) {
             });
         });
     </script>
+<script>
+        $(document).ready(function () {
+            $('#table_s2').DataTable({
+                columnDefs: [
+                    {
+                        className: 'mdl-data-table__cell--non-numeric'
+                    }
+                ],
+
+                responsive: true,
+                "bInfo": false,
+                "pageLength": 10,
+                "bLengthChange": false, //used to hide the property
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+                    "sInfo": "",
+                    "sInfoEmpty": "",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Ãšltimo",
+                        "sNext": "»",
+                        "sPrevious": "«"
+                    }
+                },
+            });
+        });
+    </script>
+{% comment %}<script>
+   $(document).ready(function(){
+	   $(window).bind('scroll', function() {
+	   var navHeight = $( window ).height() 0;
+			 if ($(window).scrollTop() > navHeight) {
+				 $('nav').addClass('fixed');
+			 }
+			 else {
+				 $('nav').removeClass('fixed');
+			 }
+		});
+	});
+</script>{% endcomment %}
 </body>
 </html>

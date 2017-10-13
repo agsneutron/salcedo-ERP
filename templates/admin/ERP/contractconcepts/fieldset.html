@@ -5,7 +5,7 @@
     }
 
 </style>
-<fieldset class="module aligned {{ fieldset.classes }}">
+<fieldset class=" {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
@@ -39,7 +39,7 @@
         <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Conceptos del Contrato</span>
+                    <span class="">Conceptos del Contrato</span>
                 </a>
             </li>
         </ul>
@@ -123,5 +123,6 @@
         </div>
     </div>
 </fieldset>
+
 
 
