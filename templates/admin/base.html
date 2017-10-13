@@ -58,10 +58,11 @@
 
 
     {% block blockbots %}
+        <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
         <script src="{% static "ERP/admin/js/theme.js" %}"></script>
 
         {% comment %}DataTables{% endcomment %}
-        <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
+
     {% endblock %}
 
     <!-- Jquery Library js -->
@@ -566,7 +567,43 @@ if (errors) {
 </script>
  <script>
         $(document).ready(function () {
-            $('#table_s, #table_s2').DataTable({
+            $('#table_s').DataTable({
+                columnDefs: [
+                    {
+                        className: 'mdl-data-table__cell--non-numeric'
+                    }
+                ],
+
+                responsive: true,
+                "bInfo": false,
+                "pageLength": 10,
+                "bLengthChange": false, //used to hide the property
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+                    "sInfo": "",
+                    "sInfoEmpty": "",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Ãšltimo",
+                        "sNext": "»",
+                        "sPrevious": "«"
+                    }
+                },
+            });
+        });
+    </script>
+<script>
+        $(document).ready(function () {
+            $('#table_s2').DataTable({
                 columnDefs: [
                     {
                         className: 'mdl-data-table__cell--non-numeric'
