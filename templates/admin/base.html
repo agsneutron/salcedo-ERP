@@ -21,6 +21,12 @@
         .sb-site-container {
 
         }
+        .fixed {
+	position: fixed;
+	top: 0;
+	height: 70px;
+	z-index: 1;
+}
     </style>
 
 
@@ -106,7 +112,7 @@
     <!-- begins navigation -- request.resolver_match.view_name }}---->
 
     {% if user.is_active and user.is_staff %}
-        <nav class="navbar fixed-top yamm ms-navbar ms-navbar-primary">
+        <nav class="navbar  yamm ms-navbar ms-navbar-primary">
             <div class="container container-full container-nav">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
@@ -591,5 +597,18 @@ if (errors) {
             });
         });
     </script>
+{% comment %}<script>
+   $(document).ready(function(){
+	   $(window).bind('scroll', function() {
+	   var navHeight = $( window ).height() 0;
+			 if ($(window).scrollTop() > navHeight) {
+				 $('nav').addClass('fixed');
+			 }
+			 else {
+				 $('nav').removeClass('fixed');
+			 }
+		});
+	});
+</script>{% endcomment %}
 </body>
 </html>
