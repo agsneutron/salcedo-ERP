@@ -10,52 +10,106 @@
                 <span class="ms-icon ms-icon-circle ms-icon mb-4 color-info" style="margin-bottom: 0rem !important"><i
                         class="zmdi zmdi-city-alt"></i></span>
                     <h3 class="color-info">
-                        Estimación<a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
+                        Estimación&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
                         <i class="fa fa-pencil color-default eliminar"></i>
                     </a>
                     </h3>
 
-                    <br>
+                    <div class="col-xs-12 col-sm-6 text-left">
+
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Clave del Contrato:</span> {{ estimate.contract.clave_contrato }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Contratista:</span> {{ estimate.contract.contratista.nombreContratista }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Monto del Contrato:</span> {{ estimate.contract.monto_contrato }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Monto Actual:</span> {{ estimate.contract_amount_override }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Partida:</span> {{ estimate.contract.line_item.description }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i>{% comment %} <span
+                                class="color-active">Ver Conceptos<span class="glyphicon glyphicon-chevron-down"></span> </span> {% endcomment %}
+
+
+                        <button type="button" class="color-active exp" data-toggle="collapse" data-target="#verconceptos">
+                            Ver Conceptos <span class="glyphicon  glyphicon-plus-sign"></span> </button></span>
+                    </div>
+
+                    <div class="col-xs-12 col-sm-6 text-left">
+
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Adelanto:</span> {{ estimate.advance_payment_amount|formatoNumero }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Fecha:</span> {{ estimate.advance_payment_date }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Estado:</span> {{ estimate.get_advance_payment_status_display }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Periodo:</span> {{ estimate.end_date }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Fecha Inicio:</span> {{ estimate.start_date }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Fecha Final:</span> {{ estimate.end_date }}</span>
+                    </div>
                     <div class="col-xs-12">
-                        <div class="col-xs-12 col-sm-8 text-left">
+                       {% comment %} <div class="col-xs-12 col-sm-4 text-left">
                             <div style="padding-top: 10px;">
                                 <dl>
                                     <dt>Clave del Contrato:</dt>
                                     <dd style="padding-top: 4px">{{ estimate.contract.clave_contrato }}</dd>
+                                    <hr>
                                     <dt>Contratista:</dt>
                                     <dd style="padding-top: 4px"> {{ estimate.contract.contratista.nombreContratista }}</dd>
-                                    <dt>Partida:</dt>
-                                    <dd style="padding-top: 4px">{{ estimate.contract.line_item.description }}</dd>
+                                     <hr>
                                     <dt>Monto del Contrato:</dt>
                                     <dd style="padding-top: 4px">{{ estimate.contract.monto_contrato }}</dd>
+                                     <hr>
                                     <dt>Monto Actual:</dt>
                                     <dd style="padding-top: 4px">{{ estimate.contract_amount_override }}</dd>
-
-                                    <hr>
+                                     <dt>Partida:</dt>
+                                    <dd style="padding-top: 4px">{{ estimate.contract.line_item.description }}</dd>
 
                                 </dl>
 
-                                <div class="">
+
+                            </div>
+                        </div>
+{% endcomment %}
+                       {% comment %} <div class="col-xs-12 col-sm-4  text-left">
+                            <div style="padding-top: 12px;">
+                                <dl>
                                     {% if estimate.advance_payment_amount > 0 %}
-                                        <div class="col-xs-12 col-sm-3  text-center"><strong
-                                                class="color-active">Adelanto: </strong>{{ estimate.advance_payment_amount|formatoNumero }}
-                                        </div>
-                                        <div class="col-xs-12 col-sm-6  text-center"><strong
-                                                class="color-active">Fecha: </strong>{{ estimate.advance_payment_date }}
-                                        </div>
-                                        <div class="col-xs-12 col-sm-3  text-center"><strong
-                                                class="color-active">Estado: </strong>{{ estimate.get_advance_payment_status_display }}
-                                        </div>
+                                        <dd>Adelanto: </dd>
+                                            <dt>{{ estimate.advance_payment_amount|formatoNumero }}</dt>
+                                        <hr>
+                                        <dd>Fecha:  </dd>
+                                            <dt>{{ estimate.advance_payment_date }}</dt>
+                                        <hr>
+                                        <dd>Estado: </dd>
+                                            <dt>{{ estimate.get_advance_payment_status_display }}</dt>
+
                                     {% elif estimate.advance_payment_amount == 0 %}
-                                        <div>No se ha definido un anticipo</div>
+                                        <dd>No se ha definido un anticipo</dd>
+
                                     {% endif %}
-                                </div>
+                                </dl>
+
                             </div>
                         </div>
 
-
                         <div class="col-xs-12 col-sm-4  text-left">
-                            <div style="    padding-top: 52px;">
+                            <div style="padding-top: 12px;">
                                 <dl>
 
                                     <dd>Periodo</dd>
@@ -71,9 +125,31 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div>{% endcomment %}
                     <div class="clearfix"></div>
+
+
+                    {% comment %}begin concepts{% endcomment %}
+                     <div id="verconceptos" class="collapse">
+                        <table border="1">
+                        <tr>
+                            <td>Key</td>
+                            <td>Descripción</td>
+                            <td>Cantidad Pactada</td>
+                        </tr>
+                            {% for c in contract_concepts %}
+                                <tr>
+                                    <td width="10%">{{ c.concept.key }}</td>
+                                    <td>{{ c.concept.description }}</td>
+                                    <td>{{ c.amount }}</td>
+                                </tr>
+                            {% endfor %}
+                        </table>
                     <hr>
+                    </div>
+                    {% comment %}end concepts{% endcomment %}
+
+                     <div class="clearfix"></div>
                     <div class="col-xs-12 text-left">
 
                         <div class="card card-default">
@@ -181,24 +257,17 @@
         $("#progressbar").css('background-color', progressBarColor);{% endcomment %}
     </script>
 
+<script>
+$(document).ready(function(){
+  $("#verconceptos").on("hide.bs.collapse", function(){
+    $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-plus-sign"></span>');
+  });
+  $("#verconceptos").on("show.bs.collapse", function(){
+    $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-minus-sign"></span>');
+  });
+});
+</script>
 
 
-
-    <div>
-        <table border="1">
-        <tr>
-            <td>Key</td>
-            <td>Descripción</td>
-            <td>Cantidad Pactada</td>
-        </tr>
-            {% for c in contract_concepts %}
-                <tr>
-                    <td width="10%">{{ c.concept.key }}</td>
-                    <td>{{ c.concept.description }}</td>
-                    <td>{{ c.amount }}</td>
-                </tr>
-            {% endfor %}
-        </table>
-    </div>
 
 {% endblock %}
