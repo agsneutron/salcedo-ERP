@@ -133,7 +133,7 @@
                         <li class="dropdown
                                 {% if request.resolver_match.view_name == "admin:index" %}{{ "active" }}{% endif %}">
                             <a href="/admin"
-                               class="dropdown-toggle animated fadeIn animation-delay-4 "
+                               class="dropdown-toggle fadeIn"
                                data-hover="dropdown" data-name="home">
                                 <i class="fa fa-home text-center"></i><br class="hidden-xs">
                                 Inicio
@@ -146,7 +146,7 @@
 
 
                                 {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
+                            <a href="#" class="dropdown-toggle fadeIn"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="blog">
@@ -155,7 +155,7 @@
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                             </a>
                             <ul id="op_contratista"
-                                class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
+                                class="dropdown-menu dropdown-menu-left">
                                 <li class="dropdown-submenu">
                                     <a href="blog-sidebar.html" class="has_children">
                                         <i class="zmdi zmdi-view-compact"></i> Contratistas</a>
@@ -189,7 +189,7 @@
 
 
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="#" class="dropdown-toggle animated fadeIn animation-delay-7"
+                            <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="blog">
@@ -231,7 +231,7 @@
 
 
                                 {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-7"
+                            <a href="/admin/ERP/project/" class="dropdown-toggle"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="blog">
@@ -241,7 +241,7 @@
                             </a>
 
                             <ul id="op_proyectos"
-                                class="dropdown-menu dropdown-menu-left animated-2x animated fadeIn">
+                                class="dropdown-menu dropdown-menu-left">
                                 <li class="dropdown">
                                     <a href="/admin/ERP/project/">
                                         <i class="zmdi zmdi-view-compact"></i> Proyectos</a>
@@ -311,7 +311,7 @@
 
 
                                 {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="#" class="dropdown-toggle animated fadeIn animation-delay-8"
+                            <a href="#" class="dropdown-toggle "
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="portfolio">
@@ -343,7 +343,7 @@
 
 
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="/reporting/report" class="dropdown-toggle animated fadeIn animation-delay-4"
+                            <a href="/reporting/report" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
                                 <i class="fa fa-line-chart text-center"></i><br class="hidden-xs">
