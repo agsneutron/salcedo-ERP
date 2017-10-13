@@ -56,7 +56,7 @@ function getDataProjectList(onSuccess) {
                 setProjectList(data);
             },
             error: function(data) {
-                var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+                var message = 'Ocurrió un error al generar la lista de proyectos, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
             $('#alertModal').find('.modal-body p').text(message);
             $('#alertModal').modal('show')
             }

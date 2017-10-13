@@ -225,6 +225,7 @@ function segmentsSave(segmentos, no_seleccionados, project_id) {
     /*  $.get('/obras/register_by_token', function(ans) {
      var ajaxData = { access_token: ans.access_token};
      //alert(ans.access_token);*/
+    var message="";
     var ajaxData = {
         secciones: segmentos.toString(),
         noseleccionados: no_seleccionados.toString(),
@@ -237,7 +238,7 @@ function segmentsSave(segmentos, no_seleccionados, project_id) {
         dataType: "html",
         success: function (data) {
             //alert(data[0].mensaje);
-            var message = 'Se guardó correctamente la configuración';
+            message = 'Se guardó correctamente la configuración';
             $('#alertModalSuccess').find('.modal-body p').text(message);
             $('#alertModalSuccess').modal('show')
         },
@@ -245,7 +246,7 @@ function segmentsSave(segmentos, no_seleccionados, project_id) {
 
             /*alert('error!! ' + data.status);*/
             /* alert('Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error: ' + data.status);*/
-            var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+            message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
             $('#alertModal').find('.modal-body p').text(message);
             $('#alertModal').modal('show')
 
