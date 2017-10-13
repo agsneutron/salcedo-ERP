@@ -787,8 +787,9 @@
                     <h3 class="card-title text">Contratista en el Proyecto</h3>
                 </div>
             </div>
+            {% if contracts %}
             <div class="card-block">
-                <div class="table-responsive ">
+                <div class="table-responsive">
                     <table id="table_s" class="table table-striped">
                         <thead>
                         <th>Nombre</th>
@@ -815,6 +816,9 @@
                     </table>
                 </div>
             </div>
+            {% else %}
+                  <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No se han agregado Contratistas.</div>
+            {% endif %}
         </div>
     </div>
 

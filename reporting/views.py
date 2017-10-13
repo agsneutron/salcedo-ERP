@@ -794,18 +794,44 @@ def testView(request):
 class GetFinancialReport(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
-        detail_level = request.GET.get('detail_level')
+        #detail_level = request.GET.get('detail_level')
+        # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
+        # will be exported grouped by line_item.
+        show_concepts = True
+        selected_line_items_array = [
+            642,
+            643,
+            644,
+            645,
+            646,
+            647,
+            648,
+            649,
+            650,
+            651,
+            653,
+            658,
+            662,
+            667,
+            672,
+            679,
+            683,
+            692,
+            698,
+            700,
+            705,
+            714,
+            722,
+            727,
+            728,
+            729
+        ]
+        report_json = api.FinancialHistoricalProgressReport.get_report(project_id, selected_line_items_array)
 
-        if detail_level == "c":
-            show_concepts = True
-        else:
-            show_concepts = False
+        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
 
-        report_json = api.FinancialHistoricalProgressReport.get_report(project_id)
         file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
-
-        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
 
 
 class GetPhysicalFinancialAdvanceReport(View):
@@ -830,15 +856,12 @@ class GetMainDashboard(View):
     def get(self, request):
 
         response_by_project = []
-        print "User is: " + str(request.user)
         access_set = AccessToProject.objects.filter(user__id=request.user.erpuser.id)
         for access in access_set:
 
             structured_response = {}
-            print "Here!"
+
             response = api.PhysicalFinancialAdvanceReport.get_biddings_report(access.project.id)
-            print "Response: "
-            print response
 
             total_programmed = 0
             total_estimated = 0

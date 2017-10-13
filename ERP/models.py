@@ -1166,7 +1166,7 @@ class LineItem(models.Model):
     version = IntegerVersionField()
     # Model attributes.
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=False)
-    key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=False, default="")
+    key = models.CharField(verbose_name="Clave", max_length=15, null=False, blank=True, unique=False, default="")
 
     # Foreign keys for the model.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
@@ -1469,10 +1469,12 @@ class ProgressEstimate(models.Model):
         return ans
 
     def __str__(self):
-        return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
+        return "Estimación " + self.key + "del Contrato " + self.estimate.contract.clave_contrato + " en el periodo: " \
+               + str(self.estimate.period)
 
     def __unicode__(self):
-        return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
+        return "Estimación " + self.key + "del Contrato " + self.estimate.contract.clave_contrato + " en el periodo: " \
+               + str(self.estimate.period)
 
     def save(self, *args, **kwargs):
         canSave = True
