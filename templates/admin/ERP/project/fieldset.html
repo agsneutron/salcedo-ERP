@@ -1740,23 +1740,23 @@
                {% endfor %}
 
 
-                         {% for inline_admin_formset in inline_admin_formsets %}
-                             {{ nline_admin_formset }}
-                            {% if inline_admin_formset.formset.prefix == "tipoproyectodetalle_set" %}
-                                <!-- proyecto detalle-->
-                                <div role="tabpanel" class="tab-pane fade" id="otro8">
-                                    {% include "admin/ERP/project/tabular.html" %}
-                                </div>
-                            {% endif %}
-                            <!-- Added block for the payment schedule -->
-                            {% if inline_admin_formset.formset.prefix == "paymentschedule_set" %}
-                                <!-- proyecto programa-->
-                                <div role="tabpanel" class="tab-pane fade" id="otro9">
-                                    {% include "admin/ERP/project/tabular.html" %}
-                                </div>
-                            {% endif %}
-                            <!-- Ends block for the payment schedule -->
-                        {% endfor %}
+             {% for inline_admin_formset in inline_admin_formsets %}
+                 {{ nline_admin_formset }}
+                {% if inline_admin_formset.formset.prefix == "tipoproyectodetalle_set" %}
+                    <!-- proyecto detalle-->
+                    <div role="tabpanel" class="tab-pane fade" id="otro8">
+                        {% include "admin/ERP/project/tabular.html" %}
+                    </div>
+                {% endif %}
+                <!-- Added block for the payment schedule -->
+                {% if inline_admin_formset.formset.prefix == "paymentschedule_set" %}
+                    <!-- proyecto programa-->
+                    <div role="tabpanel" class="tab-pane fade" id="otro9">
+                        {% include "admin/ERP/project/tabular.html" %}
+                    </div>
+                {% endif %}
+                <!-- Ends block for the payment schedule -->
+            {% endfor %}
 
             </div>
         </div>
