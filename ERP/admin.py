@@ -766,7 +766,7 @@ class ContractConceptsAdmin(admin.ModelAdmin):
             contract_concept = ContractConcepts.objects.filter(Q(concept_id=c.id))
 
             if len(contract_concept) == 0:
-                response.append({'key': str(c.id), 'amount': str(c.quantity), 'resting': str(c.quantity)})
+                response.append({'key': str(c.id), 'amount': str(c.quantity) + ' ' + c.unit.abbreviation, 'resting': str(c.quantity) + ' ' +c.unit.abbreviation})
             else:
                 contracted_amount = contract_concept[0].amount
                 response.append(
