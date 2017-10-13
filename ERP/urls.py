@@ -23,6 +23,8 @@ urlpatterns = [
     url(r'^api/sections_for_project_save', api.SectionsByProjectSave.as_view()),
     url(r'^api/sections_by_project', api.SectionsByProjectEndpoint.as_view()),
 
+    url(r'^api/clean_project', api.CleanProject.as_view()),
+
     # Endpoint to manage user assignment to a project.
     url(r'^api/get_access_to_project_by_user', api.AccessToProjectByUser.as_view()),
 

@@ -86,6 +86,8 @@ class DocumentoFuenteForm(forms.ModelForm):
     This forms allows the user to register a new estimate for an specific project.
     
 '''
+
+
 class EstimateForm(forms.ModelForm):
     class Meta:
         model = Estimate
@@ -96,7 +98,6 @@ class EstimateForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         super(EstimateForm, self).__init__(*args, **kwargs)
         project_id = self.request.GET.get('project')
-
 
         if kwargs.get('instance'):
             contract_id = kwargs['instance'].contract.id
@@ -112,8 +113,8 @@ class EstimateForm(forms.ModelForm):
                 contract_id_array.append(estimated_contract['contract_id'])
 
             all_contracts_by_project = ContratoContratista.objects.filter(Q(project_id=project_id))
-            no_estimated_contracts = ContratoContratista.objects.filter(Q(project_id=project_id)).exclude(Q(id__in=contract_id_array))
-
+            no_estimated_contracts = ContratoContratista.objects.filter(Q(project_id=project_id)).exclude(
+                Q(id__in=contract_id_array))
 
             no_concepts_contract_key_array = []
             no_concepts_contract_id_array = []
@@ -126,7 +127,6 @@ class EstimateForm(forms.ModelForm):
 
             self.fields['contract'].queryset = no_estimated_contracts.exclude(Q(id__in=no_concepts_contract_id_array))
 
-
             if not all_contracts_by_project.exists():
                 messages.error(self.request, "No se han generado contratos con contratistas para el proyecto actual.")
             elif not no_estimated_contracts.exists():
@@ -134,9 +134,6 @@ class EstimateForm(forms.ModelForm):
             if len(no_concepts_contract_key_array) >= 1:
                 messages.error(self.request, "Los siguientes contratos no cuentan con conceptos asignados: "
                                + ", ".join(no_concepts_contract_key_array))
-
-
-
 
     def clean(self):
         cleaned_data = super(EstimateForm, self).clean()
@@ -146,8 +143,8 @@ class EstimateForm(forms.ModelForm):
         print 'cleaning'
 
         if status == Estimate.PAID and amount <= 0:
-
-            self._errors["advance_payment_status"] = self.error_class(['El estatus del pago no puede ser "Pagado" si la cantidad es 0.0.'])
+            self._errors["advance_payment_status"] = self.error_class(
+                ['El estatus del pago no puede ser "Pagado" si la cantidad es 0.0.'])
             # self.fields['advance_payment_amount'].
             raise forms.ValidationError("Error")
 
@@ -266,7 +263,18 @@ class ContractConceptsForm(forms.ModelForm):
             contract_obj = ContratoContratista.objects.get(pk=self.contract_id)
 
             self.fields['contract'].queryset = ContratoContratista.objects.filter(pk=self.contract_id)
-            self.fields['concept'].queryset = Concept_Input.objects.filter(line_item__id=contract_obj.line_item.id)
+
+            contract_concepts = ContractConcepts.objects.filter(contract__id=self.contract_id).values('concept_id')
+            exclude = []
+            for c in contract_concepts:
+                exclude.append(c['concept_id'])
+
+            self.fields['concept'].queryset = Concept_Input.objects.filter(
+                line_item__id=contract_obj.line_item.id).exclude(id__in=exclude)
+
+            if len(self.fields['concept'].queryset) == 0:
+                messages.error(self.request,
+                               "Ya no hay más conceptos que se puedan agregar al contrato.")
 
 
 
@@ -278,7 +286,6 @@ class EstimateSearchForm(forms.Form):
         super(EstimateSearchForm, self).__init__()
         self.fields['line_item'].queryset = LineItem.objects.filter(project_id=project_id)
 
-
     start_date = forms.DateTimeField(initial=datetime.date.today(), widget=widgets.AdminDateWidget,
                                      label="Fecha de Inicio")
     end_date = forms.DateTimeField(initial=datetime.date.today(), widget=widgets.AdminDateWidget,
@@ -288,7 +295,7 @@ class EstimateSearchForm(forms.Form):
                                        empty_label="Seleccionar Partida", label='', required=False)
 
     contractor = forms.ModelChoiceField(queryset=Contratista.objects.all(),
-                                       empty_label="Seleccionar Contratista", label='', required=False)
+                                        empty_label="Seleccionar Contratista", label='', required=False)
 
 
 class AddEstimateForm(forms.Form):

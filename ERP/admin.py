@@ -7,9 +7,12 @@ from django.contrib import messages
 from django.db import transaction
 from django.http import Http404
 from django.shortcuts import redirect
+from rest_framework.utils import html
 
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
+from ERP.lib.errors import OperationLogicError
+from ERP.lib.utilities import Utilities
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm, \
     ContactForm, ContractConceptsForm
@@ -19,12 +22,17 @@ from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuen
 from django.contrib import admin
 from django.http import HttpResponseRedirect
 
+from urllib import unquote
+
 # Register your models here.
 # Modificacion del admin de Region para la parte de catalogos
 from ERP.views import CompaniesListView, ContractorListView, ProjectListView, ProgressEstimateLogListView, \
     EstimateListView, UploadedInputExplotionsHistoryListView, UploadedCatalogsHistoryAdminListView, \
     AccessToProjectAdminListView
 from SalcedoERP.lib.SystemLog import LoggingConstants
+import json
+
+from users.templatetags.app_filters import register
 
 
 class DocumentoFuenteInline(admin.TabularInline):
@@ -328,12 +336,10 @@ class AccessToProjectAdmin(admin.ModelAdmin):
 
         projects_array = []
 
-
         for project in projects_set:
             projects_array.append(project['project__id'])
 
         available_projects = Project.objects.exclude(Q(id__in=projects_array))
-
 
         if not available_projects.exists():
             custom_message = "No hay proyectos pendientes de asignación para el usuario actual."
@@ -341,7 +347,6 @@ class AccessToProjectAdmin(admin.ModelAdmin):
 
             if len(messages_list) <= 0:
                 messages.error(request, custom_message)
-
 
         project_field.queryset = available_projects
 
@@ -366,12 +371,10 @@ class AccessToProjectAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-
     def response_delete(self, request, obj_display, obj_id):
         user_id = request.GET.get('user')
 
-        return HttpResponseRedirect("/admin/ERP/accesstoproject/?user="+str(user_id))
-
+        return HttpResponseRedirect("/admin/ERP/accesstoproject/?user=" + str(user_id))
 
 
 class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
@@ -388,7 +391,6 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
         # Fet the field for the project to restrict.
         project = ModelForm.base_fields['project']
         project.queryset = Project.objects.filter(pk=project_id)
-
 
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
@@ -610,6 +612,11 @@ class ContactInline(admin.StackedInline):
         return ModelForm
 
 
+@register.filter
+def unquote_new(value):
+    return html.parser.HTMLParser().unescape(value)
+
+
 @admin.register(Contact)
 class ContactModelAdmin(admin.ModelAdmin):
     form = ContactForm
@@ -743,7 +750,6 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-
     def response_add(self, request, obj, post_url_continue="../%s/"):
         return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id))
 
@@ -756,14 +762,33 @@ class ConceptForContractsInlines(admin.TabularInline):
 class ContractConceptsAdmin(admin.ModelAdmin):
     form = ContractConceptsForm
 
+    def get_amounts_per_contract(self, contract_id):
+        line_item_id = ContratoContratista.objects.get(pk=contract_id).line_item.id
+
+        concepts = Concept_Input.objects.filter(line_item_id=line_item_id)
+        response = []
+
+        for c in concepts:
+            contract_concept = ContractConcepts.objects.filter(Q(concept_id=c.id))
+
+            if len(contract_concept) == 0:
+                response.append({'key': str(c.id), 'amount': str(c.quantity), 'resting': str(c.quantity)})
+            else:
+                contracted_amount = contract_concept[0].amount
+                response.append(
+                    {'key': str(c.id), 'amount': str(c.quantity), 'resting': str(c.quantity - contracted_amount)})
+        return response
+
     def get_form(self, request, obj=None, **kwargs):
 
         ModelForm = super(ContractConceptsAdmin, self).get_form(request, obj, **kwargs)
+
 
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
                 kwargs['contract_id'] = request.GET.get('contract_id')
+                self.form.amounts_per_concept = self.get_amounts_per_contract(kwargs['contract_id'])
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
@@ -774,7 +799,6 @@ class ContractConceptsAdmin(admin.ModelAdmin):
         else:
             return HttpResponseRedirect(
                 "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
-
 
     def response_add(self, request, obj, post_url_continue="../%s/"):
         if '_continue' not in request.POST:
@@ -852,6 +876,29 @@ class LineItemAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+    def delete_model(self, request, obj):
+
+        request.obj_parent = obj.parent_line_item_id
+        request.obj_project = obj.project_id
+
+        if obj.can_be_deleted():
+            return super(LineItemAdmin, self).delete_model(request, obj)
+        else:
+            e = OperationLogicError(
+                u'Error al borrar la partida con clave ' + obj.key + '. Alguno de sus conceptos internos ya ha sido estimado.',
+                LoggingConstants.ERROR, request.user.id)
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, e.get_error_message())
+
+    def response_delete(self, request, obj_display, obj_id):
+        # te quedaste aquí
+        if hasattr(request, "obj_parent") and request.obj_parent is not None:
+            parent_line_item = request.obj_parent
+        else:
+            parent_line_item = 0
+        project_id = request.obj_project
+        return redirect('/admin/ERP/lineitem/conceptos/' + str(project_id) + '/' + str(parent_line_item) + '/')
+
 
 @admin.register(Concept_Input)
 class ConceptInputAdmin(admin.ModelAdmin):
@@ -866,11 +913,13 @@ class ConceptInputAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+
 class PaymentScheduleInline(admin.TabularInline):
-    model= PaymentSchedule
+    model = PaymentSchedule
     extra = 0
     ordering = ("year", "month")
-    fields = ('project','year', 'month', 'amount')
+    fields = ('project', 'year', 'month', 'amount')
+
 
 @admin.register(Project)
 class ProjectModelAdmin(admin.ModelAdmin):
@@ -946,7 +995,6 @@ class ProjectModelAdmin(admin.ModelAdmin):
         tipo_construccion.widget.can_change_related = False
         empresa.widget.can_add_related = False
         empresa.widget.can_change_related = False
-
 
         if obj is not None:
             sections_dictionary = {
@@ -1072,13 +1120,15 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
-                    if inner_section['inner_section_status'] == 0 and inner_section['inner_section_short_name'] in sections_dictionary:
+                    if inner_section['inner_section_status'] == 0 and inner_section[
+                        'inner_section_short_name'] in sections_dictionary:
                         fields_to_exclude += sections_dictionary[inner_section['inner_section_short_name']]
-
+                    if inner_section['inner_section_status'] == 0 and inner_section[
+                        'inner_section_short_name'] in sections_dictionary:
+                        self.exclude += sections_dictionary[inner_section['inner_section_short_name']]
 
             print "Exclude: "
             print fields_to_exclude
-
 
             if len(fields_to_exclude) > 0:
                 self.exclude = fields_to_exclude
@@ -1095,7 +1145,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
         extra['sections_result'] = sections_result
 
         return super(ProjectModelAdmin, self).change_view(request, object_id,
-                                                     form_url, extra_context=extra)
+                                                          form_url, extra_context=extra)
 
 
 @admin.register(Estimate)
@@ -1125,7 +1175,6 @@ class EstimateAdmin(admin.ModelAdmin):
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         contract.widget.can_add_related = False
         contract.widget.can_change_related = False
-
 
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):

@@ -236,7 +236,10 @@ function segmentsSave(segmentos, no_seleccionados, project_id) {
         type: 'get',
         dataType: "html",
         success: function (data) {
-            alert(data[0].mensaje);
+            //alert(data[0].mensaje);
+            var message = 'Se guardó correctamente la configuración';
+            $('#alertModalSuccess').find('.modal-body p').text(message);
+            $('#alertModalSuccess').modal('show')
         },
         error: function (data) {
 
