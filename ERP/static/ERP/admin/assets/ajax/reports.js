@@ -76,10 +76,10 @@ function clearControl(idcontrol) {
 
 function Get_Financial_Report(){
     var project_id = $('select#project_id_AFI').find('option:selected').val();
-    var detail_level = $('select#detail_level').find('option:selected').val();
+   // var detail_level = $('select#detail_level').find('option:selected').val();
 
-    if (project_id != "" && detail_level.toString()!= "" ) {
-        window.open("/reporting/get_financial_report?project_id=" + parseInt(project_id) + "&detail_level=" + detail_level.toString());
+    if (project_id != ""){     // && detail_level.toString()!= "" ) {
+        window.open("/reporting/get_financial_report?project_id=" + parseInt(project_id)); // + "&detail_level=" + detail_level.toString());
     }
     else{
         //alert("Para generar el reporte debe seleccionar un Proyecto");
