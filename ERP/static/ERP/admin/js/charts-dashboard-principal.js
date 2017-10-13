@@ -79,7 +79,7 @@ function setDataCircles(porcentaje_fisico, porcentaje_financiero,indice){
                 styleText: true
             });
              var myCircle = Circles.create({
-                id: 'circles-'+indice+'-1', //+indice,
+                id: 'circles-'+indice+'-'+indice,
                 radius: 50,
                 value: porcentaje_financiero,
                 maxValue: 100,
