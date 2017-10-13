@@ -99,12 +99,13 @@
                             </a>
                         </li>
                     {% endif %}
-                         <li role="presentation">
+                    {% if section.section_name == "Programación"  %}
+                        <li role="presentation">
                             <a class="withoutripple" href="#otro9" aria-controls="otro9" role="tab" data-toggle="tab">
                                 <span class="">Programación</span>
                             </a>
                         </li>
-
+                    {% endif %}
                 {% endfor %}
             {% else %}
                  <li role="presentation" class="active">
