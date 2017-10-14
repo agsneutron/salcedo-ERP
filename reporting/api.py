@@ -159,7 +159,6 @@ class PhysicalFinancialAdvanceReport(View):
 
     @staticmethod
     def get_biddings_report(project_id):
-
         response = []
 
         # Getting the years found in the schedule.
@@ -190,8 +189,8 @@ class PhysicalFinancialAdvanceReport(View):
                 month_total_estimate = 0
                 # Obtaining all the estimates for the current month and year.
                 progress_estimate_set = ProgressEstimate.objects.filter(Q(estimate__contract__project__id=project_id)
-                                                                        & Q(estimate__start_date__month=record.month)
-                                                                        & Q(estimate__start_date__year=temp_year)) \
+                                                                        & Q(estimate__period__month=record.month)
+                                                                        & Q(estimate__period__year=temp_year)) \
                     .values('estimate__contract__project__id') \
                     .annotate(Count('estimate__contract__project__id'), total=Sum('amount'))
 
