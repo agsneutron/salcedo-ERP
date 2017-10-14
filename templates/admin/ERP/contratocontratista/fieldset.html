@@ -78,7 +78,7 @@
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.field|add_desc:"data-live-search=true" }}
                                     {{ field.errors }}
                                 </div>
                             </div>
