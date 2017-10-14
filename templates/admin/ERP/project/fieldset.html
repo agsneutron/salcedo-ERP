@@ -993,6 +993,12 @@
                             var html="";
                             if ( $('#otro5').length==0 ) {
                                 $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro5"> ');
+                                //$('#otro4').append('<h2 class="text-center">Uso del Suelo</h2><hr>');
+                                $('#otro5').append('<div class="row" id="otro51">');
+                                $('#otro5').append('<div class="row" id="otro52">');
+                                $('#otro5').append('<div class="row" id="otro53">');
+                                $('#otro5').append('<div class="row" id="otro54">');
+                                $('#otro5').append('<div class="row" id="otro55">');
                             }
                         </script>
 
@@ -1000,7 +1006,6 @@
                             <script type="text/javascript">
                         html='<h2 class="text-center">Vial</h2>'
                             +'<hr>'
-                            +'<div class="row">'
                             +'<div class="col-sm-3">'
                             +'    <div class="form-group field-vial_viaacceso">'
                             +'        <div>'
@@ -1010,7 +1015,7 @@
                             +'        </div>'
                             +'    </div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro51').append(html);
                         </script>
                         {% endif %}
 
@@ -1025,7 +1030,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro51').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "vial_carriles" %}
@@ -1039,7 +1044,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro51').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "vial_seccion" %}
@@ -1052,16 +1057,14 @@
                             +'        {{ field.errors }}'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro51').append(html);
                         </script>
                     {% endif %}
 
                     {% if field.field.name == "vial_tipopavimento" %}
                         <script type="text/javascript">
-                        html='<div class="row">'
-                        +'<div class="col-sm-3">'
+                        html='<div class="col-sm-3">'
                         +'    <div class="form-group field-vial_tipopavimento">'
                         +'        <div>'
                         +'            <label class="control-label" for="id_vial_tipopavimento">Tipo de Pavimento:</label>'
@@ -1070,7 +1073,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro52').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "vial_estadoconstruccion" %}
@@ -1085,7 +1088,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro52').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "vial_observaciones" %}
@@ -1099,7 +1102,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro52').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "vial_documento" %}
@@ -1120,9 +1123,8 @@
                             +'                            </span>'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro52').append(html);
                         </script>
                     {% endif %}
 
@@ -1130,7 +1132,6 @@
                         <script type="text/javascript">
                         html='<h2 class="text-center">Electricidad</h2>'
                         +'<hr>'
-                        +'<div class="row">'
                         +'<div class="col-sm-3">'
                         +'    <div class="form-group field-electricidad_tipo">'
                         +'        <div>'
@@ -1140,7 +1141,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro53').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "electricidad_distancia" %}
@@ -1154,7 +1155,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro53').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "electricidad_observaciones" %}
