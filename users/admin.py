@@ -56,5 +56,5 @@ class UsuarioAdmin(UserAdmin):
 
 
 # Registering activities.
-admin.site.unregister(User)
-admin.site.register(User, UsuarioAdmin)
+# admin.site.unregister(User)
+# admin.site.register(User, UsuarioAdmin)

@@ -134,6 +134,11 @@ class CompaniesListView(ListView):
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_empresa'):
+            raise PermissionDenied
+        return super(CompaniesListView, self).dispatch(request, args, kwargs)
+
 
 class CompanyDetailView(generic.DetailView):
     model = Empresa
@@ -183,6 +188,11 @@ class ContractorListView(ListView):
         context['query_string'] = '&q=' + CompaniesListView.query
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_contratista'):
+            raise PermissionDenied
+        return super(ContractorListView, self).dispatch(request, args, kwargs)
 
 
 class ContractorDetailView(generic.DetailView):
@@ -242,6 +252,14 @@ class ContractorContractListView(ListView):
             ContractorContractListView.query != "")
         print context
         return context
+
+
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_contratocontratista'):
+            raise PermissionDenied
+        return super(ContractorContractListView, self).dispatch(request, args, kwargs)
+
 
 
 class ContractorContractDetailView(generic.DetailView):

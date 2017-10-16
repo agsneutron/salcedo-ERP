@@ -385,6 +385,10 @@ class Contratista(models.Model):
     class Meta:
         verbose_name_plural = 'Contratista'
 
+        permissions = (
+            ("view_list_contratista", "Can see contractor listing"),
+        )
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
@@ -509,6 +513,10 @@ class Empresa(models.Model):
     class Meta:
         verbose_name_plural = 'Empresa'
 
+        permissions = (
+            ("view_list_empresa", "Can see client listing"),
+        )
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
@@ -587,6 +595,11 @@ class ContratoContratista(models.Model):
 
     class Meta:
         verbose_name_plural = 'Contratos'
+
+        permissions = (
+            ("view_list_contratocontratista", "Can see contractor contract listing"),
+        )
+
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
