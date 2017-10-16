@@ -1,4 +1,5 @@
 # coding=utf-8
+
 from __future__ import unicode_literals
 
 from decimal import Decimal
@@ -9,6 +10,18 @@ from django.db.models.functions import TruncMonth
 
 from ERP.models import LineItem, Concept_Input, ProgressEstimate, PaymentSchedule, Project, Estimate, \
     ContratoContratista
+import os, sys
+sys.setdefaultencoding('utf-8')
+from xlsxwriter.workbook import Workbook
+
+import datetime
+try:
+    import cStringIO as StringIO
+except ImportError:
+    import StringIO
+
+from django.http import HttpResponse, StreamingHttpResponse
+from wsgiref.util import FileWrapper
 
 
 class ReportingUtilities():
@@ -391,9 +404,9 @@ class EstimatesReport():
                 'concepts': concepts_array,
                 'project': estimate.contract.project.nombreProyecto,
                 'line_item': estimate.contract.line_item.description,
-                'start_date': str(estimate.start_date),
-                'end_date': str(estimate.end_date),
-                'period': str(estimate.period),
+                'start_date': str(estimate.start_date.strftime('%m/%d/%Y')),
+                'end_date': str(estimate.end_date.strftime('%m/%d/%Y')),
+                'period': str(estimate.period.strftime('%m/%d/%Y')),
                 'total_physical_estimate_amount': 0,
                 'total_financial_estimate_amount': 0,
                 'financial_advance': {
@@ -433,9 +446,8 @@ class EstimatesReport():
                 # Adding to the general amount
                 estimate_json['total_financial_estimate_amount'] += float(progress_estimate.amount)
 
-
-
             response.append(estimate_json)
+
 
 
         return response

@@ -7,6 +7,7 @@ from ERP.models import AccessToProject, Project, LineItem
 from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
+from lib.estimate_reports import EstimateReports
 from django.shortcuts import render, redirect, render_to_response
 from django.views.generic import View
 
@@ -928,11 +929,27 @@ class GetDashboardByProject(View):
 
 
 # Report to retrieve the json for every estimate in a project.
-class GetEstimatesReport(View):
+class GetEstimatesReportJson(View):
     def get(self, request):
 
         project_id = request.GET.get('project_id')
         response = api.EstimatesReport.getReport(project_id)
 
         return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
+
+
+class GetEstimatesReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        #detail_level = request.GET.get('detail_level')
+        # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
+        # will be exported grouped by line_item.
+        show_concepts = True
+
+        responseJson = api.EstimatesReport.getReport(project_id)
+
+        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+
+        file = EstimateReports.generate_report(responseJson, show_concepts)
+        return file
 
