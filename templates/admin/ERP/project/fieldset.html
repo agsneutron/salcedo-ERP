@@ -164,6 +164,56 @@
 
         <div class="card-block">
             <div class="tab-content" id = "container">
+
+
+            <script>
+                var html="";
+                if ( $('#otro3').length==0 ) {
+                    $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro3"> ');
+                    $('#otro3').append('<div class="row" id="otro31">');
+                    $('#otro3').append('<div class="row" id="otro32">');
+                    $('#otro3').append('<div class="row" id="otro33">');
+
+                }
+
+                if ( $('#otro4').length==0 ) {
+                    $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro4"> ');
+                    //$('#otro4').append('<h2 class="text-center">Uso del Suelo</h2><hr>');
+                    $('#otro4').append('<div class="row" id="otro41">');
+                    $('#otro4').append('<div class="row" id="otro42">');
+                    $('#otro4').append('<div class="row" id="otro43">');
+                    $('#otro4').append('<div class="row" id="otro44">');
+                    $('#otro4').append('<div class="row" id="otro45">');
+                }
+
+                if ( $('#otro5').length==0 ) {
+                    $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro5"> ');
+                    //$('#otro4').append('<h2 class="text-center">Uso del Suelo</h2><hr>');
+                    $('#otro5').append('<div class="row" id="otro51">');
+                    $('#otro5').append('<div class="row" id="otro52">');
+                    $('#otro5').append('<div class="row" id="otro53">');
+                    $('#otro5').append('<div class="row" id="otro54">');
+                    $('#otro5').append('<div class="row" id="otro55">');
+                    $('#otro5').append('<div class="row" id="otro56">');
+                    $('#otro5').append('<div class="row" id="otro57">');
+                }
+
+                if ( $('#otro6').length==0 ) {
+                    $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro6"> ');
+                    //$('#otro4').append('<h2 class="text-center">Uso del Suelo</h2><hr>');
+                    $('#otro6').append('<div class="row" id="otro61">');
+                    $('#otro6').append('<div class="row" id="otro62">');
+                    $('#otro6').append('<div class="row" id="otro63">');
+                }
+                if ( $('#otro7').length==0 ) {
+                    $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro7"> ');
+                    //$('#otro4').append('<h2 class="text-center">Uso del Suelo</h2><hr>');
+                    $('#otro7').append('<div class="row" id="otro71">');
+                    $('#otro7').append('<div class="row" id="otro72">');
+                }
+            </script>
+
+
                 {% for line in fieldset %}
                     {% for field in line %}
                         {% if field.field.name == "version" %}
@@ -579,105 +629,108 @@
 
                         {% if field.field.name == "restriccion_vial" %}
 
-                            <div role="tabpanel" class="tab-pane fade" id="otro3">
-                            <h2 class="text-center">Restricciones</h2>
-                            <hr>
-                            <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group field-restriccion_vial">
-                                    <div>
-                                        <label class="control-label required" for="id_restriccion_vial">Vial:</label>
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
+                            <script type="text/javascript">
+                        html=' <h2 class="text-center">Restricciones</h2>'
+                            +'<hr>'
+                            +'<div class="col-sm-4">'
+                            +'    <div class="form-group field-restriccion_vial">'
+                            +'        <div>'
+                            +'            <label class="control-label required" for="id_restriccion_vial">Vial:</label>'
+                            +'            {{ field.field|addcss:"form-control" }}'
+                            +'            {{ field.errors }}'
+                            +'        </div>'
+                            +'    </div>'
+                            +'</div>';
+                        $('#otro31').append(html);
+                        </script>
                         {% endif %}
                     {% if field.field.name == "restriccion_cna" %}
-                        <div class="col-sm-4">
-                            <div class="form-group field-restriccion_cna">
-                                <div>
-                                    <label class="control-label required" for="id_restriccion_cna">CNA:</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
+                        <script type="text/javascript">
+                        html='<div class="col-sm-4">'
+                            +'<div class="form-group field-restriccion_cna">'
+                            +'    <div>'
+                            +'        <label class="control-label required" for="id_restriccion_cna">CNA:</label>'
+                            +'        {{ field.field|addcss:"form-control" }}'
+                            +'        {{ field.errors }}'
+                            +'    </div>'
+                            +'</div>'
+                            +'</div>';
+                        $('#otro31').append(html);
+                        </script>
                     {% endif %}
                     {% if field.field.name == "restriccion_cfe" %}
-                        <div class="col-sm-4">
-                            <div class="form-group field-restriccion_cfe">
-                                <div>
-                                    <label class="control-label required" for="id_restriccion_cfe">CFE:</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
-                        </div>
+                        <script type="text/javascript">
+                        html='<div class="col-sm-4">'
+                            +'<div class="form-group field-restriccion_cfe">'
+                            +'    <div>'
+                            +'        <label class="control-label required" for="id_restriccion_cfe">CFE:</label>'
+                            +'        {{ field.field|addcss:"form-control" }}'
+                            +'        {{ field.errors }}'
+                            +'    </div>'
+                            +'</div>'
+                            +'</div>';
+                        $('#otro31').append(html);
+                        </script>
                     {% endif %}
                     {% if field.field.name == "restriccion_pemex" %}
-                        <div class="row">
-                        <div class="col-sm-4">
-                            <div class="form-group field-restriccion_pemex">
-                                <div>
-                                    <label class="control-label required" for="id_restriccion_pemex">PEMEX:</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
+                        <script type="text/javascript">
+                        html='<div class="col-sm-4">'
+                            +'<div class="form-group field-restriccion_pemex">'
+                            +'    <div>'
+                            +'        <label class="control-label required" for="id_restriccion_pemex">PEMEX:</label>'
+                            +'        {{ field.field|addcss:"form-control" }}'
+                            +'        {{ field.errors }}'
+                            +'    </div>'
+                            +'</div>'
+                            +'</div>';
+                        $('#otro32').append(html);
+                        </script>
                     {% endif %}
                     {% if field.field.name == "restriccion_inha" %}
-                        <div class="col-sm-4">
-                            <div class="form-group field-restriccion_inha">
-                                <div>
-                                    <label class="control-label required" for="id_restriccion_inha">INHA:</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
+                        <script type="text/javascript">
+                        html='<div class="col-sm-4">'
+                            +'<div class="form-group field-restriccion_inha">'
+                            +'    <div>'
+                            +'        <label class="control-label required" for="id_restriccion_inha">INHA:</label>'
+                            +'        {{ field.field|addcss:"form-control" }}'
+                            +'        {{ field.errors }}'
+                            +'    </div>'
+                            +'</div>'
+                            +'</div>';
+                        $('#otro32').append(html);
+                        </script>
                     {% endif %}
                     {% if field.field.name == "restriccion_otros" %}
-                        <div class="col-sm-4">
-                            <div class="form-group field-restriccion_otros">
-                                <div>
-                                    <label class="control-label required" for="id_restriccion_otros">Otros:</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
-                        </div>
-                        </div>
+                        <script type="text/javascript">
+                        html='<div class="col-sm-4">'
+                            +'<div class="form-group field-restriccion_otros">'
+                            +'    <div>'
+                            +'        <label class="control-label required" for="id_restriccion_otros">Otros:</label>'
+                            +'        {{ field.field|addcss:"form-control" }}'
+                            +'        {{ field.errors }}'
+                            +'    </div>'
+                            +'</div>'
+                            +'</div>';
+                        $('#otro32').append(html);
+                        </script>
                     {% endif %}
                     {% if field.field.name == "restriccion_observaciones" %}
-                        <div class="row">
-                            <div class="col-sm-6 col-sm-offset-3">
-                                <div class="form-group field-restriccion_observaciones">
-                                    <div>
-                                        <label class="control-label required" for="id_restriccion_observaciones">Observaciones:</label>
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
+                        <script type="text/javascript">
+                        html=' <div class="col-sm-6 col-sm-offset-3">'
+                            +'<div class="form-group field-restriccion_observaciones">'
+                            +'    <div>'
+                            +'        <label class="control-label required" for="id_restriccion_observaciones">Observaciones:</label>'
+                            +'        {{ field.field|addcss:"form-control" }}'
+                            +'        {{ field.errors }}'
+                            +'    </div>'
+                            +'</div>'
+                            +'</div>';
+                        $('#otro33').append(html);
+                        </script>
+
                     {% endif %}
 
-                        <script>
-                            var html="";
-                            if ( $('#otro4').length==0 ) {
-                                $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro4"> ');
-                                //$('#otro4').append('<h2 class="text-center">Uso del Suelo</h2><hr>');
-                                $('#otro4').append('<div class="row" id="otro41">');
-                                $('#otro4').append('<div class="row" id="otro42">');
-                                $('#otro4').append('<div class="row" id="otro43">');
-                                $('#otro4').append('<div class="row" id="otro44">');
-                                $('#otro4').append('<div class="row" id="otro45">');
-                            }
-                        </script>
+
 
                         {% if field.field.name == "usosuelo_pmdu" %}
 
@@ -989,18 +1042,7 @@
                         </script>
                     {% endif %}
 
-                        <script>
-                            var html="";
-                            if ( $('#otro5').length==0 ) {
-                                $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro5"> ');
-                                //$('#otro4').append('<h2 class="text-center">Uso del Suelo</h2><hr>');
-                                $('#otro5').append('<div class="row" id="otro51">');
-                                $('#otro5').append('<div class="row" id="otro52">');
-                                $('#otro5').append('<div class="row" id="otro53">');
-                                $('#otro5').append('<div class="row" id="otro54">');
-                                $('#otro5').append('<div class="row" id="otro55">');
-                            }
-                        </script>
+
 
                         {% if field.field.name == "vial_viaacceso" %}
                             <script type="text/javascript">
@@ -1170,7 +1212,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro53').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "electricidad_documento" %}
@@ -1191,9 +1233,8 @@
                             +'                            </span>'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro53').append(html);
                         </script>
                     {% endif %}
 
@@ -1201,7 +1242,6 @@
                         <script type="text/javascript">
                         html='<h2 class="text-center">Alumbrado Público</h2>'
                         +'<hr>'
-                        +'<div class="row">'
                         +'<div class="col-sm-3">'
                         +'    <div class="form-group field-alumbradopublico_tipo">'
                         +'        <div>'
@@ -1211,7 +1251,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro54').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "alumbradopublico_distancia" %}
@@ -1225,7 +1265,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro54').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "alumbradopublico_observaciones" %}
@@ -1240,7 +1280,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro54').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "alumbradopublico_documento" %}
@@ -1261,9 +1301,8 @@
                             +'                            </span>'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro54').append(html);
                         </script>
                     {% endif %}
 
@@ -1271,7 +1310,7 @@
                         <script type="text/javascript">
                         html='<h2 class="text-center">Telefonía</h2>'
                         +'<hr>'
-                        +'<div class="row">'
+                        //+'<div class="row">'
                         +'<div class="col-sm-4">'
                         +'    <div class="form-group field-telefonia_distancia">'
                         +'        <div>'
@@ -1281,7 +1320,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro55').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "telefonia_observaciones" %}
@@ -1295,7 +1334,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro55').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "telefonia_documento" %}
@@ -1316,9 +1355,8 @@
                             +'                            </span>'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro55').append(html);
                         </script>
                     {% endif %}
 
@@ -1326,7 +1364,6 @@
                         <script type="text/javascript">
                         html='<h2 class="text-center">TV Cable</h2>'
                         +'<hr>'
-                        +'<div class="row">'
                         +'<div class="col-sm-6">'
                         +'    <div class="form-group field-tvcable_distancia">'
                         +'        <div>'
@@ -1336,7 +1373,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro56').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "tvcable_observaciones" %}
@@ -1349,16 +1386,14 @@
                             +'        {{ field.errors }}'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro56').append(html);
                         </script>
                     {% endif %}
-                    {% if field.field.name == "tvcable_observaciones" %}
+                    {% if field.field.name == "equipamiento_a100" %}
                         <script type="text/javascript">
                         html='<h2 class="text-center">Equipamiento</h2>'
                         +'<hr>'
-                        +'<div class="row">'
                         +'<div class="col-sm-3">'
                             +'<div class="form-group field-equipamiento_a100">'
                         +'        <div>'
@@ -1368,7 +1403,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro57').append(html);
                         </script>
                     {% endif %}
 
@@ -1383,7 +1418,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro57').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "equipamiento_a500" %}
@@ -1397,7 +1432,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                        $('#otro57').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "equipamiento_a500" %}
@@ -1410,18 +1445,16 @@
                             +'        {{ field.errors }}'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro5').append(html);
+                            //+'</div>'
+                            //+'</div>';
+                        $('#otro57').append(html);
                         </script>
                     {% endif %}
 
                         {% if field.field.name == "costo_predio" %}
-                            <div role="tabpanel" class="tab-pane fade" id="otro6">
                         <script type="text/javascript">
-                        html='<div class="row">'
-                            +'<h2 class="text-center">Costo</h2>'
+                        html='<h2 class="text-center">Costo</h2>'
                             +'<hr>'
                             +'<div class="col-sm-3">'
                             +'    <div class="form-group field-costo_predio"'
@@ -1432,17 +1465,10 @@
                             +'        </div>'
                             +'    </div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro61').append(html);
                         </script>
                         {% endif %}
 
-
-                        <script>
-                            var html="";
-                            if ( $('#otro6').length==0 ) {
-                                $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro6"> ');
-                            }
-                        </script>
 
                     {% if field.field.name == "costo_m2" %}
                         <script type="text/javascript">
@@ -1455,7 +1481,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro61').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "costo_escrituras" %}
@@ -1469,7 +1495,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro61').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "costo_levantamiento" %}
@@ -1482,16 +1508,14 @@
                             +'        {{ field.errors }}'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro61').append(html);
                         </script>
                     {% endif %}
 
                     {% if field.field.name == "estudiomercado_demanda" %}
                         <script type="text/javascript">
-                        html='<div class="row">'
-                        +'<h2 class="text-center">Estudio de Mercado</h2>'
+                        html='<h2 class="text-center">Estudio de Mercado</h2>'
                         +'<hr>'
                         +'<div class="col-sm-3">'
                         +'    <div class="form-group field-estudiomercado_demanda">'
@@ -1502,7 +1526,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro62').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "estudiomercado_oferta" %}
@@ -1516,7 +1540,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro62').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "estudiomercado_conclusiones" %}
@@ -1531,7 +1555,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro62').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "estudiomercado_recomendaciones" %}
@@ -1544,16 +1568,14 @@
                             +'        {{ field.errors }}'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro62').append(html);
                         </script>
                     {% endif %}
 
                     {% if field.field.name == "definicionproyecto_alternativa" %}
                         <script type="text/javascript">
-                        html='<div class="row">'
-                        +'<h2 class="text-center">Definición del Proyecto</h2>'
+                        html='<h2 class="text-center">Definición del Proyecto</h2>'
                         +'<hr>'
                         +'<div class="col-sm-4">'
                         +'    <div class="form-group field-definicionproyecto_alternativa">'
@@ -1565,7 +1587,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro63').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "definicionproyecto_tamano" %}
@@ -1579,7 +1601,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro63').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "definicionproyecto_programa" %}
@@ -1592,36 +1614,29 @@
                             +'        {{ field.errors }}'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro6').append(html);
+                        $('#otro63').append(html);
                         </script>
                     {% endif %}
 
                         {% if field.field.name == "programayarea_areaprivativa" %}
-                            <div role="tabpanel" class="tab-pane fade" id="otro7">
-                            <div class="row">
-                            <h2 class="text-center">Programas y Áreas</h2>
-                            <hr>
-                            <div class="col-sm-2">
-                                <div class="form-group field-programayarea_areaprivativa">
-                                    <div>
-                                        <label class="control-label" for="id_programayarea_areaprivativa">Área
-                                            Privada:</label>
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
+                            <script type="text/javascript">
+                        html='<h2 class="text-center">Programas y Áreas</h2>'
+                            +'<hr>'
+                            +'<div class="col-sm-2">'
+                            +'    <div class="form-group field-programayarea_areaprivativa">'
+                            +'        <div>'
+                            +'            <label class="control-label" for="id_programayarea_areaprivativa">Área'
+                            +'                Privada:</label>'
+                            +'            {{ field.field|addcss:"form-control" }}'
+                            +'            {{ field.errors }}'
+                            +'        </div>'
+                            +'    </div>'
+                            +'</div>';
+                        $('#otro71').append(html);
+                        </script>
                         {% endif %}
 
-                        <script>
-                            var html="";
-                            if ( $('#otro7').length==0 ) {
-                                $('#container').append('<div role="tabpanel" class="tab-pane fade" id="otro7"> ');
-                            }
-                        </script>
 
                     {% if field.field.name == "programayarea_caseta" %}
                         <script type="text/javascript">
@@ -1634,7 +1649,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro7').append(html);
+                        $('#otro71').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "programayarea_jardin" %}
@@ -1648,7 +1663,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro7').append(html);
+                        $('#otro71').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "programayarea_vialidad" %}
@@ -1662,7 +1677,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro7').append(html);
+                        $('#otro71').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "programayarea_areaverde" %}
@@ -1676,7 +1691,7 @@
                             +'    </div>'
                             +'</div>'
                             +'</div>';
-                        $('#otro7').append(html);
+                        $('#otro71').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "programayarea_estacionamientovisita" %}
@@ -1690,16 +1705,14 @@
                             +'        {{ field.errors }}'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro7').append(html);
+                        $('#otro71').append(html);
                         </script>
                     {% endif %}
 
                     {% if field.field.name == "programayarea_afectacion" %}
                         <script type="text/javascript">
-                        html='<div class="row">'
-                        +'<h2 class="text-center">Afectación</h2>'
+                        html='<h2 class="text-center">Afectación</h2>'
                         +'<hr>'
                         +'<div class="col-sm-3 col-sm-offset-3">'
                         +'    <div class="form-group field-programayarea_afectacion">'
@@ -1710,7 +1723,7 @@
                         +'        </div>'
                         +'    </div>'
                         +'</div>';
-                        $('#otro7').append(html);
+                        $('#otro72').append(html);
                         </script>
                     {% endif %}
                     {% if field.field.name == "programayarea_documento" %}
@@ -1731,10 +1744,8 @@
                             +'                            </span>'
                             +'    </div>'
                             +'</div>'
-                            +'</div>'
-                            +'</div>'
                             +'</div>';
-                        $('#otro7').append(html);
+                        $('#otro72').append(html);
                         </script>
                     {% endif %}
                     {% endfor %}
