@@ -639,6 +639,7 @@
             });
 
   $("#datepicker_from").datepicker({
+ monthNames: [ "Enero", "Februar", "Marts", "April", "Maj", "Juni", "Juli", "August", "September", "Oktober", "November", "December" ],
 
     "onSelect": function(date) {
       minDateFilter = new Date(date).getTime();

@@ -11,7 +11,10 @@ body {
 .btn, .input-group-btn .btn {
     text-transform: none !important;
 }
+.btn>i {
 
+    margin-right: 3px;
+}
 #content {
     padding-bottom: 30px;
 }
