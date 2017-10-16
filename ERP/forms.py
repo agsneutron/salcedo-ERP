@@ -13,7 +13,7 @@ from users.models import ERPUser
 import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
-    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input
+    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input, AccessToProject
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -169,7 +169,6 @@ class ProgressEstimateLogForm(forms.ModelForm):
         self.project_id = kwargs.pop('project_id', None)
         self.user_id = kwargs.pop('user_id', None)
 
-
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
 
@@ -231,11 +230,15 @@ class ContractForm(forms.ModelForm):
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
+        print args
+        print '--'
+        print kwargs
         self.request = kwargs.pop('request', None)
         super(ContractForm, self).__init__(*args, **kwargs)
         # self.fields['fecha_inicio'].widget = widgets.AdminDateWidget()
         # self.fields['fecha_termino'].widget = widgets.AdminDateWidget()
         # self.fields['fecha_firma'].widget = widgets.AdminDateWidget()
+
 
 
 class ContractConceptsForm(forms.ModelForm):
@@ -270,8 +273,6 @@ class ContractConceptsForm(forms.ModelForm):
             if len(self.fields['concept'].queryset) == 0:
                 messages.error(self.request,
                                "Ya no hay más conceptos que se puedan agregar al contrato.")
-
-
 
 
 class EstimateSearchForm(forms.Form):

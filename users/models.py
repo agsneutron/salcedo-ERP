@@ -5,10 +5,8 @@ from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 
 
-
 def profile_picture_document_destination(instance, filename):
     return '/'.join(['documentos_del_usuario', str(instance.user.id), 'profile_' + filename])
-
 
 
 # Create your models here.
@@ -41,6 +39,6 @@ class ERPUser(models.Model):
         return self.user.get_username()
 
 
+
+
         # Create your models here.
-
-

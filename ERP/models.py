@@ -608,7 +608,6 @@ class ContratoContratista(models.Model):
         ans['pago_final'] = str(self.pago_final)
         ans['observaciones'] = str(self.observaciones)
 
-
         return ans
 
     def __str__(self):
@@ -1618,3 +1617,16 @@ class AccessToProject(models.Model):
 
     def __str__(self):
         return self.user.user.get_username() + " - " + self.project.nombreProyecto
+
+    @staticmethod
+    def user_has_access_to_project(user_id, project_id):
+        access_objects = AccessToProject.objects.filter(Q(user_id=user_id) & Q(project_id=project_id))
+        return len(access_objects) > 0
+
+    @staticmethod
+    def get_projects_for_user(user_id):
+        projects = AccessToProject.objects.filter(user_id=user_id).values('project_id')
+        project_ids = []
+        for p in projects:
+            project_ids.append(p['project_id'])
+        return project_ids

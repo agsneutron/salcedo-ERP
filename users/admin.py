@@ -31,7 +31,6 @@ class UsuarioAdmin(UserAdmin):
         ('Permissions', {'fields': ('is_active',)}),
     )
 
-
     def get_rol(self, obj):
         return obj.erpuser.rol
 
