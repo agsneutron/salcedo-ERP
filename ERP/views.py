@@ -272,6 +272,27 @@ class ContractorContractDetailView(generic.DetailView):
         context = super(ContractorContractDetailView, self).get_context_data(**kwargs)
         contract_id = self.kwargs['pk']
         context['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id))
+        # Getting, if exists, the advance payment for the contract
+        estimate = Estimate.objects.get(contract__id=contract_id)
+
+        advance_payment = None
+        advance_payment_status = ""
+
+        if estimate:
+            advance_payment = estimate.advance_payment_amount
+
+        if advance_payment == None:
+            advance_payment = "No se ha registrado un anticipo."
+            advance_payment_status = "Estatus no disponible."
+        else:
+            advance_payment = Utilities.number_to_currency(advance_payment)
+            advance_payment_status = estimate.get_advance_payment_status_display()
+
+
+        context['advance_payment'] = advance_payment
+        context['advance_payment_status'] = advance_payment_status
+
+
         return context
 
     def dispatch(self, request, *args, **kwargs):
