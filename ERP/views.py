@@ -33,6 +33,8 @@ from SalcedoERP.lib.constants import Constants
 
 from django.forms import formset_factory
 
+from users.models import ERPUser
+
 
 def custom_404(request):
     return render_to_response('404.html', RequestContext(request))
@@ -486,7 +488,7 @@ class ProjectListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        user_id = self.request.user.id
+        user_id = self.request.user.erpuser.id
         access_set = AccessToProject.objects.filter(user_id=user_id)
 
         projects_array = []
