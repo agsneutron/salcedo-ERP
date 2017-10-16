@@ -833,6 +833,7 @@ class GetPhysicalFinancialAdvanceReport(View):
 
 
         report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id, selected_line_items_array)
+        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
 
         file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file

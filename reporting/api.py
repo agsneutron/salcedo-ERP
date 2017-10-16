@@ -25,10 +25,49 @@ class ReportingUtilities():
 
         elif line_item.parent_line_item is not None:
             return ReportingUtilities.get_parent_from_array(line_item.parent_line_item,
-                                                                           parents_array)
+                                                            parents_array)
 
         else:
             return None
+
+    @staticmethod
+    def check_if_line_item_is_parent(concept_input, parent_id):
+        '''
+        :param concept_input: concept_input to inspect.
+        :param parent_id: The line_item to be evaluated as a parent.
+        :return: True or False depending on whether the line_item is parent or not.
+        '''
+
+        if concept_input.line_item.id == parent_id:
+            return True
+
+        elif concept_input.line_item.parent_line_item is not None:
+            parents_array = [parent_id]
+            result = ReportingUtilities.get_parent_from_array(concept_input.line_item,
+                                                            parents_array)
+            if result is not None:
+                return True
+
+        return False
+
+    @staticmethod
+    def get_sub_line_items(line_item_obj):
+        '''
+        :param line_item: line_item object to inspect.
+        :return: An array containing the sub_line_items.
+        '''
+        parents_array = [line_item_obj.id]
+        sub_line_items_array = []
+
+        line_items_set = LineItem.objects.filter(Q(project__id=line_item_obj.project.id))
+        for line_item in line_items_set:
+            result = ReportingUtilities.get_parent_from_array(line_item, parents_array)
+            if result is not None:
+                sub_line_items_array.append(line_item.id)
+
+        return sub_line_items_array
+
+
 
     @staticmethod
     def get_first_two_line_item_levels(project_id):
@@ -148,12 +187,21 @@ class PhysicalFinancialAdvanceReport(View):
         for item in selected_line_items:
             current_line_item = LineItem.objects.get(pk=int(item))
 
+            sub_line_items_array = ReportingUtilities.get_sub_line_items(current_line_item)
+            # Getting all the concepts for the current line_item or its childs
+            concept_input_set = Concept_Input.objects.filter(Q(line_item__id__in=sub_line_items_array))
+            concepts_amount = 0
+            for concept in concept_input_set:
+                concepts_amount += (concept.quantity * concept.unit_price)
+
+
             selected_line_items_dictionary[str(item)] = {
                 'name': current_line_item.description,
                 'line_item_key': current_line_item.key,
-                'total_programmed': 0,
+                'total_programmed': float(concepts_amount),
+                'total_contracted': 0,
                 'total_physical_advance': 0,
-                'total_financial_advance': 0
+                'total_financial_advance': 0,
             }
 
         # Getting all the estimates for the project.
@@ -169,7 +217,7 @@ class PhysicalFinancialAdvanceReport(View):
             # been paid or not
             physical_progress_estimate_set = ProgressEstimate.objects.filter(estimate__id=estimate.id).values('estimate__id') \
                 .annotate(Count('estimate__id'), physical_advance_amount=Sum('amount'),
-                          programmed_amount=Sum('estimate__contract__monto_contrato'))
+                          contracted_amount=Sum('estimate__contract__monto_contrato'))
 
             # Getting all the progresses for the financial report: paid progress estimates.
             financial_progress_estimate_set = ProgressEstimate.objects\
@@ -181,13 +229,13 @@ class PhysicalFinancialAdvanceReport(View):
 
             # If the estimate belongs to one of the selected line items.
             if estimate_belongs_to is not None and len(physical_progress_estimate_set) > 0:
-                programmed = selected_line_items_dictionary[str(estimate_belongs_to)]['total_programmed']
+                contracted = selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted']
                 physical_advance = selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance']
                 financial_advance = selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance']
 
                 # Contracted Amount.
-                selected_line_items_dictionary[str(estimate_belongs_to)]['total_programmed'] = float(programmed) \
-                                                                                              + float(physical_progress_estimate_set[0]['programmed_amount'])
+                selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted'] = float(contracted) \
+                                                                                              + float(physical_progress_estimate_set[0]['contracted_amount'])
                 # Physical Advance Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance'] = float(physical_advance) \
                                                                                                + float(physical_progress_estimate_set[0]['physical_advance_amount'])
