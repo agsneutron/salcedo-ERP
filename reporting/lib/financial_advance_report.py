@@ -85,7 +85,7 @@ class FinancialAdvanceReport(object):
 
         if FinancialAdvanceReport.show_concepts:
 
-            worksheet.merge_range('B5:B6', 'Concepto', header_format)
+            worksheet.merge_range('B5:B6', 'Subpartida', header_format)
 
             worksheet.write('C5', 'Programado', header_format)
             worksheet.write('C6', 'Importe C/IVA', header_format)

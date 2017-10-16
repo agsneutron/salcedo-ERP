@@ -1,8 +1,9 @@
 # coding=utf-8
+from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
 
 from ERP import api
-from ERP.models import AccessToProject, Project
+from ERP.models import AccessToProject, Project, LineItem
 from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
@@ -798,37 +799,17 @@ class GetFinancialReport(View):
         # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
         # will be exported grouped by line_item.
         show_concepts = True
-        selected_line_items_array = [
-            642,
-            643,
-            644,
-            645,
-            646,
-            647,
-            648,
-            649,
-            650,
-            651,
-            653,
-            658,
-            662,
-            667,
-            672,
-            679,
-            683,
-            692,
-            698,
-            700,
-            705,
-            714,
-            722,
-            727,
-            728,
-            729
-        ]
+
+
+        # The next block is to force the second level of line items to work with the report. Keep in mind this won't work
+        # on further versions
+        # Block to delete:
+        selected_line_items_array = api.ReportingUtilities.get_first_two_line_item_levels(project_id)
+        # Ends block to delete.
+
         report_json = api.FinancialHistoricalProgressReport.get_report(project_id, selected_line_items_array)
 
-        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
 
         file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
@@ -844,7 +825,14 @@ class GetPhysicalFinancialAdvanceReport(View):
         else:
             show_concepts = False
 
-        report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id)
+        # The next block is to force the second level of line items to work with the report. Keep in mind this won't work
+        # on further versions
+        # Block to delete:
+        selected_line_items_array = api.ReportingUtilities.get_first_two_line_item_levels(project_id)
+        # Ends block to delete.
+
+
+        report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id, selected_line_items_array)
 
         file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
@@ -937,4 +925,14 @@ class GetDashboardByProject(View):
         }
 
         return HttpResponse(Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
+
+
+# Report to retrieve the json for every estimate in a project.
+class GetEstimatesReport(View):
+    def get(self, request):
+
+        project_id = request.GET.get('project_id')
+        response = api.EstimatesReport.getReport(project_id)
+
+        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
 
