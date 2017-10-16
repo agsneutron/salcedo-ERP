@@ -78,11 +78,13 @@
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.field|addcss:"form-control " }}
                                     {{ field.errors }}
                                 </div>
                             </div>
+
                         </div>
+
                         </div>
                     {% endif %}
 
@@ -310,6 +312,8 @@
                                 </div>
                             </div>
                         </div>
+
+
                         </div>
                     {% endif %}
                         {% if field.field.name == "version" %}
@@ -322,6 +326,21 @@
 
             </div>
 </fieldset>
+
+
+<script>
+{% comment %}    $(document).ready(function () {
+         document.getElementById("id_project").setAttribute("onchange", "myFunction()");
+        document.getElementById("id_line_item").setAttribute("data-live-search", "true");
+    });
+
+    function myFunction() {
+        $('.selectpicker').selectpicker('refresh');
+        $('.selectpicker').selectpicker('render');
+
+    };{% endcomment %}
+</script>
+
 
 {% comment %}<script src="https://nosir.github.io/cleave.js/dist/cleave.min.js"></script>
 <script>

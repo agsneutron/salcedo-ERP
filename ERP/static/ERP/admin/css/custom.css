@@ -22,6 +22,12 @@ body {
 .vDateField, .vTimeField {
     margin-top: 0 !important;
 }
+.date_range_filter {
+    width: 100px;
+}
+.ui-datepicker {
+    z-index: 9999 !important;
+}
 .modal.modal-primary .modal-header {
     background-color: #204280 !important;
     color: #fff;

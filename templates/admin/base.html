@@ -45,7 +45,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/theme.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/custom.css" %}"/>
     <!-- Bootstrap Library js -->
-
+<!-- Latest compiled and minified CSS -->
 
     {% block extrastyle %}{% endblock %}
     {% if LANGUAGE_BIDI %}
@@ -58,9 +58,10 @@
 
 
     {% block blockbots %}
-        <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
-        <script src="{% static "ERP/admin/js/theme.js" %}"></script>
 
+        <script src="{% static "ERP/admin/js/theme.js" %}"></script>
+<script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
+<script src="{% static "ERP/admin/assets/dataTables/date_range.js" %}"></script>
         {% comment %}DataTables{% endcomment %}
 
     {% endblock %}
@@ -521,11 +522,7 @@
 </div>
 
 <script>
-if (errors) {
-    var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
-    $('#alertModal').find('.modal-body p').text(message);
-    $('#alertModal').modal('show')
-}
+
 </script>
 {% comment %}Ventana de errores{% endcomment %}
 <script>
@@ -567,7 +564,8 @@ if (errors) {
 </script>
  <script>
         $(document).ready(function () {
-            $('#table_s').DataTable({
+  var oTable_one = $('#table_s').DataTable({
+
                 columnDefs: [
                     {
                         className: 'mdl-data-table__cell--non-numeric'
@@ -597,13 +595,17 @@ if (errors) {
                         "sNext": "»",
                         "sPrevious": "«"
                     }
+
                 },
+
             });
+
+
         });
     </script>
 <script>
         $(document).ready(function () {
-            $('#table_s2').DataTable({
+  var oTable = $('#table_s2').DataTable({
                 columnDefs: [
                     {
                         className: 'mdl-data-table__cell--non-numeric'
@@ -635,7 +637,57 @@ if (errors) {
                     }
                 },
             });
+
+  $("#datepicker_from").datepicker({
+
+    "onSelect": function(date) {
+      minDateFilter = new Date(date).getTime();
+      oTable.search( this.value ).draw();
+    }
+  }).keyup(function() {
+    minDateFilter = new Date(this.value).getTime();
+    oTable.search( this.value ).draw();
+  });
+
+  $("#datepicker_to").datepicker({
+
+    "onSelect": function(date) {
+      maxDateFilter = new Date(date).getTime();
+      oTable.search( this.value ).draw();
+    }
+  }).keyup(function() {
+    maxDateFilter = new Date(this.value).getTime();
+    oTable.search( this.value ).draw();
+  });
+
+
+// Date range filter
+minDateFilter = "";
+maxDateFilter = "";
+
+$.fn.dataTableExt.afnFiltering.push(
+  function(oSettings, aData, iDataIndex) {
+    if (typeof aData._date == 'undefined') {
+      aData._date = new Date(aData[0]).getTime();
+    }
+
+    if (minDateFilter && !isNaN(minDateFilter)) {
+      if (aData._date < minDateFilter) {
+        return false;
+      }
+    }
+
+    if (maxDateFilter && !isNaN(maxDateFilter)) {
+      if (aData._date > maxDateFilter) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+);
         });
+
     </script>
 {% comment %}<script>
    $(document).ready(function(){
@@ -650,5 +702,7 @@ if (errors) {
 		});
 	});
 </script>{% endcomment %}
+<!-- Latest compiled and minified JavaScript -->
+
 </body>
 </html>
