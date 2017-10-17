@@ -11,11 +11,17 @@
                         class="zmdi zmdi-city-alt"></i></span>
                     <h3 class="color-info">
                         {% if estimate.lock_status == 'L' %}
-                            <a href="#" onClick="configura_segmentos({{ project.id }})"
-                               data-toggle="modal" data-target="#unlock_modal"
-                               class="">
+
+                            {% if perms.ERP.can_unlock_estimate %}
+                                <a href="#" onClick="configura_segmentos({{ project.id }})"
+                                   data-toggle="modal" data-target="#unlock_modal"
+                                   class="">
+                                    <i class="fa fa-lock"></i>
+                                </a>
+
+                            {% else %}
                                 <i class="fa fa-lock"></i>
-                            </a>
+                            {% endif %}
 
 
                         {% endif %}
@@ -126,7 +132,7 @@
                                     </h3>
                                 </div>
 
-                                {% if perms.ERP.add_progressestimate %}
+                                {% if perms.ERP.add_progressestimate and estimate.is_locked %}
                                     <div class="item-right">
                                         <a href="/admin/ERP/progressestimate/add/?estimate={{ estimate.id }}"
                                            class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container">
@@ -195,9 +201,7 @@
                                                     </td>
                                                     {% if perms.ERP.change_progressestimate %}
                                                         <td class="text-center" style="width: 2%">
-                                                            <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
-                                                               class="btn btn-raised btn-default btn-xs"><i
-                                                                    class="fa fa-pencil color-default eliminar"></i></a>
+
                                                         </td>
                                                     {% endif %}
                                                 </tr>
@@ -243,9 +247,11 @@
                                                         </td>
                                                         {% if perms.ERP.change_progressestimate %}
                                                             <td class="text-center" style="width: 2%">
-                                                                <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
-                                                                   class="btn btn-raised btn-default btn-xs"><i
-                                                                        class="fa fa-pencil color-default eliminar"></i></a>
+                                                                {% if progress_estimate.can_be_edited %}
+                                                                    <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
+                                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                                            class="fa fa-pencil color-default eliminar"></i></a>
+                                                                {% endif %}
                                                             </td>
                                                         {% endif %}
                                                     </tr>

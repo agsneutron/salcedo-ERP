@@ -321,6 +321,9 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
                 form.contract_amount_accumulated = "{0:.2f}%".format(
                     accumulated / estimate.contract.monto_contrato * 100)
 
+        amount_field = form.base_fields['amount']
+        amount_field.widget = forms.NumberInput(attrs={'step': .1})
+
         if obj is None and estimate_id is not None:
             qs = Estimate.objects.filter(pk=estimate_id)
             if qs.exists():
@@ -331,8 +334,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
                 estimate_field.widget.can_add_related = False
                 estimate_field.widget.can_change_related = False
 
-                amount_field = form.base_fields['amount']
-                amount_field.widget = forms.NumberInput(attrs={'step': .1})
+
             else:
                 raise Http404(
                     'No existe la estimación especificada.')
@@ -342,6 +344,17 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 
             estimate_field.widget.can_add_related = False
             estimate_field.widget.can_change_related = False
+
+            if not request.user.has_perm('ERP.can_unlock_estimate') and obj.type == ProgressEstimate.SETTLEMENT:
+                amount_field.widget.attrs['readonly'] = True
+
+            if obj.type == ProgressEstimate.PROGRESS and obj.estimate.lock_status == Estimate.UNLOCKED:
+                amount_field.widget.attrs['readonly'] = True
+
+
+
+
+
 
         else:
             raise Http404(
@@ -371,7 +384,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
             if obj is not None:
                 user_has_access = AccessToProject.user_has_access_to_project(user.id, obj.estimate.contract.project_id)
                 if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm(
-                        'ERP.change_progressestimate'):
+                        'ERP.change_progressestimate') and obj.payment_status == ProgressEstimate.NOT_PAID:
                     return True
                 return False
             else:

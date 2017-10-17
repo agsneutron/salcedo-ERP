@@ -1407,6 +1407,10 @@ class Estimate(models.Model):
     class Meta:
         verbose_name_plural = 'Estimaciones'
 
+        permissions = (
+            ("can_unlock_estimate", "Can unlock an estimate"),
+        )
+
     def __str__(self):
         return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
 
@@ -1438,6 +1442,12 @@ class Estimate(models.Model):
         accumulated += self.advance_payment_amount
 
         return accumulated
+
+    def is_unlocked(self):
+        return self.lock_status == self.UNLOCKED
+
+    def is_locked(self):
+        return self.lock_status == self.LOCKED
 
 
 '''
@@ -1524,6 +1534,9 @@ class ProgressEstimate(models.Model):
             super(ProgressEstimate, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
+
+    def can_be_edited(self):
+        return self.payment_status == self.NOT_PAID
 
 
 '''
