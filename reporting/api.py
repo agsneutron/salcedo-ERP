@@ -361,6 +361,9 @@ class PhysicalFinancialAdvanceReport(View):
 
                 for each in progress_estimate_set:
                     total_amount += float(each['total'])
+                    estimate = Estimate.objects.get(pk=each['estimate__id'])
+                    if estimate.advance_payment_status == Estimate.PAID:
+                        total_amount += float(estimate.advance_payment_amount)
 
                 for each in paid_progress_estimate_set:
                     total_paid_amount += float(each['total'])
