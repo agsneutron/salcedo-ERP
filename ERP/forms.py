@@ -373,8 +373,15 @@ class OwnerForm(forms.ModelForm):
 
         kwargs['initial'].update({'empresa': self.company_id})
         super(OwnerForm, self).__init__(*args, **kwargs)
+
         if self.company_id is not None:
             self.fields['empresa'].queryset = Empresa.objects.filter(pk=self.company_id)
+
+    def clean(self):
+        cleaned_data = super(OwnerForm,self).clean()
+        print 'cleaned-data'
+        print cleaned_data
+        return cleaned_data
 
 
 class ContactForm(forms.ModelForm):

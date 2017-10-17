@@ -61,7 +61,7 @@
         <div class="card">
             <div class="card-header">
                 <div class="item-left">
-                    <h3 class="card-title text">Propietarios</h3>
+                    <h3 class="card-title text">Contactos</h3>
                 </div>
                 <div class="item-right">
                     <a onclick="myFunction()" href=""
@@ -77,7 +77,7 @@
                         {% if owners.count == 0 %}
                             <tbody>
                             <tr>
-                                <td align="left">No hay Propietarios registrados para el Cliente</td>
+                                <td align="left">No hay contactos registrados para el Cliente</td>
                             </tr>
                             </tbody>
                         {% else %}
@@ -109,7 +109,7 @@
                                                                                  class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-pencil color-default eliminar"></i></a></td>
                                   <td class="text-center" style="width: 2%"><a
-                                                            href="/admin/ERP/contact/{{ user.id }}/delete"
+                                                            href="/admin/ERP/propietario/{{ owner.id }}/delete"
                                                             class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i></a>
                                                     </td>
@@ -199,7 +199,7 @@
     {% endfor %}
     <script>
         function myFunction() {
-            PopupCenter('/admin/ERP/propietario/add/?empresa_id={{ user.id }}', 'xtf', '1024', '500');
+            PopupCenter('/admin/ERP/propietario/add/?empresa_id={{ empresa.id }}', 'xtf', '1024', '500');
         }
     </script>
 

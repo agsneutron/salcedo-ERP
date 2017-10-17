@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.forms.models import model_to_dict
 
 
@@ -58,6 +60,3 @@ class ERPUser(models.Model):
         return self.user.get_username()
 
 
-
-
-        # Create your models here.

@@ -366,8 +366,9 @@ class ContractorContractListView(ListView):
         user = self.request.user
 
         project_ids = AccessToProject.get_projects_for_user(user.id)
-        # Filter the result to only include the appropriate results
-        result = result.filter(reduce(operator.or_, (Q(project_id=pid) for pid in project_ids)))
+        if len(project_ids) > 0:
+            # Filter the result to only include the appropriate results
+            result = result.filter(reduce(operator.or_, (Q(project_id=pid) for pid in project_ids)))
 
         return result
 
@@ -602,8 +603,14 @@ class LineItemListView(ListView):
         context['current_type_full'] = LineItemListView.current_type_full
 
         # Getting the concept inputs for the selected Line Item parent.
-        context['concepts_inputs'] = Concept_Input.objects.filter(
+        ciqs = Concept_Input.objects.filter(
             Q(line_item=LineItemListView.parent_id) & Q(type=LineItemListView.current_type))
+
+        for item in ciqs:
+            item.total = Utilities.number_to_currency(item.quantity * item.unit_price)
+
+        context['concepts_inputs'] = ciqs
+
         if LineItemListView.parent_id is not None:
             context['parent_line_item'] = LineItem.objects.get(pk=LineItemListView.parent_id)
 
