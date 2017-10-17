@@ -10,123 +10,85 @@
 
     <div id="content-main">
 
-{#    Avance Financiero Interno#}
+        {#    Avance Financiero Interno#}
         <div class="row">
             <div class="card nav-tabs-ver-container">
                 <div class="card-header">
-                <div class="item-left">
-                    <h3 class="card-title text">Reportes</h3>
+                    <div class="item-left">
+                        <h3 class="card-title text">Reportes</h3>
+                    </div>
                 </div>
-            </div>
-    <div class="row">
-        <div class="col-sm-4 col-md-3">
-            <ul class="nav nav-tabs-ver nav-tabs-ver-default" role="tablist">
-                <li role="presentation" class="active"><a href="#reporte1" aria-controls="reporte1" role="tab" data-toggle="tab"><i class="fa fa-area-chart" aria-hidden="true"></i> Avance Financiero Interno</a></li>
-                <li role="presentation"><a href="#reporte2" aria-controls="reporte2" role="tab" data-toggle="tab"><i class="fa fa-area-chart" aria-hidden="true"></i> Avance fisico-financiero</a></li>
-            </ul>
-        </div>
-        <div class="col-sm-8 col-md-9 nav-tabs-ver-container-content">
-            <div class="card-block">
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="reporte1">
-                        <div class="col-xs-12">
-                <div class="card">
-                   {% comment %} <div class="card-header">
-                        <div class="item-left">
-                            <h3 class="card-title text">Avance Financiero Interno</h3>
-                        </div>{% endcomment %}
-                        {% comment %}<div class="item-right">
-                            <a href="" id=""
-                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container"
-                            >
-                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"
-                            ></i>
-                            </a>
-                        </div>{% endcomment %}
-                    {% comment %}</div>{% endcomment %}
-
-                    <div class="card-block text-center">
-
-                        <div class="row">
-
-                            <div class="col-xs-6 col-xs-offset-3">Proyectos
-                                <select id="project_id_AFI" class="form-control selectpicker">
-                                </select>
-                            </div>
-                            {% comment %}<div class="col-xs-6">Nivel de Detalle
-                                <select id="detail_level" class="form-control selectpicker">
-                                    <label>Seleccionar...</label>
-                                    <option value="c">Conceptos</option>
-                                    <option value="p">Partidas</option>
-
-                                </select>
-                            </div>{% endcomment %}
-                            <div class="row">
-                                <div class="col-xs-12 text-center" id="get_report_AFI">
-                                     <a href="#" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-area-chart"></i> Generar</a>
+                <div class="row">
+                    <div class="col-sm-4 col-md-3">
+                        <ul class="nav nav-tabs-ver nav-tabs-ver-default" role="tablist">
+                            <li role="presentation" class="active"><a href="#reporte1" aria-controls="reporte1"
+                                                                      role="tab" data-toggle="tab"><i
+                                    class="fa fa-area-chart" aria-hidden="true"></i> Avance Financiero Interno</a></li>
+                            <li role="presentation"><a href="#reporte2" aria-controls="reporte2" role="tab"
+                                                       data-toggle="tab"><i class="fa fa-area-chart"
+                                                                            aria-hidden="true"></i> Avance
+                                fisico-financiero</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-8 col-md-9 nav-tabs-ver-container-content">
+                        <div class="card-block">
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="reporte1">
+                                    <div class="col-xs-12">
+                                        <div class="card">
+                                            <div class="card-block text-center">
+                                                <div class="row">
+                                                    <div class="col-xs-6 col-xs-offset-3">Proyectos
+                                                        <select id="project_id_AFI" class="form-control selectpicker">
+                                                        </select>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12 text-center" id="get_report_AFI">
+                                                            <a href="#"
+                                                               class="btn btn-raised btn-danger button-center-top"><i
+                                                                    class="fa fa-area-chart"></i> Generar</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="reporte2">
+                                    <div class="col-xs-12">
+                                        <div class="card">
+                                            <div class="card-block text-center">
+                                                <div class="row">
+                                                    <div class="col-xs-6  col-xs-offset-3">Proyectos
+                                                        <select id="project_id_AFF" class="form-control selectpicker">
+                                                        </select>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-xs-12 text-center" id="get_report_AFF">
+                                                            <a href="#"
+                                                               class="btn btn-raised btn-danger button-center-top"><i
+                                                                    class="fa fa-area-chart"></i> Generar</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="messages">
+                                    ...
+                                </div>
+                                <div role="tabpanel" class="tab-pane" id="settings">
+                                    ...
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="reporte2">
-                        <div class="col-xs-12">
-                <div class="card">
-                    {% comment %}<div class="card-header">
-                        <div class="item-left">
-                            <h3 class="card-title text">Avance Físico-Financiero</h3>
-                        </div>{% endcomment %}
-                        {% comment %}<div class="item-right">
-                            <a href="" id=""
-                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container"
-                            >
-                                &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"
-                            ></i>
-                            </a>
-                        </div>{% endcomment %}
-                    {% comment %}</div>{% endcomment %}
-
-                    <div class="card-block text-center">
-                        <div class="row">
-
-                            <div class="col-xs-6  col-xs-offset-3">Proyectos
-                                <select id="project_id_AFF" class="form-control selectpicker">
-                                </select>
-                            </div>
-                            <div class="row">
-                                <div class="col-xs-12 text-center" id="get_report_AFF">
-                                     <a href="#" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-area-chart"></i> Generar</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="messages">
-                        ...
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="settings">
-                        ...
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
-</div>
-
-
-
-
-
+        {# Avance Físico#}
+        <div class="row">
         </div>
-{# Avance Físico#}
-    <div class="row">
-
-        </div>
-
-
     </div>
 {% endblock %}
