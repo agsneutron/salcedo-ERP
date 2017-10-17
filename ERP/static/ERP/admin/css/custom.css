@@ -11,7 +11,10 @@ body {
 .btn, .input-group-btn .btn {
     text-transform: none !important;
 }
+.btn>i {
 
+    margin-right: 3px;
+}
 #content {
     padding-bottom: 30px;
 }
@@ -21,6 +24,12 @@ body {
 }
 .vDateField, .vTimeField {
     margin-top: 0 !important;
+}
+.date_range_filter {
+    width: 100px;
+}
+.ui-datepicker {
+    z-index: 9999 !important;
 }
 .modal.modal-primary .modal-header {
     background-color: #204280 !important;
@@ -643,14 +652,15 @@ dt {
 }
 
 .errorlist {
-    position: absolute;
-    top: 51px;
+    position: relative;
+    top: 0;
     right: 2px;
     font-size: 10px;
     /* width: 100%; */
     /* text-align: right; */
     /* list-style: none; */
     color: #ff0000;
+    line-height: 16px;
 }
 
 @media (min-width: 768px) {
@@ -1380,7 +1390,7 @@ body .sb-site-container {
     }
 
     .vDateField {
-        min-width: 75% !important;
+        min-width: 68% !important;
     }
 
     .nav.nav-tabs li a {
