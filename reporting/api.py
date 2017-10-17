@@ -558,6 +558,7 @@ class EstimateReportByContractor():
                 'contractor_name': contractor_obj.nombreContratista,
                 'estimates': []
             }
+            response['data'].append(contractor_json)
 
             # Getting all the estimates for a contractor in a .
             estimates_set = Estimate.objects.filter(contract__contratista__id=contractor_obj.id)
@@ -569,9 +570,11 @@ class EstimateReportByContractor():
                     'progress_estimates': [{
                         'key': 'Avance',
                         'amount': float(estimate.advance_payment_amount),
-                        'status': progress_estimate.get_payment_status_display(),
+                        'status': estimate.get_advance_payment_status_display(),
                     }]
                 }
+                contractor_json['estimates'].append(estimate_json)
+
                 progress_estimate_set = ProgressEstimate.objects.filter(estimate__id = estimate.id)
                 for progress_estimate in progress_estimate_set:
                     pe_json = {
@@ -579,6 +582,8 @@ class EstimateReportByContractor():
                         'amount': float(progress_estimate.amount),
                         'status': progress_estimate.get_payment_status_display(),
                     }
+
+                    estimate_json['progress_estimates'].append(pe_json)
 
 
 

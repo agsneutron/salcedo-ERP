@@ -8,6 +8,7 @@ from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
 from lib.estimate_reports import EstimateReports
+from lib.estimate_report_by_contractor import EstimateReportsByContract
 from django.shortcuts import render, redirect, render_to_response
 from django.views.generic import View
 
@@ -962,6 +963,8 @@ class GetEstimateReportByContractor(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
 
-        response = api.EstimateReportByContractor.get_report(project_id)
+        information_json = api.EstimateReportByContractor.get_report(project_id)
 
-        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
+        file = EstimateReportsByContract.generate_report(information_json)
+
+        return file
