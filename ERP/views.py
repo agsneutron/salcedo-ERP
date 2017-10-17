@@ -88,6 +88,35 @@ def progress_estimate_log_view(request):
     return render(request, 'ProgressEstimateLog/progress_estimate_log_form.html', params)
 
 
+def unlock_estimate(request, pk):
+    if request.method == 'POST':
+        estimate = Estimate.objects.get(pk=pk)
+        amount = request.POST.get('liquidation_amount')
+
+        estimate.lock_status = 'U'
+
+        estimate.save()
+
+        advance = ProgressEstimate()
+
+        advance.estimate = estimate
+        advance.key = 'FINIQUITO'
+        advance.amount = amount
+        advance.type = ProgressEstimate.SETTLEMENT
+        advance.payment_status = ProgressEstimate.NOT_PAID
+
+        advance.save()
+
+        return HttpResponseRedirect('/admin/ERP/estimate/' + str(estimate.id) + '/')
+    else:
+
+        to_delete = ProgressEstimate.objects.filter(type=ProgressEstimate.SETTLEMENT)
+        for item in to_delete:
+            item.delete()
+
+        raise PermissionDenied
+
+
 # def upload_file(request):
 #     if request.method == 'POST':
 #         form = LineItemUploadForm(request.POST, request.FILES)
@@ -291,10 +320,8 @@ class ContractorContractDetailView(generic.DetailView):
             advance_payment = Utilities.number_to_currency(advance_payment)
             advance_payment_status = estimate.get_advance_payment_status_display()
 
-
         context['advance_payment'] = advance_payment
         context['advance_payment_status'] = advance_payment_status
-
 
         return context
 
@@ -839,7 +866,6 @@ class EstimateDetailView(generic.DetailView):
         total = estimate.advance_payment_amount
         context['advance_percentage'] = "{0:.0f}%".format(total / contract_amount * 100)
 
-
         estimate.advance_payment_amount = locale.currency(estimate.advance_payment_amount, grouping=True)
 
         for record in progress_estimates:
@@ -856,6 +882,13 @@ class EstimateDetailView(generic.DetailView):
         context['contract_concepts'] = concepts
 
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            liquidation_amount = request.POST.get('liquidation_amount')
+            print liquidation_amount
+
+        return super(EstimateDetailView, self).get(request, args, kwargs)
 
     def dispatch(self, request, *args, **kwargs):
         estimate_id = kwargs['pk']

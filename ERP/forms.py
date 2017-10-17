@@ -1,6 +1,7 @@
 # coding=utf-8
 from django import forms
 from django.contrib.admin import widgets
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.contrib import messages
@@ -9,11 +10,13 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
 from users.models import ERPUser
+from django.utils.translation import ugettext as _
+
 
 import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
-    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input, AccessToProject
+    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input, AccessToProject, ProgressEstimate
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -217,6 +220,35 @@ class LogFileForm(forms.ModelForm):
         test = ProgressEstimateLogForm()
         widgets = {
         }
+
+
+class ProgressEstimateForm(forms.ModelForm):
+    class Meta:
+        model = ProgressEstimate
+        fields = "__all__"
+
+    def clean(self):
+        cleaned_data = super(ProgressEstimateForm, self).clean()
+
+
+        estimate = cleaned_data['estimate']
+        new_amount = cleaned_data['amount']
+        accumulated_amount = estimate.get_accumulated_amount()
+        contract_amount = estimate.contract.monto_contrato
+
+        new_percentage = (accumulated_amount+new_amount) / contract_amount
+
+
+
+        print 'New Percentage ' + str(new_percentage)
+        if new_percentage > 0.8:
+            print  new_percentage
+            self._errors["amount"] = self.error_class(
+                ['El monto acumulado no puede superar el 80% si la estimación no ha sido liberada.'])
+            raise ValidationError('Error en la cantidad')
+
+
+        return cleaned_data
 
 
 '''

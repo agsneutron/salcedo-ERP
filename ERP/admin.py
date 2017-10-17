@@ -14,7 +14,7 @@ from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm, \
-    ContactForm, ContractConceptsForm
+    ContactForm, ContractConceptsForm, ProgressEstimateForm
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, \
     ProgressEstimateLogForm, OwnerForm
 
@@ -242,12 +242,12 @@ class EmpleadoAdmin(admin.ModelAdmin):
 class ContratoAdmin(admin.ModelAdmin):
     list_display = ('id', 'objeto_contrato')
     search_fields = ('objeto_contrato')
-    list_display_links = ('id',  'objeto_contrato')
+    list_display_links = ('id', 'objeto_contrato')
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
         fields = (
-            'no_licitacion', 'modalidad_contrato', 'dependencia',  'contratista', 'dias_pactados',
+            'no_licitacion', 'modalidad_contrato', 'dependencia', 'contratista', 'dias_pactados',
             'fecha_firma',
             'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
             'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')
@@ -287,9 +287,11 @@ class PropietarioAdmin(admin.ModelAdmin):
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):
-    list_display = ('estimate', 'key', 'amount', 'type', 'generator_file', 'payment_status')
-    fields = ('estimate', 'key', 'amount', 'type', 'generator_file', 'payment_status', 'version',)
+    list_display = ('estimate', 'key', 'amount', 'generator_file', 'payment_status')
+    fields = ('estimate', 'key', 'amount', 'generator_file', 'payment_status', 'version',)
     model = ProgressEstimate
+
+    form = ProgressEstimateForm
 
     def response_change(self, request, obj):
         """This makes the response after adding go to another apps changelist for some model"""
@@ -300,10 +302,11 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
         return HttpResponseRedirect('/admin/ERP/estimate/' + str(obj.estimate.id))
 
     def get_form(self, request, obj=None, **kwargs):
-        estimate_id = request.GET.get('estimate')
 
         if obj is not None:
-            obj.progress *= 100
+            estimate_id = obj.estimate.id
+        else:
+            estimate_id = request.GET.get('estimate')
 
         form = super(ProgressEstimateAdmin, self).get_form(request, obj, **kwargs)
 
@@ -313,13 +316,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
                 estimate = qs[0]
                 form.contract_amount = estimate.contract.monto_contrato
 
-                accumulated_qs = ProgressEstimate.objects.filter(estimate_id=estimate.id).values(
-                    'estimate_id').annotate(
-                    Count('estimate_id'), accumulated=Sum('amount'))
-
-                accumulated = accumulated_qs[0]['accumulated']
-
-                accumulated += estimate.advance_payment_amount
+                accumulated = estimate.get_accumulated_amount()
 
                 form.contract_amount_accumulated = "{0:.2f}%".format(
                     accumulated / estimate.contract.monto_contrato * 100)
@@ -353,8 +350,6 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
         return form
 
     def save_model(self, request, obj, form, change):
-        obj.progress = obj.progress / Decimal(100.00)
-        print obj.progress
         return super(ProgressEstimateAdmin, self).save_model(request, obj, form, change)
 
     def has_add_permission(self, request):
@@ -806,7 +801,7 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         fields = (
             'clave_contrato', 'project', 'line_item', 'no_licitacion', 'contratista', 'modalidad_contrato',
             'dias_pactados', 'dependencia', 'fecha_firma', 'fecha_inicio', 'fecha_termino',
-            'monto_contrato','porcentaje_iva','objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version',)
+            'monto_contrato', 'porcentaje_iva', 'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version',)
         return fields
 
     def get_urls(self):
@@ -1225,7 +1220,7 @@ class EstimateAdmin(admin.ModelAdmin):
                 'fields': (
                     'period', 'start_date', 'end_date', 'advance_payment_amount',
                     'advance_payment_date',
-                    'advance_payment_status', 'version')
+                    'advance_payment_status', 'version', 'lock_status')
             }),
     )
 
@@ -1252,6 +1247,7 @@ class EstimateAdmin(admin.ModelAdmin):
             url(r'^list/(?P<project>[0-9]+)/$',
                 self.admin_site.admin_view(views.EstimateListView.as_view()),
                 name='estimate-view'),
+            url(r'^(?P<pk>\d+)/unlock$', views.unlock_estimate, name='estimate-detail'),
             url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
             url(r'^(?P<pk>\d+)/delete/$', views.EstimateDelete.as_view(), name='estimate-delete'),
 
