@@ -10,7 +10,7 @@ from django.http.response import HttpResponse
 from ERP.lib import utilities
 from ERP.lib.utilities import Utilities
 from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections, Section, \
-    AccessToProject
+    AccessToProject, ContratoContratista
 import json
 
 
@@ -31,6 +31,24 @@ class ProjectEndpoint(View):
         return HttpResponse(
             Utilities.json_to_dumps(the_list),
             'application/json', )
+
+class ContractorByProject(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        contractors = ContratoContratista.objects.filter(project_id=project_id)
+
+        the_list = []
+
+        for contractor in contractors:
+            new_item = {
+                'id': contractor.contratista.id,
+                'nombreContratista': unicode(contractor.contratista.nombreContratista)
+            }
+            the_list.append(new_item)
+
+        return HttpResponse(
+            json.dumps(the_list, ensure_ascii=False, indent=4, separators=(',', ': '), sort_keys=True, ),
+            'application/json; charset=utf-8')
 
 
 class LineItemsByProject(View):
