@@ -18,6 +18,8 @@ urlpatterns = [
     url(r'^forms_api/save_pel_form', erp_forms_api.SaveProgressEstimateLogFormEndpoint.as_view()),
     url(r'^forms_api/save_pel_file_form', erp_forms_api.SaveProgressEstimateLogFileFormEndpoint.as_view()),
     url(r'^api/project_list', api.ProjectEndpoint.as_view()),
+    url(r'^api/contractor_list', api.ContractorByProject.as_view()),
+
     url(r'^api/line_items_by_projects', api.LineItemsByProject.as_view()),
     url(r'^api/estimates_by_line_item', api.EstimatesByLineItems.as_view(), ),
     url(r'^api/sections_for_project_save', api.SectionsByProjectSave.as_view()),
