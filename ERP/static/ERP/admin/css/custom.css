@@ -652,14 +652,15 @@ dt {
 }
 
 .errorlist {
-    position: absolute;
-    top: 51px;
+    position: relative;
+    top: 0;
     right: 2px;
     font-size: 10px;
     /* width: 100%; */
     /* text-align: right; */
     /* list-style: none; */
     color: #ff0000;
+    line-height: 16px;
 }
 
 @media (min-width: 768px) {
