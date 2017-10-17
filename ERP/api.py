@@ -35,14 +35,15 @@ class ProjectEndpoint(View):
 class ContractorByProject(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
-        contractors = ContratoContratista.objects.filter(project_id=project_id)
+        contractors = ContratoContratista.objects.filter(project_id=project_id).values('contratista_id','contratista__nombreContratista')\
+            .annotate(Count('contratista_id'), Count('contratista__nombreContratista'))
 
         the_list = []
 
         for contractor in contractors:
             new_item = {
-                'id': contractor.contratista.id,
-                'nombreContratista': unicode(contractor.contratista.nombreContratista)
+                'id': contractor['contratista_id'],
+                'nombreContratista': unicode(contractor['contratista__nombreContratista'])
             }
             the_list.append(new_item)
 

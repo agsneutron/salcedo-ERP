@@ -11,6 +11,8 @@ $(document).on('ready', function() {
     $('#get_report_AFF').on('click',Get_Physical_Financial);
     $('#get_report_Estimacion').on('click',Get_Estimate_Report);
     $('#get_report_estimate_for_contract').on('click',Get_Estimate_For_Contract);
+    $('#get_report_estimate_general').on('click',Get_Estimate_General);
+
     $('#project_id_estimate_for_contract').on('change',get_Contractors);
 
 });
@@ -117,6 +119,15 @@ function set_Projects(data){
             '</option>'
         );
     }
+
+    clearControl("project_id_estimate_general");
+    for (var i = 0; i < data.length; i++) {
+        $("select#project_id_estimate_general").append(
+            '<option value="'+data[i].id+'">' +
+            data[i].nombreProyecto +
+            '</option>'
+        );
+    }
 }
 
 function set_Contractors(data){
@@ -176,6 +187,19 @@ function Get_Estimate_Report(){
         alert("Para generar el reporte debe seleccionar un Proyecto");
     }
 }
+
+function Get_Estimate_General(){
+    var project_id = $('select#project_id_estimate_general').find('option:selected').val();
+
+
+    if (project_id != "") {
+        window.open("/reporting/get_estimate_report_for_contractors?project_id=" + parseInt(project_id));
+    }
+    else{
+        alert("Para generar el reporte debe seleccionar un Proyecto");
+    }
+}
+
 
 function Get_Estimate_For_Contract(){
     var project_id = $('select#project_id_estimate_for_contract').find('option:selected').val();

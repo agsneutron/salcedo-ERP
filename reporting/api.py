@@ -9,7 +9,7 @@ from django.views.generic import View
 from django.db.models.functions import TruncMonth
 
 from ERP.models import LineItem, Concept_Input, ProgressEstimate, PaymentSchedule, Project, Estimate, \
-    ContratoContratista, Contact
+    ContratoContratista, Contact,Contratista
 import os, sys
 sys.setdefaultencoding('utf-8')
 from xlsxwriter.workbook import Workbook
