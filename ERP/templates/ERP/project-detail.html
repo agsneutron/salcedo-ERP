@@ -178,49 +178,52 @@
 
 
                             {% for section in sections_result %}
-                            {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
-                                <li role="presentation" class="active"><a href="#general" aria-controls="home" role="tab"
-                                                                          data-toggle="tab"><i class="zmdi zmdi-home"></i>
-                                    Proyecto</a>
-                                </li>
-                            {% endif %}
-                            {% if section.section_name == "Ubicación / Áreas" and section.total_inner_sections >= 0 %}
-                            <li role="presentation" disabled="true"><a href="#ubicacion" aria-controls="profile" role="tab"
-                                                       data-toggle="tab"><i
-                                    class="zmdi zmdi-account"></i> Ubicación/Áreas</a></li>
-                            {% endif %}
-                            {% comment %}<li role="presentation"><a href="#areas" aria-controls="messages" role="tab" data-toggle="tab"><i
+                                {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
+                                    <li role="presentation" class="active"><a href="#general" aria-controls="home"
+                                                                              role="tab"
+                                                                              data-toggle="tab"><i
+                                            class="zmdi zmdi-home"></i>
+                                        Proyecto</a>
+                                    </li>
+                                {% endif %}
+                                {% if section.section_name == "Ubicación / Áreas" and section.total_inner_sections >= 0 %}
+                                    <li role="presentation" disabled="true"><a href="#ubicacion" aria-controls="profile"
+                                                                               role="tab"
+                                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-account"></i> Ubicación/Áreas</a></li>
+                                {% endif %}
+                                {% comment %}<li role="presentation"><a href="#areas" aria-controls="messages" role="tab" data-toggle="tab"><i
                             class="zmdi zmdi-email"></i> Áreas</a></li>{% endcomment %}
-                            {% if section.section_name == "Estado Legal" and section.total_inner_sections > 0 %}
-                            <li role="presentation"><a href="#legal" aria-controls="settings" role="tab"
-                                                       data-toggle="tab"><i
-                                    class="zmdi zmdi-settings"></i> Estado Legal</a></li>
-                            {% endif %}
-                            {% if section.section_name == "Restricciones" and section.total_inner_sections > 0 %}
-                            <li role="presentation"><a href="#rest" aria-controls="settings" role="tab"
-                                                       data-toggle="tab"><i
-                                    class="zmdi zmdi-settings"></i> Restricciones</a></li>
-                            {% endif %}
-                            {% if section.section_name == "Análisis" and section.total_inner_sections > 0 %}
-                            <li role="presentation"><a href="#suelo" aria-controls="settings" role="tab"
-                                                       data-toggle="tab"><i
-                                    class="zmdi zmdi-settings"></i> Análisis</a></li>
-                            {% endif %}
-                            {% if section.section_name == "Análisis II" and section.total_inner_sections > 0 %}
-                            <li role="presentation"><a href="#suelo-dos" aria-controls="settings" role="tab"
-                                                       data-toggle="tab"><i
-                                    class="zmdi zmdi-settings"></i> Análisis II</a></li>
-                            {% endif %}
-                            {% if section.section_name == "Costo / Mercado" and section.total_inner_sections > 0 %}
-                            <li role="presentation"><a href="#costo" aria-controls="settings" role="tab"
-                                                       data-toggle="tab"><i
-                                    class="zmdi zmdi-settings"></i> Costo/Mercado</a></li>
-                            {% endif %}
-                            {% if section.section_name == "Programa" and section.total_inner_sections > 0 %}
-                            <li role="presentation"><a href="#program" aria-controls="settings" role="tab"
-                                                       data-toggle="tab"><i
-                                    class="zmdi zmdi-settings"></i> Programa</a></li>
-                            {% endif %}
+                                {% if section.section_name == "Estado Legal" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#legal" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i> Estado Legal</a></li>
+                                {% endif %}
+                                {% if section.section_name == "Restricciones" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#rest" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i> Restricciones</a></li>
+                                {% endif %}
+                                {% if section.section_name == "Análisis" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#suelo" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i> Análisis</a></li>
+                                {% endif %}
+                                {% if section.section_name == "Análisis II" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#suelo-dos" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i> Análisis II</a></li>
+                                {% endif %}
+                                {% if section.section_name == "Costo / Mercado" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#costo" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i> Costo/Mercado</a></li>
+                                {% endif %}
+                                {% if section.section_name == "Programa" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#program" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i> Programa</a></li>
+                                {% endif %}
 
                             {% endfor %}
 
@@ -230,548 +233,560 @@
                     <div class="col-sm-9 nav-tabs-ver-container-content">
                         <div class="card-block">
                             <div class="tab-content">
-                            {% for section in sections_result %}
-                                {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
-                                <div role="tabpanel" class="tab-pane active" id="general">
-                                    <div class="col-xs-12 col-md-8 col-md-offset-2">
-                                        {% for inner in section.inner_sections %}
-                                        {% if inner.inner_section_name == "Proyecto" %}
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Proyecto</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Clave de Proyecto: {{ project.key }} </li>
-                                                <li class="list-group-item">
-                                                    Empresa Cliente: {{ project.empresa }} </li>
-                                                <li class="list-group-item">
-                                                    Fecha de Inicio: {{ project.fecha_inicial }}</li>
-                                                <li class="list-group-item">
-                                                    Fecha de Término: {{ project.fecha_final }}</li>
-                                                <li class="list-group-item">
-                                                    Tipo de Contrucción: {{ project.tipo_construccion }}</li>
-                                            </ul>
-                                        </div>
-                                        {% endif %}
-                                        {% endfor %}
-                                    </div>
-                                </div>
-                                {% endif %}
-                                {% if section.section_name == "Ubicación / Áreas" and section.total_inner_sections > 0 %}
-                                <div role="tabpanel" class="tab-pane" id="ubicacion">
-                                    {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Ubicación" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Ubicación</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    País: {{ project.ubicacion_pais }}</li>
-                                                <li class="list-group-item">
-                                                    Estado: {{ project.ubicacion_estado }}</li>
-                                                <li class="list-group-item">
-                                                    Municipio: {{ project.ubicacion_municipio }}</li>
-                                                <li class="list-group-item">
-                                                    Colonia: {{ project.ubicacion_colonia }}</li>
-                                                <li class="list-group-item">
-                                                    Calle: {{ project.ubicacion_calle }}</li>
-                                                <li class="list-group-item">
-                                                    Número: {{ project.ubicacion_numero }}</li>
-                                                <li class="list-group-item">
-                                                    CP: {{ project.ubicacion_cp }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Áreas" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Áreas</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Superficie de
-                                                    Escritura: {{ project.area_superficie_escritura }}</li>
-                                                <li class="list-group-item">
-                                                    Superficie de
-                                                    Levantamiento: {{ project.area_superficie_levantamiento }}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% if section.section_name == "Estado Legal" and section.total_inner_sections > 0 %}
-                                <div role="tabpanel" class="tab-pane" id="legal">
-                                    {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Legal" %}
-                                    <div class="col-xs-12 col-md-10 col-md-offset-2">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Legal</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Acreditación de
-                                                    Propiedad: {{ project.estadolegal_documento_propiedad }}
-                                                </li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_propiedad_nombre != "" %}
-                                                        <a href="/media/{{ project.documento_propiedad }}"
-                                                           target="_blank">{{ documento_propiedad_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
+                                {% for section in sections_result %}
+                                    {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane active" id="general">
+                                            <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                                {% for inner in section.inner_sections %}
+                                                    {% if inner.inner_section_name == "Proyecto" %}
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Proyecto</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Clave de Proyecto: {{ project.key }} </li>
+                                                                <li class="list-group-item">
+                                                                    Empresa Cliente: {{ project.empresa }} </li>
+                                                                <li class="list-group-item">
+                                                                    Fecha de Inicio: {{ project.fecha_inicial }}</li>
+                                                                <li class="list-group-item">
+                                                                    Fecha de Término: {{ project.fecha_final }}</li>
+                                                                <li class="list-group-item">
+                                                                    Tipo de
+                                                                    Contrucción: {{ project.tipo_construccion }}</li>
+                                                            </ul>
+                                                        </div>
                                                     {% endif %}
-                                                </li>
-                                                <li class="list-group-item">
-                                                    Gravamen: {{ project.estadolegal_gravamen }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_gravamen_nombre != "" %}
-                                                        <a href="/media/{{ project.documento_gravamen }}"
-                                                           target="_blank">{{ documento_gravamen_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                                <li class="list-group-item">
-                                                    Predial: {{ project.estadolegal_predial }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_predial_nombre != "" %}
-                                                        <a href="/media/{{ project.documento_predial }}"
-                                                           target="_blank">{{ documento_predial_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                                <li class="list-group-item">
-                                                    Agua: {{ project.estadolegal_agua }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_agua_nombre != "" %}
-                                                        <a href="/media/{{ project.documento_agua }}"
-                                                           target="_blank">{{ documento_agua_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                            </ul>
+                                                {% endfor %}
+                                            </div>
                                         </div>
-                                    </div>
                                     {% endif %}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% if section.section_name == "Restricciones" and section.total_inner_sections > 0 %}
-                                <div role="tabpanel" class="tab-pane" id="rest">
-                                    {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Restricciones" %}
-                                    <div class="col-xs-12 col-md-8 col-md-offset-2">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Restricciones</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Vial: {{ project.restriccion_vial }}</li>
-                                                <li class="list-group-item"> CNA
-                                                    : {{ project.restriccion_cna }}</li>
-                                                <li class="list-group-item"> CFE
-                                                    : {{ project.restriccion_cfe }}</li>
-                                                <li class="list-group-item">
-                                                    PEMEX: {{ project.restriccion_pemex }}</li>
-                                                <li class="list-group-item">
-                                                    INHA: {{ project.restriccion_inha }}</li>
-                                                <li class="list-group-item">
-                                                    Otros: {{ project.restriccion_otros }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.restriccion_observaciones }}</li>
-                                            </ul>
+                                    {% if section.section_name == "Ubicación / Áreas" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="ubicacion">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Ubicación" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Ubicación</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    País: {{ project.ubicacion_pais }}</li>
+                                                                <li class="list-group-item">
+                                                                    Estado: {{ project.ubicacion_estado }}</li>
+                                                                <li class="list-group-item">
+                                                                    Municipio: {{ project.ubicacion_municipio }}</li>
+                                                                <li class="list-group-item">
+                                                                    Colonia: {{ project.ubicacion_colonia }}</li>
+                                                                <li class="list-group-item">
+                                                                    Calle: {{ project.ubicacion_calle }}</li>
+                                                                <li class="list-group-item">
+                                                                    Número: {{ project.ubicacion_numero }}</li>
+                                                                <li class="list-group-item">
+                                                                    CP: {{ project.ubicacion_cp }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Áreas" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Áreas</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Superficie de
+                                                                    Escritura: {{ project.area_superficie_escritura }}</li>
+                                                                <li class="list-group-item">
+                                                                    Superficie de
+                                                                    Levantamiento: {{ project.area_superficie_levantamiento }}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                    </div>
                                     {% endif %}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% if section.section_name == "Análisis" and section.total_inner_sections > 0 %}
-                                <div role="tabpanel" class="tab-pane" id="suelo">
-                                    {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Uso de Suelo" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Uso de Suelo</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    PDMU: {{ project.usosuelo_pmdu }}</li>
-                                                <li class="list-group-item">
-                                                    Densidad: {{ project.usosuelo_densidad }}</li>
-                                                <li class="list-group-item">
-                                                    Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
-                                                <li class="list-group-item"> M2
-                                                    de Construcción: {{ project.usosuelo_m2construccion }}</li>
-                                                <li class="list-group-item">
-                                                    Área Libre: {{ project.usosuelo_arealibre }}</li>
-                                                <li class="list-group-item">
-                                                    Altura: {{ project.usosuelo_altura }}</li>
-                                                <li class="list-group-item">
-                                                    Densidad Requerida: {{ project.usosuelo_densidadrequerida }}</li>
-                                            </ul>
+                                    {% if section.section_name == "Estado Legal" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="legal">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Legal" %}
+                                                    <div class="col-xs-12 col-md-10 col-md-offset-2">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Legal</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Acreditación de
+                                                                    Propiedad: {{ project.estadolegal_documento_propiedad }}
+                                                                </li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_propiedad_nombre != "" %}
+                                                                        <a href="/media/{{ project.documento_propiedad }}"
+                                                                           target="_blank">{{ documento_propiedad_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                                <li class="list-group-item">
+                                                                    Gravamen: {{ project.estadolegal_gravamen }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_gravamen_nombre != "" %}
+                                                                        <a href="/media/{{ project.documento_gravamen }}"
+                                                                           target="_blank">{{ documento_gravamen_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                                <li class="list-group-item">
+                                                                    Predial: {{ project.estadolegal_predial }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_predial_nombre != "" %}
+                                                                        <a href="/media/{{ project.documento_predial }}"
+                                                                           target="_blank">{{ documento_predial_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                                <li class="list-group-item">
+                                                                    Agua: {{ project.estadolegal_agua }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_agua_nombre != "" %}
+                                                                        <a href="/media/{{ project.documento_agua }}"
+                                                                           target="_blank">{{ documento_agua_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                    </div>
                                     {% endif %}
-                                    {% if inner.inner_section_name == "Hidráulica" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Hidráulica</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Fuente: {{ project.hidraulica_fuente }}</li>
-                                                <li class="list-group-item">
-                                                    Distancia: {{ project.hidraulica_distancia }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.hidraulica_observaciones }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_hidraulica_nombre != "" %}
-                                                        <a href="/media/{{ project.hidraulica_documento }}"
-                                                           target="_blank">documento_hidraulica_nombre</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                            </ul>
+                                    {% if section.section_name == "Restricciones" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="rest">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Restricciones" %}
+                                                    <div class="col-xs-12 col-md-8 col-md-offset-2">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Restricciones</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Vial: {{ project.restriccion_vial }}</li>
+                                                                <li class="list-group-item"> CNA
+                                                                    : {{ project.restriccion_cna }}</li>
+                                                                <li class="list-group-item"> CFE
+                                                                    : {{ project.restriccion_cfe }}</li>
+                                                                <li class="list-group-item">
+                                                                    PEMEX: {{ project.restriccion_pemex }}</li>
+                                                                <li class="list-group-item">
+                                                                    INHA: {{ project.restriccion_inha }}</li>
+                                                                <li class="list-group-item">
+                                                                    Otros: {{ project.restriccion_otros }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.restriccion_observaciones }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                    </div>
                                     {% endif %}
-                                    {% if inner.inner_section_name == "Sanitaria" %}
-                                    <div class="clearfix"></div>
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Sanitaria</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Tipo: {{ project.sanitaria_tipo }}</li>
-                                                <li class="list-group-item">
-                                                    Responsable: {{ project.sanitaria_responsable }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.sanitaria_observaciones }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_sanitaria_nombre != "" %}
-                                                        <a href="/media/{{ project.sanitaria_documento }}"
-                                                           target="_blank">{{ documento_sanitaria_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                            </ul>
+                                    {% if section.section_name == "Análisis" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="suelo">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Uso de Suelo" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Uso de Suelo</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    PDMU: {{ project.usosuelo_pmdu }}</li>
+                                                                <li class="list-group-item">
+                                                                    Densidad: {{ project.usosuelo_densidad }}</li>
+                                                                <li class="list-group-item">
+                                                                    Lote Mínimo: {{ project.usosuelo_loteminimo }}</li>
+                                                                <li class="list-group-item"> M2
+                                                                    de
+                                                                    Construcción: {{ project.usosuelo_m2construccion }}</li>
+                                                                <li class="list-group-item">
+                                                                    Área Libre: {{ project.usosuelo_arealibre }}</li>
+                                                                <li class="list-group-item">
+                                                                    Altura: {{ project.usosuelo_altura }}</li>
+                                                                <li class="list-group-item">
+                                                                    Densidad
+                                                                    Requerida: {{ project.usosuelo_densidadrequerida }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Hidráulica" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Hidráulica</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Fuente: {{ project.hidraulica_fuente }}</li>
+                                                                <li class="list-group-item">
+                                                                    Distancia: {{ project.hidraulica_distancia }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.hidraulica_observaciones }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_hidraulica_nombre != "" %}
+                                                                        <a href="/media/{{ project.hidraulica_documento }}"
+                                                                           target="_blank">documento_hidraulica_nombre</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Sanitaria" %}
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Sanitaria</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Tipo: {{ project.sanitaria_tipo }}</li>
+                                                                <li class="list-group-item">
+                                                                    Responsable: {{ project.sanitaria_responsable }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.sanitaria_observaciones }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_sanitaria_nombre != "" %}
+                                                                        <a href="/media/{{ project.sanitaria_documento }}"
+                                                                           target="_blank">{{ documento_sanitaria_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Pluvial" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Pluvial</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Tipo: {{ project.pluvial_tipo }}</li>
+                                                                <li class="list-group-item">
+                                                                    Responsable: {{ project.pluvial_responsable }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.pluvial_observaciones }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_pluvial_nombre != "" %}
+                                                                        <a href="/media/{{ project.pluvial_documento }}"
+                                                                           target="_blank">{{ documento_pluvial_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                    </div>
                                     {% endif %}
-                                    {% if inner.inner_section_name == "Pluvial" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Pluvial</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Tipo: {{ project.pluvial_tipo }}</li>
-                                                <li class="list-group-item">
-                                                    Responsable: {{ project.pluvial_responsable }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.pluvial_observaciones }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_pluvial_nombre != "" %}
-                                                        <a href="/media/{{ project.pluvial_documento }}"
-                                                           target="_blank">{{ documento_pluvial_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% if section.section_name == "Análisis II" and section.total_inner_sections > 0 %}
-                                <div role="tabpanel" class="tab-pane" id="suelo-dos">
-                                    {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Vial" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Vial</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Vías de
-                                                    Acceso: {{ project.vial_viaacceso }}</li>
-                                                <li class="list-group-item">
-                                                    Distancia: {{ project.vial_distancia }}</li>
-                                                <li class="list-group-item">
-                                                    Carriles: {{ project.vial_carriles }}</li>
-                                                <li class="list-group-item">
-                                                    Sección: {{ project.vial_seccion }}</li>
-                                                <li class="list-group-item">
-                                                    Tipo de
-                                                    Pavimento: {{ project.vial_tipopavimento }}</li>
-                                                <li class="list-group-item">
-                                                    Estado
-                                                    de Construcción: {{ project.vial_estadoconstruccion }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.vial_observaciones }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_vial_nombre != "" %}
-                                                        <a href="/media/{{ project.vial_documento }}"
-                                                           target="_blank">{{ documento_vial_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Electricidad" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Electricidad</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Tipo: {{ project.electricidad_tipo }}</li>
-                                                <li class="list-group-item">
-                                                    Distancia: {{ project.electricidad_distancia }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.electricidad_observaciones }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_electricidad_nombre != "" %}
-                                                        <a href="/media/{{ project.electricidad_documento }}"
-                                                           target="_blank">{{ documento_electricidad_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Alambrado Público" %}
-                                    {% comment %}<div class="clearfix"></div>{% endcomment %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Alumbrado Público</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Tipo: {{ project.alumbradopublico_tipo }}</li>
-                                                <li class="list-group-item">
-                                                    Distancia: {{ project.alumbradopublico_distancia }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.alumbradopublico_observaciones }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_alumbrado_nombre != "" %}
-                                                        <a href="/media/{{ project.alumbradopublico_documento }}"
-                                                           target="_blank">{{ documento_alumbrado_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Equipamiento" %}
+                                    {% if section.section_name == "Análisis II" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="suelo-dos">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Vial" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Vial</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Vías de
+                                                                    Acceso: {{ project.vial_viaacceso }}</li>
+                                                                <li class="list-group-item">
+                                                                    Distancia: {{ project.vial_distancia }}</li>
+                                                                <li class="list-group-item">
+                                                                    Carriles: {{ project.vial_carriles }}</li>
+                                                                <li class="list-group-item">
+                                                                    Sección: {{ project.vial_seccion }}</li>
+                                                                <li class="list-group-item">
+                                                                    Tipo de
+                                                                    Pavimento: {{ project.vial_tipopavimento }}</li>
+                                                                <li class="list-group-item">
+                                                                    Estado
+                                                                    de
+                                                                    Construcción: {{ project.vial_estadoconstruccion }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.vial_observaciones }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_vial_nombre != "" %}
+                                                                        <a href="/media/{{ project.vial_documento }}"
+                                                                           target="_blank">{{ documento_vial_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Electricidad" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Electricidad</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Tipo: {{ project.electricidad_tipo }}</li>
+                                                                <li class="list-group-item">
+                                                                    Distancia: {{ project.electricidad_distancia }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.electricidad_observaciones }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_electricidad_nombre != "" %}
+                                                                        <a href="/media/{{ project.electricidad_documento }}"
+                                                                           target="_blank">{{ documento_electricidad_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Alambrado Público" %}
+                                                    {% comment %}<div class="clearfix"></div>{% endcomment %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Alumbrado Público</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Tipo: {{ project.alumbradopublico_tipo }}</li>
+                                                                <li class="list-group-item">
+                                                                    Distancia: {{ project.alumbradopublico_distancia }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.alumbradopublico_observaciones }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_alumbrado_nombre != "" %}
+                                                                        <a href="/media/{{ project.alumbradopublico_documento }}"
+                                                                           target="_blank">{{ documento_alumbrado_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Equipamiento" %}
 
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Equipamiento</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item"> A
-                                                    100
-                                                    : {{ project.equipamiento_a100 }}</li>
-                                                <li class="list-group-item"> A
-                                                    200
-                                                    : {{ project.equipamiento_a200 }}</li>
-                                                <li class="list-group-item"> A
-                                                    500
-                                                    : {{ project.equipamiento_a500 }}</li>
-                                                <li class="list-group-item">
-                                                    Regional : {{ project.equipamiento_regional }}</li>
-                                            </ul>
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Equipamiento</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item"> A
+                                                                    100
+                                                                    : {{ project.equipamiento_a100 }}</li>
+                                                                <li class="list-group-item"> A
+                                                                    200
+                                                                    : {{ project.equipamiento_a200 }}</li>
+                                                                <li class="list-group-item"> A
+                                                                    500
+                                                                    : {{ project.equipamiento_a500 }}</li>
+                                                                <li class="list-group-item">
+                                                                    Regional : {{ project.equipamiento_regional }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "TV y Cable" %}
+                                                    {% comment %}<div class="clearfix"></div>{% endcomment %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Tv cable</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Distancia: {{ project.tvcable_distancia }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.tvcable_observaciones }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Telefonía" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Telefonía</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Distancia: {{ project.telefonia_distancia }}</li>
+                                                                <li class="list-group-item">
+                                                                    Observaciones: {{ project.telefonia_observaciones }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento:
+                                                                    {% if documento_telefonia_nombre != "" %}
+                                                                        <a href="/media/{{ project.telefonia_documento }}"
+                                                                           target="_blank">{{ documento_telefonia_nombre }}</a>
+                                                                    {% else %}
+                                                                        Aún no se ha cargado el documento.
+                                                                    {% endif %}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                    </div>
                                     {% endif %}
-                                    {% if inner.inner_section_name == "TV y Cable" %}
-                                    {% comment %}<div class="clearfix"></div>{% endcomment %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Tv cable</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Distancia: {{ project.tvcable_distancia }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.tvcable_observaciones }}</li>
-                                            </ul>
+                                    {% if section.section_name == "Costo / Mercado" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="costo">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Costo" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Costo</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Costo
+                                                                    del Predio : {{ project.costo_predio }}</li>
+                                                                <li class="list-group-item"> M2
+                                                                    : {{ project.costo_m2 }}</li>
+                                                                <li class="list-group-item">
+                                                                    Escrituras M2 : {{ project.costo_escrituras }}</li>
+                                                                <li class="list-group-item">
+                                                                    Levantamiento M2
+                                                                    : {{ project.costo_levantamiento }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Estudio de Mercado" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Estudio de Mercado</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Demanda
+                                                                    : {{ project.estudiomercado_demanda }}</li>
+                                                                <li class="list-group-item">
+                                                                    Oferta
+                                                                    : {{ project.estudiomercado_oferta }}</li>
+                                                                <li class="list-group-item">
+                                                                    Conclusiones
+                                                                    : {{ project.estudiomercado_conclusiones }}</li>
+                                                                <li class="list-group-item">
+                                                                    Recomendaciones
+                                                                    : {{ project.estudiomercado_recomendaciones }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Definición del Proyecto" %}
+                                                    <div class="clearfix"></div>
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Definicion del
+                                                                Proyecto</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Alernativa
+                                                                    : {{ project.definicionproyecto_alternativa }}</li>
+                                                                <li class="list-group-item">
+                                                                    Tamaño
+                                                                    : {{ project.definicionproyecto_tamano }}</li>
+                                                                <li class="list-group-item">
+                                                                    Programa
+                                                                    : {{ project.definicionproyecto_programa }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                    </div>
                                     {% endif %}
-                                    {% if inner.inner_section_name == "Telefonía" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Telefonía</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Distancia: {{ project.telefonia_distancia }}</li>
-                                                <li class="list-group-item">
-                                                    Observaciones: {{ project.telefonia_observaciones }}</li>
-                                                <li class="list-group-item">
-                                                    Documento:
-                                                    {% if documento_telefonia_nombre != "" %}
-                                                        <a href="/media/{{ project.telefonia_documento }}"
-                                                           target="_blank">{{ documento_telefonia_nombre }}</a>
-                                                    {% else %}
-                                                        Aún no se ha cargado el documento.
-                                                    {% endif %}
-                                                </li>
-                                            </ul>
+                                    {% if section.section_name == "Programa" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="program">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Programas y Áreas" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Programas y Áreas</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Área
+                                                                    Privada
+                                                                    : {{ project.programayarea_areaprivativa }}</li>
+                                                                <li class="list-group-item">
+                                                                    Caseta
+                                                                    : {{ project.programayarea_caseta }}</li>
+                                                                <li class="list-group-item">
+                                                                    Jardín
+                                                                    : {{ project.programayarea_jardin }}</li>
+                                                                <li class="list-group-item">
+                                                                    Vialidad: {{ project.programayarea_vialidad }}</li>
+                                                                <li class="list-group-item">
+                                                                    Área
+                                                                    Verde : {{ project.programayarea_areaverde }}</li>
+                                                                <li class="list-group-item">
+                                                                    Estacionamiento
+                                                                    Visitas: {{ project.programayarea_estacionamientovisita }}
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% if inner.inner_section_name == "Afectación" %}
+                                                    <div class="col-xs-12 col-md-6">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Afectación</h3>
+                                                            <ul class="list-group top-padding">
+                                                                <li class="list-group-item">
+                                                                    Afectación
+                                                                    : {{ project.programayarea_afectacion }}</li>
+                                                                <li class="list-group-item">
+                                                                    Documento: {{ project.programayarea_documento }}</li>
+                                                                <li class="list-group-item">
+                                                                    Latitud: {{ project.latitud }}</li>
+                                                                <li class="list-group-item">
+                                                                    Longitud: {{ project.longitud }}</li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
                                         </div>
-                                    </div>
                                     {% endif %}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% if section.section_name == "Costo / Mercado" and section.total_inner_sections > 0 %}
-                                <div role="tabpanel" class="tab-pane" id="costo">
-                                    {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Costo" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Costo</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Costo
-                                                    del Predio : {{ project.costo_predio }}</li>
-                                                <li class="list-group-item"> M2
-                                                    : {{ project.costo_m2 }}</li>
-                                                <li class="list-group-item">
-                                                    Escrituras M2 : {{ project.costo_escrituras }}</li>
-                                                <li class="list-group-item">
-                                                    Levantamiento M2 : {{ project.costo_levantamiento }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Estudio de Mercado" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Estudio de Mercado</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Demanda
-                                                    : {{ project.estudiomercado_demanda }}</li>
-                                                <li class="list-group-item">
-                                                    Oferta
-                                                    : {{ project.estudiomercado_oferta }}</li>
-                                                <li class="list-group-item">
-                                                    Conclusiones : {{ project.estudiomercado_conclusiones }}</li>
-                                                <li class="list-group-item">
-                                                    Recomendaciones : {{ project.estudiomercado_recomendaciones }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Definición del Proyecto" %}
-                                    <div class="clearfix"></div>
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Definicion del Proyecto</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Alernativa : {{ project.definicionproyecto_alternativa }}</li>
-                                                <li class="list-group-item">
-                                                    Tamaño
-                                                    : {{ project.definicionproyecto_tamano }}</li>
-                                                <li class="list-group-item">
-                                                    Programa : {{ project.definicionproyecto_programa }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
-                                {% if section.section_name == "Programa" and section.total_inner_sections > 0 %}
-                                <div role="tabpanel" class="tab-pane" id="program">
-                                    {% for inner in section.inner_sections %}
-                                    {% if inner.inner_section_name == "Programas y Áreas" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Programas y Áreas</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Área
-                                                    Privada : {{ project.programayarea_areaprivativa }}</li>
-                                                <li class="list-group-item">
-                                                    Caseta
-                                                    : {{ project.programayarea_caseta }}</li>
-                                                <li class="list-group-item">
-                                                    Jardín
-                                                    : {{ project.programayarea_jardin }}</li>
-                                                <li class="list-group-item">
-                                                    Vialidad: {{ project.programayarea_vialidad }}</li>
-                                                <li class="list-group-item">
-                                                    Área
-                                                    Verde : {{ project.programayarea_areaverde }}</li>
-                                                <li class="list-group-item">
-                                                    Estacionamiento
-                                                    Visitas: {{ project.programayarea_estacionamientovisita }}
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% if inner.inner_section_name == "Afectación" %}
-                                    <div class="col-xs-12 col-md-6">
-                                        <div class="card">
-                                            <div class="clearfix"></div>
-                                            <h3 class="color-info text-center">Afectación</h3>
-                                            <ul class="list-group top-padding">
-                                                <li class="list-group-item">
-                                                    Afectación : {{ project.programayarea_afectacion }}</li>
-                                                <li class="list-group-item">
-                                                    Documento: {{ project.programayarea_documento }}</li>
-                                                <li class="list-group-item">
-                                                    Latitud: {{ project.latitud }}</li>
-                                                <li class="list-group-item">
-                                                    Longitud: {{ project.longitud }}</li>
-                                            </ul>
-                                        </div>
-                                    </div>
-                                    {% endif %}
-                                    {% endfor %}
-                                </div>
-                                {% endif %}
 
-                            {% endfor %}
+                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -780,47 +795,56 @@
         </div>
     </div>
 
-    <div class="col-xs-10 col-xs-offset-1" style="padding-bottom: 25px">
-        <div class="card ">
-            <div class="card-header">
-                <div class="item-left">
-                    <h3 class="card-title text">Contratista en el Proyecto</h3>
-                </div>
-            </div>
-            {% if contracts %}
-            <div class="card-block">
-                <div class="table-responsive">
-                    <table id="table_s" class="table table-striped">
-                        <thead>
-                        <th>Nombre</th>
-                        <th>RFC</th>
-                        <th>Teléfono</th>
-                        <th>Correo</th>
-                        <th class="no-sorting">Ver</th>
-                        </thead>
-                        <tbody>
-                        {% for contract in contracts %}
-                            <tr>
-                                <td>{{ contract.contratista.nombreContratista }}</td>
-                                <td>{{ contract.contratista.rfc }}</td>
-                                <td>{{ contract.contratista.telefono }}</td>
-                                <td>{{ contract.contratista.email }}</td>
 
-                                <td style="width: 5%;"><a href="http://127.0.0.1:8000/admin/ERP/contratista/{{ contract.contratista.id }}"
-                                                          class="btn btn-raised btn-default btn-xs"><i
-                                        class="fa fa-eye color-default eliminar"></i></a></td>
-
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
+    {% if perms.ERP.change_project %}
+        <div class="col-xs-10 col-xs-offset-1" style="padding-bottom: 25px">
+            <div class="card ">
+                <div class="card-header">
+                    <div class="item-left">
+                        <h3 class="card-title text">Contratista en el Proyecto</h3>
+                    </div>
                 </div>
+                {% if contracts %}
+                    <div class="card-block">
+                        <div class="table-responsive">
+                            <table id="table_s" class="table table-striped">
+                                <thead>
+                                <th>Nombre</th>
+                                <th>RFC</th>
+                                <th>Teléfono</th>
+                                <th>Correo</th>
+
+                                {% if perms.ERP.change_project %}
+                                    <th class="no-sorting">Ver</th>
+                                {% endif %}
+                                </thead>
+                                <tbody>
+                                {% for contract in contracts %}
+                                    <tr>
+                                        <td>{{ contract.contratista.nombreContratista }}</td>
+                                        <td>{{ contract.contratista.rfc }}</td>
+                                        <td>{{ contract.contratista.telefono }}</td>
+                                        <td>{{ contract.contratista.email }}</td>
+
+                                        {% if perms.ERP.change_project %}
+                                            <td style="width: 5%;"><a
+                                                    href="http://127.0.0.1:8000/admin/ERP/contratista/{{ contract.contratista.id }}"
+                                                    class="btn btn-raised btn-default btn-xs"><i
+                                                    class="fa fa-eye color-default eliminar"></i></a></td>
+                                        {% endif %}
+
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                {% else %}
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No se han agregado Contratistas.</div>
+                {% endif %}
             </div>
-            {% else %}
-                  <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No se han agregado Contratistas.</div>
-            {% endif %}
         </div>
-    </div>
+    {% endif %}
 
 
     {% comment %}

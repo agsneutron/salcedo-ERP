@@ -18,11 +18,11 @@ class ERPUserAdmin(admin.StackedInline):
 class UsuarioAdmin(UserAdmin):
     inlines = (ERPUserAdmin,)
     list_per_page = 8
-    list_display = ('username', 'first_name', 'last_name', 'email', 'get_rol',)
+    list_display = ('username', 'first_name', 'last_name', 'email',)
     fieldsets = (
         ('Personal info', {'fields': ('first_name', 'last_name', 'email')}),
         ('AuthInfo', {'fields': ('username', 'password')}),
-        ('Permissions', {'fields': ('is_active',)}),
+        ('Permissions', {'fields': ('is_active','groups')}),
 
     )
     add_fieldsets = (
@@ -30,12 +30,6 @@ class UsuarioAdmin(UserAdmin):
         ('AuthInfo', {'fields': ('username', 'password1', 'password2')}),
         ('Permissions', {'fields': ('is_active',)}),
     )
-
-
-    def get_rol(self, obj):
-        return obj.erpuser.rol
-
-    get_rol.short_description = "Rol de Usuario"
 
     def get_urls(self):
         urls = super(UsuarioAdmin, self).get_urls()

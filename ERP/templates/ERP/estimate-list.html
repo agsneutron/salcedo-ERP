@@ -37,84 +37,85 @@
 
         {#        <div><a href="/admin/ERP/estimate/add?project={{ project }}">Agregar</a></div>#}
 
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="table-responsive">
-                        {% if object_list %}
-                            <table id="table_s" class="table table-striped">
-                                <thead>
-                                <tr>
-                                    <th>Fecha de la Estimación</th>
-                                    <th>Contrato</th>
-                                    <th>Contratista</th>
-                                    <th>Partida</th>
-                                    <th class="no-sorting">Ver</th>
-                                    <th class="no-sorting">Editar</th>
-                                    <th class="no-sorting">Eliminar</th>
-                                </tr>
-                                </thead>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="table-responsive">
+                    {% if object_list %}
+                        <table id="table_s" class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Fecha de la Estimación</th>
+                                <th>Contrato</th>
+                                <th>Contratista</th>
+                                <th>Partida</th>
+                                <th class="no-sorting">Ver</th>
 
-                                {% for estimate in object_list %}
-                                    <tr>
-                                        <td>
-                                            <span>De {{ estimate.start_date|date:"M d, Y" }} a {{ estimate.end_date }}</span>
-                                        </td>
-                                        <td>
-                                            <a href="/admin/ERP/contratocontratista/{{ estimate.contract.id }}" target="_blank">
+                                {% if perms.ERP.change_estimate %}
+                                    <th class="no-sorting">Editar</th>
+                                {% endif %}
+
+                                {% if perms.ERP.delete_estimate %}
+                                    <th class="no-sorting">Eliminar</th>
+                                {% endif %}
+                            </tr>
+                            </thead>
+
+                            {% for estimate in object_list %}
+                                <tr>
+                                    <td>
+                                        <span>De {{ estimate.start_date|date:"M d, Y" }} a {{ estimate.end_date }}</span>
+                                    </td>
+                                    <td>
+
+                                        {% if perms.ERP.view_list_contratocontratista %}
+                                            <a href="/admin/ERP/contratocontratista/{{ estimate.contract.id }}"
+                                               target="_blank">
                                                 <span>{{ estimate.contract.clave_contrato }}</span>
                                             </a>
-                                        </td>
-                                        <td><span>{{ estimate.contract.contratista.nombreContratista }}</span></td>
-                                        <td><span>{{ estimate.contract.line_item.description }}</span></td>
-
-                                        {% comment %} <td style="width: 7%"><a href="/admin/ERP/estimate/{{ estimate.id }}"
-                                                             class="btn btn-raised btn-default btn-xs">
-                                        <i class="fa fa-search color-default eliminar"></i> Ver</a></td>
-                                    <td style="width: 9%"><a
-                                            href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}"
-                                            class="btn btn-raised btn-default btn-xs">
-                                        <i class="fa fa-pencil color-default eliminar"></i> Editar</a></td>
-                                    <td style="width: 9%"><a href="/admin/ERP/estimate/{{ estimate.id }}/delete"
-                                                             class="btn btn-raised btn-default btn-xs">
-                                        <i class="fa fa-trash-o color-default eliminar"></i> Eliminar</a></td>{% endcomment %}
+                                        {% else %}
+                                            <span>{{ estimate.contract.clave_contrato }}</span>
+                                        {% endif %}
+                                    </td>
+                                    <td><span>{{ estimate.contract.contratista.nombreContratista }}</span></td>
+                                    <td><span>{{ estimate.contract.line_item.description }}</span></td>
 
 
-                                        <td class="text-center" style="width: 5%"><a
-                                                href="/admin/ERP/estimate/{{ estimate.id }}"
-                                                class="btn btn-raised btn-default btn-xs"><i
-                                                class="fa fa-eye color-default eliminar"></i></a></td>
+                                    <td class="text-center" style="width: 5%"><a
+                                            href="/admin/ERP/estimate/{{ estimate.id }}"
+                                            class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-eye color-default eliminar"></i></a></td>
+
+
+                                    {% if perms.ERP.change_estimate %}
                                         <td class="text-center" style="width: 5%"><a
                                                 href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}"
                                                 class="btn btn-raised btn-default btn-xs"><i
                                                 class="fa fa-pencil color-default eliminar"></i></a></td>
+                                    {% endif %}
+
+                                    {% if perms.ERP.delete_estimate %}
+
                                         <td class="text-center" style="width: 2%"><a
                                                 href="/admin/ERP/estimate/{{ estimate.id }}/delete"
                                                 class="btn btn-raised btn-default btn-xs"><i
                                                 class="fa fa-trash-o color-danger eliminar"></i></a>
                                         </td>
+                                    {% endif %}
 
 
-                                        {% empty %}
-                                        <td colspan="5">No existen estimaciones.</td>
-                                    </tr>
+                                    {% empty %}
+                                    <td colspan="5">No existen estimaciones.</td>
+                                </tr>
 
-                                    {#                            <tr>#}
-                                    {#                                <a href="Inicio: {{ estimate.id }}">Del {{ estimate.start_date.date }} al {{ estimate.end_date.date }} - Concepto o Insumo: {{ estimate.concept_input.description }}</a> |#}
-                                    {#                                <a href="{{ estimate.id }}">Concepto | Insumo: {{ estimate.line_item.description }}</a> |#}
-                                    {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}">Ver</a> |#}
-                                    {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}/change?project={{ project }}">Editar</a> |#}
-                                    {#                                <a href="/admin/ERP/estimate/{{ estimate.id }}/delete">Eliminar</a>#}
-                                    {#                                {% empty %}#}
-                                    {#                                <td colspan="5">No existen estimaciones.</td>#}
-                                    {#                            </tr>#}
-                                {% endfor %}
-                            </table>
-                        {% else %}
-                            No existen estimaciones.
-                        {% endif %}
-                    </div>
+
+                            {% endfor %}
+                        </table>
+                    {% else %}
+                        No existen estimaciones.
+                    {% endif %}
                 </div>
             </div>
+        </div>
 
 
     </div>

@@ -145,20 +145,6 @@
                                 </div>
                             </div>
                         {% endif %}
-                    {% if field.field.name == "codigo_obra" %}
-                        <div class="col-sm-4">
-                            <div class="form-group field-codigo_obra">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                    {% endif %}
                     {% if field.field.name == "dependencia" %}
 
                         <div class="col-sm-4">
@@ -231,20 +217,24 @@
                                 </div>
                             </div>
                         {% endif %}
-                    {% if field.field.name == "monto_contrato_iva" %}
-                        <div class="col-sm-3">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    <div class="input-group">
-                                        <div class="input-group-addon">$</div>
-                                        {{ field.field|addcss:"form-control f-number2" }}
+
+                        {% if field.field.name == "porcentaje_iva" %}
+                            <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+
+                                        {{ field.label_tag }}
+                                        <div class="input-group">
+                                            <div class="input-group-addon">%</div>
+                                            {{ field.field|addcss:"form-control" }}
+                                        </div>
+                                        {{ field.errors }}
                                     </div>
-                                    {{ field.errors }}
                                 </div>
                             </div>
-                        </div>
-                    {% endif %}
+                        {% endif %}
+
                     {% if field.field.name == "pago_inicial" %}
                         <div class="col-sm-3">
                             <div class="form-group field-{{ field.field.name }}">

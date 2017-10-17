@@ -47,16 +47,19 @@
                                                 <th>Inicio</th>
                                                 <th>Termino</th>
                                                 <th>Fecha de Última Edición</th>
-                                                <th class="no-sorting">Configurar</th>
+                                                {% if perms.ERP.change_project %}
+                                                    <th class="no-sorting">Configurar</th>
+                                                {% endif %}
                                                 <th class="no-sorting">Ver</th>
-                                                <th class="no-sorting">Editar</th>
+
+                                                {% if perms.ERP.change_project %}
+                                                    <th class="no-sorting">Editar</th>
+                                                {% endif %}
                                                 <th class="no-sorting">Dashboard</th>
                                             </tr>
                                             </thead>
                                             {% for project in object_list %}
                                                 <tr>
-
-
                                                     {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
                                                     <td><span>{{ project.nombreProyecto }}</span></td>
                                                     <td><span>{{ project.key }}</span></td>
@@ -77,22 +80,31 @@
                                                         class="fa fa-tachometer color-danger eliminar" style="margin-right: 0"></i> Dashboard</a>
                                                 </td>{% endcomment %}
 
-                                                <td class="text-center" style="width: 5%">
 
-                                                    {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
-                                                    <a href="#" onClick="configura_segmentos({{ project.id }})" data-toggle="modal" data-target="#myModal3"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-tasks color-default eliminar"></i></a>
-                                                </td>
+                                                    {% if perms.ERP.change_project %}
+                                                        <td class="text-center" style="width: 5%">
+
+                                                            {% comment %}<span >{{ user.is_active }}</span>{% endcomment %}
+                                                            <a href="#" onClick="configura_segmentos({{ project.id }})"
+                                                               data-toggle="modal" data-target="#myModal3"
+                                                               class="btn btn-raised btn-default btn-xs"><i
+                                                                    class="fa fa-tasks color-default eliminar"></i></a>
+                                                        </td>
+                                                    {% endif %}
 
 
                                                     <td class="text-center" style="width: 5%"><a href="{{ project.id }}"
                                                                                                  class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-eye color-default eliminar"></i></a></td>
-                                                    <td class="text-center" style="width: 5%"><a
-                                                            href="{{ project.id }}/change"
-                                                            class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-pencil color-default eliminar"></i></a></td>
+
+                                                    {% if perms.ERP.change_project %}
+                                                        <td class="text-center" style="width: 5%"><a
+                                                                href="{{ project.id }}/change"
+                                                                class="btn btn-raised btn-default btn-xs"><i
+                                                                class="fa fa-pencil color-default eliminar"></i></a>
+                                                        </td>
+
+                                                    {% endif %}
                                                     <td class="text-center" style="width: 2%"><a
                                                             href="/admin/ERP/project/dashboard/{{ project.id }}"
                                                             class="btn btn-raised btn-default btn-xs"><i
@@ -119,164 +131,39 @@
             </div>
         </div>
 
-        <div class="modal" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
-            <div class="modal-dialog animated zoomIn animated-3x" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
-                        <h3 class="modal-title" id="myModalLabel3">Asignación de Segmentos</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-xs-12">
-                            <div class="panel-group ms-collapse" id="accordion" role="tablist"
-                                 aria-multiselectable="true">
-                                {% comment %}bloque uno{% endcomment %}
-                                {% comment %}<div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingTwo">
-                                        <h4 class="panel-title ms-rotate-icon">
-                                            <div class="togglebutton" style="position: relative">
-                                                <label class="switch-right">
-                                                    <input type="checkbox" name="checkSegment" id="proyecto"
-                                                           value="1"
-                                                           checked="">
-                                                </label>
-                                            </div>
-                                            <a class="collapsed" role="button" data-toggle="collapse"
-                                               data-parent="#accordion" href="#collapseOne" aria-expanded="false"
-                                               aria-controls="collapseOne">
-                                                <i class="zmdi zmdi-chevron-up"></i> Proyectos
-                                            </a>
+        {% if perms.ERP.change_project %}
 
-                                        </h4>
-                                    </div>
-                                    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel"
-                                         aria-labelledby="headingOne">
-                                        <div class="panel-body">
-                                            <div>
-                                                Proyectos
-                                                <div class="togglebutton" style="float: right">
-                                                    <label>
-                                                        <input type="checkbox" name="checkSegment" id="proyecto"
-                                                               value="1"
-                                                               checked="">
-                                                    </label>
-                                                </div>
-                                            </div>
+            <div class="modal" id="myModal3" tabindex="-1" role="dialog" aria-labelledby="myModalLabel3">
+                <div class="modal-dialog animated zoomIn animated-3x" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                            <h3 class="modal-title" id="myModalLabel3">Asignación de Segmentos</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-xs-12">
+                                <div class="panel-group ms-collapse" id="accordion" role="tablist"
+                                     aria-multiselectable="true">
 
-                                        </div>
-                                    </div>
                                 </div>
 
-                                <div class="clearfix"></div>{% endcomment %}
-                                {% comment %}bloque uno{% endcomment %}
-                                {% comment %}<div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingTwo">
-                                        <h4 class="panel-title ms-rotate-icon">
-                                            <div class="togglebutton" style="position: relative">
-                                                <label class="switch-right">
-                                                    <input type="checkbox" name="checkSegment" id="proyecto"
-                                                           value="1"
-                                                           checked="">
-                                                </label>
-                                            </div>
-                                            <a class="collapsed" role="button" data-toggle="collapse"
-                                               data-parent="#accordion" href="#collapseTwo" aria-expanded="false"
-                                               aria-controls="collapseTwo">
-                                                <i class="zmdi zmdi-chevron-up"></i> Ubicación
-                                            </a>
 
-                                        </h4>
-                                    </div>
-                                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel"
-                                         aria-labelledby="headingTwo">
-                                        <div class="panel-body">
-                                            <div>
-                                                Ubicación
-                                                <div class="togglebutton" style="float: right">
-                                                    <label>
-                                                        <input type="checkbox" name="checkSegment" id="proyecto"
-                                                               value="1"
-                                                               checked="">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <hr class="divide-item">
-                                            <div>
-                                                Áreas
-                                                <div class="togglebutton" style="float: right">
-                                                    <label>
-                                                        <input type="checkbox" name="checkSegment" id="proyecto"
-                                                               value="1"
-                                                               checked="">
-                                                    </label>
-                                                </div>
-                                            </div>
+                            </div>
+                            <div class="col-xs-6">
 
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="panel panel-default">
-                                    <div class="panel-heading" role="tab" id="headingThree">
-                                        <h4 class="panel-title ms-rotate-icon">
-                                            <div class="togglebutton" style="position: relative">
-                                                <label class="switch-right">
-                                                    <input type="checkbox" name="checkSegment" id="proyecto"
-                                                           value="1"
-                                                           checked="">
-                                                </label>
-                                            </div>
-                                            <a class="collapsed" role="button" data-toggle="collapse"
-                                               data-parent="#accordion" href="#collapseThree" aria-expanded="false"
-                                               aria-controls="collapseThree">
-                                                <i class="zmdi zmdi-chevron-up"></i> otro
-                                            </a>
-                                        </h4>
-                                    </div>
-                                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel"
-                                         aria-labelledby="headingThree">
-                                        <div class="panel-body">
-                                            <div>
-                                                Ubicación
-                                                <div class="togglebutton" style="float: right">
-                                                    <label>
-                                                        <input type="checkbox" name="checkSegment" id="proyecto"
-                                                               value="1"
-                                                               checked="">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <hr class="divide-item">
-                                            <div>
-                                                Áreas
-                                                <div class="togglebutton" style="float: right">
-                                                    <label>
-                                                        <input type="checkbox" name="checkSegment" id="proyecto"
-                                                               value="1"
-                                                               checked="">
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>{% endcomment %}
                             </div>
 
-
                         </div>
-                        <div class="col-xs-6">
-
+                        <div class="clearfix"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                            <button id="guardaSegmento" type="button" class="btn btn-primary">Guardar</button>
                         </div>
-
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                        <button id="guardaSegmento" type="button" class="btn btn-primary">Guardar</button>
                     </div>
                 </div>
             </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}
 

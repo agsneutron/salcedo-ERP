@@ -34,7 +34,7 @@ class PhysicalFinancialAdvanceReport(object):
         # Write some simple text.
         worksheet_1.write('A1', 'Programa Licitación', bold)
 
-        #PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet_1, information_json)
+        PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet_1, information_json)
         PhysicalFinancialAdvanceReport.add_progress_table(workbook, worksheet_2, information_json)
 
         workbook.close()
@@ -241,22 +241,21 @@ class PhysicalFinancialAdvanceReport(object):
 
     @staticmethod
     def add_progress_table(workbook, worksheet, info):
-        worksheet.set_column('A:A', 30)
-        worksheet.set_column('B:H', 15)
+        worksheet.set_column('A:B', 30)
+        worksheet.set_column('C:H', 15)
 
         # Add all the headers of the report
         PhysicalFinancialAdvanceReport.add_headers_for_progress_report(workbook, worksheet)
 
-        start_cell = 3
-        count_cell = start_cell
 
         TOP_LINE_ITEM_COL = 0
         SUB_LINE_ITEM_COL = 1
         IMPORT_COL = 2
-        FINANCIAL_ESTIMATED_COL = 3
-        FINANCIAL_ADVANCE_COL = 4
-        PHYSICAL_ESTIMATED_COL = 5
-        PHYSICAL_ADVANCE_COL = 6
+        CONTRACTED_COL = 3
+        FINANCIAL_ESTIMATED_COL = 4
+        FINANCIAL_ADVANCE_COL = 5
+        PHYSICAL_ESTIMATED_COL = 6
+        PHYSICAL_ADVANCE_COL = 7
 
 
         formats = PhysicalFinancialAdvanceReport.get_formats(workbook)
@@ -270,14 +269,117 @@ class PhysicalFinancialAdvanceReport(object):
         blue_bold_format = formats['blue_bold']
         blue_currency_format = formats['blue_currency']
 
-        worksheet.merge_range('A1:G1', 'Avance Físico Financiero', blue_bold_format)
+        worksheet.merge_range('A1:H1', 'Avance Físico Financiero', blue_bold_format)
 
         financial_report = info['physical_financial_advance']
 
+        # Variables to get the values with taxes included.
+        total_programmed_tax = 0
+        total_contracted_tax = 0
+        total_physical_advance_tax = 0
+        total_financial_advance_tax = 0
+
+
+        row_counter = 3
         for top_line_item in financial_report['line_items']:
-            pass
+            start_row = row_counter
+
+            for sub_line_item in top_line_item['sub_line_items']:
+                # Adding the general variables.
+                total_programmed_tax += sub_line_item['total_programmed_tax']
+                total_contracted_tax += sub_line_item['total_contracted_tax']
+                total_physical_advance_tax += sub_line_item['total_physical_advance_tax']
+                total_financial_advance_tax += sub_line_item['total_financial_advance_tax']
 
 
+                worksheet.write(row_counter, SUB_LINE_ITEM_COL, sub_line_item['name'], formats['centered_bold'])
+                worksheet.write(row_counter, IMPORT_COL, sub_line_item['total_programmed'], currency_format)
+                worksheet.write(row_counter, CONTRACTED_COL, sub_line_item['total_contracted'], currency_format)
+                worksheet.write(row_counter, FINANCIAL_ESTIMATED_COL, sub_line_item['total_financial_advance'], currency_format)
+                worksheet.write(row_counter, PHYSICAL_ESTIMATED_COL, sub_line_item['total_physical_advance'], currency_format)
+
+
+                # =IF(D4=0,0,E4/D4)
+                total_financial_advance_percentage = '=IF(D' + str(row_counter+1) + '=0,0, G' + str(row_counter+1) + '/D' + str(row_counter+1) + ')'
+                worksheet.write(row_counter, FINANCIAL_ADVANCE_COL, total_financial_advance_percentage,
+                                percentage_format)
+
+                # =IF(D4=0,0,E4/D4)
+                total_physical_advance_percentage = '=IF(D' + str(row_counter + 1) + '=0,0, E' + str(
+                    row_counter + 1) + '/D' + str(row_counter + 1) + ')'
+                worksheet.write(row_counter, PHYSICAL_ADVANCE_COL, total_physical_advance_percentage,
+                                percentage_format)
+
+                row_counter += 1
+            # Ends sub_line_item for.
+        # Ends top_line_item for.
+
+            worksheet.merge_range(start_row, TOP_LINE_ITEM_COL, row_counter-1, TOP_LINE_ITEM_COL, top_line_item['name'],
+                                  bold_format)
+
+        worksheet.write(row_counter, TOP_LINE_ITEM_COL, "Importe", yellow_bold_format)
+        worksheet.write(row_counter, SUB_LINE_ITEM_COL, "", yellow_bold_format)
+        worksheet.write(row_counter, IMPORT_COL, '=SUM(C' + str(start_row + 1) + ':C' + str(row_counter) + ')',
+                        yellow_currency_format)
+        worksheet.write(row_counter, CONTRACTED_COL, '=SUM(D' + str(start_row + 1) + ':D' + str(row_counter) + ')',
+                        yellow_currency_format)
+
+        # Financial advance cols.
+        worksheet.write(row_counter, FINANCIAL_ESTIMATED_COL, '=SUM(E' + str(start_row + 1) + ':E' + str(row_counter) + ')',
+                        yellow_currency_format)
+
+        total_financial_advance_percentage = '=IF(D' + str(row_counter + 1) + '=0,0, E' + str(
+            row_counter + 1) + '/D' + str(row_counter + 1) + ')'
+
+        worksheet.write(row_counter, FINANCIAL_ADVANCE_COL, total_financial_advance_percentage,
+                        yellow_percentage_format)
+
+        # Physical advance cols.
+        worksheet.write(row_counter, PHYSICAL_ESTIMATED_COL,
+                        '=SUM(G' + str(start_row + 1) + ':G' + str(row_counter) + ')',
+                        yellow_currency_format)
+
+        total_physical_advance_percentage = '=IF(D' + str(row_counter + 1) + '=0,0, G' + str(
+            row_counter + 1) + '/D' + str(row_counter + 1) + ')'
+
+        worksheet.write(row_counter, PHYSICAL_ADVANCE_COL, total_physical_advance_percentage,
+                        yellow_percentage_format)
+
+
+        # IVA Info.
+        row_counter += 1
+        worksheet.write(row_counter, TOP_LINE_ITEM_COL, "IVA", bold_format)
+        worksheet.write(row_counter, SUB_LINE_ITEM_COL, "", bold_format)
+        worksheet.write(row_counter, IMPORT_COL, total_programmed_tax, currency_format)
+        worksheet.write(row_counter, CONTRACTED_COL, total_contracted_tax, currency_format)
+        worksheet.write(row_counter, FINANCIAL_ESTIMATED_COL, total_financial_advance_tax, currency_format)
+        worksheet.write(row_counter, PHYSICAL_ESTIMATED_COL, total_physical_advance_tax, currency_format)
+        worksheet.write(row_counter, FINANCIAL_ADVANCE_COL, '', currency_format)
+        worksheet.write(row_counter, PHYSICAL_ADVANCE_COL, '', currency_format)
+
+
+        # Total Info.
+        row_counter += 1
+        worksheet.write(row_counter, TOP_LINE_ITEM_COL, "Total", yellow_bold_format)
+        worksheet.write(row_counter, SUB_LINE_ITEM_COL, "", yellow_bold_format)
+        worksheet.write(row_counter, IMPORT_COL, '=C'+str(row_counter)+'+C'+str(row_counter-1),yellow_currency_format)
+        worksheet.write(row_counter, CONTRACTED_COL, '=D' + str(row_counter) + '+D' + str(row_counter - 1), yellow_currency_format)
+        worksheet.write(row_counter, FINANCIAL_ESTIMATED_COL, '=E' + str(row_counter) + '+E' + str(row_counter - 1),
+                        yellow_currency_format)
+        worksheet.write(row_counter, PHYSICAL_ESTIMATED_COL, '=G' + str(row_counter) + '+G' + str(row_counter - 1),
+                        yellow_currency_format)
+
+        total_financial_advance_percentage = '=IF(D' + str(row_counter + 1) + '=0,0, E' + str(
+            row_counter + 1) + '/D' + str(row_counter + 1) + ')'
+
+        worksheet.write(row_counter, FINANCIAL_ADVANCE_COL, total_financial_advance_percentage,
+                        yellow_percentage_format)
+
+        total_physical_advance_percentage = '=IF(D' + str(row_counter + 1) + '=0,0, G' + str(
+            row_counter + 1) + '/D' + str(row_counter + 1) + ')'
+
+        worksheet.write(row_counter, PHYSICAL_ADVANCE_COL, total_physical_advance_percentage,
+                        yellow_percentage_format)
 
 
     @staticmethod
@@ -303,13 +405,16 @@ class PhysicalFinancialAdvanceReport(object):
         worksheet.write('C2', 'Presupuesto Base', header_format)
         worksheet.write('C3', 'Importe', header_format)
 
-        worksheet.merge_range('D2:E2', 'Avance Financiero', header_format)
-        worksheet.write('D3', 'Estimado', header_format)
-        worksheet.write('E3', 'Avance', header_format)
+        worksheet.write('D2', 'Contratado', header_format)
+        worksheet.write('D3', 'Importe', header_format)
 
-        worksheet.merge_range('F2:G2', 'Avance Físico', header_format)
-        worksheet.write('F3', 'Estimado', header_format)
-        worksheet.write('G3', 'Avance', header_format)
+        worksheet.merge_range('E2:F2', 'Avance Financiero', header_format)
+        worksheet.write('E3', 'Estimado', header_format)
+        worksheet.write('F3', 'Avance', header_format)
+
+        worksheet.merge_range('G2:H2', 'Avance Físico', header_format)
+        worksheet.write('G3', 'Estimado', header_format)
+        worksheet.write('H3', 'Avance', header_format)
 
     @staticmethod
     def add_headers_for_programmed_report(workbook, worksheet):

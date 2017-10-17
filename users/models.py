@@ -5,15 +5,14 @@ from django.contrib.auth.models import User
 from django.forms.models import model_to_dict
 
 
-
 def profile_picture_document_destination(instance, filename):
     return '/'.join(['documentos_del_usuario', str(instance.user.id), 'profile_' + filename])
-
 
 
 # Create your models here.
 class ERPUser(models.Model):
     ADMINISTRATOR = "AD"
+
     DIRECTIVO = "DI"
 
     ROLES_CHOICES = (
@@ -22,7 +21,7 @@ class ERPUser(models.Model):
     )
 
     user = models.OneToOneField(User)
-    rol = models.CharField(max_length=2, choices=ROLES_CHOICES, default=ADMINISTRATOR)
+    # rol = models.CharField(max_length=2, choices=ROLES_CHOICES, default=ADMINISTRATOR)
     # projects = models.ManyToManyField(through=AccessToProject,null=True,blank=True)
 
     profile_picture = models.FileField(blank=True, null=True, upload_to=profile_picture_document_destination,
@@ -41,6 +40,6 @@ class ERPUser(models.Model):
         return self.user.get_username()
 
 
+
+
         # Create your models here.
-
-

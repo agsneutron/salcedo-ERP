@@ -8,11 +8,13 @@ from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
 from lib.estimate_reports import EstimateReports
+from lib.estimate_report_for_contractors import EstimateReportsForContractors
 from django.shortcuts import render, redirect, render_to_response
 from django.views.generic import View
 
 from reporting import lib
 from reporting.lib.physical_financial_advance_report import PhysicalFinancialAdvanceReport
+from reporting.lib.estimate_report_by_single_contractor import EstimateReportsBySingleContractor
 
 
 def report(request):
@@ -835,6 +837,8 @@ class GetPhysicalFinancialAdvanceReport(View):
 
         report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id, selected_line_items_array)
 
+        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+
         file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
 
@@ -941,7 +945,7 @@ class GetEstimatesReportJson(View):
 class GetEstimatesReport(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
-        #detail_level = request.GET.get('detail_level')
+
         # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
         # will be exported grouped by line_item.
         show_concepts = True
@@ -953,3 +957,29 @@ class GetEstimatesReport(View):
         file = EstimateReports.generate_report(responseJson, show_concepts)
         return file
 
+
+
+
+class GetEstimateReportForContractors(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+
+        information_json = api.EstimateReportForContractors.get_report(project_id)
+        #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
+
+        file = EstimateReportsForContractors.generate_report(information_json)
+
+        return file
+
+
+class GetEstimateReportBySingleContractor(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        contractor_id = request.GET.get('contractor_id')
+
+        information_json = api.EstimateReportBySingleContractor.get_report(project_id, contractor_id)
+        #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
+
+        file = EstimateReportsBySingleContractor.generate_report(information_json)
+
+        return file

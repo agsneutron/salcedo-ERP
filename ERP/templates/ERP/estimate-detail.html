@@ -10,9 +10,27 @@
                 <span class="ms-icon ms-icon-circle ms-icon mb-4 color-info" style="margin-bottom: 0rem !important"><i
                         class="zmdi zmdi-city-alt"></i></span>
                     <h3 class="color-info">
-                        Estimación:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
-                        <i class="fa fa-pencil color-default eliminar"></i>
-                    </a>
+                        {% if estimate.lock_status == 'L' %}
+                            <a href="#" onClick="configura_segmentos({{ project.id }})"
+                               data-toggle="modal" data-target="#unlock_modal"
+                               class="">
+                                <i class="fa fa-lock"></i>
+                            </a>
+
+
+                        {% endif %}
+
+                        {% if estimate.lock_status == 'U' %}
+                            <i class="fa fa-unlock"></i>
+                        {% endif %}
+                        Estimación
+                        {% if perms.ERP.change_estimate %}
+                            <a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
+                                <i class="fa fa-pencil color-default eliminar"></i>
+                            </a>
+                        {% endif %}
+
+
                     </h3>
 
                     <div class="col-xs-12 col-sm-6 text-left">
@@ -32,101 +50,40 @@
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Partida:</span> {{ estimate.contract.line_item.description }}</span>
-                        <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i>{% comment %} <span
-                                class="color-active">Ver Conceptos<span class="glyphicon glyphicon-chevron-down"></span> </span> {% endcomment %}
 
 
-                        <span href="#" class="color-active exp" data-toggle="collapse" data-target="#verconceptos">
-                            Ver Conceptos <span class="glyphicon  glyphicon-plus-sign" style="font-size: 17px;top: 3px;"></span> </span>
-                            <br>
+                        <br>
                     </div>
 
                     <div class="col-xs-12 col-sm-6 text-left">
 
+
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Adelanto:</span> {{ estimate.advance_payment_amount|formatoNumero }}</span>
+                                class="color-active">Fecha de Pago del Anticipo:</span> {{ estimate.advance_payment_date }}</span>
+
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Fecha:</span> {{ estimate.advance_payment_date }}</span>
-                        <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Estado:</span> {{ estimate.get_advance_payment_status_display }}</span>
-                        <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Periodo:</span> {{ estimate.end_date }}</span>
+                                class="color-active">Periodo:</span> {{ estimate.period }}</span>
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Fecha Inicio:</span> {{ estimate.start_date }}</span>
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Fecha Final:</span> {{ estimate.end_date }}</span>
+
+                        <span href="" class="list-group-item withripple ">
+                            <i class="fa fa-chevron-right color-active"></i>
+                            <span href="#" class="color-active exp" data-toggle="collapse" data-target="#verconceptos">
+                                Ver Conceptos
+                                <span class="glyphicon  glyphicon-plus-sign"
+                                      style="font-size: 17px;top: 3px;">
+                                </span>
+                            </span>
+                        </span>
                     </div>
                     <div class="col-xs-12">
-                        {% comment %} <div class="col-xs-12 col-sm-4 text-left">
-                            <div style="padding-top: 10px;">
-                                <dl>
-                                    <dt>Clave del Contrato:</dt>
-                                    <dd style="padding-top: 4px">{{ estimate.contract.clave_contrato }}</dd>
-                                    <hr>
-                                    <dt>Contratista:</dt>
-                                    <dd style="padding-top: 4px"> {{ estimate.contract.contratista.nombreContratista }}</dd>
-                                     <hr>
-                                    <dt>Monto del Contrato:</dt>
-                                    <dd style="padding-top: 4px">{{ estimate.contract.monto_contrato }}</dd>
-                                     <hr>
-                                    <dt>Monto Actual:</dt>
-                                    <dd style="padding-top: 4px">{{ estimate.contract_amount_override }}</dd>
-                                     <dt>Partida:</dt>
-                                    <dd style="padding-top: 4px">{{ estimate.contract.line_item.description }}</dd>
 
-                                </dl>
-
-
-                            </div>
-                        </div>
-{% endcomment %}
-                        {% comment %} <div class="col-xs-12 col-sm-4  text-left">
-                            <div style="padding-top: 12px;">
-                                <dl>
-                                    {% if estimate.advance_payment_amount > 0 %}
-                                        <dd>Adelanto: </dd>
-                                            <dt>{{ estimate.advance_payment_amount|formatoNumero }}</dt>
-                                        <hr>
-                                        <dd>Fecha:  </dd>
-                                            <dt>{{ estimate.advance_payment_date }}</dt>
-                                        <hr>
-                                        <dd>Estado: </dd>
-                                            <dt>{{ estimate.get_advance_payment_status_display }}</dt>
-
-                                    {% elif estimate.advance_payment_amount == 0 %}
-                                        <dd>No se ha definido un anticipo</dd>
-
-                                    {% endif %}
-                                </dl>
-
-                            </div>
-                        </div>
-
-                        <div class="col-xs-12 col-sm-4  text-left">
-                            <div style="padding-top: 12px;">
-                                <dl>
-
-                                    <dd>Periodo</dd>
-                                    <dt>{{ estimate.end_date }}</dt>
-                                    <hr>
-                                    <dd>Fecha Inicio</dd>
-                                    <dt>{{ estimate.start_date }}</dt>
-                                    <hr>
-                                    <dd>Fecha Final</dd>
-                                    <dt>{{ estimate.end_date }}</dt>
-
-                                </dl>
-                            </div>
-                        </div>
-
-                    </div>{% endcomment %}
                         <div class="clearfix"></div>
                         <br>
                         {% comment %}begin concepts{% endcomment %}
@@ -136,7 +93,7 @@
                                 <div class="col-xs-12">
                                     <div class="table-responsive">
                                         <table class="table table-striped">
-                                             <thead>
+                                            <thead>
                                             <tr>
                                                 <th class="text-center">Key</th>
                                                 <th class="text-center">Descripción</th>
@@ -147,7 +104,7 @@
                                                 <tr>
                                                     <td width="10%">{{ c.concept.key }}</td>
                                                     <td>{{ c.concept.description }}</td>
-                                                    <td>{{ c.amount }}</td>
+                                                    <td>{{ c.amount }} {{ c.concept.unit.abbreviation }}</td>
                                                 </tr>
                                             {% endfor %}
                                         </table>
@@ -155,7 +112,7 @@
                                 </div>
                             </div>
                             <hr>
-                        <br>
+                            <br>
                         </div>
                         {% comment %}end concepts{% endcomment %}
 
@@ -168,13 +125,16 @@
                                         Avances
                                     </h3>
                                 </div>
-                                <div class="item-right">
-                                    <a href="/admin/ERP/progressestimate/add/?estimate={{ estimate.id }}"
-                                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container">
-                                        &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"></i>
-                                    </a>
 
-                                </div>
+                                {% if perms.ERP.add_progressestimate %}
+                                    <div class="item-right">
+                                        <a href="/admin/ERP/progressestimate/add/?estimate={{ estimate.id }}"
+                                           class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success icon-container">
+                                            &nbsp; <i class="zmdi zmdi-plus zmdi-hc-2x center-icon"></i>
+                                        </a>
+
+                                    </div>
+                                {% endif %}
 
                                 {% if progress_estimates %}
                                     <div class="card-block text-center">
@@ -187,56 +147,109 @@
                                                     <th class="text-center">Monto</th>
                                                     <th class="text-center">Estatus del Pago</th>
                                                     <th class="text-center">Archivo del Generador</th>
-                                                    <th class="text-center no-sorting">Editar</th>
+
+                                                    {% if perms.ERP.change_progressestimate %}
+                                                        <th class="text-center no-sorting">Editar</th>
+                                                    {% endif %}
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 <tr>
-                                                    {% for progress_estimate in progress_estimates %}
-                                                        <tr class="text-center">
-                                                            <td>
-                                                                {{ progress_estimate.key }}
-                                                            </td>
-                                                            <td>
-                                                                <div class="progress" id="progressbar">
-                                                                    <div class="progress-bar progress-bar-{% if progress_estimate.progress|slice:":-1"  < 15 %}danger
+
+                                                <tr class="text-center">
+                                                    <td>
+                                                        Anticipo
+                                                    </td>
+                                                    <td>
+                                                        <div class="progress" id="progressbar">
+                                                            <div class="progress-bar progress-bar-{% if advance_percentage|slice:":-1"  < 15 %}danger
+                                                                  {% elif advance_percentage|slice:":-1" > 15 and advance_percentage|slice:":-1" < 50 %}warning
+                                                                  {% elif advance_percentage|slice:":-1" >= 50 and advance_percentage|slice:":-1" <= 75 %}info
+                                                                  {% elif advance_percentage|slice:":-1" > 75 %}success
+                                                                  {% endif %}"
+                                                                 role="progressbar"
+                                                                 aria-valuenow="{{ advance_percentage }}"
+                                                                 aria-valuemin="0" aria-valuemax="100"
+                                                                 style="width: {{ advance_percentage }}">
+                                                            </div>
+
+                                                        </div>
+                                                        <small>{{ advance_percentage }}</small>
+
+                                                    </td>
+                                                    <td>
+                                                        {{ estimate.advance_payment_amount }}
+                                                    </td>
+                                                    <td>
+                                                        {{ estimate.get_advance_payment_status_display }}
+                                                    </td>
+                                                    <td>
+                                                        {% if progress_estimate.generator_file %}
+                                                            <a href="/media/{{ progress_estimate.generator_file }}"
+                                                               download
+                                                               class="btn btn-raised btn-default btn-xs">
+                                                                <i class="fa fa-cloud-download fa-2x color-info eliminar"></i>
+                                                            </a>
+                                                        {% endif %}
+
+                                                    </td>
+                                                    {% if perms.ERP.change_progressestimate %}
+                                                        <td class="text-center" style="width: 2%">
+                                                            <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
+                                                               class="btn btn-raised btn-default btn-xs"><i
+                                                                    class="fa fa-pencil color-default eliminar"></i></a>
+                                                        </td>
+                                                    {% endif %}
+                                                </tr>
+
+
+                                                {% for progress_estimate in progress_estimates %}
+                                                    <tr class="text-center">
+                                                        <td>
+                                                            {{ progress_estimate.key }}
+                                                        </td>
+                                                        <td>
+                                                            <div class="progress" id="progressbar">
+                                                                <div class="progress-bar progress-bar-{% if progress_estimate.progress|slice:":-1"  < 15 %}danger
                                                                   {% elif progress_estimate.progress|slice:":-1" > 15 and progress_estimate.progress|slice:":-1" < 50 %}warning
                                                                   {% elif progress_estimate.progress|slice:":-1" >= 50 and progress_estimate.progress|slice:":-1" <= 75 %}info
                                                                   {% elif progress_estimate.progress|slice:":-1" > 75 %}success
                                                                   {% endif %}"
-                                                                         role="progressbar"
-                                                                         aria-valuenow="{{ progress_estimate.progress }}"
-                                                                         aria-valuemin="0" aria-valuemax="100"
-                                                                         style="width: {{ progress_estimate.progress }}">
-                                                                    </div>
-
+                                                                     role="progressbar"
+                                                                     aria-valuenow="{{ progress_estimate.progress }}"
+                                                                     aria-valuemin="0" aria-valuemax="100"
+                                                                     style="width: {{ progress_estimate.progress }}">
                                                                 </div>
-                                                                <small>{{ progress_estimate.progress }}</small>
 
-                                                            </td>
-                                                            <td>
-                                                                {{ progress_estimate.amount }}
-                                                            </td>
-                                                            <td>
-                                                                {{ progress_estimate.get_payment_status_display }}
-                                                            </td>
-                                                            <td>
-                                                                {% if progress_estimate.generator_file %}
-                                                                    <a href="/media/{{ progress_estimate.generator_file }}"
-                                                                       download
-                                                                       class="btn btn-raised btn-default btn-xs">
-                                                                        <i class="fa fa-cloud-download fa-2x color-info eliminar"></i>
-                                                                    </a>
-                                                                {% endif %}
+                                                            </div>
+                                                            <small>{{ progress_estimate.progress }}</small>
 
-                                                            </td>
+                                                        </td>
+                                                        <td>
+                                                            {{ progress_estimate.amount }}
+                                                        </td>
+                                                        <td>
+                                                            {{ progress_estimate.get_payment_status_display }}
+                                                        </td>
+                                                        <td>
+                                                            {% if progress_estimate.generator_file %}
+                                                                <a href="/media/{{ progress_estimate.generator_file }}"
+                                                                   download
+                                                                   class="btn btn-raised btn-default btn-xs">
+                                                                    <i class="fa fa-cloud-download fa-2x color-info eliminar"></i>
+                                                                </a>
+                                                            {% endif %}
+
+                                                        </td>
+                                                        {% if perms.ERP.change_progressestimate %}
                                                             <td class="text-center" style="width: 2%">
                                                                 <a href="/admin/ERP/progressestimate/{{ progress_estimate.id }}/change/"
                                                                    class="btn btn-raised btn-default btn-xs"><i
                                                                         class="fa fa-pencil color-default eliminar"></i></a>
                                                             </td>
-                                                        </tr>
-                                                    {% endfor %}
+                                                        {% endif %}
+                                                    </tr>
+                                                {% endfor %}
                                                 </tr>
                                                 </tbody>
                                             </table>
@@ -277,6 +290,45 @@
                 });
             });
         </script>
+
+
+        <div class="modal" id="unlock_modal" tabindex="-1" role="dialog" aria-labelledby="unlock_modal">
+            <div class="modal-dialog animated zoomIn animated-3x" role="document">
+                <div class="modal-content">
+
+                    <form method="POST" action="unlock">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                            <h3 class="modal-title" id="myModalLabel3">Desbloquear estimación</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-xs-12">
+
+                                <p>¿Estás seguro que deseas desbloquear la estimación? Una vez desbloqueada la
+                                    estimación,
+                                    ya
+                                    no se podrá estimar más. Se definirá un finiquito correspondiente al monto
+                                    especificado.</p>
+
+                                Monto del finiquito: <input type="number" name="liquidation_amount"
+                                                            id="liquidation_amount"/>
+                                {% csrf_token %}
+
+                            </div>
+
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                            <button id="unlock_estimate" type="button" class="btn btn-primary">Guardar</button>
+                            <input type="submit" name="Desbloquear">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 
