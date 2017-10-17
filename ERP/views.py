@@ -7,6 +7,7 @@ import locale
 import decimal
 from datetime import date
 
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.forms.models import modelformset_factory
 from django.http import HttpResponseForbidden
@@ -24,7 +25,7 @@ from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
     Contact, AccessToProject, \
-    ProjectSections, ContractConcepts
+    ProjectSections, ContractConcepts, ProgressEstimateAuthorization, EstimateAdvanceAuthorization
 from django.db.models import Q
 import json
 
@@ -93,6 +94,10 @@ def unlock_estimate(request, pk):
         estimate = Estimate.objects.get(pk=pk)
         amount = request.POST.get('liquidation_amount')
 
+        if amount == "":
+            messages.error(request, 'Tienes que definir un finiquito para desbloquear la estimación.')
+            return HttpResponseRedirect('/admin/ERP/estimate/' + str(estimate.id) + '/')
+
         estimate.lock_status = 'U'
 
         estimate.save()
@@ -106,6 +111,92 @@ def unlock_estimate(request, pk):
         advance.payment_status = ProgressEstimate.NOT_PAID
 
         advance.save()
+
+        return HttpResponseRedirect('/admin/ERP/estimate/' + str(estimate.id) + '/')
+    else:
+
+        to_delete = ProgressEstimate.objects.filter(type=ProgressEstimate.SETTLEMENT)
+        for item in to_delete:
+            item.delete()
+
+        raise PermissionDenied
+
+
+def approve_progress_estimate(request, pk):
+    if request.method == 'POST':
+        progress_estimate = ProgressEstimate.objects.get(pk=pk)
+
+        user = request.user
+        user_full_name = user.first_name + ' ' + user.last_name
+
+        permissions = ['users.is_general_director',
+                       'users.is_project_director',
+                       'users.is_vicepresident',
+                       'users.is_head_manager',
+                       'users.is_president']
+
+        permission_roles = {'users.is_general_director': 'Director General',
+                            'users.is_project_director': 'Director de Obras',
+                            'users.is_vicepresident': 'Vicepresidente Empresarial',
+                            'users.is_head_manager': 'Jefe de Administración',
+                            'users.is_president': 'Presidente'}
+
+        for permission in permissions:
+            if user.has_perm(permission):
+
+                test_authorization = ProgressEstimateAuthorization.objects.filter(
+                    Q(user_id=user.id) & Q(progress_estimate_id=progress_estimate.id))
+
+                if len(test_authorization) == 0:
+                    authorization = ProgressEstimateAuthorization()
+                    authorization.full_name = permission_roles[permission] + ': ' + user_full_name
+                    authorization.user = user
+                    authorization.progress_estimate = progress_estimate
+
+                    authorization.save()
+
+        return HttpResponseRedirect('/admin/ERP/estimate/' + str(progress_estimate.estimate.id) + '/')
+    else:
+
+        to_delete = ProgressEstimate.objects.filter(type=ProgressEstimate.SETTLEMENT)
+        for item in to_delete:
+            item.delete()
+
+        raise PermissionDenied
+
+
+def approve_estimate_advance(request, pk):
+    if request.method == 'POST':
+        estimate = Estimate.objects.get(pk=pk)
+
+        user = request.user
+        user_full_name = user.first_name + ' ' + user.last_name
+
+        permissions = ['users.is_general_director',
+                       'users.is_project_director',
+                       'users.is_vicepresident',
+                       'users.is_head_manager',
+                       'users.is_president']
+
+        permission_roles = {'users.is_general_director': 'Director General',
+                            'users.is_project_director': 'Director de Obras',
+                            'users.is_vicepresident': 'Vicepresidente Empresarial',
+                            'users.is_head_manager': 'Jefe de Administración',
+                            'users.is_president': 'Presidente'}
+
+        for permission in permissions:
+            if user.has_perm(permission):
+
+                test_authorization = EstimateAdvanceAuthorization.objects.filter(
+                    Q(user_id=user.id) & Q(estimate_id=estimate.id))
+
+                if len(test_authorization) == 0:
+                    authorization = EstimateAdvanceAuthorization()
+                    authorization.full_name = permission_roles[permission] + ': ' + user_full_name
+                    authorization.user = user
+                    authorization.estimate = estimate
+
+                    authorization.save()
 
         return HttpResponseRedirect('/admin/ERP/estimate/' + str(estimate.id) + '/')
     else:
@@ -871,11 +962,19 @@ class EstimateDetailView(generic.DetailView):
 
         estimate.advance_payment_amount = locale.currency(estimate.advance_payment_amount, grouping=True)
 
+        current_user_can_approve = estimate.user_can_approve(self.request.user.id)
+        context['current_user_can_approve'] = current_user_can_approve
+        estimate.show_approval_button = not estimate.has_been_approved_by(
+            self.request.user.id) and current_user_can_approve
+
         for record in progress_estimates:
             total += record.amount
             record.amount = locale.currency(record.amount, grouping=True)
             percentage = total / contract_amount
             record.progress = "{0:.0f}%".format(percentage * 100)
+
+            record.show_approval_button = not record.has_been_approved_by(
+                self.request.user.id) and current_user_can_approve
 
         context['progress_estimates'] = progress_estimates
 

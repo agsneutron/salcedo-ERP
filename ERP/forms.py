@@ -12,11 +12,11 @@ from django.utils import timezone
 from users.models import ERPUser
 from django.utils.translation import ugettext as _
 
-
 import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
-    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input, AccessToProject, ProgressEstimate
+    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input, AccessToProject, \
+    ProgressEstimate
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -228,25 +228,36 @@ class ProgressEstimateForm(forms.ModelForm):
         fields = "__all__"
 
     def clean(self):
-        cleaned_data = super(ProgressEstimateForm, self).clean()
 
+        is_new = self.instance.pk is None
+
+        is_unlocked = not is_new and self.instance.estimate.lock_status == Estimate.UNLOCKED
+
+        cleaned_data = super(ProgressEstimateForm, self).clean()
 
         estimate = cleaned_data['estimate']
         new_amount = cleaned_data['amount']
         accumulated_amount = estimate.get_accumulated_amount()
         contract_amount = estimate.contract.monto_contrato
 
-        new_percentage = (accumulated_amount+new_amount) / contract_amount
+        if is_new:
+            accumulated_amount = accumulated_amount + new_amount
+        else:
+            old_amount = self.instance.amount
+            accumulated_amount = accumulated_amount - old_amount + new_amount
+            if is_unlocked and self.instance.type == ProgressEstimate.PROGRESS:
+                # Payment amount can't be changed
+                if old_amount != new_amount:
+                    self._errors["amount"] = self.error_class(
+                        ['El monto no puede cambiar una vez que se ha definido un finiquito.'])
+                    raise ValidationError('Error en la cantidad')
 
+        new_percentage = accumulated_amount / contract_amount
 
-
-        print 'New Percentage ' + str(new_percentage)
-        if new_percentage > 0.8:
-            print  new_percentage
+        if new_percentage > 0.8 and self.instance.type == ProgressEstimate.PROGRESS:
             self._errors["amount"] = self.error_class(
                 ['El monto acumulado no puede superar el 80% si la estimación no ha sido liberada.'])
             raise ValidationError('Error en la cantidad')
-
 
         return cleaned_data
 
@@ -270,7 +281,6 @@ class ContractForm(forms.ModelForm):
         # self.fields['fecha_inicio'].widget = widgets.AdminDateWidget()
         # self.fields['fecha_termino'].widget = widgets.AdminDateWidget()
         # self.fields['fecha_firma'].widget = widgets.AdminDateWidget()
-
 
 
 class ContractConceptsForm(forms.ModelForm):

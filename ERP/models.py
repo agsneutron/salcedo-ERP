@@ -1404,8 +1404,22 @@ class Estimate(models.Model):
     lock_status = models.CharField(max_length=1, choices=ESTIMATE_LOCK_CHOICES, default=LOCKED,
                                    verbose_name="Bloqueo de la Estimación")
 
+    # Director General
+    #
+    # Director  de Obras
+    #
+    # Vicepresidente Empresarial
+    #
+    # Jefe de Administración
+    #
+    # Presidente
+
     class Meta:
         verbose_name_plural = 'Estimaciones'
+
+        permissions = (
+            ("can_unlock_estimate", "Can unlock an estimate"),
+        )
 
     def __str__(self):
         return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
@@ -1439,8 +1453,48 @@ class Estimate(models.Model):
 
         return accumulated
 
+    def is_unlocked(self):
+        return self.lock_status == self.UNLOCKED
 
-'''
+    def is_locked(self):
+        return self.lock_status == self.LOCKED
+
+    def get_html_approval_list(self):
+
+        authorizations = EstimateAdvanceAuthorization.objects.filter(estimate_id=self.id)
+        html = "<div style=\"text-align:left;\">"
+
+        if len(authorizations) == 0:
+            html += 'Este pago aún no ha sido autorizado.'
+        else:
+            for auth in authorizations:
+                html += auth.full_name + "<br>"
+
+        html += "</div>"
+        return html
+
+    def has_been_approved(self):
+        authorizations = EstimateAdvanceAuthorization.objects.filter(estimate_id=self.id)
+        return len(authorizations) > 0
+
+    def has_been_approved_by(self, user_id):
+        authorizations = EstimateAdvanceAuthorization.objects.filter(Q(estimate_id=self.id) & Q(user_id=user_id))
+        return len(authorizations) > 0
+
+    def user_can_approve(self, user_id):
+        user = User.objects.get(pk=user_id)
+        permissions = ['users.is_general_director',
+                       'users.is_project_director',
+                       'users.is_vicepresident',
+                       'users.is_head_manager',
+                       'users.is_president']
+
+        for p in permissions:
+            if user.has_perm(p):
+                return True
+        return False
+
+    '''
     Model for the Progress Estimates.
 '''
 
@@ -1524,6 +1578,32 @@ class ProgressEstimate(models.Model):
             super(ProgressEstimate, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
+
+    def can_be_edited(self):
+        return self.payment_status == self.NOT_PAID
+
+    def get_html_approval_list(self):
+
+        authorizations = ProgressEstimateAuthorization.objects.filter(progress_estimate_id=self.id)
+        html = "<div style=\"text-align:left;\">"
+
+        if len(authorizations) == 0:
+            html += 'Este pago aún no ha sido autorizado.'
+        else:
+            for auth in authorizations:
+                html += auth.full_name + "<br>"
+
+        html += "</div>"
+        return html
+
+    def has_been_approved(self):
+        authorizations = ProgressEstimateAuthorization.objects.filter(progress_estimate_id=self.id)
+        return len(authorizations) > 0
+
+    def has_been_approved_by(self, user_id):
+        authorizations = ProgressEstimateAuthorization.objects.filter(
+            Q(progress_estimate_id=self.id) & Q(user_id=user_id))
+        return len(authorizations) > 0
 
 
 '''
@@ -1670,3 +1750,29 @@ class AccessToProject(models.Model):
         for p in projects:
             project_ids.append(p['project_id'])
         return project_ids
+
+
+class ProgressEstimateAuthorization(models.Model):
+    version = IntegerVersionField()
+    full_name = models.CharField(max_length=256, )
+    user = models.ForeignKey(User, verbose_name="Usuario", null=False, blank=False)
+    progress_estimate = models.ForeignKey(ProgressEstimate, verbose_name="Avance", null=False, blank=False)
+
+    def __str__(self):
+        return self.full_name
+
+    def __unicode__(self):
+        return self.descripcion
+
+
+class EstimateAdvanceAuthorization(models.Model):
+    version = IntegerVersionField()
+    full_name = models.CharField(max_length=256, )
+    user = models.ForeignKey(User, verbose_name="Usuario", null=False, blank=False)
+    estimate = models.ForeignKey(Estimate, verbose_name="Avance", null=False, blank=False)
+
+    def __str__(self):
+        return self.full_name
+
+    def __unicode__(self):
+        return self.descripcion
