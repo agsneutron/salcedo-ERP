@@ -146,9 +146,9 @@ class EstimateReports(object):
 
         merge_format_blanco.set_font_color('black')
 
-        worksheet.insert_image('A1', 'static/ERP/admin/img/logo404.jpg', {'x_scale': 0.8, 'y_scale': 0.7})
+        worksheet.insert_image('A1', 'static/ERP/admin/img/logo_2_salcedo.png', {'x_scale': 0.5, 'y_scale': 0.4})
 
-        worksheet.merge_range('C3:H3', 'SALCEDO CONSTRUCCIÓN Y SUPERVISIÓN S.A. DE C.V.', borde_blanco)
+        worksheet.merge_range('C3:I3', 'SALCEDO CONSTRUCCIÓN Y SUPERVISIÓN S.A. DE C.V.', borde_blanco)
 
         worksheet.merge_range('A5:E5', '', merge_format_blanco_CENTER)
         worksheet.merge_range('G5:K5', '', merge_format_blanco_CENTER)
