@@ -1342,10 +1342,10 @@ class Concept_Input(models.Model):
         return ans
 
     def __str__(self):
-        return self.description
+        return self.key + ' - ' + self.description
 
     def __unicode__(self):
-        return self.description
+        return self.key + ' - ' + self.description
 
     def save(self, *args, **kwargs):
         canSave = True
