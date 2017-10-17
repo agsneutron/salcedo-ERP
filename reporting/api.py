@@ -257,30 +257,47 @@ class PhysicalFinancialAdvanceReport(View):
                 physical_advance_tax = selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance_tax']
                 financial_advance_tax = selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance_tax']
 
+                # Getting the retrieved amounts.
+                if len(physical_progress_estimate_set) > 0:
+                    extra_contracted = float(physical_progress_estimate_set[0]['contracted_amount'])
+                else:
+                    extra_contracted = 0
+
+
+                if len(physical_progress_estimate_set) > 0:
+                    extra_physical_amount = float(physical_progress_estimate_set[0]['physical_advance_amount'])
+                else:
+                    extra_physical_amount = 0
+
+
+                if len(financial_progress_estimate_set) > 0:
+                    extra_financial_amount = float(financial_progress_estimate_set[0]['total_financial'])
+                else:
+                    extra_financial_amount = 0
 
                 # Contracted Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted'] = float(contracted) \
-                                                                                              + float(physical_progress_estimate_set[0]['contracted_amount'])
+                                                                                              + extra_contracted
                 # Physical Advance Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance'] = float(physical_advance) \
-                                                                                               + float(physical_progress_estimate_set[0]['physical_advance_amount'])
+                                                                                               + extra_physical_amount
                 # Financial Advance Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance'] = float(
-                    financial_advance) + float(financial_progress_estimate_set[0]['total_financial'])
+                    financial_advance) + extra_financial_amount
 
                 #------ Amounts with taxes included. ------
                 estimate_tax = float(estimate.contract.porcentaje_iva) / 100
 
                 # Contracted Amount with taxes.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted_tax'] = float(contracted_tax) \
-                                      + (float(physical_progress_estimate_set[0]['contracted_amount']) * estimate_tax)
+                                      + (extra_contracted * estimate_tax)
                 # Physical Advance Amount with taxes.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance_tax'] = float(
-                    physical_advance_tax) + (float(physical_progress_estimate_set[0]['physical_advance_amount']) * estimate_tax)
+                    physical_advance_tax) + (extra_physical_amount * estimate_tax)
 
                 # Financial Advance Amount with taxes.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance_tax'] = float(
-                    financial_advance_tax) + (float(financial_progress_estimate_set[0]['total_financial']) * estimate_tax)
+                    financial_advance_tax) + (extra_financial_amount * estimate_tax)
 
 
         # Getting the top line items for the project
@@ -624,9 +641,9 @@ class EstimateReportBySingleContractor():
             }
             response['data'].append(contractor_json)
 
-            # Getting all the estimates for a contractor in a .
+            # Getting all the estimates for a contractor in a project.
             estimates_set = Estimate.objects.filter(
-                Q(contract__contratista__id=contractor_obj.id) & Q(contract__project_id=project_id) & Q(contract_id=contract.id))
+                Q(contract__contratista__id=contractor_obj.id) & Q(contract__project_id=project_id))
             for estimate in estimates_set:
                 concepts_array = []
                 concepts_set = estimate.contract.concepts.all()

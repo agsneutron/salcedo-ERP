@@ -42,7 +42,7 @@ class BudgetReportsByContractor(object):
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=Estimaciones_por_Contratista.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Presupuesto_por_Contratista.xlsx'
         response['Content-Length'] = output.tell()
 
         output.seek(0)
