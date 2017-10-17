@@ -37,7 +37,6 @@ class UsersListView(ListView):
     """
        Display a Blog List page filtered by the search query.
     """
-    paginate_by = 10
 
     def get_queryset(self):
         result = super(UsersListView, self).get_queryset()

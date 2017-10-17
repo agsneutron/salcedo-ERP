@@ -60,18 +60,3 @@ class ERPUser(models.Model):
         return self.user.get_username()
 
 
-
-
-        # Create your models here.
-
-
-@receiver(post_save, sender=User, dispatch_uid='create_profile')
-def create_profile(sender, instance, **kwargs):
-    # Creating the sections for each saved project.
-    id = instance.id
-    users = ERPUser.objects.filter(user_id=id)
-    if len(users) == 0:
-        new_user = ERPUser()
-        new_user.profile_picture = ''
-        new_user.user_id = id
-        new_user.save()
