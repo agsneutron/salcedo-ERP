@@ -150,8 +150,7 @@ class EstimateReports(object):
 
         worksheet.merge_range('C3:I3', 'SALCEDO CONSTRUCCIÓN Y SUPERVISIÓN S.A. DE C.V.', borde_blanco)
 
-        worksheet.merge_range('A5:E5', '', merge_format_blanco_CENTER)
-        worksheet.merge_range('G5:K5', '', merge_format_blanco_CENTER)
+
         worksheet.merge_range('A5:E5', 'HOJA ESTIMACIÓN', fondo_blanco_border_blue)
         worksheet.merge_range('G5:K5', '', fondo_blanco_border_blue)
 
