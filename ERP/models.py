@@ -1205,10 +1205,10 @@ class LineItem(models.Model):
         return ans
 
     def __str__(self):
-        return self.description
+        return self.key + " - "+self.description
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.description
+        return self.key + " - " + self.description
 
     def save(self, *args, **kwargs):
         canSave = True
