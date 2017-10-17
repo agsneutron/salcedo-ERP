@@ -943,7 +943,7 @@ class GetEstimatesReportJson(View):
 class GetEstimatesReport(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
-        #detail_level = request.GET.get('detail_level')
+
         # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
         # will be exported grouped by line_item.
         show_concepts = True
@@ -955,3 +955,13 @@ class GetEstimatesReport(View):
         file = EstimateReports.generate_report(responseJson, show_concepts)
         return file
 
+
+
+
+class GetEstimateReportByContractor(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+
+        response = api.EstimateReportByContractor.get_report(project_id)
+
+        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')

@@ -12,6 +12,7 @@ urlpatterns = [
 
     url(r'^get_financial_report$', views.GetFinancialReport.as_view()),
     url(r'^get_physical_financial_advance_report$', views.GetPhysicalFinancialAdvanceReport.as_view()),
+    url(r'^get_estimate_report_by_contractor$', views.GetEstimateReportByContractor.as_view()),
 
     # Report for the estimates page.
     url(r'^get_estimates_report$', views.GetEstimatesReport.as_view()),

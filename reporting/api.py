@@ -9,7 +9,7 @@ from django.views.generic import View
 from django.db.models.functions import TruncMonth
 
 from ERP.models import LineItem, Concept_Input, ProgressEstimate, PaymentSchedule, Project, Estimate, \
-    ContratoContratista
+    ContratoContratista, Contratista
 import os, sys
 sys.setdefaultencoding('utf-8')
 from xlsxwriter.workbook import Workbook
@@ -530,5 +530,59 @@ class EstimatesReport():
             response.append(estimate_json)
 
 
+
+        return response
+
+
+
+class EstimateReportByContractor():
+    @staticmethod
+    def get_report(project_id):
+        response = {}
+        response['data'] = []
+
+        project_obj = Project.objects.get(pk=project_id)
+        response['project_key'] = project_obj.key
+        response['project_name'] = project_obj.nombreProyecto
+        response['project_start_date'] = str(project_obj.fecha_inicial)
+        response['project_end_date'] = str(project_obj.fecha_final)
+
+        # Getting all the contracts in a project grouped by contractor.
+        contracts_set = ContratoContratista.objects.filter(project_id=project_id).values('contratista_id').annotate(Count('contratista_id'))
+
+        for contract in contracts_set:
+            contractor_id = contract['contratista_id']
+            contractor_obj = Contratista.objects.get(pk=contractor_id)
+
+            contractor_json = {
+                'contractor_name': contractor_obj.nombreContratista,
+                'estimates': []
+            }
+
+            # Getting all the estimates for a contractor in a .
+            estimates_set = Estimate.objects.filter(contract__contratista__id=contractor_obj.id)
+            for estimate in estimates_set:
+                estimate_json = {
+                    'estimate_start_date': str(estimate.start_date),
+                    'estimate_end_date': str(estimate.end_date),
+                    'estimate_period': str(estimate.period),
+                    'progress_estimates': [{
+                        'key': 'Avance',
+                        'amount': float(estimate.advance_payment_amount),
+                        'status': progress_estimate.get_payment_status_display(),
+                    }]
+                }
+                progress_estimate_set = ProgressEstimate.objects.filter(estimate__id = estimate.id)
+                for progress_estimate in progress_estimate_set:
+                    pe_json = {
+                        'key': progress_estimate.key,
+                        'amount': float(progress_estimate.amount),
+                        'status': progress_estimate.get_payment_status_display(),
+                    }
+
+
+
+
+        print contracts_set
 
         return response
