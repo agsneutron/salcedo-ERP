@@ -94,4 +94,18 @@
 
 </div>
 </form></div>
+
+
+
+<script>
+    jQuery(document).ready(function(){
+        jQuery('#id_amount').change(function(){
+            var new_percentaje = jQuery('#id_amount').val()/{{ adminform.form.contract_amount }} * 100;
+            jQuery('#id_porcentaje').html(new_percentaje.toFixed(2) + '%');
+        });
+    });
+</script>
 {% endblock %}
+
+
+

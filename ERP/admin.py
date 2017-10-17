@@ -6,6 +6,7 @@ from django.conf.urls import url
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.db.models import Count, Sum
 from django.http import Http404
 from django.shortcuts import redirect
 
@@ -118,30 +119,28 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
 
-
-    #here
+    # here
     def has_add_permission(self, request):
         project_id = request.GET.get('project')
         if project_id is None:
             return False
         else:
-            user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project_id)
-            if user_has_access:
+            user = request.user
+            user_has_access = AccessToProject.user_has_access_to_project(user.id, project_id)
+            if user_has_access and user.has_perm('ERP.view_list_project'):
                 return True
             return False
 
     def has_change_permission(self, request, obj=None):
         user = request.user
 
-        if user.has_perm('ERP.change_progressestimatelog'):
+        if user.has_perm('ERP.change_progressestimatelog') and user.has_perm('ERP.view_list_project'):
             if obj is not None:
                 return AccessToProject.user_has_access_to_project(user.id, obj.project_id)
             else:
                 return True
         else:
             return False
-
-
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -288,8 +287,8 @@ class PropietarioAdmin(admin.ModelAdmin):
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):
-    list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file', 'payment_status')
-    fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file', 'payment_status', 'version',)
+    list_display = ('estimate', 'key', 'amount', 'type', 'generator_file', 'payment_status')
+    fields = ('estimate', 'key', 'amount', 'type', 'generator_file', 'payment_status', 'version',)
     model = ProgressEstimate
 
     def response_change(self, request, obj):
@@ -308,6 +307,23 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 
         form = super(ProgressEstimateAdmin, self).get_form(request, obj, **kwargs)
 
+        if estimate_id is not None:
+            qs = Estimate.objects.filter(pk=estimate_id)
+            if qs.exists():
+                estimate = qs[0]
+                form.contract_amount = estimate.contract.monto_contrato
+
+                accumulated_qs = ProgressEstimate.objects.filter(estimate_id=estimate.id).values(
+                    'estimate_id').annotate(
+                    Count('estimate_id'), accumulated=Sum('amount'))
+
+                accumulated = accumulated_qs[0]['accumulated']
+
+                accumulated += estimate.advance_payment_amount
+
+                form.contract_amount_accumulated = "{0:.2f}%".format(
+                    accumulated / estimate.contract.monto_contrato * 100)
+
         if obj is None and estimate_id is not None:
             qs = Estimate.objects.filter(pk=estimate_id)
             if qs.exists():
@@ -317,6 +333,9 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 
                 estimate_field.widget.can_add_related = False
                 estimate_field.widget.can_change_related = False
+
+                amount_field = form.base_fields['amount']
+                amount_field.widget = forms.NumberInput(attrs={'step': .1})
             else:
                 raise Http404(
                     'No existe la estimación especificada.')
@@ -344,8 +363,9 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
             return False
         else:
             estimate = Estimate.objects.get(pk=estimate_id)
-            user_has_access = AccessToProject.user_has_access_to_project(request.user.id, estimate.contract.project_id)
-            if user_has_access:
+            user = request.user
+            user_has_access = AccessToProject.user_has_access_to_project(user.id, estimate.contract.project_id)
+            if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm('ERP.add_progressestimate'):
                 return True
             return False
 
@@ -354,9 +374,13 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 
         if user.has_perm('ERP.change_progressestimatelog'):
             if obj is not None:
-                return AccessToProject.user_has_access_to_project(user.id, obj.estimate.contract.project_id)
+                user_has_access = AccessToProject.user_has_access_to_project(user.id, obj.estimate.contract.project_id)
+                if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm(
+                        'ERP.change_progressestimate'):
+                    return True
+                return False
             else:
-                return True
+                return False
         else:
             return False
 
@@ -799,9 +823,8 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue="../%s/"):
         return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id))
 
-
     def has_add_permission(self, request):
-        if request.user.has_perm('ERP.change_contratocontratista'):
+        if request.user.has_perm('ERP.add_contratocontratista'):
             return True
         return False
 
@@ -1230,7 +1253,7 @@ class EstimateAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(views.EstimateListView.as_view()),
                 name='estimate-view'),
             url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
-            url(r'^(?P<pk>\d+)/delete$', views.EstimateDelete.as_view(), name='estimate-delete'),
+            url(r'^(?P<pk>\d+)/delete/$', views.EstimateDelete.as_view(), name='estimate-delete'),
 
         ]
 
@@ -1255,8 +1278,9 @@ class EstimateAdmin(admin.ModelAdmin):
         if project_id is None:
             return False
         else:
-            user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project_id)
-            if user_has_access:
+            user = request.user
+            user_has_access = AccessToProject.user_has_access_to_project(user.id, project_id)
+            if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm('ERP.add_estimate'):
                 return True
             return False
 
