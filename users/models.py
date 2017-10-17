@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.forms.models import model_to_dict
 
 
@@ -61,3 +63,15 @@ class ERPUser(models.Model):
 
 
         # Create your models here.
+
+
+@receiver(post_save, sender=User, dispatch_uid='create_profile')
+def create_profile(sender, instance, **kwargs):
+    # Creating the sections for each saved project.
+    id = instance.id
+    users = ERPUser.objects.filter(user_id=id)
+    if len(users) == 0:
+        new_user = ERPUser()
+        new_user.profile_picture = ''
+        new_user.user_id = id
+        new_user.save()
