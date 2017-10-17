@@ -11,6 +11,7 @@ import json
 
 register = template.Library()
 
+
 @register.filter(name='add_attributes')
 def add_attributes(field, css):
     attrs = {}
@@ -43,18 +44,22 @@ def add_desc(field, css):
 def is_file(field):
     return isinstance(field.field.widget, forms.ClearableFileInput)
 
+
 @register.filter(name='addcss')
 def addcss(field, css):
-    return field.as_widget(attrs={"class":css})
+    return field.as_widget(attrs={"class": css})
 
 
 @register.filter(name='formatoNumero')
 def currency(field):
-    if field=='-' or field == "None": field=0
+    if field == '-' or field == "None": field = 0
+
+    print 'The field is: ' + str(field)
     return locale.currency(field, grouping=True)
-    #moneda = round(float(field), 2)
-    #return "$%s%s" % (intcomma(int(moneda)), ("%0.2f" % moneda)[-3:])
-    #return field
+    # moneda = round(float(field), 2)
+    # return "$%s%s" % (intcomma(int(moneda)), ("%0.2f" % moneda)[-3:])
+    # return field
+
 
 @register.filter(is_safe=True)
 def js(obj):

@@ -8,14 +8,14 @@ from django.http.response import StreamingHttpResponse
 from xlsxwriter.workbook import Workbook
 
 
-class EstimateReportsByContract(object):
+class EstimateReportsBySingleContractor(object):
 
     @staticmethod
-    def generate_report(information_json,):
+    def generate_report(information_json):
         if len(information_json) == 0:
             output = StringIO.StringIO()
             workbook = Workbook(output)
-            worksheet = workbook.add_worksheet('Avance Financiero Interno')
+            worksheet = workbook.add_worksheet('Estimaciones por contratista')
 
             # Widen the first column to make the text clearer.
             worksheet.set_column('A:A', 20)
@@ -30,9 +30,10 @@ class EstimateReportsByContract(object):
 
             # Iterate through the contractors array.
             for contractor in information_json['data']:
-                worksheet = workbook.add_worksheet(contractor['contractor_name'])
-                EstimateReportsByContract.add_headers(workbook, worksheet, information_json, contractor)
-                EstimateReportsByContract.add_estimates_table(workbook, worksheet, contractor['estimates'])
+                for estimate in contractor['estimates']:
+                    worksheet = workbook.add_worksheet(estimate['contract_key'])
+                    EstimateReportsBySingleContractor.add_headers(workbook, worksheet, information_json, contractor)
+                    EstimateReportsBySingleContractor.add_estimates_table(workbook, worksheet, estimate)
 
 
 
@@ -72,7 +73,7 @@ class EstimateReportsByContract(object):
             'font_color': '#202020'
         }
 
-        formats = EstimateReportsByContract.get_formats(workbook)
+        formats = EstimateReportsBySingleContractor.get_formats(workbook)
         light_blue_format = formats['light_blue']
 
         header_format = workbook.add_format(header_format_info)
@@ -83,7 +84,7 @@ class EstimateReportsByContract(object):
         header_format_info['fg_color'] = '#6BB067'  # Green
 
         worksheet.merge_range('A1:F1', general_info['project_name'], header_format)
-        worksheet.merge_range('A2:F2', "Código: " +general_info['project_key'], general_format)
+        worksheet.merge_range('A2:F2', "Código de Obra: " +general_info['project_key'], general_format)
         worksheet.merge_range('A3:F3', "Proyecto con fecha del " + general_info['project_start_date'] + " al " +general_info['project_end_date'], general_format)
         worksheet.merge_range('A4:F4', "Contratista: " + contractor_info['contractor_name'], general_format)
 
@@ -106,7 +107,7 @@ class EstimateReportsByContract(object):
     @staticmethod
     def add_estimates_table(workbook, worksheet, info):
 
-        STAR_DATE_COL = 0
+        START_DATE_COL = 0
         END_DATE_COL = 1
         PERIOD_COL = 2
         KEY_COL = 3
@@ -116,31 +117,55 @@ class EstimateReportsByContract(object):
         START_ROW = 7
 
 
-        formats = EstimateReportsByContract.get_formats(workbook)
+        formats = EstimateReportsBySingleContractor.get_formats(workbook)
         light_border_format = formats['light_border']
+        light_border_format.set_text_wrap()
         light_border_grey_format = formats['light_border_grey']
+        light_blue_format = formats['light_blue']
 
 
         row_counter = START_ROW
         estimate_counter = 0
-        for estimate in info:
-            estimate_counter += 1
-            estimate_row = row_counter
+        estimate = info
+        estimate_counter += 1
+        estimate_row = row_counter
 
-            if estimate_counter % 2 == 0:
-                cell_format = light_border_grey_format
-            else:
-                cell_format = light_border_format
+        if estimate_counter % 2 == 0:
+            cell_format = light_border_grey_format
+        else:
+            cell_format = light_border_format
 
-            for progress_estimate in estimate['progress_estimates']:
-                worksheet.write(row_counter, KEY_COL, progress_estimate['key'], cell_format)
-                worksheet.write(row_counter, AMOUNT_COL, progress_estimate['amount'], cell_format)
-                worksheet.write(row_counter, STATUS_COL, progress_estimate['status'], cell_format)
-                row_counter += 1
+        for progress_estimate in estimate['progress_estimates']:
+            worksheet.write(row_counter, KEY_COL, progress_estimate['key'], cell_format)
+            worksheet.write(row_counter, AMOUNT_COL, progress_estimate['amount'], cell_format)
+            worksheet.write(row_counter, STATUS_COL, progress_estimate['status'], cell_format)
+            row_counter += 1
 
-            worksheet.merge_range('A'+str(estimate_row+1)+':A'+str(row_counter), estimate['estimate_start_date'], cell_format)
-            worksheet.merge_range('B'+str(estimate_row+1)+':B'+str(row_counter), estimate['estimate_end_date'], cell_format)
-            worksheet.merge_range('C'+str(estimate_row+1)+':C'+str(row_counter), estimate['estimate_period'], cell_format)
+        worksheet.merge_range('A'+str(estimate_row+1)+':A'+str(row_counter), estimate['estimate_start_date'], cell_format)
+        worksheet.merge_range('B'+str(estimate_row+1)+':B'+str(row_counter), estimate['estimate_end_date'], cell_format)
+        worksheet.merge_range('C'+str(estimate_row+1)+':C'+str(row_counter), estimate['estimate_period'], cell_format)
+
+        row_counter += 1
+
+
+        worksheet.merge_range('A'+str(row_counter+1)+':F'+str(row_counter+1), 'Conceptos del Contrato', light_blue_format)
+        row_counter += 1
+        worksheet.write(row_counter, START_DATE_COL, "Clave", light_blue_format)
+        worksheet.merge_range('B' + str(row_counter + 1) + ':C' + str(row_counter + 1), 'Descripción',
+                              light_blue_format)
+        worksheet.write(row_counter, KEY_COL, "Unidad", light_blue_format)
+        worksheet.write(row_counter, AMOUNT_COL, "Precio Unitario", light_blue_format)
+        worksheet.write(row_counter, STATUS_COL, "Cantidad", light_blue_format)
+
+        row_counter += 1
+        for concept in estimate['concepts']:
+            worksheet.set_row(row_counter, 130)
+            worksheet.write(row_counter, START_DATE_COL, concept['concept_key'], light_border_format)
+            worksheet.merge_range('B' + str(row_counter + 1) + ':C' + str(row_counter + 1), concept['concept_description'], light_border_format)
+            worksheet.write(row_counter, KEY_COL, concept['concept_unit'],light_border_format)
+            worksheet.write(row_counter, AMOUNT_COL, concept['concept_price'],light_border_format)
+            worksheet.write(row_counter, STATUS_COL, str(concept['concept_quantity']),light_border_format)
+            row_counter += 1
 
 
 

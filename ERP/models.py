@@ -8,6 +8,8 @@ from decimal import Decimal
 
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from django.db.models import Count
+from django.db.models import Sum
 from django.db.models.fields.related import ManyToManyField
 from django.db.models.query_utils import Q
 from django.dispatch import receiver
@@ -563,7 +565,7 @@ class ContratoContratista(models.Model):
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
     porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,
-                                             null=False, default=0, max_digits=5)
+                                         null=False, default=0, max_digits=5)
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
                                      editable=True)
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,
@@ -596,7 +598,6 @@ class ContratoContratista(models.Model):
         permissions = (
             ("view_list_contratocontratista", "Can see contractor contract listing"),
         )
-
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -1393,6 +1394,16 @@ class Estimate(models.Model):
     advance_payment_status = models.CharField(max_length=2, choices=ADVANCE_PAYMENT_STATUS_CHOICES, default=NOT_PAID,
                                               verbose_name="Estatus del Anticipo")
 
+    LOCKED = "L"
+    UNLOCKED = "U"
+
+    ESTIMATE_LOCK_CHOICES = (
+        (LOCKED, 'Bloqueada'),
+        (UNLOCKED, 'Desbloquada'),
+    )
+    lock_status = models.CharField(max_length=1, choices=ESTIMATE_LOCK_CHOICES, default=LOCKED,
+                                   verbose_name="Bloqueo de la Estimación")
+
     class Meta:
         verbose_name_plural = 'Estimaciones'
 
@@ -1411,6 +1422,22 @@ class Estimate(models.Model):
             super(Estimate, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
+
+    def get_accumulated_amount(self, include_settlement=False):
+        if include_settlement:
+            accumulated_qs = ProgressEstimate.objects.filter(estimate_id=self.id).values(
+                'estimate_id').annotate(
+                Count('estimate_id'), accumulated=Sum('amount'))
+        else:
+            accumulated_qs = ProgressEstimate.objects.filter(
+                Q(estimate_id=self.id) & Q(type=ProgressEstimate.PROGRESS)).values(
+                'estimate_id').annotate(
+                Count('estimate_id'), accumulated=Sum('amount'))
+
+        accumulated = accumulated_qs[0]['accumulated']
+        accumulated += self.advance_payment_amount
+
+        return accumulated
 
 
 '''
@@ -1436,8 +1463,7 @@ def content_file_generador(instance, filename):
 class ProgressEstimate(models.Model):
     version = IntegerVersionField()
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
-    key = models.CharField(verbose_name="Clave del Avance", max_length=8, null=False, blank=False)
-
+    key = models.CharField(verbose_name="Clave del Avance", max_length=9, null=False, blank=False)
 
     amount = models.DecimalField(verbose_name='Monto ($)', decimal_places=6, blank=False, null=False, default=0,
                                  max_digits=20)
@@ -1450,10 +1476,10 @@ class ProgressEstimate(models.Model):
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     PROGRESS = "P"
-    ESTIMATE = "E"
+    SETTLEMENT = "S"
     TYPE_CHOICES = (
         (PROGRESS, 'Avance'),
-        (ESTIMATE, 'Estimado'),
+        (SETTLEMENT, 'Finiquito'),
     )
 
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS, verbose_name="Tipo")

@@ -10,6 +10,19 @@
                 <span class="ms-icon ms-icon-circle ms-icon mb-4 color-info" style="margin-bottom: 0rem !important"><i
                         class="zmdi zmdi-city-alt"></i></span>
                     <h3 class="color-info">
+                        {% if estimate.lock_status == 'L' %}
+                            <a href="#" onClick="configura_segmentos({{ project.id }})"
+                               data-toggle="modal" data-target="#unlock_modal"
+                               class="">
+                                <i class="fa fa-lock"></i>
+                            </a>
+
+
+                        {% endif %}
+
+                        {% if estimate.lock_status == 'U' %}
+                            <i class="fa fa-unlock"></i>
+                        {% endif %}
                         Estimación
                         {% if perms.ERP.change_estimate %}
                             <a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
@@ -277,6 +290,45 @@
                 });
             });
         </script>
+
+
+        <div class="modal" id="unlock_modal" tabindex="-1" role="dialog" aria-labelledby="unlock_modal">
+            <div class="modal-dialog animated zoomIn animated-3x" role="document">
+                <div class="modal-content">
+
+                    <form method="POST" action="unlock">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                    aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                            <h3 class="modal-title" id="myModalLabel3">Desbloquear estimación</h3>
+                        </div>
+                        <div class="modal-body">
+                            <div class="col-xs-12">
+
+                                <p>¿Estás seguro que deseas desbloquear la estimación? Una vez desbloqueada la
+                                    estimación,
+                                    ya
+                                    no se podrá estimar más. Se definirá un finiquito correspondiente al monto
+                                    especificado.</p>
+
+                                Monto del finiquito: <input type="number" name="liquidation_amount"
+                                                            id="liquidation_amount"/>
+                                {% csrf_token %}
+
+                            </div>
+
+                        </div>
+                        <div class="clearfix"></div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                            <button id="unlock_estimate" type="button" class="btn btn-primary">Guardar</button>
+                            <input type="submit" name="Desbloquear">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div>
 
 
 

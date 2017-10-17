@@ -535,7 +535,7 @@ class EstimatesReport():
 
 
 
-class EstimateReportByContractor():
+class EstimateReportForContractors():
     @staticmethod
     def get_report(project_id):
         response = {}
@@ -587,5 +587,72 @@ class EstimateReportByContractor():
 
 
 
+
+        return response
+
+class EstimateReportBySingleContractor():
+    @staticmethod
+    def get_report(project_id, contractor_id):
+        response = {}
+        response['data'] = []
+
+        project_obj = Project.objects.get(pk=project_id)
+        response['project_key'] = project_obj.key
+        response['project_name'] = project_obj.nombreProyecto
+        response['project_start_date'] = str(project_obj.fecha_inicial)
+        response['project_end_date'] = str(project_obj.fecha_final)
+
+        # Getting all the contracts in a project grouped by contractor.
+        contracts_set = ContratoContratista.objects.filter(Q(project_id=project_id)&Q(contratista__id=contractor_id)).values('contratista_id').annotate(
+            Count('contratista_id'))
+
+        for contract in contracts_set:
+            contractor_id = contract['contratista_id']
+            contractor_obj = Contratista.objects.get(pk=contractor_id)
+
+            contractor_json = {
+                'contractor_name': contractor_obj.nombreContratista,
+                'estimates': []
+            }
+            response['data'].append(contractor_json)
+
+            # Getting all the estimates for a contractor in a .
+            estimates_set = Estimate.objects.filter(
+                Q(contract__contratista__id=contractor_obj.id) & Q(contract__project_id=project_id))
+            for estimate in estimates_set:
+                concepts_array = []
+                concepts_set = estimate.contract.concepts.all()
+                for concept in concepts_set:
+                    concepts_array.append({
+                        'concept_key':concept.key,
+                        'concept_description':concept.description,
+                        'concept_price':float(concept.unit_price),
+                        'concept_quantity':float(concept.quantity),
+                        'concept_unit':concept.unit.name,
+                    })
+
+                estimate_json = {
+                    'contract_key': estimate.contract.clave_contrato,
+                    'estimate_start_date': str(estimate.start_date),
+                    'estimate_end_date': str(estimate.end_date),
+                    'estimate_period': str(estimate.period),
+                    'concepts': concepts_array,
+                    'progress_estimates': [{
+                        'key': 'Avance',
+                        'amount': float(estimate.advance_payment_amount),
+                        'status': estimate.get_advance_payment_status_display(),
+                    }]
+                }
+                contractor_json['estimates'].append(estimate_json)
+
+                progress_estimate_set = ProgressEstimate.objects.filter(estimate__id=estimate.id)
+                for progress_estimate in progress_estimate_set:
+                    pe_json = {
+                        'key': progress_estimate.key,
+                        'amount': float(progress_estimate.amount),
+                        'status': progress_estimate.get_payment_status_display(),
+                    }
+
+                    estimate_json['progress_estimates'].append(pe_json)
 
         return response

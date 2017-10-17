@@ -8,12 +8,13 @@ from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
 from lib.estimate_reports import EstimateReports
-from lib.estimate_report_by_contractor import EstimateReportsByContract
+from lib.estimate_report_for_contractors import EstimateReportsForContractors
 from django.shortcuts import render, redirect, render_to_response
 from django.views.generic import View
 
 from reporting import lib
 from reporting.lib.physical_financial_advance_report import PhysicalFinancialAdvanceReport
+from reporting.lib.estimate_report_by_single_contractor import EstimateReportsBySingleContractor
 
 
 def report(request):
@@ -959,13 +960,26 @@ class GetEstimatesReport(View):
 
 
 
-class GetEstimateReportByContractor(View):
+class GetEstimateReportForContractors(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
 
-        information_json = api.EstimateReportByContractor.get_report(project_id)
+        information_json = api.EstimateReportForContractors.get_report(project_id)
         #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
 
-        file = EstimateReportsByContract.generate_report(information_json)
+        file = EstimateReportsForContractors.generate_report(information_json)
+
+        return file
+
+
+class GetEstimateReportBySingleContractor(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        contractor_id = request.GET.get('contractor_id')
+
+        information_json = api.EstimateReportBySingleContractor.get_report(project_id, contractor_id)
+        #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
+
+        file = EstimateReportsBySingleContractor.generate_report(information_json)
 
         return file

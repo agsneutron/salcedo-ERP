@@ -128,6 +128,20 @@
                         </div>
                     {% endif %}
 
+
+                        {% if field.field.name == "lock_status" %}
+
+                        <div class="col-sm-4">
+                            <div class="form-group field-fecha_final">
+                                <label class=" required" for="id_fecha_final_0">Bloqueo:</label>
+                                {{ field.field }}
+                                {{ field.errors }}
+                            </div>
+                        </div>
+
+                        </div>
+                    {% endif %}
+
                         {% if field.field.name == "contractor" %}
 
                                 <div class="col-sm-12">
