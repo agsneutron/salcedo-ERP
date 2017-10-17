@@ -30,6 +30,24 @@ class ERPUser(models.Model):
     class Meta:
         verbose_name_plural = 'Usuarios'
 
+        # Director General
+        #
+        # Director  de Obras
+        #
+        # Vicepresidente Empresarial
+        #
+        # Jefe de Administración
+        #
+        # Presidente
+
+        permissions = (
+            ("is_general_director", "Es director general"),
+            ("is_project_director", "Es director de obras"),
+            ("is_vicepresident", "Es vicepresidente empresarial"),
+            ("is_head_manager", "Es jefe de administración"),
+            ("is_president", "Es presidente"),
+        )
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['name'] = str(self.user.first_name)

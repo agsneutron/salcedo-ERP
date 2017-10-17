@@ -3,6 +3,33 @@
 {% block content %}
 
 
+    <style>
+        .approved {
+            color: #0c9bd5;
+        }
+
+        .not-approved {
+            color: #b30023;
+        }
+
+        .approval-indicator {
+            cursor: help;
+            margin-left: 5px;
+            vertical-align: middle;
+        }
+
+        .approval-submit-button {
+            background: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        .payed-label {
+            min-width: 80px;
+            display: inline-block;
+        }
+    </style>
+
     <div class="col-xs-12" style="margin-bottom: 25px">
         <div class="card">
             <div class="card-block text-center">
@@ -144,7 +171,7 @@
 
                                 {% if progress_estimates %}
                                     <div class="card-block text-center">
-                                        <div class="table-responsive">
+                                        <span class="table-responsive">
                                             <table id="table_s" class="table table-striped text-center">
                                                 <thead>
                                                 <tr>
@@ -156,6 +183,11 @@
 
                                                     {% if perms.ERP.change_progressestimate %}
                                                         <th class="text-center no-sorting">Editar</th>
+                                                    {% endif %}
+
+
+                                                    {% if current_user_can_approve %}
+                                                        <th class="text-center">Aprobar</th>
                                                     {% endif %}
                                                 </tr>
                                                 </thead>
@@ -187,7 +219,19 @@
                                                         {{ estimate.advance_payment_amount }}
                                                     </td>
                                                     <td>
-                                                        {{ estimate.get_advance_payment_status_display }}
+                                                        <span class="payed-label">{{ estimate.get_advance_payment_status_display }}</span>
+
+                                                        {% if estimate.has_been_approved %}
+                                                            <i class="fa fa-circle approved approval-indicator"
+                                                               data-toggle="tooltip" data-placement="left"
+                                                               data-html="true"
+                                                               title="{{ estimate.get_html_approval_list }}"></i>
+                                                        {% else %}
+                                                            <i class="fa fa-circle not-approved approval-indicator"
+                                                               data-toggle="tooltip" data-placement="left"
+                                                               data-html="true"
+                                                               title="{{ estimate.get_html_approval_list }}"></i>
+                                                        {% endif %}
                                                     </td>
                                                     <td>
                                                         {% if progress_estimate.generator_file %}
@@ -203,6 +247,20 @@
                                                         <td class="text-center" style="width: 2%">
 
                                                         </td>
+                                                    {% endif %}
+
+                                                    {% if current_user_can_approve %}
+                                                        <td>
+                                                        {% if estimate.show_approval_button %}
+                                                            <form method="POST"
+                                                                  action="/admin/ERP/estimate/{{ estimate.id }}/approve">
+                                                                {% csrf_token %}
+                                                                <button class="approval-submit-button">
+                                                                    <i class="fa fa-thumbs-o-up"></i>
+                                                                </button>
+                                                            </form>
+                                                        {% endif %}
+                                                    </td>
                                                     {% endif %}
                                                 </tr>
 
@@ -233,7 +291,19 @@
                                                             {{ progress_estimate.amount }}
                                                         </td>
                                                         <td>
-                                                            {{ progress_estimate.get_payment_status_display }}
+                                                            <span class="payed-label">{{ progress_estimate.get_payment_status_display }}</span>
+
+                                                            {% if progress_estimate.has_been_approved %}
+                                                                <i class="fa fa-circle approved approval-indicator"
+                                                                   data-toggle="tooltip" data-placement="left"
+                                                                   data-html="true"
+                                                                   title="{{ progress_estimate.get_html_approval_list }}"></i>
+                                                            {% else %}
+                                                                <i class="fa fa-circle not-approved approval-indicator"
+                                                                   data-toggle="tooltip" data-placement="left"
+                                                                   data-html="true"
+                                                                   title="{{ progress_estimate.get_html_approval_list }}"></i>
+                                                            {% endif %}
                                                         </td>
                                                         <td>
                                                             {% if progress_estimate.generator_file %}
@@ -254,88 +324,107 @@
                                                                 {% endif %}
                                                             </td>
                                                         {% endif %}
+
+                                                        {% if current_user_can_approve %}
+                                                            <td>
+                                                            {% if progress_estimate.show_approval_button %}
+                                                                <form method="POST"
+                                                                      action="/admin/ERP/progressestimate/{{ progress_estimate.id }}/approve">
+                                                                    {% csrf_token %}
+                                                                    <button class="approval-submit-button">
+                                                                        <i class="fa fa-thumbs-o-up"></i>
+                                                                    </button>
+                                                                </form>
+                                                            {% endif %}
+                                                        </td>
+                                                        {% endif %}
                                                     </tr>
                                                 {% endfor %}
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                        </div>
+                                    </div>
                                     </div>
                                 {% else %}
                                     <div>&nbsp;&nbsp;&nbsp;&nbsp;No se ha agregado ningún avance.</div>
                                 {% endif %}
-                            </div>
+                        </div>
 
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+    <script>
+        {% comment %}var progressBarColor;
+
+        var someValueToCheck = {{ progress_estimate.progress }};
+
+        if(someValueToCheck >= 4) progressBarColor = "#ff0000";
+        else if(someValueToCheck >=5) progressBarColor = "orange";
+        else progressBarColor = "green";
+
+        $("#progressbar").css('background-color', progressBarColor);{% endcomment %}
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $("#verconceptos").on("hide.bs.collapse", function () {
+                $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-plus-sign"></span>');
+            });
+            $("#verconceptos").on("show.bs.collapse", function () {
+                $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-minus-sign"></span>');
+            });
+        });
+    </script>
+
+
+    <div class="modal" id="unlock_modal" tabindex="-1" role="dialog" aria-labelledby="unlock_modal">
+        <div class="modal-dialog animated zoomIn animated-3x" role="document">
+            <div class="modal-content">
+
+                <form method="POST" action="unlock">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                        <h3 class="modal-title" id="myModalLabel3">Desbloquear estimación</h3>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-xs-12">
+
+                            <p>¿Estás seguro que deseas desbloquear la estimación? Una vez desbloqueada la
+                                estimación,
+                                ya
+                                no se podrá estimar más. Se definirá un finiquito correspondiente al monto
+                                especificado.</p>
+
+                            Monto del finiquito: <input type="number" name="liquidation_amount"
+                                                        id="liquidation_amount"/>
+                            {% csrf_token %}
 
                         </div>
+
+                    </div>
+                    <div class="clearfix"></div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                        <button id="unlock_estimate" type="button" class="btn btn-primary" onclick="submit()">Guardar
+                        </button>
+
                     </div>
 
-
-                </div>
+                </form>
             </div>
         </div>
-        <script>
-            {% comment %}var progressBarColor;
+    </div>
 
-            var someValueToCheck = {{ progress_estimate.progress }};
-
-            if(someValueToCheck >= 4) progressBarColor = "#ff0000";
-            else if(someValueToCheck >=5) progressBarColor = "orange";
-            else progressBarColor = "green";
-
-            $("#progressbar").css('background-color', progressBarColor);{% endcomment %}
-        </script>
-
-        <script>
-            $(document).ready(function () {
-                $("#verconceptos").on("hide.bs.collapse", function () {
-                    $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-plus-sign"></span>');
-                });
-                $("#verconceptos").on("show.bs.collapse", function () {
-                    $(".exp").html(' Ver Conceptos <span class="glyphicon glyphicon-minus-sign"></span>');
-                });
-            });
-        </script>
-
-
-        <div class="modal" id="unlock_modal" tabindex="-1" role="dialog" aria-labelledby="unlock_modal">
-            <div class="modal-dialog animated zoomIn animated-3x" role="document">
-                <div class="modal-content">
-
-                    <form method="POST" action="unlock">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                    aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
-                            <h3 class="modal-title" id="myModalLabel3">Desbloquear estimación</h3>
-                        </div>
-                        <div class="modal-body">
-                            <div class="col-xs-12">
-
-                                <p>¿Estás seguro que deseas desbloquear la estimación? Una vez desbloqueada la
-                                    estimación,
-                                    ya
-                                    no se podrá estimar más. Se definirá un finiquito correspondiente al monto
-                                    especificado.</p>
-
-                                Monto del finiquito: <input type="number" name="liquidation_amount"
-                                                            id="liquidation_amount"/>
-                                {% csrf_token %}
-
-                            </div>
-
-                        </div>
-                        <div class="clearfix"></div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                            <button id="unlock_estimate" type="button" class="btn btn-primary">Guardar</button>
-                            <input type="submit" name="Desbloquear">
-                        </div>
-
-                    </form>
-                </div>
-            </div>
-        </div>
-
-
+    <script>
+        jQuery(document).ready(function () {
+            jQuery('[data-toggle="tooltip"]').tooltip();
+        });
+    </script>
 
 {% endblock %}

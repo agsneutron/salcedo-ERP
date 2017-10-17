@@ -351,16 +351,18 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
             if obj.type == ProgressEstimate.PROGRESS and obj.estimate.lock_status == Estimate.UNLOCKED:
                 amount_field.widget.attrs['readonly'] = True
 
-
-
-
-
-
         else:
             raise Http404(
                 'No existe esta página. Para editar una estimación, hazlo a través de las opciones del sistema.')
 
         return form
+
+    def get_urls(self):
+        urls = super(ProgressEstimateAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/approve', views.approve_progress_estimate, name='progress-estimate-approve'),
+        ]
+        return my_urls + urls
 
     def save_model(self, request, obj, form, change):
         return super(ProgressEstimateAdmin, self).save_model(request, obj, form, change)
@@ -1263,6 +1265,7 @@ class EstimateAdmin(admin.ModelAdmin):
             url(r'^(?P<pk>\d+)/unlock$', views.unlock_estimate, name='estimate-detail'),
             url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
             url(r'^(?P<pk>\d+)/delete/$', views.EstimateDelete.as_view(), name='estimate-delete'),
+            url(r'^(?P<pk>\d+)/approve', views.approve_estimate_advance, name='estimate-advance-approve'),
 
         ]
 
