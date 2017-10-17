@@ -1205,10 +1205,10 @@ class LineItem(models.Model):
         return ans
 
     def __str__(self):
-        return self.description
+        return self.key + " - "+self.description
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.description
+        return self.key + " - " + self.description
 
     def save(self, *args, **kwargs):
         canSave = True
@@ -1342,10 +1342,10 @@ class Concept_Input(models.Model):
         return ans
 
     def __str__(self):
-        return self.description
+        return self.key + ' - ' + self.description
 
     def __unicode__(self):
-        return self.description
+        return self.key + ' - ' + self.description
 
     def save(self, *args, **kwargs):
         canSave = True
@@ -1447,6 +1447,9 @@ class Estimate(models.Model):
                 Q(estimate_id=self.id) & Q(type=ProgressEstimate.PROGRESS)).values(
                 'estimate_id').annotate(
                 Count('estimate_id'), accumulated=Sum('amount'))
+
+        if len(accumulated_qs) == 0:
+            return self.advance_payment_amount
 
         accumulated = accumulated_qs[0]['accumulated']
         accumulated += self.advance_payment_amount

@@ -393,7 +393,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
     def has_change_permission(self, request, obj=None):
         user = request.user
 
-        if user.has_perm('ERP.change_progressestimatelog'):
+        if user.has_perm('ERP.change_progressestimate'):
             if obj is not None:
                 user_has_access = AccessToProject.user_has_access_to_project(user.id, obj.estimate.contract.project_id)
                 if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm(
