@@ -1448,6 +1448,9 @@ class Estimate(models.Model):
                 'estimate_id').annotate(
                 Count('estimate_id'), accumulated=Sum('amount'))
 
+        if len(accumulated_qs) == 0:
+            return self.advance_payment_amount
+
         accumulated = accumulated_qs[0]['accumulated']
         accumulated += self.advance_payment_amount
 
