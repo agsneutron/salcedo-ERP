@@ -1,6 +1,7 @@
 # coding=utf-8
 from django import forms
 from django.contrib.admin import widgets
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
@@ -161,10 +162,10 @@ class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
         fields = '__all__'
-        exclue = ()
+        exclude = ()
         widgets = {
             # 'user': forms.HiddenInput(),
-            'progress_estimate': forms.HiddenInput()
+            'project': forms.HiddenInput()
         }
 
     def __init__(self, *args, **kwargs):
@@ -173,7 +174,9 @@ class ProgressEstimateLogForm(forms.ModelForm):
         self.user_id = kwargs.pop('user_id', None)
 
         if not kwargs.get('initial'):
-            kwargs['initial'] = {}
+            kwargs['initial'] = {
+                'project': self.project_id
+            }
 
         kwargs['initial'].update({'project': self.project_id})
         # kwargs['initial'].update({'user': self.user_id})
@@ -204,8 +207,14 @@ class ProgressEstimateLogForm(forms.ModelForm):
     def clean(self):
         # Then call the clean() method of the super  class
         cleaned_data = super(ProgressEstimateLogForm, self).clean()
-        cleaned_data['user'] = ERPUser.objects.get(pk=self.user_id)
+        cleaned_data['user'] = User.objects.get(pk=self.user_id)
+        self.cleaned_data['project'] = Project.objects.get(pk=self.project_id)
+
         return cleaned_data
+
+    def save(self, commit=True):
+        self.instance.project = Project.objects.get(pk=self.project_id)
+        return super(ProgressEstimateLogForm, self).save(commit)
 
 
 '''

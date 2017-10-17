@@ -1614,7 +1614,7 @@ class ProgressEstimate(models.Model):
 class ProgressEstimateLog(models.Model):
     version = IntegerVersionField()
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=True, blank=True)
+    user = models.ForeignKey(User, verbose_name="Usuario", null=True, blank=True)
     description = models.TextField(verbose_name="Notas", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=now(), null=True, verbose_name="Fecha")
@@ -1642,7 +1642,7 @@ class ProgressEstimateLog(models.Model):
         canSave = True
 
         if canSave:
-            Logs.log("Saving new Empresa", "Te")
+            Logs.log("Saving new Bitacora", "Te")
             self.last_edit_date = now()
             super(ProgressEstimateLog, self).save(*args, **kwargs)
         else:
@@ -1664,7 +1664,6 @@ class LogFile(models.Model):
                                               blank=False)
     file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination,
                             default="")
-    mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 

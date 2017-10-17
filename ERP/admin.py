@@ -56,14 +56,14 @@ class LineItemAdmin(admin.ModelAdmin):
 
 
 class LogFileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime', 'version',)
+    list_display = ('id', 'progress_estimate_log', 'file',)
+    fields = ('id', 'progress_estimate_log', 'file', 'version',)
     model = LogFile
 
 
 class LogFileInline(admin.TabularInline):
-    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime', 'version',)
+    list_display = ('id', 'progress_estimate_log', 'file',)
+    fields = ('id', 'progress_estimate_log', 'file', 'version',)
     model = LogFile
     extra = 1
 
@@ -79,7 +79,17 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
+
+        project_id = request.GET.get('project')
+
+        if project_id is None:
+            raise PermissionDenied
+
+        project_qs = Project.objects.filter(id=project_id)
+
         project = ModelFormE.base_fields['project']
+
+        project.queryset = project_qs
 
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
