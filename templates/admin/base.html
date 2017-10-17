@@ -111,7 +111,7 @@
         </div>
     </header>
     <!-- End Header -->
-    <!-- begins navigation -- request.resolver_match.view_name }}---->
+    <!-- begins navigation  request.resolver_match.view_name }}------>
 
     {% if user.is_active and user.is_staff %}
         <nav class="navbar  yamm ms-navbar ms-navbar-primary">
@@ -307,10 +307,6 @@
                             </ul>
                         </li>
                         <li class="dropdown
-
-
-
-
                                 {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle "
                                data-toggle="dropdown"
@@ -339,10 +335,6 @@
 
                         </li>
                         <li id="op_reportes" class="dropdown
-
-
-
-
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"

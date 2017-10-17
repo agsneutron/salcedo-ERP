@@ -1,4 +1,10 @@
 {% load app_filters admin_static %}
+<style>
+    .no_change {
+        pointer-events: none;
+    }
+
+</style>
 <fieldset class=" {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
@@ -40,55 +46,72 @@
 
         <div class="card-block">
             <div class="tab-content">
-
-                <div id="concept_amount">
-
-                </div>
                 {% for line in fieldset %}
                     {% for field in line %}
                         {% if field.field.name == "contract" %}
-                            <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                            <div class="row">
-                            <div class="col-xs-12">
-                                <h2 class="text-center"></h2>
-                            </div>
-                            <div class="clearfix"></div>
-                            <hr>
-                            <div class="col-md-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
+                            <div role="tabpanel" class="tab-pane fade active in">
+                                <div class="row">
+                                    <div class="col-xs-12">
+                                        <h2 class="text-center"></h2>
                                     </div>
-                                </div>
+                                    <div class="clearfix"></div>
+                                    <hr>
+                                    <div class="col-md-12">
+                                        <div class="form-group field-{{ field.field.name }}">
+                                            <div>
+                                                {{ field.label_tag }}
+                                                {{ field.field|addcss:"form-control no_change" }}
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
                             </div>
+
                         {% endif %}
 
                     {% if field.field.name == "concept" %}
-                        <div class="col-md-4">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div id="concept_input_container">
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group field-{{ field.field.name }}">
+                                            <div id="concept_input_container">
+                                                {{ field.label_tag }}
+                                                {{ field.field|addcss:"form-control" }}
+                                                {{ field.errors }}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
                     {% endif %}
+
                     {% if field.field.name == "amount" %}
-                        <div class="col-md-4">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
+                            <div class="row">
+                                <div class="col-md-4" >
+                                    <div class="form-group">
+                                        <div id="concept_amount">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <div id="rest_amount">
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4" id="amount_section" hidden="true">
+                                    <div class="form-group field-{{ field.field.name }}">
+                                        <div>
+                                            {{ field.label_tag }}
+                                            {{ field.field|addcss:"form-control" }}
+                                            {{ field.errors }}
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        </div>
                     {% endif %}
+
 
                         {% if field.field.name == "version" %}
                             {{ field.field|addcss:"form-control" }}

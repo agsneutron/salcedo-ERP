@@ -6,7 +6,9 @@ import urllib
 import locale
 from datetime import date
 
+from django.core.exceptions import PermissionDenied
 from django.forms.models import modelformset_factory
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext, loader
 import datetime
@@ -30,6 +32,8 @@ from ERP.lib.utilities import Utilities
 from SalcedoERP.lib.constants import Constants
 
 from django.forms import formset_factory
+
+from users.models import ERPUser
 
 
 def custom_404(request):
@@ -132,6 +136,11 @@ class CompaniesListView(ListView):
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_empresa'):
+            raise PermissionDenied
+        return super(CompaniesListView, self).dispatch(request, args, kwargs)
+
 
 class CompanyDetailView(generic.DetailView):
     model = Empresa
@@ -182,6 +191,11 @@ class ContractorListView(ListView):
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_contratista'):
+            raise PermissionDenied
+        return super(ContractorListView, self).dispatch(request, args, kwargs)
+
 
 class ContractorDetailView(generic.DetailView):
     model = Contratista
@@ -222,6 +236,13 @@ class ContractorContractListView(ListView):
         else:
             ContractorContractListView.query = ''
 
+        # Get the projects to which the user has access
+        user = self.request.user
+
+        project_ids = AccessToProject.get_projects_for_user(user.id)
+        # Filter the result to only include the appropriate results
+        result = result.filter(reduce(operator.or_, (Q(project_id=pid) for pid in project_ids)))
+
         return result
 
     def get_context_data(self, **kwargs):
@@ -235,6 +256,14 @@ class ContractorContractListView(ListView):
         return context
 
 
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_contratocontratista'):
+            raise PermissionDenied
+        return super(ContractorContractListView, self).dispatch(request, args, kwargs)
+
+
+
 class ContractorContractDetailView(generic.DetailView):
     model = ContratoContratista
     template_name = "ERP/contractor-contract-detail.html"
@@ -243,7 +272,36 @@ class ContractorContractDetailView(generic.DetailView):
         context = super(ContractorContractDetailView, self).get_context_data(**kwargs)
         contract_id = self.kwargs['pk']
         context['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id))
+        # Getting, if exists, the advance payment for the contract
+        estimate = Estimate.objects.get(contract__id=contract_id)
+
+        advance_payment = None
+        advance_payment_status = ""
+
+        if estimate:
+            advance_payment = estimate.advance_payment_amount
+
+        if advance_payment == None:
+            advance_payment = "No se ha registrado un anticipo."
+            advance_payment_status = "Estatus no disponible."
+        else:
+            advance_payment = Utilities.number_to_currency(advance_payment)
+            advance_payment_status = estimate.get_advance_payment_status_display()
+
+
+        context['advance_payment'] = advance_payment
+        context['advance_payment_status'] = advance_payment_status
+
+
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        contract_id = kwargs['pk']
+        project_id = ContratoContratista.objects.get(pk=contract_id).project_id
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project_id)
+        if not user_has_access:
+            raise PermissionDenied
+        return super(ContractorContractDetailView, self).dispatch(request, args, kwargs)
 
 
 # Views for the model Propietaro.
@@ -402,6 +460,12 @@ class LineItemListView(ListView):
 
         return result
 
+    def dispatch(self, request, *args, **kwargs):
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, kwargs['project'])
+        if not user_has_access:
+            raise PermissionDenied
+        return super(LineItemListView, self).dispatch(request, args, kwargs)
+
     def get_context_data(self, **kwargs):
         context = super(LineItemListView, self).get_context_data(**kwargs)
         context['title_list'] = LineItemListView.title_list + LineItemListView.current_type_full
@@ -445,7 +509,7 @@ class ProjectListView(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        user_id = self.request.user.id
+        user_id = self.request.user.erpuser.id
         access_set = AccessToProject.objects.filter(user_id=user_id)
 
         projects_array = []
@@ -538,6 +602,12 @@ class ProjectDetailView(generic.DetailView):
 
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, kwargs['pk'])
+        if not user_has_access:
+            raise PermissionDenied
+        return super(ProjectDetailView, self).dispatch(request, args, kwargs)
+
 
 class ProgressEstimateLogListView(ListView):
     model = ProgressEstimateLog
@@ -591,6 +661,18 @@ class ProgressEstimateLogListView(ListView):
             ProgressEstimateLogListView.query != "")
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        project_id = request.GET.get('project')
+
+        if project_id is None:
+            raise PermissionDenied
+
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project_id)
+        if not user_has_access:
+            raise PermissionDenied
+
+        return super(ProgressEstimateLogListView, self).dispatch(request, args, kwargs)
+
 
 '''class ProgressEstimateLogDetailView(generic.DetailView):
     model = ProgressEstimateLog
@@ -607,6 +689,19 @@ class ProgressEstimateLogDetailView(generic.DetailView):
         context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
 
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        pk = kwargs['pk']
+        project = ProgressEstimateLog.objects.get(pk=pk).project
+
+        if project is None:
+            raise PermissionDenied
+
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project.id)
+        if not user_has_access:
+            raise PermissionDenied
+
+        return super(ProgressEstimateLogDetailView, self).dispatch(request, args, kwargs)
 
 
 # Views for the model Estimate.
@@ -687,6 +782,12 @@ class EstimateListView(ListView):
 
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, kwargs['project'])
+        if not user_has_access:
+            raise PermissionDenied
+        return super(EstimateListView, self).dispatch(request, args, kwargs)
+
 
 class EstimateDelete(DeleteView):
     model = Estimate
@@ -728,6 +829,14 @@ class EstimateDetailView(generic.DetailView):
 
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        estimate_id = kwargs['pk']
+        project_id = Estimate.objects.get(pk=estimate_id).contract.project_id
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project_id)
+        if not user_has_access:
+            raise PermissionDenied
+        return super(EstimateDetailView, self).dispatch(request, args, kwargs)
+
 
 class DashBoardView(ListView):
     model = Project
@@ -745,6 +854,12 @@ class DashBoardView(ListView):
         context['project_id'] = DashBoardView.project_id
         context['project'] = Project.objects.filter(Q(id=DashBoardView.project_id))
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, kwargs['project'])
+        if not user_has_access:
+            raise PermissionDenied
+        return super(DashBoardView, self).dispatch(request, args, kwargs)
 
 
 # Views for the model UploadedInputExplotionsHistory.

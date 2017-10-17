@@ -1,11 +1,13 @@
 # coding=utf-8
+from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
 
 from ERP import api
-from ERP.models import AccessToProject, Project
+from ERP.models import AccessToProject, Project, LineItem
 from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
+from lib.estimate_reports import EstimateReports
 from django.shortcuts import render, redirect, render_to_response
 from django.views.generic import View
 
@@ -794,18 +796,24 @@ def testView(request):
 class GetFinancialReport(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
-        detail_level = request.GET.get('detail_level')
+        #detail_level = request.GET.get('detail_level')
+        # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
+        # will be exported grouped by line_item.
+        show_concepts = True
 
-        if detail_level == "c":
-            show_concepts = True
-        else:
-            show_concepts = False
 
-        report_json = api.FinancialHistoricalProgressReport.get_report(project_id)
-        file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
-        return file
+        # The next block is to force the second level of line items to work with the report. Keep in mind this won't work
+        # on further versions
+        # Block to delete:
+        selected_line_items_array = api.ReportingUtilities.get_first_two_line_item_levels(project_id)
+        # Ends block to delete.
+
+        report_json = api.FinancialHistoricalProgressReport.get_report(project_id, selected_line_items_array)
 
         # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+
+        file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
+        return file
 
 
 class GetPhysicalFinancialAdvanceReport(View):
@@ -818,7 +826,15 @@ class GetPhysicalFinancialAdvanceReport(View):
         else:
             show_concepts = False
 
-        report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id)
+        # The next block is to force the second level of line items to work with the report. Keep in mind this won't work
+        # on further versions
+        # Block to delete:
+        selected_line_items_array = api.ReportingUtilities.get_first_two_line_item_levels(project_id)
+        # Ends block to delete.
+
+
+        report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id, selected_line_items_array)
+        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
 
         file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
@@ -830,15 +846,12 @@ class GetMainDashboard(View):
     def get(self, request):
 
         response_by_project = []
-        print "User is: " + str(request.user)
         access_set = AccessToProject.objects.filter(user__id=request.user.erpuser.id)
         for access in access_set:
 
             structured_response = {}
-            print "Here!"
+
             response = api.PhysicalFinancialAdvanceReport.get_biddings_report(access.project.id)
-            print "Response: "
-            print response
 
             total_programmed = 0
             total_estimated = 0
@@ -914,4 +927,30 @@ class GetDashboardByProject(View):
         }
 
         return HttpResponse(Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
+
+
+# Report to retrieve the json for every estimate in a project.
+class GetEstimatesReportJson(View):
+    def get(self, request):
+
+        project_id = request.GET.get('project_id')
+        response = api.EstimatesReport.getReport(project_id)
+
+        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
+
+
+class GetEstimatesReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        #detail_level = request.GET.get('detail_level')
+        # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
+        # will be exported grouped by line_item.
+        show_concepts = True
+
+        responseJson = api.EstimatesReport.getReport(project_id)
+
+        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+
+        file = EstimateReports.generate_report(responseJson, show_concepts)
+        return file
 

@@ -266,6 +266,8 @@ class DBObject(object):
         try:
             for record in record_list:
 
+                print record
+
                 if record[self.LineItemConstants.get_max_level()] != "":
                     self.save_line_item(record, project_id)
 

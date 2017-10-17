@@ -31,7 +31,6 @@ class UsuarioAdmin(UserAdmin):
         ('Permissions', {'fields': ('is_active',)}),
     )
 
-
     def get_rol(self, obj):
         return obj.erpuser.rol
 
@@ -57,5 +56,5 @@ class UsuarioAdmin(UserAdmin):
 
 
 # Registering activities.
-admin.site.unregister(User)
-admin.site.register(User, UsuarioAdmin)
+# admin.site.unregister(User)
+# admin.site.register(User, UsuarioAdmin)

@@ -3,6 +3,8 @@
 
 {% block extrahead %}{{ block.super }}
     <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+    <script type=“text/javascript” src=“http://code.jquery.com/jquery-1.11.3.min.js“></script>
+
     {{ media }}
 {% endblock %}
 
@@ -101,25 +103,26 @@
 
             var amounts = {
                 {%  for c in adminform.form.amounts_per_concept %}
-                    '{{ c.key }}': {{  c.amount }},
+                    '{{ c.key }}': '{{  c.amount }}',
                 {% endfor %}
             };
 
             var resting_amounts = {
                 {%  for c in adminform.form.amounts_per_concept %}
-                    '{{ c.key }}': {{  c.resting }},
+                    '{{ c.key }}': '{{  c.resting }}',
                 {% endfor %}
             };
             $('#id_concept').change(function (e) {
                 var amount = amounts['' + $(this).val()];  // Cantidad total del catálogo de conceptos
                 var resting = resting_amounts['' + $(this).val()]; // Cantidad restante
 
-
                 // Actualizar la página con las cantidades de arriba
 
-                var html = 'Cantidad total: ' + amount + '<br>';
-                html += 'Cantidad restante: ' + resting;
+                var html = '<span class="color-active">Cantidad Total:</span><br>' + amount ;
+                var html2 = '<span class="color-active">Cantidad Restante:</span><br> ' + resting;
                 $('#concept_amount').html(html);
+                $('#rest_amount').html(html2);
+                $('#amount_section').show(true);
 
 
             });

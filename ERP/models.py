@@ -385,6 +385,10 @@ class Contratista(models.Model):
     class Meta:
         verbose_name_plural = 'Contratista'
 
+        permissions = (
+            ("view_list_contratista", "Can see contractor listing"),
+        )
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
@@ -509,6 +513,10 @@ class Empresa(models.Model):
     class Meta:
         verbose_name_plural = 'Empresa'
 
+        permissions = (
+            ("view_list_empresa", "Can see client listing"),
+        )
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
@@ -552,17 +560,12 @@ class ContratoContratista(models.Model):
                                        editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
-    monto_contrato_iva = models.DecimalField(verbose_name='Monto de Contrato con IVA', decimal_places=2, blank=False,
-                                             null=False, default=0, max_digits=20)
-    pago_inicial = models.DecimalField(verbose_name='Pago Inicial', decimal_places=2, blank=False, null=False,
-                                       default=0, max_digits=20)
-    pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=True, null=False, default=0,
-                                     max_digits=20)
+    porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,
+                                             null=False, default=0, max_digits=5)
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
                                      editable=True)
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,
                                      editable=True)
-    codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
     objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
                                        editable=True)
     last_edit_date = models.DateTimeField(auto_now_add=True)
@@ -588,6 +591,11 @@ class ContratoContratista(models.Model):
     class Meta:
         verbose_name_plural = 'Contratos'
 
+        permissions = (
+            ("view_list_contratocontratista", "Can see contractor contract listing"),
+        )
+
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
@@ -607,7 +615,6 @@ class ContratoContratista(models.Model):
         ans['pago_inicial'] = str(self.pago_inicial)
         ans['pago_final'] = str(self.pago_final)
         ans['observaciones'] = str(self.observaciones)
-
 
         return ans
 
@@ -1166,7 +1173,7 @@ class LineItem(models.Model):
     version = IntegerVersionField()
     # Model attributes.
     description = models.CharField(verbose_name="Descripción", max_length=255, null=False, blank=False, unique=False)
-    key = models.CharField(verbose_name="Clave", max_length=8, null=False, blank=True, unique=False, default="")
+    key = models.CharField(verbose_name="Clave", max_length=15, null=False, blank=True, unique=False, default="")
 
     # Foreign keys for the model.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
@@ -1469,10 +1476,12 @@ class ProgressEstimate(models.Model):
         return ans
 
     def __str__(self):
-        return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
+        return "Estimación " + self.key + "del Contrato " + self.estimate.contract.clave_contrato + " en el periodo: " \
+               + str(self.estimate.period)
 
     def __unicode__(self):
-        return self.estimate.concept_input.description + " - " + str(self.estimate.period) + " - " + self.key
+        return "Estimación " + self.key + "del Contrato " + self.estimate.contract.clave_contrato + " en el periodo: " \
+               + str(self.estimate.period)
 
     def save(self, *args, **kwargs):
         canSave = True
@@ -1616,3 +1625,16 @@ class AccessToProject(models.Model):
 
     def __str__(self):
         return self.user.user.get_username() + " - " + self.project.nombreProyecto
+
+    @staticmethod
+    def user_has_access_to_project(user_id, project_id):
+        access_objects = AccessToProject.objects.filter(Q(user_id=user_id) & Q(project_id=project_id))
+        return len(access_objects) > 0
+
+    @staticmethod
+    def get_projects_for_user(user_id):
+        projects = AccessToProject.objects.filter(user_id=user_id).values('project_id')
+        project_ids = []
+        for p in projects:
+            project_ids.append(p['project_id'])
+        return project_ids

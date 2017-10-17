@@ -8,7 +8,7 @@ from django.http.response import StreamingHttpResponse
 from xlsxwriter.workbook import Workbook
 
 
-class FinancialAdvanceReport(object):
+class EstimateReports(object):
     show_concepts = False
 
     @staticmethod
@@ -24,27 +24,23 @@ class FinancialAdvanceReport(object):
             worksheet.write('A1', 'Aún no se ha agregado el catálogo de conceptos.')
         else:
 
-            FinancialAdvanceReport.show_concepts = show_concepts
+            EstimateReports.show_concepts = show_concepts
 
             output = StringIO.StringIO()
 
             # Create an new Excel file and add a worksheet.
-            # workbook = Workbook('report.xlsx')
             workbook = Workbook(output)
-            worksheet = workbook.add_worksheet('Avance Financiero Interno')
+            numberSheet=1
+            for info in information_json:
+                worksheet = workbook.add_worksheet('Hoja de Estimación ' + str(numberSheet))
+                numberSheet+=1
 
-            # Widen the first column to make the text clearer.
-            worksheet.set_column('A:H', 20)
+                # Widen the first column to make the text clearer.
+                worksheet.set_column('A:J', 20)
 
-            # Add a bold format to use to highlight cells.
-            bold = workbook.add_format({'bold': True})
+                EstimateReports.add_headers(workbook, worksheet, info)
 
-            # Write some simple text.
-            worksheet.write('A1', 'Avance Financiero Interno', bold)
-
-            FinancialAdvanceReport.add_headers(workbook, worksheet)
-
-            FinancialAdvanceReport.add_concepts(workbook, worksheet, information_json['line_items'])
+            #EstimateReports.add_concepts(workbook, worksheet, information_json)
 
             # Insert an image.
             # worksheet.insert_image('B5', 'logo.png')
@@ -53,7 +49,7 @@ class FinancialAdvanceReport(object):
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=Reporte_Avance_Financiero.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=hoja de estimación.xlsx'
         response['Content-Length'] = output.tell()
 
         output.seek(0)
@@ -61,66 +57,65 @@ class FinancialAdvanceReport(object):
         return response
 
     @staticmethod
-    def add_headers(workbook, worksheet):
+    def add_headers(workbook, worksheet,info):
 
-        # Create a format to use in the merged range.
-        header_format_info = {
+        borde_negro = workbook.add_format({
+            'border': 1})
+        borde_negro.set_border_color('black')
+        borde_negro.set_border(1)
+
+        merge_format_blanco = workbook.add_format({
             'bold': 1,
+            'text_wrap': 1,
+            'border': 1,
+            'align': 'left',
+            'valign': 'vcenter',
+            'fg_color': 'FFFFFF'})
+
+        merge_format_blanco_CENTER = workbook.add_format({
+            'bold': 1,
+            'text_wrap': 1,
             'border': 1,
             'align': 'center',
             'valign': 'vcenter',
-            'fg_color': '#A9C1F4'}
+            'fg_color': 'FFFFFF'})
 
-        header_format = workbook.add_format(header_format_info)
+        merge_format_blanco.set_font_color('black')
 
-        header_format_info['fg_color'] = '#F43C37'  # Red
+        worksheet.merge_range('C3:H3', 'SALCEDO CONSTRUCCIÓN Y SUPERVISIÓN S.A. DE C.V.', merge_format_blanco_CENTER)
 
-        red_header_format = workbook.add_format(header_format_info)
+        worksheet.merge_range('A5:E5', '', borde_negro)
+        worksheet.merge_range('F5:J5', '', borde_negro)
+        worksheet.merge_range('A5:E5', 'HOJA ESTIMACIÓN', merge_format_blanco_CENTER)
+        worksheet.merge_range('F5:J5', '', merge_format_blanco)
 
-        header_format_info['fg_color'] = '#6BB067'  # Green
+        worksheet.write('A6', 'CONTRATISTA: ', merge_format_blanco)
+        worksheet.write('A7', 'OBRA: ', merge_format_blanco)
+        worksheet.write('A8', 'CONCEPTO: ', merge_format_blanco)
 
-        green_header_format = workbook.add_format(header_format_info)
+        worksheet.write('F6', 'PERIODO: ', merge_format_blanco)
+        worksheet.write('F7', 'DEL: ', merge_format_blanco)
+        worksheet.write('F8', 'AL: ', merge_format_blanco)
 
-        worksheet.merge_range('A5:A6', 'Partida', header_format)
+        worksheet.merge_range('B6:E6', info['contractor_name'], merge_format_blanco)
+        worksheet.merge_range('B7:E7', info['project'], merge_format_blanco)
+        worksheet.merge_range('B8:E8', info['line_item'], merge_format_blanco)
 
-        if FinancialAdvanceReport.show_concepts:
+        worksheet.merge_range('G6:J6', info['period'], merge_format_blanco)
+        worksheet.merge_range('G7:J7', info['start_date'], merge_format_blanco)
+        worksheet.merge_range('G8:J8', info['end_date'], merge_format_blanco)
 
-            worksheet.merge_range('B5:B6', 'Subpartida', header_format)
+        worksheet.merge_range('A10:E10', 'AVANCE FINANCIERO', merge_format_blanco_CENTER)
+        worksheet.merge_range('F10:J10', 'AVANCE FÍSICO', merge_format_blanco)
 
-            worksheet.write('C5', 'Programado', header_format)
-            worksheet.write('C6', 'Importe C/IVA', header_format)
 
-            worksheet.write('D5', 'Estimado', green_header_format)
-            worksheet.write('D6', 'Importe C/IVA', green_header_format)
-
-            worksheet.write('E5', 'Pendiente', red_header_format)
-            worksheet.write('E6', 'Importe C/IVA', red_header_format)
-
-            worksheet.write('F5', 'Programa General', header_format)
-            worksheet.write('F6', 'Importe C/IVA', header_format)
-
-            worksheet.write('G5', 'Estimado General', green_header_format)
-            worksheet.write('G6', 'Importe C/IVA', green_header_format)
-
-            worksheet.write('H5', 'Pendiente General', red_header_format)
-            worksheet.write('H6', 'Importe C/IVA', red_header_format)
-        else:
-
-            worksheet.write('B5', 'Programa General', header_format)
-            worksheet.write('B6', 'Importe C/IVA', header_format)
-
-            worksheet.write('C5', 'Estimado General', green_header_format)
-            worksheet.write('C6', 'Importe C/IVA', green_header_format)
-
-            worksheet.write('D5', 'Pendiente General', red_header_format)
-            worksheet.write('D6', 'Importe C/IVA', red_header_format)
 
     @staticmethod
     def add_concepts(workbook, worksheet, info):
         # The first cell is A7
-        formats = FinancialAdvanceReport.get_formats(workbook)
+        formats = EstimateReports.get_formats(workbook)
 
-        if FinancialAdvanceReport.show_concepts:
+        if EstimateReports.show_concepts:
             LINE_ITEM_COL = 0
             CONCEPT_COL = 1
             PROGRAMMED_COL = 2
@@ -142,7 +137,7 @@ class FinancialAdvanceReport(object):
 
             number_of_concepts = len(line_item['sub_line_items'])
 
-            if FinancialAdvanceReport.show_concepts:
+            if EstimateReports.show_concepts:
                 worksheet.merge_range(row_count, LINE_ITEM_COL, row_count + number_of_concepts - 1, LINE_ITEM_COL,
                                       line_item['name'], formats['centered_bold'])
                 worksheet.merge_range(row_count, GENERAL_PROGRAMMED_COL, row_count + number_of_concepts - 1,
@@ -164,7 +159,7 @@ class FinancialAdvanceReport(object):
                 worksheet.write(row_count, GENERAL_PENDING_COL,
                                 Decimal(line_item['total_pending']), formats['light_red_currency'])
 
-            if FinancialAdvanceReport.show_concepts:
+            if EstimateReports.show_concepts:
                 i = row_count
                 for sub_line_item in line_item['sub_line_items']:
                     worksheet.write(i, CONCEPT_COL, sub_line_item['name'], formats['centered'])
@@ -180,7 +175,7 @@ class FinancialAdvanceReport(object):
             else:
                 row_count += 1
 
-            if FinancialAdvanceReport.show_concepts:
+            if EstimateReports.show_concepts:
                 worksheet.write(row_count, PROGRAMMED_COL, '=SUM(C' + str(START_ROW + 1) + ':C' + str(row_count) + ')',
                                 formats['currency_centered_bold'])
                 worksheet.write(row_count, ESTIMATED_COL, '=SUM(D' + str(START_ROW + 1) + ':D' + str(row_count) + ')',
