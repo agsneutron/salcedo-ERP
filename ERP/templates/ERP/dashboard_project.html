@@ -12,18 +12,19 @@
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}"/>
     {#    <script src="{% static "admin/assets/Highcharts/code/themes/dark-unica.js" %}"></script>#}
     <style>
-    hr{
+        hr {
             display: block;
-    border-top: 1px solid #00a09b;
-    margin: 5px 0 ;
-    }
-</style>
+            border-top: 1px solid #00a09b;
+            margin: 5px 0;
+        }
+    </style>
 {% endblock %}
 {% block content %}
     <div id="container">
         <div class="btn-group btn-group-justified btn-group-raised">
-            <a class="btn btn-info dash-menu" href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/">CATÁLOGO DE CONCEPTOS</a>
-{% comment %}
+            <a class="btn btn-info dash-menu" href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/">CATÁLOGO DE
+                CONCEPTOS</a>
+            {% comment %}
             <a class="btn btn-info dash-menu" href="/admin/ERP/lineitem/insumos/{{ project_id }}/0/">Explosión de<br>Insumos</a>
 {% endcomment %}
             <a class="btn btn-info dash-menu" href="/admin/ERP/estimate/list/{{ project_id }}">ESTIMACIONES</a>
@@ -33,7 +34,8 @@
             {% comment %}<a class="btn btn-info dash-menu" href="/admin/ERP/uploadedinputexplotionshistory/add/?project={{ project_id }}">Añadir Explosión<br>
                 de
                 Insumos</a>{% endcomment %}
-            <a class="btn btn-info dash-menu" href="/admin/ERP/progressestimatelog/?project={{ project_id }}">BITÁCORAS</a>
+            <a class="btn btn-info dash-menu"
+               href="/admin/ERP/progressestimatelog/?project={{ project_id }}">BITÁCORAS</a>
         </div>
 
         {% comment %}        <div class="row">
@@ -74,14 +76,15 @@
 
                                 </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-6 mobile-pad-right" style="display:none; padding-left: 0" id="noImage">
+                                <div class="col-xs-12 col-sm-6 mobile-pad-right" style="display:none; padding-left: 0"
+                                     id="noImage">
 
-                                        <div class="no-imagen" text-center id="NoImagen" >Para ver
-                                            la imagen ingresa a la sección: Editar Proyecto
-                                        </div>
+                                    <div class="no-imagen" text-center id="NoImagen">Para ver
+                                        la imagen ingresa a la sección: Editar Proyecto
+                                    </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 mobile-pad-right" style="padding-left: 0" id="siImage">
-                                       <a href="/media/{{ project.portada }}" data-lightbox="image-1"
+                                    <a href="/media/{{ project.portada }}" data-lightbox="image-1"
                                        data-title="{{ project.nombreProyecto }}">
                                         <div class="thumbnail-container" style="height: 340px;
                                                 background-position: center center;
@@ -116,8 +119,13 @@
                                          style="display: flex;text-align: right;float: right;">
                                         <a href="/admin/ERP/project/{{ project_id }}/" class="btn btn-royal">
                                             <i class="fa fa-search"></i> Ver mas</a>
-                                        <a href="/admin/ERP/project/{{ project_id }}/change" class="btn btn-raised btn-danger ">
-                                            <i class="fa fa-pencil"></i> Editar</a>
+
+
+                                        {% if perms.ERP.change_project %}
+                                            <a href="/admin/ERP/project/{{ project_id }}/change"
+                                               class="btn btn-raised btn-danger ">
+                                                <i class="fa fa-pencil"></i> Editar</a>
+                                        {% endif %}
                                     </div>
 
                                 </div>
@@ -147,7 +155,8 @@
 
                                 <input type="hidden" id="latitud" name="latitud" value="{{ project.latitud }}">
                                 <input type="hidden" id="longitud" name="longitud" value="{{ project.longitud }}">
-                                <input type="hidden" id="nombreProyecto" name="nombreProyecto" value="{{ project.nombreProyecto }}">
+                                <input type="hidden" id="nombreProyecto" name="nombreProyecto"
+                                       value="{{ project.nombreProyecto }}">
                                 <input type="hidden" id="portada" name="portada" value="{{ project.portada }}">
                                 <input type="hidden" id="projectID" name="projectID" value="{{ project.id }}">
 
@@ -191,7 +200,8 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-6 mobile-pad-left" style="padding-right: 0">
-                                    <div class="no-mapa" text-center id="NoMap" style="display:none;">Para ver el mapa ingresa Latitud y Longitud
+                                    <div class="no-mapa" text-center id="NoMap" style="display:none;">Para ver el mapa
+                                        ingresa Latitud y Longitud
                                         en la sección: Ubicación
                                     </div>
                                     <div id="map" style="height: 340px; "></div>
@@ -202,7 +212,7 @@
                             </div>
                             </div>
         </div>
-<hr style="margin: 25px 0;" class="visible-xs">
+        <hr style="margin: 25px 0;" class="visible-xs">
         <div class="row">
             <div class="col-xs-12">
                 <div class="card">
@@ -216,7 +226,6 @@
                     </div>
                 </div>
             </div>
-
 
 
         </div>
@@ -243,26 +252,26 @@
             // To add the marker to the map, call setMap();
             marker.setMap(map);
         }
-        function muestraMapa(){
+        function muestraMapa() {
             var latitud = parseInt(document.getElementById("latitud").value);
             var longitud = parseInt(document.getElementById("longitud").value);
 
-            if (latitud>0 && longitud!=0){
+            if (latitud > 0 && longitud != 0) {
                 document.getElementById('map').style.display = 'block';
                 document.getElementById('NoMap').style.display = 'none';
                 initMap();
-            }else{
+            } else {
                 document.getElementById('NoMap').style.display = 'block';
                 document.getElementById('map').style.display = 'none';
             }
 
         }
-        function mostrarPortada(){
+        function mostrarPortada() {
             var portada = document.getElementById("portada").value;
-            if (portada==""){
+            if (portada == "") {
                 document.getElementById('noImage').style.display = 'block';
                 document.getElementById('siImage').style.display = 'none';
-            }else{
+            } else {
                 document.getElementById('siImage').style.display = 'block';
                 document.getElementById('noImage').style.display = 'none';
             }

@@ -5,6 +5,8 @@ from concurrency.fields import IntegerVersionField
 import os
 
 from decimal import Decimal
+
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 from django.db.models.fields.related import ManyToManyField
 from django.db.models.query_utils import Q
@@ -770,7 +772,7 @@ def cover_file_document_destination(instance, filename):
 # Projects model.
 class Project(models.Model):
     version = IntegerVersionField()
-    users = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
+    users = models.ManyToManyField(User, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
                                    blank=False)
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
@@ -952,6 +954,10 @@ class Project(models.Model):
 
     class Meta:
         verbose_name_plural = 'Proyectos'
+
+        permissions = (
+            ("view_list_project", "Can see project listing"),
+        )
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -1429,15 +1435,15 @@ def generator_file_storage(instance, filename):
 
 
 def content_file_generador(instance, filename):
-    return '/'.join(['documentosFuente', instance.estimate.concept_input.line_item.project.key, filename])
+    return '/'.join(['documentosFuente', instance.estimate.contract.project.key, filename])
 
 
 class ProgressEstimate(models.Model):
     version = IntegerVersionField()
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
     key = models.CharField(verbose_name="Clave del Avance", max_length=8, null=False, blank=False)
-    progress = models.DecimalField(verbose_name='Progreso (%)', decimal_places=4, blank=False, null=False, default=0,
-                                   max_digits=20)
+
+
     amount = models.DecimalField(verbose_name='Monto ($)', decimal_places=6, blank=False, null=False, default=0,
                                  max_digits=20)
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
@@ -1614,7 +1620,7 @@ class SystemLogEntry(models.Model):
 
 
 class AccessToProject(models.Model):
-    user = models.ForeignKey(ERPUser, verbose_name="Usuario")
+    user = models.ForeignKey(User, verbose_name="Usuario", on_delete=models.CASCADE)
     project = models.ForeignKey(Project, verbose_name="Obra", null=False, blank=False)
 
     class Meta:
@@ -1629,7 +1635,7 @@ class AccessToProject(models.Model):
         return ans
 
     def __str__(self):
-        return self.user.user.get_username() + " - " + self.project.nombreProyecto
+        return self.user.get_username() + " - " + self.project.nombreProyecto
 
     @staticmethod
     def user_has_access_to_project(user_id, project_id):

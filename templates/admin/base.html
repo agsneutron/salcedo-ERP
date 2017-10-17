@@ -21,12 +21,13 @@
         .sb-site-container {
 
         }
+
         .fixed {
-	position: fixed;
-	top: 0;
-	height: 70px;
-	z-index: 1;
-}
+            position: fixed;
+            top: 0;
+            height: 70px;
+            z-index: 1;
+        }
     </style>
 
 
@@ -140,81 +141,137 @@
                                 <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
                             </a>
                         </li>
-                        <li class="dropdown
 
 
 
 
-                                {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="#" class="dropdown-toggle fadeIn"
-                               data-toggle="dropdown"
-                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                               data-name="blog">
-                                <i class="fa fa-book text-center"></i><br class="hidden-xs">
-                                Catálogo
-                                <i class="zmdi zmdi-chevron-down hidden-xs"></i>
-                            </a>
-                            <ul id="op_contratista"
-                                class="dropdown-menu dropdown-menu-left">
-                                <li class="dropdown-submenu">
-                                    <a href="blog-sidebar.html" class="has_children">
-                                        <i class="zmdi zmdi-view-compact"></i> Contratistas</a>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/ERP/contratista/add/">Agregar</a>
+                        {% if perms.ERP.view_list_contratista or perms.ERP.view_list_empresa %}
+
+                            <li class="dropdown
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
+                                <a href="#" class="dropdown-toggle fadeIn"
+                                   data-toggle="dropdown"
+                                   data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                                   data-name="blog">
+                                    <i class="fa fa-book text-center"></i><br class="hidden-xs">
+                                    Catálogo
+                                    <i class="zmdi zmdi-chevron-down hidden-xs"></i>
+                                </a>
+                                <ul id="op_contratista"
+                                    class="dropdown-menu dropdown-menu-left">
+                                    <li class="dropdown-submenu">
+
+
+                                        {% if perms.ERP.view_list_contratista %}
+                                            <a href="blog-sidebar.html" class="has_children">
+                                                <i class="zmdi zmdi-view-compact"></i> Contratistas
+                                            </a>
+
+
+
+                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                <li>
+                                                    <a href="/admin/ERP/contratista/add/">Agregar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/admin/ERP/contratista/">Consultar</a>
+                                                </li>
+                                            </ul>
+
+                                        {% endif %}
+                                    </li>
+
+                                    {% if perms.ERP.view_list_empresa %}
+                                        <li class="dropdown-submenu">
+                                            <a href="blog-sidebar.html" class="has_children">
+                                                <i class="zmdi zmdi-view-compact"></i> Clientes</a>
+                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                <li>
+                                                    <a href="/admin/ERP/empresa/add/">Agregar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/admin/ERP/empresa/">Consultar</a>
+                                                </li>
+                                            </ul>
                                         </li>
-                                        <li>
-                                            <a href="/admin/ERP/contratista/">Consultar</a>
+                                    {% endif %}
+
+                                </ul>
+                            </li>
+                        {% endif %}
+
+
+
+
+
+                        {% if perms.ERP.view_list_contratocontratista %}
+                            <li class="dropdown
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                                <a href="#" class="dropdown-toggle"
+                                   data-toggle="dropdown"
+                                   data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                                   data-name="blog">
+                                    <i class="fa fa-file-text-o text-center"></i><br class="hidden-xs">
+                                    Contratación
+                                    <i class="zmdi zmdi-chevron-down hidden-xs"></i>
+                                </a>
+                                <ul id="op_contratos" class="dropdown-menu dropdown-menu-left">
+
+                                    {% if perms.ERP.view_list_contratocontratista %}
+                                        <li class="dropdown-submenu">
+                                            <a href="#" class="has_children">
+                                                <i class="zmdi zmdi-view-dashboard"></i>Contratos</a>
+
+                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                <li>
+                                                    <a href="/admin/ERP/contratocontratista/add/">Agregar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/admin/ERP/contratocontratista/">Consultar</a>
+                                                </li>
+                                            </ul>
                                         </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="blog-sidebar.html" class="has_children">
-                                        <i class="zmdi zmdi-view-compact"></i> Clientes</a>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/ERP/empresa/add/">Agregar</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/ERP/empresa/">Consultar</a>
-                                        </li>
-                                    </ul>
-                                </li>
+                                    {% endif %}
+                                </ul>
 
-                            </ul>
-                        </li>
-                        <li class="dropdown
-
-
-
-
-                                {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="#" class="dropdown-toggle"
-                               data-toggle="dropdown"
-                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                               data-name="blog">
-                                <i class="fa fa-file-text-o text-center"></i><br class="hidden-xs">
-                                Contratación
-                                <i class="zmdi zmdi-chevron-down hidden-xs"></i>
-                            </a>
-                            <ul id="op_contratos" class="dropdown-menu dropdown-menu-left">
-
-                                <li class="dropdown-submenu">
-                                    <a href="#" class="has_children">
-                                        <i class="zmdi zmdi-view-dashboard"></i>Contratos</a>
-
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/ERP/contratocontratista/add/">Agregar</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/ERP/contratocontratista/">Consultar</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-
-                        </li>
+                            </li>
+                        {% endif %}
                         {% comment %}<li class="dropdown">
                         <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-8"
                            data-toggle="dropdown"
@@ -225,28 +282,47 @@
                         </a>
 
                     </li>{% endcomment %}
-                        <li class="dropdown
+
+                        {% if perms.ERP.view_list_project %}
+                            <li class="dropdown
 
 
 
 
-                                {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="/admin/ERP/project/" class="dropdown-toggle"
-                               data-toggle="dropdown"
-                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                               data-name="blog">
-                                <i class="fa fa-building text-center"></i><br class="hidden-xs">
-                                Seguimiento de Obra
-                                <i class="zmdi zmdi-chevron-down hidden-xs"></i>
-                            </a>
 
-                            <ul id="op_proyectos"
-                                class="dropdown-menu dropdown-menu-left">
-                                <li class="dropdown">
-                                    <a href="/admin/ERP/project/">
-                                        <i class="zmdi zmdi-view-compact"></i> Proyectos</a>
-                                </li>
-                                {% comment %}<li class="dropdown-submenu">
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                    {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
+                                <a href="/admin/ERP/project/" class="dropdown-toggle"
+                                   data-toggle="dropdown"
+                                   data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                                   data-name="blog">
+                                    <i class="fa fa-building text-center"></i><br class="hidden-xs">
+                                    Seguimiento de Obra
+                                    <i class="zmdi zmdi-chevron-down hidden-xs"></i>
+                                </a>
+
+                                <ul id="op_proyectos"
+                                    class="dropdown-menu dropdown-menu-left">
+
+                                    {% if perms.ERP.view_list_project %}
+                                        <li class="dropdown">
+                                            <a href="/admin/ERP/project/">
+                                                <i class="zmdi zmdi-view-compact"></i> Proyectos</a>
+                                        </li>
+                                    {% endif %}
+                                    {% comment %}<li class="dropdown-submenu">
                                 <a href="blog-sidebar.html" class="has_children">
                                     <i class="zmdi zmdi-view-compact"></i> Precios Unitarios</a>
                                 <ul class="dropdown-menu dropdown-menu-left">
@@ -303,44 +379,70 @@
                                     </li>
                                 </ul>
                             </li>{% endcomment %}
-                            </ul>
-                        </li>
-                        <li class="dropdown
-                                {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="#" class="dropdown-toggle "
-                               data-toggle="dropdown"
-                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                               data-name="portfolio">
-                                <i class="fa fa-user-circle-o text-center"></i><br class="hidden-xs">
-                                Recursos Humanos
-                                <i class="zmdi zmdi-chevron-down hidden-xs"></i>
-                            </a>
-                            <ul id="op_usuarios" class="dropdown-menu dropdown-menu-left">
+                                </ul>
+                            </li>
+                        {% endif %}
 
-                                <li class="dropdown-submenu">
-                                    <a href="#" class="has_children">
-                                        <i class="zmdi zmdi-view-dashboard"></i>Usuarios</a>
+                        {% if perms.auth.add_user and perms.auth.change_user and perms.auth.delete_user %}
+                            <li class="dropdown
 
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/auth/user/add">Agregar</a>
+
+
+                                    {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                                <a href="#" class="dropdown-toggle "
+                                   data-toggle="dropdown"
+                                   data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                                   data-name="portfolio">
+                                    <i class="fa fa-user-circle-o text-center"></i><br class="hidden-xs">
+                                    Recursos Humanos
+                                    <i class="zmdi zmdi-chevron-down hidden-xs"></i>
+                                </a>
+                                <ul id="op_usuarios" class="dropdown-menu dropdown-menu-left">
+
+                                    {% if perms.auth.add_user and perms.auth.change_user and perms.auth.delete_user %}
+                                        <li class="dropdown-submenu">
+                                            <a href="#" class="has_children">
+                                                <i class="zmdi zmdi-view-dashboard"></i>Usuarios</a>
+
+                                            <ul class="dropdown-menu dropdown-menu-left">
+                                                <li>
+                                                    <a href="/admin/auth/user/add">Agregar</a>
+                                                </li>
+                                                <li>
+                                                    <a href="/admin/auth/user/">Consultar</a>
+                                                </li>
+                                            </ul>
                                         </li>
-                                        <li>
-                                            <a href="/admin/auth/user/">Consultar</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
+                                    {% endif %}
+                                </ul>
 
-                        </li>
+                            </li>
+                        {% endif %}
+
+
+
                         <li id="op_reportes" class="dropdown
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
                                 <i class="fa fa-line-chart text-center"></i><br class="hidden-xs">
                                 Reportes
-                                                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
+                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
 
                             </a>
                         </li>
@@ -482,7 +584,8 @@
     <div class="modal-dialog animated zoomIn animated-3x" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i
+                        class="zmdi zmdi-close"></i></span></button>
                 <h3 class="modal-title" id="myModalLabel6"><strong>Ha ocurrido un error</strong></h3>
             </div>
             <div class="modal-body test-center">
@@ -499,7 +602,8 @@
     <div class="modal-dialog animated zoomIn animated-3x" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i
+                        class="zmdi zmdi-close"></i></span></button>
                 <h3 class="modal-title" id="myModalLabel6"><strong>La operación se resolvió con éxito</strong></h3>
             </div>
             <div class="modal-body test-center">
@@ -513,11 +617,11 @@
 </div>
 
 <script>
-if (errors) {
-    var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
-    $('#alertModal').find('.modal-body p').text(message);
-    $('#alertModal').modal('show')
-}
+    if (errors) {
+        var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+        $('#alertModal').find('.modal-body p').text(message);
+        $('#alertModal').modal('show')
+    }
 </script>
 {% comment %}Ventana de errores{% endcomment %}
 <script>
@@ -526,109 +630,109 @@ if (errors) {
     }
 </script>
 <script>
-{% comment %}    $(document).ready(function () {
-        (".sb-toggle-left").on("touchend click", function (e) {
-            l(e, t(this)), s("left")
+    {% comment %}    $(document).ready(function () {
+            (".sb-toggle-left").on("touchend click", function (e) {
+                l(e, t(this)), s("left")
+            })
+            (".sb-toggle-right").on("touchend click", function (e) {
+                l(e, t(this)), s("right")
+            })
+            (".sb-open-left").on("touchend click", function (e) {
+                l(e, t(this)), r("left")
+            })
+            (".sb-open-right").on("touchend click", function (e) {
+                l(e, t(this)), r("right")
+            })
+            (".sb-toggle-left").on("touchend click", function (e) {
+                if (t(this).is("a") || t(this).children().is("a")) {
+                    if ("click" === e.type) {
+                        e.stopPropagation(), e.preventDefault();
+                        var n = t(this).is("a") ? t(this) : t(this).find("a");
+                        a(n.attr("href"), n.attr("target") ? n.attr("target") : "_self")
+                    }
+                } else l(e, t(this)), a()
+            }), m.on("touchend click", function (e) {
+                u.siteClose && (y || x) && (l(e, t(this)), a())
+            })
+        }
+        }
+        (jQuery)
         })
-        (".sb-toggle-right").on("touchend click", function (e) {
-            l(e, t(this)), s("right")
-        })
-        (".sb-open-left").on("touchend click", function (e) {
-            l(e, t(this)), r("left")
-        })
-        (".sb-open-right").on("touchend click", function (e) {
-            l(e, t(this)), r("right")
-        })
-        (".sb-toggle-left").on("touchend click", function (e) {
-            if (t(this).is("a") || t(this).children().is("a")) {
-                if ("click" === e.type) {
-                    e.stopPropagation(), e.preventDefault();
-                    var n = t(this).is("a") ? t(this) : t(this).find("a");
-                    a(n.attr("href"), n.attr("target") ? n.attr("target") : "_self")
-                }
-            } else l(e, t(this)), a()
-        }), m.on("touchend click", function (e) {
-            u.siteClose && (y || x) && (l(e, t(this)), a())
-        })
-    }
-    }
-    (jQuery)
-    })
-    ;{% endcomment %}
+        ;{% endcomment %}
 
 </script>
- <script>
-        $(document).ready(function () {
-            $('#table_s').DataTable({
-                columnDefs: [
-                    {
-                        className: 'mdl-data-table__cell--non-numeric'
-                    }
-                ],
-
-                responsive: true,
-                "bInfo": false,
-                "pageLength": 10,
-                "bLengthChange": false, //used to hide the property
-                "language": {
-                    "sProcessing": "Procesando...",
-                    "sLengthMenu": "Mostrar _MENU_ registros",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
-                    "sInfo": "",
-                    "sInfoEmpty": "",
-                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sSearch": "",
-                    "sUrl": "",
-                    "sInfoThousands": ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Ãšltimo",
-                        "sNext": "»",
-                        "sPrevious": "«"
-                    }
-                },
-            });
-        });
-    </script>
 <script>
-        $(document).ready(function () {
-            $('#table_s2').DataTable({
-                columnDefs: [
-                    {
-                        className: 'mdl-data-table__cell--non-numeric'
-                    }
-                ],
+    $(document).ready(function () {
+        $('#table_s').DataTable({
+            columnDefs: [
+                {
+                    className: 'mdl-data-table__cell--non-numeric'
+                }
+            ],
 
-                responsive: true,
-                "bInfo": false,
-                "pageLength": 10,
-                "bLengthChange": false, //used to hide the property
-                "language": {
-                    "sProcessing": "Procesando...",
-                    "sLengthMenu": "Mostrar _MENU_ registros",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
-                    "sInfo": "",
-                    "sInfoEmpty": "",
-                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sSearch": "",
-                    "sUrl": "",
-                    "sInfoThousands": ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Ãšltimo",
-                        "sNext": "»",
-                        "sPrevious": "«"
-                    }
-                },
-            });
+            responsive: true,
+            "bInfo": false,
+            "pageLength": 10,
+            "bLengthChange": false, //used to hide the property
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+                "sInfo": "",
+                "sInfoEmpty": "",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Ãšltimo",
+                    "sNext": "»",
+                    "sPrevious": "«"
+                }
+            },
         });
-    </script>
+    });
+</script>
+<script>
+    $(document).ready(function () {
+        $('#table_s2').DataTable({
+            columnDefs: [
+                {
+                    className: 'mdl-data-table__cell--non-numeric'
+                }
+            ],
+
+            responsive: true,
+            "bInfo": false,
+            "pageLength": 10,
+            "bLengthChange": false, //used to hide the property
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+                "sInfo": "",
+                "sInfoEmpty": "",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Ãšltimo",
+                    "sNext": "»",
+                    "sPrevious": "«"
+                }
+            },
+        });
+    });
+</script>
 {% comment %}<script>
    $(document).ready(function(){
 	   $(window).bind('scroll', function() {
