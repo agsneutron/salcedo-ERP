@@ -302,8 +302,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         estimate_id = request.GET.get('estimate')
 
-        if obj is not None:
-            obj.progress *= 100
+
 
         form = super(ProgressEstimateAdmin, self).get_form(request, obj, **kwargs)
 
@@ -317,9 +316,11 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
                     'estimate_id').annotate(
                     Count('estimate_id'), accumulated=Sum('amount'))
 
-                accumulated = accumulated_qs[0]['accumulated']
-
-                accumulated += estimate.advance_payment_amount
+                if len(accumulated_qs) > 0:
+                    accumulated = accumulated_qs[0]['accumulated']
+                    accumulated += estimate.advance_payment_amount
+                else:
+                    accumulated = 0
 
                 form.contract_amount_accumulated = "{0:.2f}%".format(
                     accumulated / estimate.contract.monto_contrato * 100)
@@ -353,8 +354,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
         return form
 
     def save_model(self, request, obj, form, change):
-        obj.progress = obj.progress / Decimal(100.00)
-        print obj.progress
+
         return super(ProgressEstimateAdmin, self).save_model(request, obj, form, change)
 
     def has_add_permission(self, request):

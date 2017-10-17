@@ -964,6 +964,7 @@ class GetEstimateReportByContractor(View):
         project_id = request.GET.get('project_id')
 
         information_json = api.EstimateReportByContractor.get_report(project_id)
+        #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
 
         file = EstimateReportsByContract.generate_report(information_json)
 

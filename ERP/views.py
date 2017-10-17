@@ -276,7 +276,10 @@ class ContractorContractDetailView(generic.DetailView):
         contract_id = self.kwargs['pk']
         context['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id))
         # Getting, if exists, the advance payment for the contract
-        estimate = Estimate.objects.get(contract__id=contract_id)
+        try:
+            estimate = Estimate.objects.get(contract__id=contract_id)
+        except Estimate.DoesNotExist:
+            estimate = None
 
         advance_payment = None
         advance_payment_status = ""

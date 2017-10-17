@@ -561,7 +561,7 @@ class EstimateReportByContractor():
             response['data'].append(contractor_json)
 
             # Getting all the estimates for a contractor in a .
-            estimates_set = Estimate.objects.filter(contract__contratista__id=contractor_obj.id)
+            estimates_set = Estimate.objects.filter(Q(contract__contratista__id=contractor_obj.id)&Q(contract__project_id=project_id))
             for estimate in estimates_set:
                 estimate_json = {
                     'estimate_start_date': str(estimate.start_date),
@@ -587,7 +587,5 @@ class EstimateReportByContractor():
 
 
 
-
-        print contracts_set
 
         return response

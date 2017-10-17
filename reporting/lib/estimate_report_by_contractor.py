@@ -12,7 +12,6 @@ class EstimateReportsByContract(object):
 
     @staticmethod
     def generate_report(information_json,):
-
         if len(information_json) == 0:
             output = StringIO.StringIO()
             workbook = Workbook(output)
@@ -32,6 +31,8 @@ class EstimateReportsByContract(object):
             # Iterate through the contractors array.
             for contractor in information_json['data']:
                 worksheet = workbook.add_worksheet(contractor['contractor_name'])
+                EstimateReportsByContract.add_headers(workbook, worksheet, information_json, contractor)
+                EstimateReportsByContract.add_estimates_table(workbook, worksheet, contractor['estimates'])
 
 
 
@@ -40,7 +41,7 @@ class EstimateReportsByContract(object):
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=hoja de estimación.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Estimaciones_por_Contratista.xlsx'
         response['Content-Length'] = output.tell()
 
         output.seek(0)
@@ -48,155 +49,134 @@ class EstimateReportsByContract(object):
         return response
 
     @staticmethod
-    def add_headers(workbook, worksheet,info):
+    def add_headers(workbook, worksheet, general_info, contractor_info):
 
-        borde_negro = workbook.add_format({
-            'border': 1})
-        borde_negro.set_border_color('black')
-        borde_negro.set_border(1)
-
-        merge_format_blanco = workbook.add_format({
+        # Create a format to use in the merged range.
+        header_format_info = {
             'bold': 1,
-            'text_wrap': 1,
-            'border': 1,
-            'align': 'left',
-            'valign': 'vcenter',
-            'fg_color': 'FFFFFF'})
-
-        merge_format_blanco_CENTER = workbook.add_format({
-            'bold': 1,
-            'text_wrap': 1,
             'border': 1,
             'align': 'center',
             'valign': 'vcenter',
-            'fg_color': 'FFFFFF'})
+            'fg_color': '#19306D',
+            'font_size':14,
+            'font_color': '#FFFFFF'
+        }
 
-        merge_format_blanco.set_font_color('black')
+        general_format_info = {
+            'bold': 1,
+            'border': 0,
+            'align': 'left',
+            'valign': 'vcenter',
+            'fg_color': '#F3F2F3',
+            'font_size': 12,
+            'font_color': '#202020'
+        }
 
-        worksheet.merge_range('C3:H3', 'SALCEDO CONSTRUCCIÓN Y SUPERVISIÓN S.A. DE C.V.', merge_format_blanco_CENTER)
+        formats = EstimateReportsByContract.get_formats(workbook)
+        light_blue_format = formats['light_blue']
 
-        worksheet.merge_range('A5:E5', '', borde_negro)
-        worksheet.merge_range('F5:J5', '', borde_negro)
-        worksheet.merge_range('A5:E5', 'HOJA ESTIMACIÓN', merge_format_blanco_CENTER)
-        worksheet.merge_range('F5:J5', '', merge_format_blanco)
+        header_format = workbook.add_format(header_format_info)
+        general_format = workbook.add_format(general_format_info)
 
-        worksheet.write('A6', 'CONTRATISTA: ', merge_format_blanco)
-        worksheet.write('A7', 'OBRA: ', merge_format_blanco)
-        worksheet.write('A8', 'CONCEPTO: ', merge_format_blanco)
+        header_format_info['fg_color'] = '#F43C37'  # Red
 
-        worksheet.write('F6', 'PERIODO: ', merge_format_blanco)
-        worksheet.write('F7', 'DEL: ', merge_format_blanco)
-        worksheet.write('F8', 'AL: ', merge_format_blanco)
+        header_format_info['fg_color'] = '#6BB067'  # Green
 
-        worksheet.merge_range('B6:E6', info['contractor_name'], merge_format_blanco)
-        worksheet.merge_range('B7:E7', info['project'], merge_format_blanco)
-        worksheet.merge_range('B8:E8', info['line_item'], merge_format_blanco)
+        worksheet.merge_range('A1:F1', general_info['project_name'], header_format)
+        worksheet.merge_range('A2:F2', "Código: " +general_info['project_key'], general_format)
+        worksheet.merge_range('A3:F3', "Proyecto con fecha del " + general_info['project_start_date'] + " al " +general_info['project_end_date'], general_format)
+        worksheet.merge_range('A4:F4', "Contratista: " + contractor_info['contractor_name'], general_format)
 
-        worksheet.merge_range('G6:J6', info['period'], merge_format_blanco)
-        worksheet.merge_range('G7:J7', info['start_date'], merge_format_blanco)
-        worksheet.merge_range('G8:J8', info['end_date'], merge_format_blanco)
+        worksheet.set_row(1, 20)
+        worksheet.set_row(2, 20)
+        worksheet.set_row(3, 20)
+        worksheet.set_row(4, 20)
 
-        worksheet.merge_range('A10:E10', 'AVANCE FINANCIERO', merge_format_blanco_CENTER)
-        worksheet.merge_range('F10:J10', 'AVANCE FÍSICO', merge_format_blanco)
+        worksheet.set_column('A:F', 18)
+        worksheet.merge_range('A6:F6', 'Estimaciones', light_blue_format)
+        worksheet.write('A7', 'Fecha de Inicio', light_blue_format)
+        worksheet.write('B7', 'Fecha de Fin', light_blue_format)
+        worksheet.write('C7', 'Periodo', light_blue_format)
+        worksheet.write('D7', 'Clave de la Estimación', light_blue_format)
+        worksheet.write('E7', 'Cantidad', light_blue_format)
+        worksheet.write('F7', 'Estatus', light_blue_format)
 
 
 
     @staticmethod
-    def add_concepts(workbook, worksheet, info):
-        # The first cell is A7
-        formats = EstimateReports.get_formats(workbook)
+    def add_estimates_table(workbook, worksheet, info):
 
-        if EstimateReports.show_concepts:
-            LINE_ITEM_COL = 0
-            CONCEPT_COL = 1
-            PROGRAMMED_COL = 2
-            ESTIMATED_COL = 3
-            PENDING_COL = 4
-            GENERAL_PROGRAMMED_COL = 5
-            GENERAL_ESTIMATED_COL = 6
-            GENERAL_PENDING_COL = 7
-        else:
-            LINE_ITEM_COL = 0
-            GENERAL_PROGRAMMED_COL = 1
-            GENERAL_ESTIMATED_COL = 2
-            GENERAL_PENDING_COL = 3
+        STAR_DATE_COL = 0
+        END_DATE_COL = 1
+        PERIOD_COL = 2
+        KEY_COL = 3
+        AMOUNT_COL = 4
+        STATUS_COL = 5
 
-        START_ROW = 6
-        row_count = START_ROW
+        START_ROW = 7
 
-        for line_item in info:
 
-            number_of_concepts = len(line_item['sub_line_items'])
+        formats = EstimateReportsByContract.get_formats(workbook)
+        light_border_format = formats['light_border']
+        light_border_grey_format = formats['light_border_grey']
 
-            if EstimateReports.show_concepts:
-                worksheet.merge_range(row_count, LINE_ITEM_COL, row_count + number_of_concepts - 1, LINE_ITEM_COL,
-                                      line_item['name'], formats['centered_bold'])
-                worksheet.merge_range(row_count, GENERAL_PROGRAMMED_COL, row_count + number_of_concepts - 1,
-                                      GENERAL_PROGRAMMED_COL,
-                                      Decimal(line_item['total_programmed']), formats['currency_centered_bold'])
-                worksheet.merge_range(row_count, GENERAL_ESTIMATED_COL, row_count + number_of_concepts - 1,
-                                      GENERAL_ESTIMATED_COL,
-                                      Decimal(line_item['total_estimated']), formats['light_green_currency'])
-                worksheet.merge_range(row_count, GENERAL_PENDING_COL, row_count + number_of_concepts - 1,
-                                      GENERAL_PENDING_COL,
-                                      Decimal(line_item['total_pending']), formats['light_red_currency'])
+
+        row_counter = START_ROW
+        estimate_counter = 0
+        for estimate in info:
+            estimate_counter += 1
+            estimate_row = row_counter
+
+            if estimate_counter % 2 == 0:
+                cell_format = light_border_grey_format
             else:
-                worksheet.write(row_count, LINE_ITEM_COL,
-                                line_item['name'], formats['centered_bold'])
-                worksheet.write(row_count, GENERAL_PROGRAMMED_COL,
-                                Decimal(line_item['total_programmed']), formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_ESTIMATED_COL,
-                                Decimal(line_item['total_estimated']), formats['light_green_currency'])
-                worksheet.write(row_count, GENERAL_PENDING_COL,
-                                Decimal(line_item['total_pending']), formats['light_red_currency'])
+                cell_format = light_border_format
 
-            if EstimateReports.show_concepts:
-                i = row_count
-                for sub_line_item in line_item['sub_line_items']:
-                    worksheet.write(i, CONCEPT_COL, sub_line_item['name'], formats['centered'])
-                    worksheet.write(i, PROGRAMMED_COL, Decimal(sub_line_item['total_programmed']),
-                                    formats['currency_centered'])
-                    worksheet.write(i, ESTIMATED_COL, Decimal(sub_line_item['total_estimated']),
-                                    formats['light_green_currency'])
-                    worksheet.write(i, PENDING_COL, Decimal(sub_line_item['total_pending']), formats['light_red_currency'])
+            for progress_estimate in estimate['progress_estimates']:
+                worksheet.write(row_counter, KEY_COL, progress_estimate['key'], cell_format)
+                worksheet.write(row_counter, AMOUNT_COL, progress_estimate['amount'], cell_format)
+                worksheet.write(row_counter, STATUS_COL, progress_estimate['status'], cell_format)
+                row_counter += 1
 
-                    i = i + 1
+            worksheet.merge_range('A'+str(estimate_row+1)+':A'+str(row_counter), estimate['estimate_start_date'], cell_format)
+            worksheet.merge_range('B'+str(estimate_row+1)+':B'+str(row_counter), estimate['estimate_end_date'], cell_format)
+            worksheet.merge_range('C'+str(estimate_row+1)+':C'+str(row_counter), estimate['estimate_period'], cell_format)
 
-                row_count = row_count + number_of_concepts
-            else:
-                row_count += 1
 
-            if EstimateReports.show_concepts:
-                worksheet.write(row_count, PROGRAMMED_COL, '=SUM(C' + str(START_ROW + 1) + ':C' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
-                worksheet.write(row_count, ESTIMATED_COL, '=SUM(D' + str(START_ROW + 1) + ':D' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
-                worksheet.write(row_count, PENDING_COL, '=SUM(E' + str(START_ROW + 1) + ':E' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_PROGRAMMED_COL,
-                                '=SUM(F' + str(START_ROW + 1) + ':F' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_ESTIMATED_COL,
-                                '=SUM(G' + str(START_ROW + 1) + ':G' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_PENDING_COL,
-                                '=SUM(H' + str(START_ROW + 1) + ':H' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
-            else:
 
-                worksheet.write(row_count, GENERAL_PROGRAMMED_COL,
-                                '=SUM(B' + str(START_ROW + 1) + ':B' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_ESTIMATED_COL,
-                                '=SUM(C' + str(START_ROW + 1) + ':C' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
-                worksheet.write(row_count, GENERAL_PENDING_COL,
-                                '=SUM(D' + str(START_ROW + 1) + ':D' + str(row_count) + ')',
-                                formats['currency_centered_bold'])
+
+
+
+
+
+
 
     @staticmethod
     def get_formats(workbook):
         formats = {}
+        # Create a format to use in the merged range.
+        format_info = {
+            'align': 'center',
+            'valign': 'vcenter',
+            'border': 1,
+            'border_color': '#D5D5D5',
+            'num_format': '$#,#00.00'
+        }
+
+        formats['light_border'] = workbook.add_format(format_info)
+
+        format_info = {
+            'align': 'center',
+            'valign': 'vcenter',
+            'border': 1,
+            'fg_color': '#F3F2F3',
+            'border_color': '#D5D5D5',
+            'num_format': '$#,#00.00'
+        }
+
+        formats['light_border_grey'] = workbook.add_format(format_info)
+
+
         # Create a format to use in the merged range.
         centered_info = {
             'align': 'center',
@@ -216,12 +196,67 @@ class EstimateReportsByContract(object):
 
         # Create a format to use in the merged range.
         centered_info = {
+            'align': 'right',
+            'valign': 'vcenter',
+            'border': 1,
+            'num_format': '$#,#00.00'}
+
+        formats['currency'] = workbook.add_format(centered_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
+            'align': 'right',
+            'valign': 'vcenter',
+            'border': 1,
+            'num_format': '$#,#00.00',
+            'fg_color': '#FFFF00'}
+
+        formats['yellow_currency'] = workbook.add_format(centered_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
+            'align': 'right',
+            'valign': 'vcenter',
+            'border': 1,
+            'num_format': '0.00%'}
+
+        formats['percentage'] = workbook.add_format(centered_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
+            'align': 'right',
+            'valign': 'vcenter',
+            'border': 1,
+            'num_format': '0.00%',
+            'fg_color': '#FFFF00'}
+
+        formats['yellow_percentage'] = workbook.add_format(centered_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
             'align': 'center',
             'valign': 'vcenter',
             'bold': 1,
             'border': 1}
 
         formats['centered_bold'] = workbook.add_format(centered_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
+            'valign': 'vcenter',
+            'bold': 1,
+            'border': 1}
+
+        formats['bold'] = workbook.add_format(centered_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
+            'valign': 'vcenter',
+            'bold': 1,
+            'border': 1,
+            'fg_color': '#FFFF00'}
+
+        formats['yellow_bold'] = workbook.add_format(centered_info)
 
         # Create a format to use in the merged range.
         centered_info = {
@@ -253,5 +288,38 @@ class EstimateReportsByContract(object):
             'num_format': '$#,#00.00'}
 
         formats['light_red_currency'] = workbook.add_format(info)
+
+        # Create a format to use in the merged range.
+        header_format_info = {
+            'bold': 1,
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'fg_color': '#A9C1F4'}
+
+        formats['blue_bold'] = workbook.add_format(header_format_info)
+
+        # Create a format to use in the merged range.
+        header_format_info = {
+            'bold': 1,
+            'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'fg_color': '#139189',
+            'border_color': '#139189',
+            'font_color': '#FFFFFF'
+        }
+
+        formats['light_blue'] = workbook.add_format(header_format_info)
+
+        # Create a format to use in the merged range.
+        centered_info = {
+            'align': 'right',
+            'valign': 'vcenter',
+            'border': 1,
+            'num_format': '$#,#00.00',
+            'fg_color': '#A9C1F4'}
+
+        formats['blue_currency'] = workbook.add_format(centered_info)
 
         return formats
