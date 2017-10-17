@@ -392,6 +392,13 @@ class EstimatesReport():
         for estimate in estimate_set:
             concepts_array = []
             contract_obj = ContratoContratista.objects.get(pk=estimate.contract.id)
+            contactor = Contact.objects.filter(contractor_id=estimate.contract.contratista_id)
+            contract_name = "Sin contacto"
+            if contactor:
+                contact = Contact.objects.get(contractor_id=estimate.contract.contratista_id)
+                if contact:
+                    contract_name = contact.name
+
             for concept in contract_obj.concepts.all():
                 concepts_array.append({
                     'concept_name': concept.description,
@@ -400,7 +407,7 @@ class EstimatesReport():
 
             estimate_json = {
                 'contractor_name': estimate.contract.contratista.nombreContratista,
-                'contract_name': Contact.objects.get(contractor_id=estimate.contract.contratista_id).name ,
+                'contract_name': contract_name ,
                 'contract_amount_with_tax': float(estimate.contract.monto_contrato) * 1.16,
                 'concepts': concepts_array,
                 'project': estimate.contract.project.nombreProyecto,

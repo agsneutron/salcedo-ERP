@@ -9,6 +9,7 @@ $(document).on('ready', function() {
     get_Projects();
     $('#get_report_AFI').on('click',Get_Financial_Report);
     $('#get_report_AFF').on('click',Get_Physical_Financial);
+    $('#get_report_Estimacion').on('click',Get_Estimate_Report);
 
 });
 
@@ -46,6 +47,7 @@ function get_Projects(){
 }
 
 function set_Projects(data){
+
     clearControl("project_id_AFI");
     for (var i = 0; i < data.length; i++) {
         $("select#project_id_AFI").append(
@@ -57,6 +59,15 @@ function set_Projects(data){
     clearControl("project_id_AFF");
     for (var i = 0; i < data.length; i++) {
         $("select#project_id_AFF").append(
+            '<option value="'+data[i].id+'">' +
+            data[i].nombreProyecto +
+            '</option>'
+        );
+    }
+
+    clearControl("project_id_Estimacion");
+    for (var i = 0; i < data.length; i++) {
+        $("select#project_id_Estimacion").append(
             '<option value="'+data[i].id+'">' +
             data[i].nombreProyecto +
             '</option>'
@@ -92,6 +103,18 @@ function Get_Physical_Financial(){
 
     if (project_id != "") {
         window.open("/reporting/get_physical_financial_advance_report?project_id=" + parseInt(project_id));
+    }
+    else{
+        alert("Para generar el reporte debe seleccionar un Proyecto");
+    }
+}
+
+function Get_Estimate_Report(){
+    var project_id = $('select#project_id_Estimacion').find('option:selected').val();
+
+
+    if (project_id != "") {
+        window.open("/reporting/get_estimates_report?project_id=" + parseInt(project_id));
     }
     else{
         alert("Para generar el reporte debe seleccionar un Proyecto");
