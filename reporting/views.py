@@ -15,6 +15,7 @@ from django.views.generic import View
 from reporting import lib
 from reporting.lib.physical_financial_advance_report import PhysicalFinancialAdvanceReport
 from reporting.lib.estimate_report_by_single_contractor import EstimateReportsBySingleContractor
+from reporting.lib.budget_report_by_contractor import BudgetReportsByContractor
 
 
 def report(request):
@@ -983,3 +984,16 @@ class GetEstimateReportBySingleContractor(View):
         file = EstimateReportsBySingleContractor.generate_report(information_json)
 
         return file
+
+class GetBudgetByContractorReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        contractor_id = request.GET.get('contractor_id')
+
+        information_json = api.GetBudgetByContractorReport.get_report(project_id, contractor_id)
+        #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
+
+        file = BudgetReportsByContractor.generate_report(information_json)
+
+        return file
+
