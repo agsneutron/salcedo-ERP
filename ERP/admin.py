@@ -241,14 +241,14 @@ class EmpleadoAdmin(admin.ModelAdmin):
 
 
 class ContratoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'codigo_obra', 'objeto_contrato')
-    search_fields = ('codigo_obra', 'objeto_contrato')
-    list_display_links = ('id', 'codigo_obra', 'objeto_contrato')
+    list_display = ('id', 'objeto_contrato')
+    search_fields = ('objeto_contrato')
+    list_display_links = ('id',  'objeto_contrato')
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
         fields = (
-            'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados',
+            'no_licitacion', 'modalidad_contrato', 'dependencia',  'contratista', 'dias_pactados',
             'fecha_firma',
             'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
             'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')

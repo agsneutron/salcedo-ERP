@@ -180,11 +180,11 @@ class PhysicalFinancialAdvanceReport(View):
     def get_report(project_id, selected_line_items_array, type='C'):
         structured_response = {}
 
-        structured_response[
-            'physical_financial_advance'] = PhysicalFinancialAdvanceReport.get_physical_financial_advance(project_id,
+        structured_response['physical_financial_advance'] = PhysicalFinancialAdvanceReport.get_physical_financial_advance(project_id,
                                                                                                           selected_line_items_array,
                                                                                                           type)
-        #structured_response['biddings_programs'] = PhysicalFinancialAdvanceReport.get_biddings_report(project_id)
+
+        structured_response['biddings_programs'] = PhysicalFinancialAdvanceReport.get_biddings_report(project_id)
 
         return structured_response
 
@@ -215,6 +215,11 @@ class PhysicalFinancialAdvanceReport(View):
                 'total_contracted': 0,
                 'total_physical_advance': 0,
                 'total_financial_advance': 0,
+                'total_programmed_tax': float(concepts_amount) * 1.16,
+                'total_contracted_tax': 0,
+                'total_physical_advance_tax': 0,
+                'total_financial_advance_tax': 0,
+
             }
 
         # Getting all the estimates for the project.
@@ -246,15 +251,36 @@ class PhysicalFinancialAdvanceReport(View):
                 physical_advance = selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance']
                 financial_advance = selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance']
 
+
+                # With taxes.
+                contracted_tax = selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted_tax']
+                physical_advance_tax = selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance_tax']
+                financial_advance_tax = selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance_tax']
+
+
                 # Contracted Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted'] = float(contracted) \
                                                                                               + float(physical_progress_estimate_set[0]['contracted_amount'])
                 # Physical Advance Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance'] = float(physical_advance) \
                                                                                                + float(physical_progress_estimate_set[0]['physical_advance_amount'])
-                # Physical Advance Amount.
+                # Financial Advance Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance'] = float(
                     financial_advance) + float(financial_progress_estimate_set[0]['total_financial'])
+
+                #------ Amounts with taxes included. ------
+                estimate_tax = float(estimate.contract.porcentaje_iva) / 100
+
+                # Contracted Amount with taxes.
+                selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted_tax'] = float(contracted_tax) \
+                                      + (float(physical_progress_estimate_set[0]['contracted_amount']) * estimate_tax)
+                # Physical Advance Amount with taxes.
+                selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance_tax'] = float(
+                    physical_advance_tax) + (float(physical_progress_estimate_set[0]['physical_advance_amount']) * estimate_tax)
+
+                # Financial Advance Amount with taxes.
+                selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance_tax'] = float(
+                    financial_advance_tax) + (float(financial_progress_estimate_set[0]['total_financial']) * estimate_tax)
 
 
         # Getting the top line items for the project
@@ -285,8 +311,6 @@ class PhysicalFinancialAdvanceReport(View):
         schedule_years = PaymentSchedule.objects.filter(project_id=project_id).values('year').annotate(Count('year')) \
             .order_by('year')
 
-        payment_schedule_grouped = schedule_years.values('project_id').annotate(Count('project_id'),
-                                                                                total=Sum('amount'))
 
         # Years JSON.
 
@@ -310,20 +334,29 @@ class PhysicalFinancialAdvanceReport(View):
                 # Obtaining all the estimates for the current month and year.
                 progress_estimate_set = ProgressEstimate.objects.filter(Q(estimate__contract__project__id=project_id)
                                                                         & Q(estimate__period__month=record.month)
-                                                                        & Q(estimate__period__year=temp_year)) \
-                    .values('estimate__contract__project__id') \
-                    .annotate(Count('estimate__contract__project__id'), total=Sum('amount'))
+                                                                        & Q(estimate__period__year=temp_year)).values('estimate__id').annotate(Count('estimate__id'), total=Sum('amount'))
+
 
                 paid_progress_estimate_set = progress_estimate_set.filter(Q(payment_status='P'))
 
+                total_amount = 0
+                total_paid_amount = 0
+
+                for each in progress_estimate_set:
+                    total_amount += float(each['total'])
+
+                for each in paid_progress_estimate_set:
+                    total_paid_amount += float(each['total'])
+                    estimate = Estimate.objects.get(pk=each['estimate__id'])
+                    if estimate.advance_payment_status == Estimate.PAID:
+                        total_paid_amount += float(estimate.advance_payment_amount)
+
                 # Total amount for every estimate
                 # Estimates that have been paid.
-                if progress_estimate_set.exists():
-                    month_total_estimate = progress_estimate_set[0]['total']
+                month_total_estimate = total_amount
 
                 # Estimates that have been paid.
-                if paid_progress_estimate_set.exists():
-                    month_paid_estimate = round(paid_progress_estimate_set[0]['total'], 2)
+                month_paid_estimate = round(total_paid_amount, 2)
 
                 accumulated_total_estimate += round(month_total_estimate, 2)
                 accumulated_paid_estimate += round(month_paid_estimate, 2)

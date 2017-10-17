@@ -34,7 +34,7 @@ class PhysicalFinancialAdvanceReport(object):
         # Write some simple text.
         worksheet_1.write('A1', 'Programa Licitación', bold)
 
-        #PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet_1, information_json)
+        PhysicalFinancialAdvanceReport.add_programmed_table(workbook, worksheet_1, information_json)
         PhysicalFinancialAdvanceReport.add_progress_table(workbook, worksheet_2, information_json)
 
         workbook.close()
@@ -273,11 +273,25 @@ class PhysicalFinancialAdvanceReport(object):
 
         financial_report = info['physical_financial_advance']
 
+        # Variables to get the values with taxes included.
+        total_programmed_tax = 0
+        total_contracted_tax = 0
+        total_physical_advance_tax = 0
+        total_financial_advance_tax = 0
+
+
         row_counter = 3
         for top_line_item in financial_report['line_items']:
             start_row = row_counter
 
             for sub_line_item in top_line_item['sub_line_items']:
+                # Adding the general variables.
+                total_programmed_tax += sub_line_item['total_programmed_tax']
+                total_contracted_tax += sub_line_item['total_contracted_tax']
+                total_physical_advance_tax += sub_line_item['total_physical_advance_tax']
+                total_financial_advance_tax += sub_line_item['total_financial_advance_tax']
+
+
                 worksheet.write(row_counter, SUB_LINE_ITEM_COL, sub_line_item['name'], formats['centered_bold'])
                 worksheet.write(row_counter, IMPORT_COL, sub_line_item['total_programmed'], currency_format)
                 worksheet.write(row_counter, CONTRACTED_COL, sub_line_item['total_contracted'], currency_format)
@@ -296,11 +310,9 @@ class PhysicalFinancialAdvanceReport(object):
                 worksheet.write(row_counter, PHYSICAL_ADVANCE_COL, total_physical_advance_percentage,
                                 percentage_format)
 
-
-
-
-
                 row_counter += 1
+            # Ends sub_line_item for.
+        # Ends top_line_item for.
 
             worksheet.merge_range(start_row, TOP_LINE_ITEM_COL, row_counter-1, TOP_LINE_ITEM_COL, top_line_item['name'],
                                   bold_format)
@@ -336,6 +348,15 @@ class PhysicalFinancialAdvanceReport(object):
 
         # IVA Info.
         row_counter += 1
+        worksheet.write(row_counter, TOP_LINE_ITEM_COL, "IVA", bold_format)
+        worksheet.write(row_counter, SUB_LINE_ITEM_COL, "", bold_format)
+        worksheet.write(row_counter, IMPORT_COL, total_programmed_tax, currency_format)
+        worksheet.write(row_counter, CONTRACTED_COL, total_contracted_tax, currency_format)
+        worksheet.write(row_counter, FINANCIAL_ESTIMATED_COL, total_financial_advance_tax, currency_format)
+        worksheet.write(row_counter, PHYSICAL_ESTIMATED_COL, total_physical_advance_tax, currency_format)
+        worksheet.write(row_counter, FINANCIAL_ADVANCE_COL, '', currency_format)
+        worksheet.write(row_counter, PHYSICAL_ADVANCE_COL, '', currency_format)
+
 
         # Total Info.
         row_counter += 1
