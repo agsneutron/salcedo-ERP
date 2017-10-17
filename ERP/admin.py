@@ -365,6 +365,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def save_model(self, request, obj, form, change):
+
         return super(ProgressEstimateAdmin, self).save_model(request, obj, form, change)
 
     def has_add_permission(self, request):
