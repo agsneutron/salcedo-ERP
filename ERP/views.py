@@ -4,9 +4,13 @@ from __future__ import unicode_literals
 import operator
 import urllib
 import locale
+import decimal
 from datetime import date
 
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.forms.models import modelformset_factory
+from django.http import HttpResponseForbidden
 from django.shortcuts import render, redirect, render_to_response
 from django.template import RequestContext, loader
 import datetime
@@ -21,7 +25,7 @@ from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
     Contact, AccessToProject, \
-    ProjectSections, ContractConcepts
+    ProjectSections, ContractConcepts, ProgressEstimateAuthorization, EstimateAdvanceAuthorization
 from django.db.models import Q
 import json
 
@@ -30,6 +34,8 @@ from ERP.lib.utilities import Utilities
 from SalcedoERP.lib.constants import Constants
 
 from django.forms import formset_factory
+
+from users.models import ERPUser
 
 
 def custom_404(request):
@@ -83,6 +89,125 @@ def progress_estimate_log_view(request):
     return render(request, 'ProgressEstimateLog/progress_estimate_log_form.html', params)
 
 
+def unlock_estimate(request, pk):
+    if request.method == 'POST':
+        estimate = Estimate.objects.get(pk=pk)
+        amount = request.POST.get('liquidation_amount')
+
+        if amount == "":
+            messages.error(request, 'Tienes que definir un finiquito para desbloquear la estimación.')
+            return HttpResponseRedirect('/admin/ERP/estimate/' + str(estimate.id) + '/')
+
+        estimate.lock_status = 'U'
+
+        estimate.save()
+
+        advance = ProgressEstimate()
+
+        advance.estimate = estimate
+        advance.key = 'FINIQUITO'
+        advance.amount = amount
+        advance.type = ProgressEstimate.SETTLEMENT
+        advance.payment_status = ProgressEstimate.NOT_PAID
+
+        advance.save()
+
+        return HttpResponseRedirect('/admin/ERP/estimate/' + str(estimate.id) + '/')
+    else:
+
+        to_delete = ProgressEstimate.objects.filter(type=ProgressEstimate.SETTLEMENT)
+        for item in to_delete:
+            item.delete()
+
+        raise PermissionDenied
+
+
+def approve_progress_estimate(request, pk):
+    if request.method == 'POST':
+        progress_estimate = ProgressEstimate.objects.get(pk=pk)
+
+        user = request.user
+        user_full_name = user.first_name + ' ' + user.last_name
+
+        permissions = ['users.is_general_director',
+                       'users.is_project_director',
+                       'users.is_vicepresident',
+                       'users.is_head_manager',
+                       'users.is_president']
+
+        permission_roles = {'users.is_general_director': 'Director General',
+                            'users.is_project_director': 'Director de Obras',
+                            'users.is_vicepresident': 'Vicepresidente Empresarial',
+                            'users.is_head_manager': 'Jefe de Administración',
+                            'users.is_president': 'Presidente'}
+
+        for permission in permissions:
+            if user.has_perm(permission):
+
+                test_authorization = ProgressEstimateAuthorization.objects.filter(
+                    Q(user_id=user.id) & Q(progress_estimate_id=progress_estimate.id))
+
+                if len(test_authorization) == 0:
+                    authorization = ProgressEstimateAuthorization()
+                    authorization.full_name = permission_roles[permission] + ': ' + user_full_name
+                    authorization.user = user
+                    authorization.progress_estimate = progress_estimate
+
+                    authorization.save()
+
+        return HttpResponseRedirect('/admin/ERP/estimate/' + str(progress_estimate.estimate.id) + '/')
+    else:
+
+        to_delete = ProgressEstimate.objects.filter(type=ProgressEstimate.SETTLEMENT)
+        for item in to_delete:
+            item.delete()
+
+        raise PermissionDenied
+
+
+def approve_estimate_advance(request, pk):
+    if request.method == 'POST':
+        estimate = Estimate.objects.get(pk=pk)
+
+        user = request.user
+        user_full_name = user.first_name + ' ' + user.last_name
+
+        permissions = ['users.is_general_director',
+                       'users.is_project_director',
+                       'users.is_vicepresident',
+                       'users.is_head_manager',
+                       'users.is_president']
+
+        permission_roles = {'users.is_general_director': 'Director General',
+                            'users.is_project_director': 'Director de Obras',
+                            'users.is_vicepresident': 'Vicepresidente Empresarial',
+                            'users.is_head_manager': 'Jefe de Administración',
+                            'users.is_president': 'Presidente'}
+
+        for permission in permissions:
+            if user.has_perm(permission):
+
+                test_authorization = EstimateAdvanceAuthorization.objects.filter(
+                    Q(user_id=user.id) & Q(estimate_id=estimate.id))
+
+                if len(test_authorization) == 0:
+                    authorization = EstimateAdvanceAuthorization()
+                    authorization.full_name = permission_roles[permission] + ': ' + user_full_name
+                    authorization.user = user
+                    authorization.estimate = estimate
+
+                    authorization.save()
+
+        return HttpResponseRedirect('/admin/ERP/estimate/' + str(estimate.id) + '/')
+    else:
+
+        to_delete = ProgressEstimate.objects.filter(type=ProgressEstimate.SETTLEMENT)
+        for item in to_delete:
+            item.delete()
+
+        raise PermissionDenied
+
+
 # def upload_file(request):
 #     if request.method == 'POST':
 #         form = LineItemUploadForm(request.POST, request.FILES)
@@ -131,6 +256,11 @@ class CompaniesListView(ListView):
         context['query_string'] = '&q=' + CompaniesListView.query
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_empresa'):
+            raise PermissionDenied
+        return super(CompaniesListView, self).dispatch(request, args, kwargs)
 
 
 class CompanyDetailView(generic.DetailView):
@@ -182,6 +312,11 @@ class ContractorListView(ListView):
         context['has_query'] = (CompaniesListView.query is not None) and (CompaniesListView.query != "")
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_contratista'):
+            raise PermissionDenied
+        return super(ContractorListView, self).dispatch(request, args, kwargs)
+
 
 class ContractorDetailView(generic.DetailView):
     model = Contratista
@@ -193,6 +328,11 @@ class ContractorDetailView(generic.DetailView):
         context['contacts'] = Contact.objects.filter(Q(contractor__id=contractor_id))
         context['contracts'] = ContratoContratista.objects.filter(Q(contratista=contractor_id))
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_contratista'):
+            raise PermissionDenied
+        return super(ContractorDetailView, self).dispatch(request, args, kwargs)
 
 
 # Views for the model ContratoContratista.
@@ -222,6 +362,14 @@ class ContractorContractListView(ListView):
         else:
             ContractorContractListView.query = ''
 
+        # Get the projects to which the user has access
+        user = self.request.user
+
+        project_ids = AccessToProject.get_projects_for_user(user.id)
+        if len(project_ids) > 0:
+            # Filter the result to only include the appropriate results
+            result = result.filter(reduce(operator.or_, (Q(project_id=pid) for pid in project_ids)))
+
         return result
 
     def get_context_data(self, **kwargs):
@@ -234,6 +382,11 @@ class ContractorContractListView(ListView):
         print context
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_contratocontratista'):
+            raise PermissionDenied
+        return super(ContractorContractListView, self).dispatch(request, args, kwargs)
+
 
 class ContractorContractDetailView(generic.DetailView):
     model = ContratoContratista
@@ -243,7 +396,38 @@ class ContractorContractDetailView(generic.DetailView):
         context = super(ContractorContractDetailView, self).get_context_data(**kwargs)
         contract_id = self.kwargs['pk']
         context['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id))
+        # Getting, if exists, the advance payment for the contract
+        try:
+            estimate = Estimate.objects.get(contract__id=contract_id)
+        except Estimate.DoesNotExist:
+            estimate = None
+
+        advance_payment = None
+        advance_payment_status = ""
+
+        if estimate:
+            advance_payment = estimate.advance_payment_amount
+
+        if advance_payment == None:
+            advance_payment = "No se ha registrado un anticipo."
+            advance_payment_status = "Estatus no disponible."
+        else:
+            advance_payment = Utilities.number_to_currency(advance_payment)
+            advance_payment_status = estimate.get_advance_payment_status_display()
+
+        context['advance_payment'] = advance_payment
+        context['advance_payment_status'] = advance_payment_status
+
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        contract_id = kwargs['pk']
+        project_id = ContratoContratista.objects.get(pk=contract_id).project_id
+        user = request.user
+        user_has_access = AccessToProject.user_has_access_to_project(user.id, project_id)
+        if user_has_access and user.has_perm('ERP.view_list_contratocontratista'):
+            return super(ContractorContractDetailView, self).dispatch(request, args, kwargs)
+        raise PermissionDenied
 
 
 # Views for the model Propietaro.
@@ -402,6 +586,13 @@ class LineItemListView(ListView):
 
         return result
 
+    def dispatch(self, request, *args, **kwargs):
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, kwargs['project'])
+        user = request.user
+        if user_has_access and user.has_perm('ERP.view_list_project'):
+            return super(LineItemListView, self).dispatch(request, args, kwargs)
+        raise PermissionDenied
+
     def get_context_data(self, **kwargs):
         context = super(LineItemListView, self).get_context_data(**kwargs)
         context['title_list'] = LineItemListView.title_list + LineItemListView.current_type_full
@@ -412,8 +603,14 @@ class LineItemListView(ListView):
         context['current_type_full'] = LineItemListView.current_type_full
 
         # Getting the concept inputs for the selected Line Item parent.
-        context['concepts_inputs'] = Concept_Input.objects.filter(
+        ciqs = Concept_Input.objects.filter(
             Q(line_item=LineItemListView.parent_id) & Q(type=LineItemListView.current_type))
+
+        for item in ciqs:
+            item.total = Utilities.number_to_currency(item.quantity * item.unit_price)
+
+        context['concepts_inputs'] = ciqs
+
         if LineItemListView.parent_id is not None:
             context['parent_line_item'] = LineItem.objects.get(pk=LineItemListView.parent_id)
 
@@ -482,6 +679,11 @@ class ProjectListView(ListView):
         context['has_query'] = (ProjectListView.query is not None) and (ProjectListView.query != "")
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_project'):
+            raise PermissionDenied
+        return super(ProjectListView, self).dispatch(request, args, kwargs)
+
 
 class ProjectDetailView(generic.DetailView):
     model = Project
@@ -538,6 +740,13 @@ class ProjectDetailView(generic.DetailView):
 
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        user_has_access = AccessToProject.user_has_access_to_project(user.id, kwargs['pk'])
+        if user_has_access and user.has_perm('ERP.view_list_project'):
+            return super(ProjectDetailView, self).dispatch(request, args, kwargs)
+        raise PermissionDenied
+
 
 class ProgressEstimateLogListView(ListView):
     model = ProgressEstimateLog
@@ -591,6 +800,17 @@ class ProgressEstimateLogListView(ListView):
             ProgressEstimateLogListView.query != "")
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        project_id = request.GET.get('project')
+
+        if project_id is None:
+            raise PermissionDenied
+        user = request.user
+        user_has_access = AccessToProject.user_has_access_to_project(user.id, project_id)
+        if user_has_access and user.has_perm('ERP.view_list_project'):
+            return super(ProgressEstimateLogListView, self).dispatch(request, args, kwargs)
+        raise PermissionDenied
+
 
 '''class ProgressEstimateLogDetailView(generic.DetailView):
     model = ProgressEstimateLog
@@ -607,6 +827,20 @@ class ProgressEstimateLogDetailView(generic.DetailView):
         context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
 
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        pk = kwargs['pk']
+        project = ProgressEstimateLog.objects.get(pk=pk).project
+
+        if project is None:
+            raise PermissionDenied
+
+        user = request.user
+        user_has_access = AccessToProject.user_has_access_to_project(user.id, project.id)
+        if user_has_access and user.has_perm('ERP.view_list_project'):
+            return super(ProgressEstimateLogDetailView, self).dispatch(request, args, kwargs)
+
+        raise PermissionDenied
 
 
 # Views for the model Estimate.
@@ -687,11 +921,25 @@ class EstimateListView(ListView):
 
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, kwargs['project'])
+        user = request.user
+        if user_has_access and user.has_perm('ERP.view_list_project'):
+            return super(EstimateListView, self).dispatch(request, args, kwargs)
+        raise PermissionDenied
+
 
 class EstimateDelete(DeleteView):
     model = Estimate
     success_url = ""
-    template_name = "ERP/estimate_confirm_delete.html"
+
+    # template_name = "ERP/estimate_confirm_delete.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        if user.has_perm('ERP.delete_estimate'):
+            return super(EstimateDelete, self).dispatch(request, *args, **kwargs)
+        raise PermissionDenied
 
     def delete(self, request, *args, **kwargs):
         print "About to delete."
@@ -710,14 +958,30 @@ class EstimateDetailView(generic.DetailView):
 
         # Shallow copy for the main object.
         estimate = context['estimate']
+        contract_amount = estimate.contract.monto_contrato
         estimate.contract.monto_contrato = Utilities.number_to_currency(estimate.contract.monto_contrato)
         estimate.contract_amount_override = Utilities.number_to_currency(estimate.contract_amount_override)
 
         progress_estimates = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
 
+        total = estimate.advance_payment_amount
+        context['advance_percentage'] = "{0:.0f}%".format(total / contract_amount * 100)
+
+        estimate.advance_payment_amount = locale.currency(estimate.advance_payment_amount, grouping=True)
+
+        current_user_can_approve = estimate.user_can_approve(self.request.user.id)
+        context['current_user_can_approve'] = current_user_can_approve
+        estimate.show_approval_button = not estimate.has_been_approved_by(
+            self.request.user.id) and current_user_can_approve
+
         for record in progress_estimates:
+            total += record.amount
             record.amount = locale.currency(record.amount, grouping=True)
-            record.progress = "{0:.0f}%".format(record.progress * 100)
+            percentage = total / contract_amount
+            record.progress = "{0:.0f}%".format(percentage * 100)
+
+            record.show_approval_button = not record.has_been_approved_by(
+                self.request.user.id) and current_user_can_approve
 
         context['progress_estimates'] = progress_estimates
 
@@ -727,6 +991,22 @@ class EstimateDetailView(generic.DetailView):
         context['contract_concepts'] = concepts
 
         return context
+
+    def get(self, request, *args, **kwargs):
+        if request.method == 'POST':
+            liquidation_amount = request.POST.get('liquidation_amount')
+            print liquidation_amount
+
+        return super(EstimateDetailView, self).get(request, args, kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        estimate_id = kwargs['pk']
+        project_id = Estimate.objects.get(pk=estimate_id).contract.project_id
+        user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project_id)
+        user = request.user
+        if user_has_access and user.has_perm('ERP.view_list_project'):
+            return super(EstimateDetailView, self).dispatch(request, args, kwargs)
+        raise PermissionDenied
 
 
 class DashBoardView(ListView):
@@ -745,6 +1025,14 @@ class DashBoardView(ListView):
         context['project_id'] = DashBoardView.project_id
         context['project'] = Project.objects.filter(Q(id=DashBoardView.project_id))
         return context
+
+    def dispatch(self, request, *args, **kwargs):
+        user = request.user
+        user_has_access_to_project = AccessToProject.user_has_access_to_project(user.id, kwargs['project'])
+        print 'access:' + str(user_has_access_to_project)
+        if user_has_access_to_project and user.has_perm('ERP.view_list_project'):
+            return super(DashBoardView, self).dispatch(request, args, kwargs)
+        raise PermissionDenied
 
 
 # Views for the model UploadedInputExplotionsHistory.

@@ -1,6 +1,8 @@
 # coding=utf-8
 from django import forms
 from django.contrib.admin import widgets
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 from django.contrib import messages
@@ -9,11 +11,13 @@ from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
 from users.models import ERPUser
+from django.utils.translation import ugettext as _
 
 import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
-    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input
+    ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input, AccessToProject, \
+    ProgressEstimate
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -158,10 +162,10 @@ class ProgressEstimateLogForm(forms.ModelForm):
     class Meta:
         model = ProgressEstimateLog
         fields = '__all__'
-        exclue = ()
+        exclude = ()
         widgets = {
             # 'user': forms.HiddenInput(),
-            'progress_estimate': forms.HiddenInput()
+            'project': forms.HiddenInput()
         }
 
     def __init__(self, *args, **kwargs):
@@ -169,9 +173,10 @@ class ProgressEstimateLogForm(forms.ModelForm):
         self.project_id = kwargs.pop('project_id', None)
         self.user_id = kwargs.pop('user_id', None)
 
-
         if not kwargs.get('initial'):
-            kwargs['initial'] = {}
+            kwargs['initial'] = {
+                'project': self.project_id
+            }
 
         kwargs['initial'].update({'project': self.project_id})
         # kwargs['initial'].update({'user': self.user_id})
@@ -202,8 +207,14 @@ class ProgressEstimateLogForm(forms.ModelForm):
     def clean(self):
         # Then call the clean() method of the super  class
         cleaned_data = super(ProgressEstimateLogForm, self).clean()
-        cleaned_data['user'] = ERPUser.objects.get(pk=self.user_id)
+        cleaned_data['user'] = User.objects.get(pk=self.user_id)
+        self.cleaned_data['project'] = Project.objects.get(pk=self.project_id)
+
         return cleaned_data
+
+    def save(self, commit=True):
+        self.instance.project = Project.objects.get(pk=self.project_id)
+        return super(ProgressEstimateLogForm, self).save(commit)
 
 
 '''
@@ -220,6 +231,46 @@ class LogFileForm(forms.ModelForm):
         }
 
 
+class ProgressEstimateForm(forms.ModelForm):
+    class Meta:
+        model = ProgressEstimate
+        fields = "__all__"
+
+    def clean(self):
+
+        is_new = self.instance.pk is None
+
+        is_unlocked = not is_new and self.instance.estimate.lock_status == Estimate.UNLOCKED
+
+        cleaned_data = super(ProgressEstimateForm, self).clean()
+
+        estimate = cleaned_data['estimate']
+        new_amount = cleaned_data['amount']
+        accumulated_amount = estimate.get_accumulated_amount()
+        contract_amount = estimate.contract.monto_contrato
+
+        if is_new:
+            accumulated_amount = accumulated_amount + new_amount
+        else:
+            old_amount = self.instance.amount
+            accumulated_amount = accumulated_amount - old_amount + new_amount
+            if is_unlocked and self.instance.type == ProgressEstimate.PROGRESS:
+                # Payment amount can't be changed
+                if old_amount != new_amount:
+                    self._errors["amount"] = self.error_class(
+                        ['El monto no puede cambiar una vez que se ha definido un finiquito.'])
+                    raise ValidationError('Error en la cantidad')
+
+        new_percentage = accumulated_amount / contract_amount
+
+        if new_percentage > 0.8 and self.instance.type == ProgressEstimate.PROGRESS:
+            self._errors["amount"] = self.error_class(
+                ['El monto acumulado no puede superar el 80% si la estimación no ha sido liberada.'])
+            raise ValidationError('Error en la cantidad')
+
+        return cleaned_data
+
+
 '''
     Forms for the progress estimate.
 '''
@@ -231,6 +282,9 @@ class ContractForm(forms.ModelForm):
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
+        print args
+        print '--'
+        print kwargs
         self.request = kwargs.pop('request', None)
         super(ContractForm, self).__init__(*args, **kwargs)
         # self.fields['fecha_inicio'].widget = widgets.AdminDateWidget()
@@ -270,8 +324,6 @@ class ContractConceptsForm(forms.ModelForm):
             if len(self.fields['concept'].queryset) == 0:
                 messages.error(self.request,
                                "Ya no hay más conceptos que se puedan agregar al contrato.")
-
-
 
 
 class EstimateSearchForm(forms.Form):
@@ -321,8 +373,15 @@ class OwnerForm(forms.ModelForm):
 
         kwargs['initial'].update({'empresa': self.company_id})
         super(OwnerForm, self).__init__(*args, **kwargs)
+
         if self.company_id is not None:
             self.fields['empresa'].queryset = Empresa.objects.filter(pk=self.company_id)
+
+    def clean(self):
+        cleaned_data = super(OwnerForm,self).clean()
+        print 'cleaned-data'
+        print cleaned_data
+        return cleaned_data
 
 
 class ContactForm(forms.ModelForm):

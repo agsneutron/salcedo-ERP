@@ -79,6 +79,7 @@
                         <div class="col-sm-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
+
                                     {{ field.label_tag }}
                                     {{ field.field|addcss:"form-control" }}
                                     {{ field.errors }}
@@ -86,6 +87,9 @@
                             </div>
                         </div>
                     {% endif %}
+
+
+
                 {% endfor %}
             {% endfor %}
         </fieldset>
@@ -157,6 +161,18 @@
                             </div>
                         </div>
                     {% endif %}
+
+                     {% if field.field.name == "groups" %}
+                        <div class="form-group field-{{ field.field.name }}">
+                            <div>
+                                {{ field.label_tag }}
+                                {{ field.field|addcss:"form-control" }}
+                                {{ field.errors }}
+                            </div>
+                        </div>
+                    {% endif %}
+
+
                 {% endfor %}
             {% endfor %}
         </fieldset>

@@ -1,0 +1,74 @@
+[
+  {
+    "model": "users.erpuser",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "profile_picture": "documentos_del_usuario/1/profile_Screen_Shot_2017-09-26_at_16.57.31.png"
+    }
+  },
+  {
+    "model": "users.erpuser",
+    "pk": 2,
+    "fields": {
+      "user": 2,
+      "profile_picture": "documentos_del_usuario/2/profile_Screen_Shot_2017-09-26_at_16.56.30.png"
+    }
+  },
+  {
+    "model": "users.erpuser",
+    "pk": 3,
+    "fields": {
+      "user": 7,
+      "profile_picture": "documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png"
+    }
+  },
+  {
+    "model": "users.erpuser",
+    "pk": 4,
+    "fields": {
+      "user": 15,
+      "profile_picture": "documentos_del_usuario/15/profile_Screen_Shot_2017-10-16_at_13.18.59_IK3STm3.png"
+    }
+  },
+  {
+    "model": "users.erpuser",
+    "pk": 5,
+    "fields": {
+      "user": 21,
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "users.erpuser",
+    "pk": 6,
+    "fields": {
+      "user": 20,
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "users.erpuser",
+    "pk": 7,
+    "fields": {
+      "user": 19,
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "users.erpuser",
+    "pk": 8,
+    "fields": {
+      "user": 17,
+      "profile_picture": ""
+    }
+  },
+  {
+    "model": "users.erpuser",
+    "pk": 9,
+    "fields": {
+      "user": 22,
+      "profile_picture": ""
+    }
+  }
+]

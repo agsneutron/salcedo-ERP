@@ -4,7 +4,9 @@ from __future__ import unicode_literals
 import django
 from django.conf.urls import url
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.db.models import Count, Sum
 from django.http import Http404
 from django.shortcuts import redirect
 
@@ -12,7 +14,7 @@ from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm, \
-    ContactForm, ContractConceptsForm
+    ContactForm, ContractConceptsForm, ProgressEstimateForm
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, \
     ProgressEstimateLogForm, OwnerForm
 
@@ -54,14 +56,14 @@ class LineItemAdmin(admin.ModelAdmin):
 
 
 class LogFileAdmin(admin.ModelAdmin):
-    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime', 'version',)
+    list_display = ('id', 'progress_estimate_log', 'file',)
+    fields = ('id', 'progress_estimate_log', 'file', 'version',)
     model = LogFile
 
 
 class LogFileInline(admin.TabularInline):
-    list_display = ('id', 'progress_estimate_log', 'file', 'mime',)
-    fields = ('id', 'progress_estimate_log', 'file', 'mime', 'version',)
+    list_display = ('id', 'progress_estimate_log', 'file',)
+    fields = ('id', 'progress_estimate_log', 'file', 'version',)
     model = LogFile
     extra = 1
 
@@ -77,7 +79,17 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
+
+        project_id = request.GET.get('project')
+
+        if project_id is None:
+            raise PermissionDenied
+
+        project_qs = Project.objects.filter(id=project_id)
+
         project = ModelFormE.base_fields['project']
+
+        project.queryset = project_qs
 
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
@@ -116,6 +128,29 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
             return HttpResponseRedirect('/admin/ERP/progressestimatelog/?project=' + project_id)
         else:
             return super(ProgressEstimateLogAdmin, self).response_add(request, obj, post_url_continue)
+
+    # here
+    def has_add_permission(self, request):
+        project_id = request.GET.get('project')
+        if project_id is None:
+            return False
+        else:
+            user = request.user
+            user_has_access = AccessToProject.user_has_access_to_project(user.id, project_id)
+            if user_has_access and user.has_perm('ERP.view_list_project'):
+                return True
+            return False
+
+    def has_change_permission(self, request, obj=None):
+        user = request.user
+
+        if user.has_perm('ERP.change_progressestimatelog') and user.has_perm('ERP.view_list_project'):
+            if obj is not None:
+                return AccessToProject.user_has_access_to_project(user.id, obj.project_id)
+            else:
+                return True
+        else:
+            return False
 
 
 class ProgressEstimateInline(admin.TabularInline):
@@ -215,14 +250,14 @@ class EmpleadoAdmin(admin.ModelAdmin):
 
 
 class ContratoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'codigo_obra', 'objeto_contrato')
-    search_fields = ('codigo_obra', 'objeto_contrato')
-    list_display_links = ('id', 'codigo_obra', 'objeto_contrato')
+    list_display = ('id', 'objeto_contrato')
+    search_fields = ('objeto_contrato')
+    list_display_links = ('id', 'objeto_contrato')
     list_per_page = 50
 
     def get_fields(self, request, obj=None):
         fields = (
-            'no_licitacion', 'modalidad_contrato', 'dependencia', 'codigo_obra', 'contratista', 'dias_pactados',
+            'no_licitacion', 'modalidad_contrato', 'dependencia', 'contratista', 'dias_pactados',
             'fecha_firma',
             'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
             'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')
@@ -262,9 +297,11 @@ class PropietarioAdmin(admin.ModelAdmin):
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):
-    list_display = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file', 'payment_status')
-    fields = ('estimate', 'key', 'progress', 'amount', 'type', 'generator_file', 'payment_status', 'version',)
+    list_display = ('estimate', 'key', 'amount', 'generator_file', 'payment_status')
+    fields = ('estimate', 'key', 'amount', 'generator_file', 'payment_status', 'version',)
     model = ProgressEstimate
+
+    form = ProgressEstimateForm
 
     def response_change(self, request, obj):
         """This makes the response after adding go to another apps changelist for some model"""
@@ -275,12 +312,27 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
         return HttpResponseRedirect('/admin/ERP/estimate/' + str(obj.estimate.id))
 
     def get_form(self, request, obj=None, **kwargs):
-        estimate_id = request.GET.get('estimate')
 
         if obj is not None:
-            obj.progress *= 100
+            estimate_id = obj.estimate.id
+        else:
+            estimate_id = request.GET.get('estimate')
 
         form = super(ProgressEstimateAdmin, self).get_form(request, obj, **kwargs)
+
+        if estimate_id is not None:
+            qs = Estimate.objects.filter(pk=estimate_id)
+            if qs.exists():
+                estimate = qs[0]
+                form.contract_amount = estimate.contract.monto_contrato
+
+                accumulated = estimate.get_accumulated_amount()
+
+                form.contract_amount_accumulated = "{0:.2f}%".format(
+                    accumulated / estimate.contract.monto_contrato * 100)
+
+        amount_field = form.base_fields['amount']
+        amount_field.widget = forms.NumberInput(attrs={'step': .1})
 
         if obj is None and estimate_id is not None:
             qs = Estimate.objects.filter(pk=estimate_id)
@@ -291,6 +343,8 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 
                 estimate_field.widget.can_add_related = False
                 estimate_field.widget.can_change_related = False
+
+
             else:
                 raise Http404(
                     'No existe la estimación especificada.')
@@ -301,16 +355,55 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
             estimate_field.widget.can_add_related = False
             estimate_field.widget.can_change_related = False
 
+            if not request.user.has_perm('ERP.can_unlock_estimate') and obj.type == ProgressEstimate.SETTLEMENT:
+                amount_field.widget.attrs['readonly'] = True
+
+            if obj.type == ProgressEstimate.PROGRESS and obj.estimate.lock_status == Estimate.UNLOCKED:
+                amount_field.widget.attrs['readonly'] = True
+
         else:
             raise Http404(
                 'No existe esta página. Para editar una estimación, hazlo a través de las opciones del sistema.')
 
         return form
 
+    def get_urls(self):
+        urls = super(ProgressEstimateAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/approve', views.approve_progress_estimate, name='progress-estimate-approve'),
+        ]
+        return my_urls + urls
+
     def save_model(self, request, obj, form, change):
-        obj.progress = obj.progress / Decimal(100.00)
-        print obj.progress
+
         return super(ProgressEstimateAdmin, self).save_model(request, obj, form, change)
+
+    def has_add_permission(self, request):
+        estimate_id = request.GET.get('estimate')
+        if estimate_id is None:
+            return False
+        else:
+            estimate = Estimate.objects.get(pk=estimate_id)
+            user = request.user
+            user_has_access = AccessToProject.user_has_access_to_project(user.id, estimate.contract.project_id)
+            if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm('ERP.add_progressestimate'):
+                return True
+            return False
+
+    def has_change_permission(self, request, obj=None):
+        user = request.user
+
+        if user.has_perm('ERP.change_progressestimate'):
+            if obj is not None:
+                user_has_access = AccessToProject.user_has_access_to_project(user.id, obj.estimate.contract.project_id)
+                if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm(
+                        'ERP.change_progressestimate') and obj.payment_status == ProgressEstimate.NOT_PAID:
+                    return True
+                return False
+            else:
+                return False
+        else:
+            return False
 
 
 class AccessToProjectAdmin(admin.ModelAdmin):
@@ -328,12 +421,10 @@ class AccessToProjectAdmin(admin.ModelAdmin):
 
         projects_array = []
 
-
         for project in projects_set:
             projects_array.append(project['project__id'])
 
         available_projects = Project.objects.exclude(Q(id__in=projects_array))
-
 
         if not available_projects.exists():
             custom_message = "No hay proyectos pendientes de asignación para el usuario actual."
@@ -341,7 +432,6 @@ class AccessToProjectAdmin(admin.ModelAdmin):
 
             if len(messages_list) <= 0:
                 messages.error(request, custom_message)
-
 
         project_field.queryset = available_projects
 
@@ -366,12 +456,10 @@ class AccessToProjectAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-
     def response_delete(self, request, obj_display, obj_id):
         user_id = request.GET.get('user')
 
-        return HttpResponseRedirect("/admin/ERP/accesstoproject/?user="+str(user_id))
-
+        return HttpResponseRedirect("/admin/ERP/accesstoproject/?user=" + str(user_id))
 
 
 class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
@@ -388,7 +476,6 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
         # Fet the field for the project to restrict.
         project = ModelForm.base_fields['project']
         project.queryset = Project.objects.filter(pk=project_id)
-
 
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
@@ -442,6 +529,16 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
             return HttpResponseRedirect('/admin/ERP/uploadedcatalogshistory/?project=' + project_id)
         else:
             return super(UploadedCatalogsHistoryAdmin, self).response_add(request, obj, post_url_continue)
+
+    def has_add_permission(self, request):
+        project_id = request.GET.get('project')
+        if project_id is None:
+            return False
+        else:
+            user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project_id)
+            if user_has_access:
+                return True
+            return False
 
 
 class UploadedInputExplotionHistoryAdmin(admin.ModelAdmin):
@@ -721,15 +818,16 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         modalidad_contrato.widget.can_add_related = False
         modalidad_contrato.widget.can_change_related = False
 
+        project_ids = AccessToProject.get_projects_for_user(request.user.id)
+        ModelForm.base_fields['project'].queryset = Project.objects.filter(pk__in=project_ids)
+
         return ModelForm
 
     def get_fields(self, request, obj=None):
         fields = (
-            'clave_contrato', 'project', 'line_item', 'no_licitacion', 'contratista', 'modalidad_contrato', 'dias_pactados',
-            'codigo_obra', 'dependencia',
-            'fecha_firma', 'fecha_inicio', 'fecha_termino',
-            'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', )
+            'clave_contrato', 'project', 'line_item', 'no_licitacion', 'contratista', 'modalidad_contrato',
+            'dias_pactados', 'dependencia', 'fecha_firma', 'fecha_inicio', 'fecha_termino',
+            'monto_contrato', 'porcentaje_iva', 'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version',)
         return fields
 
     def get_urls(self):
@@ -743,9 +841,24 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-
     def response_add(self, request, obj, post_url_continue="../%s/"):
         return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id))
+
+    def has_add_permission(self, request):
+        if request.user.has_perm('ERP.add_contratocontratista'):
+            return True
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        user = request.user
+
+        if user.has_perm('ERP.change_contratocontratista'):
+            if obj is not None:
+                return AccessToProject.user_has_access_to_project(user.id, obj.project_id)
+            else:
+                return True
+        else:
+            return False
 
 
 class ConceptForContractsInlines(admin.TabularInline):
@@ -766,7 +879,8 @@ class ContractConceptsAdmin(admin.ModelAdmin):
             contract_concept = ContractConcepts.objects.filter(Q(concept_id=c.id))
 
             if len(contract_concept) == 0:
-                response.append({'key': str(c.id), 'amount': str(c.quantity) + ' ' + c.unit.abbreviation, 'resting': str(c.quantity) + ' ' +c.unit.abbreviation})
+                response.append({'key': str(c.id), 'amount': str(c.quantity) + ' ' + c.unit.abbreviation,
+                                 'resting': str(c.quantity) + ' ' + c.unit.abbreviation})
             else:
                 contracted_amount = contract_concept[0].amount
                 response.append(
@@ -792,7 +906,6 @@ class ContractConceptsAdmin(admin.ModelAdmin):
         else:
             return HttpResponseRedirect(
                 "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
-
 
     def response_add(self, request, obj, post_url_continue="../%s/"):
         if '_continue' not in request.POST:
@@ -884,17 +997,18 @@ class ConceptInputAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+
 class PaymentScheduleInline(admin.TabularInline):
-    model= PaymentSchedule
+    model = PaymentSchedule
     extra = 0
     ordering = ("year", "month")
-    fields = ('project','year', 'month', 'amount')
+    fields = ('project', 'year', 'month', 'amount')
+
 
 @admin.register(Project)
 class ProjectModelAdmin(admin.ModelAdmin):
     inlines = (TipoProyectoDetalleInline, PaymentScheduleInline)
     exclude = None
-
 
     @staticmethod
     def get_project_settings(project_id):
@@ -922,7 +1036,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
                     "inner_section_status": inner_section.status,
                     "inner_section_short_name": inner_section.section.short_section_name
                 }
-                if inner_section.status ==1:
+                if inner_section.status == 1:
                     i += 1
                 section_json["inner_sections"].append(inner_json)
             section_json["total_inner_sections"] = i
@@ -1068,10 +1182,9 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
-                    if inner_section['inner_section_status'] == 0 and inner_section['inner_section_short_name'] in sections_dictionary:
+                    if inner_section['inner_section_status'] == 0 and inner_section[
+                        'inner_section_short_name'] in sections_dictionary:
                         fields_to_exclude += sections_dictionary[inner_section['inner_section_short_name']]
-
-
 
             if len(fields_to_exclude) > 0:
                 self.exclude = fields_to_exclude
@@ -1090,7 +1203,32 @@ class ProjectModelAdmin(admin.ModelAdmin):
         extra['sections_result'] = sections_result
 
         return super(ProjectModelAdmin, self).change_view(request, object_id,
-                                                     form_url, extra_context=extra)
+                                                          form_url, extra_context=extra)
+
+    def has_change_permission(self, request, obj=None):
+        user = request.user
+
+        print 'User id: ' + str(user.id)
+        print 'User has perm:' + str(user.has_perm('ERP.change_project'))
+
+        if user.has_perm('ERP.change_project'):
+            if obj is not None:
+                return AccessToProject.user_has_access_to_project(user.id, obj.id)
+            else:
+                return True
+        else:
+            return False
+
+    def has_delete_permission(self, request, obj=None):
+        user = request.user
+        print obj
+        if user.has_perm('ERP.delete_project'):
+            if obj is not None:
+                return AccessToProject.user_has_access_to_project(user.id, obj.id)
+            else:
+                return True
+        else:
+            return False
 
 
 @admin.register(Estimate)
@@ -1108,7 +1246,7 @@ class EstimateAdmin(admin.ModelAdmin):
                 'fields': (
                     'period', 'start_date', 'end_date', 'advance_payment_amount',
                     'advance_payment_date',
-                    'advance_payment_status', 'version')
+                    'advance_payment_status', 'version', 'lock_status')
             }),
     )
 
@@ -1120,7 +1258,6 @@ class EstimateAdmin(admin.ModelAdmin):
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         contract.widget.can_add_related = False
         contract.widget.can_change_related = False
-
 
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
@@ -1136,8 +1273,10 @@ class EstimateAdmin(admin.ModelAdmin):
             url(r'^list/(?P<project>[0-9]+)/$',
                 self.admin_site.admin_view(views.EstimateListView.as_view()),
                 name='estimate-view'),
+            url(r'^(?P<pk>\d+)/unlock$', views.unlock_estimate, name='estimate-detail'),
             url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
-            url(r'^(?P<pk>\d+)/delete$', views.EstimateDelete.as_view(), name='estimate-delete'),
+            url(r'^(?P<pk>\d+)/delete/$', views.EstimateDelete.as_view(), name='estimate-delete'),
+            url(r'^(?P<pk>\d+)/approve', views.approve_estimate_advance, name='estimate-advance-approve'),
 
         ]
 
@@ -1156,6 +1295,28 @@ class EstimateAdmin(admin.ModelAdmin):
             return HttpResponseRedirect('/admin/ERP/estimate/' + str(obj.id) + '/')
         else:
             return super(EstimateAdmin, self).response_add(request, obj, post_url_continue)
+
+    def has_add_permission(self, request):
+        project_id = request.GET.get('project')
+        if project_id is None:
+            return False
+        else:
+            user = request.user
+            user_has_access = AccessToProject.user_has_access_to_project(user.id, project_id)
+            if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm('ERP.add_estimate'):
+                return True
+            return False
+
+    def has_change_permission(self, request, obj=None):
+        user = request.user
+
+        if user.has_perm('ERP.change_estimate'):
+            if obj is not None:
+                return AccessToProject.user_has_access_to_project(user.id, obj.contract.project_id)
+            else:
+                return True
+        else:
+            return False
 
 
 # Simple admin views.

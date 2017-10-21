@@ -48,6 +48,9 @@
 
 
 
+
+
+
                             {% if field.field.name == "payment_status" %}
                                 <div class="row">
                                     <div class="col-md-12">
@@ -68,7 +71,9 @@
                                 {{ field.field|addcss:"form-control" }}
                             {% endif %}
 
-
+                            {% if field.field.name == "project" %}
+                                {{ field.field }}
+                            {% endif %}
 
                         {% endfor %}
                     {% endfor %}

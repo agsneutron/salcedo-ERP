@@ -2,18 +2,19 @@
 from __future__ import unicode_literals
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.forms.models import model_to_dict
-
 
 
 def profile_picture_document_destination(instance, filename):
     return '/'.join(['documentos_del_usuario', str(instance.user.id), 'profile_' + filename])
 
 
-
 # Create your models here.
 class ERPUser(models.Model):
     ADMINISTRATOR = "AD"
+
     DIRECTIVO = "DI"
 
     ROLES_CHOICES = (
@@ -22,7 +23,7 @@ class ERPUser(models.Model):
     )
 
     user = models.OneToOneField(User)
-    rol = models.CharField(max_length=2, choices=ROLES_CHOICES, default=ADMINISTRATOR)
+    # rol = models.CharField(max_length=2, choices=ROLES_CHOICES, default=ADMINISTRATOR)
     # projects = models.ManyToManyField(through=AccessToProject,null=True,blank=True)
 
     profile_picture = models.FileField(blank=True, null=True, upload_to=profile_picture_document_destination,
@@ -30,6 +31,24 @@ class ERPUser(models.Model):
 
     class Meta:
         verbose_name_plural = 'Usuarios'
+
+        # Director General
+        #
+        # Director  de Obras
+        #
+        # Vicepresidente Empresarial
+        #
+        # Jefe de Administración
+        #
+        # Presidente
+
+        permissions = (
+            ("is_general_director", "Es director general"),
+            ("is_project_director", "Es director de obras"),
+            ("is_vicepresident", "Es vicepresidente empresarial"),
+            ("is_head_manager", "Es jefe de administración"),
+            ("is_president", "Es presidente"),
+        )
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -39,8 +58,5 @@ class ERPUser(models.Model):
 
     def __str__(self):
         return self.user.get_username()
-
-
-        # Create your models here.
 
 

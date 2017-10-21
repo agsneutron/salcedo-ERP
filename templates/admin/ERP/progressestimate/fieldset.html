@@ -46,7 +46,7 @@
 
                             {% comment %}<h2 class="text-center">Datos Generales</h2>{% endcomment %}
                             <div class="row">
-                            <hr>
+                                <hr>
                                 <div class="col-md-12">
                                     <div class="form-group field-{{ field.field.name }}">
                                         <div>
@@ -59,8 +59,8 @@
                             </div>
                         {% endif %}
 
-                    {% if field.field.name == "key" %}
-                        <div class="row">
+                        {% if field.field.name == "key" %}
+                            <div class="row">
                             <div class="col-md-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
@@ -73,7 +73,7 @@
 
 
 
-                    {% endif %}
+                        {% endif %}
                     {% if field.field.name == "progress" %}
 
                         <div class="col-md-4">
@@ -99,22 +99,42 @@
                             </div>
                         </div>
 
-                    </div>
-                    {% endif %}
-                    {% if field.field.name == "type" %}
-                    <div class="row">
                         <div class="col-md-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
+                                    <div>Total del Contrato: {{ adminform.form.contract_amount | formatoNumero }}</div>
+
+
+                                    <div>Total Estimado Hasta
+                                        Ahora: {{ adminform.form.contract_amount_accumulated }}</div>
+
+
+                                    <div>
+                                        Porcentaje en esta Estimación:
+                                        <span id="id_porcentaje">0%</span>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
 
+
+                        </div>
                     {% endif %}
+                        {% if field.field.name == "type" %}
+                            <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        {% endif %}
                     {% if field.field.name == "generator_file" %}
 
                         <div class="col-md-4">
@@ -151,7 +171,7 @@
                         {% if field.field.name == "version" %}
                             <div class="row">
                                 <div class="col-md-12">
-                                   {{ field.field|addcss:"form-control" }}
+                                    {{ field.field|addcss:"form-control" }}
                                 </div>
                             </div>
                         {% endif %}
@@ -164,6 +184,3 @@
 
             </div>
 </fieldset>
-
-
-</script>

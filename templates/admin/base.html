@@ -21,12 +21,13 @@
         .sb-site-container {
 
         }
+
         .fixed {
-	position: fixed;
-	top: 0;
-	height: 70px;
-	z-index: 1;
-}
+            position: fixed;
+            top: 0;
+            height: 70px;
+            z-index: 1;
+        }
     </style>
 
 
@@ -45,7 +46,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/theme.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/custom.css" %}"/>
     <!-- Bootstrap Library js -->
-
+    <!-- Latest compiled and minified CSS -->
 
     {% block extrastyle %}{% endblock %}
     {% if LANGUAGE_BIDI %}
@@ -58,8 +59,10 @@
 
 
     {% block blockbots %}
-        <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
+
         <script src="{% static "ERP/admin/js/theme.js" %}"></script>
+        <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
+        {% comment %} <script src="{% static "ERP/admin/assets/dataTables/date_range.js" %}"></script>{% endcomment %}
 
         {% comment %}DataTables{% endcomment %}
 
@@ -110,7 +113,7 @@
         </div>
     </header>
     <!-- End Header -->
-    <!-- begins navigation  request.resolver_match.view_name }}------>
+    <!-- begins navigation -- request.resolver_match.view_name }}---->
 
     {% if user.is_active and user.is_staff %}
         <nav class="navbar  yamm ms-navbar ms-navbar-primary">
@@ -141,6 +144,7 @@
                             </a>
                         </li>
                         <li class="dropdown
+
 
 
 
@@ -188,6 +192,7 @@
 
 
 
+
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown"
@@ -226,6 +231,7 @@
 
                     </li>{% endcomment %}
                         <li class="dropdown
+
 
 
 
@@ -306,6 +312,11 @@
                             </ul>
                         </li>
                         <li class="dropdown
+
+
+
+
+
                                 {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle "
                                data-toggle="dropdown"
@@ -334,13 +345,18 @@
 
                         </li>
                         <li id="op_reportes" class="dropdown
+
+
+
+
+
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
                                 <i class="fa fa-line-chart text-center"></i><br class="hidden-xs">
                                 Reportes
-                                                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
+                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
 
                             </a>
                         </li>
@@ -418,7 +434,11 @@
                         </h3>
                         {% endcomment %}
                     <div class="avatar">
-                        <img alt="" src="/media/{{ user.erpuser.profile_picture }}">
+                        {% if user.erpuser.profile_picture %}
+                            <img alt="" src="/media/{{ user.erpuser.profile_picture }}">
+                        {% else %}
+                            <img alt="" src="/media/assets/avatar.jpg">
+                        {% endif %}
                         <h3 style="margin-top: 0 !important">
                             {% block welcome-msg %}
                                 &nbsp;{% trans 'Bienvenido, &nbsp;' %}
@@ -482,7 +502,8 @@
     <div class="modal-dialog animated zoomIn animated-3x" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i
+                        class="zmdi zmdi-close"></i></span></button>
                 <h3 class="modal-title" id="myModalLabel6"><strong>Ha ocurrido un error</strong></h3>
             </div>
             <div class="modal-body test-center">
@@ -499,7 +520,8 @@
     <div class="modal-dialog animated zoomIn animated-3x" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i
+                        class="zmdi zmdi-close"></i></span></button>
                 <h3 class="modal-title" id="myModalLabel6"><strong>La operación se resolvió con éxito</strong></h3>
             </div>
             <div class="modal-body test-center">
@@ -513,11 +535,7 @@
 </div>
 
 <script>
-if (errors) {
-    var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
-    $('#alertModal').find('.modal-body p').text(message);
-    $('#alertModal').modal('show')
-}
+
 </script>
 {% comment %}Ventana de errores{% endcomment %}
 <script>
@@ -526,109 +544,79 @@ if (errors) {
     }
 </script>
 <script>
-{% comment %}    $(document).ready(function () {
-        (".sb-toggle-left").on("touchend click", function (e) {
-            l(e, t(this)), s("left")
+    {% comment %}    $(document).ready(function () {
+            (".sb-toggle-left").on("touchend click", function (e) {
+                l(e, t(this)), s("left")
+            })
+            (".sb-toggle-right").on("touchend click", function (e) {
+                l(e, t(this)), s("right")
+            })
+            (".sb-open-left").on("touchend click", function (e) {
+                l(e, t(this)), r("left")
+            })
+            (".sb-open-right").on("touchend click", function (e) {
+                l(e, t(this)), r("right")
+            })
+            (".sb-toggle-left").on("touchend click", function (e) {
+                if (t(this).is("a") || t(this).children().is("a")) {
+                    if ("click" === e.type) {
+                        e.stopPropagation(), e.preventDefault();
+                        var n = t(this).is("a") ? t(this) : t(this).find("a");
+                        a(n.attr("href"), n.attr("target") ? n.attr("target") : "_self")
+                    }
+                } else l(e, t(this)), a()
+            }), m.on("touchend click", function (e) {
+                u.siteClose && (y || x) && (l(e, t(this)), a())
+            })
+        }
+        }
+        (jQuery)
         })
-        (".sb-toggle-right").on("touchend click", function (e) {
-            l(e, t(this)), s("right")
-        })
-        (".sb-open-left").on("touchend click", function (e) {
-            l(e, t(this)), r("left")
-        })
-        (".sb-open-right").on("touchend click", function (e) {
-            l(e, t(this)), r("right")
-        })
-        (".sb-toggle-left").on("touchend click", function (e) {
-            if (t(this).is("a") || t(this).children().is("a")) {
-                if ("click" === e.type) {
-                    e.stopPropagation(), e.preventDefault();
-                    var n = t(this).is("a") ? t(this) : t(this).find("a");
-                    a(n.attr("href"), n.attr("target") ? n.attr("target") : "_self")
-                }
-            } else l(e, t(this)), a()
-        }), m.on("touchend click", function (e) {
-            u.siteClose && (y || x) && (l(e, t(this)), a())
-        })
-    }
-    }
-    (jQuery)
-    })
-    ;{% endcomment %}
+        ;{% endcomment %}
 
 </script>
- <script>
-        $(document).ready(function () {
-            $('#table_s').DataTable({
-                columnDefs: [
-                    {
-                        className: 'mdl-data-table__cell--non-numeric'
-                    }
-                ],
-
-                responsive: true,
-                "bInfo": false,
-                "pageLength": 10,
-                "bLengthChange": false, //used to hide the property
-                "language": {
-                    "sProcessing": "Procesando...",
-                    "sLengthMenu": "Mostrar _MENU_ registros",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
-                    "sInfo": "",
-                    "sInfoEmpty": "",
-                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sSearch": "",
-                    "sUrl": "",
-                    "sInfoThousands": ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Ãšltimo",
-                        "sNext": "»",
-                        "sPrevious": "«"
-                    }
-                },
-            });
-        });
-    </script>
 <script>
-        $(document).ready(function () {
-            $('#table_s2').DataTable({
-                columnDefs: [
-                    {
-                        className: 'mdl-data-table__cell--non-numeric'
-                    }
-                ],
+    $(document).ready(function () {
+        var oTable_one = $('#table_s').DataTable({
 
-                responsive: true,
-                "bInfo": false,
-                "pageLength": 10,
-                "bLengthChange": false, //used to hide the property
-                "language": {
-                    "sProcessing": "Procesando...",
-                    "sLengthMenu": "Mostrar _MENU_ registros",
-                    "sZeroRecords": "No se encontraron resultados",
-                    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
-                    "sInfo": "",
-                    "sInfoEmpty": "",
-                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                    "sInfoPostFix": "",
-                    "sSearch": "",
-                    "sUrl": "",
-                    "sInfoThousands": ",",
-                    "sLoadingRecords": "Cargando...",
-                    "oPaginate": {
-                        "sFirst": "Primero",
-                        "sLast": "Ãšltimo",
-                        "sNext": "»",
-                        "sPrevious": "«"
-                    }
-                },
-            });
+            columnDefs: [
+                {
+                    className: 'mdl-data-table__cell--non-numeric'
+                }
+            ],
+
+            responsive: true,
+            "bInfo": false,
+            "pageLength": 10,
+            "bLengthChange": false, //used to hide the property
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+                "sInfo": "",
+                "sInfoEmpty": "",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Ãšltimo",
+                    "sNext": "»",
+                    "sPrevious": "«"
+                }
+
+            },
+
         });
-    </script>
+
+
+    });
+</script>
+
 {% comment %}<script>
    $(document).ready(function(){
 	   $(window).bind('scroll', function() {
@@ -642,5 +630,7 @@ if (errors) {
 		});
 	});
 </script>{% endcomment %}
+<!-- Latest compiled and minified JavaScript -->
+
 </body>
 </html>

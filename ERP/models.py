@@ -5,7 +5,11 @@ from concurrency.fields import IntegerVersionField
 import os
 
 from decimal import Decimal
+
+from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from django.db.models import Count
+from django.db.models import Sum
 from django.db.models.fields.related import ManyToManyField
 from django.db.models.query_utils import Q
 from django.dispatch import receiver
@@ -385,6 +389,10 @@ class Contratista(models.Model):
     class Meta:
         verbose_name_plural = 'Contratista'
 
+        permissions = (
+            ("view_list_contratista", "Can see contractor listing"),
+        )
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
@@ -509,6 +517,10 @@ class Empresa(models.Model):
     class Meta:
         verbose_name_plural = 'Empresa'
 
+        permissions = (
+            ("view_list_empresa", "Can see client listing"),
+        )
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
@@ -552,17 +564,12 @@ class ContratoContratista(models.Model):
                                        editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
-    monto_contrato_iva = models.DecimalField(verbose_name='Monto de Contrato con IVA', decimal_places=2, blank=False,
-                                             null=False, default=0, max_digits=20)
-    pago_inicial = models.DecimalField(verbose_name='Pago Inicial', decimal_places=2, blank=False, null=False,
-                                       default=0, max_digits=20)
-    pago_final = models.DecimalField(verbose_name='Pago Final', decimal_places=2, blank=True, null=False, default=0,
-                                     max_digits=20)
+    porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,
+                                         null=False, default=0, max_digits=5)
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
                                      editable=True)
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,
                                      editable=True)
-    codigo_obra = models.CharField(verbose_name='Código de Obra', max_length=50, null=False, blank=False, editable=True)
     objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
                                        editable=True)
     last_edit_date = models.DateTimeField(auto_now_add=True)
@@ -588,6 +595,10 @@ class ContratoContratista(models.Model):
     class Meta:
         verbose_name_plural = 'Contratos'
 
+        permissions = (
+            ("view_list_contratocontratista", "Can see contractor contract listing"),
+        )
+
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
@@ -607,7 +618,6 @@ class ContratoContratista(models.Model):
         ans['pago_inicial'] = str(self.pago_inicial)
         ans['pago_final'] = str(self.pago_final)
         ans['observaciones'] = str(self.observaciones)
-
 
         return ans
 
@@ -758,7 +768,7 @@ def cover_file_document_destination(instance, filename):
 # Projects model.
 class Project(models.Model):
     version = IntegerVersionField()
-    users = models.ManyToManyField(ERPUser, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
+    users = models.ManyToManyField(User, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
                                    blank=False)
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
@@ -940,6 +950,10 @@ class Project(models.Model):
 
     class Meta:
         verbose_name_plural = 'Proyectos'
+
+        permissions = (
+            ("view_list_project", "Can see project listing"),
+        )
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -1191,10 +1205,10 @@ class LineItem(models.Model):
         return ans
 
     def __str__(self):
-        return self.description
+        return self.key + " - "+self.description
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.description
+        return self.key + " - " + self.description
 
     def save(self, *args, **kwargs):
         canSave = True
@@ -1328,10 +1342,10 @@ class Concept_Input(models.Model):
         return ans
 
     def __str__(self):
-        return self.description
+        return self.key + ' - ' + self.description
 
     def __unicode__(self):
-        return self.description
+        return self.key + ' - ' + self.description
 
     def save(self, *args, **kwargs):
         canSave = True
@@ -1380,8 +1394,32 @@ class Estimate(models.Model):
     advance_payment_status = models.CharField(max_length=2, choices=ADVANCE_PAYMENT_STATUS_CHOICES, default=NOT_PAID,
                                               verbose_name="Estatus del Anticipo")
 
+    LOCKED = "L"
+    UNLOCKED = "U"
+
+    ESTIMATE_LOCK_CHOICES = (
+        (LOCKED, 'Bloqueada'),
+        (UNLOCKED, 'Desbloquada'),
+    )
+    lock_status = models.CharField(max_length=1, choices=ESTIMATE_LOCK_CHOICES, default=LOCKED,
+                                   verbose_name="Bloqueo de la Estimación")
+
+    # Director General
+    #
+    # Director  de Obras
+    #
+    # Vicepresidente Empresarial
+    #
+    # Jefe de Administración
+    #
+    # Presidente
+
     class Meta:
         verbose_name_plural = 'Estimaciones'
+
+        permissions = (
+            ("can_unlock_estimate", "Can unlock an estimate"),
+        )
 
     def __str__(self):
         return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
@@ -1399,8 +1437,67 @@ class Estimate(models.Model):
         else:
             Logs.log("Couldn't save")
 
+    def get_accumulated_amount(self, include_settlement=False):
+        if include_settlement:
+            accumulated_qs = ProgressEstimate.objects.filter(estimate_id=self.id).values(
+                'estimate_id').annotate(
+                Count('estimate_id'), accumulated=Sum('amount'))
+        else:
+            accumulated_qs = ProgressEstimate.objects.filter(
+                Q(estimate_id=self.id) & Q(type=ProgressEstimate.PROGRESS)).values(
+                'estimate_id').annotate(
+                Count('estimate_id'), accumulated=Sum('amount'))
 
-'''
+        if len(accumulated_qs) == 0:
+            return self.advance_payment_amount
+
+        accumulated = accumulated_qs[0]['accumulated']
+        accumulated += self.advance_payment_amount
+
+        return accumulated
+
+    def is_unlocked(self):
+        return self.lock_status == self.UNLOCKED
+
+    def is_locked(self):
+        return self.lock_status == self.LOCKED
+
+    def get_html_approval_list(self):
+
+        authorizations = EstimateAdvanceAuthorization.objects.filter(estimate_id=self.id)
+        html = "<div style=\"text-align:left;\">"
+
+        if len(authorizations) == 0:
+            html += 'Este pago aún no ha sido autorizado.'
+        else:
+            for auth in authorizations:
+                html += auth.full_name + "<br>"
+
+        html += "</div>"
+        return html
+
+    def has_been_approved(self):
+        authorizations = EstimateAdvanceAuthorization.objects.filter(estimate_id=self.id)
+        return len(authorizations) > 0
+
+    def has_been_approved_by(self, user_id):
+        authorizations = EstimateAdvanceAuthorization.objects.filter(Q(estimate_id=self.id) & Q(user_id=user_id))
+        return len(authorizations) > 0
+
+    def user_can_approve(self, user_id):
+        user = User.objects.get(pk=user_id)
+        permissions = ['users.is_general_director',
+                       'users.is_project_director',
+                       'users.is_vicepresident',
+                       'users.is_head_manager',
+                       'users.is_president']
+
+        for p in permissions:
+            if user.has_perm(p):
+                return True
+        return False
+
+    '''
     Model for the Progress Estimates.
 '''
 
@@ -1417,15 +1514,14 @@ def generator_file_storage(instance, filename):
 
 
 def content_file_generador(instance, filename):
-    return '/'.join(['documentosFuente', instance.estimate.concept_input.line_item.project.key, filename])
+    return '/'.join(['documentosFuente', instance.estimate.contract.project.key, filename])
 
 
 class ProgressEstimate(models.Model):
     version = IntegerVersionField()
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
-    key = models.CharField(verbose_name="Clave del Avance", max_length=8, null=False, blank=False)
-    progress = models.DecimalField(verbose_name='Progreso (%)', decimal_places=4, blank=False, null=False, default=0,
-                                   max_digits=20)
+    key = models.CharField(verbose_name="Clave del Avance", max_length=9, null=False, blank=False)
+
     amount = models.DecimalField(verbose_name='Monto ($)', decimal_places=6, blank=False, null=False, default=0,
                                  max_digits=20)
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
@@ -1437,10 +1533,10 @@ class ProgressEstimate(models.Model):
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     PROGRESS = "P"
-    ESTIMATE = "E"
+    SETTLEMENT = "S"
     TYPE_CHOICES = (
         (PROGRESS, 'Avance'),
-        (ESTIMATE, 'Estimado'),
+        (SETTLEMENT, 'Finiquito'),
     )
 
     type = models.CharField(max_length=1, choices=TYPE_CHOICES, default=PROGRESS, verbose_name="Tipo")
@@ -1486,6 +1582,32 @@ class ProgressEstimate(models.Model):
         else:
             Logs.log("Couldn't save")
 
+    def can_be_edited(self):
+        return self.payment_status == self.NOT_PAID
+
+    def get_html_approval_list(self):
+
+        authorizations = ProgressEstimateAuthorization.objects.filter(progress_estimate_id=self.id)
+        html = "<div style=\"text-align:left;\">"
+
+        if len(authorizations) == 0:
+            html += 'Este pago aún no ha sido autorizado.'
+        else:
+            for auth in authorizations:
+                html += auth.full_name + "<br>"
+
+        html += "</div>"
+        return html
+
+    def has_been_approved(self):
+        authorizations = ProgressEstimateAuthorization.objects.filter(progress_estimate_id=self.id)
+        return len(authorizations) > 0
+
+    def has_been_approved_by(self, user_id):
+        authorizations = ProgressEstimateAuthorization.objects.filter(
+            Q(progress_estimate_id=self.id) & Q(user_id=user_id))
+        return len(authorizations) > 0
+
 
 '''
     Model for handling the progress estimate log.
@@ -1495,7 +1617,7 @@ class ProgressEstimate(models.Model):
 class ProgressEstimateLog(models.Model):
     version = IntegerVersionField()
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
-    user = models.ForeignKey(ERPUser, verbose_name="Usuario", null=True, blank=True)
+    user = models.ForeignKey(User, verbose_name="Usuario", null=True, blank=True)
     description = models.TextField(verbose_name="Notas", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
     date = models.DateTimeField(default=now(), null=True, verbose_name="Fecha")
@@ -1523,7 +1645,7 @@ class ProgressEstimateLog(models.Model):
         canSave = True
 
         if canSave:
-            Logs.log("Saving new Empresa", "Te")
+            Logs.log("Saving new Bitacora", "Te")
             self.last_edit_date = now()
             super(ProgressEstimateLog, self).save(*args, **kwargs)
         else:
@@ -1545,7 +1667,6 @@ class LogFile(models.Model):
                                               blank=False)
     file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination,
                             default="")
-    mime = models.CharField(verbose_name="MIME", max_length=128, null=False, blank=False)
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -1602,7 +1723,7 @@ class SystemLogEntry(models.Model):
 
 
 class AccessToProject(models.Model):
-    user = models.ForeignKey(ERPUser, verbose_name="Usuario")
+    user = models.ForeignKey(User, verbose_name="Usuario", on_delete=models.CASCADE)
     project = models.ForeignKey(Project, verbose_name="Obra", null=False, blank=False)
 
     class Meta:
@@ -1617,4 +1738,43 @@ class AccessToProject(models.Model):
         return ans
 
     def __str__(self):
-        return self.user.user.get_username() + " - " + self.project.nombreProyecto
+        return self.user.get_username() + " - " + self.project.nombreProyecto
+
+    @staticmethod
+    def user_has_access_to_project(user_id, project_id):
+        access_objects = AccessToProject.objects.filter(Q(user_id=user_id) & Q(project_id=project_id))
+        return len(access_objects) > 0
+
+    @staticmethod
+    def get_projects_for_user(user_id):
+        projects = AccessToProject.objects.filter(user_id=user_id).values('project_id')
+        project_ids = []
+        for p in projects:
+            project_ids.append(p['project_id'])
+        return project_ids
+
+
+class ProgressEstimateAuthorization(models.Model):
+    version = IntegerVersionField()
+    full_name = models.CharField(max_length=256, )
+    user = models.ForeignKey(User, verbose_name="Usuario", null=False, blank=False)
+    progress_estimate = models.ForeignKey(ProgressEstimate, verbose_name="Avance", null=False, blank=False)
+
+    def __str__(self):
+        return self.full_name
+
+    def __unicode__(self):
+        return self.descripcion
+
+
+class EstimateAdvanceAuthorization(models.Model):
+    version = IntegerVersionField()
+    full_name = models.CharField(max_length=256, )
+    user = models.ForeignKey(User, verbose_name="Usuario", null=False, blank=False)
+    estimate = models.ForeignKey(Estimate, verbose_name="Avance", null=False, blank=False)
+
+    def __str__(self):
+        return self.full_name
+
+    def __unicode__(self):
+        return self.descripcion

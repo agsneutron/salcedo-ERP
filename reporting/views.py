@@ -1,16 +1,21 @@
 # coding=utf-8
+from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
 
 from ERP import api
-from ERP.models import AccessToProject, Project
+from ERP.models import AccessToProject, Project, LineItem
 from reporting import api
 from ERP.lib.utilities import Utilities
 from lib.financial_advance_report import FinancialAdvanceReport
+from lib.estimate_reports import EstimateReports
+from lib.estimate_report_for_contractors import EstimateReportsForContractors
 from django.shortcuts import render, redirect, render_to_response
 from django.views.generic import View
 
 from reporting import lib
 from reporting.lib.physical_financial_advance_report import PhysicalFinancialAdvanceReport
+from reporting.lib.estimate_report_by_single_contractor import EstimateReportsBySingleContractor
+from reporting.lib.budget_report_by_contractor import BudgetReportsByContractor
 
 
 def report(request):
@@ -798,37 +803,17 @@ class GetFinancialReport(View):
         # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
         # will be exported grouped by line_item.
         show_concepts = True
-        selected_line_items_array = [
-            642,
-            643,
-            644,
-            645,
-            646,
-            647,
-            648,
-            649,
-            650,
-            651,
-            653,
-            658,
-            662,
-            667,
-            672,
-            679,
-            683,
-            692,
-            698,
-            700,
-            705,
-            714,
-            722,
-            727,
-            728,
-            729
-        ]
+
+
+        # The next block is to force the second level of line items to work with the report. Keep in mind this won't work
+        # on further versions
+        # Block to delete:
+        selected_line_items_array = api.ReportingUtilities.get_first_two_line_item_levels(project_id)
+        # Ends block to delete.
+
         report_json = api.FinancialHistoricalProgressReport.get_report(project_id, selected_line_items_array)
 
-        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
 
         file = FinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
@@ -844,7 +829,16 @@ class GetPhysicalFinancialAdvanceReport(View):
         else:
             show_concepts = False
 
-        report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id)
+        # The next block is to force the second level of line items to work with the report. Keep in mind this won't work
+        # on further versions
+        # Block to delete:
+        selected_line_items_array = api.ReportingUtilities.get_first_two_line_item_levels(project_id)
+        # Ends block to delete.
+
+
+        report_json = api.PhysicalFinancialAdvanceReport.get_report(project_id, selected_line_items_array)
+
+        #return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
 
         file = PhysicalFinancialAdvanceReport.generate_report(report_json, show_concepts)
         return file
@@ -856,7 +850,7 @@ class GetMainDashboard(View):
     def get(self, request):
 
         response_by_project = []
-        access_set = AccessToProject.objects.filter(user__id=request.user.erpuser.id)
+        access_set = AccessToProject.objects.filter(user__id=request.user.id)
         for access in access_set:
 
             structured_response = {}
@@ -937,4 +931,69 @@ class GetDashboardByProject(View):
         }
 
         return HttpResponse(Utilities.json_to_dumps(structured_response), 'application/json; charset=utf-8')
+
+
+# Report to retrieve the json for every estimate in a project.
+class GetEstimatesReportJson(View):
+    def get(self, request):
+
+        project_id = request.GET.get('project_id')
+        response = api.EstimatesReport.getReport(project_id)
+
+        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8')
+
+
+class GetEstimatesReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+
+        # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
+        # will be exported grouped by line_item.
+        show_concepts = True
+
+        responseJson = api.EstimatesReport.getReport(project_id)
+
+        # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
+
+        file = EstimateReports.generate_report(responseJson, show_concepts)
+        return file
+
+
+
+
+class GetEstimateReportForContractors(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+
+        information_json = api.EstimateReportForContractors.get_report(project_id)
+        #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
+
+        file = EstimateReportsForContractors.generate_report(information_json)
+
+        return file
+
+
+class GetEstimateReportBySingleContractor(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        contractor_id = request.GET.get('contractor_id')
+
+        information_json = api.EstimateReportBySingleContractor.get_report(project_id, contractor_id)
+        #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
+
+        file = EstimateReportsBySingleContractor.generate_report(information_json)
+
+        return file
+
+class GetBudgetByContractorReport(View):
+    def get(self, request):
+        project_id = request.GET.get('project_id')
+        contractor_id = request.GET.get('contractor_id')
+
+        information_json = api.GetBudgetByContractorReport.get_report(project_id, contractor_id)
+        #return HttpResponse(Utilities.json_to_dumps(information_json),'application/json; charset=utf-8')
+
+        file = BudgetReportsByContractor.generate_report(information_json)
+
+        return file
 

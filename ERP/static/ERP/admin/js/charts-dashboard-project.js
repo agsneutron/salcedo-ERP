@@ -352,6 +352,7 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
             tickColor: '#707073',
             tickWidth: 1,
             title: {
+                text: 'Montos',
                 style: {
                     color: '#A0A0A3'
                 }
@@ -567,6 +568,7 @@ function graficaTres(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
                 tickColor: '#707073',
                 tickWidth: 1,
                 title: {
+                    text: 'Montos',
                     style: {
                         color: '#A0A0A3'
                     }
@@ -798,6 +800,7 @@ function graficaCuatro(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
                 tickColor: '#707073',
                 tickWidth: 1,
                 title: {
+                    text: 'Montos',
                     style: {
                         color: '#A0A0A3'
                     }
@@ -1028,6 +1031,7 @@ function graficaCinco(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
                 tickColor: '#707073',
                 tickWidth: 1,
                 title: {
+                    text:'Montos',
                     style: {
                         color: '#A0A0A3'
                     }
