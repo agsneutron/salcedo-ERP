@@ -27,7 +27,8 @@ class EmployeeAdmin(admin.ModelAdmin):
                        'extension_number','personal_email', 'work_email', 'driving_license_number','driving_license_expiry_date')
         }),
     )
-
+    list_display = ('name', 'first_last_name', 'personal_email', )
+    list_editable = ('first_last_name', 'personal_email', )
 
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
