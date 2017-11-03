@@ -27,6 +27,8 @@ import users
 from ERP import urls
 import ERP
 
+import HumanResources
+
 
 from reporting import urls
 
