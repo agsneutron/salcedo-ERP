@@ -293,8 +293,8 @@ def upload_employee_current_education_document(instance, filename):
 
 # Employee Current Education Documents.
 class CurrentEducationDocument(models.Model):
-    file = models.FileField(upload_to=upload_employee_current_education_document, null=True, verbose_name="Archivo")
-    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=False, blank=False, unique=False)
+    file = models.FileField(upload_to=upload_employee_current_education_document, null=True, verbose_name="Archivo", blank=True)
+    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True, unique=False)
 
     # Foreign Keys.
     current_education = models.ForeignKey(CurrentEducation, verbose_name='Formación Actual del Empleado', null=False, blank=False)
@@ -306,8 +306,8 @@ class CurrentEducationDocument(models.Model):
         return self.file.name
 
     class Meta:
-        verbose_name_plural = 'Documentos de la Formación Acutal del Empleado'
-        verbose_name = 'Documento de la Formación Acutal del Empleado'
+        verbose_name_plural = 'Documentos de la Formación Actual del Empleado'
+        verbose_name = 'Documento de la Formación Actual del Empleado'
 
 
 # Method to save the employee's current education file.
