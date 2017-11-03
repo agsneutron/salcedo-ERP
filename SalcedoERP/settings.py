@@ -53,7 +53,8 @@ INSTALLED_APPS = [
     'users',
     'ERP',
     'reporting',
-    'DataUpload'
+    'DataUpload',
+    'HumanResources'
 ]
 
 MIDDLEWARE = [
