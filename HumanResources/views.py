@@ -10,7 +10,8 @@ from django.views.generic.list import ListView
 # Model Imports.
 from HumanResources.models import *
 
-
+def employeedetail(request):
+    return render(request, 'HumanResources/employee-detail.html')
 
 class EmployeeDetailView(generic.DetailView):
     model = Employee

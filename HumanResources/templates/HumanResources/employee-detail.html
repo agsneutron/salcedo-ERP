@@ -1,148 +1,447 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static app_filters %}
+{% load i18n admin_static %}
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block extrastyle %}{{ block.super }}
+    <style>
+        p {
+            margin: 0;
+        }
+    hr {
+    display: block;
+    border-top: 1px solid #00a09b;
+    margin: 10px 0;
+}
+    </style>
+{% endblock %}
 {% block content %}
-    <h1> Esta es la Vista de Detalle del Empleado.</h1>
-
-    <h2>Datos del Empleado</h2>
-    <p> <strong>Id: </strong> {{ employee.id }} </p>
-    <p> <strong>Clave: </strong> {{ employee.employee_key }} </p>
-    <p> <strong>Tipo de Empleado: </strong> {{ employee.get_type_display }} </p>
-    <p> <strong>Fecha de Registro: </strong> {{ employee.registry_date }} </p>
-    <p> <strong>Estatus: </strong> {{ employee.get_status_display }} </p>
-
-    <br><br>
-
-    <h2>Datos Personales</h2>
-    <p> <strong>Nombre: </strong> {{ employee.name }} </p>
-    <p> <strong>Apellido Paterno: </strong> {{ employee.first_last_name }} </p>
-    <p> <strong>Apellido Materno: </strong> {{ employee.second_last_name }} </p>
-    <p> <strong>Fecha de Nacimiento: </strong> {{ employee.birthdate }} </p>
-    <p> <strong>Lugar de Nacimiento: </strong> {{ employee.birthplace }} </p>
-    <p> <strong>Género: </strong> {{ employee.get_gender_display }} </p>
-    <p> <strong>Estado Civil: </strong> {{ employee.get_marital_status_display }} </p>
-    <p> <strong>CURP: </strong> {{ employee.curp }} </p>
-    <p> <strong>RFC: </strong> {{ employee.rfc }} </p>
-    <p> <strong>Teléfono: </strong> {{ employee.phone_number }} </p>
-    <p> <strong>Celular: </strong> {{ employee.cellphone_number }} </p>
-    <p> <strong>Oficina: </strong> {{ employee.office_number }} </p>
-    <p> <strong>Extensión: </strong> {{ employee.extension_number }} </p>
-    <p> <strong>Correo Personal: </strong> {{ employee.personal_email }} </p>
-    <p> <strong>Correo del Trabajo: </strong> {{ employee.work_email }} </p>
-    <p> <strong>País: </strong> {{ employee.country }} </p>
-    <p> <strong>Estado: </strong> {{ employee.state }} </p>
-    <p> <strong>Municipio: </strong> {{ employee.town }} </p>
-    <p> <strong>Colonia: </strong> {{ employee.colony }} </p>
-    <p> <strong>Calle: </strong> {{ employee.street }} </p>
-    <p> <strong>Número Exterior: </strong> {{ employee.outdoor_number }} </p>
-    <p> <strong>Número Interior: </strong> {{ employee.indoor_number }} </p>
-    <p> <strong>Código Postal: </strong> {{ employee.zip_code }} </p>
-    <p> <strong>Tipo Sanguíneo: </strong> {{ employee.get_blood_type_display }} </p>
-    <p> <strong>No. de Licencia de Manejo: </strong> {{ employee.driving_license_number }} </p>
-    <p> <strong>Fecha de Vencimineto de Licencia de Manejo: </strong> {{ employee.driving_license_expiry_date }} </p>
-    <p> <strong>Régimen Fiscal: </strong> {{ employee.tax_regime }} </p>
 
 
-    <br><br>
+    {#    <h1> Esta es la Vista de Detalle del Empleado.</h1>#}
+    <div class="row">
+        <h3 class="color-info">Datos Personales</h3>
+        <div class="col-xs-4">
+            <p><strong>Nombre: </strong> {{ employee.name }} </p>
+            <p><strong>Apellido Paterno: </strong> {{ employee.first_last_name }} </p>
+            <p><strong>Apellido Materno: </strong> {{ employee.second_last_name }} </p>
+            <p><strong>Fecha de Nacimiento: </strong> {{ employee.birthdate }} </p>
+            <p><strong>Lugar de Nacimiento: </strong> {{ employee.birthplace }} </p>
+            <p><strong>Género: </strong> {{ employee.get_gender_display }} </p>
+            <p><strong>Estado Civil: </strong> {{ employee.get_marital_status_display }} </p>
+            <p><strong>CURP: </strong> {{ employee.curp }} </p>
+            <p><strong>RFC: </strong> {{ employee.rfc }} </p>
+            <p><strong>Teléfono: </strong> {{ employee.phone_number }} </p>
+            <p><strong>Celular: </strong> {{ employee.cellphone_number }} </p>
+            <p><strong>Oficina: </strong> {{ employee.office_number }} </p>
+            <p><strong>Extensión: </strong> {{ employee.extension_number }} </p>
+            <p><strong>Correo Personal: </strong> {{ employee.personal_email }} </p>
 
-    <h2>Formación Académica</h2>
-    {% for record in education %}
-        <p> <strong>Grado: </strong> {{ record.get_type_display }} </p>
-        <p> <strong>Nombre: </strong> {{ record.name}} </p>
-        <p> <strong>Institución: </strong> {{ record.institution}} </p>
-        <p> <strong>Evidencia: </strong> {{ record.evidence.name }} </p>
-    {% endfor %}
+        </div>
+        <div class="col-xs-4">
+            <p><strong>Correo del Trabajo: </strong> {{ employee.work_email }} </p>
+            <p><strong>País: </strong> {{ employee.country }} </p>
+            <p><strong>Estado: </strong> {{ employee.state }} </p>
+            <p><strong>Municipio: </strong> {{ employee.town }} </p>
+            <p><strong>Colonia: </strong> {{ employee.colony }} </p>
+            <p><strong>Calle: </strong> {{ employee.street }} </p>
+            <p><strong>Número Exterior: </strong> {{ employee.outdoor_number }} </p>
+            <p><strong>Número Interior: </strong> {{ employee.indoor_number }} </p>
+            <p><strong>Código Postal: </strong> {{ employee.zip_code }} </p>
+            <p><strong>Tipo Sanguíneo: </strong> {{ employee.get_blood_type_display }} </p>
+            <p><strong>No. de Licencia de Manejo: </strong> {{ employee.driving_license_number }} </p>
+            <p><strong>Vencimineto de Licencia de Manejo: </strong> {{ employee.driving_license_expiry_date }}
+            </p>
+            <p><strong>Régimen Fiscal: </strong> {{ employee.tax_regime }} </p>
+        </div>
+        <div class="col-xs-4">
+            <div>
+                <a href="" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+            </div>
+            <hr>
+            <div>
+                <h3 class="color-info">Datos del Empleado</h3>
+                <p><strong>Id: </strong> {{ employee.id }} </p>
+                <p><strong>Clave: </strong> {{ employee.employee_key }} </p>
+                <p><strong>Tipo de Empleado: </strong> {{ employee.get_type_display }} </p>
+                <p><strong>Fecha de Registro: </strong> {{ employee.registry_date }} </p>
+                <p><strong>Estatus: </strong> {{ employee.get_status_display }} </p>
+            </div>
+            <div>
+                <h3 class="color-info">Etiquetas</h3>
+                <select multiple class="" style="width: 100%">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
 
-
-    <br><br>
-
-    <h2>Formación Académica Actual</h2>
-    {% for record in current_education %}
-        <p> <strong>Grado: </strong> {{ record.get_type_display }} </p>
-        <p> <strong>Nombre: </strong> {{ record.name}} </p>
-        <p> <strong>Institución: </strong> {{ record.institution}} </p>
-        <p>
-            <strong>Días de Asistencia: </strong>
-            <strong>Domingo: </strong> {{ record.sunday }}, <strong>Lunes: </strong> {{ record.monday }},
-            <strong>Martes: </strong> {{ record.tuesday }}, <strong>Miércoles: </strong> {{ record.wednesday }},
-            <strong>Jueves: </strong> {{ record.thursday }}, <strong>Viernes: </strong> {{ record.friday }},
-            <strong>Sábado: </strong> {{ record.saturday }}
-        </p>
-        <p>
-            <strong>Evidencia: </strong>
-            {% for document in record.documents %}
-                <p> <strong>Documento: </strong> {{ document }} </p>
+        <div class="col-xs-12">
+            <h3 class="color-info">Formación Académica</h3>
+            {% for record in education %}
+                <p><strong>Grado: </strong> {{ record.get_type_display }} </p>
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Institución: </strong> {{ record.institution }} </p>
+                <p><strong>Evidencia: </strong> {{ record.evidence.name }} </p>
             {% endfor %}
-        </p>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Formación Académica Actual</h3>
+            {% for record in current_education %}
+                <p><strong>Grado: </strong> {{ record.get_type_display }} </p>
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Institución: </strong> {{ record.institution }} </p>
+                <p>
+                    <strong>Días de Asistencia: </strong>
+                    <strong>Domingo: </strong> {{ record.sunday }}, <strong>Lunes: </strong> {{ record.monday }},
+                    <strong>Martes: </strong> {{ record.tuesday }}, <strong>Miércoles: </strong> {{ record.wednesday }},
+                    <strong>Jueves: </strong> {{ record.thursday }}, <strong>Viernes: </strong> {{ record.friday }},
+                    <strong>Sábado: </strong> {{ record.saturday }}
+                </p>
+                <p>
+                    <strong>Evidencia: </strong>
+                    {% for document in record.documents %}
+                        <p><strong>Documento: </strong> {{ document }} </p>
+                    {% endfor %}
+                </p>
 
-    {% endfor %}
+            {% endfor %}
+        </div>
+
+    </div>
+    <hr>
+    <div class="row">
+
+        <div class="col-xs-12">
+            <h3 class="color-info">Contactos de Emergencia</h3>
+            {% for record in emergency_contacts %}
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Apellido Paterno: </strong> {{ record.first_last_name }} </p>
+                <p><strong>Apellido Materno: </strong> {{ record.second_last_name }} </p>
+                <p><strong>Número de Teléfono: </strong> {{ record.phone_number }} </p>
+                <p><strong>Número de Celular: </strong> {{ record.cellphone_number }} </p>
+                <p><strong>Correo Electrónico: </strong> {{ record.email }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Familiares</h3>
+            {% for record in family_members %}
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Apellido Paterno: </strong> {{ record.first_last_name }} </p>
+                <p><strong>Apellido Materno: </strong> {{ record.second_last_name }} </p>
+                <p><strong>Parentesco: </strong> {{ record.relationship }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Referencias Laborales</h3>
+            {% for record in work_references %}
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Apellido Paterno: </strong> {{ record.first_last_name }} </p>
+                <p><strong>Apellido Materno: </strong> {{ record.second_last_name }} </p>
+                <p><strong>Empresa: </strong> {{ record.company_name }} </p>
+                <p><strong>Teléfono No. 1: </strong> {{ record.first_phone_number }} </p>
+                <p><strong>Teléfono No. 2: </strong> {{ record.second_phone_number }} </p>
+                <p><strong>Correo Electrónico: </strong> {{ record.email }} </p>
+                <p><strong>Notas: </strong> {{ record.notes }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Pruebas</h3>
+            {% for test in test_applications %}
+                <p><strong>Nombre de la Prueba: </strong> {{ test.test.name }} </p>
+                <p><strong>Fecha de Aplicación: </strong> {{ test.application_date }} </p>
+                <p><strong>Resultado: </strong> {{ test.result }} </p>
+                <p><strong>Comentarios: </strong> {{ test.comments }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Documentación Probatoria</h3>
+            {% for record in employee_documents %}
+                <p><strong>Archivo: </strong> {{ record.file.name }} </p>
+                <p><strong>Tipo de Documento: </strong> {{ record.document_type }} </p>
+                <p><strong>Comentarios: </strong> {{ record.comments }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Checador</h3>
+            <p><strong>Tipo de Checador: </strong> {{ checker_data.get_checker_type_display }} </p>
+            <p><strong>Checa Entrada: </strong> {{ checker_data.checks_entry }} </p>
+            <p><strong>Checa Salida: </strong> {{ checker_data.checks_exit }} </p>
+        </div>
+
+    </div>
+
+    {% comment %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card animated fadeInUp animation-delay-7">
+                    <div class="ms-hero-bg-info ms-hero-img-coffee">
+                        <h3 class="color-white index-1 text-center no-m pt-2">{{ employee.name }} {{ employee.first_last_name }}</h3>
+                        <div class="color-medium index-1 text-center np-m">ID: {{ employee.id }}</div>
+                        <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png" alt=""
+                             class="img-avatar-circle"></div>
+                    <div class="card-block pt-4 text-center">
+                        <h3 class="color-info">Datos del Empleado</h3>
+                        <ul class="list-group text-left">
+                            <li class="list-group-item">Id: {{ employee.id }}</li>
+                            <li class="list-group-item">Clave: {{ employee.employee_key }}</li>
+                            <li class="list-group-item">Tipo: {{ employee.get_type_display }}</li>
+                            <li class="list-group-item">Registro: {{ employee.registry_date }}</li>
+                            <li class="list-group-item">Estatus: {{ employee.get_status_display }}</li>
+                        </ul>
+                        <div class="text-right">
+                            <a style="margin: 0;" href="#" class="btn btn-block btn-danger">Editar Información</a>
+                        </div>
+
+                        <hr>
+                        <h3 class="color-info">Datos Generales</h3>
+                        <ul class="list-group text-left">
+                            <li class="list-group-item">
+                                Nombre: {{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</li>
+                            <li class="list-group-item">Tel: {{ employee.phone_number }}</li>
+                            <li class="list-group-item">Email: {{ employee.personal_email }}</li>
+                            <li class="list-group-item">Estado: {{ employee.state }}</li>
+                            <li class="list-group-item">Ciudad: {{ employee.town }}</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card animated fadeInUp animation-delay-12">
+                    <div class="ms-hero-bg-royal ms-hero-img-mountain">
+                        <h3 class="color-white index-1 text-center pb-4 pt-4">Listado de Empleados</h3>
+                    </div>
+                    <div class="card-block">
+                        <div class="search_employee">
+                            <label>
+                                <button class="searchbutton" type="submit" style="">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                                <div class="form-group form-group-sm is-empty" style="    float: left;
+    margin: 0;">
+                                    <input style="width: 170px;     height: 30px;" type="search"
+                                           class="form-control input-sm form-control searchfield"
+                                           placeholder="" aria-controls="DataTables_Table_0">
+                                </div>
+                            </label>
+                        </div>
+
+                        <ul class="list-group text-left">
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+                            <li class="list-group-item">{{ employee.name }} {{ employee.first_last_name }}
+                                Id: {{ employee.id }}</li>
+
+                        </ul>
+
+                    </div>
+                </div>
+            </div>
 
 
-    <br><br>
+            <div class="col-md-9">
+                <h2 class="color-primary text-center mb-2">Perfil de Empleado</h2>
+                <div class="card card-info wow materialUp">
+                    <div class="card-header">
+                        <h3 class="card-title">Datos Personales</h3>
+                    </div>
+                    <div class="card-block text-center">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <div>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</div>
+                                <div class="color-active title-employee">Nombre</div>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Apellido Paterno</span>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Apellido Materno</span>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Fecha de Nacimiento</span>
+                            </div>
+                        </div>
+                        <hr class="hr-employee">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <div>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</div>
+                                <div class="color-active title-employee">Nombre</div>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Apellido Paterno</span>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Apellido Materno</span>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Fecha de Nacimiento</span>
+                            </div>
+                        </div>
+                        <hr class="hr-employee">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <div>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</div>
+                                <div class="color-active title-employee">Nombre</div>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Apellido Paterno</span>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Apellido Materno</span>
+                            </div>
+                            <div class="col-xs-3">
+                                <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                <span class="color-active title-employee">Fecha de Nacimiento</span>
+                            </div>
+                        </div>
+<hr class="hr-employee">
+                        <div class="text-right">
+                            <a style="margin: 15px 0 5px 0;" href="#" class="btn btn-sm btn-raised btn-default"><i
+                                    class="fa fa-eye"></i>
+                                Ver Completo</a>
+                            <a style="margin: 15px 0 5px 0;" href="change"
+                               class="btn btn-sm btn-danger button-center-top"><i class="fa fa-pencil"></i>
+                                Editar Información</a>
+                        </div>
+                    </div>
 
-    <h2>Contactos de Emergencia</h2>
-    {% for record in emergency_contacts %}
-        <p> <strong>Nombre: </strong> {{ record.name }} </p>
-        <p> <strong>Apellido Paterno: </strong> {{ record.first_last_name}} </p>
-        <p> <strong>Apellido Materno: </strong> {{ record.second_last_name}} </p>
-        <p> <strong>Número de Teléfono: </strong> {{ record.phone_number}} </p>
-        <p> <strong>Número de Celular: </strong> {{ record.cellphone_number }} </p>
-        <p> <strong>Correo Electrónico: </strong> {{ record.email }} </p>
-    {% endfor %}
+                </div>
+                <div class="col-xs-6">
+                    <div class="card card-info wow materialUp">
+                        <div class="card-header">
+                            <h3 class="card-title">Formacion Académica</h3>
+                        </div>
+                        <div class="card-block text-center">
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</div>
+                                    <div class="color-active title-employee">Nombre</div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                    <span class="color-active title-employee">Apellido Paterno</span>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                    <span class="color-active title-employee">Apellido Materno</span>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                    <span class="color-active title-employee">Fecha de Nacimiento</span>
+                                </div>
+                            </div>
+                            <hr class="hr-employee">
+                            <div class="text-right">
+                                <a style="margin: 15px 0 5px 0;" href="#" class="btn btn-sm btn-raised btn-default"><i
+                                        class="fa fa-eye"></i>
+                                    Ver Completo</a>
+                                <a style="margin: 15px 0 5px 0;" href="change"
+                                   class="btn btn-sm btn-danger button-center-top"><i class="fa fa-pencil"></i>
+                                    Editar Información</a>
+                            </div>
+                        </div>
 
-    <br><br>
+                    </div>
+                </div>
+                <div class="col-xs-6">
+                    <div class="card card-info wow materialUp">
+                        <div class="card-header">
+                            <h3 class="card-title">Formacion Académica Actual</h3>
+                        </div>
+                        <div class="card-block text-center">
 
-    <h2>Familiares</h2>
-    {% for record in family_members %}
-        <p> <strong>Nombre: </strong> {{ record.name }} </p>
-        <p> <strong>Apellido Paterno: </strong> {{ record.first_last_name}} </p>
-        <p> <strong>Apellido Materno: </strong> {{ record.second_last_name}} </p>
-        <p> <strong>Parentesco: </strong> {{ record.relationship }} </p>
-    {% endfor %}
+                            <div class="row">
+                                <div class="col-xs-6">
+                                    <div>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</div>
+                                    <div class="color-active title-employee">Nombre</div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                    <span class="color-active title-employee">Apellido Paterno</span>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                    <span class="color-active title-employee">Apellido Materno</span>
+                                </div>
+                                <div class="col-xs-6">
+                                    <span>{{ employee.name }} {{ employee.first_last_name }} {{ employee.second_last_name }}</span><br>
+                                    <span class="color-active title-employee">Fecha de Nacimiento</span>
+                                </div>
+                            </div>
+                            <hr class="hr-employee">
+                            <div class="text-right">
+                            <a style="margin: 15px 0 5px 0;" href="#" class="btn btn-sm btn-raised btn-default"><i
+                                    class="fa fa-eye"></i>
+                                Ver Completo</a>
+                            <a style="margin: 15px 0 5px 0;" href="change"
+                               class="btn btn-sm btn-danger button-center-top"><i class="fa fa-pencil"></i>
+                                Editar Información</a>
+                        </div>
+                        </div>
 
-    <br><br>
+                    </div>
+                </div>
 
-    <h2>Referencias Laborales</h2>
-    {% for record in work_references %}
-        <p> <strong>Nombre: </strong> {{ record.name }} </p>
-        <p> <strong>Apellido Paterno: </strong> {{ record.first_last_name}} </p>
-        <p> <strong>Apellido Materno: </strong> {{ record.second_last_name}} </p>
-        <p> <strong>Empresa: </strong> {{ record.company_name }} </p>
-        <p> <strong>Teléfono No. 1: </strong> {{ record.first_phone_number }} </p>
-        <p> <strong>Teléfono No. 2: </strong> {{ record.second_phone_number }} </p>
-        <p> <strong>Correo Electrónico: </strong> {{ record.email }} </p>
-        <p> <strong>Notas: </strong> {{ record.notes }} </p>
-    {% endfor %}
-
-
-    <br><br>
-
-    <h2>Pruebas</h2>
-    {% for test in test_applications %}
-        <p> <strong>Nombre de la Prueba: </strong> {{ test.test.name }} </p>
-        <p> <strong>Fecha de Aplicación: </strong> {{ test.application_date }} </p>
-        <p> <strong>Resultado: </strong> {{ test.result}} </p>
-        <p> <strong>Comentarios: </strong> {{ test.comments }} </p>
-    {% endfor %}
-
-
-    <br><br>
-
-    <h2>Documentación Probatoria</h2>
-    {% for record in employee_documents %}
-        <p> <strong>Archivo: </strong> {{ record.file.name }} </p>
-        <p> <strong>Tipo de Documento: </strong> {{ record.document_type }} </p>
-        <p> <strong>Comentarios: </strong> {{ record.comments}} </p>
-    {% endfor %}
-
-
-    <br><br>
-
-    <h2>Checador</h2>
-
-    <p> <strong>Tipo de Checador: </strong> {{ checker_data.get_checker_type_display }} </p>
-    <p> <strong>Checa Entrada: </strong> {{ checker_data.checks_entry }} </p>
-    <p> <strong>Checa Salida: </strong> {{ checker_data.checks_exit}} </p>
-
-
+            </div>
+        </div>
+    </div>{% endcomment %}
 
 {% endblock %}
