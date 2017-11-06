@@ -29,6 +29,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     )
 
 
+
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
         my_urls = [
