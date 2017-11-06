@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+
 # Django Libraries.
 from django.conf.urls import url
 from django.contrib import admin
@@ -261,7 +262,30 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
     form = EmployeeLoanForm
 
 
-# Loan Admin.
+# JobProfile Admin.
 @admin.register(JobProfile)
-class EmployeeLoanAdmin(admin.ModelAdmin):
+class JobProfileAdmin(admin.ModelAdmin):
     form = JobProfileForm
+
+
+# Loan Admin.
+@admin.register(Direction)
+class DirectionAdmin(admin.ModelAdmin):
+    form = DirectionForm
+
+# Loan Admin.
+@admin.register(Subdirection)
+class SubdirectionAdmin(admin.ModelAdmin):
+    form = SubdirectionForm
+
+
+# Loan Admin.
+@admin.register(Area)
+class AreaAdmin(admin.ModelAdmin):
+    form = AreaForm
+
+# Loan Admin.
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    form = DepartmentForm
+

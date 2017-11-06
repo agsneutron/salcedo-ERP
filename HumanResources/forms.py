@@ -283,5 +283,31 @@ class EmployeeLoanForm(forms.ModelForm):
 # Form to include the fields of Tag Form.
 class JobProfileForm(forms.ModelForm):
     class Meta:
-        model = Tag
+        model = JobProfile
+        fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
+class DirectionForm(forms.ModelForm):
+    class Meta:
+        model = Direction
+        fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
+class SubdirectionForm(forms.ModelForm):
+    class Meta:
+        model = Subdirection
+        fields = '__all__'
+
+# Form to include the fields of Tag Form.
+class DepartmentForm(forms.ModelForm):
+    class Meta:
+        model = Department
+        fields = '__all__'
+
+# Form to include the fields of Tag Form.
+class AreaForm(forms.ModelForm):
+    class Meta:
+        model = Area
         fields = '__all__'
