@@ -4,6 +4,7 @@
     <link  rel="stylesheet" href="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
     <script  src="http://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
 
+
     <div class="col-xs-12 col-lg-8 col-lg-offset-2">
         <div class="card card-info">
             <div class="card-block text-center">
@@ -135,18 +136,21 @@
                         </tbody>
                     {% else %}
                         <div id="date_filter" style="position: absolute;right: 33px;">
-                            <span id="date-label-from" class="date-label">Bucar por fecha de: </span>
+                            <span id="date-label-from" class="date-label">Buscar por fecha de: </span>
                             <input class="date_range_filter date" type="text" id="datepicker_from" />
                             <span id="date-label-to" class="date-label">a:</span>
                             <input class="date_range_filter date" type="text" id="datepicker_to" />
                         </div>
+
                         <thead>
+                        <tr>
                         <td>Clave del Proyecto</td>
                         <td>Nombre</td>
                         <td>Ubicación</td>
                         <td>Fecha de Inicio</td>
                         <td>Fecha de Término</td>
                         <td class="no-sorting">Ver</td>
+                        </tr>
                         </thead>
                         <tbody>
                         {% for contract in contracts %}
@@ -225,6 +229,139 @@
     <script>
 
     </script>
+
+    <script>
+
+    ( function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		// AMD. Register as an anonymous module.
+		define( [ "../widgets/datepicker" ], factory );
+	} else {
+
+		// Browser globals
+		factory( jQuery.datepicker );
+	}
+}( function( datepicker ) {
+
+datepicker.regional.es = {
+	closeText: "Cerrar",
+	prevText: "&#x3C;Ant",
+	nextText: "Sig&#x3E;",
+	currentText: "Hoy",
+	monthNames: [ "Enero","Bebrero","Marzo","Abril","Mayo","Junio",
+	"Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre" ],
+	monthNamesShort: [ "ene","feb","mar","abr","may","jun",
+	"jul","ago","sep","oct","nov","dic" ],
+	dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
+	dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
+	dayNamesMin: [ "D","L","M","X","J","V","S" ],
+	weekHeader: "Sm",
+	dateFormat: "dd/mm/yy",
+	firstDay: 1,
+	isRTL: false,
+	showMonthAfterYear: false,
+	yearSuffix: "" };
+datepicker.setDefaults( datepicker.regional.es );
+
+return datepicker.regional.es;
+
+} ) );
+    $(document).ready(function () {
+
+
+
+        var oTable = $('#table_s2').DataTable({
+
+            columnDefs: [
+                {
+                    className: 'mdl-data-table__cell--non-numeric'
+                }
+            ],
+
+            responsive: true,
+            "bInfo": false,
+            "pageLength": 10,
+            "bLengthChange": false, //used to hide the property
+            "language": {
+                "sProcessing": "Procesando...",
+                "sLengthMenu": "Mostrar _MENU_ registros",
+                "sZeroRecords": "No se encontraron resultados",
+                "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+                "sInfo": "",
+                "sInfoEmpty": "",
+                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "sInfoPostFix": "",
+                "sSearch": "",
+                "sUrl": "",
+                "sInfoThousands": ",",
+                "sLoadingRecords": "Cargando...",
+                "oPaginate": {
+                    "sFirst": "Primero",
+                    "sLast": "Ãšltimo",
+                    "sNext": "»",
+                    "sPrevious": "«"
+                }
+            },
+        });
+
+
+
+        $("#datepicker_from").datepicker({
+            "onSelect": function (date) {
+                minDateFilter = new Date(date).getTime();
+                oTable.search(this.value).draw();
+            }
+        }).keyup(function () {
+            minDateFilter = new Date(this.value).getTime();
+            oTable.columns(3).search(this.value).draw();
+        });
+        $("#datepicker_from").datepicker($.datepicker.regional[ "es" ]);
+        $( "#datepicker_from" ).datepicker( "option", "dateFormat", "d 'de' MM 'de' yy" );
+
+
+        $("#datepicker_to").datepicker({
+
+            "onSelect": function (date) {
+                maxDateFilter = new Date(date).getTime();
+                oTable.columns(4).search(this.value).draw();
+            }
+        }).keyup(function () {
+            maxDateFilter = new Date(this.value).getTime();
+            oTable.search(this.value).draw();
+        });
+        $("#datepicker_to").datepicker($.datepicker.regional[ "es" ]);
+        $( "#datepicker_to" ).datepicker( "option", "dateFormat", "d 'de' MM 'de' yy" );
+
+// Date range filter
+        minDateFilter = "";
+        maxDateFilter = "";
+
+        $.fn.dataTableExt.afnFiltering.push(
+                function (oSettings, aData, iDataIndex) {
+                    if (typeof aData._date == 'undefined') {
+                        aData._date = new Date(aData[0]).getTime();
+                    }
+
+                    if (minDateFilter && !isNaN(minDateFilter)) {
+                        if (aData._date < minDateFilter) {
+                            return false;
+                        }
+                    }
+
+                    if (maxDateFilter && !isNaN(maxDateFilter)) {
+                        if (aData._date > maxDateFilter) {
+                            return false;
+                        }
+                    }
+
+                    return true;
+                }
+        );
+    });
+
+</script>
+
 {% endblock %}
 
 
