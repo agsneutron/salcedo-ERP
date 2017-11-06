@@ -259,3 +259,9 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 @admin.register(EmployeeLoan)
 class EmployeeLoanAdmin(admin.ModelAdmin):
     form = EmployeeLoanForm
+
+
+# Loan Admin.
+@admin.register(JobProfile)
+class EmployeeLoanAdmin(admin.ModelAdmin):
+    form = JobProfileForm

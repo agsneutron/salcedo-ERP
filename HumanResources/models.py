@@ -566,6 +566,12 @@ class JobProfile(models.Model):
     friday = models.BooleanField(verbose_name="Viernes", default= True)
     saturday = models.BooleanField(verbose_name="Sábado", default= True)
 
+    # Foreign Keys.
+    direction = models.ForeignKey('Direction', verbose_name='Dirección', null=False, blank=False)
+    subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección', null=False, blank=False)
+    area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
+    department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
+
 
     class Meta:
         verbose_name_plural = "Perfiles de Puesto"
@@ -583,3 +589,66 @@ class JobProfile(models.Model):
 class Direction(models.Model):
     name = models.CharField(verbose_name="Dirección", max_length=2048, null=False, blank=False,
                                    unique=False)
+
+    class Meta:
+        verbose_name_plural = "Direcciones"
+        verbose_name = "Dirección"
+
+
+    def __str__(self):
+        return self.name
+
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
+
+# To represent a Subdirection.
+class Subdirection(models.Model):
+    name = models.CharField(verbose_name="Subdirección", max_length=2048, null=False, blank=False,
+                                   unique=False)
+
+
+    class Meta:
+        verbose_name_plural = "Subdirecciones"
+        verbose_name = "Subdirección"
+
+
+    def __str__(self):
+        return self.name
+
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
+
+# To represent an Area.
+class Area(models.Model):
+    name = models.CharField(verbose_name="Área", max_length=2048, null=False, blank=False,
+                                   unique=False)
+
+    class Meta:
+        verbose_name_plural = "Áreas"
+        verbose_name = "Área"
+
+
+    def __str__(self):
+        return self.name
+
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
+
+
+# To represent a DEpartment.
+class Department(models.Model):
+    name = models.CharField(verbose_name="Departamento", max_length=2048, null=False, blank=False,
+                                   unique=False)
+
+    class Meta:
+        verbose_name_plural = "Departamentos"
+        verbose_name = "Departamento"
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name

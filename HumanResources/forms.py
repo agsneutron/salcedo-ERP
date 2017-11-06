@@ -278,3 +278,10 @@ class EmployeeLoanForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
+class JobProfileForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = '__all__'
