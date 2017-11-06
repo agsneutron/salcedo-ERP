@@ -508,3 +508,48 @@ class EmployeeDropOut(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.employee.name + ": " + self.employee.first_last_name + ": " + self.employee.second_last_name
 
+
+
+# To represent a Job Profile.
+class JobProfile(models.Model):
+    job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
+                                   unique=False)
+    abilities = models.CharField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
+                                   unique=False)
+    aptitudes = models.CharField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
+                                   unique=False)
+    knowledge = models.CharField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
+                                 unique=False)
+    competitions = models.CharField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
+                                 unique=False)
+    scholarship = models.CharField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
+                                 unique=False)
+    experience = models.CharField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
+                                 unique=False)
+    entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
+    exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
+    sunday = models.BooleanField(verbose_name="Domingo", default= False)
+    monday = models.BooleanField(verbose_name="Lunes", default= True)
+    tuesday = models.BooleanField(verbose_name="Martes", default= True)
+    wednesday = models.BooleanField(verbose_name="Miércoles", default= True)
+    thursday = models.BooleanField(verbose_name="Jueves", default= True)
+    friday = models.BooleanField(verbose_name="Viernes", default= True)
+    saturday = models.BooleanField(verbose_name="Sábado", default= True)
+
+
+    class Meta:
+        verbose_name_plural = "Perfiles de Puesto"
+        verbose_name = "Perfil de Puesto"
+
+    def __str__(self):
+        return self.description
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.description
+
+
+
+# To represent a Job's Profile Direction.
+class Direction(models.Model):
+    name = models.CharField(verbose_name="Dirección", max_length=2048, null=False, blank=False,
+                                   unique=False)
