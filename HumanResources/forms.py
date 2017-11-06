@@ -240,7 +240,6 @@ class EmployeeHasTagForm(forms.ModelForm):
 
 # Form to include the fields of the Tax Regime Form.
 class TaxRegimeForm(forms.ModelForm):
-
     class Meta:
         model = TaxRegime
         fields = '__all__'
@@ -248,7 +247,6 @@ class TaxRegimeForm(forms.ModelForm):
 
 # Form to include the fields of the Tax Regime Form.
 class TestForm(forms.ModelForm):
-
     class Meta:
         model = Test
         fields = '__all__'
@@ -261,9 +259,22 @@ class DocumentTypeForm(forms.ModelForm):
         fields = '__all__'
 
 
-
 # Form to include the fields of Tag Form.
 class TagForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
+class EmployeeAssistanceForm(forms.ModelForm):
+    class Meta:
+        model = Tag
+        fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
+class EmployeeLoanForm(forms.ModelForm):
     class Meta:
         model = Tag
         fields = '__all__'

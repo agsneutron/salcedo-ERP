@@ -16,6 +16,9 @@ from ERP.models import Pais, Estado, Municipio
 
 
 
+
+
+
 # Employee General Information.
 class Employee(models.Model):
     employee_key = models.CharField(verbose_name="Clave del Empleado", max_length=64, null=False, blank=False, unique=False)
@@ -508,3 +511,31 @@ class EmployeeDropOut(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.employee.name + ": " + self.employee.first_last_name + ": " + self.employee.second_last_name
 
+class EmployeeAssistance(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+    # Period
+
+    date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha")
+    entry_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Entrada")
+    exit_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Salida")
+
+
+    class Meta:
+        verbose_name_plural = "Asistencias"
+        verbose_name = "Asistencia"
+
+
+
+class EmployeeLoan(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+    # Period
+
+    # Start_Period ***
+    # End_Period   ***
+
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+
+
+    class Meta:
+        verbose_name_plural = "Préstamos"
+        verbose_name = "Préstamo"
