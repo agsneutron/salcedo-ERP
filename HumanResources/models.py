@@ -509,6 +509,36 @@ class EmployeeDropOut(models.Model):
         return self.employee.name + ": " + self.employee.first_last_name + ": " + self.employee.second_last_name
 
 
+class EmployeeAssistance(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+    # Period
+
+    date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha")
+    entry_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Entrada")
+    exit_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Salida")
+
+
+    class Meta:
+        verbose_name_plural = "Asistencias"
+        verbose_name = "Asistencia"
+
+
+
+class EmployeeLoan(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+    # Period
+
+    # Start_Period ***
+    # End_Period   ***
+
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+
+
+    class Meta:
+        verbose_name_plural = "Préstamos"
+        verbose_name = "Préstamo"
+
+
 
 # To represent a Job Profile.
 class JobProfile(models.Model):
@@ -549,7 +579,7 @@ class JobProfile(models.Model):
 
 
 
-# To represent a Job's Profile Direction.
+# To represent a Direction.
 class Direction(models.Model):
     name = models.CharField(verbose_name="Dirección", max_length=2048, null=False, blank=False,
                                    unique=False)

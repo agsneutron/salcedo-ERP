@@ -1665,8 +1665,7 @@ class LogFile(models.Model):
     version = IntegerVersionField()
     progress_estimate_log = models.ForeignKey(ProgressEstimateLog, verbose_name="Bitácora de estimación", null=False,
                                               blank=False)
-    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination,
-                            default="")
+    file = models.FileField(verbose_name="Archivo", null=True, blank=True, upload_to=progress_estimate_log_destination)
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
