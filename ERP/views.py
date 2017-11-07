@@ -824,7 +824,12 @@ class ProgressEstimateLogDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProgressEstimateLogDetailView, self).get_context_data(**kwargs)
         progressestimatelog = context['progressestimatelog']
+        print 'the id log id:'+str(progressestimatelog)
         context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
+
+
+
+        print context['logfiles'][0].file
 
         return context
 
