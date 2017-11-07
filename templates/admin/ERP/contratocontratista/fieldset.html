@@ -221,6 +221,7 @@
                                     </div>
                                 </div>
                             </div>
+                         </div>
                         {% endif %}
                         {% comment %} {% if field.field.name == "pago_inicial" %}
                         <div class="col-sm-3">
@@ -289,18 +290,19 @@
                             </div>
                         </div>
                         </div>
-                    {% endif %}
+
+
+
+
+                </div>
+
+</fieldset>
+ {% endif %}
                         {% if field.field.name == "version" %}
                             {{ field.field|addcss:"form-control" }}
                         {% endif %}
                     {% endfor %}
                 {% endfor %}
-                </div>
-
-
-                </div>
-</fieldset>
-
 
 <script>
     {% comment %}    $(document).ready(function () {

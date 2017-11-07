@@ -1,0 +1,54 @@
+{% load app_filters admin_static %}
+<style>
+.header{
+    background-color: #204280;
+    padding: 5px 10px;
+    color: white;
+}
+</style>
+<fieldset class=" {{ fieldset.classes }}">
+   {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="header">
+           <span class="">{{ fieldset.name }}</span>
+        </div>
+    </div>
+</div>
+
+        <div >
+
+                {% for line in fieldset %}
+                    {% for field in line %}
+
+
+                        <div class="col-xs-4"{% if not line.fields|length_is:'1' %} class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %} class="checkbox-row"{% endif %}>
+                   {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                   {% if field.is_checkbox %}
+                       {{ field.field }}{{ field.label_tag }}
+                   {% else %}
+                       {{ field.label_tag }}
+                       {% if field.is_readonly %}
+                           <div class="readonly">{{ field.contents }}</div>
+                       {% else %}
+                           {{ field.field |addcss:"form-control"  }}
+                       {% endif %}
+                   {% endif %}
+                   {% if field.field.help_text %}
+                       <div class="help">{{ field.field.help_text|safe }}</div>
+                   {% endif %}
+               </div>
+
+
+
+
+                    {% endfor %}
+                {% endfor %}
+                </div>
+        </div>
+    </div>
+</fieldset>
