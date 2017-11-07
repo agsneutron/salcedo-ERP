@@ -13,6 +13,9 @@ from HumanResources.models import *
 def employeedetail(request):
     return render(request, 'HumanResources/employee-detail.html')
 
+def employeehome(request):
+    return render(request, 'HumanResources/employee-home.html')
+
 class EmployeeDetailView(generic.DetailView):
     model = Employee
     template_name = "HumanResources/employee-detail.html"

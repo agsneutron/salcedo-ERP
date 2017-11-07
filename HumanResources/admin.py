@@ -28,7 +28,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
     list_display = ('name', 'first_last_name', 'personal_email', )
-    list_editable = ('first_last_name', 'personal_email', )
+    # list_editable = ('first_last_name', 'personal_email', )
 
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
