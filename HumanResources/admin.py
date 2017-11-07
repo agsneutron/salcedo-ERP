@@ -18,16 +18,17 @@ class EmployeeAdmin(admin.ModelAdmin):
     form = EmployeeForm
     fieldsets = (
         ("Datos de Empleado", {
+            'classes': ('collapse',),
             'fields': ('employee_key','type','registry_date', 'status')
         }),
         ("Datos Personales", {
+            'classes': ('collapse',),
             'fields': ('name', 'first_last_name', 'second_last_name', 'birthdate', 'birthplace', 'gender', 'marital_status',
                        'curp', 'rfc', 'tax_regime', 'blood_type', 'street', 'outdoor_number', 'indoor_number', 'colony',
                        'country', 'state', 'town', 'zip_code', 'phone_number', 'cellphone_number','office_number',
                        'extension_number','personal_email', 'work_email', 'driving_license_number','driving_license_expiry_date')
         }),
     )
-
 
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
@@ -219,7 +220,6 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
-
 ''' ----------------------------------
 Administrators to fill the database.
 ----------------------------------  '''
@@ -246,3 +246,6 @@ class DocumentTypeAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     form = TagForm
+
+
+

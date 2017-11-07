@@ -9,7 +9,7 @@ from django.utils.timezone import now
 from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
-from ERP.models import Pais, Estado, Municipio
+from ERP.models import Pais, Estado, Municipio, Project
 
 # Create your models here.
 
@@ -507,4 +507,3 @@ class EmployeeDropOut(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.employee.name + ": " + self.employee.first_last_name + ": " + self.employee.second_last_name
-
