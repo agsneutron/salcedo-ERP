@@ -87,10 +87,11 @@
                                 <h3 class="card-title">
                                      Archivos de bitácora</h3>
                             </div>
-                             <table id="" class="table  table-striped table_s">
+                            <table id="" class="table  table-striped table_s">
                                 <thead>
                                 <tr>
                                     <th>Archivo</th>
+                                    <th>MIME</th>
 
                                 </tr>
                                 </thead>
@@ -98,8 +99,10 @@
                                 {% for logfile in logfiles %}
                                     <tr>
                                         <td>
-
-                                           <a href="{{ logfile.file.name }}">{{ logfile.file.name }}</a>
+                                           <a href="{{ logfile.file }}">{{ logfile.file }}</a>
+                                        </td>
+                                        <td>
+                                            {{ logfile.mime }}
                                         </td>
 
                                     </tr>
