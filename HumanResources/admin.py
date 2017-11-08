@@ -221,13 +221,18 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 
-
-
-
 # Employee Position Description Admin.
 @admin.register(EmployeePositionDescription)
 class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
     form = EmployeePositionDescriptionForm
+    fieldsets = (
+        ("Descripción de Puesto", {
+            #contract
+            'fields': ('start_date', 'end_date', 'direction', 'subdirection','area','department','job_profile','physical_location',
+                       'payroll_classification','project','insurance_type','insurance_number','days_attendance','entry_time','departure_time',
+                       'observations')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):

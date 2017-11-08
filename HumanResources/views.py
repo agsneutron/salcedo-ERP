@@ -10,7 +10,8 @@ from django.views.generic.list import ListView
 # Model Imports.
 from HumanResources.models import *
 
-
+def employeehome(request):
+    return render(request, 'admin/HumanResources/employee-home.html')
 
 class EmployeeDetailView(generic.DetailView):
     model = Employee
@@ -69,7 +70,12 @@ class EmployeeDetailView(generic.DetailView):
         context['employee_documents'] = EmployeeDocument.objects.filter(employee__id=employee.id)
 
         # Obtaining the employee's checker info and setting it to the context.
-        context['checker_data'] = CheckerData.objects.get(employee__id=employee.id)
+        #context['checker_data'] = CheckerData.objects.get(employee__id=employee.id)
 
+        # Obtaining the employee's position description and setting it to the context.
+        context['employee_position_description'] = EmployeePositionDescription.objects.filter(employee__id=employee.id)
+
+        # Obtaining the employee's Employee Financial Data and setting it to the context.
+        context['employee_financial_data'] = EmployeeFinancialData.objects.filter(employee__id=employee.id)
 
         return context
