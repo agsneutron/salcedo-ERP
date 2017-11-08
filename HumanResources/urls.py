@@ -25,31 +25,19 @@ from users import urls
 import users
 from ERP import urls
 import ERP
-from HumanResources import urls
+
 import HumanResources
+from HumanResources import views
 
 from reporting import urls
 
 from users import views
+from HumanResources import views
 
-admin.autodiscover()
 
-import DataUpload
-from DataUpload import urls
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^users/', include(users.urls)),
-    url(r'^erp/', include(ERP.urls)),
-    url(r'^humanresources/', include(HumanResources.urls)),
-    url(r'^reporting/', include(ERP.urls)),
-    url(r'^$', RedirectView.as_view(url='/admin')),
-    url(r'^data_upload/', include(DataUpload.urls)),
-    url(r'^reporting/', include(reporting.urls)),
-    url(r'^chaining/', include('smart_selects.urls')),
+    url(r'^employeehome$', views.employeehome, name='employeehome'),
 
-    url(r'^admin/empresas', users.views.empresas, name='empresas'),
-    url(r'^admin/contratos', users.views.contratos, name='contratos'),
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
