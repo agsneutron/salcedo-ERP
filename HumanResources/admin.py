@@ -30,6 +30,18 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
+    def get_urls(self):
+        urls = super(EmployeeAdmin, self).get_urls()
+
+        my_urls = [
+            # url(r'^$',
+            #    self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
+            #    name='progressestimatelog-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.EmployeeDetailView.as_view(), name='employee-detail'),
+
+        ]
+        return my_urls + urls
+
 
 
 # Education Admin.
