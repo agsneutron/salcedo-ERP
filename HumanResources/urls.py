@@ -20,6 +20,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.http import HttpResponseRedirect
 from django.conf import settings
 
+
+
 import reporting
 from users import urls
 import users
@@ -38,6 +40,7 @@ from HumanResources import views
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^employeehome$', views.employeehome, name='employeehome'),
 
+    url(r'^employeehome$', views.employeehome, name='employeehome'),
+url(r'^employeedetail$', views.employeedetail, name='employeedetail'),
 ]
