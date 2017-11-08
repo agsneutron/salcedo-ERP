@@ -311,3 +311,11 @@ class AreaForm(forms.ModelForm):
     class Meta:
         model = Area
         fields = '__all__'
+
+
+
+# Form to include the fields of Tag Form.
+class JobInstanceForm(forms.ModelForm):
+    class Meta:
+        model = JobInstance
+        fields = '__all__'

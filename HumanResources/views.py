@@ -6,10 +6,64 @@ from django.shortcuts import render
 from django.views import generic
 from django.views.generic.list import ListView
 
-
 # Model Imports.
 from HumanResources.models import *
 
+
+class JobInstanceListView(generic.ListView):
+    model = JobInstance
+    template_name = "HumanResources/job-instance-list.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(JobInstanceListView, self).get_context_data(**kwargs)
+
+        elements = context['object_list']
+
+        first_node = JobInstance.objects.get(pk=1)
+
+        first_node.children = self.get_children(first_node)
+
+        context['chart'] = self.get_chart(first_node)
+
+        print '----'
+        print context['chart']
+
+        return context
+
+    def get_children(self, node):
+        children = JobInstance.objects.filter(parent_job_instance_id=node.id)
+        for child in children:
+            child.children = self.get_children(child)
+
+        return children
+
+    def get_chart(self, first_node):
+        html = '<ul id="org" style="display:none">'
+
+        html += '<li>'
+        html += str(first_node.id)
+
+        html += self.get_sub_chart(first_node.children)
+
+        html += '</li>'
+        html += '</ul>'
+
+        return html
+
+    def get_sub_chart(self, children):
+        html = ''
+        if children is not None and len(children) > 0:
+            html += '<ul>'
+
+        for child in children:
+            html += '<li>' + str(child.id)
+            html += self.get_sub_chart(child.children)
+            html += '</li>'
+
+        if children is not None and len(children) > 0:
+            html += '</ul>'
+
+        return html
 
 
 class EmployeeDetailView(generic.DetailView):
@@ -70,6 +124,5 @@ class EmployeeDetailView(generic.DetailView):
 
         # Obtaining the employee's checker info and setting it to the context.
         context['checker_data'] = CheckerData.objects.get(employee__id=employee.id)
-
 
         return context
