@@ -439,8 +439,8 @@ form .aligned ul {
 }
 
 .item-right {
-    position: absolute;
-    top: 2px;
+        position: absolute;
+    top: 3px;
     right: 25px;
 }
 

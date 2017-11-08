@@ -1,4 +1,5 @@
 """SalcedoERP URL Configuration
+
 The `urlpatterns` list routes URLs to views. For more information please see:
     https://docs.djangoproject.com/en/1.11/topics/http/urls/
 Examples:
@@ -49,7 +50,8 @@ urlpatterns = [
     url(r'^reporting/', include(reporting.urls)),
     url(r'^chaining/', include('smart_selects.urls')),
 
-    url(r'^admin/empresas', users.views.empresas, name='empresas'),
-    url(r'^admin/contratos', users.views.contratos, name='contratos'),
+                  url(r'^admin/empresas', users.views.empresas, name='empresas'),
+                  url(r'^admin/contratos', users.views.contratos, name='contratos'),
+
 
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
