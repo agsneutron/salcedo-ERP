@@ -70,7 +70,7 @@ class EmployeeDetailView(generic.DetailView):
         context['work_references'] = WorkReference.objects.filter(employee__id=employee.id)
 
         # Obtaining the employee's documents and setting them to the context.
-        context['employee_documents'] = EmployeeDocument.objects.filter(employee__id=employee.id)
+      #  context['employee_documents'] = EmployeeDocument.objects.filter(employee__id=employee.id)
 
         # Obtaining the employee's checker info and setting it to the context.
         context['checker_data'] = CheckerData.objects.get(employee__id=employee.id)

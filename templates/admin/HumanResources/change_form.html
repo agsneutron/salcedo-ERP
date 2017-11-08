@@ -175,7 +175,7 @@
                 <!-- Nav tabs -->
                 <ul class="nav nav-tabs">
                     <li role="presentation" class="active">
-                        <a href="#personales" aria-controls="personales" role="tab" data-toggle="tab">Datos
+                        <a href="../../employee/add">Datos
                             personales</a>
                     </li>
                     <li role="presentation">
@@ -183,7 +183,7 @@
                             academica</a>
                     </li>
                     <li role="presentation">
-                        <a href="#contactos" aria-controls="contactos" role="tab" data-toggle="tab">Contactos de
+                        <a href="../../emergencycontact/add">Contactos de
                             emergencia</a>
                     </li>
                     <li role="presentation">
@@ -210,7 +210,7 @@
                     </li>
 
                 </ul>
-<hr>
+
                 <!-- Tab panes -->
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="personales">
@@ -218,57 +218,17 @@
 
 
 
-
-
-
-
-
-
-
-     {% include "admin/HumanResources/employee/fieldset.html" %}
+     {% include "admin/HumanResources/fieldset.html" %}
 {% endfor %}
                     </div>
 
-                    <div role="tabpanel" class="tab-pane" id="academica">
 
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="contactos">
-
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="familiares">
-
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="referencias">
-
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="pruebas">
-
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="doc">
-
-                    </div>
-
-                    <div role="tabpanel" class="tab-pane" id="checador">
-
-                    </div>
-
-                     <div role="tabpanel" class="tab-pane" id="puesto">
-
-                    </div>
-
-                     <div role="tabpanel" class="tab-pane" id="financieros">
-
-                    </div>
 
                 </div>
             </div>
         </div>
     </div>
+
 
 
 
@@ -292,7 +252,7 @@
 {% endblock %}
 
 {% block after_related_objects %}{% endblock %}
-
+<hr>
 {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 
 {% block admin_change_form_document_ready %}
