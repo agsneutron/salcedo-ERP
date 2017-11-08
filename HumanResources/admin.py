@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+
 # Django Libraries.
 from django.conf.urls import url
 from django.contrib import admin
@@ -18,22 +19,22 @@ class EmployeeAdmin(admin.ModelAdmin):
     form = EmployeeForm
     fieldsets = (
         ("Datos de Empleado", {
-            'fields': ('employee_key','type','registry_date', 'status')
+            'fields': ('employee_key', 'type', 'registry_date', 'status')
         }),
         ("Datos Personales", {
-            'fields': ('name', 'first_last_name', 'second_last_name', 'birthdate', 'birthplace', 'gender', 'marital_status',
-                       'curp', 'rfc', 'tax_regime', 'blood_type', 'street', 'outdoor_number', 'indoor_number', 'colony',
-                       'country', 'state', 'town', 'zip_code', 'phone_number', 'cellphone_number','office_number',
-                       'extension_number','personal_email', 'work_email', 'driving_license_number','driving_license_expiry_date')
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'birthdate', 'birthplace', 'gender', 'marital_status',
+                'curp', 'rfc', 'tax_regime', 'blood_type', 'street', 'outdoor_number', 'indoor_number', 'colony',
+                'country', 'state', 'town', 'zip_code', 'phone_number', 'cellphone_number', 'office_number',
+                'extension_number', 'personal_email', 'work_email', 'driving_license_number',
+                'driving_license_expiry_date')
         }),
     )
-    list_display = ('name', 'first_last_name', 'personal_email', )
-    # list_editable = ('first_last_name', 'personal_email', )
 
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
         my_urls = [
-            #url(r'^$',
+            # url(r'^$',
             #    self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
             #    name='progressestimatelog-list-view'),
             url(r'^(?P<pk>\d+)/$', views.EmployeeDetailView.as_view(), name='employee-detail'),
@@ -61,7 +62,6 @@ class EducationAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 
-
 # Admin for the inline documents of the current education of an employee.
 class CurrentEducationDocumentInline(admin.TabularInline):
     model = CurrentEducationDocument
@@ -72,7 +72,7 @@ class CurrentEducationDocumentInline(admin.TabularInline):
 @admin.register(CurrentEducation)
 class CurrentEducationAdmin(admin.ModelAdmin):
     form = CurrentEducationForm
-    inlines = (CurrentEducationDocumentInline, )
+    inlines = (CurrentEducationDocumentInline,)
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -105,7 +105,6 @@ class EmergencyContactAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
-
 
 
 # Family Member Admin.
@@ -144,6 +143,7 @@ class WorkReferenceAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
 
 # Test Application Admin.
 @admin.register(TestApplication)
@@ -221,9 +221,164 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 
+
+
+
+# Employee Position Description Admin.
+@admin.register(EmployeePositionDescription)
+class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
+    form = EmployeePositionDescriptionForm
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EmployeePositionDescriptionAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+# Employee Financial Data Admin.
+@admin.register(EmployeeFinancialData)
+class EmployeeFinancialDataAdmin(admin.ModelAdmin):
+    form = EmployeeFinancialDataForm
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EmployeeFinancialDataAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
+# Infonavit Data Admin.
+@admin.register(InfonavitData)
+class InfonavitDataAdmin(admin.ModelAdmin):
+    form = InfonavitDataForm
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
+# Earnings Deductions Admin.
+@admin.register(EarningsDeductions)
+class EarningsDeductionsAdmin(admin.ModelAdmin):
+    form = EarningsDeductionsForm
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
+# Employee Earnings Deductions Admin.
+@admin.register(EmployeeEarningsDeductions)
+class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
+    form = EmployeeEarningsDeductionsForm
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EmployeeEarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
+# Payroll Receipt Processed Admin.
+@admin.register(PayrollReceiptProcessed)
+class PayrollReceiptProcessedAdmin(admin.ModelAdmin):
+    form = PayrollReceiptProcessedForm
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(PayrollReceiptProcessedAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+# Payroll Processed Detail Admin.
+@admin.register(PayrollProcessedDetail)
+class PayrollProcessedDetailAdmin(admin.ModelAdmin):
+    form = PayrollProcessedDetailForm
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(PayrollProcessedDetailAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
 ''' ----------------------------------
 Administrators to fill the database.
 ----------------------------------  '''
+
+# Payroll Processed Admin.
+@admin.register(PayrollProcessed)
+class PayrollProcessedAdmin(admin.ModelAdmin):
+    form = PayrollProcessedForm
+
+# Payroll To Process Admin.
+@admin.register(PayrollToProcess)
+class PayrollToProcessAdmin(admin.ModelAdmin):
+    form = PayrollToProcessForm
+
+# Payroll Type Admin.
+@admin.register(PayrollType)
+class PayrollTypeAdmin(admin.ModelAdmin):
+    form = PayrollTypeForm
+
+
+# Payroll Period Admin.
+@admin.register(PayrollPeriod)
+class PayrollPeriodAdmin(admin.ModelAdmin):
+    form = PayrollPeriodForm
 
 # Tax Regime Admin.
 @admin.register(TaxRegime)
@@ -247,3 +402,44 @@ class DocumentTypeAdmin(admin.ModelAdmin):
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     form = TagForm
+
+
+# Assistance Admin.
+@admin.register(EmployeeAssistance)
+class EmployeeAssistanceAdmin(admin.ModelAdmin):
+    form = EmployeeAssistanceForm
+
+
+# Loan Admin.
+@admin.register(EmployeeLoan)
+class EmployeeLoanAdmin(admin.ModelAdmin):
+    form = EmployeeLoanForm
+
+
+# JobProfile Admin.
+@admin.register(JobProfile)
+class JobProfileAdmin(admin.ModelAdmin):
+    form = JobProfileForm
+
+
+# Loan Admin.
+@admin.register(Direction)
+class DirectionAdmin(admin.ModelAdmin):
+    form = DirectionForm
+
+# Loan Admin.
+@admin.register(Subdirection)
+class SubdirectionAdmin(admin.ModelAdmin):
+    form = SubdirectionForm
+
+
+# Loan Admin.
+@admin.register(Area)
+class AreaAdmin(admin.ModelAdmin):
+    form = AreaForm
+
+# Loan Admin.
+@admin.register(Department)
+class DepartmentAdmin(admin.ModelAdmin):
+    form = DepartmentForm
+
