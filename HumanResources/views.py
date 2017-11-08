@@ -9,7 +9,6 @@ from django.views.generic.list import ListView
 # Model Imports.
 from HumanResources.models import *
 
-
 class JobInstanceListView(generic.ListView):
     model = JobInstance
     template_name = "HumanResources/job-instance-list.html"
@@ -64,7 +63,6 @@ class JobInstanceListView(generic.ListView):
             html += '</ul>'
 
         return html
-
 
 class EmployeeDetailView(generic.DetailView):
     model = Employee

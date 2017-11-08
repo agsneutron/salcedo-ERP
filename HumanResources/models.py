@@ -662,12 +662,9 @@ class JobInstance(models.Model):
     job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleado', null=False, blank=False)
     parent_job_instance = models.ForeignKey('self', verbose_name='Jefe Inmediato', null=True, blank=True)
 
-
     class Meta:
         verbose_name_plural = "Vacante de Puesto"
         verbose_name = "Vacante de Empleos"
-
-
 
     def __str__(self):
         return str(self.id)
