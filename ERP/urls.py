@@ -11,7 +11,8 @@ urlpatterns = [
     #
     # Endpoints to retrieve information.
     url(r'^api/log_files_for_progress_estimate_log', erp_api.LogFilesForProgressEstimateLogEndpoint.as_view()),
-    url(r'^api/concepts_inputs_by_line_item_and_type', erp_api.ConceptInputsForLineItemAndType.as_view()),
+    url(r'^api/concepts_inputs_by_line_item_and_type', erp_api
+        .ConceptInputsForLineItemAndType.as_view()),
     url(r'^api/get_project_info', erp_api.GetProjectInfo.as_view()),
     #
     # Endpoints to be called after a form to be saved.

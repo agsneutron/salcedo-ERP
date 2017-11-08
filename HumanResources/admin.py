@@ -245,7 +245,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 # Employee Financial Data Admin.
 @admin.register(EmployeeFinancialData)
 class EmployeeFinancialDataAdmin(admin.ModelAdmin):
-    form = EmployeeFinancialDataForm
+    form = EmployeeFinantialForm #EmployeeFinancialDataForm
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -358,6 +358,8 @@ class PayrollProcessedDetailAdmin(admin.ModelAdmin):
 ''' ----------------------------------
 Administrators to fill the database.
 ----------------------------------  '''
+
+
 
 # Payroll Processed Admin.
 @admin.register(PayrollProcessed)
