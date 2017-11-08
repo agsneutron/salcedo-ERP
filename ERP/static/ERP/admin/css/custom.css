@@ -545,8 +545,8 @@ form .aligned ul {
 }
 
 .item-right {
-    position: absolute;
-    top: -21px;
+        position: absolute;
+    top: 3px;
     right: 25px;
 }
 
@@ -1502,4 +1502,18 @@ body .sb-site-container {
     .col-lg-offset-0 {
         margin-left: 0%;
     }
+}
+.vTextField {
+    width: 100% !important;
+}
+select.form-control {
+    border: 1px solid #e2e2e2;
+    box-shadow: none;
+    border-radius: 0;
+}
+.datetimeshortcuts {
+position: absolute;
+    right: 17px;
+    z-index: 9999;
+
 }

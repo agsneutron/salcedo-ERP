@@ -28,7 +28,7 @@ from ERP import urls
 import ERP
 
 import HumanResources
-from HumanResources  import urls
+from HumanResources import urls
 
 from reporting import urls
 
@@ -41,18 +41,17 @@ from DataUpload import urls
 from django.conf.urls.static import static
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^users/', include(users.urls)),
-    url(r'^erp/', include(ERP.urls)),
-    url(r'^reporting/', include(ERP.urls)),
-    url(r'^$', RedirectView.as_view(url='/admin')),
-    url(r'^data_upload/', include(DataUpload.urls)),
-    url(r'^reporting/', include(reporting.urls)),
-url(r'^HumanResources/', include(HumanResources.urls)),
-    url(r'^chaining/', include('smart_selects.urls')),
+                  url(r'^admin/', admin.site.urls),
+                  url(r'^users/', include(users.urls)),
+                  url(r'^erp/', include(ERP.urls)),
+                  url(r'^reporting/', include(ERP.urls)),
+                  url(r'^$', RedirectView.as_view(url='/admin')),
+                  url(r'^data_upload/', include(DataUpload.urls)),
+                  url(r'^reporting/', include(reporting.urls)),
+                  url(r'^HumanResources/', include(HumanResources.urls)),
+                  url(r'^chaining/', include('smart_selects.urls')),
 
-    url(r'^admin/empresas', users.views.empresas, name='empresas'),
-    url(r'^admin/contratos', users.views.contratos, name='contratos'),
+                  url(r'^admin/empresas', users.views.empresas, name='empresas'),
+                  url(r'^admin/contratos', users.views.contratos, name='contratos'),
 
-
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
