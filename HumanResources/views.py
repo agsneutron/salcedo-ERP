@@ -14,7 +14,7 @@ def employeedetail(request):
     return render(request, 'HumanResources/employee-detail.html')
 
 def employeehome(request):
-    return render(request, 'HumanResources/employee-home.html')
+    return render(request, 'admin/HumanResources/employee-home.html')
 
 class EmployeeDetailView(generic.DetailView):
     model = Employee
