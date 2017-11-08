@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-
 # Django Libraries.
 from django.conf.urls import url
 from django.contrib import admin
@@ -31,16 +30,6 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
-    def get_urls(self):
-        urls = super(EmployeeAdmin, self).get_urls()
-        my_urls = [
-            # url(r'^$',
-            #    self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
-            #    name='progressestimatelog-list-view'),
-            url(r'^(?P<pk>\d+)/$', views.EmployeeDetailView.as_view(), name='employee-detail'),
-
-        ]
-        return my_urls + urls
 
 
 # Education Admin.
@@ -364,6 +353,8 @@ class PayrollProcessedDetailAdmin(admin.ModelAdmin):
 Administrators to fill the database.
 ----------------------------------  '''
 
+
+
 # Payroll Processed Admin.
 @admin.register(PayrollProcessed)
 class PayrollProcessedAdmin(admin.ModelAdmin):
@@ -432,6 +423,7 @@ class JobProfileAdmin(admin.ModelAdmin):
 class DirectionAdmin(admin.ModelAdmin):
     form = DirectionForm
 
+
 # Loan Admin.
 @admin.register(Subdirection)
 class SubdirectionAdmin(admin.ModelAdmin):
@@ -443,8 +435,21 @@ class SubdirectionAdmin(admin.ModelAdmin):
 class AreaAdmin(admin.ModelAdmin):
     form = AreaForm
 
+
 # Loan Admin.
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
     form = DepartmentForm
 
+
+# Loan Admin.
+@admin.register(JobInstance)
+class JobInstanceAdmin(admin.ModelAdmin):
+    form = JobInstanceForm
+
+    def get_urls(self):
+        urls = super(JobInstanceAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', views.JobInstanceListView.as_view(), name='employee-detail'),
+        ]
+        return my_urls + urls
