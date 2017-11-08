@@ -712,7 +712,7 @@ class EmployeePositionDescription(models.Model):
     subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección', null=False, blank=False)
     area = models.ForeignKey(Area, verbose_name='Área', null=False, blank=False)
     department = models.ForeignKey(Department, verbose_name='Departamento', null=False, blank=False)
-
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
     #contract = models.ForeignKey(Contract, verbose_name="Contrato", null=False, blank=False)
     #immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
     payroll_classification = models.ForeignKey(PAYROLL_CLASIFICATION, verbose_name="Clasificación de Nómina", null=False, blank=False,)
