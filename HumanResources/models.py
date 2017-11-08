@@ -688,15 +688,6 @@ class Bank(models.Model):
 
 
 class EmployeePositionDescription(models.Model):
-    DAY_CHOICES = (
-        ('L', 'Lunes'),
-        ('M', 'Martes'),
-        ('X', 'Miércoles'),
-        ('J', 'Jueves'),
-        ('V', 'Viernes'),
-        ('S', 'Sábado'),
-        ('D', 'Domingo'),
-    )
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     end_date = models.DateField(verbose_name="Fecha de Termino", null=False, blank=False)
     physical_location = models.CharField(verbose_name="Ubicación Física", max_length=250, null=False, blank=True)
@@ -705,8 +696,15 @@ class EmployeePositionDescription(models.Model):
     entry_time = models.TimeField(verbose_name="Hora de Entrada", null=True, auto_now_add=False)
     departure_time = models.TimeField(verbose_name="Hora de Salida", null=True, auto_now_add=False)
     observations = models.CharField(verbose_name="Observaciones", null=True, blank=False, max_length=500)
-    days_attendance = MultiSelectField(verbose_name="Días Laborales", null=True, blank=False, max_length=1, choices=DAY_CHOICES)
-        # Foreign Keys.
+    monday = models.BooleanField(verbose_name="Lunes", default=True)
+    tuesday = models.BooleanField(verbose_name="Martes", default=True)
+    wednesday = models.BooleanField(verbose_name="Miércoles", default=True)
+    thursday = models.BooleanField(verbose_name="Jueves", default=True)
+    friday = models.BooleanField(verbose_name="Viernes", default=True)
+    saturday = models.BooleanField(verbose_name="Sábado", default=True)
+    sunday = models.BooleanField(verbose_name="Domingo", default=False)
+
+    # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     direction = models.ForeignKey(Direction, verbose_name='Dirección', null=False, blank=False)
     subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección', null=False, blank=False)
