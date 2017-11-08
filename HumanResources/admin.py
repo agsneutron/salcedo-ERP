@@ -250,7 +250,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 # Employee Financial Data Admin.
 @admin.register(EmployeeFinancialData)
 class EmployeeFinancialDataAdmin(admin.ModelAdmin):
-    form = EmployeeFinantialForm #EmployeeFinancialDataForm
+    form = EmployeeFinancialDataForm
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):

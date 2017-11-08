@@ -438,7 +438,7 @@ class PayrollProcessedDetailForm(forms.ModelForm):
         # Filtering the values for the contractor if it , otherwise, None.
         if self.payroll_receip_processed_id is not None:
             self.fields['payroll_receip_processed'].queryset = PayrollReceiptProcessed.objects.filter(pk=self.payroll_receip_processed_id)
-
+'''
 class CombinedFormBase(forms.Form):
     form_classes = []
 
@@ -488,7 +488,7 @@ class RegisterView(FormView):
         # some actions...
         return redirect(self.get_success_url())
 
-
+'''
 
 # Form to include the fields of the Payroll Process Form.
 class PayrollProcessedForm(forms.ModelForm):
