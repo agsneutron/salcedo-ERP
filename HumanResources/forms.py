@@ -241,7 +241,6 @@ class EmployeeHasTagForm(forms.ModelForm):
 class EmployeePositionDescriptionForm(forms.ModelForm):
     class Meta:
         model = EmployeePositionDescription
-        days_attendance = forms.MultipleChoiceField(choices=EmployeePositionDescription.DAY_CHOICES, widget=forms.CheckboxSelectMultiple())
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
