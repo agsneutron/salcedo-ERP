@@ -38,7 +38,7 @@
                      class=“checkbox-row”{% endif %}>
                     {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
                     {% if field.is_checkbox %}
-                        {{ field.field }}{{ field.label_tag }}
+                        {{ field.label_tag }}{{ field.field }}
                     {% else %}
                         {{ field.label_tag }}
                         {% if field.is_readonly %}

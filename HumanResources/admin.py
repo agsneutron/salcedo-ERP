@@ -217,8 +217,8 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Descripción de Puesto", {
             #contract
-            'fields': ('start_date', 'end_date', 'direction', 'subdirection','area','department','job_profile','physical_location',
-                       'payroll_classification','project','insurance_type','insurance_number','days_attendance','entry_time','departure_time',
+            'fields': ('start_date', 'end_date', 'direction', 'subdirection','area','department','job_profile', 'physical_location',
+                       'payroll_classification','project','insurance_type','insurance_number','monday','tuesday', 'wednesday', 'thursday','friday','saturday','sunday','entry_time','departure_time',
                        'observations')
         }),
     )
@@ -236,10 +236,46 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+    # Infonavit Data Admin.
+    # @admin.register(InfonavitData)
+class InfonavitDataInLine(admin.StackedInline):
+    # form = InfonavitDataForm
+    model = InfonavitData
+    extra = 1
+    fieldsets = (
+        ("Crédito Infonavit", {
+            'fields': ('infonavit_credit_number', 'discount_type', 'discount_amount', 'start_date', 'credit_term',
+                       'comments',)
+        }),
+    )
+
+        # # Method to override some characteristics of the form.
+        # def get_form(self, request, obj=None, **kwargs):
+        #     ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
+        #
+        #     # Class to pass the request to the form.
+        #     class ModelFormMetaClass(ModelForm):
+        #         def __new__(cls, *args, **kwargs):
+        #             kwargs['request'] = request
+        #
+        #             return ModelForm(*args, **kwargs)
+        #
+        #     return ModelFormMetaClass
+
+
 # Employee Financial Data Admin.
 @admin.register(EmployeeFinancialData)
 class EmployeeFinancialDataAdmin(admin.ModelAdmin):
     form = EmployeeFinancialDataForm
+
+    fieldsets = (
+        ("Datos Financieros", {
+            'fields': ('payment_method', 'account_number', 'CLABE', 'bank', 'monthly_salary', 'daily_salary',
+                       'aggregate_daily_salary',)
+        }),
+    )
+
+    inlines = (InfonavitDataInLine,)
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -253,26 +289,6 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
-
-
-# Infonavit Data Admin.
-@admin.register(InfonavitData)
-class InfonavitDataAdmin(admin.ModelAdmin):
-    form = InfonavitDataForm
-
-    # Method to override some characteristics of the form.
-    def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
-
-        # Class to pass the request to the form.
-        class ModelFormMetaClass(ModelForm):
-            def __new__(cls, *args, **kwargs):
-                kwargs['request'] = request
-
-                return ModelForm(*args, **kwargs)
-
-        return ModelFormMetaClass
-
 
 # Earnings Deductions Admin.
 @admin.register(EarningsDeductions)

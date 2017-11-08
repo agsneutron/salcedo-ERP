@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 # Django Libraries.
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 
 from decimal import Decimal
@@ -732,8 +733,8 @@ class EmployeePositionDescription(models.Model):
 
 
 class EmployeeFinancialData(models.Model):
-    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, max_length=20, default=0)
-    CLABE = models.IntegerField(verbose_name='CLABE', null=False, max_length=20, default=0)
+    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, default=0)
+    CLABE = models.IntegerField(verbose_name='CLABE', null=False, default=0)
     monthly_salary = models.DecimalField(verbose_name='Salario Mensual', max_digits=20, decimal_places=2, null=True)
     daily_salary = models.DecimalField(verbose_name='Salario Diario', max_digits=20, decimal_places=2, null=True)
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20, decimal_places=2, null=True)
@@ -756,7 +757,7 @@ class InfonavitData(models.Model):
     comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500,)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee_financial_data = models.ForeignKey(EmployeeFinancialData, verbose_name="Empleado", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Datos del Infonavit del Empleado"
