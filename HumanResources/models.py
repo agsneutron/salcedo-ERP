@@ -582,10 +582,12 @@ class JobProfile(models.Model):
         verbose_name = "Perfil de Puesto"
 
     def __str__(self):
-        return self.description
+        return self.job
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.description
+        return self.job
+
+
 
 
 
@@ -924,3 +926,19 @@ class PayrollProcessedDetail(models.Model):
        verbose_name_plural = "Detalle de Nómina Procesada"
        verbose_name = "Detalle de Nómina Procesada"
 
+
+
+class JobInstance(models.Model):
+    # Job Description ***
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleado', null=False, blank=False)
+    parent_job_instance = models.ForeignKey('self', verbose_name='Jefe Inmediato', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Vacante de Puesto"
+        verbose_name = "Vacante de Empleos"
+
+    def __str__(self):
+        return str(self.id)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.id)
