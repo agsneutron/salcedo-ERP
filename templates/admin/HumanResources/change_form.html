@@ -215,9 +215,6 @@
                 <div class="tab-content">
                     <div role="tabpanel" class="tab-pane active" id="personales">
 {% for fieldset in adminform %}
-
-
-
      {% include "admin/HumanResources/fieldset.html" %}
 {% endfor %}
                     </div>
@@ -231,24 +228,17 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
 {% endblock %}
 
 {% block after_field_sets %}{% endblock %}
 
 {% block inline_field_sets %}
+
 {% for inline_admin_formset in inline_admin_formsets %}
 
-    {% include inline_admin_formset.opts.template %}
+    {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
+    {% include "admin/HumanResources/stacked.html" %}
+
 {% endfor %}
 {% endblock %}
 
