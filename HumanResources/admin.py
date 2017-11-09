@@ -13,20 +13,28 @@ from HumanResources import views
 # Importing the forms.
 from HumanResources.forms import *
 
+# Importing the models.
+from HumanResources.models import *
 
 
-class EmployeeList(ChangeList):
+class HumanResourcesAdminUtilities():
+    @staticmethod
+    def get_detail_link(obj):
+        model_name =  obj.__class__.__name__.lower()
+        link = "http://localhost:8000/admin/HumanResources/"+model_name+"/"+str(obj.id)+"/"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-eye color-default eliminar' > </i>"
 
+        return '<a href="'+link+'" class="'+css+'" >'+button+'</a>'
 
+    @staticmethod
+    def get_delete_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "http://localhost:8000/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/delete"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-trash color-default eliminar' > </i>"
 
-    def get_results(self, request):
-        super(EmployeeList, self).get_results(request)
-        print(self.result_list)
-        for result in self.result_list:
-            result.test = 1
-
-        #self.list_display = ('test',)
-
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
 # Employee Admin.
 @admin.register(Employee)
@@ -58,29 +66,25 @@ class EmployeeAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    list_display = ('name','my_url_field','my_url_change')
+    list_display = ('employee_key','get_full_name','get_detail_column','get_delete_column')
 
-    def my_url_field(self, obj):
-        return mark_safe('<a href="%s" class="btn btn-raised btn-default btn-xs"><i class="fa fa-eye color-default eliminar"></i></a>' % obj.id)
+    def get_full_name(self, obj):
+        return obj.name + " " + obj.first_last_name + " " + obj.second_last_name
 
-    def my_url_change(selfself, obj):
-        return mark_safe('<a href = "%s/change?employee=%s" class ="btn btn-raised btn-default btn-xs"> <i class ="fa fa-pencil color-default eliminar"></i></a>' % (obj.id,obj.id))
-    my_url_change.allow_tags = True
-    my_url_change.short_description = 'Editar'
+    def get_detail_column(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
 
-    my_url_field.allow_tags = True
-    my_url_field.short_description = 'Ver'
-    list_display = ('id','name')
-    list_display_links = ('name',)
+    def get_delete_column(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
 
-    def get_changelist(self, request, **kwargs):
-        return EmployeeList
+    # Added columns meta data.
+    get_full_name.short_description = "Nombre"
 
+    get_detail_column.allow_tags = True
+    get_detail_column.short_description = 'Detalle'
 
-
-
-
-
+    get_delete_column.allow_tags = True
+    get_delete_column.short_description = 'Eliminar'
 
 # Education Admin.
 @admin.register(Education)
@@ -106,7 +110,7 @@ class EducationAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
-        print "Employee Id: " + str(employee_id)
+        education_set = Education.objects.filter(employee_id=employee_id)
 
         return super(EducationAdmin, self).add_view(request, form_url, extra_context=extra)
 
@@ -335,6 +339,11 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
         }),
     )
 
+
+# Employee Financial Data Admin.
+@admin.register(EmployeeFinancialData)
+class EmployeeFinancialDataAdmin(admin.ModelAdmin):
+    form = EmployeeFinancialDataForm
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
