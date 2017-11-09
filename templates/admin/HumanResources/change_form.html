@@ -221,6 +221,16 @@
 
                                 {% include "admin/HumanResources/fieldset.html" %}
                             {% endfor %}
+
+                        {% block inline_field_sets %}
+
+{% for inline_admin_formset in inline_admin_formsets %}
+
+    {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
+    {% include "admin/HumanResources/stacked.html" %}
+
+{% endfor %}
+{% endblock %}
                         </div>
                     </div>
 
@@ -231,15 +241,7 @@
 
 {% block after_field_sets %}{% endblock %}
 
-{% block inline_field_sets %}
 
-{% for inline_admin_formset in inline_admin_formsets %}
-
-    {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
-    {% include "admin/HumanResources/stacked.html" %}
-
-{% endfor %}
-{% endblock %}
 
                 {% block after_related_objects %}{% endblock %}
                 <hr>
