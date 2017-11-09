@@ -2,13 +2,13 @@
 {% load i18n admin_urls admin_static admin_modify %}
 
 {% block extrahead %}{{ block.super }}
-<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
-{{ media }}
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+    {{ media }}
 {% endblock %}
 
 {% block extrastyle %}{{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}" />
-<style>
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+    <style>
         p {
             margin: 0;
         }
@@ -84,10 +84,11 @@
         .list-group .list-group-item:first-child, .list-group a.list-group-item:first-child {
             border-top: solid 0px #eee;
         }
-    dd, dt {
-    line-height: 1.3 !important;
-}
-</style>
+
+        dd, dt {
+            line-height: 1.3 !important;
+        }
+    </style>
 {% endblock %}
 
 {% block coltype %}colM{% endblock %}
@@ -95,140 +96,137 @@
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
 
 {% if not is_popup %}
-{% block breadcrumbs %}
-<div class="breadcrumbs">
-<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
-&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
-&rsaquo; {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
-&rsaquo; {% if add %}{% trans 'Add' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
-</div>
+    {% block breadcrumbs %}
+        <div class="breadcrumbs">
+            <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+            &rsaquo; <a
+                href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+            &rsaquo; {% if has_change_permission %}
+            <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}
+            {{ opts.verbose_name_plural|capfirst }}{% endif %}
+            &rsaquo;
+            {% if add %}{% trans 'Add' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+        </div>
 
-{% endblock %}
+    {% endblock %}
 {% endif %}
 
-{% block content %}<div id="content-main">
-{% block object-tools %}
-{% if change %}{% if not is_popup %}
-  <ul class="object-tools">
-    {% block object-tools-items %}
-    {% comment %}<li>
+{% block content %}
+    <div id="content-main">
+        {% block object-tools %}
+            {% if change %}{% if not is_popup %}
+                <ul class="object-tools">
+                    {% block object-tools-items %}
+                        {% comment %}<li>
         {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
         <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
     </li>
     {% if has_absolute_url %}<li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif %}
 {% endcomment %}    {% endblock %}
-  </ul>
-{% endif %}{% endif %}
-{% endblock %}
-<form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
-<div>
-{% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
-{% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
-{% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
-{% if errors %}
-    <p class="errornote">
-    {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
-    </p>
-    {{ adminform.form.non_field_errors }}
-{% endif %}
-
-{% block field_sets %}
-        <div class="container">
-        <div class="col-md-3">
-            <div class="card" style="border-right: 1px solid #e1e1e1">
-
-                <img style="top: -42px;"
-                     src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png" alt=""
-                     class="img-avatar-circle">
-            </div>
-        </div>
-        <div class="col-md-3">
-            <dl>
-                <dt>Nombre</dt>
-                <dd>ewrt{{ employee.name }}</dd>
-                <dt>Tipo de empleado</dt>
-                <dd>ert{{ employee.get_type_display }}</dd>
-            </dl>
-
-        </div>
-        <div class="col-md-3">
-            <dl>
-                <dt>Apellido Paterno</dt>
-                <dd>ewrt {{ employee.first_last_name }}</dd>
-                <dt>Registro</dt>
-                <dd>ert {{ employee.registry_date }}</dd>
-            </dl>
-        </div>
-        <div class="col-md-3">
-            <dl>
-                <dt>Apellido Materno</dt>
-                <dd>ewrt {{ employee.second_last_name }}</dd>
-                <dt>Estatus</dt>
-                <dd>ert {{ employee.get_status_display }}</dd>
-            </dl>
-        </div>
-        <hr>
-
-        <div class="col-md-12">
-            <div>
-
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs">
-                    <li role="presentation" class="active">
-                        <a href="../../employee/add">Datos
-                            personales</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="../../education/add/" >Formacion
-                            academica</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="../../emergencycontact/add">Contactos de
-                            emergencia</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#familiares" aria-controls="familiares" role="tab" data-toggle="tab">Familiares</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#referencias" aria-controls="referencias" role="tab"
-                           data-toggle="tab">Referencias</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#pruebas" aria-controls="pruebas" role="tab" data-toggle="tab">Examen Psicometricos</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#doc" aria-controls="doc" role="tab" data-toggle="tab">Documentacion</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#checador" aria-controls="checador" role="tab" data-toggle="tab">Checador</a>
-                    </li>
-                     <li role="presentation">
-                        <a href="#puesto" aria-controls="checador" role="tab" data-toggle="tab">Puesto</a>
-                    </li>
-                     <li role="presentation">
-                        <a href="#financieros" aria-controls="checador" role="tab" data-toggle="tab">Datos Financieros</a>
-                    </li>
-
                 </ul>
+            {% endif %}{% endif %}
+        {% endblock %}
+        <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post"
+              id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
+            <div>
+                {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1"/>{% endif %}
+                {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}"/>{% endif %}
+                {% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
+                {% if errors %}
+                    <p class="errornote">
+                        {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}
+                            {% trans "Please correct the errors below." %}{% endif %}
+                    </p>
+                    {{ adminform.form.non_field_errors }}
+                {% endif %}
 
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div role="tabpanel" class="tab-pane active" id="personales">
-{% for fieldset in adminform %}
-     {% include "admin/HumanResources/fieldset.html" %}
-{% endfor %}
+                {% block field_sets %}
+
+                    <div class="container">
+                    <h2 class=" text-center">Perfil de Empleado</h2>
+                    <hr>
+                    <div class="btn-group btn-group-justified btn-group-raised">
+                                <a class="btn btn-primary employee-menu" href="../../employee/add">Datos<br> Personales
+                                    <div class="ripple-container"></div>
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../education/add/">Formación<br>
+                                    Académica
+                                    <div class="ripple-container"></div>
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../emergencycontact/add">
+                                    <div class="ripple-container"></div>
+                                    Contactos de<br> Emergencia
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../familymember/add">
+                                    <div class="ripple-container"></div>
+                                    Familiares
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../workreference/add">
+                                    <div class="ripple-container"></div>
+                                    Referencias
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../..//add">
+                                    <div class="ripple-container"></div>
+                                    Examen <br>Psicometrico
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../employeedocument/add">
+                                    <div class="ripple-container"></div>
+                                    Documentación
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../employeeassistance/add">
+                                    <div class="ripple-container"></div>
+                                    Checador
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../employeepositiondescription/add">
+                                    <div class="ripple-container"></div>
+                                    Puesto
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../employeefinancialdata/add">
+                                    <div class="ripple-container"></div>
+                                    Datos<br> Financieros
+                                </a>
+                            </div>
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                            <div class="card animated fadeInUp animation-delay-7">
+                                <div class="ms-hero-bg-info">
+                                    <h3 class="color-white index-1 text-center no-m pt-2">{{ employee.name }} {{ employee.first_last_name }}</h3>
+                                    <div class="color-medium index-1 text-center np-m">ID: {{ employee.id }}</div>
+                                    <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png"
+                                         alt=""
+                                         class="img-avatar-circle"></div>
+                                <div class="card-block pt-4 text-center">
+                                    <h3 class="color-info">Empleado</h3>
+                                    <ul class="list-group text-left">
+                                        <li class="list-group-item"><strong>Id:</strong> {{ employee.id }}</li>
+                                        <li class="list-group-item">
+                                            <strong>Clave:</strong> {{ employee.employee_key }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Tipo:</strong> {{ employee.get_type_display }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Registro:</strong> {{ employee.registry_date }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Estatus:</strong> {{ employee.get_status_display }}</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-10">
+
+                            {% for fieldset in adminform %}
+                                {% include "admin/HumanResources/fieldset.html" %}
+                            {% endfor %}
+                        </div>
                     </div>
 
 
 
-                </div>
-            </div>
-        </div>
-    </div>
+                {% endblock %}
 
-
-
-{% endblock %}
 
 {% block after_field_sets %}{% endblock %}
 
@@ -242,34 +240,35 @@
 {% endfor %}
 {% endblock %}
 
-{% block after_related_objects %}{% endblock %}
-<hr>
-{% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
+                {% block after_related_objects %}{% endblock %}
+                <hr>
+                {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 
-{% block admin_change_form_document_ready %}
-    <script type="text/javascript">
-        (function($) {
-            $(document).ready(function() {
-                $('.add-another').click(function(e) {
-                    e.preventDefault();
-                    var event = $.Event('django:add-another-related');
-                    $(this).trigger(event);
-                    if (!event.isDefaultPrevented()) {
-                        showAddAnotherPopup(this);
-                    }
-                });
+                {% block admin_change_form_document_ready %}
+                    <script type="text/javascript">
+                        (function ($) {
+                            $(document).ready(function () {
+                                $('.add-another').click(function (e) {
+                                    e.preventDefault();
+                                    var event = $.Event('django:add-another-related');
+                                    $(this).trigger(event);
+                                    if (!event.isDefaultPrevented()) {
+                                        showAddAnotherPopup(this);
+                                    }
+                                });
 
-            {% if adminform and add %}
-                $('form#{{ opts.model_name }}_form :input:visible:enabled:first').focus()
-            {% endif %}
-            });
-        })(django.jQuery);
-    </script>
-{% endblock %}
+                                {% if adminform and add %}
+                                    $('form#{{ opts.model_name }}_form :input:visible:enabled:first').focus()
+                                {% endif %}
+                            });
+                        })(django.jQuery);
+                    </script>
+                {% endblock %}
 
-{# JavaScript for prepopulated fields #}
-{% prepopulated_fields_js %}
+                {# JavaScript for prepopulated fields #}
+                {% prepopulated_fields_js %}
 
-</div>
-</form></div>
+                </div>
+        </form>
+    </div>
 {% endblock %}

@@ -8,8 +8,12 @@
     }
 
     .col-xs-4 {
-        height: 65px;
+    min-height: 65px;
     }
+    .col-xs-4 br {
+    display: none !important;
+}
+
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -21,8 +25,8 @@
         <div class="col-xs-12">
 
             <div class="">
-               <h2 class="section-title">{{ fieldset.name }}</h2>
-<hr>
+                <h2 class="section-title">{{ fieldset.name }}</h2>
+                <hr>
             </div>
         </div>
     </div>
@@ -30,44 +34,46 @@
     <div>
 
         {% for line in fieldset %}
-            {% for field in line %}
+            <div class=“campo{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}
+            {% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}
+                {% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}“>
+
+                {% for field in line %}
 
 
-                <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
-                     class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
-                     class=“checkbox-row”{% endif %}>
-                    {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
-                    {% if field.is_checkbox %}
-                        {{ field.label_tag }}{{ field.field }}
-                    {% else %}
-                        {{ field.label_tag }}
-                        {% if field.is_readonly %}
-                            <div class=“readonly”>{{ field.contents }}</div>
+                    <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
+                         class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
+                         class=“checkbox-row”{% endif %}>
+                        {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                        {% if field.is_checkbox %}
+                            {{ field.field }}{{ field.label_tag }}
                         {% else %}
-                            {{ field.field }}
+                            {{ field.label_tag }}
+                            {% if field.is_readonly %}
+                                <div class=“readonly”>{{ field.contents }}</div>
+                            {% else %}
+                                {{ field.field }}
+                            {% endif %}
                         {% endif %}
-                    {% endif %}
-                    {% if field.field.help_text %}
-                        <div class=“help”>{{ field.field.help_text|safe }}</div>
-                    {% endif %}
-                </div>
+                        {% if field.field.help_text %}
+                            <div class=“help”>{{ field.field.help_text|safe }}</div>
+                        {% endif %}
+                        {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+                    </div>
+                {% endfor %}
 
-
-
-
-
-            {% endfor %}
+            </div>
         {% endfor %}
     </div>
 
 
 </fieldset>
 <script>
-    // A $( document ).ready() block.
+
     $(document).ready(function () {
         $('input').addClass('form-control');
         $('select').addClass('form-control');
-        $('div.col-xs-4').find('br').remove();
+
     });
 
 </script>
