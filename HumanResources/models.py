@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 # Django Libraries.
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 
 from decimal import Decimal
@@ -732,8 +733,8 @@ class EmployeePositionDescription(models.Model):
 
 
 class EmployeeFinancialData(models.Model):
-    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, max_length=20, default=0)
-    CLABE = models.IntegerField(verbose_name='CLABE', null=False, max_length=20, default=0)
+    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, default=0)
+    CLABE = models.IntegerField(verbose_name='CLABE', null=False, default=0)
     monthly_salary = models.DecimalField(verbose_name='Salario Mensual', max_digits=20, decimal_places=2, null=True)
     daily_salary = models.DecimalField(verbose_name='Salario Diario', max_digits=20, decimal_places=2, null=True)
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20, decimal_places=2, null=True)
@@ -756,11 +757,17 @@ class InfonavitData(models.Model):
     comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500,)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee_financial_data = models.OneToOneField(EmployeeFinancialData)
 
     class Meta:
         verbose_name_plural = "Datos del Infonavit del Empleado"
         verbose_name = "Datos del Infonavit del Empleado"
+
+    def __str__(self):
+        return "Crédito :" + self.infonavit_credit_number + " del empleado " + self.employee_financial_data.employee.employee_key
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return "Crédito :" + self.infonavit_credit_number + " del empleado " + self.employee_financial_data.employee.employee_key
 
 
 class EarningsDeductionsCategory(models.Model):
@@ -770,6 +777,7 @@ class EarningsDeductionsCategory(models.Model):
     )
     earnings_deductions_category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES)
 
+
 class EarningDeductionType(models.Model):
     EARNINGDEDUCTIONTYPE_CHOICES = (
         ('D', 'Deducción'),
@@ -778,7 +786,9 @@ class EarningDeductionType(models.Model):
 
     earning_deduction_type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES)
 
+
 class YNType(models.Model):
+
     YNTYPE_CHOICES = (
         ('Y', 'Si'),
         ('N', 'No'),
@@ -800,17 +810,17 @@ class EarningsDeductions(models.Model):
     type = models.ForeignKey(EarningDeductionType, verbose_name="Tipo", null=False, blank=False,)
     taxable = models.ForeignKey(YNType, verbose_name="Grabable", null=False,)
     category = models.ForeignKey(EarningsDeductionsCategory, verbose_name="Categoria", null=False, blank=False,)
+
     class Meta:
         verbose_name_plural = "Percepciones y Deducciones"
         verbose_name = "Percepciones y Deducciones"
 
-
     def __str__(self):
         return self.name + " " + self.type
 
-
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name + " " + self.type
+
 
 class EmployeeEarningsDeductions(models.Model):
 
@@ -826,6 +836,8 @@ class EmployeeEarningsDeductions(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
         verbose_name = "Deducciones y Percepciones por Empleado"
+
+
 
 class PayrollType(models.Model):
     name = models.CharField(verbose_name="Tipo de Nómina", null=False, blank=False, max_length=30,)

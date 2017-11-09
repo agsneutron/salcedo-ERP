@@ -643,36 +643,6 @@
                         </div>
                         <div class="col-xs-6">
                             <ul class="list-group text-left">
-                                <li class="list-group-item"><strong>Correo del
-                                    Trabajo: </strong> {{ employee.work_email }}
-                                </li>
-                                <li class="list-group-item"><strong>País: </strong> {{ employee.country }} </li>
-                                <li class="list-group-item"><strong>Estado: </strong> {{ employee.state }} </li>
-                                <li class="list-group-item"><strong>Municipio: </strong> {{ employee.town }} </li>
-                                <li class="list-group-item"><strong>Colonia: </strong> {{ employee.colony }} </li>
-                                <li class="list-group-item"><strong>Calle: </strong> {{ employee.street }} </li>
-                                <li class="list-group-item"><strong>Número
-                                    Exterior: </strong> {{ employee.outdoor_number }}
-                                </li>
-                                <li class="list-group-item"><strong>Número
-                                    Interior: </strong> {{ employee.indoor_number }}
-                                </li>
-                                <li class="list-group-item"><strong>Código Postal: </strong> {{ employee.zip_code }}
-                                </li>
-                                <li class="list-group-item"><strong>Tipo
-                                    Sanguíneo: </strong> {{ employee.get_blood_type_display }} </li>
-                                <li class="list-group-item"><strong>No. de Licencia de
-                                    Manejo: </strong> {{ employee.driving_license_number }} </li>
-                                <li class="list-group-item"><strong>Vencimineto de Licencia de
-                                    Manejo: </strong> {{ employee.driving_license_expiry_date }}
-                                </li>
-                                <li class="list-group-item"><strong>Régimen
-                                    Fiscal: </strong> {{ employee.tax_regime }}
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-xs-6">
-                            <ul class="list-group text-left">
                                 <li class="list-group-item"><strong>Nombre: </strong> {{ employee.name }} </li>
                                 <li class="list-group-item"><strong>Apellido
                                     Paterno: </strong> {{ employee.first_last_name }} </li>
@@ -705,6 +675,37 @@
                                 </li>
                             </ul>
                         </div>
+                        <div class="col-xs-6">
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Correo del
+                                    Trabajo: </strong> {{ employee.work_email }}
+                                </li>
+                                <li class="list-group-item"><strong>País: </strong> {{ employee.country }} </li>
+                                <li class="list-group-item"><strong>Estado: </strong> {{ employee.state }} </li>
+                                <li class="list-group-item"><strong>Municipio: </strong> {{ employee.town }} </li>
+                                <li class="list-group-item"><strong>Colonia: </strong> {{ employee.colony }} </li>
+                                <li class="list-group-item"><strong>Calle: </strong> {{ employee.street }} </li>
+                                <li class="list-group-item"><strong>Número
+                                    Exterior: </strong> {{ employee.outdoor_number }}
+                                </li>
+                                <li class="list-group-item"><strong>Número
+                                    Interior: </strong> {{ employee.indoor_number }}
+                                </li>
+                                <li class="list-group-item"><strong>Código Postal: </strong> {{ employee.zip_code }}
+                                </li>
+                                <li class="list-group-item"><strong>Tipo
+                                    Sanguíneo: </strong> {{ employee.get_blood_type_display }} </li>
+                                <li class="list-group-item"><strong>No. de Licencia de
+                                    Manejo: </strong> {{ employee.driving_license_number }} </li>
+                                <li class="list-group-item"><strong>Vencimineto de Licencia de
+                                    Manejo: </strong> {{ employee.driving_license_expiry_date }}
+                                </li>
+                                <li class="list-group-item"><strong>Régimen
+                                    Fiscal: </strong> {{ employee.tax_regime }}
+                                </li>
+                            </ul>
+                        </div>
+
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="academica">
@@ -777,18 +778,18 @@
                                             <strong>Días de Asistencia: </strong><br>
                                             <div class="checkbox">
                                                 <label>
-                                                     <a href="javascript:void(0)"
+                                                    <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
                                                         <i class="zmdi zmdi-check"></i>
                                                     </a>
                                                     <br>Domingo
                                                 </label>
                                                 <label class="">
-                                                     <a href="javascript:void(0)"
+                                                    <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
                                                         <i class="zmdi zmdi-check"></i>
                                                     </a>
-                                                   <br>Lunes
+                                                    <br>Lunes
                                                 </label>
                                                 <label>
                                                     <a href="javascript:void(0)"
@@ -1029,7 +1030,6 @@
         } else {
             checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
         }
-
 
 
     </script>
