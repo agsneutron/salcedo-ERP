@@ -670,6 +670,7 @@ class PAYROLL_CLASIFICATION(models.Model):
     )
     payroll_classification = models.CharField(max_length=1, choices=PAYROLLCLASSIFICATION_CHOICES)
 
+
 class Payment_Method(models.Model):
     PAYMENT_METHOD_CHOICES = (
         ('D', 'Deposito'),
@@ -677,6 +678,7 @@ class Payment_Method(models.Model):
         ('T', 'Transferencia Interbancaria'),
     )
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES)
+
 
 class Bank(models.Model):
     BANK_CHOICES = (
@@ -729,8 +731,6 @@ class EmployeePositionDescription(models.Model):
         return self.project.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 
-
-
 class EmployeeFinancialData(models.Model):
     account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, max_length=20, default=0)
     CLABE = models.IntegerField(verbose_name='CLABE', null=False, max_length=20, default=0)
@@ -770,6 +770,7 @@ class EarningsDeductionsCategory(models.Model):
     )
     earnings_deductions_category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES)
 
+
 class EarningDeductionType(models.Model):
     EARNINGDEDUCTIONTYPE_CHOICES = (
         ('D', 'Deducción'),
@@ -778,13 +779,13 @@ class EarningDeductionType(models.Model):
 
     earning_deduction_type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES)
 
+
 class YNType(models.Model):
     YNTYPE_CHOICES = (
         ('Y', 'Si'),
         ('N', 'No'),
     )
     yn_type = models.CharField(max_length=1, choices=YNTYPE_CHOICES)
-
 
 
 class EarningsDeductions(models.Model):
@@ -812,6 +813,7 @@ class EarningsDeductions(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name + " " + self.type
 
+
 class EmployeeEarningsDeductions(models.Model):
 
     ammount = models.DecimalField(verbose_name="Monto", decimal_places=2, blank=False, null=False,
@@ -827,12 +829,14 @@ class EmployeeEarningsDeductions(models.Model):
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
         verbose_name = "Deducciones y Percepciones por Empleado"
 
+
 class PayrollType(models.Model):
     name = models.CharField(verbose_name="Tipo de Nómina", null=False, blank=False, max_length=30,)
 
     class Meta:
         verbose_name_plural = "Tipo de Nómina"
         verbose_name = "Tipos de Nómina"
+
 
 class PayrollPeriod(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
@@ -853,7 +857,6 @@ class PayrollPeriod(models.Model):
         return self.name
 
 
-
 class PayrollToProcess(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
     # Foreign Keys.
@@ -868,6 +871,7 @@ class PayrollToProcess(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
+
 
 class PayrollProcessed(models.Model):
     # Foreign Keys.
@@ -925,7 +929,6 @@ class PayrollProcessedDetail(models.Model):
    class Meta:
        verbose_name_plural = "Detalle de Nómina Procesada"
        verbose_name = "Detalle de Nómina Procesada"
-
 
 
 class JobInstance(models.Model):

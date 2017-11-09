@@ -238,6 +238,7 @@ class EmployeeHasTagForm(forms.ModelForm):
         if self.employee_id is not None:
             self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
 
+
 # Form to include the fields of the Employee Position Description Form.
 class EmployeePositionDescriptionForm(forms.ModelForm):
     class Meta:
@@ -261,6 +262,7 @@ class EmployeePositionDescriptionForm(forms.ModelForm):
         # Filtering the values for the contractor if it , otherwise, None.
         if self.employee_id is not None:
             self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
+
 
 # Form to include the fields of the Employee Financial Data Form.
 class EmployeeFinancialDataForm(forms.ModelForm):
