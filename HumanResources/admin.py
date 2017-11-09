@@ -30,7 +30,25 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
+    def get_urls(self):
+        urls = super(EmployeeAdmin, self).get_urls()
 
+        my_urls = [
+            # url(r'^$',
+            #    self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
+            #    name='progressestimatelog-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.EmployeeDetailView.as_view(), name='employee-detail'),
+
+        ]
+        return my_urls + urls
+
+    list_display = ('name','my_url_field',)
+
+    def my_url_field(self, obj):
+        return '<a href="http://www.google.com">google.com</a>' #% ('http://url-to-prepend.com/', obj.url_field, obj.url_field)
+
+    my_url_field.allow_tags = True
+    my_url_field.short_description = 'Column description'
 
 # Education Admin.
 @admin.register(Education)
@@ -49,6 +67,16 @@ class EducationAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        print "Employee Id: " + str(employee_id)
+
+        return super(EducationAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
 # Admin for the inline documents of the current education of an employee.
