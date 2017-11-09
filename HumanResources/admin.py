@@ -48,7 +48,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         return mark_safe('<a href="%s" class="btn btn-raised btn-default btn-xs"><i class="fa fa-eye color-default eliminar"></i></a>' % obj.id)
 
     def my_url_change(selfself, obj):
-        return mark_safe('<a href = "%s/change" class ="btn btn-raised btn-default btn-xs"> <i class ="fa fa-pencil color-default eliminar"></i></a>' % obj.id)
+        return mark_safe('<a href = "%s/change?employee=%s" class ="btn btn-raised btn-default btn-xs"> <i class ="fa fa-pencil color-default eliminar"></i></a>' % (obj.id,obj.id))
     my_url_change.allow_tags = True
     my_url_change.short_description = 'Editar'
 

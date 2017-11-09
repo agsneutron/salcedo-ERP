@@ -141,47 +141,46 @@
                 {% endif %}
 
                 {% block field_sets %}
-
                     <div class="container">
                     <h2 class=" text-center">Perfil de Empleado</h2>
                     <hr>
                     <div class="btn-group btn-group-justified btn-group-raised">
-                                <a class="btn btn-primary employee-menu" href="../../employee/add">Datos<br> Personales
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employee/{{request.GET.employee}}/change/?employee={{request.GET.employee}}">Datos<br> Personales
                                     <div class="ripple-container"></div>
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../../education/add/">Formación<br>
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/education/add/?employee={{request.GET.employee}}">Formación<br>
                                     Académica
                                     <div class="ripple-container"></div>
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../../emergencycontact/add">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/emergencycontact/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container"></div>
                                     Contactos de<br> Emergencia
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../../familymember/add">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/familymember/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container"></div>
                                     Familiares
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../../workreference/add">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/workreference/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container"></div>
                                     Referencias
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../..//add">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/testapplication/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container"></div>
                                     Examen <br>Psicometrico
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../../employeedocument/add">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeedocument/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container"></div>
                                     Documentación
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../../employeeassistance/add">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeeassistance/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container"></div>
                                     Checador
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../../employeepositiondescription/add">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeepositiondescription/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container"></div>
                                     Puesto
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="../../employeefinancialdata/add">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeefinancialdata/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container"></div>
                                     Datos<br> Financieros
                                 </a>
