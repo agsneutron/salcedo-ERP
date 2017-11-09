@@ -6,7 +6,7 @@ from django.db import models
 from django.utils.timezone import now
 
 from decimal import Decimal
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator,MaxValueValidator
 
 # Third Party Libraries
 from smart_selects.db_fields import ChainedForeignKey
@@ -834,13 +834,48 @@ class PayrollType(models.Model):
         verbose_name_plural = "Tipo de Nómina"
         verbose_name = "Tipos de Nómina"
 
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
+
 class PayrollPeriod(models.Model):
+    JANUARY = 1
+    FEBRUARY = 2
+    MARCH = 3
+    APRIL = 4
+    MAY = 5
+    JUNE = 6
+    JULY = 7
+    AUGUST = 8
+    SEPTEMBER = 9
+    OCTOBER = 10
+    NOVEMBER = 11
+    DECEMBER = 12
+
+    MONTH_CHOICES = (
+        (JANUARY, 'Enero'),
+        (FEBRUARY, 'Febrero'),
+        (MARCH, 'Marzo'),
+        (APRIL, 'Abril'),
+        (MAY, 'Mayo'),
+        (JUNE, 'Junio'),
+        (JULY, 'Julio'),
+        (AUGUST, 'Agosto'),
+        (SEPTEMBER, 'Septiembre'),
+        (OCTOBER, 'Octubre'),
+        (NOVEMBER, 'Noviembre'),
+        (DECEMBER, 'Diciembre'),
+    )
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    month = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    year = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    week = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    start_period = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    end_period = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
+    month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
+        validators=[MaxValueValidator(9999), MinValueValidator(2017)])
+    week = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
+        validators=[MaxValueValidator(53), MinValueValidator(1)])
+    start_period = models.DateField(verbose_name="Inicio de Periodo", null=False,blank=False)
+    end_period = models.DateField(verbose_name="Fin de Periodo", null=False,blank=False)
 
     class Meta:
         verbose_name_plural = "Periodos de Nómina"
@@ -857,7 +892,7 @@ class PayrollPeriod(models.Model):
 class PayrollToProcess(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
     # Foreign Keys.
-    payroll_type = models.ForeignKey(PayrollType, verbose_name="Empleado", null=False, blank=False)
+    payroll_type = models.ForeignKey(PayrollType, verbose_name="Tipo de Nómina", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Nómina a Procesar"
