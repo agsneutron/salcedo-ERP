@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block content %}
+
+    <script type="text/javascript" src="/static/HumanResources/js/jquery.jOrgChart.js"></script>
+    <link rel="stylesheet" href="/static/HumanResources/css/jquery.jOrgChart.css"/>
+
+
+
+
+    {{ chart | safe }}
+
+
+
+
+
+
+    <script>
+        jQuery(document).ready(function () {
+            $("#org").jOrgChart();
+        });
+    </script>
+
+{% endblock %}

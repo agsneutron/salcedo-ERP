@@ -341,6 +341,19 @@
                                         </li>
                                     </ul>
                                 </li>
+                                 <li class="dropdown-submenu">
+                                    <a href="#" class="has_children">
+                                        <i class="zmdi zmdi-view-dashboard"></i>Empleados</a>
+
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>
+                                            <a href="../admin/HumanResources/employee/add">Agregar</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/HumanResources/employee/">Consultar</a>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
 
                         </li>
@@ -577,7 +590,7 @@
 </script>
 <script>
     $(document).ready(function () {
-        var oTable_one = $('#table_s').DataTable({
+       $('table.table_s').DataTable({
 
             columnDefs: [
                 {
@@ -602,6 +615,9 @@
                 "sUrl": "",
                 "sInfoThousands": ",",
                 "sLoadingRecords": "Cargando...",
+
+        "sEmptyTable":     "No hay contactos registrados para el Cliente",
+
                 "oPaginate": {
                     "sFirst": "Primero",
                     "sLast": "Ãšltimo",
@@ -612,8 +628,8 @@
             },
 
         });
-
-
+document.getElementById('DataTables_Table_1_wrapper').style.width = "100%";
+document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
     });
 </script>
 

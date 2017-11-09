@@ -1,0 +1,1039 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block extrastyle %}{{ block.super }}
+    <style>
+        p {
+            margin: 0;
+        }
+
+        hr {
+            display: block;
+            border-top: 1px solid #00a09b;
+            margin: 10px 0;
+        }
+
+        .card .card-block, .card.card-block {
+            padding: 20px;
+            padding: 0rem;
+        }
+
+        .card.card-info {
+            border-bottom: solid 0px #00bcd4;
+            border-radius: 0px;
+        }
+
+        .card {
+            box-shadow: none;
+            box-shadow: 0 0px 0px 0 rgba(0, 0, 0, .14), 0 0px 0px 0px rgba(0, 0, 0, .2), 0 0px 0px 0 rgba(0, 0, 0, .12);
+            border-radius: 2px;
+            background-color: #fff;
+            margin-bottom: 20px;
+            margin-bottom: 2rem;
+        }
+
+        .truncate {
+            width: 420px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .ms-hero-bg-info:after {
+            background-color: #204280 !important;
+        }
+
+        .list-group .list-group-item, .list-group a.list-group-item {
+            font-size: 13px !important;
+            line-height: 26px;
+        }
+
+        .nav.nav-tabs li a {
+            font-weight: 400;
+            padding: 1.7rem 7px;
+            color: rgba(255, 255, 255, .5) !important;
+            text-align: center;
+            font-size: 12px;
+        }
+
+        .list-group {
+            border-left: solid 0px #eee;
+            border-right: solid 0px #eee;
+        }
+
+        .list-group .list-group-item, .list-group a.list-group-item {
+            border: 0;
+            padding: 10px 15px;
+            margin: 0;
+            transition: all ease .3s;
+            border-bottom: solid 0px #eee;
+            vertical-align: middle;
+        }
+
+        .checkbox label .checkbox-material {
+            margin-right: 10px;
+            margin-right: 0;
+        }
+
+        .list-group .list-group-item:first-child, .list-group a.list-group-item:first-child {
+            border-top: solid 0px #eee;
+        }
+    </style>
+{% endblock %}
+{% block content %}
+
+
+    {#    <h1> Esta es la Vista de Detalle del Empleado.</h1>#}
+
+    {% comment %}    <div class="row">
+        <h3 class="color-info">Datos Personales</h3>
+        <div class="col-xs-4">
+            <p><strong>Nombre: </strong> {{ employee.name }} </p>
+            <p><strong>Apellido Paterno: </strong> {{ employee.first_last_name }} </p>
+            <p><strong>Apellido Materno: </strong> {{ employee.second_last_name }} </p>
+            <p><strong>Fecha de Nacimiento: </strong> {{ employee.birthdate }} </p>
+            <p><strong>Lugar de Nacimiento: </strong> {{ employee.birthplace }} </p>
+            <p><strong>Género: </strong> {{ employee.get_gender_display }} </p>
+            <p><strong>Estado Civil: </strong> {{ employee.get_marital_status_display }} </p>
+            <p><strong>CURP: </strong> {{ employee.curp }} </p>
+            <p><strong>RFC: </strong> {{ employee.rfc }} </p>
+            <p><strong>Teléfono: </strong> {{ employee.phone_number }} </p>
+            <p><strong>Celular: </strong> {{ employee.cellphone_number }} </p>
+            <p><strong>Oficina: </strong> {{ employee.office_number }} </p>
+            <p><strong>Extensión: </strong> {{ employee.extension_number }} </p>
+            <p><strong>Correo Personal: </strong> {{ employee.personal_email }} </p>
+
+        </div>
+        <div class="col-xs-4">
+
+            <p><strong>Correo del Trabajo: </strong> {{ employee.work_email }} </p>
+            <p><strong>País: </strong> {{ employee.country }} </p>
+            <p><strong>Estado: </strong> {{ employee.state }} </p>
+            <p><strong>Municipio: </strong> {{ employee.town }} </p>
+            <p><strong>Colonia: </strong> {{ employee.colony }} </p>
+            <p><strong>Calle: </strong> {{ employee.street }} </p>
+            <p><strong>Número Exterior: </strong> {{ employee.outdoor_number }} </p>
+            <p><strong>Número Interior: </strong> {{ employee.indoor_number }} </p>
+            <p><strong>Código Postal: </strong> {{ employee.zip_code }} </p>
+            <p><strong>Tipo Sanguíneo: </strong> {{ employee.get_blood_type_display }} </p>
+            <p><strong>No. de Licencia de Manejo: </strong> {{ employee.driving_license_number }} </p>
+            <p><strong>Vencimineto de Licencia de Manejo: </strong> {{ employee.driving_license_expiry_date }}
+            </p>
+            <p><strong>Régimen Fiscal: </strong> {{ employee.tax_regime }} </p>
+        </div>
+        <div class="col-xs-4">
+            <div>
+                <a href="" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+            </div>
+            <hr>
+            <div>
+                <h3 class="color-info">Datos del Empleado</h3>
+                <p><strong>Id: </strong> {{ employee.id }} </p>
+                <p><strong>Clave: </strong> {{ employee.employee_key }} </p>
+                <p><strong>Tipo de Empleado: </strong> {{ employee.get_type_display }} </p>
+                <p><strong>Fecha de Registro: </strong> {{ employee.registry_date }} </p>
+                <p><strong>Estatus: </strong> {{ employee.get_status_display }} </p>
+            </div>
+            <div>
+                <h3 class="color-info">Etiquetas</h3>
+                <select multiple class="" style="width: 100%">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+
+        <div class="col-xs-12">
+            <h3 class="color-info">Formación Académica</h3>
+            {% for record in education %}
+                <p><strong>Grado: </strong> {{ record.get_type_display }} </p>
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Institución: </strong> {{ record.institution }} </p>
+                <p><strong>Evidencia: </strong> {{ record.evidence.name }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Formación Académica Actual</h3>
+            {% for record in current_education %}
+                <p><strong>Grado: </strong> {{ record.get_type_display }} </p>
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Institución: </strong> {{ record.institution }} </p>
+                <p>
+                    <strong>Días de Asistencia: </strong>
+                    <strong>Domingo: </strong> {{ record.sunday }}, <strong>Lunes: </strong> {{ record.monday }},
+                    <strong>Martes: </strong> {{ record.tuesday }}, <strong>Miércoles: </strong> {{ record.wednesday }},
+                    <strong>Jueves: </strong> {{ record.thursday }}, <strong>Viernes: </strong> {{ record.friday }},
+                    <strong>Sábado: </strong> {{ record.saturday }}
+                </p>
+                <p>
+                    <strong>Evidencia: </strong>
+                    {% for document in record.documents %}
+                        <p><strong>Documento: </strong> {{ document }} </p>
+                    {% endfor %}
+                </p>
+
+            {% endfor %}
+        </div>
+
+    </div>
+    <hr>
+    <div class="row">
+
+        <div class="col-xs-12">
+            <h3 class="color-info">Contactos de Emergencia</h3>
+            {% for record in emergency_contacts %}
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Apellido Paterno: </strong> {{ record.first_last_name }} </p>
+                <p><strong>Apellido Materno: </strong> {{ record.second_last_name }} </p>
+                <p><strong>Número de Teléfono: </strong> {{ record.phone_number }} </p>
+                <p><strong>Número de Celular: </strong> {{ record.cellphone_number }} </p>
+                <p><strong>Correo Electrónico: </strong> {{ record.email }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Familiares</h3>
+            {% for record in family_members %}
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Apellido Paterno: </strong> {{ record.first_last_name }} </p>
+                <p><strong>Apellido Materno: </strong> {{ record.second_last_name }} </p>
+                <p><strong>Parentesco: </strong> {{ record.relationship }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Referencias Laborales</h3>
+            {% for record in work_references %}
+                <p><strong>Nombre: </strong> {{ record.name }} </p>
+                <p><strong>Apellido Paterno: </strong> {{ record.first_last_name }} </p>
+                <p><strong>Apellido Materno: </strong> {{ record.second_last_name }} </p>
+                <p><strong>Empresa: </strong> {{ record.company_name }} </p>
+                <p><strong>Teléfono No. 1: </strong> {{ record.first_phone_number }} </p>
+                <p><strong>Teléfono No. 2: </strong> {{ record.second_phone_number }} </p>
+                <p><strong>Correo Electrónico: </strong> {{ record.email }} </p>
+                <p><strong>Notas: </strong> {{ record.notes }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Pruebas</h3>
+            {% for test in test_applications %}
+                <p><strong>Nombre de la Prueba: </strong> {{ test.test.name }} </p>
+                <p><strong>Fecha de Aplicación: </strong> {{ test.application_date }} </p>
+                <p><strong>Resultado: </strong> {{ test.result }} </p>
+                <p><strong>Comentarios: </strong> {{ test.comments }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Documentación Probatoria</h3>
+            {% for record in employee_documents %}
+                <p><strong>Archivo: </strong> {{ record.file.name }} </p>
+                <p><strong>Tipo de Documento: </strong> {{ record.document_type }} </p>
+                <p><strong>Comentarios: </strong> {{ record.comments }} </p>
+            {% endfor %}
+        </div>
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-xs-12">
+            <h3 class="color-info">Checador</h3>
+            <p><strong>Tipo de Checador: </strong> {{ checker_data.get_checker_type_display }} </p>
+            <p><strong>Checa Entrada: </strong> {{ checker_data.checks_entry }} </p>
+            <p><strong>Checa Salida: </strong> {{ checker_data.checks_exit }} </p>
+        </div>
+
+    </div>{% endcomment %}
+
+
+
+
+    {% comment %} <div class="container">
+        <h2 class=" text-center">Perfil de Empleado</h2>
+        <hr>
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card animated fadeInUp animation-delay-7">
+                    <div class="ms-hero-bg-info ms-hero-img-coffee">
+                        <h3 class="color-white index-1 text-center no-m pt-2">{{ employee.name }} {{ employee.first_last_name }}</h3>
+                        <div class="color-medium index-1 text-center np-m">ID: {{ employee.id }}</div>
+                        <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png" alt=""
+                             class="img-avatar-circle"></div>
+                    <div class="card-block pt-4 text-center">
+                        <h3 class="color-info">Datos del Empleado</h3>
+                        <ul class="list-group text-left">
+                            <li class="list-group-item">Id: {{ employee.id }}</li>
+                            <li class="list-group-item">Clave: {{ employee.employee_key }}</li>
+                            <li class="list-group-item">Tipo: {{ employee.get_type_display }}</li>
+                            <li class="list-group-item">Registro: {{ employee.registry_date }}</li>
+                            <li class="list-group-item">Estatus: {{ employee.get_status_display }}</li>
+                        </ul>
+                        <div>
+                            <a href="" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+                        </div>
+                        <hr>
+                        <h3 class="color-info">Datos Personales</h3>
+                        <ul class="list-group text-left">
+                            <li class="list-group-item"><strong>Nombre: </strong> {{ employee.name }} </li>
+                            <li class="list-group-item"><strong>Apellido
+                                Paterno: </strong> {{ employee.first_last_name }} </li>
+                            <li class="list-group-item"><strong>Apellido
+                                Materno: </strong> {{ employee.second_last_name }} </li>
+                            <li class="list-group-item"><strong>Fecha de Nacimiento: </strong> {{ employee.birthdate }}
+                            </li>
+                            <li class="list-group-item"><strong>Lugar de Nacimiento: </strong> {{ employee.birthplace }}
+                            </li>
+                            <li class="list-group-item"><strong>Género: </strong> {{ employee.get_gender_display }}
+                            </li>
+                            <li class="list-group-item"><strong>Estado
+                                Civil: </strong> {{ employee.get_marital_status_display }} </li>
+                            <li class="list-group-item"><strong>CURP: </strong> {{ employee.curp }} </li>
+                            <li class="list-group-item"><strong>RFC: </strong> {{ employee.rfc }} </li>
+                            <li class="list-group-item"><strong>Teléfono: </strong> {{ employee.phone_number }} </li>
+                            <li class="list-group-item"><strong>Celular: </strong> {{ employee.cellphone_number }} </li>
+                            <li class="list-group-item"><strong>Oficina: </strong> {{ employee.office_number }} </li>
+                            <li class="list-group-item"><strong>Extensión: </strong> {{ employee.extension_number }}
+                            </li>
+                            <li class="list-group-item"><strong>Correo Personal: </strong> {{ employee.personal_email }}
+                            </li>
+                            <li class="list-group-item"><strong>Correo del Trabajo: </strong> {{ employee.work_email }}
+                            </li>
+                            <li class="list-group-item"><strong>País: </strong> {{ employee.country }} </li>
+                            <li class="list-group-item"><strong>Estado: </strong> {{ employee.state }} </li>
+                            <li class="list-group-item"><strong>Municipio: </strong> {{ employee.town }} </li>
+                            <li class="list-group-item"><strong>Colonia: </strong> {{ employee.colony }} </li>
+                            <li class="list-group-item"><strong>Calle: </strong> {{ employee.street }} </li>
+                            <li class="list-group-item"><strong>Número Exterior: </strong> {{ employee.outdoor_number }}
+                            </li>
+                            <li class="list-group-item"><strong>Número Interior: </strong> {{ employee.indoor_number }}
+                            </li>
+                            <li class="list-group-item"><strong>Código Postal: </strong> {{ employee.zip_code }} </li>
+                            <li class="list-group-item"><strong>Tipo
+                                Sanguíneo: </strong> {{ employee.get_blood_type_display }} </li>
+                            <li class="list-group-item"><strong>No. de Licencia de
+                                Manejo: </strong> {{ employee.driving_license_number }} </li>
+                            <li class="list-group-item"><strong>Vencimineto de Licencia de
+                                Manejo: </strong> {{ employee.driving_license_expiry_date }}
+                            </li>
+                            <li class="list-group-item"><strong>Régimen Fiscal: </strong> {{ employee.tax_regime }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+
+
+            <div class="col-md-9">
+                <div class="card card-info wow materialUp">
+                    <div class="">
+                        <h3 class="color-info card-title">Formación Académica</h3>
+                    </div>
+                    <div class="card-block text-center">
+
+                        {% for record in education %}
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Grado</th>
+                                        <th>Nombre</th>
+                                        <th>Institución</th>
+                                        <th>Evidencia</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>{{ record.get_type_display }}</th>
+                                        <td>{{ record.name }}</td>
+                                        <td>{{ record.institution }}</td>
+                                        <td>{{ record.evidence.name }}</td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                <div class="card card-info wow materialUp">
+                    <div class="">
+                        <h3 class="color-info card-title">Formación Académica Actual</h3>
+                    </div>
+                    <div class="card-block text-center">
+                        {% for record in current_education %}
+                            <div class="table-responsive">
+                                <table class="table table-bordered">
+                                    <thead>
+                                    <tr>
+                                        <th>Grado</th>
+                                        <th>Nombre</th>
+                                        <th>Institución</th>
+                                        <th>Evidencia</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <th>{{ record.get_type_display }}</th>
+                                        <td>{{ record.name }}</td>
+                                        <td>{{ record.institution }}</td>
+                                        <td> {% for document in record.documents %}
+                                            <p class="truncate"><strong>Documento: </strong> {{ document }} </p>
+                                        {% endfor %}</td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+                            </div>
+                             <p>
+                                <strong>Días de Asistencia: </strong><br>
+                                <strong>Domingo: </strong> {{ record.sunday }},
+                                <strong>Lunes: </strong> {{ record.monday }},
+                                <strong>Martes: </strong> {{ record.tuesday }},
+                                <strong>Miércoles: </strong> {{ record.wednesday }},
+                                <strong>Jueves: </strong> {{ record.thursday }},
+                                <strong>Viernes: </strong> {{ record.friday }},
+                                <strong>Sábado: </strong> {{ record.saturday }}
+                            </p>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                <div class="card card-info wow materialUp">
+                    <div class="">
+                        <h3 class="color-info card-title">Contactos de Emergencia</h3>
+                    </div>
+                    <div class="card-block text-left">
+                        {% for record in emergency_contacts %}
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Paterno: </strong> {{ record.first_last_name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Materno: </strong> {{ record.second_last_name }} </li>
+                                <li class="list-group-item"><strong>Número de
+                                    Teléfono: </strong> {{ record.phone_number }} </li>
+                                <li class="list-group-item"><strong>Número de
+                                    Celular: </strong> {{ record.cellphone_number }} </li>
+                                <li class="list-group-item"><strong>Correo Electrónico: </strong> {{ record.email }}
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+                <hr>
+                <div class="card card-info wow materialUp">
+                    <div class="">
+                        <h3 class="color-info card-title">Familiares</h3>
+                    </div>
+                    <div class="card-block text-left">
+                        {% for record in family_members %}
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Paterno: </strong> {{ record.first_last_name }}
+                                </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Materno: </strong> {{ record.second_last_name }} </li>
+                                <li class="list-group-item"><strong>Parentesco: </strong> {{ record.relationship }}
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            <hr>
+                <div class="card card-info wow materialUp">
+                    <div class="">
+                        <h3 class="color-info card-title">Referencias laborales</h3>
+                    </div>
+                    <div class="card-block text-left">
+                        {% for record in family_members %}
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Paterno: </strong> {{ record.first_last_name }}
+                                </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Materno: </strong> {{ record.second_last_name }} </li>
+                                <li class="list-group-item"><strong>Parentesco: </strong> {{ record.relationship }}
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+            <hr>
+                <div class="card card-info wow materialUp">
+                    <div class="">
+                        <h3 class="color-info card-title">Pruebas</h3>
+                    </div>
+                    <div class="card-block text-left">
+                        {% for record in family_members %}
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Paterno: </strong> {{ record.first_last_name }}
+                                </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Materno: </strong> {{ record.second_last_name }} </li>
+                                <li class="list-group-item"><strong>Parentesco: </strong> {{ record.relationship }}
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+<hr>
+                <div class="card card-info wow materialUp">
+                    <div class="">
+                        <h3 class="color-info card-title">Documentacion probatoria</h3>
+                    </div>
+                    <div class="card-block text-left">
+                        {% for record in family_members %}
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Paterno: </strong> {{ record.first_last_name }}
+                                </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Materno: </strong> {{ record.second_last_name }} </li>
+                                <li class="list-group-item"><strong>Parentesco: </strong> {{ record.relationship }}
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+<hr>
+                <div class="card card-info wow materialUp">
+                    <div class="">
+                        <h3 class="color-info card-title">Checador</h3>
+                    </div>
+                    <div class="card-block text-left">
+                        {% for record in family_members %}
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Paterno: </strong> {{ record.first_last_name }}
+                                </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Materno: </strong> {{ record.second_last_name }} </li>
+                                <li class="list-group-item"><strong>Parentesco: </strong> {{ record.relationship }}
+                                </li>
+                            </ul>
+                        {% endfor %}
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+{% endcomment %}
+
+
+
+
+
+    <div class="container">
+    <h2 class=" text-center">Perfil de Empleado</h2>
+    <hr>
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card animated fadeInUp animation-delay-7">
+                <div class="ms-hero-bg-info">
+                    <h3 class="color-white index-1 text-center no-m pt-2">{{ employee.name }} {{ employee.first_last_name }}</h3>
+                    <div class="color-medium index-1 text-center np-m">ID: {{ employee.id }}</div>
+                    <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png" alt=""
+                         class="img-avatar-circle"></div>
+                <div class="card-block pt-4 text-center">
+                    <h3 class="color-info">Datos del Empleado</h3>
+                    <ul class="list-group text-left">
+                        <li class="list-group-item"><strong>Id:</strong> {{ employee.id }}</li>
+                        <li class="list-group-item"><strong>Clave:</strong> {{ employee.employee_key }}</li>
+                        <li class="list-group-item"><strong>Tipo:</strong> {{ employee.get_type_display }}</li>
+                        <li class="list-group-item"><strong>Registro:</strong> {{ employee.registry_date }}</li>
+                        <li class="list-group-item"><strong>Estatus:</strong> {{ employee.get_status_display }}</li>
+                    </ul>
+                    <div>
+                        <a href="" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+                    </div>
+
+                </div>
+            </div>
+            <hr>
+            <div class="card-block text-center">
+                <h3 class="color-info">Etiquetas</h3>
+                <span class="label label-default">EtiquetaA</span>
+                <span class="label label-default">EtiquetaB</span>
+                <span class="label label-default">EtiquetaD</span>
+                <span class="label label-default">EtiquetaE</span>
+                <span class="label label-default">EtiquetaF</span>
+                <span class="label label-default">EtiquetaG</span>
+                <span class="label label-default">EtiquetaH</span>
+                <span class="label label-default">EtiquetaI</span>
+
+            </div>
+
+
+        </div>
+
+
+        <div class="col-md-9">
+            <div>
+
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active">
+                        <a href="#personales" aria-controls="personales" role="tab" data-toggle="tab">Datos
+                            personales</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#academica" aria-controls="academica" role="tab" data-toggle="tab">Formacion
+                            academica</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#contactos" aria-controls="contactos" role="tab" data-toggle="tab">Contactos de
+                            emergencia</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#familiares" aria-controls="familiares" role="tab" data-toggle="tab">Familiares</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#referencias" aria-controls="referencias" role="tab"
+                           data-toggle="tab">Referencias</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#pruebas" aria-controls="pruebas" role="tab" data-toggle="tab">Pruebas</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#doc" aria-controls="doc" role="tab" data-toggle="tab">Doc. Probatoria</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#checador" aria-controls="checador" role="tab" data-toggle="tab">Checador</a>
+                    </li>
+
+                </ul>
+
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="personales">
+                        <div class="">
+                            <h3 class="color-info card-title">Datos Personales</h3>
+                        </div>
+                        <div class="col-xs-6">
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Nombre: </strong> {{ employee.name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Paterno: </strong> {{ employee.first_last_name }} </li>
+                                <li class="list-group-item"><strong>Apellido
+                                    Materno: </strong> {{ employee.second_last_name }} </li>
+                                <li class="list-group-item"><strong>Fecha de
+                                    Nacimiento: </strong> {{ employee.birthdate }}
+                                </li>
+                                <li class="list-group-item"><strong>Lugar de
+                                    Nacimiento: </strong> {{ employee.birthplace }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Género: </strong> {{ employee.get_gender_display }}
+                                </li>
+                                <li class="list-group-item"><strong>Estado
+                                    Civil: </strong> {{ employee.get_marital_status_display }} </li>
+                                <li class="list-group-item"><strong>CURP: </strong> {{ employee.curp }} </li>
+                                <li class="list-group-item"><strong>RFC: </strong> {{ employee.rfc }} </li>
+                                <li class="list-group-item"><strong>Teléfono: </strong> {{ employee.phone_number }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Celular: </strong> {{ employee.cellphone_number }} </li>
+                                <li class="list-group-item"><strong>Oficina: </strong> {{ employee.office_number }}
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Extensión: </strong> {{ employee.extension_number }}
+                                </li>
+                                <li class="list-group-item"><strong>Correo
+                                    Personal: </strong> {{ employee.personal_email }}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-xs-6">
+                            <ul class="list-group text-left">
+                                <li class="list-group-item"><strong>Correo del
+                                    Trabajo: </strong> {{ employee.work_email }}
+                                </li>
+                                <li class="list-group-item"><strong>País: </strong> {{ employee.country }} </li>
+                                <li class="list-group-item"><strong>Estado: </strong> {{ employee.state }} </li>
+                                <li class="list-group-item"><strong>Municipio: </strong> {{ employee.town }} </li>
+                                <li class="list-group-item"><strong>Colonia: </strong> {{ employee.colony }} </li>
+                                <li class="list-group-item"><strong>Calle: </strong> {{ employee.street }} </li>
+                                <li class="list-group-item"><strong>Número
+                                    Exterior: </strong> {{ employee.outdoor_number }}
+                                </li>
+                                <li class="list-group-item"><strong>Número
+                                    Interior: </strong> {{ employee.indoor_number }}
+                                </li>
+                                <li class="list-group-item"><strong>Código Postal: </strong> {{ employee.zip_code }}
+                                </li>
+                                <li class="list-group-item"><strong>Tipo
+                                    Sanguíneo: </strong> {{ employee.get_blood_type_display }} </li>
+                                <li class="list-group-item"><strong>No. de Licencia de
+                                    Manejo: </strong> {{ employee.driving_license_number }} </li>
+                                <li class="list-group-item"><strong>Vencimineto de Licencia de
+                                    Manejo: </strong> {{ employee.driving_license_expiry_date }}
+                                </li>
+                                <li class="list-group-item"><strong>Régimen
+                                    Fiscal: </strong> {{ employee.tax_regime }}
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="academica">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Formación Académica</h3>
+                            </div>
+                            <div class="card-block text-center">
+
+                                {% for record in education %}
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Grado</th>
+                                                <th>Nombre</th>
+                                                <th>Institución</th>
+                                                <th>Evidencia</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th>{{ record.get_type_display }}</th>
+                                                <td>{{ record.name }}</td>
+                                                <td>{{ record.institution }}</td>
+                                                <td>{{ record.evidence.name }}</td>
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Formación Académica Actual</h3>
+                            </div>
+                            <div class="card-block text-center">
+                                {% for record in current_education %}
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Grado</th>
+                                                <th>Nombre</th>
+                                                <th>Institución</th>
+                                                <th>Evidencia</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ record.get_type_display }}</td>
+                                                <td>{{ record.name }}</td>
+                                                <td>{{ record.institution }}</td>
+                                                <td> {% for document in record.documents %}
+                                                    <p class="truncate"><strong>Documento: </strong> {{ document }}
+                                                    </p>
+                                                {% endfor %}</td>
+
+                                            </tr>
+                                            </tbody>
+                                        </table>
+
+                                    </div>
+                                    <hr>
+                                    <div class="form-group" style="margin-top: 0;">
+                                        <div class="">
+                                            <strong>Días de Asistencia: </strong><br>
+                                            <div class="checkbox">
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
+                                                        <i class="zmdi zmdi-check"></i>
+                                                    </a>
+                                                    <br>Domingo
+                                                </label>
+                                                <label class="">
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
+                                                        <i class="zmdi zmdi-check"></i>
+                                                    </a>
+                                                    <br>Lunes
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
+                                                        <i class="zmdi zmdi-check"></i>
+                                                    </a><br>Martes
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
+                                                        <i class="zmdi zmdi-check"></i>
+                                                    </a><br>Miércoles
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
+                                                        <i class="zmdi zmdi-check"></i>
+                                                    </a><br>Jueves
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
+                                                        <i class="zmdi zmdi-check"></i>
+                                                    </a><br>Viernes
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1">
+                                                        <i class="zmdi zmdi-close"></i>
+                                                    </a><br>Sábado
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% comment %} <p>
+                                            <strong>Días de Asistencia: </strong><br>
+                                            <strong>Domingo: </strong> {{ record.sunday }},
+                                            <strong>Lunes: </strong> {{ record.monday }},
+                                            <strong>Martes: </strong> {{ record.tuesday }},
+                                            <strong>Miércoles: </strong> {{ record.wednesday }},
+                                            <strong>Jueves: </strong> {{ record.thursday }},
+                                            <strong>Viernes: </strong> {{ record.friday }},
+                                            <strong>Sábado: </strong> {{ record.saturday }}
+                                        </p>{% endcomment %}
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="contactos">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Contactos de Emergencia</h3>
+                            </div>
+                            <div class="card-block text-left">
+                                {% for record in emergency_contacts %}
+                                    <ul class="list-group text-left">
+                                        <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }}
+                                        </li>
+                                        <li class="list-group-item"><strong>Apellido
+                                            Paterno: </strong> {{ record.first_last_name }} </li>
+                                        <li class="list-group-item"><strong>Apellido
+                                            Materno: </strong> {{ record.second_last_name }} </li>
+                                        <li class="list-group-item"><strong>Número de
+                                            Teléfono: </strong> {{ record.phone_number }} </li>
+                                        <li class="list-group-item"><strong>Número de
+                                            Celular: </strong> {{ record.cellphone_number }} </li>
+                                        <li class="list-group-item"><strong>Correo
+                                            Electrónico: </strong> {{ record.email }}
+                                        </li>
+                                    </ul>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="familiares">
+                        <div class="">
+                            <h3 class="color-info card-title">Familiares</h3>
+                        </div>
+                        <div class="card-block text-left">
+                            {% for record in family_members %}
+                                <ul class="list-group text-left">
+                                    <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }} </li>
+                                    <li class="list-group-item"><strong>Apellido
+                                        Paterno: </strong> {{ record.first_last_name }}
+                                    </li>
+                                    <li class="list-group-item"><strong>Apellido
+                                        Materno: </strong> {{ record.second_last_name }} </li>
+                                    <li class="list-group-item">
+                                        <strong>Parentesco: </strong> {{ record.relationship }}
+                                    </li>
+                                </ul>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+
+                    <div role="tabpanel" class="tab-pane" id="referencias">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Referencias laborales</h3>
+                            </div>
+                            <div class="card-block text-left">
+                                {% for record in work_references %}
+                                    <ul class="list-group text-left">
+                                        <li class="list-group-item"><strong>Nombre: </strong> {{ record.name }}
+                                        </li>
+                                        <li class="list-group-item"><strong>Apellido
+                                            Paterno: </strong> {{ record.first_last_name }} </li>
+                                        <li class="list-group-item"><strong>Apellido
+                                            Materno: </strong> {{ record.second_last_name }} </li>
+                                        <li class="list-group-item">
+                                            <strong>Empresa: </strong> {{ record.company_name }}
+                                        </li>
+                                        <li class="list-group-item"><strong>Teléfono No.
+                                            1: </strong> {{ record.first_phone_number }} </li>
+                                        <li class="list-group-item"><strong>Teléfono No.
+                                            2: </strong> {{ record.second_phone_number }} </li>
+                                        <li class="list-group-item"><strong>Correo
+                                            Electrónico: </strong> {{ record.email }} </li>
+                                        <li class="list-group-item"><strong>Notas: </strong> {{ record.notes }}
+                                        </li>
+                                    </ul>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="pruebas">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Pruebas</h3>
+                            </div>
+                            <div class="card-block text-left">
+                                {% for test in test_applications %}
+                                    <ul class="list-group text-left">
+                                        <li class="list-group-item"><strong>Nombre de la
+                                            Prueba: </strong> {{ test.test.name }} </li>
+                                        <li class="list-group-item"><strong>Fecha de
+                                            Aplicación: </strong> {{ test.application_date }} </li>
+                                        <li class="list-group-item"><strong>Resultado: </strong> {{ test.result }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Comentarios: </strong> {{ test.comments }}
+                                        </li>
+                                    </ul>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="doc">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Documentación Probatoria</h3>
+                            </div>
+                            <div class="card-block text-left">
+                                <div class="table-responsive">
+                                    {% for record in employee_documents %}
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Archivo</th>
+                                                <th>Documento</th>
+                                                <th>Comentarios</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td><span></span>
+                                                    <p class="truncate">{{ record.file.name }}</p></td>
+                                                <td>{{ record.document_type }}</td>
+                                                <td>{{ record.comments }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        </div>
+
+
+                                    {% endfor %}
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="checador">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Checador</h3>
+                            </div>
+                            <div class="card-block text-left">
+                                {% comment %}<ul class="list-group text-left">
+                                    <li class="list-group-item"><strong>Tipo de
+                                        Checador: </strong> {{ checker_data.get_checker_type_display }} </li>
+                                    <li class="list-group-item"><strong>Checa
+                                        Entrada: </strong> {{ checker_data.checks_entry }} </li>
+                                    <li class="list-group-item"><strong>Checa
+                                        Salida: </strong> {{ checker_data.checks_exit }} </li>
+                                </ul>{% endcomment %}
+
+                                <div class="checkbox">
+                                    <div class="checkbox">
+                                        <label>
+                                            <strong>Tipo de
+                                                Checador: </strong> {{ checker_data.get_checker_type_display }}
+                                        </label>
+                                        <label id="checaEntrada" class="text-center {{ checker_data.checks_entry }}">
+
+
+                                        </label>
+                                        <label id="checaSalida" class="text-center {{ checker_data.checks_exit }}">
+
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script>
+        var checkEntrada = document.getElementById('checaEntrada');
+        var checkSalida = document.getElementById('checaSalida');
+
+        if ($(checkEntrada).hasClass("True")) {
+            checkEntrada.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1"><i class="zmdi zmdi-check"></i></button> <br>Checa Entrada';
+        } else {
+            checkEntrada.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
+        }
+
+        if ($(checkSalida).hasClass("True")) {
+            checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1"><i class="zmdi zmdi-check"></i></button> <br>Checa Entrada';
+        } else {
+            checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
+        }
+
+
+    </script>
+
+
+{% endblock %}
+
