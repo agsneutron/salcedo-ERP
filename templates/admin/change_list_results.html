@@ -28,11 +28,15 @@
 <tbody>
 {% for result in results %}
 {% if result.form.non_field_errors %}
-    <tr><td colspan="{{ result|length }}">{{ result.form.non_field_errors }}</td></tr>
+    <tr><td colspan="{{ result|length}}">{{ result.form.non_field_errors }}</td><td></td></tr>
 {% endif %}
-<tr class="{% cycle 'row1' 'row2' %}">{% for item in result %}{{ item }}{% endfor %}</tr>
+<tr class="{% cycle 'row1' 'row2' %}">{% for item in result %}{{ item }}{% endfor %}<td>link</td></tr>
 {% endfor %}
 </tbody>
 </table>
+
+{% block nuevo %}
+    ok
+{% endblock %}
 </div>
 {% endif %}

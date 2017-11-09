@@ -6,10 +6,26 @@ from django.conf.urls import url
 from django.contrib import admin
 
 # Importing the views.
+from django.contrib.admin.views.main import ChangeList
+
 from HumanResources import views
 
 # Importing the forms.
 from HumanResources.forms import *
+
+
+
+class EmployeeList(ChangeList):
+
+
+
+    def get_results(self, request):
+        super(EmployeeList, self).get_results(request)
+        print(self.result_list)
+        for result in self.result_list:
+            result.test = 1
+
+        #self.list_display = ('test',)
 
 
 # Employee Admin.
@@ -29,6 +45,16 @@ class EmployeeAdmin(admin.ModelAdmin):
                 'driving_license_expiry_date')
         }),
     )
+
+    list_display = ('id','name')
+    list_display_links = ('name',)
+
+    def get_changelist(self, request, **kwargs):
+        return EmployeeList
+
+
+
+
 
 
 
