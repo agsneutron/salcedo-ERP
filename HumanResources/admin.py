@@ -36,6 +36,16 @@ class HumanResourcesAdminUtilities():
 
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
+
+    @staticmethod
+    def get_change_link_with_employee(obj, employee_id):
+        model_name = obj.__class__.__name__.lower()
+        link = "http://localhost:8000/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change?employee="+str(employee_id)
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
 # Employee Admin.
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
@@ -66,13 +76,16 @@ class EmployeeAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    list_display = ('employee_key','get_full_name','get_detail_column','get_delete_column')
+    list_display = ('employee_key','get_full_name','get_detail_column','get_change_column', 'get_delete_column')
 
     def get_full_name(self, obj):
         return obj.name + " " + obj.first_last_name + " " + obj.second_last_name
 
     def get_detail_column(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+    def get_change_column(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
 
     def get_delete_column(self, obj):
         return HumanResourcesAdminUtilities.get_delete_link(obj)
@@ -83,8 +96,15 @@ class EmployeeAdmin(admin.ModelAdmin):
     get_detail_column.allow_tags = True
     get_detail_column.short_description = 'Detalle'
 
+    get_change_column.allow_tags = True
+    get_change_column.short_description = 'Eliminar'
+
     get_delete_column.allow_tags = True
     get_delete_column.short_description = 'Eliminar'
+
+
+    # Overriding the Change View for the employee
+    #def change_view(self, request, object_id, form_url='', extra_context=None):
 
 # Education Admin.
 @admin.register(Education)
@@ -111,6 +131,9 @@ class EducationAdmin(admin.ModelAdmin):
 
         employee_id = request.GET.get('employee')
         education_set = Education.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "education"
+        extra['education'] = education_set
 
         return super(EducationAdmin, self).add_view(request, form_url, extra_context=extra)
 
@@ -338,25 +361,6 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
             'fields': ('employee','concept','ammount')
         }),
     )
-
-
-# Employee Financial Data Admin.
-@admin.register(EmployeeFinancialData)
-class EmployeeFinancialDataAdmin(admin.ModelAdmin):
-    form = EmployeeFinancialDataForm
-
-    # Method to override some characteristics of the form.
-    def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(EmployeeEarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
-
-        # Class to pass the request to the form.
-        class ModelFormMetaClass(ModelForm):
-            def __new__(cls, *args, **kwargs):
-                kwargs['request'] = request
-
-                return ModelForm(*args, **kwargs)
-
-        return ModelFormMetaClass
 
 
 # Employee Financial Data Admin.

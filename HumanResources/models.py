@@ -757,7 +757,7 @@ class InfonavitData(models.Model):
     comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500,)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee_financial_data = models.OneToOneField(EmployeeFinancialData)
 
     class Meta:
         verbose_name_plural = "Datos del Infonavit del Empleado"
