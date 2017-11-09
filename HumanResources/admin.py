@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
-
 # Django Libraries.
 from django.conf.urls import url
 from django.contrib import admin
@@ -33,6 +32,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
+
         my_urls = [
             # url(r'^$',
             #    self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
@@ -41,6 +41,19 @@ class EmployeeAdmin(admin.ModelAdmin):
 
         ]
         return my_urls + urls
+
+    list_display = ('name','my_url_field','my_url_change')
+
+    def my_url_field(self, obj):
+        return mark_safe('<a href="%s" class="btn btn-raised btn-default btn-xs"><i class="fa fa-eye color-default eliminar"></i></a>' % obj.id)
+
+    def my_url_change(selfself, obj):
+        return mark_safe('<a href = "%s/change?employee=%s" class ="btn btn-raised btn-default btn-xs"> <i class ="fa fa-pencil color-default eliminar"></i></a>' % (obj.id,obj.id))
+    my_url_change.allow_tags = True
+    my_url_change.short_description = 'Editar'
+
+    my_url_field.allow_tags = True
+    my_url_field.short_description = 'Ver'
 
 
 # Education Admin.
@@ -60,6 +73,16 @@ class EducationAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        print "Employee Id: " + str(employee_id)
+
+        return super(EducationAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
 # Admin for the inline documents of the current education of an employee.
@@ -221,13 +244,18 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 
-
-
-
 # Employee Position Description Admin.
 @admin.register(EmployeePositionDescription)
 class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
     form = EmployeePositionDescriptionForm
+    fieldsets = (
+        ("Descripción de Puesto", {
+            #contract
+            'fields': ('employee','start_date', 'end_date', 'direction', 'subdirection','area','department','job_profile', 'physical_location',
+                       'payroll_classification','project','insurance_type','insurance_number','monday','tuesday', 'wednesday', 'thursday','friday','saturday','sunday','entry_time','departure_time',
+                       'observations')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -242,10 +270,73 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+    # Infonavit Data Admin.
+#@admin.register(InfonavitData)
+class InfonavitDataAdmin(admin.StackedInline):
+    model = InfonavitData
+
+    fieldsets = (
+        ("Datos de Crédito Infonavit", {
+            'fields': ('infonavit_credit_number', 'discount_type', 'discount_amount', 'start_date', 'credit_term',
+                       'comments',)
+        }),
+    )
+    # form = InfonavitDataForm
+    #
+    #
+    # # Method to override some characteristics of the form.
+    # def get_form(self, request, obj=None, **kwargs):
+    #      ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
+    #
+    #
+    #      # Class to pass the request to the form.
+    #      class ModelFormMetaClass(ModelForm):
+    #          def __new__(cls, *args, **kwargs):
+    #              kwargs['request'] = request
+    #
+    #              return ModelForm(*args, **kwargs)
+    #
+    #      return ModelFormMetaClass
+
+
+@admin.register(EmployeeEarningsDeductions)
+class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
+    form = EmployeeEarningsDeductionsForm
+
+    fieldsets = (
+        ("Percepciones y Deducciones", {
+            'fields': ('employee','concept','ammount')
+        }),
+    )
+
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EmployeeEarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
 # Employee Financial Data Admin.
 @admin.register(EmployeeFinancialData)
 class EmployeeFinancialDataAdmin(admin.ModelAdmin):
     form = EmployeeFinancialDataForm
+
+    fieldsets = (
+        ("Datos Financieros", {
+            'fields': ('employee', 'payment_method', 'account_number', 'CLABE', 'bank', 'monthly_salary', 'daily_salary',
+                       'aggregate_daily_salary',)
+        }),
+    )
+
+    inlines = (InfonavitDataAdmin,)
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -260,26 +351,6 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
-
-# Infonavit Data Admin.
-@admin.register(InfonavitData)
-class InfonavitDataAdmin(admin.ModelAdmin):
-    form = InfonavitDataForm
-
-    # Method to override some characteristics of the form.
-    def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
-
-        # Class to pass the request to the form.
-        class ModelFormMetaClass(ModelForm):
-            def __new__(cls, *args, **kwargs):
-                kwargs['request'] = request
-
-                return ModelForm(*args, **kwargs)
-
-        return ModelFormMetaClass
-
-
 # Earnings Deductions Admin.
 @admin.register(EarningsDeductions)
 class EarningsDeductionsAdmin(admin.ModelAdmin):
@@ -288,25 +359,6 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
-
-        # Class to pass the request to the form.
-        class ModelFormMetaClass(ModelForm):
-            def __new__(cls, *args, **kwargs):
-                kwargs['request'] = request
-
-                return ModelForm(*args, **kwargs)
-
-        return ModelFormMetaClass
-
-
-# Employee Earnings Deductions Admin.
-@admin.register(EmployeeEarningsDeductions)
-class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
-    form = EmployeeEarningsDeductionsForm
-
-    # Method to override some characteristics of the form.
-    def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(EmployeeEarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
 
         # Class to pass the request to the form.
         class ModelFormMetaClass(ModelForm):
@@ -358,6 +410,8 @@ class PayrollProcessedDetailAdmin(admin.ModelAdmin):
 ''' ----------------------------------
 Administrators to fill the database.
 ----------------------------------  '''
+
+
 
 # Payroll Processed Admin.
 @admin.register(PayrollProcessed)
@@ -427,6 +481,7 @@ class JobProfileAdmin(admin.ModelAdmin):
 class DirectionAdmin(admin.ModelAdmin):
     form = DirectionForm
 
+
 # Loan Admin.
 @admin.register(Subdirection)
 class SubdirectionAdmin(admin.ModelAdmin):
@@ -438,8 +493,21 @@ class SubdirectionAdmin(admin.ModelAdmin):
 class AreaAdmin(admin.ModelAdmin):
     form = AreaForm
 
+
 # Loan Admin.
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
     form = DepartmentForm
 
+
+# Loan Admin.
+@admin.register(JobInstance)
+class JobInstanceAdmin(admin.ModelAdmin):
+    form = JobInstanceForm
+
+    def get_urls(self):
+        urls = super(JobInstanceAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', views.JobInstanceListView.as_view(), name='employee-detail'),
+        ]
+        return my_urls + urls

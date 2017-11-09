@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 # Django Libraries.
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 
 from decimal import Decimal
@@ -582,10 +583,12 @@ class JobProfile(models.Model):
         verbose_name = "Perfil de Puesto"
 
     def __str__(self):
-        return self.description
+        return self.job
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.description
+        return self.job
+
+
 
 
 
@@ -688,15 +691,6 @@ class Bank(models.Model):
 
 
 class EmployeePositionDescription(models.Model):
-    DAY_CHOICES = (
-        ('L', 'Lunes'),
-        ('M', 'Martes'),
-        ('X', 'Miércoles'),
-        ('J', 'Jueves'),
-        ('V', 'Viernes'),
-        ('S', 'Sábado'),
-        ('D', 'Domingo'),
-    )
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     end_date = models.DateField(verbose_name="Fecha de Termino", null=False, blank=False)
     physical_location = models.CharField(verbose_name="Ubicación Física", max_length=250, null=False, blank=True)
@@ -705,14 +699,21 @@ class EmployeePositionDescription(models.Model):
     entry_time = models.TimeField(verbose_name="Hora de Entrada", null=True, auto_now_add=False)
     departure_time = models.TimeField(verbose_name="Hora de Salida", null=True, auto_now_add=False)
     observations = models.CharField(verbose_name="Observaciones", null=True, blank=False, max_length=500)
-    days_attendance = MultiSelectField(verbose_name="Días Laborales", null=True, blank=False, max_length=1, choices=DAY_CHOICES)
-        # Foreign Keys.
+    monday = models.BooleanField(verbose_name="Lunes", default=True)
+    tuesday = models.BooleanField(verbose_name="Martes", default=True)
+    wednesday = models.BooleanField(verbose_name="Miércoles", default=True)
+    thursday = models.BooleanField(verbose_name="Jueves", default=True)
+    friday = models.BooleanField(verbose_name="Viernes", default=True)
+    saturday = models.BooleanField(verbose_name="Sábado", default=True)
+    sunday = models.BooleanField(verbose_name="Domingo", default=False)
+
+    # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     direction = models.ForeignKey(Direction, verbose_name='Dirección', null=False, blank=False)
     subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección', null=False, blank=False)
     area = models.ForeignKey(Area, verbose_name='Área', null=False, blank=False)
     department = models.ForeignKey(Department, verbose_name='Departamento', null=False, blank=False)
-
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
     #contract = models.ForeignKey(Contract, verbose_name="Contrato", null=False, blank=False)
     #immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
     payroll_classification = models.ForeignKey(PAYROLL_CLASIFICATION, verbose_name="Clasificación de Nómina", null=False, blank=False,)
@@ -732,8 +733,8 @@ class EmployeePositionDescription(models.Model):
 
 
 class EmployeeFinancialData(models.Model):
-    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, max_length=20, default=0)
-    CLABE = models.IntegerField(verbose_name='CLABE', null=False, max_length=20, default=0)
+    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, default=0)
+    CLABE = models.IntegerField(verbose_name='CLABE', null=False, default=0)
     monthly_salary = models.DecimalField(verbose_name='Salario Mensual', max_digits=20, decimal_places=2, null=True)
     daily_salary = models.DecimalField(verbose_name='Salario Diario', max_digits=20, decimal_places=2, null=True)
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20, decimal_places=2, null=True)
@@ -756,11 +757,17 @@ class InfonavitData(models.Model):
     comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500,)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee_financial_data = models.OneToOneField(EmployeeFinancialData)
 
     class Meta:
         verbose_name_plural = "Datos del Infonavit del Empleado"
         verbose_name = "Datos del Infonavit del Empleado"
+
+    def __str__(self):
+        return "Crédito :" + self.infonavit_credit_number + " del empleado " + self.employee_financial_data.employee.employee_key
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return "Crédito :" + self.infonavit_credit_number + " del empleado " + self.employee_financial_data.employee.employee_key
 
 
 class EarningsDeductionsCategory(models.Model):
@@ -770,6 +777,7 @@ class EarningsDeductionsCategory(models.Model):
     )
     earnings_deductions_category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES)
 
+
 class EarningDeductionType(models.Model):
     EARNINGDEDUCTIONTYPE_CHOICES = (
         ('D', 'Deducción'),
@@ -778,7 +786,9 @@ class EarningDeductionType(models.Model):
 
     earning_deduction_type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES)
 
+
 class YNType(models.Model):
+
     YNTYPE_CHOICES = (
         ('Y', 'Si'),
         ('N', 'No'),
@@ -800,17 +810,17 @@ class EarningsDeductions(models.Model):
     type = models.ForeignKey(EarningDeductionType, verbose_name="Tipo", null=False, blank=False,)
     taxable = models.ForeignKey(YNType, verbose_name="Grabable", null=False,)
     category = models.ForeignKey(EarningsDeductionsCategory, verbose_name="Categoria", null=False, blank=False,)
+
     class Meta:
         verbose_name_plural = "Percepciones y Deducciones"
         verbose_name = "Percepciones y Deducciones"
 
-
     def __str__(self):
         return self.name + " " + self.type
 
-
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name + " " + self.type
+
 
 class EmployeeEarningsDeductions(models.Model):
 
@@ -826,6 +836,8 @@ class EmployeeEarningsDeductions(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
         verbose_name = "Deducciones y Percepciones por Empleado"
+
+
 
 class PayrollType(models.Model):
     name = models.CharField(verbose_name="Tipo de Nómina", null=False, blank=False, max_length=30,)
@@ -926,3 +938,19 @@ class PayrollProcessedDetail(models.Model):
        verbose_name_plural = "Detalle de Nómina Procesada"
        verbose_name = "Detalle de Nómina Procesada"
 
+
+
+class JobInstance(models.Model):
+    # Job Description ***
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleado', null=False, blank=False)
+    parent_job_instance = models.ForeignKey('self', verbose_name='Jefe Inmediato', null=True, blank=True)
+
+    class Meta:
+        verbose_name_plural = "Vacante de Puesto"
+        verbose_name = "Vacante de Empleos"
+
+    def __str__(self):
+        return str(self.id)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.id)
