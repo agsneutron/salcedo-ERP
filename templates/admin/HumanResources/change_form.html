@@ -141,100 +141,90 @@
                 {% endif %}
 
                 {% block field_sets %}
+
                     <div class="container">
-                        <div class="col-md-3">
-                            <div class="card" style="border-right: 1px solid #e1e1e1">
-
-                                <img style="top: -42px;"
-                                     src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png"
-                                     alt=""
-                                     class="img-avatar-circle">
+                    <h2 class=" text-center">Perfil de Empleado</h2>
+                    <hr>
+                    <div class="btn-group btn-group-justified btn-group-raised">
+                                <a class="btn btn-primary employee-menu" href="../../employee/add">Datos<br> Personales
+                                    <div class="ripple-container"></div>
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../education/add/">Formación<br>
+                                    Académica
+                                    <div class="ripple-container"></div>
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../emergencycontact/add">
+                                    <div class="ripple-container"></div>
+                                    Contactos de<br> Emergencia
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../familymember/add">
+                                    <div class="ripple-container"></div>
+                                    Familiares
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../workreference/add">
+                                    <div class="ripple-container"></div>
+                                    Referencias
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../..//add">
+                                    <div class="ripple-container"></div>
+                                    Examen <br>Psicometrico
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../employeedocument/add">
+                                    <div class="ripple-container"></div>
+                                    Documentación
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../employeeassistance/add">
+                                    <div class="ripple-container"></div>
+                                    Checador
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../employeepositiondescription/add">
+                                    <div class="ripple-container"></div>
+                                    Puesto
+                                </a>
+                                <a class="btn btn-primary employee-menu" href="../../employeefinancialdata/add">
+                                    <div class="ripple-container"></div>
+                                    Datos<br> Financieros
+                                </a>
                             </div>
-                        </div>
-                        <div class="col-md-3">
-                            <dl>
-                                <dt>Nombre</dt>
-                                <dd>ewrt{{ employee.name }}</dd>
-                                <dt>Tipo de empleado</dt>
-                                <dd>ert{{ employee.get_type_display }}</dd>
-                            </dl>
-
-                        </div>
-                        <div class="col-md-3">
-                            <dl>
-                                <dt>Apellido Paterno</dt>
-                                <dd>ewrt {{ employee.first_last_name }}</dd>
-                                <dt>Registro</dt>
-                                <dd>ert {{ employee.registry_date }}</dd>
-                            </dl>
-                        </div>
-                        <div class="col-md-3">
-                            <dl>
-                                <dt>Apellido Materno</dt>
-                                <dd>ewrt {{ employee.second_last_name }}</dd>
-                                <dt>Estatus</dt>
-                                <dd>ert {{ employee.get_status_display }}</dd>
-                            </dl>
-                        </div>
-                        <hr>
-
-                        <div class="col-md-12">
-                            <div>
-
-                                <!-- Nav tabs -->
-                                <ul class="nav nav-tabs">
-                                    <li role="presentation" class="active">
-                                        <a href="../../employee/add">Datos
-                                            personales</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="../../education/add/">Formacion
-                                            academica</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="../../emergencycontact/add">Contactos de
-                                            emergencia</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#familiares" aria-controls="familiares" role="tab" data-toggle="tab">Familiares</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#referencias" aria-controls="referencias" role="tab"
-                                           data-toggle="tab">Referencias</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#pruebas" aria-controls="pruebas" role="tab" data-toggle="tab">Examen
-                                            Psicometricos</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#doc" aria-controls="doc" role="tab"
-                                           data-toggle="tab">Documentacion</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#checador" aria-controls="checador" role="tab" data-toggle="tab">Checador</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#puesto" aria-controls="checador" role="tab"
-                                           data-toggle="tab">Puesto</a>
-                                    </li>
-                                    <li role="presentation">
-                                        <a href="#financieros" aria-controls="checador" role="tab" data-toggle="tab">Datos
-                                            Financieros</a>
-                                    </li>
-
-                                </ul>
-
-                                <!-- Tab panes -->
-                                <div class="tab-content">
-                                    <div role="tabpanel" class="tab-pane active" id="personales">
-                                        {% for fieldset in adminform %}
-                                            {% include "admin/HumanResources/fieldset.html" %}
-                                        {% endfor %}
-                                    </div>
+                    <div class="row mb-4">
+                        <div class="col-md-2">
+                            <div class="card animated fadeInUp animation-delay-7">
+                                <div class="ms-hero-bg-info">
+                                    <h3 class="color-white index-1 text-center no-m pt-2">{{ employee.name }} {{ employee.first_last_name }}</h3>
+                                    <div class="color-medium index-1 text-center np-m">ID: {{ employee.id }}</div>
+                                    <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png"
+                                         alt=""
+                                         class="img-avatar-circle"></div>
+                                <div class="card-block pt-4 text-center">
+                                    <h3 class="color-info">Empleado</h3>
+                                    <ul class="list-group text-left">
+                                        <li class="list-group-item"><strong>Id:</strong> {{ employee.id }}</li>
+                                        <li class="list-group-item">
+                                            <strong>Clave:</strong> {{ employee.employee_key }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Tipo:</strong> {{ employee.get_type_display }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Registro:</strong> {{ employee.registry_date }}
+                                        </li>
+                                        <li class="list-group-item">
+                                            <strong>Estatus:</strong> {{ employee.get_status_display }}</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
+
+                        <div class="col-xs-10">
+
+                            {% for fieldset in adminform %}
+                                {% include "admin/HumanResources/fieldset.html" %}
+                            {% endfor %}
+                        </div>
                     </div>
+
+
+
                 {% endblock %}
 
                 {% block after_field_sets %}{% endblock %}
@@ -272,7 +262,7 @@
                 {# JavaScript for prepopulated fields #}
                 {% prepopulated_fields_js %}
 
-            </div>
+                </div>
         </form>
     </div>
 {% endblock %}
