@@ -76,7 +76,8 @@ class EmployeeAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    list_display = ('employee_key','get_full_name','get_detail_column','get_change_column', 'get_delete_column')
+    list_display = ('get_full_name','get_detail_column','get_change_column', 'get_delete_column')
+    list_display_links = None
 
     def get_full_name(self, obj):
         return obj.name + " " + obj.first_last_name + " " + obj.second_last_name
@@ -97,7 +98,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     get_detail_column.short_description = 'Detalle'
 
     get_change_column.allow_tags = True
-    get_change_column.short_description = 'Eliminar'
+    get_change_column.short_description = 'Editar'
 
     get_delete_column.allow_tags = True
     get_delete_column.short_description = 'Eliminar'
