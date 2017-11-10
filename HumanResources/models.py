@@ -687,6 +687,7 @@ class EmployeePositionDescription(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
     direction = models.ForeignKey(Direction, verbose_name='Dirección', null=False, blank=False)
     subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección', null=False, blank=False)
     area = models.ForeignKey(Area, verbose_name='Área', null=False, blank=False)
@@ -872,6 +873,7 @@ class PayrollPeriod(models.Model):
         (NOVEMBER, 'Noviembre'),
         (DECEMBER, 'Diciembre'),
     )
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
     month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
     year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
@@ -978,17 +980,12 @@ class PayrollProcessedDetail(models.Model):
        verbose_name = "Detalle de Nómina Procesada"
 
 
-class AccountingProject(models.Model):
-   # Foreign Keys.
-    project = models.ForeignKey(Project, verbose_name="Projecto de Obra", null=False, blank=False)
-    identifier = models.CharField(verbose_name="Identificador", null=False, blank=False, max_length=50)
-    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
-    start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
-    end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
+class PayrollGroup(models.Model):
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=100, )
 
     class Meta:
-        verbose_name_plural = "Proyecto Contable"
-        verbose_name = "Proyecto Contable"
+        verbose_name_plural = "Grupo de Nómina"
+        verbose_name = "Grupo de Nómina"
 
     def __str__(self):
         return str(self.name)

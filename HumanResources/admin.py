@@ -487,13 +487,13 @@ class PayrollReceiptProcessedAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 # Accounting Project Admin.
-@admin.register(AccountingProject)
-class AccountingProjectAdmin(admin.ModelAdmin):
-    form = AccountingProjectForm
+@admin.register(PayrollGroup)
+class PayrollGroupAdmin(admin.ModelAdmin):
+    form = PayrollGroupForm
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(AccountingProjectAdmin, self).get_form(request, obj, **kwargs)
+        ModelForm = super(PayrollGroupAdmin, self).get_form(request, obj, **kwargs)
 
         # Class to pass the request to the form.
         class ModelFormMetaClass(ModelForm):
