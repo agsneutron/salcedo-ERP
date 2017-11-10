@@ -18,6 +18,22 @@ from ERP.models import Pais, Estado, Municipio, Project
 # Create your models here.
 from multiselectfield import MultiSelectField
 
+
+
+class PayrollGroup(models.Model):
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=100, )
+
+    class Meta:
+        verbose_name_plural = "Grupo de Nómina"
+        verbose_name = "Grupo de Nómina"
+
+    def __str__(self):
+        return str(self.name)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.name)
+
+
 # Employee General Information.
 class Employee(models.Model):
     employee_key = models.CharField(verbose_name="Clave del Empleado", max_length=64, null=False, blank=False, unique=False)
@@ -977,18 +993,7 @@ class PayrollProcessedDetail(models.Model):
        verbose_name = "Detalle de Nómina Procesada"
 
 
-class PayrollGroup(models.Model):
-    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=100, )
 
-    class Meta:
-        verbose_name_plural = "Grupo de Nómina"
-        verbose_name = "Grupo de Nómina"
-
-    def __str__(self):
-        return str(self.name)
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.name)
 
 class JobInstance(models.Model):
     # Job Description ***
