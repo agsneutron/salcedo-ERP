@@ -34,9 +34,9 @@
     <div>
 
         {% for line in fieldset %}
-            <div class=“campo{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}
+            <div class="campo{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}
             {% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}
-                {% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}“>
+                {% if field.field.name %}field-{{ field.field.name }}{% endif %}{% endfor %}">
 
                 {% for field in line %}
 
@@ -74,6 +74,20 @@
         $('input').addClass('form-control');
         $('select').addClass('form-control');
 
+
     });
+
+</script>
+<script>
+
+
+    $( ".field-monday" ).addClass( "dias-fields" );
+    $( ".field-tuesday" ).addClass( "dias-fields" );
+    $( ".field-wednesday" ).addClass( "dias-fields" );
+    $( ".field-thursday" ).addClass( "dias-fields" );
+    $( ".field-friday" ).addClass( "dias-fields" );
+    $( ".field-saturday" ).addClass( "dias-fields" );
+    $( ".field-sunday" ).addClass( "dias-fields" );
+
 
 </script>
