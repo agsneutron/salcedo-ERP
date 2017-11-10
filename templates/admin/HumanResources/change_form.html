@@ -273,6 +273,44 @@
 
     <!-- Implementing the data list section -->
     {% if template == "education" %}
+        <table style="border:1px solid black;">
+            <thead>
+            <tr>
+                <td style="border:1px solid">Grado</td>
+                <td style="border:1px solid">Nombre</td>
+                <td style="border:1px solid">Institución</td>
+                <td style="border:1px solid">Lincencia</td>
+                <td style="border:1px solid">Evidencia</td>
+                <td style="border:1px solid">Editar</td>
+                <td style="border:1px solid">Eliminar</td>
+            </tr>
+            </thead>
+            <tbody>
+                {% for record in education %}
+                    <tr>
+                        <td style="border:1px solid">{{ record.get_type_display }}</td>
+                        <td style="border:1px solid">{{ record.name }}</td>
+                        <td style="border:1px solid">{{ record.institution }}</td>
+                        <td style="border:1px solid">{{ record.license_code }}</td>
+                        <td style="border:1px solid">
+                           <a href="/media/{{ record.evidence.name }}">
+                                Archivo
+                            </a>
+                        </td>
+                        <td style="border:1px solid">
+                            <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                Editar
+                            </a>
+                        </td>
+                        <td style="border:1px solid">
+                            <a href="/admin/HumanResources/education/{{ record.id }}/delete/">
+                                Eliminar
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
 
     {% elif template == "emergency" %}
 

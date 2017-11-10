@@ -317,7 +317,7 @@ class CurrentEducationDocument(models.Model):
 
 # Method to save the employee's current education file.
 def upload_employee_education_document(instance, filename):
-    return '/'.join(['human_resources', 'employee_documents', 'education',instance.current_education.employee.employee_key, filename])
+    return '/'.join(['human_resources', 'employee_documents', 'education',instance.employee.employee_key, filename])
 
 
 # Employee Education Records.
