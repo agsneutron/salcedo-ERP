@@ -12,14 +12,11 @@ from django.core.validators import MinValueValidator,MaxValueValidator
 # Third Party Libraries
 from smart_selects.db_fields import ChainedForeignKey
 
-
 # Importing model from other apps.
 from ERP.models import Pais, Estado, Municipio, Project
 
 # Create your models here.
 from multiselectfield import MultiSelectField
-
-
 
 # Employee General Information.
 class Employee(models.Model):
