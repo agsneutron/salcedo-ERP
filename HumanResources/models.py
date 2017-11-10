@@ -980,6 +980,23 @@ class PayrollProcessedDetail(models.Model):
        verbose_name = "Detalle de Nómina Procesada"
 
 
+class AccountingProject(models.Model):
+   # Foreign Keys.
+    project = models.ForeignKey(Project, verbose_name="Projecto de Obra", null=False, blank=False)
+    identifier = models.CharField(verbose_name="Identificador", null=False, blank=False, max_length=50)
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
+    start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
+    end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Proyecto Contable"
+        verbose_name = "Proyecto Contable"
+
+    def __str__(self):
+        return str(self.name)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.name)
 
 class JobInstance(models.Model):
     # Job Description ***

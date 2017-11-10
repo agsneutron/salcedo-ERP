@@ -525,6 +525,13 @@ class RegisterView(FormView):
 
 '''
 
+# Form to include the fields of the Accounting Project Form.
+class AccountingProjectForm(forms.ModelForm):
+    class Meta:
+        model = AccountingProject
+        fields = '__all__'
+
+
 # Form to include the fields of the Payroll Process Form.
 class PayrollProcessedForm(forms.ModelForm):
     class Meta:
