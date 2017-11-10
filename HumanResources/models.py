@@ -86,7 +86,7 @@ class Employee(models.Model):
     )
     blood_type = models.IntegerField(choices=BLOOD_TYPE_CHOICES, default=BLOOD_TYPE_A,verbose_name='Tipo Sanguíneo')
     driving_license_number = models.CharField(verbose_name="Número de Licencia de Conducir", max_length=20, null=False, blank=True)
-    driving_license_expiry_date = models.DateField(null=False, blank=True, verbose_name="Fecha de Expiración de la Licencia de Conducir")
+    driving_license_expiry_date = models.DateField(null=False, blank=True, verbose_name="Expiración de Licencia para Conducir")
 
     # Foreign Keys.
 
@@ -317,7 +317,7 @@ class CurrentEducationDocument(models.Model):
 
 # Method to save the employee's current education file.
 def upload_employee_education_document(instance, filename):
-    return '/'.join(['human_resources', 'employee_documents', 'education',instance.current_education.employee.employee_key, filename])
+    return '/'.join(['human_resources', 'employee_documents', 'education',instance.employee.employee_key, filename])
 
 
 # Employee Education Records.
@@ -619,10 +619,8 @@ class Subdirection(models.Model):
         verbose_name_plural = "Subdirecciones"
         verbose_name = "Subdirección"
 
-
     def __str__(self):
         return self.name
-
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
@@ -636,10 +634,8 @@ class Area(models.Model):
         verbose_name_plural = "Áreas"
         verbose_name = "Área"
 
-
     def __str__(self):
         return self.name
-
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
@@ -810,11 +806,13 @@ class EarningsDeductions(models.Model):
         verbose_name_plural = "Percepciones y Deducciones"
         verbose_name = "Percepciones y Deducciones"
 
+
     def __str__(self):
-        return self.name + " " + self.type
+        return self.name + "-" + self.type.earning_deduction_type
+
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.name + " " + self.type
+        return self.name + "-" + self.type.earning_deduction_type
 
 
 class EmployeeEarningsDeductions(models.Model):
@@ -831,6 +829,7 @@ class EmployeeEarningsDeductions(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
         verbose_name = "Deducciones y Percepciones por Empleado"
+
 
 
 

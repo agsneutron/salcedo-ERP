@@ -6,10 +6,54 @@ from django.conf.urls import url
 from django.contrib import admin
 
 # Importing the views.
+from django.contrib.admin.views.main import ChangeList
+
 from HumanResources import views
 
 # Importing the forms.
 from HumanResources.forms import *
+
+# Importing the models.
+from HumanResources.models import *
+
+
+class HumanResourcesAdminUtilities():
+    @staticmethod
+    def get_detail_link(obj):
+        model_name =  obj.__class__.__name__.lower()
+        link = "http://localhost:8000/admin/HumanResources/"+model_name+"/"+str(obj.id)+"/"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+
+        return '<a href="'+link+'" class="'+css+'" >'+button+'</a>'
+
+    @staticmethod
+    def get_delete_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "http://localhost:8000/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/delete"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-trash-o color-danger eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+
+    @staticmethod
+    def get_change_link_with_employee(obj, employee_id):
+        model_name = obj.__class__.__name__.lower()
+        link = "http://localhost:8000/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change?employee="+str(employee_id)
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_nomina_link_with_employee(obj, employee_id):
+        model_name = "employeeearningsdeductions"
+        link = "/admin/HumanResources/" + model_name + "/add/?employee=" + str(employee_id)
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-address-card-o color-default' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
 
 # Employee Admin.
@@ -42,19 +86,42 @@ class EmployeeAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    list_display = ('name','my_url_field','my_url_change')
+    list_display = ('get_full_name','get_detail_column','get_change_column', 'get_delete_column','get_payroll_column')
+    list_display_links = None
 
-    def my_url_field(self, obj):
-        return mark_safe('<a href="%s" class="btn btn-raised btn-default btn-xs"><i class="fa fa-eye color-default eliminar"></i></a>' % obj.id)
+    def get_full_name(self, obj):
+        return obj.name + " " + obj.first_last_name + " " + obj.second_last_name
 
-    def my_url_change(selfself, obj):
-        return mark_safe('<a href = "%s/change?employee=%s" class ="btn btn-raised btn-default btn-xs"> <i class ="fa fa-pencil color-default eliminar"></i></a>' % (obj.id,obj.id))
-    my_url_change.allow_tags = True
-    my_url_change.short_description = 'Editar'
+    def get_detail_column(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
 
-    my_url_field.allow_tags = True
-    my_url_field.short_description = 'Ver'
+    def get_change_column(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
 
+    def get_delete_column(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    def get_payroll_column(self, obj):
+        return HumanResourcesAdminUtilities.get_nomina_link_with_employee(obj,obj.id)
+
+    # Added columns meta data.
+    get_full_name.short_description = "Nombre"
+
+    get_detail_column.allow_tags = True
+    get_detail_column.short_description = 'Detalle'
+
+    get_change_column.allow_tags = True
+    get_change_column.short_description = 'Editar'
+
+    get_delete_column.allow_tags = True
+    get_delete_column.short_description = 'Eliminar'
+
+    get_payroll_column.allow_tags = True
+    get_payroll_column.short_description = 'Nómina'
+
+
+    # Overriding the Change View for the employee
+    #def change_view(self, request, object_id, form_url='', extra_context=None):
 
 # Education Admin.
 @admin.register(Education)
@@ -80,7 +147,10 @@ class EducationAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
-        print "Employee Id: " + str(employee_id)
+        education_set = Education.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "education"
+        extra['education'] = education_set
 
         return super(EducationAdmin, self).add_view(request, form_url, extra_context=extra)
 
@@ -128,6 +198,19 @@ class EmergencyContactAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+        # Adding extra context to the change view.
+
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        emergencycontact_set = EmergencyContact.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "emergencycontact"
+        extra['emergencycontact'] = emergencycontact_set
+
+        return super(EmergencyContactAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
 # Family Member Admin.
@@ -305,7 +388,7 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Percepciones y Deducciones", {
-            'fields': ('employee','concept','ammount')
+            'fields': ('employee','concept','ammount','date')
         }),
     )
 
@@ -322,6 +405,21 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type__earning_deduction_type="PERCEPCION")
+        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type__earning_deduction_type="DEDUCCION")
+
+        extra['template'] = "employee_earnings_deductions"
+        extra['earnings'] = earnings_set
+        extra['deductions'] = deductions_set
+
+        return super(EmployeeEarningsDeductionsAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
 # Employee Financial Data Admin.
