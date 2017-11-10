@@ -1570,6 +1570,15 @@ width: 5% !important;
 .column-my_url_change {
 width: 5% !important;
 }
+.field-get_detail_column {
+    width: 5% !important;
+}
+.field-get_change_column {
+    width: 5% !important;
+}
+.field-get_delete_column {
+    width: 5% !important;
+}
 .dias-fields {
 display: inline-block;
     text-align: center;
