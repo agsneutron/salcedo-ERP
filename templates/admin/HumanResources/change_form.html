@@ -146,46 +146,57 @@
                     <h2 class=" text-center">Perfil de Empleado</h2>
                     <hr>
                     <div class="btn-group btn-group-justified btn-group-raised">
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employee/{{request.GET.employee}}/change/?employee={{request.GET.employee}}">Datos<br> Personales
-                                    <div class="ripple-container"></div>
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/education/add/?employee={{request.GET.employee}}">Formación<br>
-                                    Académica
-                                    <div class="ripple-container"></div>
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/emergencycontact/add/?employee={{request.GET.employee}}">
-                                    <div class="ripple-container"></div>
-                                    Contactos de<br> Emergencia
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/familymember/add/?employee={{request.GET.employee}}">
-                                    <div class="ripple-container"></div>
-                                    Familiares
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/workreference/add/?employee={{request.GET.employee}}">
-                                    <div class="ripple-container"></div>
-                                    Referencias
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/testapplication/add/?employee={{request.GET.employee}}">
-                                    <div class="ripple-container"></div>
-                                    Examen <br>Psicometrico
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeedocument/add/?employee={{request.GET.employee}}">
-                                    <div class="ripple-container"></div>
-                                    Documentación
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeeassistance/add/?employee={{request.GET.employee}}">
-                                    <div class="ripple-container"></div>
-                                    Checador
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeepositiondescription/add/?employee={{request.GET.employee}}">
-                                    <div class="ripple-container"></div>
-                                    Puesto
-                                </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeefinancialdata/add/?employee={{request.GET.employee}}">
-                                    <div class="ripple-container"></div>
-                                    Datos<br> Financieros
-                                </a>
-                            </div>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/employee/{{ request.GET.employee }}/change/?employee={{ request.GET.employee }}">Datos<br>
+                            Personales
+                            <div class="ripple-container"></div>
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/education/add/?employee={{ request.GET.employee }}">Formación<br>
+                            Académica
+                            <div class="ripple-container"></div>
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/emergencycontact/add/?employee={{ request.GET.employee }}">
+                            <div class="ripple-container"></div>
+                            Contactos de<br> Emergencia
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/familymember/add/?employee={{ request.GET.employee }}">
+                            <div class="ripple-container"></div>
+                            Familiares
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/workreference/add/?employee={{ request.GET.employee }}">
+                            <div class="ripple-container"></div>
+                            Referencias
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/testapplication/add/?employee={{ request.GET.employee }}">
+                            <div class="ripple-container"></div>
+                            Examen <br>Psicometrico
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/employeedocument/add/?employee={{ request.GET.employee }}">
+                            <div class="ripple-container"></div>
+                            Documentación
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/employeeassistance/add/?employee={{ request.GET.employee }}">
+                            <div class="ripple-container"></div>
+                            Checador
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/employeepositiondescription/add/?employee={{ request.GET.employee }}">
+                            <div class="ripple-container"></div>
+                            Puesto
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/employeefinancialdata/add/?employee={{ request.GET.employee }}">
+                            <div class="ripple-container"></div>
+                            Datos<br> Financieros
+                        </a>
+                    </div>
                     <div class="row mb-4">
                         <div class="col-md-2">
                             <div class="card ">
@@ -218,19 +229,77 @@
                         <div class="col-xs-10">
 
                             {% for fieldset in adminform %}
-
                                 {% include "admin/HumanResources/fieldset.html" %}
                             {% endfor %}
 
-                        {% block inline_field_sets %}
+                            {% block inline_field_sets %}
+                                {% for inline_admin_formset in inline_admin_formsets %}
+                                    {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
+                                    {% include "admin/HumanResources/stacked.html" %}
+                                {% endfor %}
+                            {% endblock %}
+                            <!-- Implementing the data list section -->
+                            {% if template == "education" %}
+                                <h2 class="section-title mt-4">Listado de Formación Académica</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Grado</td>
+                                            <td>Nombre</td>
+                                            <td>Institución</td>
+                                            <td>Lincencia</td>
+                                            <td>Evidencia</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in education %}
+                                            <tr>
+                                                <td>{{ record.get_type_display }}</td>
+                                                <td>{{ record.name }}</td>
+                                                <td>{{ record.institution }}</td>
+                                                <td>{{ record.license_code }}</td>
+                                                <td>
+                                                    <a href="/media/{{ record.evidence.name }}">
+                                                        Archivo
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/education/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            {% elif template == "emergency" %}
 
-{% for inline_admin_formset in inline_admin_formsets %}
+                            {% elif template == "familiars" %}
 
-    {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
-    {% include "admin/HumanResources/stacked.html" %}
+                            {% elif template == "references" %}
 
-{% endfor %}
-{% endblock %}
+                            {% elif template == "tests" %}
+
+                            {% elif template == "documentation" %}
+
+                            {% elif template == "checker" %}
+
+                            {% elif template == "job" %}
+
+                            {% elif template == "financial_data" %}
+
+                            {% endif %}
+
                         </div>
                     </div>
 
@@ -239,8 +308,7 @@
                 {% endblock %}
 
 
-{% block after_field_sets %}{% endblock %}
-
+                {% block after_field_sets %}{% endblock %}
 
 
                 {% block after_related_objects %}{% endblock %}
@@ -275,62 +343,5 @@
         </form>
     </div>
 
-    <!-- Implementing the data list section -->
-    {% if template == "education" %}
-        <table style="border:1px solid black;">
-            <thead>
-            <tr>
-                <td style="border:1px solid">Grado</td>
-                <td style="border:1px solid">Nombre</td>
-                <td style="border:1px solid">Institución</td>
-                <td style="border:1px solid">Lincencia</td>
-                <td style="border:1px solid">Evidencia</td>
-                <td style="border:1px solid">Editar</td>
-                <td style="border:1px solid">Eliminar</td>
-            </tr>
-            </thead>
-            <tbody>
-                {% for record in education %}
-                    <tr>
-                        <td style="border:1px solid">{{ record.get_type_display }}</td>
-                        <td style="border:1px solid">{{ record.name }}</td>
-                        <td style="border:1px solid">{{ record.institution }}</td>
-                        <td style="border:1px solid">{{ record.license_code }}</td>
-                        <td style="border:1px solid">
-                           <a href="/media/{{ record.evidence.name }}">
-                                Archivo
-                            </a>
-                        </td>
-                        <td style="border:1px solid">
-                            <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }}">
-                                Editar
-                            </a>
-                        </td>
-                        <td style="border:1px solid">
-                            <a href="/admin/HumanResources/education/{{ record.id }}/delete/">
-                                Eliminar
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
 
-    {% elif template == "emergency" %}
-
-    {% elif template == "familiars" %}
-
-    {% elif template == "references" %}
-
-    {% elif template == "tests" %}
-
-    {% elif template == "documentation" %}
-
-    {% elif template == "checker" %}
-
-    {% elif template == "job" %}
-
-    {% elif template == "financial_data" %}
-
-    {% endif %}
 {% endblock %}
