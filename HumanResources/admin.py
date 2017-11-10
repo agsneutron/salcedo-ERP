@@ -32,7 +32,7 @@ class HumanResourcesAdminUtilities():
         model_name = obj.__class__.__name__.lower()
         link = "http://localhost:8000/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/delete"
         css = "btn btn-raised btn-default btn-xs"
-        button = "<i class ='fa fa-trash color-default eliminar' > </i>"
+        button = "<i class ='fa fa-trash-o color-danger eliminar' > </i>"
 
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
@@ -182,6 +182,19 @@ class EmergencyContactAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+        # Adding extra context to the change view.
+
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        emergencycontact_set = EmergencyContact.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "emergencycontact"
+        extra['emergencycontact'] = emergencycontact_set
+
+        return super(EmergencyContactAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
 # Family Member Admin.

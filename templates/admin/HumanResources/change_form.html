@@ -146,14 +146,19 @@
                     <h2 class=" text-center">Perfil de Empleado</h2>
                     <hr>
                     <div class="btn-group btn-group-justified btn-group-raised">
-                        <a class="btn btn-primary employee-menu"
+                        <a class="btn btn-primary employee-menu active"
                            href="/admin/HumanResources/employee/{{ request.GET.employee }}/change/?employee={{ request.GET.employee }}">Datos<br>
                             Personales
-                            <div class="ripple-container"></div>
+
                         </a>
                         <a class="btn btn-primary employee-menu"
                            href="/admin/HumanResources/education/add/?employee={{ request.GET.employee }}">Formación<br>
                             Académica
+                            <div class="ripple-container"></div>
+                        </a>
+                        <a class="btn btn-primary employee-menu"
+                           href="/admin/HumanResources/currenteducation/add/?employee={{ request.GET.employee }}">Formación<br>
+                            Académica Actual
                             <div class="ripple-container"></div>
                         </a>
                         <a class="btn btn-primary employee-menu"
@@ -238,6 +243,7 @@
                                     {% include "admin/HumanResources/stacked.html" %}
                                 {% endfor %}
                             {% endblock %}
+
                             <!-- Implementing the data list section -->
                             {% if template == "education" %}
                                 <h2 class="section-title mt-4">Listado de Formación Académica</h2>
@@ -282,22 +288,333 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            {% elif template == "emergency" %}
+
+                            {% elif template == "emergencycontact" %}
+                                <h2 class="section-title mt-4">Listado de Formación Académica</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                            <td>Apellido Paterno</td>
+                                            <td>Apellido Materno</td>
+                                            <td>No. Telefono</td>
+                                            <td>No. Celular</td>
+                                            <td>Email</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in emergencycontact %}
+                                            <tr>
+                                                <td>{{ record.name }}</td>
+                                                <td>{{ record.first_last_name }}</td>
+                                                <td>{{ record.second_last_name }}</td>
+                                                <td>{{ record.phone_number }}</td>
+                                                <td>{{ record.cellphone_number }}</td>
+                                                <td>{{ record.email }}</td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/emergencycontact/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/emergencycontact/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
 
                             {% elif template == "familiars" %}
+                                <h2 class="section-title mt-4">Listado de Familiares</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                            <td>Apellido Paterno</td>
+                                            <td>Apellido Materno</td>
+                                            <td>Parentesco</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in familiars %}
+                                            <tr>
+                                                <td>{{ record.name }}</td>
+                                                <td>{{ record.first_last_name }}</td>
+                                                <td>{{ record.second_last_name }}</td>
+                                                <td>{{ record.relationship }}</td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/familymember/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/familymember/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
 
                             {% elif template == "references" %}
+                                <h2 class="section-title mt-4">Listado de Referencias</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                            <td>Apellido Paterno</td>
+                                            <td>Apellido Materno</td>
+                                            <td>Empresa</td>
+                                            <td>Teléfono #1</td>
+                                            <td>Teléfono #2</td>
+                                            <td>Email</td>
+                                            <td>Notas</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in references %}
+                                            <tr>
+                                                <td>{{ record.name }}</td>
+                                                <td>{{ record.first_last_name }}</td>
+                                                <td>{{ record.second_last_name }}</td>
+                                                <td>{{ record.company_name }}</td>
+                                                <td>{{ record.first_phone_number }}</td>
+                                                <td>{{ record.second_phone_number }}</td>
+                                                <td>{{ record.email }}</td>
+                                                <td>{{ record.notes }}</td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/workreference/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/workreference/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
 
                             {% elif template == "tests" %}
+                                <h2 class="section-title mt-4">Listado de Exámen</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Fecha de Aplicacion</td>
+                                            <td>Resultado</td>
+                                            <td>Comentarios</td>
+                                            <td>Prueba</td>
 
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in tests %}
+                                            <tr>
+                                                <td>{{ record.application_date }}</td>
+                                                <td>{{ record.result }}</td>
+                                                <td>{{ record.comments }}</td>
+                                                <td>{{ record.test }}</td>
+
+                                                <td>
+                                                    <a href="/admin/HumanResources/testapplication/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/testapplication/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             {% elif template == "documentation" %}
+                                <h2 class="section-title mt-4">Listado de Documentación</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Archivo</td>
+                                            <td>Comentarios</td>
+                                            <td>Tipo de Doc.</td>
 
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in documentation %}
+                                            <tr>
+                                                <td>{{ record.file }}</td>
+                                                <td>{{ record.comments }}</td>
+                                                <td>{{ record.document_type }}</td>
+
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeedocument/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeedocument/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             {% elif template == "checker" %}
-
+                                <h2 class="section-title mt-4">Listado de Checador</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Empleado</td>
+                                            <td>Fecha</td>
+                                            <td>Hora de Entrada</td>
+                                            <td>Hora de Salida</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in checker %}
+                                            <tr>
+                                                <td>{{ record.employee }}</td>
+                                                <td>{{ record.date }}</td>
+                                                <td>{{ record.entry_time }}</td>
+                                                <td>{{ record.exit_time }}</td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeeassistance/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeeassistance/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             {% elif template == "job" %}
 
                             {% elif template == "financial_data" %}
+                                <h2 class="section-title mt-4">Listado de Datos Financieros</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Cuenta</td>
+                                            <td>CLABE</td>
+                                            <td>Salario Mensual</td>
+                                            <td>Salario Diario</td>
+                                            <td>Salario Diario Acumulado</td>
 
+
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in financial_data %}
+                                            <tr>
+                                                <td>{{ record.account_number }}</td>
+                                                <td>{{ record.CLABE }}</td>
+                                                <td>{{ record.monthly_salary }}</td>
+                                                <td>{{ record.daily_salary }}</td>
+                                                <td>{{ record.aggregate_daily_salary }}</td>
+
+
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <h2 class="section-title mt-4">Listado de Crédito Infonavit</h2>
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Numero de Crédito</td>
+                                            <td>Tipo Descuento</td>
+                                            <td>Monto Descuento</td>
+                                            <td>Fecha de Inicio</td>
+                                            <td>Duracion</td>
+                                            <td>Observaciones</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in financial_data %}
+                                            <tr>
+                                                <td>{{ record.infonavit_credit_number }}</td>
+                                                <td>{{ record.discount_type }}</td>
+                                                <td>{{ record.discount_amount }}</td>
+                                                <td>{{ record.start_date }}</td>
+                                                <td>{{ record.credit_term }}</td>
+                                                <td>{{ record.comments }}</td>
+
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             {% endif %}
 
                         </div>
