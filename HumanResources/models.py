@@ -619,10 +619,8 @@ class Subdirection(models.Model):
         verbose_name_plural = "Subdirecciones"
         verbose_name = "Subdirección"
 
-
     def __str__(self):
         return self.name
-
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
@@ -636,10 +634,8 @@ class Area(models.Model):
         verbose_name_plural = "Áreas"
         verbose_name = "Área"
 
-
     def __str__(self):
         return self.name
-
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
@@ -665,11 +661,14 @@ class Department(models.Model):
 # Model for an specific employee position description.
 
 class PAYROLL_CLASIFICATION(models.Model):
+
+    CORPORATIVA =1
+    PROYECTO=2
     PAYROLLCLASSIFICATION_CHOICES = (
-        ('C', 'Corporativa'),
-        ('P', 'Proyecto'),
+        (CORPORATIVA, 'Corporativa'),
+        (PROYECTO, 'Proyecto'),
     )
-    payroll_classification = models.CharField(max_length=1, choices=PAYROLLCLASSIFICATION_CHOICES)
+    payroll_classification = models.IntegerField(max_length=1, choices=PAYROLLCLASSIFICATION_CHOICES, default=CORPORATIVA)
 
 
 class Payment_Method(models.Model):
@@ -718,7 +717,7 @@ class EmployeePositionDescription(models.Model):
     job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
     #contract = models.ForeignKey(Contract, verbose_name="Contrato", null=False, blank=False)
     #immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
-    payroll_classification = models.ForeignKey(PAYROLL_CLASIFICATION, verbose_name="Clasificación de Nómina", null=False, blank=False,)
+    payroll_classification = models.ForeignKey(PAYROLL_CLASIFICATION, verbose_name="Clasificación de Nómina",)
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
 
     class Meta:
@@ -771,29 +770,48 @@ class InfonavitData(models.Model):
 
 
 class EarningsDeductionsCategory(models.Model):
-    EARNINGDEDUCTIONSCATEGORY_CHOICES = (
-        ('F', 'Fija'),
-        ('V', 'Variable'),
-    )
-    earnings_deductions_category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES)
+    #FIJA VARIABLE
+    earnings_deductions_category = models.CharField(max_length=20)
+
+    class Meta:
+        verbose_name_plural = "Categoria de Percepción y Deducción"
+        verbose_name = "Categorias de Percepciones y Deducciones"
+
+    def __str__(self):
+        return self.earnings_deductions_category
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.earnings_deductions_category
 
 
 class EarningDeductionType(models.Model):
-    EARNINGDEDUCTIONTYPE_CHOICES = (
-        ('D', 'Deducción'),
-        ('P', 'Percepción'),
-    )
+    # PERCEPCIÓN DEDUCCIÓN
+    earning_deduction_type = models.CharField(max_length=20)
 
-    earning_deduction_type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES)
+    class Meta:
+        verbose_name_plural = "Tipo de Percepción y Deducción"
+        verbose_name = "Tipos de Percepciones y Deducciones"
+
+    def __str__(self):
+        return self.earning_deduction_type
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.earning_deduction_type
 
 
 class YNType(models.Model):
+    # SI NO
+    yn_type = models.CharField(max_length=2)
 
-    YNTYPE_CHOICES = (
-        ('Y', 'Si'),
-        ('N', 'No'),
-    )
-    yn_type = models.CharField(max_length=1, choices=YNTYPE_CHOICES)
+    class Meta:
+        verbose_name_plural = "SI/NO"
+        verbose_name = "SI/NO"
+
+    def __str__(self):
+        return self.yn_type
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.yn_type
 
 
 class EarningsDeductions(models.Model):
@@ -816,11 +834,11 @@ class EarningsDeductions(models.Model):
 
 
     def __str__(self):
-        return self.name + " " + self.type
+        return self.name + "-" + self.type.earning_deduction_type
 
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.name + " " + self.type
+        return self.name + "-" + self.type.earning_deduction_type
 
 
 class EmployeeEarningsDeductions(models.Model):
