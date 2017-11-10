@@ -376,6 +376,9 @@ class EmployeeEarningsDeductionsForm(forms.ModelForm):
     class Meta:
         model = EmployeeEarningsDeductions
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
