@@ -20,6 +20,10 @@ class EducationForm(forms.ModelForm):
         model = Education
         fields = '__all__'
 
+        widgets = {
+            "employee": forms.HiddenInput
+        }
+
     def __init__(self, *args, **kwargs):
 
         self.request = kwargs.pop('request', None)
@@ -44,6 +48,9 @@ class CurrentEducationForm(forms.ModelForm):
     class Meta:
         model = Education
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -69,6 +76,9 @@ class EmergencyContactForm(forms.ModelForm):
     class Meta:
         model = EmergencyContact
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -94,6 +104,9 @@ class FamilyMemberForm(forms.ModelForm):
     class Meta:
         model = FamilyMember
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -119,6 +132,9 @@ class WorkReferenceForm(forms.ModelForm):
     class Meta:
         model = WorkReference
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -144,6 +160,9 @@ class TestApplicationForm(forms.ModelForm):
     class Meta:
         model = TestApplication
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -169,6 +188,9 @@ class EmployeeDocumentForm(forms.ModelForm):
     class Meta:
         model = EmployeeDocument
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -194,6 +216,9 @@ class CheckerDataForm(forms.ModelForm):
     class Meta:
         model = CheckerData
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -244,6 +269,9 @@ class EmployeePositionDescriptionForm(forms.ModelForm):
     class Meta:
         model = EmployeePositionDescription
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -269,6 +297,9 @@ class EmployeeFinancialDataForm(forms.ModelForm):
     class Meta:
         model = EmployeeFinancialData
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput
+        }
 
     def __init__(self, *args, **kwargs):
 
