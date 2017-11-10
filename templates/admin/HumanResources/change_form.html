@@ -604,7 +604,78 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            {% endif %}
+                            {% elif template == "employee_earnings_deductions" %}
+                                <div class="col-xs-12">
+                                <div class="col-xs-6">
+                                   {% comment %} <h4 class="section-title mt-4">Percepciones</h4>
+                                    <hr>{% endcomment %}
+                                        <div class="table-respponsive">
+                                           <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td style="border:1px solid">Percepción</td>
+                                                <td style="border:1px solid">Monto</td>
+                                                <td style="border:1px solid">Editar</td>
+                                                <td style="border:1px solid">Eliminar</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for record in earnings %}
+                                                    <tr>
+                                                        <td style="border:1px solid">{{ record.concept }}</td>
+                                                        <td style="border:1px solid">{{ record.ammount }}</td>
+                                                        <td style="border:1px solid">
+                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                                Editar
+                                                            </a>
+                                                        </td>
+                                                        <td style="border:1px solid">
+                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/">
+                                                                Eliminar
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    {% comment %}<h4 class="section-title mt-4">Deducciones</h4>
+                                    <hr>{% endcomment %}
+                                    <div class="table-respponsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td style="border:1px solid">Deducción</td>
+                                                <td style="border:1px solid">Monto</td>
+                                                <td style="border:1px solid">Editar</td>
+                                                <td style="border:1px solid">Eliminar</td>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for record in deductions %}
+                                                    <tr>
+                                                        <td style="border:1px solid">{{ record.concept }}</td>
+                                                        <td style="border:1px solid">{{ record.ammount }}</td>
+                                                        <td style="border:1px solid">
+                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                                                Editar
+                                                            </a>
+                                                        </td>
+                                                        <td style="border:1px solid">
+                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/">
+                                                                Eliminar
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                         {% endif %}
 
                         </div>
                     </div>
