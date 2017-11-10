@@ -126,6 +126,7 @@
                 </ul>
             {% endif %}{% endif %}
         {% endblock %}
+
         <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post"
               id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
             <div>
@@ -187,9 +188,9 @@
                             </div>
                     <div class="row mb-4">
                         <div class="col-md-2">
-                            <div class="card animated fadeInUp animation-delay-7">
+                            <div class="card ">
                                 <div class="ms-hero-bg-info">
-                                    <h3 class="color-white index-1 text-center no-m pt-2">{{ employee.name }} {{ employee.first_last_name }}</h3>
+                                    <h3 class="color-white index-1 text-center no-m pt-2"> {{ employee.name }} {{ employee.first_last_name }} </h3>
                                     <div class="color-medium index-1 text-center np-m">ID: {{ employee.id }}</div>
                                     <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png"
                                          alt=""
@@ -197,18 +198,18 @@
                                 <div class="card-block pt-4 text-center">
                                     <h3 class="color-info">Empleado</h3>
                                     <ul class="list-group text-left">
-                                        <li class="list-group-item"><strong>Id:</strong> {{ employee.id }}</li>
+                                        <li class="list-group-item"><strong>Id:</strong><br> {{ employee.id }}</li>
                                         <li class="list-group-item">
-                                            <strong>Clave:</strong> {{ employee.employee_key }}
+                                            <strong>Clave:</strong><br> {{ employee.employee_key }}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Tipo:</strong> {{ employee.get_type_display }}
+                                            <strong>Tipo:</strong><br> {{ employee.get_type_display }}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Registro:</strong> {{ employee.registry_date }}
+                                            <strong>Registro:</strong><br> {{ employee.registry_date }}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Estatus:</strong> {{ employee.get_status_display }}</li>
+                                            <strong>Estatus:</strong><br> {{ employee.get_status_display }}</li>
                                     </ul>
                                 </div>
                             </div>
@@ -217,8 +218,19 @@
                         <div class="col-xs-10">
 
                             {% for fieldset in adminform %}
+
                                 {% include "admin/HumanResources/fieldset.html" %}
                             {% endfor %}
+
+                        {% block inline_field_sets %}
+
+{% for inline_admin_formset in inline_admin_formsets %}
+
+    {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
+    {% include "admin/HumanResources/stacked.html" %}
+
+{% endfor %}
+{% endblock %}
                         </div>
                     </div>
 
@@ -229,15 +241,7 @@
 
 {% block after_field_sets %}{% endblock %}
 
-{% block inline_field_sets %}
 
-{% for inline_admin_formset in inline_admin_formsets %}
-
-    {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
-    {% include "admin/HumanResources/stacked.html" %}
-
-{% endfor %}
-{% endblock %}
 
                 {% block after_related_objects %}{% endblock %}
                 <hr>
