@@ -7,6 +7,8 @@ from django.contrib import admin
 
 # Importing the views.
 from django.contrib.admin.views.main import ChangeList
+from django.core.exceptions import PermissionDenied
+from django.http.response import HttpResponseRedirect
 
 from HumanResources import views
 
@@ -231,6 +233,18 @@ class FamilyMemberAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        family_member_set = FamilyMember.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "family_members"
+        extra['family_member'] = family_member_set
+
+        return super(FamilyMemberAdmin, self).add_view(request, form_url, extra_context=extra)
+
 
 # Work Reference Admin.
 @admin.register(WorkReference)
@@ -251,6 +265,20 @@ class WorkReferenceAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 
+    # Overriding the add_wiew method for the work reference admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        work_reference_set = WorkReference.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "work_reference"
+        extra['work_reference'] = work_reference_set
+
+        return super(WorkReferenceAdmin, self).add_view(request, form_url, extra_context=extra)
+
+
 # Test Application Admin.
 @admin.register(TestApplication)
 class TestApplicationAdmin(admin.ModelAdmin):
@@ -268,6 +296,20 @@ class TestApplicationAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    # Overriding the add_wiew method for the tests admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        applications_set = TestApplication.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "applications"
+        extra['applications'] = applications_set
+
+        return super(TestApplicationAdmin, self).add_view(request, form_url, extra_context=extra)
+
 
 
 # Employee Document Admin.
@@ -288,11 +330,31 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+    # Overriding the add_wiew method for the employee document admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        documents_set = EmployeeDocument.objects.filter(employee_id=employee_id)
+
+        print documents_set
+
+        extra['template'] = "documentation"
+        extra['documentation'] = documents_set
+
+        return super(EmployeeDocumentAdmin, self).add_view(request, form_url, extra_context=extra)
+
 
 # Checker Data Admin.
 @admin.register(CheckerData)
 class CheckerDataAdmin(admin.ModelAdmin):
     form = CheckerDataForm
+
+
+
+
+
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -306,6 +368,34 @@ class CheckerDataAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    # Overriding the add_wiew method for the employee document admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        found_checker = request.GET.get('checker')
+
+        checker_data = CheckerData.objects.filter(employee_id=employee_id)
+
+
+        if len(checker_data) > 0 and found_checker is None:
+            return HttpResponseRedirect("/admin/HumanResources/checkerdata/"+str(checker_data.first().id)+"/change?employee="+str(employee_id)+"&checker=1")
+
+
+        return super(CheckerDataAdmin, self).add_view(request, form_url, extra_context=extra)
+
+
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        employee_id = request.GET.get('employee')
+        checker_data = CheckerData.objects.filter(employee_id=employee_id)
+
+        if len(checker_data) <= 0 or (int(object_id) != int(checker_data.first().id)):
+            raise PermissionDenied
+
+        return super(CheckerDataAdmin, self).change_view(request, object_id, form_url, extra_context)
 
 
 # Employee Has Tag Admin.
@@ -352,6 +442,32 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    # Overriding the add_wiew method for the employee position description admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        found_position = request.GET.get('position')
+
+        position_description_data = EmployeePositionDescription.objects.filter(employee_id=employee_id)
+
+        if len(position_description_data) > 0 and found_position is None:
+            return HttpResponseRedirect(
+                "/admin/HumanResources/employeepositiondescription/" + str(position_description_data.first().id) + "/change?employee=" + str(
+                    employee_id) + "&position=1")
+
+        return super(EmployeePositionDescriptionAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        employee_id = request.GET.get('employee')
+        position_description_data = EmployeePositionDescription.objects.filter(employee_id=employee_id)
+
+        if len(position_description_data) <= 0 or (int(object_id) != int(position_description_data.first().id)):
+            raise PermissionDenied
+
+        return super(EmployeePositionDescriptionAdmin, self).change_view(request, object_id, form_url, extra_context)
 
     # Infonavit Data Admin.
 #@admin.register(InfonavitData)
@@ -448,6 +564,34 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+
+    # Overriding the add_wiew method for the employee position description admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        found_financial_data = request.GET.get('position')
+
+        financial_data = EmployeeFinancialData.objects.filter(employee_id=employee_id)
+
+        if len(financial_data) > 0 and found_financial_data is None:
+            return HttpResponseRedirect(
+                "/admin/HumanResources/employeefinancialdata/" + str(
+                    financial_data.first().id) + "/change?employee=" + str(employee_id) + "&position=1")
+
+        return super(EmployeeFinancialDataAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        employee_id = request.GET.get('employee')
+        financial_data = EmployeeFinancialData.objects.filter(employee_id=employee_id)
+
+        if len(financial_data) <= 0 or (int(object_id) != int(financial_data.first().id)):
+            raise PermissionDenied
+
+        return super(EmployeeFinancialDataAdmin, self).change_view(request, object_id, form_url,
+                                                                         extra_context)
 
 # Earnings Deductions Admin.
 @admin.register(EarningsDeductions)
@@ -609,3 +753,10 @@ class JobInstanceAdmin(admin.ModelAdmin):
             url(r'^$', views.JobInstanceListView.as_view(), name='employee-detail'),
         ]
         return my_urls + urls
+
+
+
+
+admin.site.register(PAYROLL_CLASIFICATION)
+admin.site.register(Payment_Method)
+admin.site.register(Bank)

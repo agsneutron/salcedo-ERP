@@ -672,23 +672,31 @@ class PAYROLL_CLASIFICATION(models.Model):
 
 
 class Payment_Method(models.Model):
-    PAYMENT_METHOD_CHOICES = (
-        ('D', 'Deposito'),
-        ('E', 'Efectivo'),
-        ('T', 'Transferencia Interbancaria'),
-    )
-    payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES)
+    name = models.CharField(max_length=512, null=False, blank=False)
+
+    class Meta:
+        verbose_name = "Forma de Pago"
+        verbose_name_plural = "Formas de Pago"
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
 
 
 class Bank(models.Model):
-    BANK_CHOICES = (
-        ('1', 'BANCOMER'),
-        ('2', 'BANAMEX'),
-        ('3', 'BANORTE'),
-        ('4', 'SANTANDER'),
-        ('5', 'HSBC'),
-    )
-    bank = models.CharField(max_length=1, choices=BANK_CHOICES)
+    name = models.CharField(max_length=512,blank=False, null=False)
+
+    class Meta:
+        verbose_name = "Banco"
+        verbose_name_plural = "Bancos"
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
 
 
 class EmployeePositionDescription(models.Model):
@@ -725,15 +733,15 @@ class EmployeePositionDescription(models.Model):
         verbose_name = "Descripción de Puesto del Empleado"
 
     def __str__(self):
-        return self.project.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+        return self.project.nombreProyecto + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.project.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+        return self.project.nombreProyecto + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 
 class EmployeeFinancialData(models.Model):
-    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, max_length=20, default=0)
-    CLABE = models.IntegerField(verbose_name='CLABE', null=False, max_length=20, default=0)
+    account_number = models.CharField(verbose_name='Número de Cuenta', null=False, max_length=20, default=0)
+    CLABE = models.CharField(verbose_name='CLABE', null=False, max_length=20, default=0)
     monthly_salary = models.DecimalField(verbose_name='Salario Mensual', max_digits=20, decimal_places=2, null=True)
     daily_salary = models.DecimalField(verbose_name='Salario Diario', max_digits=20, decimal_places=2, null=True)
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20, decimal_places=2, null=True)

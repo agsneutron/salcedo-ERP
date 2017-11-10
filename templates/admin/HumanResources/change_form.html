@@ -178,7 +178,7 @@
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Documentación
                                 </a>
-                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/employeeassistance/add/?employee={{request.GET.employee}}">
+                                <a class="btn btn-primary employee-menu" href="/admin/HumanResources/checkerdata/add/?employee={{request.GET.employee}}">
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeeassistance_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Checador
                                 </a>
@@ -320,7 +320,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "familiars" %}
+                            {% elif template == "family_members" %}
                                 <h2 class="section-title mt-4">Listado de Familiares</h2>
                                 <hr>
                                 <div class="table-respponsive">
@@ -336,7 +336,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in familiars %}
+                                        {% for record in family_member_set %}
                                             <tr>
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.first_last_name }}</td>
@@ -358,7 +358,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "references" %}
+                            {% elif template == "work_reference" %}
                                 <h2 class="section-title mt-4">Listado de Referencias</h2>
                                 <hr>
                                 <div class="table-respponsive">
@@ -378,7 +378,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in references %}
+                                        {% for record in work_reference %}
                                             <tr>
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.first_last_name }}</td>
@@ -404,7 +404,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "tests" %}
+                            {% elif template == "applications" %}
                                 <h2 class="section-title mt-4">Listado de Exámen</h2>
                                 <hr>
                                 <div class="table-respponsive">
@@ -421,7 +421,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in tests %}
+                                        {% for record in applications %}
                                             <tr>
                                                 <td>{{ record.application_date }}</td>
                                                 <td>{{ record.result }}</td>
@@ -461,7 +461,12 @@
                                         <tbody>
                                         {% for record in documentation %}
                                             <tr>
-                                                <td>{{ record.file }}</td>
+                                                <td>
+                                                    <a href="/media/{{ record.file.name }}" target="_blank">
+                                                        Archivo
+                                                    </a>
+
+                                                </td>
                                                 <td>{{ record.comments }}</td>
                                                 <td>{{ record.document_type }}</td>
 
@@ -480,44 +485,6 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            {% elif template == "checker" %}
-                                <h2 class="section-title mt-4">Listado de Checador</h2>
-                                <hr>
-                                <div class="table-respponsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                        <tr>
-                                            <td>Empleado</td>
-                                            <td>Fecha</td>
-                                            <td>Hora de Entrada</td>
-                                            <td>Hora de Salida</td>
-                                            <td>Editar</td>
-                                            <td>Eliminar</td>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for record in checker %}
-                                            <tr>
-                                                <td>{{ record.employee }}</td>
-                                                <td>{{ record.date }}</td>
-                                                <td>{{ record.entry_time }}</td>
-                                                <td>{{ record.exit_time }}</td>
-                                                <td>
-                                                    <a href="/admin/HumanResources/employeeassistance/{{ record.id }}/change/?employee={{ request.GET.employee }}">
-                                                        Editar
-                                                    </a>
-                                                </td>
-                                                <td>
-                                                    <a href="/admin/HumanResources/employeeassistance/{{ record.id }}/delete/">
-                                                        Eliminar
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-                            {% elif template == "job" %}
 
                             {% elif template == "financial_data" %}
                                 <h2 class="section-title mt-4">Listado de Datos Financieros</h2>
