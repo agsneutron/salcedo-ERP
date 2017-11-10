@@ -412,8 +412,8 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
-        earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type__earning_deduction_type="PERCEPCION")
-        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type__earning_deduction_type="DEDUCCION")
+        earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
+        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
 
         extra['template'] = "employee_earnings_deductions"
         extra['earnings'] = earnings_set
@@ -487,13 +487,13 @@ class PayrollReceiptProcessedAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 # Accounting Project Admin.
-@admin.register(AccountingProject)
-class AccountingProjectAdmin(admin.ModelAdmin):
-    form = AccountingProjectForm
+@admin.register(PayrollGroup)
+class PayrollGroupAdmin(admin.ModelAdmin):
+    form = PayrollGroupForm
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(AccountingProjectAdmin, self).get_form(request, obj, **kwargs)
+        ModelForm = super(PayrollGroupAdmin, self).get_form(request, obj, **kwargs)
 
         # Class to pass the request to the form.
         class ModelFormMetaClass(ModelForm):
@@ -551,6 +551,29 @@ class PayrollTypeAdmin(admin.ModelAdmin):
 @admin.register(PayrollPeriod)
 class PayrollPeriodAdmin(admin.ModelAdmin):
     form = PayrollPeriodForm
+
+
+    fieldsets = (
+        ("Periodos de Nómina", {
+            'fields': ('name', 'month', 'year', 'week','start_period','end_period')
+        }),
+    )
+
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        #employee_id = request.GET.get('employee')
+        period_set = PayrollPeriod.objects.all()
+
+        extra['template'] = "payrollperiod"
+        extra['period'] = period_set
+
+
+        return super(PayrollPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
+
 
 # Tax Regime Admin.
 @admin.register(TaxRegime)
