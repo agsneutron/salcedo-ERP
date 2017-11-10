@@ -796,8 +796,6 @@ class EarningsDeductions(models.Model):
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1,)
     accounting_account  = models.IntegerField("Cuenta Contable", blank=False, null=False)
     comments = models.CharField(verbose_name="Observaciones", null=False, blank=False, max_length=500,)
-
-    #foreign
     type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES,default=DEDUCCION)
     taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES,default=NO)
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES,default=FIJA)
@@ -808,11 +806,11 @@ class EarningsDeductions(models.Model):
 
 
     def __str__(self):
-        return self.name + "-" + self.type.earning_deduction_type
+        return self.type + "-" + self.name
 
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.name + "-" + self.type.earning_deduction_type
+        return self.type + "-" + self.name
 
 
 class EmployeeEarningsDeductions(models.Model):

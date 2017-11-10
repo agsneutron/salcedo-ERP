@@ -412,8 +412,8 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
-        earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type__earning_deduction_type="PERCEPCION")
-        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type__earning_deduction_type="DEDUCCION")
+        earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
+        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
 
         extra['template'] = "employee_earnings_deductions"
         extra['earnings'] = earnings_set
