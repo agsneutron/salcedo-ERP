@@ -505,6 +505,23 @@ class PayrollGroupAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 
+# Earning Deduction Period Project Admin.
+@admin.register(EarningDeductionPeriod)
+class EarningDeductionPeriodAdmin(admin.ModelAdmin):
+    form = EarningDeductionPeriodForm
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EarningDeductionPeriodAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
 
 # Payroll Processed Detail Admin.
 @admin.register(PayrollProcessedDetail)

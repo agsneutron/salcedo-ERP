@@ -907,6 +907,21 @@ class PayrollPeriod(models.Model):
         return self.name
 
 
+class EarningDeductionPeriod(models.Model):
+    # Foreign Keys.
+    payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
+    employee_earnings_deductions = models.ForeignKey(EmployeeEarningsDeductions, verbose_name="Deducción/Percepción", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Periodo Percepción / Deducción"
+        verbose_name = "Periodo Percepción / Deducción"
+
+    def __str__(self):
+        return str(self.payroll_period.name)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.payroll_period.name)
+
 
 class PayrollToProcess(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
