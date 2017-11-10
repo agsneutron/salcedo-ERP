@@ -532,6 +532,29 @@ class PayrollTypeAdmin(admin.ModelAdmin):
 class PayrollPeriodAdmin(admin.ModelAdmin):
     form = PayrollPeriodForm
 
+
+    fieldsets = (
+        ("Periodos de Nómina", {
+            'fields': ('name', 'month', 'year', 'week','start_period','end_period')
+        }),
+    )
+
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        #employee_id = request.GET.get('employee')
+        period_set = PayrollPeriod.objects.all()
+
+        extra['template'] = "payrollperiod"
+        extra['period'] = period_set
+
+
+        return super(PayrollPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
+
+
 # Tax Regime Admin.
 @admin.register(TaxRegime)
 class TaxRegimeAdmin(admin.ModelAdmin):
