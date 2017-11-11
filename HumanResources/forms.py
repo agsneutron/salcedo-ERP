@@ -537,13 +537,6 @@ class EarningDeductionPeriodForm(forms.ModelForm):
         model = EarningDeductionPeriod
         fields = '__all__'
 
-
-# Form to include the fields of the Payroll Process Form.
-class PayrollProcessedForm(forms.ModelForm):
-    class Meta:
-        model = PayrollProcessed
-        fields = '__all__'
-
 # Form to include the fields of the Payroll To Process Form.
 class PayrollToProcessForm(forms.ModelForm):
     class Meta:

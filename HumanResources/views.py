@@ -12,6 +12,8 @@ from HumanResources.models import *
 def employeehome(request):
     return render(request, 'admin/HumanResources/employee-home.html')
 
+def payrollhome(request):
+    return render(request, 'admin/HumanResources/payroll-home.html')
 
 class JobInstanceListView(generic.ListView):
     model = JobInstance

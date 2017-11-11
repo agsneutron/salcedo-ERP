@@ -76,6 +76,8 @@
                                         <thead>
                                         <tr>
                                             <td>Nombre</td>
+                                            <td>Clasificación</td>
+                                            <td>Proyecto</td>
                                             <td>Editar</td>
                                             <td>Eliminar</td>
                                         </tr>
@@ -84,6 +86,8 @@
                                         {% for record in period %}
                                             <tr>
                                                 <td>{{ record.name }}</td>
+                                                <td>{{ record.payroll_classification.name }}</td>
+                                                <td>{{ record.project.nombreProyecto }}</td>
                                                 <td>
                                                     <a href="/admin/HumanResources/payrollgroup/{{ record.id }}/change/">
                                                         Editar

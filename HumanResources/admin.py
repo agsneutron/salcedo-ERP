@@ -335,7 +335,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         ("Descripción de Puesto", {
             #contract
             'fields': ('employee','start_date', 'end_date', 'direction', 'subdirection','area','department','job_profile', 'physical_location',
-                       'payroll_classification','project','insurance_type','insurance_number','monday','tuesday', 'wednesday', 'thursday','friday','saturday','sunday','entry_time','departure_time',
+                       'insurance_type','insurance_number','monday','tuesday', 'wednesday', 'thursday','friday','saturday','sunday','entry_time','departure_time',
                        'observations','payroll_group')
         }),
     )
@@ -553,32 +553,6 @@ Administrators to fill the database.
 
 
 
-# Payroll Processed Admin.
-@admin.register(PayrollProcessed)
-class PayrollProcessedAdmin(admin.ModelAdmin):
-    form = PayrollProcessedForm
-
-    fieldsets = (
-        ("Nómina a Generar", {
-            'fields': ('payroll_period','payroll_to_process','payroll_classification')
-        }),
-    )
-
-
-    # Adding extra context to the change view.
-    def add_view(self, request, form_url='', extra_context=None):
-        # Setting the extra variable to the set context or none instead.
-        extra = extra_context or {}
-
-        #employee_id = request.GET.get('employee')
-        payroll_set = PayrollProcessed.objects.all()
-
-        extra['template'] = "payrollprocessed"
-        extra['payroll'] = payroll_set
-
-
-        return super(PayrollProcessedAdmin, self).add_view(request, form_url, extra_context=extra)
-
 # Payroll To Process Admin.
 @admin.register(PayrollToProcess)
 class PayrollToProcessAdmin(admin.ModelAdmin):
@@ -596,7 +570,7 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('name',)
+            'fields': ('name','payroll_classification','project')
         }),
     )
 
@@ -623,7 +597,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Periodos de Nómina", {
-            'fields': ('name','start_period','end_period', 'week', 'month', 'year', 'payroll_group')
+            'fields': ('name','start_period','end_period', 'week', 'month', 'year', 'payroll_group','payroll_to_process')
         }),
     )
 
