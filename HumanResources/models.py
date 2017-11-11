@@ -12,13 +12,26 @@ from django.core.validators import MinValueValidator,MaxValueValidator
 # Third Party Libraries
 from smart_selects.db_fields import ChainedForeignKey
 
-
 # Importing model from other apps.
 from ERP.models import Pais, Estado, Municipio, Project
 
 # Create your models here.
 from multiselectfield import MultiSelectField
 
+
+
+class PayrollGroup(models.Model):
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=100)
+
+    class Meta:
+        verbose_name_plural = "Grupo de Nómina"
+        verbose_name = "Grupo de Nómina"
+
+    def __str__(self):
+        return str(self.name)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.name)
 
 
 # Employee General Information.
@@ -687,6 +700,7 @@ class EmployeePositionDescription(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
     direction = models.ForeignKey(Direction, verbose_name='Dirección', null=False, blank=False)
     subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección', null=False, blank=False)
     # subdirection = ChainedForeignKey(Subdirection,
@@ -891,6 +905,7 @@ class PayrollPeriod(models.Model):
         (NOVEMBER, 'Noviembre'),
         (DECEMBER, 'Diciembre'),
     )
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
     month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
     year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
@@ -910,6 +925,21 @@ class PayrollPeriod(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
 
+
+class EarningDeductionPeriod(models.Model):
+    # Foreign Keys.
+    payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
+    employee_earnings_deductions = models.ForeignKey(EmployeeEarningsDeductions, verbose_name="Deducción/Percepción", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Periodo Percepción / Deducción"
+        verbose_name = "Periodo Percepción / Deducción"
+
+    def __str__(self):
+        return str(self.payroll_period.name)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.payroll_period.name)
 
 
 class PayrollToProcess(models.Model):
@@ -995,6 +1025,7 @@ class PayrollProcessedDetail(models.Model):
    class Meta:
        verbose_name_plural = "Detalle de Nómina Procesada"
        verbose_name = "Detalle de Nómina Procesada"
+
 
 
 

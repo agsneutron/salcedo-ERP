@@ -525,6 +525,19 @@ class RegisterView(FormView):
 
 '''
 
+# Form to include the fields of the Payroll Group Form.
+class PayrollGroupForm(forms.ModelForm):
+    class Meta:
+        model = PayrollGroup
+        fields = '__all__'
+
+# Form to include the fields of the Earning Deduction Period Form.
+class EarningDeductionPeriodForm(forms.ModelForm):
+    class Meta:
+        model = EarningDeductionPeriod
+        fields = '__all__'
+
+
 # Form to include the fields of the Payroll Process Form.
 class PayrollProcessedForm(forms.ModelForm):
     class Meta:
