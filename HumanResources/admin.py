@@ -573,6 +573,27 @@ class PayrollTypeAdmin(admin.ModelAdmin):
 class PayrollGroupAdmin(admin.ModelAdmin):
     form = PayrollGroupForm
 
+    fieldsets = (
+        ("Grupos de Nómina", {
+            'fields': ('name',)
+        }),
+    )
+
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        #employee_id = request.GET.get('employee')
+        period_set = PayrollGroup.objects.all()
+
+        extra['template'] = "payrollgroup"
+        extra['period'] = period_set
+
+
+        return super(PayrollGroupAdmin, self).add_view(request, form_url, extra_context=extra)
+
 # Payroll Period Admin.
 @admin.register(PayrollPeriod)
 class PayrollPeriodAdmin(admin.ModelAdmin):
