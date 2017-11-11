@@ -336,7 +336,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
             #contract
             'fields': ('employee','start_date', 'end_date', 'direction', 'subdirection','area','department','job_profile', 'physical_location',
                        'payroll_classification','project','insurance_type','insurance_number','monday','tuesday', 'wednesday', 'thursday','friday','saturday','sunday','entry_time','departure_time',
-                       'observations')
+                       'observations','payroll_group')
         }),
     )
 
@@ -486,23 +486,6 @@ class PayrollReceiptProcessedAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
-# Accounting Project Admin.
-@admin.register(PayrollGroup)
-class PayrollGroupAdmin(admin.ModelAdmin):
-    form = PayrollGroupForm
-
-    # Method to override some characteristics of the form.
-    def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(PayrollGroupAdmin, self).get_form(request, obj, **kwargs)
-
-        # Class to pass the request to the form.
-        class ModelFormMetaClass(ModelForm):
-            def __new__(cls, *args, **kwargs):
-                kwargs['request'] = request
-
-                return ModelForm(*args, **kwargs)
-
-        return ModelFormMetaClass
 
 
 # Earning Deduction Period Project Admin.
@@ -563,6 +546,10 @@ class PayrollToProcessAdmin(admin.ModelAdmin):
 class PayrollTypeAdmin(admin.ModelAdmin):
     form = PayrollTypeForm
 
+# Payroll Type Admin.
+@admin.register(PayrollGroup)
+class PayrollGroupAdmin(admin.ModelAdmin):
+    form = PayrollGroupForm
 
 # Payroll Period Admin.
 @admin.register(PayrollPeriod)

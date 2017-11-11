@@ -21,7 +21,7 @@ from multiselectfield import MultiSelectField
 
 
 class PayrollGroup(models.Model):
-    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=100, )
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=100)
 
     class Meta:
         verbose_name_plural = "Grupo de Nómina"
