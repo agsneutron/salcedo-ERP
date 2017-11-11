@@ -559,7 +559,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Periodos de Nómina", {
-            'fields': ('name', 'month', 'year', 'week','start_period','end_period')
+            'fields': ('name','start_period','end_period', 'week', 'month', 'year', 'payroll_group')
         }),
     )
 
