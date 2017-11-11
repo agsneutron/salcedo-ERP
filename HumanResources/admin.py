@@ -558,6 +558,27 @@ Administrators to fill the database.
 class PayrollProcessedAdmin(admin.ModelAdmin):
     form = PayrollProcessedForm
 
+    fieldsets = (
+        ("Nómina a Generar", {
+            'fields': ('payroll_period','payroll_to_process','payroll_classification')
+        }),
+    )
+
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        #employee_id = request.GET.get('employee')
+        payroll_set = PayrollProcessed.objects.all()
+
+        extra['template'] = "payrollprocessed"
+        extra['payroll'] = payroll_set
+
+
+        return super(PayrollProcessedAdmin, self).add_view(request, form_url, extra_context=extra)
+
 # Payroll To Process Admin.
 @admin.register(PayrollToProcess)
 class PayrollToProcessAdmin(admin.ModelAdmin):
