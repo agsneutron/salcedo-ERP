@@ -454,6 +454,13 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
 class EarningsDeductionsAdmin(admin.ModelAdmin):
     form = EarningsDeductionsForm
 
+    fieldsets = (
+        ("Catálogo de Percepciones y Deducciones", {
+            'fields': (
+                'name', 'type', 'category', 'taxable', 'percent_taxable', 'accounting_account', 'sat_key',
+                'law_type', 'status', 'comments',)
+        }),
+    )
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
@@ -466,6 +473,21 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        #employee_id = request.GET.get('employee')
+        earnings_set = EarningsDeductions.objects.filter(type='P')
+        deductions_set = EarningsDeductions.objects.filter(type='D')
+
+        extra['template'] = "earnings_deductions"
+        extra['earnings'] = earnings_set
+        extra['deductions'] = deductions_set
+
+        return super(EarningsDeductionsAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
 # Payroll Receipt Processed Admin.
