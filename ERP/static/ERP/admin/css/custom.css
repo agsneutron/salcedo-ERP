@@ -7,27 +7,33 @@ body {
     background-color: #fff;
     margin-bottom: -48px;
 }
+
 .errornote {
-        z-index: 9;
+    z-index: 9;
     color: white;
     position: relative;
     font-size: 11px;
     text-align: center;
 }
-.title-employee  {
-        font-size: 13px;
+
+.title-employee {
+    font-size: 13px;
 }
+
 .hr-employee {
-        display: block;
+    display: block;
     border-top: 1px solid #e9e9e9;
     margin: 10px 0;
 }
+
 .ms-hero-bg-info:after {
     background-color: #00bcd4;
 }
+
 .color-medium {
-    color: #f1f1f1!important;
+    color: #f1f1f1 !important;
 }
+
 .ms-hero-bg-royal:after {
     display: block;
     content: "";
@@ -41,45 +47,57 @@ body {
     background-color: #00a09b;
     z-index: 0;
 }
+
 .dataTables_paginate {
     text-align: right;
 }
+
 .btn, .input-group-btn .btn {
     text-transform: none !important;
 }
-.btn>i {
+
+.btn > i {
     vertical-align: baseline;
     margin-right: 3px;
 }
+
 #content {
     padding-bottom: 30px;
 }
+
 .modal-dialog {
     width: 600px;
     margin: 80px auto;
 }
+
 .vDateField, .vTimeField {
     margin-top: 0 !important;
 }
+
 .date_range_filter {
-        width: 181px;
+    width: 181px;
 }
+
 .pagination {
     display: inline-block;
     padding-left: 0;
     margin: 20px 0 0 0;
     border-radius: 4px;
 }
+
 .ui-datepicker {
     z-index: 9999 !important;
 }
+
 .modal.modal-primary .modal-header {
     background-color: #204280 !important;
     color: #fff;
 }
+
 .modal.modal-primary .modal-content {
     border-bottom: solid 3px #204280 !important;
 }
+
 #sb-site, .sb-site-container, .sb-slide, .sb-slidebar {
     -webkit-transform: translate(0px);
     -moz-transform: translate(0px);
@@ -89,9 +107,10 @@ body {
     -moz-transition: -moz-transform 400ms ease;
     -o-transition: -o-transform 400ms ease;
     transition: transform 400ms ease;
-    -webkit-transition-property: -webkit-transform,left,right;
+    -webkit-transition-property: -webkit-transform, left, right;
     -webkit-backface-visibility: hidden;
 }
+
 #sb-site, .sb-site-container, .sb-slidebar, body, html {
     margin: 0;
     padding: 0;
@@ -99,6 +118,7 @@ body {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
 }
+
 #sb-site, .sb-site-container {
     width: 100%;
     min-height: 100vh;
@@ -106,6 +126,7 @@ body {
     z-index: 1;
     background-color: #fff;
 }
+
 #sb-site, .sb-site-container, .sb-slide, .sb-slidebar {
     -webkit-transform: translate(0px);
     -moz-transform: translate(0px);
@@ -115,9 +136,10 @@ body {
     -moz-transition: -moz-transform 400ms ease;
     -o-transition: -o-transform 400ms ease;
     transition: transform 400ms ease;
-    -webkit-transition-property: -webkit-transform,left,right;
+    -webkit-transition-property: -webkit-transform, left, right;
     -webkit-backface-visibility: hidden;
 }
+
 .text-center {
     text-align: center;
 }
@@ -387,7 +409,7 @@ hr {
 }
 
 .ms-header .ms-title img {
-       margin: 2px 0px;
+    margin: 2px 0px;
 }
 
 .ms-header .ms-title .ms-logo {
@@ -545,7 +567,7 @@ form .aligned ul {
 }
 
 .item-right {
-        position: absolute;
+    position: absolute;
     top: 3px;
     right: 25px;
 }
@@ -557,15 +579,17 @@ form .aligned ul {
 }
 
 .card .card-header i {
-       margin-right: 0px;
+    margin-right: 0px;
     margin: 0px 0px;
     font-size: 14px;
     margin-top: -2px;
     margin-left: 0px;
 }
+
 .btn-circle.btn-circle-sm i.zmdi {
     font-size: 23px;
 }
+
 #container-chart-2 .highcharts-button-box {
     display: none !important;
 }
@@ -788,14 +812,16 @@ dt {
 }
 
 #searchform {
-    height:30px;
+    height: 30px;
 }
+
 .vDateField {
     min-width: 6.85em;
     border: 1px solid #e2e2e2;
-        margin: 5px 0 0;
+    margin: 5px 0 0;
     border-radius: 5px;
 }
+
 .ms-icon.ms-icon-xxlg {
     width: 80px;
     height: 80px;
@@ -1015,12 +1041,15 @@ ul {
     font-size: 30px !important;
     font-size: 2.5rem !important;
 }
+
 .circle {
     margin-top: -2px;
 }
+
 .highcharts-no-data text {
     font-size: 10px !important;
 }
+
 body .sb-site-container {
     -webkit-transform: none;
     transform: none;
@@ -1068,8 +1097,6 @@ body .sb-site-container {
     display: none !important;
 }
 
-
-
 /*==========  Mobile First Method  ==========*/
 
 /* Custom, iPhone Retina */
@@ -1080,11 +1107,13 @@ body .sb-site-container {
         position: absolute;
         left: calc(50% - 25px);
     }
+
     .yamm .nav, .yamm .collapse, .yamm .dropup, .yamm .dropdown {
         position: static;
         z-index: 9999999;
         background-color: white;
     }
+
     .navbar-header {
         width: 100%;
     }
@@ -1186,25 +1215,30 @@ body .sb-site-container {
     .btn, .input-group-btn .btn {
         padding: 8px 15px;
     }
+
     .dash-menu {
-            font-size: 7px;
-    color: white !important;
-    font-weight: bold;
-    text-transform: initial;
-    padding: 8px 1px !important;
+        font-size: 7px;
+        color: white !important;
+        font-weight: bold;
+        text-transform: initial;
+        padding: 8px 1px !important;
     }
+
     .mobile-pad-right {
         padding-right: 0;
     }
+
     .mobile-pad-left {
         padding-left: 0;
     }
+
     .ms-navbar .container .navbar-header .navbar-brand {
         display: inline-block;
-    margin: 0px 15px;
-    padding: 9px 15px;
-    height: 58px;
+        margin: 0px 15px;
+        padding: 9px 15px;
+        height: 58px;
     }
+
     .container-full {
         padding: 0;
         height: 58px;
@@ -1219,29 +1253,35 @@ body .sb-site-container {
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px) {
     .highcharts-no-data text {
-    font-size: 12px !important;
-}
+        font-size: 12px !important;
+    }
+
     .yamm .nav, .yamm .collapse, .yamm .dropup, .yamm .dropdown {
         position: static;
         z-index: 9;
         background-color: white;
     }
+
     .container-full {
         padding: 0;
         height: inherit;
     }
-     .mobile-pad-right {
+
+    .mobile-pad-right {
         padding-right: 15px;
     }
+
     .mobile-pad-left {
         padding-left: 15px;
     }
+
     .dash-menu {
         font-size: 14px;
         color: white !important;
         font-weight: bold;
         text-transform: initial !important;
     }
+
     .go-back-btn {
         position: absolute;
         top: 1px;
@@ -1333,8 +1373,8 @@ body .sb-site-container {
     }
 
     .vDateField {
-            min-width: 59% !important;
-    font-size: 12px;
+        min-width: 59% !important;
+        font-size: 12px;
     }
 
     .nav.nav-tabs li a {
@@ -1349,10 +1389,12 @@ body .sb-site-container {
 /* Medium Devices, Desktops */
 @media only screen and (min-width: 992px) {
     .nav-tabs-ver-container .nav-tabs-ver li a {
-    color: #424242;
-    font-size: 15px;
-    padding: 10px 10px;
-}s
+        color: #424242;
+        font-size: 15px;
+        padding: 10px 10px;
+    }
+
+    s
     .h3, h3 {
         font-size: 24px;
     }
@@ -1503,27 +1545,33 @@ body .sb-site-container {
         margin-left: 0%;
     }
 }
+
 .vTextField {
     width: 100% !important;
 }
+
 select.form-control {
     border: 1px solid #e2e2e2;
     box-shadow: none;
     border-radius: 0;
 }
+
 .datetimeshortcuts {
-position: absolute;
+    position: absolute;
     right: 17px;
     z-index: 9999;
     top: 30px;
 }
-.errorlist li{
+
+.errorlist li {
     text-align: right;
 }
+
 errors > input {
     border: 1px solid #ff0000
 }
-    .errornote {
+
+.errornote {
     font-size: 14px !important;
     font-weight: 700;
     display: block;
@@ -1540,6 +1588,7 @@ errors > input {
     font-size: 11px;
     text-align: center;
 }
+
 .messagelist li.success {
     /* text-align: center; */
     background: #b9d4b0 none repeat scroll 0 0;
@@ -1557,6 +1606,7 @@ errors > input {
     border-left: solid 4px #4caf50;
     border-right: solid 4px #4caf50;
 }
+
 .employee-menu {
     font-size: 11px;
     border-right: 1px solid rgba(255, 255, 255, .2);
@@ -1564,33 +1614,63 @@ errors > input {
     padding-right: 5px !important;
     padding-left: 5px !important;
 }
+
 .column-my_url_field {
-width: 5% !important;
-}
-.column-my_url_change {
-width: 5% !important;
-}
-.field-get_detail_column {
     width: 5% !important;
-}
-.field-get_change_column {
-    width: 5% !important;
-}
-.field-get_delete_column {
-    width: 5% !important;
-}
-.dias-fields {
-display: inline-block;
     text-align: center;
 }
-.dias-fields>.col-xs-4>input {
+
+.column-my_url_change {
+    width: 5% !important;
+    text-align: center;
+}
+
+.field-get_detail_column {
+    width: 5% !important;
+    text-align: center;
+}
+
+.field-get_change_column {
+    width: 5% !important;
+    text-align: center;
+}
+
+.field-get_delete_column {
+    width: 5% !important;
+    text-align: center;
+}
+
+.field-get_payroll_column {
+    width: 5% !important;
+    text-align: center;
+}
+
+.dias-fields {
+
+    text-align: center;
+}
+.vIntegerField {
+    width: 100% !important;
+}
+.dias-fields > .col-xs-4 {
+    width: 14%;
+}
+.mt-15 {
+    margin-top: 15px;
+}
+.dias-fields > .col-xs-4 > input {
     z-index: 9999;
-    width: 35px;
+
     height: 20px;
     text-align: center;
     margin-bottom: 7px;
     margin-top: 10px;
 }
+
 input[type=file] {
     font-size: 11px;
+}
+
+.section-title {
+    color: #00bcd4 !important;
 }
