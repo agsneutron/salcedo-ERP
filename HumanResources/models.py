@@ -689,12 +689,31 @@ class EmployeePositionDescription(models.Model):
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     direction = models.ForeignKey(Direction, verbose_name='Dirección', null=False, blank=False)
     subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección', null=False, blank=False)
-    area = models.ForeignKey(Area, verbose_name='Área', null=False, blank=False)
+    # subdirection = ChainedForeignKey(Subdirection,
+    #                                  chained_field="direction",
+    #                                  chained_model_field="direction",
+    #                                  show_all=False,
+    #                                  auto_choose=True,
+    #                                  sort=True)
     department = models.ForeignKey(Department, verbose_name='Departamento', null=False, blank=False)
+    # department = ChainedForeignKey(Department,
+    #                                chained_field="subdirection",
+    #                                chained_model_field="subdirection",
+    #                                show_all=False,
+    #                                auto_choose=True,
+    #                                sort=True)
+    area = models.ForeignKey(Area, verbose_name='Área', null=False, blank=False)
+    # area = ChainedForeignKeyChainedForeignKey(Area,
+    #                          chained_field="subdirection",
+    #                          chained_model_field="subdirection",
+    #                          show_all=False,
+    #                          auto_choose=True,
+    #                          sort=True)
+
     job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
     #contract = models.ForeignKey(Contract, verbose_name="Contrato", null=False, blank=False)
     #immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
-    payroll_classification = models.CharField(max_length=1, choices=PAYROLLCLASSIFICATION_CHOICES, default=CORPORATIVA)
+    payroll_classification = models.CharField(max_length=1, choices=PAYROLLCLASSIFICATION_CHOICES, default=CORPORATIVA, verbose_name="Clasificación de Nómina")
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
 
     class Meta:
@@ -702,10 +721,10 @@ class EmployeePositionDescription(models.Model):
         verbose_name = "Descripción de Puesto del Empleado"
 
     def __str__(self):
-        return self.project.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+        return self.project.nombreProyecto + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.project.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+        return self.project.nombreProyecto + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 
 
