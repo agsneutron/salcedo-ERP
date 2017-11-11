@@ -544,7 +544,44 @@
                                     </table>
                                 </div>
                             {% elif template == "job" %}
+<hr>
+                                <div class="table-responsive mt-15">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Fecha Inicio</td>
+                                            <td>Fecha Termino</td>
+                                            <td>Puesto</td>
+                                            <td>No. Seguro</td>
+                                            <td>Observaciones</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in job %}
+                                            <tr>
+                                                <td>{{ record.start_date }}</td>
+                                                <td>{{ record.end_date }}</td>
+                                                <td>{{ record.job_profile }}</td>
+                                                <td>{{ record.insurance_number }}</td>
+                                                 <td>{{ record.observations }}</td>
 
+                                                <td style="width: 5%">
+                                                    <a href="/admin/HumanResources/employeepositiondescription/{{ record.id }}/change/?employee={{ request.GET.employee }} class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-pencil color-default eliminar"></i>
+                                                    </a>
+                                                </td>
+                                                <td style="width: 5%">
+                                                    <a href="/admin/HumanResources/employeepositiondescription/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-trash-o color-danger eliminar"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
                             {% elif template == "financial_data" %}
 
                                 <hr>
@@ -631,8 +668,9 @@
                                     </table>
                                 </div>
                             {% elif template == "employee_earnings_deductions" %}
-                                <div class="col-xs-12 mt-15">
-                                    <div class="col-xs-6">
+                                <hr>
+                                <div class=" mt-15">
+                                    <div class="col-xs-6" style="    padding-left: 0;">
                                         {% comment %} <h4 class="section-title mt-4">Percepciones</h4>
                                     <hr>{% endcomment %}
                                         <div class="table-responsive">
@@ -666,7 +704,7 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-6" style="    padding-right: 0;">
                                         {% comment %}<h4 class="section-title mt-4">Deducciones</h4>
                                     <hr>{% endcomment %}
                                         <div class="table-responsive">
