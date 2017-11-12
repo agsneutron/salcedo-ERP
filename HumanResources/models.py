@@ -876,8 +876,6 @@ class EmployeeEarningsDeductions(models.Model):
         verbose_name = "Deducciones y Percepciones por Empleado"
 
 
-
-
 class PayrollType(models.Model):
     name = models.CharField(verbose_name="Tipo de Nómina", null=False, blank=False, max_length=30,)
 
@@ -954,6 +952,22 @@ class PayrollPeriod(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
+
+class EmployeeEarningsDeductionsbyPeriod(models.Model):
+
+    ammount = models.DecimalField(verbose_name="Monto", decimal_places=2, blank=False, null=False,
+                                                   default=0, max_digits=20,
+                                                   validators=[MinValueValidator(Decimal('0.0'))])
+    date = models.DateField(verbose_name="Fecha", null=False,blank=False)
+
+    # Foreign Keys.
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
+    payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Deducciones y Percepciones por Periodo"
+        verbose_name = "Deducciones y Percepciones por Periodo"
 
 
 class EarningDeductionPeriod(models.Model):

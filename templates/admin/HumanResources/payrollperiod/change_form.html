@@ -76,12 +76,10 @@
                                         <thead>
                                         <tr>
                                             <td>Grupo</td>
-                                            <td>Nombre</td>
-                                            <td>Mes</td>
-                                            <td>Año</td>
-                                            <td>Semana</td>
+                                            <td>Quincena</td>
                                             <td>Inicio de Periodo</td>
                                             <td>Fin de Periodo</td>
+                                            <td>Ver</td>
                                             <td>Editar</td>
                                             <td>Eliminar</td>
                                         </tr>
@@ -91,11 +89,13 @@
                                             <tr>
                                                 <td>{{ record.payroll_group.name }}</td>
                                                 <td>{{ record.name }}</td>
-                                                <td>{{ record.month }}</td>
-                                                <td>{{ record.year }}</td>
-                                                <td>{{ record.week }}</td>
                                                 <td>{{ record.start_period }}</td>
                                                 <td>{{ record.end_period }}</td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/change/">
+                                                        Ver
+                                                    </a>
+                                                </td>
                                                 <td>
                                                     <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/change/">
                                                         Editar
