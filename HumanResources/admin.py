@@ -335,7 +335,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         ("Descripción de Puesto", {
             #contract
             'fields': ('employee','start_date', 'end_date', 'direction', 'subdirection','area','department','job_profile', 'physical_location',
-                       'payroll_classification','project','insurance_type','insurance_number','monday','tuesday', 'wednesday', 'thursday','friday','saturday','sunday','entry_time','departure_time',
+                       'insurance_type','insurance_number','monday','tuesday', 'wednesday', 'thursday','friday','saturday','sunday','entry_time','departure_time',
                        'observations','payroll_group')
         }),
     )
@@ -382,16 +382,66 @@ class InfonavitDataAdmin(admin.StackedInline):
     #      return ModelFormMetaClass
 
 
+@admin.register(EmployeeEarningsDeductionsbyPeriod)
+class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
+    form = EmployeeEarningsDeductionsbyPeriodForm
+
+    fieldsets = (
+        ("Percepciones y Deducciones", {
+            'fields': ('employee','concept','ammount','date','payroll_period',)
+        }),
+    )
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EmployeeEarningsDeductionsbyPeriodAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        employee_position = EmployeePositionDescription.objects.filter(employee_id=employee_id)
+        employee_data = Employee.objects.filter(id=employee_id)
+        earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
+        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
+        earnings_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
+            concept__type='P')
+        deductions_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
+            concept__type='D')
+
+        extra['template'] = "employee_earnings_deductions"
+        extra['employeedata'] = employee_data
+        extra['employeeposition'] = employee_position
+        extra['earnings'] = earnings_set
+        extra['deductions'] = deductions_set
+        extra['periodearnings'] = earnings_by_period_set
+        extra['perioddeductions'] = deductions_by_period_set
+
+
+
+        return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
+
+
 @admin.register(EmployeeEarningsDeductions)
 class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
     form = EmployeeEarningsDeductionsForm
 
     fieldsets = (
         ("Percepciones y Deducciones", {
-            'fields': ('employee','concept','ammount','date')
+            'fields': ('employee', 'concept', 'ammount', 'date')
         }),
     )
-
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -413,7 +463,8 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
 
         employee_id = request.GET.get('employee')
         earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
-        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
+        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(
+            concept__type='D')
 
         extra['template'] = "employee_earnings_deductions"
         extra['earnings'] = earnings_set
@@ -553,11 +604,6 @@ Administrators to fill the database.
 
 
 
-# Payroll Processed Admin.
-@admin.register(PayrollProcessed)
-class PayrollProcessedAdmin(admin.ModelAdmin):
-    form = PayrollProcessedForm
-
 # Payroll To Process Admin.
 @admin.register(PayrollToProcess)
 class PayrollToProcessAdmin(admin.ModelAdmin):
@@ -573,6 +619,27 @@ class PayrollTypeAdmin(admin.ModelAdmin):
 class PayrollGroupAdmin(admin.ModelAdmin):
     form = PayrollGroupForm
 
+    fieldsets = (
+        ("Grupos de Nómina", {
+            'fields': ('name','payroll_classification','project')
+        }),
+    )
+
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        #employee_id = request.GET.get('employee')
+        period_set = PayrollGroup.objects.all()
+
+        extra['template'] = "payrollgroup"
+        extra['period'] = period_set
+
+
+        return super(PayrollGroupAdmin, self).add_view(request, form_url, extra_context=extra)
+
 # Payroll Period Admin.
 @admin.register(PayrollPeriod)
 class PayrollPeriodAdmin(admin.ModelAdmin):
@@ -581,7 +648,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Periodos de Nómina", {
-            'fields': ('name', 'month', 'year', 'week','start_period','end_period')
+            'fields': ('name','start_period','end_period', 'week', 'month', 'year', 'payroll_group','payroll_to_process')
         }),
     )
 

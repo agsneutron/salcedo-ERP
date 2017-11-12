@@ -19,9 +19,24 @@ from ERP.models import Pais, Estado, Municipio, Project
 from multiselectfield import MultiSelectField
 
 
+class PayrollClassification(models.Model):
+    name = models.CharField(verbose_name="Nombre", max_length=100, null=False, blank=False, unique=False,default='')
+
+    class Meta:
+        verbose_name_plural = "Clasificación de Nómina"
+        verbose_name = "Clasificación de Nómina"
+
+    def __str__(self):
+        return str(self.name)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.name)
 
 class PayrollGroup(models.Model):
-    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=100)
+    name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
+    payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina", null=False, blank=False)
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+
 
     class Meta:
         verbose_name_plural = "Grupo de Nómina"
@@ -675,13 +690,6 @@ class Department(models.Model):
 
 
 class EmployeePositionDescription(models.Model):
-    CORPORATIVA='C'
-    PROYECTO='P'
-    PAYROLLCLASSIFICATION_CHOICES = (
-        (CORPORATIVA, 'Corporativa'),
-        (PROYECTO, 'Proyecto'),
-    )
-
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     end_date = models.DateField(verbose_name="Fecha de Termino", null=False, blank=False)
     physical_location = models.CharField(verbose_name="Ubicación Física", max_length=250, null=False, blank=True)
@@ -727,18 +735,17 @@ class EmployeePositionDescription(models.Model):
     job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
     #contract = models.ForeignKey(Contract, verbose_name="Contrato", null=False, blank=False)
     #immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
-    payroll_classification = models.CharField(max_length=1, choices=PAYROLLCLASSIFICATION_CHOICES, default=CORPORATIVA, verbose_name="Clasificación de Nómina")
-    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+
 
     class Meta:
         verbose_name_plural = "Descripción de Puesto del Empleado"
         verbose_name = "Descripción de Puesto del Empleado"
 
     def __str__(self):
-        return self.project.nombreProyecto + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+        return self.payroll_group.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.project.nombreProyecto + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+        return self.payroll_group.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 
 
@@ -830,14 +837,14 @@ class EarningsDeductions(models.Model):
     )
 
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    percent_taxable = models.IntegerField("Porcentaje Grabable", blank=False, null=False)
+    percent_taxable = models.IntegerField("Porcentaje Gravable", blank=False, null=False)
     sat_key = models.CharField(verbose_name="Clave SAT", null=False, blank=False, max_length=30,)
     law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30,)
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES, default=ACTIVA)
     accounting_account = models.IntegerField("Cuenta Contable", blank=False, null=False)
     comments = models.CharField(verbose_name="Observaciones", null=False, blank=False, max_length=500,)
     type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION, verbose_name="Tipo")
-    taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES,default=NO, verbose_name="Grabable")
+    taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES,default=NO, verbose_name="Gravable")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA, verbose_name="Categoria")
 
     class Meta:
@@ -869,14 +876,27 @@ class EmployeeEarningsDeductions(models.Model):
         verbose_name = "Deducciones y Percepciones por Empleado"
 
 
-
-
 class PayrollType(models.Model):
     name = models.CharField(verbose_name="Tipo de Nómina", null=False, blank=False, max_length=30,)
 
     class Meta:
         verbose_name_plural = "Tipo de Nómina"
         verbose_name = "Tipos de Nómina"
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
+
+class PayrollToProcess(models.Model):
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
+    # Foreign Keys.
+    payroll_type = models.ForeignKey(PayrollType, verbose_name="Tipo de Nómina", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Nómina a Procesar"
+        verbose_name = "Nómina a Procesar"
 
     def __str__(self):
         return self.name
@@ -913,8 +933,9 @@ class PayrollPeriod(models.Model):
         (DECEMBER, 'Diciembre'),
     )
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
+    payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a procesar", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    month = models.IntegerField(verbose_name="Mes", choices=MONTH_CHOICES, default=JANUARY)
     year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
         validators=[MaxValueValidator(9999), MinValueValidator(2017)])
     week = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
@@ -931,6 +952,22 @@ class PayrollPeriod(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
+
+class EmployeeEarningsDeductionsbyPeriod(models.Model):
+
+    ammount = models.DecimalField(verbose_name="Monto", decimal_places=2, blank=False, null=False,
+                                                   default=0, max_digits=20,
+                                                   validators=[MinValueValidator(Decimal('0.0'))])
+    date = models.DateField(verbose_name="Fecha", null=False,blank=False)
+
+    # Foreign Keys.
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
+    payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Deducciones y Percepciones por Periodo"
+        verbose_name = "Deducciones y Percepciones por Periodo"
 
 
 class EarningDeductionPeriod(models.Model):
@@ -949,36 +986,7 @@ class EarningDeductionPeriod(models.Model):
         return str(self.payroll_period.name)
 
 
-class PayrollToProcess(models.Model):
-    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    # Foreign Keys.
-    payroll_type = models.ForeignKey(PayrollType, verbose_name="Tipo de Nómina", null=False, blank=False)
 
-    class Meta:
-        verbose_name_plural = "Nómina a Procesar"
-        verbose_name = "Nómina a Procesar"
-
-    def __str__(self):
-        return self.name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.name
-
-class PayrollProcessed(models.Model):
-    CORPORATIVA = 'C'
-    PROYECTO = 'P'
-    PAYROLLCLASSIFICATION_CHOICES = (
-        (CORPORATIVA, 'Corporativa'),
-        (PROYECTO, 'Proyecto'),
-    )
-    # Foreign Keys.
-    payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo", null=False, blank=False)
-    payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a Procesar", null=False, blank=False)
-    payroll_classification = models.CharField(max_length=1, choices=PAYROLLCLASSIFICATION_CHOICES, default=CORPORATIVA)
-
-    class Meta:
-        verbose_name_plural = "Nómina Procesada"
-        verbose_name = "Nómina Procesada"
 
 
 class PayrollReceiptProcessed(models.Model):
@@ -993,7 +1001,7 @@ class PayrollReceiptProcessed(models.Model):
     total_perceptions = models.DecimalField(verbose_name="Total de Percepciones", null=False, blank=False, max_digits=20, decimal_places=2)
     total_deductions = models.DecimalField(verbose_name="Total de Deducciones", null=False, blank=False, max_digits=20, decimal_places=2)
     total_payroll = models.DecimalField(verbose_name="Total Neto", null=False, blank=False, max_digits=20, decimal_places=2)
-    taxed = models.DecimalField(verbose_name="Grabado", null=False, blank=False, max_digits=20, decimal_places=2)
+    taxed = models.DecimalField(verbose_name="Gravado", null=False, blank=False, max_digits=20, decimal_places=2)
     exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
     daily_salry = models.DecimalField(verbose_name="Salario Diario", null=False, blank=False, max_digits=20, decimal_places=2)
     total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=False, blank=False, max_digits=20, decimal_places=2)
@@ -1011,7 +1019,7 @@ class PayrollReceiptProcessed(models.Model):
 
     #foreign
 
-    payroll_processed = models.ForeignKey(PayrollProcessed, verbose_name="Nómina Procesada", null=False,
+    payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False,
                                               blank=False)
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False,
                        blank=False)
@@ -1026,7 +1034,7 @@ class PayrollProcessedDetail(models.Model):
    payroll_receip_processed = models.ForeignKey(PayrollReceiptProcessed, verbose_name="Recibo de Nómina Procesado", null=False, blank=False)
    earnings_deductions = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
    total = models.DecimalField( verbose_name="Total", null=False, blank=False, max_digits=20, decimal_places=2)
-   taxed = models.DecimalField(verbose_name="Grabable", null=False, blank=False, max_digits=20, decimal_places=2)
+   taxed = models.DecimalField(verbose_name="Gravable", null=False, blank=False, max_digits=20, decimal_places=2)
    exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
 
    class Meta:
