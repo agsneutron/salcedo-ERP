@@ -56,7 +56,7 @@
     <div class="container">
 
         {% for fieldset in adminform %}
-          {% include "admin/HumanResources/payrollperiod/fieldset.html" %}
+          {% include "admin/HumanResources/payrollprocessed/fieldset.html" %}
         {% endfor %}
     </div>
 {% endblock %}
@@ -75,34 +75,28 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <td>Grupo</td>
-                                            <td>Nombre</td>
-                                            <td>Mes</td>
-                                            <td>Año</td>
-                                            <td>Semana</td>
-                                            <td>Inicio de Periodo</td>
-                                            <td>Fin de Periodo</td>
+                                            <td>Periodo de nómina</td>
+                                            <td>Nómina a procesar</td>
+                                            <td>Clasificación</td>
+
                                             <td>Editar</td>
                                             <td>Eliminar</td>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in period %}
+                                        {% for record in payroll %}
                                             <tr>
-                                                <td>{{ record.payroll_group.name }}</td>
-                                                <td>{{ record.name }}</td>
-                                                <td>{{ record.month }}</td>
-                                                <td>{{ record.year }}</td>
-                                                <td>{{ record.week }}</td>
-                                                <td>{{ record.start_period }}</td>
-                                                <td>{{ record.end_period }}</td>
+                                                <td>{{ record.payroll_period.name }}</td>
+                                                <td>{{ record.payroll_to_process.name }}</td>
+                                                <td>{{ record.payroll_classification }}</td>
+
                                                 <td>
-                                                    <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/change/">
+                                                    <a href="/admin/HumanResources/payrollprocessed/{{ record.id }}/change/">
                                                         Editar
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/delete/">
+                                                    <a href="/admin/HumanResources/payrollprocessed/{{ record.id }}/delete/">
                                                         Eliminar
                                                     </a>
                                                 </td>
