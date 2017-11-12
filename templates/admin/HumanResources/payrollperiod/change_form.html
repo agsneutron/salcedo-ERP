@@ -79,7 +79,7 @@
                                             <td>Quincena</td>
                                             <td>Inicio de Periodo</td>
                                             <td>Fin de Periodo</td>
-                                            <td>Ver</td>
+                                            <td>Listado</td>
                                             <td>Editar</td>
                                             <td>Eliminar</td>
                                         </tr>
@@ -91,9 +91,9 @@
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.start_period }}</td>
                                                 <td>{{ record.end_period }}</td>
-                                                <td>
-                                                    <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/change/">
-                                                        Ver
+                                                <td>  employeebyperiod
+                                                    <a href="/admin/HumanResources/payrollperiod/listado-nomina?payrollperiod={{ record.id }}">
+                                                        Listar Nómina
                                                     </a>
                                                 </td>
                                                 <td>
