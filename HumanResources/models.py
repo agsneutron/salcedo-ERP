@@ -830,14 +830,14 @@ class EarningsDeductions(models.Model):
     )
 
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    percent_taxable = models.IntegerField("Porcentaje Grabable", blank=False, null=False)
+    percent_taxable = models.IntegerField("Porcentaje Gravable", blank=False, null=False)
     sat_key = models.CharField(verbose_name="Clave SAT", null=False, blank=False, max_length=30,)
     law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30,)
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES, default=ACTIVA)
     accounting_account = models.IntegerField("Cuenta Contable", blank=False, null=False)
     comments = models.CharField(verbose_name="Observaciones", null=False, blank=False, max_length=500,)
     type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION, verbose_name="Tipo")
-    taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES,default=NO, verbose_name="Grabable")
+    taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES,default=NO, verbose_name="Gravable")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA, verbose_name="Categoria")
 
     class Meta:
@@ -993,7 +993,7 @@ class PayrollReceiptProcessed(models.Model):
     total_perceptions = models.DecimalField(verbose_name="Total de Percepciones", null=False, blank=False, max_digits=20, decimal_places=2)
     total_deductions = models.DecimalField(verbose_name="Total de Deducciones", null=False, blank=False, max_digits=20, decimal_places=2)
     total_payroll = models.DecimalField(verbose_name="Total Neto", null=False, blank=False, max_digits=20, decimal_places=2)
-    taxed = models.DecimalField(verbose_name="Grabado", null=False, blank=False, max_digits=20, decimal_places=2)
+    taxed = models.DecimalField(verbose_name="Gravado", null=False, blank=False, max_digits=20, decimal_places=2)
     exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
     daily_salry = models.DecimalField(verbose_name="Salario Diario", null=False, blank=False, max_digits=20, decimal_places=2)
     total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=False, blank=False, max_digits=20, decimal_places=2)
@@ -1026,7 +1026,7 @@ class PayrollProcessedDetail(models.Model):
    payroll_receip_processed = models.ForeignKey(PayrollReceiptProcessed, verbose_name="Recibo de Nómina Procesado", null=False, blank=False)
    earnings_deductions = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
    total = models.DecimalField( verbose_name="Total", null=False, blank=False, max_digits=20, decimal_places=2)
-   taxed = models.DecimalField(verbose_name="Grabable", null=False, blank=False, max_digits=20, decimal_places=2)
+   taxed = models.DecimalField(verbose_name="Gravable", null=False, blank=False, max_digits=20, decimal_places=2)
    exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
 
    class Meta:
