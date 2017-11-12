@@ -742,10 +742,10 @@ class EmployeePositionDescription(models.Model):
         verbose_name = "Descripción de Puesto del Empleado"
 
     def __str__(self):
-        return self.project.nombreProyecto + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+        return self.payroll_group.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.project.nombreProyecto + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+        return self.payroll_group.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 
 

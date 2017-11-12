@@ -388,10 +388,9 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Percepciones y Deducciones", {
-            'fields': ('employee','concept','ammount','date')
+            'fields': ('employee','concept','ammount','date','payroll_period',)
         }),
     )
-
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -412,12 +411,23 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
-        earnings_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(concept__type='P')
-        deductions_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(concept__type='D')
+        employee_data = EmployeePositionDescription.objects.filter(employee_id=employee_id)
+        earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
+        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
+        earnings_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
+            concept__type='P')
+        deductions_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
+            concept__type='D')
+
+        print earnings_by_period_set.count()
+        print deductions_by_period_set.count()
 
         extra['template'] = "employee_earnings_deductions"
+        extra['employee'] = employee_data
         extra['earnings'] = earnings_set
         extra['deductions'] = deductions_set
+        extra['periodearnings'] = earnings_by_period_set
+        extra['perioddeductions'] = deductions_by_period_set
 
         return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
 
