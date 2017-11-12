@@ -411,7 +411,8 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
-        employee_data = EmployeePositionDescription.objects.filter(employee_id=employee_id)
+        employee_position = EmployeePositionDescription.objects.filter(employee_id=employee_id)
+        employee_data = Employee.objects.filter(id=employee_id)
         earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
         deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
         earnings_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
@@ -419,15 +420,15 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         deductions_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
             concept__type='D')
 
-        print earnings_by_period_set.count()
-        print deductions_by_period_set.count()
-
         extra['template'] = "employee_earnings_deductions"
-        extra['employee'] = employee_data
+        extra['employeedata'] = employee_data
+        extra['employeeposition'] = employee_position
         extra['earnings'] = earnings_set
         extra['deductions'] = deductions_set
         extra['periodearnings'] = earnings_by_period_set
         extra['perioddeductions'] = deductions_by_period_set
+
+
 
         return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
 

@@ -54,7 +54,14 @@
 
 {% block field_sets %}
     <div class="container">
-
+        {% for record in employeedata %}
+            <p>Empleado: {{ record.employee_key }}{{ record.name }} {{ record.first_last_name }} {{ record.second_last_name }}</p>
+            <p></p>
+        {% endfor %}
+        {% for record in employeeposition %}
+            <p>Puesto: {{ record.job_profile }} </p>
+            <p>Grupo de Nómina: {{ record.payroll_group }}</p>
+        {% endfor %}
         {% for fieldset in adminform %}
           {% include "admin/HumanResources/employeeearningsdeductionsbyperiod/fieldset.html" %}
         {% endfor %}
