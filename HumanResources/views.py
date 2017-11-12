@@ -2,9 +2,13 @@
 from __future__ import unicode_literals
 
 # Django Imports.
+import operator
+
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 from django.views import generic
 from django.views.generic.list import ListView
+from django.db.models import Q
 
 # Model Imports.
 from HumanResources.models import *
@@ -136,3 +140,47 @@ class EmployeeDetailView(generic.DetailView):
         context['employee_financial_data'] = EmployeeFinancialData.objects.filter(employee__id=employee.id)
 
         return context
+
+
+class PositionDescriptionListView(ListView):
+    model = EmployeePositionDescription
+    template_name = "HumanResources/company-list.html"
+
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+    title_list = 'Empleados'
+
+    def get_queryset(self):
+        result = super(PositionDescriptionListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            PositionDescriptionListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(nombreEmpresa__icontains=q) for q in query_list)) |
+                reduce(operator.and_,
+                       (Q(calle__icontains=q) for q in query_list))
+            )
+        else:
+            PositionDescriptionListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(PositionDescriptionListView, self).get_context_data(**kwargs)
+        context['title_list'] = PositionDescriptionListView.title_list
+        context['query'] = PositionDescriptionListView.query
+        context['query_string'] = '&q=' + PositionDescriptionListView.query
+        context['has_query'] = (PositionDescriptionListView.query is not None) and (PositionDescriptionListView.query != "")
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_empresa'):
+            raise PermissionDenied
+        return super(PositionDescriptionListView, self).dispatch(request, args, kwargs)

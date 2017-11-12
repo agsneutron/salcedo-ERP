@@ -382,9 +382,9 @@ class InfonavitDataAdmin(admin.StackedInline):
     #      return ModelFormMetaClass
 
 
-@admin.register(EmployeeEarningsDeductions)
-class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
-    form = EmployeeEarningsDeductionsForm
+@admin.register(EmployeeEarningsDeductionsbyPeriod)
+class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
+    form = EmployeeEarningsDeductionsbyPeriodForm
 
     fieldsets = (
         ("Percepciones y Deducciones", {
@@ -392,6 +392,45 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
         }),
     )
 
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EmployeeEarningsDeductionsbyPeriodAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        earnings_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(concept__type='P')
+        deductions_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(concept__type='D')
+
+        extra['template'] = "employee_earnings_deductions"
+        extra['earnings'] = earnings_set
+        extra['deductions'] = deductions_set
+
+        return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
+
+
+@admin.register(EmployeeEarningsDeductions)
+class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
+    form = EmployeeEarningsDeductionsForm
+
+    fieldsets = (
+        ("Percepciones y Deducciones", {
+            'fields': ('employee', 'concept', 'ammount', 'date')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -413,7 +452,8 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
 
         employee_id = request.GET.get('employee')
         earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
-        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
+        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(
+            concept__type='D')
 
         extra['template'] = "employee_earnings_deductions"
         extra['earnings'] = earnings_set
