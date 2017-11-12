@@ -65,7 +65,8 @@
                 </div>
                 <div class="item-right">
                     <a onclick="myFunction()" href=""
-                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
+                            class="zmdi zmdi-plus zmdi-hc-2x"></i>
                     </a>
 
                 </div>
@@ -75,34 +76,34 @@
                     <table id="" class="table table-striped table_s" width="100%">
                         {% if owners.count == 0 %}
                             <style>
-                            #DataTables_Table_0_wrapper {
-                                display: none !important;
-                            }
+                                #DataTables_Table_0_wrapper {
+                                    display: none !important;
+                                }
                             </style>
-                             <thead>
-                              <td></td>
-                             </thead>
+                            <thead>
+                            <td></td>
+                            </thead>
                             <span align="center">No hay contactos registrados para el Cliente</span>
                         {% else %}
                             <thead>
                             <td>Nombre</td>
-                            <td >Correo</td>
-                            <td >Teléfono</td>
+                            <td>Correo</td>
+                            <td>Teléfono</td>
                             {% comment %}<td >Teléfono 2</td>{% endcomment %}
 
-                            <td  class="no-sorting">Ver</td>
-                            <td  class="no-sorting">Editar</td>
-                             <td class="no-sorting">Eliminar</td>
+                            <td class="no-sorting">Ver</td>
+                            <td class="no-sorting">Editar</td>
+                            <td class="no-sorting">Eliminar</td>
                             </thead>
                             <tbody>
                             {% for owner in owners %}
-                                <tr >
-                                    <td >{{ owner.nombrePropietario }}</td>
-                                    <td >{{ owner.email }}</td>
-                                    <td >{{ owner.telefono1 }}</td>
+                                <tr>
+                                    <td>{{ owner.nombrePropietario }}</td>
+                                    <td>{{ owner.email }}</td>
+                                    <td>{{ owner.telefono1 }}</td>
 
                                     {% comment %}<td >{{ owner.telefono2 }}</td>{% endcomment %}
-                                    <td class="text-center"  style="width: 3%"><a
+                                    <td class="text-center" style="width: 3%"><a
                                             href="/admin/ERP/propietario/{{ owner.id }}"
                                             target="_blank"
                                             class="btn btn-raised btn-default btn-xs"><i
@@ -111,11 +112,11 @@
                                                                                  href="{% comment %}/admin/ERP/propietario/{{ owner.id }}/change{% endcomment %}"
                                                                                  class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-pencil color-default eliminar"></i></a></td>
-                                  <td class="text-center" style="width: 3%"><a
-                                                            href="/admin/ERP/propietario/{{ owner.id }}/delete"
-                                                            class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-trash-o color-danger eliminar"></i></a>
-                                                    </td>
+                                    <td class="text-center" style="width: 3%"><a
+                                            href="/admin/ERP/propietario/{{ owner.id }}/delete"
+                                            class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-trash-o color-danger eliminar"></i></a>
+                                    </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
@@ -137,34 +138,34 @@
                 <div class="table-responsive">
                     <table id="" class="table table-striped table_s" width="100%">
                         {% if projects.count == 0 %}
-                             <style>
-                            #DataTables_Table_1_wrapper {
-                                display: none !important;
-                            }
+                            <style>
+                                #DataTables_Table_1_wrapper {
+                                    display: none !important;
+                                }
                             </style>
-                             <thead>
-                              <td></td>
-                             </thead>
+                            <thead>
+                            <td></td>
+                            </thead>
                             <span align="center">No hay Proyectos registrados para el Cliente</span>
 
                         {% else %}
                             <thead>
-                            <td >Clave</td>
-                            <td >Nombre</td>
-                            <td >Ubicación</td>
-                            <td >Fecha de Inicio</td>
-                            <td >Fecha de Término</td>
-                            <td  class="no-sorting">Ver</td>
+                            <td>Clave</td>
+                            <td>Nombre</td>
+                            <td>Ubicación</td>
+                            <td>Fecha de Inicio</td>
+                            <td>Fecha de Término</td>
+                            <td class="no-sorting">Ver</td>
                             </thead>
                             <tbody>
                             {% for project in projects %}
-                                <tr >
-                                    <td >{{ project.key }}</td>
-                                    <td >{{ project.nombreProyecto }}</td>
-                                    <td >{{ project.ubicacion_pais.nombrePais }}</td>
-                                    <td >{{ project.fecha_inicial }}</td>
-                                    <td >{{ project.fecha_final }}</td>
-                                    <td class="text-center" ><a
+                                <tr>
+                                    <td>{{ project.key }}</td>
+                                    <td>{{ project.nombreProyecto }}</td>
+                                    <td>{{ project.ubicacion_pais.nombrePais }}</td>
+                                    <td>{{ project.fecha_inicial }}</td>
+                                    <td>{{ project.fecha_final }}</td>
+                                    <td class="text-center"><a
                                             href="/admin/ERP/project/{{ project.id }}"
                                             target="_blank"
                                             class="btn btn-raised btn-default btn-xs"><i
@@ -201,14 +202,15 @@
     {% for owner in owners %}
         <script>
             function popupedit() {
-                PopupCenter('/admin/ERP/propietario/{{ user.id }}/change', 'xtf', '1024', '500');
+                PopupCenter('/admin/ERP/propietario/{{ owner.id }}/change', 'xtf', '1024', '500');
             }
         </script>
     {% endfor %}
-    <script>
-        function myFunction() {
-            PopupCenter('/admin/ERP/propietario/add/?empresa_id={{ empresa.id }}', 'xtf', '1024', '500');
-        }
-    </script>
-
+    {% for project in projects %}
+        <script>
+            function myFunction() {
+                PopupCenter('/admin/ERP/propietario/add/?empresa_id={{ empresa.id }}', 'xtf', '1024', '500');
+            }
+        </script>
+    {% endfor %}
 {% endblock %}

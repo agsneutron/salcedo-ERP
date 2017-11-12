@@ -1,6 +1,6 @@
-{% load i18n admin_urls static admin_modify app_filters%}
+{% load i18n admin_urls static admin_modify app_filters %}
 <div class=" ">
-        {% comment %}<ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+    {% comment %}<ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
             <li role="presentation" class="active">
                 <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
                     <span class="hidden-xs">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</span>
@@ -8,112 +8,136 @@
             </li>
         </ul>{% endcomment %}
     <div class="">
-    <h2 class="text-center">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
+        <h2 class="text-center">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
-                 <div class="row" style="margin-left: -5px; margin-right: -5px;">
+                <div class="row" style="margin-left: -5px; margin-right: -5px;">
 
-                    <div class="js-inline-admin-formset inline-group" id="{{ inline_admin_formset.formset.prefix }}-group"
+                    <div class="js-inline-admin-formset inline-group"
+                         id="{{ inline_admin_formset.formset.prefix }}-group"
                          data-inline-type="tabular"
                          data-inline-formset="{{ inline_admin_formset.inline_formset_data }}">
-                      <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
-                    {{ inline_admin_formset.formset.management_form }}
-                    <fieldset class="module {{ inline_admin_formset.classes }}">
-                      {% comment %} <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>{% endcomment %}
-                       {{ inline_admin_formset.formset.non_form_errors }}
-{#----------AQUI SE  SALE DEL RECUADRO---------------#}
-                       <table class="table">
-                         <thead><tr>
-                           <th class="original"></th>
-                         {% for field in inline_admin_formset.fields %}
-                           {% if not field.widget.is_hidden %}
-                             <th{% if field.required %} class="required"{% endif %}>{{ field.label|capfirst }}
-                             {% if field.help_text %}&nbsp;<img src="{% static "admin/img/icon-unknown.svg" %}" class="help help-tooltip" width="10" height="10" alt="({{ field.help_text|striptags }})" title="{{ field.help_text|striptags }}" />{% endif %}
-                             </th>
-                           {% endif %}
-                         {% endfor %}
-                         {% if inline_admin_formset.formset.can_delete %}<th>{% trans "Delete?" %}</th>{% endif %}
-                         </tr></thead>
-                         <tbody>
-                         {% for inline_admin_form in inline_admin_formset %}
-                            {% if inline_admin_form.form.non_field_errors %}
-                            <tr><td colspan="{{ inline_admin_form|cell_count }}">{{ inline_admin_form.form.non_field_errors }}</td></tr>
-                            {% endif %}
-                            <tr class="form-row {% cycle "row1" "row2" %} {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last %} empty-form{% endif %}"
-                                 id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
-                            <td class="original">
-                              {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
-                              {% if inline_admin_form.original %}
-                           {% comment %}   {{ inline_admin_form.original }}{% endcomment %}
-                              {% if inline_admin_form.model_admin.show_change_link and inline_admin_form.model_admin.has_registered_model %}<a href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}" class="inlinechangelink">{% trans "Change" %}</a>{% endif %}
-                              {% endif %}
-                              {% if inline_admin_form.show_url %}<a href="{{ inline_admin_form.absolute_url }}">{% trans "View on site" %}</a>{% endif %}
-                                </p>{% endif %}
-                              {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
-                              {{ inline_admin_form.fk_field.field }}
-                              {% spaceless %}
-                              {% for fieldset in inline_admin_form %}
-                                {% for line in fieldset %}
-                                  {% for field in line %}
-                                    {% if field.field.is_hidden %} {{ field.field }} {% endif %}
-                                  {% endfor %}
-                                {% endfor %}
-                              {% endfor %}
-                              {% endspaceless %}
-                            </td>
-                            {% for fieldset in inline_admin_form %}
-                              {% for line in fieldset %}
-                                {% for field in line %}
-                                  {% if not field.field.is_hidden %}
-                                  <td{% if field.field.name %} class="field-{{ field.field.name }}"{% endif %} style="vertical-align: bottom">
+                        <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
+                            {{ inline_admin_formset.formset.management_form }}
+                            <fieldset class="module {{ inline_admin_formset.classes }}">
+                                {% comment %} <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>{% endcomment %}
+                                {{ inline_admin_formset.formset.non_form_errors }}
+                                {#----------AQUI SE  SALE DEL RECUADRO---------------#}
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th class="original"></th>
+                                        {% for field in inline_admin_formset.fields %}
+                                            {% if not field.widget.is_hidden %}
+                                                <th{% if field.required %}
+                                                    class="required"{% endif %}>{{ field.label|capfirst }}
+                                                    {% if field.help_text %}&nbsp;
+                                                        <img src="{% static "admin/img/icon-unknown.svg" %}"
+                                                             class="help help-tooltip" width="10" height="10"
+                                                             alt="({{ field.help_text|striptags }})"
+                                                             title="{{ field.help_text|striptags }}"/>{% endif %}
+                                                </th>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% if inline_admin_formset.formset.can_delete %}
+                                            <th>{% trans "Delete?" %}</th>{% endif %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for inline_admin_form in inline_admin_formset %}
+                                        {% if inline_admin_form.form.non_field_errors %}
+                                            <tr>
+                                                <td colspan="{{ inline_admin_form|cell_count }}">{{ inline_admin_form.form.non_field_errors }}</td>
+                                            </tr>
+                                        {% endif %}
+                                        <tr class="form-row {% cycle "row1" "row2" %} {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last %} empty-form{% endif %}"
+                                            id="{{ inline_admin_formset.formset.prefix }}-
 
-                                  {% if field.is_readonly %}
-                                      <p>{{ field.contents }}</p>
-                                  {% else %}
-                                      {% if field.field.name == "documento" %}
-                                            <div class="form-group field-{{ field.field.name }}">
-                                                    {{ field.field|addcss:"form-control" }}
-                                                    {{ field.errors }}
-                                                    <div class="input-group">
-                                                      <input type="text" readonly="" class="form-control" placeholder="Seleccionar archivo...">
-                                                      <span class="input-group-btn input-group-sm">
+                                                    {% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
+                                            <td class="original">
+                                                {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
+                                                    {% if inline_admin_form.original %}
+                                                        {% comment %}   {{ inline_admin_form.original }}{% endcomment %}
+                                                        {% if inline_admin_form.model_admin.show_change_link and inline_admin_form.model_admin.has_registered_model %}
+                                                            <a href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}"
+                                                               class="inlinechangelink">{% trans "Change" %}</a>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                    {% if inline_admin_form.show_url %}
+                                                        <a href="{{ inline_admin_form.absolute_url }}">{% trans "View on site" %}</a>{% endif %}
+                                                </p>{% endif %}
+                                                {% if inline_admin_form.needs_explicit_pk_field %}
+                                                    {{ inline_admin_form.pk_field.field }}{% endif %}
+                                                {{ inline_admin_form.fk_field.field }}
+                                                {% spaceless %}
+                                                    {% for fieldset in inline_admin_form %}
+                                                        {% for line in fieldset %}
+                                                            {% for field in line %}
+                                                                {% if field.field.is_hidden %} {{ field.field }}
+                                                                {% endif %}
+                                                            {% endfor %}
+                                                        {% endfor %}
+                                                    {% endfor %}
+                                                {% endspaceless %}
+                                            </td>
+                                            {% for fieldset in inline_admin_form %}
+                                                {% for line in fieldset %}
+                                                    {% for field in line %}
+                                                        {% if not field.field.is_hidden %}
+                                                            <td{% if field.field.name %}
+                                                                class="field-{{ field.field.name }}"{% endif %}
+                                                                style="vertical-align: bottom">
+
+                                                                {% if field.is_readonly %}
+                                                                    <p>{{ field.contents }}</p>
+                                                                {% else %}
+                                                                    {% if field.field.name == "documento" %}
+                                                                        <div class="form-group field-{{ field.field.name }}">
+                                                                            {{ field.field|addcss:"form-control" }}
+                                                                            {{ field.errors }}
+                                                                            <div class="input-group">
+                                                                                <input type="text" readonly=""
+                                                                                       class="form-control"
+                                                                                       placeholder="Seleccionar archivo...">
+                                                                                <span class="input-group-btn input-group-sm">
                                                         <button type="button" class="btn btn-fab btn-fab-mini">
                                                           <i class="material-icons">attach_file</i>
                                                         </button>
                                                       </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    {% else %}
+                                                                        <div class="form-group field-{{ field.field.name }}">
+                                                                            <div>
+                                                                                {{ field.field|addcss:"form-control" }}
+                                                                                {{ field.errors }}
+                                                                            </div>
+                                                                        </div>
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </td>
+                                                        {% endif %}
+                                                    {% endfor %}
+                                                {% endfor %}
+                                            {% endfor %}
+                                            {% if inline_admin_formset.formset.can_delete %}
+                                                <td class="delete"
+                                                    style="vertical-align: bottom; padding-bottom: 10px; padding-left: 30px;">
+                                                    <div class="form-group field-deletetd">
+                                                        <div>{% if inline_admin_form.original %}
+                                                            {{ inline_admin_form.deletion_field.field }}{% endif %}</div>
                                                     </div>
-                                            </div>
-                                      {% else %}
-                                              <div class="form-group field-{{ field.field.name }}">
-                                                <div>
-                                                    {{ field.field|addcss:"form-control" }}
-                                                    {{ field.errors }}
-                                                </div>
-                                            </div>
-                                      {% endif %}
-                                  {% endif %}
-                                  </td>
-                                  {% endif %}
-                                {% endfor %}
-                              {% endfor %}
-                            {% endfor %}
-                            {% if inline_admin_formset.formset.can_delete %}
-                              <td class="delete" style="vertical-align: bottom; padding-bottom: 10px; padding-left: 30px;"> <div class="form-group field-deletetd">
-                                                <div>{% if inline_admin_form.original %}{{ inline_admin_form.deletion_field.field }}{% endif %}</div>
-                                            </div></td>
-                            {% endif %}
-                            </tr>
-                         {% endfor %}
-                         </tbody>
-                       </table>
-
-                    </fieldset>
-                      </div>
+                                                </td>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </fieldset>
+                        </div>
                     </div>
-
-
+                </div>
             </div>
         </div>
-    </div>
     </div>
 </div>

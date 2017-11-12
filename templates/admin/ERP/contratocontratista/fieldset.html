@@ -1,5 +1,5 @@
 {% load app_filters admin_static %}
-<fieldset class="module aligned {{ fieldset.classes }}">
+<fieldset class="module {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
@@ -315,6 +315,12 @@
             $('.selectpicker').selectpicker('render');
 
         };{% endcomment %}
+    $(document).ready(function () {
+        $('.vDateField').addClass('form-control');
+
+
+
+    });
 </script>
 
 

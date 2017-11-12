@@ -568,7 +568,7 @@ form .aligned ul {
 
 .item-right {
     position: absolute;
-    top: 3px;
+    top: -19px;
     right: 25px;
 }
 
@@ -722,9 +722,9 @@ dt {
 }
 
 .errorlist {
-        position: absolute;
-    top: -6px;
-    right: 15px;
+        position: relative;
+    top: 0px;
+    right: 2px;
     font-size: 10px;
     /* width: 100%; */
     /* text-align: right; */
@@ -1031,7 +1031,9 @@ ul {
 .nav-tabs-ver-container .nav-tabs-ver li.active a {
     color: #00a09b;
 }
-
+.nav-tabs-ver-container .nav-tabs-ver li a:hover {
+    color: #00a09b;
+}
 .ms-header .header-right {
     margin: 15px;
     float: right;
@@ -1197,7 +1199,7 @@ body .sb-site-container {
     }
 
     .vDateField {
-        min-width: 80% !important;
+
     }
 
     .nav.nav-tabs li a {
@@ -1373,8 +1375,7 @@ body .sb-site-container {
     }
 
     .vDateField {
-        min-width: 59% !important;
-        font-size: 12px;
+
     }
 
     .nav.nav-tabs li a {
@@ -1449,7 +1450,7 @@ body .sb-site-container {
     }
 
     .vDateField {
-        min-width: 70% !important;
+
     }
 
     .nav.nav-tabs li a {
@@ -1478,7 +1479,7 @@ body .sb-site-container {
     }
 
     .vDateField {
-        min-width: 68% !important;
+
     }
 
     .nav.nav-tabs li a {
@@ -1555,12 +1556,15 @@ select.form-control {
     box-shadow: none;
     border-radius: 0;
 }
+.vDateField {
 
+    padding-left: 70px;
+}
 .datetimeshortcuts {
     position: absolute;
-    right: 17px;
+
     z-index: 9999;
-    top: 30px;
+        top: 30px;
 }
 
 .errorlist li {
@@ -1673,4 +1677,10 @@ input[type=file] {
 
 .section-title {
     color: #00bcd4 !important;
+}
+.pagination li a {
+    color: #00a09b;
+}
+.pagination li a:hover {
+    background-color: #00a09b;
 }

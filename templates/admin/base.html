@@ -608,16 +608,14 @@
 
 </script>
 <script>
+
     $(document).ready(function () {
        $('table.table_s').DataTable({
 
-            columnDefs: [
-                {
-                    className: 'mdl-data-table__cell--non-numeric'
-                }
-            ],
+
 
             responsive: true,
+           paging: true,
             "bInfo": false,
             "pageLength": 10,
             "bLengthChange": false, //used to hide the property
@@ -666,6 +664,10 @@ document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
 	});
 </script>{% endcomment %}
 <!-- Latest compiled and minified JavaScript -->
-
+ <script>
+        $(document).ready(function () {
+            $('.vDateField').addClass('form-control');
+        });
+    </script>
 </body>
 </html>
