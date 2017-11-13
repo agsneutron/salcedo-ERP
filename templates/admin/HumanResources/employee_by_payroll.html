@@ -111,10 +111,10 @@
                                         <thead>
                                         <tr>
                                             <td>Clave</td>
-                                            <td>Empleado</td>
-
-                                            <td>Editar</td>
-                                            <td>Eliminar</td>
+                                            <td>Nombre</td>
+                                            <td>Puesto Asignado</td>
+                                            <td>P/D por Periodo</td>
+                                            <td>Excluir</td>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -122,16 +122,15 @@
                                             <tr>
                                                 <td>{{ record.employee.employee_key }}</td>
                                                 <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
-
+                                                <td>{{ record.job_profile.job }}</td>
                                                 <td>
-                                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}">
-                                                        Editar
+                                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-address-card-o color-default"></i>
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/delete/">
-                                                        Eliminar
-                                                    </a>
+
+                                                    <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}">
                                                 </td>
                                             </tr>
                                         {% endfor %}
