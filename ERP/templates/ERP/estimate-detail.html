@@ -28,6 +28,13 @@
             min-width: 80px;
             display: inline-block;
         }
+
+        .modal ul {
+            list-style: circle;
+        }
+        .deduction-comments{
+            color: #009690;
+        }
     </style>
 
     <div class="col-xs-12" style="margin-bottom: 25px">
@@ -40,11 +47,12 @@
                         {% if estimate.lock_status == 'L' %}
 
                             {% if perms.ERP.can_unlock_estimate %}
-                                <a href="#" onClick="configura_segmentos({{ project.id }})"
-                                   data-toggle="modal" data-target="#unlock_modal"
-                                   class="">
-                                    <i class="fa fa-lock"></i>
-                                </a>
+                                <form action="/admin/ERP/estimate/apply_deductions_to_estimate" method="post"
+                                      style="display: inline-block">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="estimate_id" value="{{ estimate.id }}">
+                                    <i class="fa fa-lock" onclick="submit()" style="cursor: pointer;"></i>
+                                </form>
 
                             {% else %}
                                 <i class="fa fa-lock"></i>
@@ -159,15 +167,30 @@
                                     </h3>
                                 </div>
 
-                                {% if perms.ERP.add_progressestimate and estimate.is_locked %}
+                                {% if perms.ERP.add_progressestimate and estimate.is_open %}
                                     <div class="item-right">
                                         <a href="/admin/ERP/progressestimate/add/?estimate={{ estimate.id }}"
-                                           class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                                           class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
+                                                class="zmdi zmdi-plus zmdi-hc-2x"></i>
                                         </a>
 
                                     </div>
                                 {% endif %}
 
+
+                                {% if estimate.lock_status != 'L' %}
+
+                                    <div class="card-block">
+                                        <div>Deducciones por mala calidad: {{ estimate.deduction_amount }}</div>
+                                        <a href="#"
+                                           data-toggle="modal" data-target="#unlock_modal"
+                                           class="">
+                                            <span>Ver Comentarios</span>
+                                        </a>
+
+
+                                    </div>
+                                {% endif %}
                                 <div class="card-block text-center">
                                         <span class="table-responsive">
                                             <table id="" class="table table-striped text-center table_s">
@@ -356,6 +379,43 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal" id="unlock_modal" tabindex="-1" role="dialog" aria-labelledby="unlock_modal">
+        <div class="modal-dialog animated zoomIn animated-3x" role="document">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                    <h3 class="modal-title" id="myModalLabel3">Deducciones por Mala Calidad</h3>
+                </div>
+                <div class="modal-body">
+                    <div class="col-xs-12">
+
+                        <p>Se han aplicado deducciones por mala calidad por la cantidad
+                            de: <span class="deduction-comments"> {{ estimate.deduction_amount }}</span>.</p>
+                        <p>Las comentarios agregados por el auditor son los siguientes:</p>
+
+                        <div class="deduction-comments">
+                            {{ estimate.deduction_comments | safe }}
+                        </div>
+
+                    </div>
+
+                </div>
+                <div class="clearfix"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                    </button>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
     <script>
         {% comment %}var progressBarColor;
 
@@ -380,44 +440,6 @@
     </script>
 
 
-    <div class="modal" id="unlock_modal" tabindex="-1" role="dialog" aria-labelledby="unlock_modal">
-        <div class="modal-dialog animated zoomIn animated-3x" role="document">
-            <div class="modal-content">
-
-                <form method="POST" action="unlock">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                                aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
-                        <h3 class="modal-title" id="myModalLabel3">Desbloquear estimación</h3>
-                    </div>
-                    <div class="modal-body">
-                        <div class="col-xs-12">
-
-                            <p>¿Estás seguro que deseas desbloquear la estimación? Una vez desbloqueada la
-                                estimación,
-                                ya
-                                no se podrá estimar más. Se definirá un finiquito correspondiente al monto
-                                especificado.</p>
-
-                            Monto del finiquito: <input type="number" name="liquidation_amount"
-                                                        id="liquidation_amount"/>
-                            {% csrf_token %}
-
-                        </div>
-
-                    </div>
-                    <div class="clearfix"></div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                        <button id="unlock_estimate" type="button" class="btn btn-primary" onclick="submit()">Guardar
-                        </button>
-
-                    </div>
-
-                </form>
-            </div>
-        </div>
-    </div>
 
     <script>
         jQuery(document).ready(function () {
