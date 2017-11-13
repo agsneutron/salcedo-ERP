@@ -49,19 +49,14 @@
                             <i class="fa fa-lock"></i> &nbsp; | &nbsp;
                         {% endif %}
                     {% endif %}
-
                         {% if estimate.lock_status == 'U' %}
                             <i class="fa fa-unlock"></i> &nbsp; | &nbsp;
                         {% endif %}
-
-
-
                         {% if perms.ERP.change_estimate %}
                             <a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
                                 <i class="fa fa-pencil"></i>
                             </a> &nbsp; | &nbsp;
                         {% endif %}
-
                         <a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
                             <i class="fa fa-print"></i>
                         </a>
