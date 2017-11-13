@@ -105,7 +105,8 @@
                                     <tbody>
                                     {% for logfile in logfiles %}
                                         <tr>
-                                            <td>ok:
+                                            <td>
+                                                {{ logfile.file.name }}
                                                 <a download="" href="/media/{{ logfile.file }}">Descargar</a>
                                             </td>
 
