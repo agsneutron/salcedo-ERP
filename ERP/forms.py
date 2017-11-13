@@ -10,6 +10,8 @@ from django.forms import SelectDateWidget
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.utils import timezone
+from tinymce.widgets import TinyMCE
+
 from users.models import ERPUser
 from django.utils.translation import ugettext as _
 
@@ -210,6 +212,11 @@ class ProgressEstimateLogForm(forms.ModelForm):
         cleaned_data['user'] = User.objects.get(pk=self.user_id)
         self.cleaned_data['project'] = Project.objects.get(pk=self.project_id)
 
+
+        if not self.request.user.has_perm('ERP.change_log_status'):
+            if self.instance.status != self.cleaned_data['status']:
+                self.cleaned_data['status'] = self.instance.status
+
         return cleaned_data
 
     def save(self, commit=True):
@@ -263,11 +270,14 @@ class ProgressEstimateForm(forms.ModelForm):
 
         new_percentage = accumulated_amount / contract_amount
 
-        if new_percentage > 0.8 and self.instance.type == ProgressEstimate.PROGRESS:
+        if estimate.lock_status == 'L' and new_percentage > 0.8 and self.instance.type == ProgressEstimate.PROGRESS:
             self._errors["amount"] = self.error_class(
                 ['El monto acumulado no puede superar el 80% si la estimación no ha sido liberada.'])
             raise ValidationError('Error en la cantidad')
 
+        elif estimate.lock_status == 'U':
+            estimate.lock_status = 'C'
+            estimate.save()
         return cleaned_data
 
 
@@ -378,7 +388,7 @@ class OwnerForm(forms.ModelForm):
             self.fields['empresa'].queryset = Empresa.objects.filter(pk=self.company_id)
 
     def clean(self):
-        cleaned_data = super(OwnerForm,self).clean()
+        cleaned_data = super(OwnerForm, self).clean()
         print 'cleaned-data'
         print cleaned_data
         return cleaned_data
@@ -406,3 +416,27 @@ class ContactForm(forms.ModelForm):
         # Filtering the values for the contractor if it , otherwise, None.
         if self.contractor_id is not None:
             self.fields['contractor'].queryset = Contratista.objects.filter(pk=self.contractor_id)
+
+
+class EstimateDedutionsForm(forms.ModelForm):
+
+    estimate_id = forms.IntegerField(widget=forms.HiddenInput)
+
+    class Meta:
+        model = Estimate
+        fields = ('id', 'deduction_amount', 'deduction_comments',)
+
+    def __init__(self, *args, **kwargs):
+        super(EstimateDedutionsForm, self).__init__(*args, **kwargs)
+        self.fields['deduction_amount'].required = True
+        self.fields['deduction_comments'].required = True
+
+    def is_valid(self):
+        print 'Is valid______'
+        valid = super(EstimateDedutionsForm, self).is_valid()
+        if not valid:
+            return valid
+        if self.cleaned_data['deduction_comments'] is None or self.cleaned_data['deduction_comments'] == "":
+            return False
+        return True
+
