@@ -168,7 +168,9 @@ def EmployeeByPeriod(request):
     payrollperiod = request.GET.get('payrollperiod')
     template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
     employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup)
+    period_data = PayrollPeriod.objects.filter(id=payrollperiod)
     #context = RequestContext.request
     context = {'employees': employees,
-               'payrollperiod':payrollperiod}
+               'payrollperiod': payrollperiod,
+               'payrolldata':period_data}
     return HttpResponse(template.render(context,request))
