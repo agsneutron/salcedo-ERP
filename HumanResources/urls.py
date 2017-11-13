@@ -41,9 +41,9 @@ from django.conf.urls.static import static
 
 urlpatterns = [
 
+
     url(r'^employeehome$', views.employeehome, name='employeehome'),
     url(r'^payrollhome$', views.payrollhome, name='payrollhome'),
     url(r'^employeebyperiod', views.EmployeeByPeriod, name='employeebyperiod'),
-
 
 ]

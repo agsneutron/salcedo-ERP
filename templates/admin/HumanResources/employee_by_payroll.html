@@ -110,7 +110,7 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <td>id</td>
+                                            <td>Clave</td>
                                             <td>Nombre</td>
                                             <td>Puesto Asignado</td>
                                             <td>P/D por Periodo</td>
@@ -129,10 +129,8 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-trash-o color-danger eliminar"></i>
 
-                                                    </a>
+                                                    <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}">
                                                 </td>
                                             </tr>
                                         {% endfor %}

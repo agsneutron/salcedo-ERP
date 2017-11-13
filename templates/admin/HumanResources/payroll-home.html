@@ -60,6 +60,7 @@
             text-align: center;
             font-size: 12px;
         }
+
         .list-group {
             border-left: solid 0px #eee;
             border-right: solid 0px #eee;
@@ -82,19 +83,107 @@
         .list-group .list-group-item:first-child, .list-group a.list-group-item:first-child {
             border-top: solid 0px #eee;
         }
-    dd, dt {
-    line-height: 1.3 !important;
+
+        dd, dt {
+            line-height: 1.3 !important;
+        }
+        .ms-paper-menu-left-container .ms-paper-menu-left {
+    background-color: #eee;
+    margin-bottom: -99999px;
+    padding-bottom: 99999px;
+    position: relative;
+}
+    .ms-paper-menu-left-container .ms-paper-menu-left .ms-paper-menu-title {
+    margin: 0;
+    padding: 15px 10px;
+    text-align: center;
+    font-size: 17px;
+    font-size: 1.7rem;
+    background-color: #204280;
+    color: #fff;
+    text-transform: uppercase;
+    position: relative;
+}
+    .ms-collapse-nav li.panel a {
+    background-color: #204280;
+    color: #fff;
+}
+    .ms-collapse-nav li.panel a:hover {
+    background-color: #204280 !important;
+    color: #fff;
 }
     </style>
 {% endblock %}
 {% block content %}
 
     <div class="container">
+        <div class="col-md-3 ms-paper-menu-left-container">
+            <div class="ms-paper-menu-left">
+                <h3 class="ms-paper-menu-title">
+                   Nómina
 
-        <hr>
+                </h3>
+                <div class="panel-menu collapse" id="collapseMenu">
+                    <ul class="panel-group ms-collapse-nav" id="components-nav" role="tablist"
+                        aria-multiselectable="true">
+                        <li class="panel" role="tab" id="e1">
+                            <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c1"
+                               aria-expanded="true" aria-controls="c1" class="collapsed withripple">
+                                Periodos de Nómina</a>
+                            <ul id="c1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e1">
+                                <li>
+                                    <a class="withripple" href="component-typography.html">
+                                        <i class="fa fa-plus"></i> Agregar</a>
+                                </li>
+                                <li>
+                                    <a class="withripple" href="component-headers.html">
+                                        <i class="fa fa-search"></i> Consultar</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="panel" role="tab" id="e2">
+                            <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c2"
+                               aria-expanded="true" aria-controls="c2" class="collapsed withripple">
+                                Grupo de Nómina</a>
+                            <ul id="c2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e2">
+                                <li>
+                                    <a class="withripple" href="component-typography.html">
+                                        <i class="fa fa-plus"></i> Agregar</a>
+                                </li>
+                                <li>
+                                    <a class="withripple" href="component-headers.html">
+                                        <i class="fa fa-search"></i> Consultar</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="panel" role="tab" id="e3">
+                            <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c3"
+                               aria-expanded="true" aria-controls="c3" class="collapsed withripple">
+                                Percepciones y Deducciones</a>
+                            <ul id="c3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e3">
+                                <li>
+                                    <a class="withripple" href="component-typography.html">
+                                        <i class="fa fa-plus"></i> Agregar</a>
+                                </li>
+                                <li>
+                                    <a class="withripple" href="component-headers.html">
+                                        <i class="fa fa-search"></i> Consultar</a>
+                                </li>
+                            </ul>
+                        </li>
 
-        <div class="col-md-12">
+                    </ul>
+                    <!-- ms-collapse-nav -->
+                </div>
+            </div>
+        </div>
+        <!-- col-md-3 -->
 
+        <div class="col-md-9">
+            contenido
+  {% for fieldset in adminform %}
+          {% include "admin/HumanResources/payrollperiod/fieldset.html" %}
+        {% endfor %}
         </div>
     </div>
 
