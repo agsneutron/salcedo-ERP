@@ -17,6 +17,7 @@ from ERP.models import Pais, Estado, Municipio, Project
 
 # Create your models here.
 from multiselectfield import MultiSelectField
+from django.forms.models import model_to_dict
 
 
 class PayrollClassification(models.Model):
@@ -747,7 +748,11 @@ class EmployeePositionDescription(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.payroll_group.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
-
+    def to_serilizable_dic(self):
+        ans = model_to_dict(self)
+        ans['id'] = str(self.id)
+        ans['payroll_group'] = str(self.payroll_group.name)
+        return ans
 
 
 class EmployeeFinancialData(models.Model):

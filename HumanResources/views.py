@@ -12,6 +12,14 @@ from django.db.models import Q
 
 # Model Imports.
 from HumanResources.models import *
+from django.template import Context
+
+
+# Create your views here.
+from django.shortcuts import render, redirect, render_to_response
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.template import RequestContext,loader
 
 def employeehome(request):
     return render(request, 'admin/HumanResources/employee-home.html')
@@ -142,45 +150,23 @@ class EmployeeDetailView(generic.DetailView):
         return context
 
 
-class PositionDescriptionListView(ListView):
+@login_required()
+def EmployeeByPeriod(request):
     model = EmployeePositionDescription
-    template_name = "HumanResources/company-list.html"
+    template_name = "admin/HumanResources/employee_by_payroll.html"
 
-    query = None
+    context = Context()
+    template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
+    payrollgroup = request.GET.get('payrollgroup')
+    employees = EmployeePositionDescription.objects.values('employee__id').filter(payroll_group__id=payrollgroup)
+    context['employee_financial_data']=employees
+    context['employees'] = employees
+    return HttpResponse(template.render(context))
 
-    """
-       Display a Blog List page filtered by the search query.
-    """
-    paginate_by = 10
-    title_list = 'Empleados'
-
-    def get_queryset(self):
-        result = super(PositionDescriptionListView, self).get_queryset()
-
-        query = self.request.GET.get('q')
-        if query:
-            PositionDescriptionListView.query = query
-            query_list = query.split()
-            result = result.filter(
-                reduce(operator.and_,
-                       (Q(nombreEmpresa__icontains=q) for q in query_list)) |
-                reduce(operator.and_,
-                       (Q(calle__icontains=q) for q in query_list))
-            )
-        else:
-            PositionDescriptionListView.query = ''
-
-        return result
-
-    def get_context_data(self, **kwargs):
-        context = super(PositionDescriptionListView, self).get_context_data(**kwargs)
-        context['title_list'] = PositionDescriptionListView.title_list
-        context['query'] = PositionDescriptionListView.query
-        context['query_string'] = '&q=' + PositionDescriptionListView.query
-        context['has_query'] = (PositionDescriptionListView.query is not None) and (PositionDescriptionListView.query != "")
-        return context
-
-    def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('ERP.view_list_empresa'):
-            raise PermissionDenied
-        return super(PositionDescriptionListView, self).dispatch(request, args, kwargs)
+    '''
+    #templates = loader.get_template('consultas/busqueda_general.html')
+    template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
+    context = RequestContext(request, {
+        'employees': employees,
+    })
+    return HttpResponse(template.render(context))'''
