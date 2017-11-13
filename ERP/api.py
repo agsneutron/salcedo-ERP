@@ -114,6 +114,26 @@ class CleanProject(View):
         return HttpResponse('ok', 'application/json; charset=utf-8')
 
 
+class CleanEstimate(View):
+    def get(self, request):
+        estimate_id = request.GET.get('id')
+
+
+        items = ProgressEstimate.objects.filter(estimate_id=estimate_id)
+
+        for item in items:
+            item.delete()
+
+
+        estimate = Estimate.objects.get(pk=estimate_id)
+        estimate.lock_status = 'L'
+        estimate.save()
+
+
+
+        return HttpResponse('ok', 'application/json; charset=utf-8')
+
+
 class SectionsByProjectSave(View):
     def get(self, request):
         secciones_id = get_array_or_none(request.GET.get('secciones'))

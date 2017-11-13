@@ -1,0 +1,57 @@
+{% extends "admin/base_site.html" %}
+{% load app_filters admin_static %}
+
+{% block extrahead %}
+    {{ form.media }}
+{% endblock %}
+
+{% block content %}
+    <form action="/admin/ERP/estimate/save_deductions_to_estimate/" method="post">
+
+        {% csrf_token %}
+        {% for field in form.hidden_fields %}
+            {{ field }}
+        {% endfor %}
+
+
+
+
+
+        <div class="card ">
+            <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+                <li role="presentation" class="active">
+                    <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                        Desbloquear Estimación
+                    </a>
+                </li>
+            </ul>
+            <div class="card-block">
+                <div class="tab-content">
+                    {% for field in form.visible_fields %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        <div>
+                                            {{ field.label_tag }}
+                                        </div>
+                                        <div class="input-group">
+                                            {{ field|addcss:"form-control" }}
+                                            {{ field.errors }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <input type="submit" value="Guardar"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </form>
+{% endblock %}

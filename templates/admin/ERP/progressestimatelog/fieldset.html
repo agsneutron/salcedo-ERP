@@ -75,6 +75,10 @@
                                 {{ field.field }}
                             {% endif %}
 
+                            {% if field.field.name == "status" %}
+                                {{ field.field }}
+                            {% endif %}
+
                         {% endfor %}
                     {% endfor %}
                 </div>
