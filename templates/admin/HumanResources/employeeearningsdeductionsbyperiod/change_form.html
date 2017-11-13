@@ -1,105 +1,9 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_modify %}
+{% load i18n admin_urls admin_static admin_modify%}
 
 {% block extrahead %}{{ block.super }}
-    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
-    {{ media }}
-    <style>
-        p {
-            margin: 0;
-        }
-
-        hr {
-            display: block;
-            border-top: 1px solid #00a09b;
-            margin: 10px 0;
-        }
-
-        .card .card-block, .card.card-block {
-            padding: 20px;
-            padding: 0rem;
-        }
-
-        .card.card-info {
-            border-bottom: solid 0px #00bcd4;
-            border-radius: 0px;
-        }
-
-        .card {
-            box-shadow: none;
-            box-shadow: 0 0px 0px 0 rgba(0, 0, 0, .14), 0 0px 0px 0px rgba(0, 0, 0, .2), 0 0px 0px 0 rgba(0, 0, 0, .12);
-            border-radius: 2px;
-            background-color: #fff;
-            margin-bottom: 20px;
-            margin-bottom: 2rem;
-        }
-
-        .truncate {
-            width: 420px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .ms-hero-bg-info:after {
-            background-color: #204280 !important;
-        }
-
-        .list-group .list-group-item, .list-group a.list-group-item {
-            font-size: 13px !important;
-            line-height: 26px;
-        }
-
-        .nav.nav-tabs li a {
-            font-weight: 400;
-            padding: 1.7rem 7px;
-            color: rgba(255, 255, 255, .5) !important;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .list-group {
-            border-left: solid 0px #eee;
-            border-right: solid 0px #eee;
-        }
-
-        .list-group .list-group-item, .list-group a.list-group-item {
-            border: 0;
-            padding: 10px 15px;
-            margin: 0;
-            transition: all ease .3s;
-            border-bottom: solid 0px #eee;
-            vertical-align: middle;
-        }
-
-        .checkbox label .checkbox-material {
-            margin-right: 10px;
-            margin-right: 0;
-        }
-
-        .list-group .list-group-item:first-child, .list-group a.list-group-item:first-child {
-            border-top: solid 0px #eee;
-        }
-
-        dd, dt {
-            line-height: 1.3 !important;
-        }
-
-        .active_btn {
-            border-bottom: 3px solid white !important;
-        }
-    .errorlist {
-        position: absolute;
-    top: -6px;
-    right: 15px;
-    font-size: 10px;
-    /* width: 100%; */
-    /* text-align: right; */
-    /* list-style: none; */
-    color: #ff0000;
-    line-height: 16px;
-}
-    </style>
+<script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+{{ media }}
 {% endblock %}
 
 {% block extrastyle %}{{ block.super }}
@@ -112,228 +16,216 @@
 {% block bodyclass %}{{ block.super }} app-{{ opts.app_label }} model-{{ opts.model_name }} change-form{% endblock %}
 
 {% if not is_popup %}
-    {% block breadcrumbs %}
-        <div class="breadcrumbs">
-            <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
-            &rsaquo; <a
-                href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
-            &rsaquo; {% if has_change_permission %}
-            <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}
-            {{ opts.verbose_name_plural|capfirst }}{% endif %}
-            &rsaquo; {% if add %}{% blocktrans with name=opts.verbose_name %}Add {{ name }}{% endblocktrans %}{% else %}
-            {{ original|truncatewords:"18" }}{% endif %}
-        </div>
-    {% endblock %}
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
+&rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+&rsaquo; {% if has_change_permission %}<a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}{{ opts.verbose_name_plural|capfirst }}{% endif %}
+&rsaquo; {% if add %}{% blocktrans with name=opts.verbose_name %}Add {{ name }}{% endblocktrans %}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+</div>
+{% endblock %}
 {% endif %}
 
-{% block content %}
-    <div id="content-main">
-        {% block object-tools %}
-            {% if change %}{% if not is_popup %}
-                <ul class="object-tools">
-                    {% block object-tools-items %}
-                        <li>
-                            {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
-                            <a href="{% add_preserved_filters history_url %}"
-                               class="historylink">{% trans "History" %}</a>
-                        </li>
-                        {% if has_absolute_url %}
-                            <li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>
-                        {% endif %}
-                    {% endblock %}
-                </ul>
-            {% endif %}{% endif %}
-        {% endblock %}
-        <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post"
-              id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
-            <div>
-                {% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1"/>{% endif %}
-                {% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}"/>{% endif %}
-                {% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
-                {% if errors %}
-                    <p class="errornote">
-                        {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}
-                            {% trans "Please correct the errors below." %}{% endif %}
-                    </p>
-                    {{ adminform.form.non_field_errors }}
-                {% endif %}
+{% block content %}<div id="content-main">
+{% block object-tools %}
+{% if change %}{% if not is_popup %}
+  <ul class="object-tools">
+    {% block object-tools-items %}
+    <li>
+        {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
+        <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
+    </li>
+    {% if has_absolute_url %}<li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif %}
+    {% endblock %}
+  </ul>
+{% endif %}{% endif %}
+{% endblock %}
+<form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post" id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
+<div>
+{% if is_popup %}<input type="hidden" name="{{ is_popup_var }}" value="1" />{% endif %}
+{% if to_field %}<input type="hidden" name="{{ to_field_var }}" value="{{ to_field }}" />{% endif %}
+{% if save_on_top %}{% block submit_buttons_top %}{% submit_row %}{% endblock %}{% endif %}
+{% if errors %}
+    <p class="errornote">
+    {% if errors|length == 1 %}{% trans "Please correct the error below." %}{% else %}{% trans "Please correct the errors below." %}{% endif %}
+    </p>
+    {{ adminform.form.non_field_errors }}
+{% endif %}
 
-                {% block field_sets %}
-                    <div class="">
-                        <div class="col-xs-3">
-                            <div class=" ">
+{% block field_sets %}
+    <div class="container">
+        <div class="col-xs-12">
 
-                                <div class="">
-                                    <h3 class="color-info">Empleado</h3>
-                                <hr>
-                                    <ul class="list-group text-left" style="    margin-bottom: 0;">
-
-                                        <li class="list-group-item">
-                                            <strong>Empleado:</strong><br>
-                                            {% for record in employeedata %}
-
-                                                {{ record.employee_key }}{{ record.name }} {{ record.first_last_name }}
-                                                {{ record.second_last_name }}
-
-                                            {% endfor %}
-                                        </li>
-                                        {% for record in employeeposition %}
-                                            <li class="list-group-item">
-                                                <strong>Puesto:</strong><br>
-                                                {{ record.job_profile }}
-                                            </li>
-                                            <li class="list-group-item">
-                                                <strong>Grupo de Nomina:</strong><br>
-                                                {{ record.payroll_group }}
-                                            </li>
-                                        {% endfor %}
-                                    </ul>
-                                </div>
-                            </div>
-
-
-                        </div>
-                        <div class="col-xs-9">
-                            {% for fieldset in adminform %}
-                                {% include "admin/HumanResources/employeeearningsdeductionsbyperiod/fieldset.html" %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <div class="clearfix"></div>
-                {% endblock %}
-
-                {% block after_field_sets %}{% endblock %}
-
-                {% block inline_field_sets %}
-                    {% for inline_admin_formset in inline_admin_formsets %}
-                        {% include inline_admin_formset.opts.template %}
-                    {% endfor %}
-                {% endblock %}
-
-                {% block after_related_objects %}
-                    <hr>
-                    <div class="">
-                        <div class="col-xs-6">
-                            {% comment %} <h4 class="section-title mt-4">Percepciones</h4>{% endcomment %}
-
-                            <div class="table-respponsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <td >Percepciones</td>
-                                        <td >Monto</td>
-
-                                        <td style="width: 5%">Editar</td>
-                                        <td style="width: 5%">Eliminar</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for record in earnings %}
-                                        <tr>
-                                            <td>{{ record.concept }}</td>
-                                            <td >{{ record.ammount }}</td>
-
-                                            <td>
-                                                -
-                                            </td>
-                                            <td >
-                                                -
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    {% for record in periodearnings %}
-                                        <tr>
-                                            <td>{{ record.concept }}</td>
-                                            <td >{{ record.ammount }}</td>
-
-                                            <td>
-                                                <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-pencil color-default eliminar"></i>
-                                                </a>
-                                            </td>
-                                            <td >
-                                                <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/"  class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-trash-o color-danger eliminar"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                        <div class="col-xs-6">
-                            {% comment %}<h4 class="section-title mt-4">Deducciones</h4>{% endcomment %}
-
-                            <div class="table-respponsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <td >Deducciones</td>
-                                        <td>% o Monto</td>
-
-                                        <td style="width: 5%">Editar</td>
-                                        <td style="width: 5%">Eliminar</td>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {% for record in deductions %}
-                                        <tr>
-                                            <td>{{ record.concept }}</td>
-                                            <td>{{ record.ammount }}</td>
-
-                                            <td >
-                                                -
-                                            </td>
-                                            <td >
-                                                -
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    {% for record in perioddeductions %}
-                                        <tr>
-                                            <td >{{ record.concept }}</td>
-                                            <td >{{ record.ammount }}</td>
-
-                                            <td >
-                                                <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-pencil color-default eliminar"></i>
-                                                </a>
-                                            </td>
-                                            <td>
-                                                <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-trash-o color-danger eliminar"></i>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-
-
-
-                {% endblock %}
-
-                {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
-
-                {% block admin_change_form_document_ready %}
-                    <script type="text/javascript"
-                            id="django-admin-form-add-constants"
-                            src="{% static 'admin/js/change_form.js' %}"
-                            {% if adminform and add %}
-                            data-model-name="{{ opts.model_name }}"
-                            {% endif %}>
-                    </script>
-                {% endblock %}
-
-                {# JavaScript for prepopulated fields #}
-                {% prepopulated_fields_js %}
-
+            <div class="col-xs-6">
+                {% for fieldset in adminform %}
+                  {% include "admin/HumanResources/employeeearningsdeductionsbyperiod/fieldset.html" %}
+                {% endfor %}
             </div>
-        </form>
+            <div class="col-xs-6">
+                <h3 class="color-info">Datos del Empleado</h3>{% comment %} aqui insertar botón Pre Recibo{% endcomment %}
+                <ul class="list-group text-left">
+                    {% for record in employeedata %}
+                        <li class="list-group-item">
+                            <strong>Empleado:</strong> {{ record.employee_key }} - {{ record.name }} {{ record.first_last_name }} {{ record.second_last_name }}
+                        </li>
+                    {% endfor %}
+                    {% for record in employeeposition %}
+                        <li class="list-group-item">
+                            <strong>Puesto:</strong> {{ record.job_profile }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Grupo de Nómina:</strong> {{ record.payroll_group }}
+                        </li>
+                    {% endfor %}
+                    {% for record in payrolldata %}
+                        <li class="list-group-item">
+                            <strong>Periodo:</strong> {{ record.name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Inicio de Periodo:</strong> {{ record.start_period }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Fin de Periodo:</strong> {{ record.end_period }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
     </div>
+{% endblock %}
+
+{% block after_field_sets %}{% endblock %}
+
+{% block inline_field_sets %}
+{% for inline_admin_formset in inline_admin_formsets %}
+    {% include inline_admin_formset.opts.template %}
+{% endfor %}
+{% endblock %}
+
+{% block after_related_objects %}
+    <hr>
+    <div class="col-xs-12">
+        <div class="col-xs-6">
+           {% comment %} <h4 class="section-title mt-4">Percepciones</h4>{% endcomment %}
+
+                <div class="table-respponsive">
+                   <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td style="border:1px solid">Percepciones</td>
+                        <td style="border:1px solid">Monto</td>
+
+                        <td style="border:1px solid">Editar</td>
+                        <td style="border:1px solid">Eliminar</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in earnings %}
+                            <tr>
+                                <td style="border:1px solid">{{ record.concept }}</td>
+                                <td style="border:1px solid">{{ record.ammount }}</td>
+
+                                <td style="border:1px solid">
+                                    -
+                                </td>
+                                <td style="border:1px solid">
+                                    -
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        {% for record in periodearnings %}
+                            <tr>
+                                <td style="border:1px solid">{{ record.concept }}</td>
+                                <td style="border:1px solid">{{ record.ammount }}</td>
+
+                                <td style="border:1px solid">
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                        Editar
+                                    </a>
+                                </td>
+                                <td style="border:1px solid">
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/">
+                                        Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-xs-6">
+            {% comment %}<h4 class="section-title mt-4">Deducciones</h4>{% endcomment %}
+
+            <div class="table-respponsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <td style="border:1px solid">Deducciones</td>
+                        <td style="border:1px solid">% o Monto</td>
+
+                        <td style="border:1px solid">Editar</td>
+                        <td style="border:1px solid">Eliminar</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in deductions %}
+                            <tr>
+                                <td style="border:1px solid">{{ record.concept }}</td>
+                                 <td style="border:1px solid">{{ record.ammount }}</td>
+
+                                <td style="border:1px solid">
+                                    -
+                                </td>
+                                <td style="border:1px solid">
+                                    -
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        {% for record in perioddeductions %}
+                            <tr>
+                                <td style="border:1px solid">{{ record.concept }}</td>
+                                 <td style="border:1px solid">{{ record.ammount }}</td>
+
+                                <td style="border:1px solid">
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}">
+                                        Editar
+                                    </a>
+                                </td>
+                                <td style="border:1px solid">
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/">
+                                        Eliminar
+                                    </a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+
+
+{% endblock %}
+
+{% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
+
+{% block admin_change_form_document_ready %}
+    <script type="text/javascript"
+            id="django-admin-form-add-constants"
+            src="{% static 'admin/js/change_form.js' %}"
+            {% if adminform and add %}
+                data-model-name="{{ opts.model_name }}"
+            {% endif %}>
+    </script>
+{% endblock %}
+
+{# JavaScript for prepopulated fields #}
+{% prepopulated_fields_js %}
+
+</div>
+</form></div>
 {% endblock %}

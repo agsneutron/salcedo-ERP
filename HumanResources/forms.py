@@ -404,7 +404,8 @@ class EmployeeEarningsDeductionsbyPeriodForm(forms.ModelForm):
         model = EmployeeEarningsDeductionsbyPeriod
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            "payroll_period": forms.HiddenInput
         }
 
     def __init__(self, *args, **kwargs):

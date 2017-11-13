@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import operator
+
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import render
 
 # Create your views here.
@@ -20,6 +22,7 @@ from SalcedoERP.lib.constants import Constants
 
 from django.forms import formset_factory
 
+
 def empresas(request):
     return render(request, 'empresas.html')
 
@@ -28,7 +31,7 @@ def contratos(request):
     return render(request, 'contratos.html')
 
 
-#Views for the model Users.
+# Views for the model Users.
 class UsersListView(ListView):
     model = User
     template_name = "users/users-list.html"
@@ -64,8 +67,12 @@ class UsersListView(ListView):
         context['has_query'] = (UsersListView.query is not None) and (UsersListView.query != "")
         return context
 
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('auth.change_user'):
+            raise PermissionDenied
+        return super(UsersListView, self).dispatch(request, args, kwargs)
+
 
 class UsersDetailView(generic.DetailView):
     model = User
     template_name = "users/users-detail.html"
-

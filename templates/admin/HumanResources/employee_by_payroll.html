@@ -98,8 +98,8 @@
                                         <thead>
                                         <tr>
                                             <td>id</td>
-                                            <td>nombre</td>
-
+                                            <td>Nombre</td>
+                                            <td>Puesto Asignado</td>
                                             <td>Editar</td>
                                             <td>Eliminar</td>
                                         </tr>
@@ -109,7 +109,7 @@
                                             <tr>
                                                 <td>{{ record.employee.id }}</td>
                                                 <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
-
+                                                <td>{{ record.job_profile.job }}</td>
                                                 <td>
                                                     <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}">
                                                         Editar

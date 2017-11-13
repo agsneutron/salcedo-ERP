@@ -65,12 +65,12 @@ class LogFileInline(admin.TabularInline):
     list_display = ('id', 'progress_estimate_log', 'file',)
     fields = ('id', 'progress_estimate_log', 'file', 'version',)
     model = LogFile
-    extra = 1
+    extra = 0
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
     form = ProgressEstimateLogForm
-    fields = ('user', 'project', 'date', 'description', 'version')
+    fields = ('user', 'project', 'date', 'description', 'version', 'status')
     list_display = ('user', 'date', 'description')
     search_fields = ('user', 'date', 'description')
     list_display_links = ('user', 'date', 'description')
@@ -94,6 +94,7 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
         project.widget.can_change_related = False
+
 
         class ModelFormEMetaClass(ModelFormE):
             def __new__(cls, *args, **kwargs):
@@ -1259,6 +1260,8 @@ class EstimateAdmin(admin.ModelAdmin):
         contract.widget.can_add_related = False
         contract.widget.can_change_related = False
 
+
+
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
@@ -1277,6 +1280,8 @@ class EstimateAdmin(admin.ModelAdmin):
             url(r'^(?P<pk>\d+)/$', views.EstimateDetailView.as_view(), name='estimate-detail'),
             url(r'^(?P<pk>\d+)/delete/$', views.EstimateDelete.as_view(), name='estimate-delete'),
             url(r'^(?P<pk>\d+)/approve', views.approve_estimate_advance, name='estimate-advance-approve'),
+            url(r'^apply_deductions_to_estimate', views.apply_deductions_to_estimate),
+            url(r'^save_deductions_to_estimate', views.save_deductions_to_estimate),
 
         ]
 
