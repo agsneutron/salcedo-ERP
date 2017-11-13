@@ -828,9 +828,6 @@ class ProgressEstimateLogDetailView(generic.DetailView):
         context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
 
 
-
-        print context['logfiles'][0].file
-
         return context
 
     def dispatch(self, request, *args, **kwargs):
