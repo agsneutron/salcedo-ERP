@@ -404,19 +404,22 @@ class EmployeeEarningsDeductionsbyPeriodForm(forms.ModelForm):
         model = EmployeeEarningsDeductionsbyPeriod
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            "payroll_period": forms.HiddenInput,
         }
 
     def __init__(self, *args, **kwargs):
 
         self.request = kwargs.pop('request', None)
         self.employee_id = self.request.GET.get('employee', None)
+        self.payroll_period_id = self.request.GET.get('payrollperiod', None)
 
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
 
         # Selecting the current value for the contractor if it exists, otherwise, None.
         kwargs['initial'].update({'employee': self.employee_id})
+        kwargs['initial'].update({'payroll_period': self.payroll_period_id})
 
         # Calling super class to have acces to the fields.
         super(EmployeeEarningsDeductionsbyPeriodForm, self).__init__(*args, **kwargs)
@@ -424,6 +427,9 @@ class EmployeeEarningsDeductionsbyPeriodForm(forms.ModelForm):
         # Filtering the values for the contractor if it , otherwise, None.
         if self.employee_id is not None:
             self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
+
+        if self.payroll_period_id is not None:
+            self.fields['payroll_period'].queryset = PayrollPeriod.objects.filter(pk=self.payroll_period_id)
 
 # Form to include the fields of Employee Earnings Deductions Form.
 class PayrollTeForm(forms.ModelForm):

@@ -54,17 +54,44 @@
 
 {% block field_sets %}
     <div class="container">
-        {% for record in employeedata %}
-            <p>Empleado: {{ record.employee_key }}{{ record.name }} {{ record.first_last_name }} {{ record.second_last_name }}</p>
-            <p></p>
-        {% endfor %}
-        {% for record in employeeposition %}
-            <p>Puesto: {{ record.job_profile }} </p>
-            <p>Grupo de Nómina: {{ record.payroll_group }}</p>
-        {% endfor %}
-        {% for fieldset in adminform %}
-          {% include "admin/HumanResources/employeeearningsdeductionsbyperiod/fieldset.html" %}
-        {% endfor %}
+        <div class="col-xs-12">
+
+            <div class="col-xs-6">
+                {% for fieldset in adminform %}
+                  {% include "admin/HumanResources/employeeearningsdeductionsbyperiod/fieldset.html" %}
+                {% endfor %}
+            </div>
+            <div class="col-xs-6">
+                <h3 class="color-info">Datos del Empleado</h3>{% comment %} aqui insertar botón Pre Recibo{% endcomment %}
+                <ul class="list-group text-left">
+                    {% for record in employeedata %}
+                        <li class="list-group-item">
+                            <strong>Empleado:</strong> {{ record.employee_key }} - {{ record.name }} {{ record.first_last_name }} {{ record.second_last_name }}
+                        </li>
+                    {% endfor %}
+                    {% for record in employeeposition %}
+                        <li class="list-group-item">
+                            <strong>Puesto:</strong> {{ record.job_profile }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Grupo de Nómina:</strong> {{ record.payroll_group }}
+                        </li>
+                    {% endfor %}
+                    {% for record in payrolldata %}
+                        <li class="list-group-item">
+                            <strong>Periodo:</strong> {{ record.name }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Inicio de Periodo:</strong> {{ record.start_period }}
+                        </li>
+                        <li class="list-group-item">
+                            <strong>Fin de Periodo:</strong> {{ record.end_period }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+        </div>
     </div>
 {% endblock %}
 
@@ -113,13 +140,12 @@
                                 <td style="border:1px solid">{{ record.ammount }}</td>
 
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}">
-                                        Editar
-                                    </a>
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}"  class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-pencil color-default eliminar"></i>
                                 </td>
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/">
-                                        Eliminar
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-trash-o color-danger eliminar"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -136,7 +162,7 @@
                     <thead>
                     <tr>
                         <td style="border:1px solid">Deducciones</td>
-                        <td style="border:1px solid">% o Monto</td>
+                        <td style="border:1px solid">Monto ó %</td>
 
                         <td style="border:1px solid">Editar</td>
                         <td style="border:1px solid">Eliminar</td>
@@ -162,13 +188,13 @@
                                  <td style="border:1px solid">{{ record.ammount }}</td>
 
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}">
-                                        Editar
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-pencil color-default eliminar"></i>
                                     </a>
                                 </td>
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/">
-                                        Eliminar
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-trash-o color-danger eliminar"></i>
                                     </a>
                                 </td>
                             </tr>

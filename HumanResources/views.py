@@ -150,23 +150,27 @@ class EmployeeDetailView(generic.DetailView):
         return context
 
 
-@login_required()
+'''@login_required()
 def EmployeeByPeriod(request):
     model = EmployeePositionDescription
     template_name = "admin/HumanResources/employee_by_payroll.html"
 
-    context = Context()
+    context = Context({"my_name": "Dolores"})
     template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
     payrollgroup = request.GET.get('payrollgroup')
     employees = EmployeePositionDescription.objects.values('employee__id').filter(payroll_group__id=payrollgroup)
-    context['employee_financial_data']=employees
-    context['employees'] = employees
-    return HttpResponse(template.render(context))
-
-    '''
-    #templates = loader.get_template('consultas/busqueda_general.html')
-    template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
-    context = RequestContext(request, {
-        'employees': employees,
-    })
     return HttpResponse(template.render(context))'''
+
+
+@login_required()
+def EmployeeByPeriod(request):
+    payrollgroup = request.GET.get('payrollgroup')
+    payrollperiod = request.GET.get('payrollperiod')
+    template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
+    employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup)
+    period_data = PayrollPeriod.objects.filter(id=payrollperiod)
+    #context = RequestContext.request
+    context = {'employees': employees,
+               'payrollperiod': payrollperiod,
+               'payrolldata':period_data}
+    return HttpResponse(template.render(context,request))

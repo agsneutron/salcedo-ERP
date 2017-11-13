@@ -188,8 +188,8 @@
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Documentación
                                 </a>
-                                <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/checkerdata/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
-                                    <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_checkerdata_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/employeeassistance/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
+                                    <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeeassistance_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Checador
                                 </a>
                                 <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/employeepositiondescription/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
@@ -205,26 +205,26 @@
                         <div class="col-md-2">
                             <div class="card ">
                                 <div class="ms-hero-bg-info">
-                                    <h3 class="color-white index-1 text-center no-m pt-2"> {{ employee.name }} {{ employee.first_last_name }} </h3>
-                                    <div class="color-medium index-1 text-center np-m">ID: {{ employee.id }}</div>
+                                    <h3 class="color-white index-1 text-center no-m pt-2"> {{ employee.name }}  </h3>
+                                    <div class="color-medium index-1 text-center np-m"> {{ employee.first_last_name }}</div>
                                     <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png"
                                          alt=""
                                          class="img-avatar-circle"></div>
                                 <div class="card-block pt-4 text-center">
                                     <h3 class="color-info">Empleado</h3>
                                     <ul class="list-group text-left">
-                                        <li class="list-group-item"><strong>Id:</strong><br> {{ employee.id }}</li>
+                                        <li class="list-group-item"><strong>Id:</strong> {{ employee.id }}</li>
                                         <li class="list-group-item">
-                                            <strong>Clave:</strong><br> {{ employee.employee_key }}
+                                            <strong>Clave:</strong> {{ employee.employee_key }}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Tipo:</strong><br> {{ employee.get_type_display }}
+                                            <strong>Tipo:</strong> {{ employee.get_type_display }}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Registro:</strong><br> {{ employee.registry_date }}
+                                            <strong>Registro:</strong> {{ employee.registry_date }}
                                         </li>
                                         <li class="list-group-item">
-                                            <strong>Estatus:</strong><br> {{ employee.get_status_display }}</li>
+                                            <strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                                     </ul>
                                 </div>
                             </div>
