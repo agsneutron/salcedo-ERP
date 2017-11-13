@@ -177,8 +177,8 @@
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Documentación
                                 </a>
-                                <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/employeeassistance/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
-                                    <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeeassistance_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/checkerdata/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
+                                    <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_checkerdata_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Checador
                                 </a>
                                 <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/employeepositiondescription/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
@@ -319,7 +319,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "familiars" %}
+                            {% elif template == "family_members" %}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -335,7 +335,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in familiars %}
+                                        {% for record in family_member_set %}
                                             <tr>
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.first_last_name }}</td>
@@ -357,7 +357,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "references" %}
+                            {% elif template == "work_reference" %}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -377,7 +377,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in references %}
+                                        {% for record in work_reference %}
                                             <tr>
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.first_last_name }}</td>
@@ -403,7 +403,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "tests" %}
+                            {% elif template == "applications" %}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -420,7 +420,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in tests %}
+                                        {% for record in applications %}
                                             <tr>
                                                 <td>{{ record.application_date }}</td>
                                                 <td>{{ record.result }}</td>
@@ -460,7 +460,12 @@
                                         <tbody>
                                         {% for record in documentation %}
                                             <tr>
-                                                <td>{{ record.file }}</td>
+                                                <td>
+                                                    <a href="/media/{{ record.file.name }}" target="_blank">
+                                                        Archivo
+                                                    </a>
+
+                                                </td>
                                                 <td>{{ record.comments }}</td>
                                                 <td>{{ record.document_type }}</td>
 
