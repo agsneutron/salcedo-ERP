@@ -1247,7 +1247,7 @@ class EstimateAdmin(admin.ModelAdmin):
                 'fields': (
                     'period', 'start_date', 'end_date', 'advance_payment_amount',
                     'advance_payment_date',
-                    'advance_payment_status', 'version', 'lock_status')
+                    'advance_payment_status', 'version')
             }),
     )
 

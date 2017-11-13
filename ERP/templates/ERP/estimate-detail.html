@@ -48,21 +48,21 @@
 
                         {% if perms.ERP.can_unlock_estimate and  estimate.lock_status == 'L' %}
                             <form action="/admin/ERP/estimate/apply_deductions_to_estimate" method="post"
-                                  style="display: inline-block">
+                                  style="display: inline-block" id="unlock_form" name="unlock_form">
                                 {% csrf_token %}
                                 <input type="hidden" name="estimate_id" value="{{ estimate.id }}">
-                                <i class="fa fa-lock" onclick="submit()" style="cursor: pointer;"></i>
+                                <i class="fa fa-lock" onclick="unlock_form.submit()" style="cursor: pointer;"></i>
                             </form>
 
+                        {% elif estimate.lock_status == 'U' or estimate.lock_status == 'C' %}
+                            <i class="fa fa-unlock"></i>
                         {% else %}
                             <i class="fa fa-lock"></i>
                         {% endif %}
 
 
 
-                        {% if estimate.lock_status == 'U' %}
-                            <i class="fa fa-unlock"></i>
-                        {% endif %}
+
                         Estimación
                         {% if perms.ERP.change_estimate %}
                             <a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
