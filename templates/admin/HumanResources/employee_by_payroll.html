@@ -2,7 +2,6 @@
 {% load i18n admin_static %}
 {% block coltype %}colMS{% endblock %}
 
-
 {% block bodyclass %}{{ block.super }} dashboard{% endblock %}
 
 {% block breadcrumbs %}{% endblock %}
@@ -94,7 +93,38 @@
         <hr>
 
         <div class="col-md-12">
-            this is payroll home my friend
+            <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>id</td>
+                                            <td>nombre</td>
+
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in employees %}
+                                            <tr>
+                                                <td>{{ record.employee.id }}</td>
+                                                <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
+
+                                                <td>
+                                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}">
+                                                        Editar
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/delete/">
+                                                        Eliminar
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
         </div>
     </div>
 
