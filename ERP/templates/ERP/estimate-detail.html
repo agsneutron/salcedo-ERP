@@ -32,7 +32,8 @@
         .modal ul {
             list-style: circle;
         }
-        .deduction-comments{
+
+        .deduction-comments {
             color: #009690;
         }
     </style>
@@ -44,22 +45,20 @@
                 <span class="ms-icon ms-icon-circle ms-icon mb-4 color-info" style="margin-bottom: 0rem !important"><i
                         class="zmdi zmdi-city-alt"></i></span>
                     <h3 class="color-info">
-                        {% if estimate.lock_status == 'L' %}
 
-                            {% if perms.ERP.can_unlock_estimate %}
-                                <form action="/admin/ERP/estimate/apply_deductions_to_estimate" method="post"
-                                      style="display: inline-block">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="estimate_id" value="{{ estimate.id }}">
-                                    <i class="fa fa-lock" onclick="submit()" style="cursor: pointer;"></i>
-                                </form>
+                        {% if perms.ERP.can_unlock_estimate and  estimate.lock_status == 'L' %}
+                            <form action="/admin/ERP/estimate/apply_deductions_to_estimate" method="post"
+                                  style="display: inline-block">
+                                {% csrf_token %}
+                                <input type="hidden" name="estimate_id" value="{{ estimate.id }}">
+                                <i class="fa fa-lock" onclick="submit()" style="cursor: pointer;"></i>
+                            </form>
 
-                            {% else %}
-                                <i class="fa fa-lock"></i>
-                            {% endif %}
-
-
+                        {% else %}
+                            <i class="fa fa-lock"></i>
                         {% endif %}
+
+
 
                         {% if estimate.lock_status == 'U' %}
                             <i class="fa fa-unlock"></i>
