@@ -330,8 +330,10 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "familiars" %}
 
+
+                            {% elif template == "family_members" %}
+                                <h2 class="section-title mt-4">Listado de Familiares</h2>
                                 <hr>
                                 <div class="table-responsive mt-15">
                                     <table class="table table-striped">
@@ -346,7 +348,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in familiars %}
+                                        {% for record in family_member_set %}
                                             <tr>
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.first_last_name }}</td>
@@ -368,8 +370,8 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "references" %}
-
+                            {% elif template == "work_reference" %}
+                                <h2 class="section-title mt-4">Listado de Referencias</h2>
                                 <hr>
                                 <div class="table-responsive mt-15">
                                     <table class="table table-striped">
@@ -388,7 +390,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in references %}
+                                        {% for record in work_reference %}
                                             <tr>
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.first_last_name }}</td>
@@ -414,8 +416,8 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "tests" %}
-
+                            {% elif template == "applications" %}
+                                <h2 class="section-title mt-4">Listado de Exámen</h2>
                                 <hr>
                                 <div class="table-responsive mt-15">
                                     <table class="table table-striped">
@@ -431,7 +433,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in tests %}
+                                        {% for record in applications %}
                                             <tr>
                                                 <td>{{ record.application_date }}</td>
                                                 <td>{{ record.result }}</td>
@@ -471,7 +473,12 @@
                                         <tbody>
                                         {% for record in documentation %}
                                             <tr>
-                                                <td>{{ record.file }}</td>
+                                                <td>
+                                                    <a href="/media/{{ record.file.name }}" target="_blank">
+                                                        Archivo
+                                                    </a>
+
+                                                </td>
                                                 <td>{{ record.comments }}</td>
                                                 <td>{{ record.document_type }}</td>
 
