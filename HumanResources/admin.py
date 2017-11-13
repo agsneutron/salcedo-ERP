@@ -88,7 +88,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    list_display = ('get_full_name','get_detail_column','get_change_column', 'get_delete_column','get_payroll_column')
+    list_display = ('employee_key','get_full_name','work_email','get_detail_column','get_change_column', 'get_delete_column','get_payroll_column')
     list_display_links = None
 
     def get_full_name(self, obj):
