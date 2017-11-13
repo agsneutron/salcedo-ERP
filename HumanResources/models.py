@@ -37,7 +37,7 @@ class PayrollClassification(models.Model):
 class PayrollGroup(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
     payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina", null=False, blank=False)
-    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=True, blank=True)
 
 
     class Meta:
