@@ -1557,3 +1557,40 @@ errors > input {
     border-left: solid 4px #4caf50;
     border-right: solid 4px #4caf50;
 }
+.employee-menu {
+    font-size: 11px;
+    border-right: 1px solid rgba(255, 255, 255, .2);
+    /* padding: 8px 24px; */
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
+.column-my_url_field {
+width: 5% !important;
+}
+.column-my_url_change {
+width: 5% !important;
+}
+.field-get_detail_column {
+    width: 5% !important;
+}
+.field-get_change_column {
+    width: 5% !important;
+}
+.field-get_delete_column {
+    width: 5% !important;
+}
+.dias-fields {
+display: inline-block;
+    text-align: center;
+}
+.dias-fields>.col-xs-4>input {
+    z-index: 9999;
+    width: 35px;
+    height: 20px;
+    text-align: center;
+    margin-bottom: 7px;
+    margin-top: 10px;
+}
+input[type=file] {
+    font-size: 11px;
+}
