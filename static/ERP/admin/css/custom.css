@@ -1557,3 +1557,10 @@ errors > input {
     border-left: solid 4px #4caf50;
     border-right: solid 4px #4caf50;
 }
+.employee-menu {
+        font-size: 11px;
+    border-right: 1px solid rgba(255,255,255,.2);
+    /* padding: 8px 24px; */
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}

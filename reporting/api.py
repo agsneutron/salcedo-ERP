@@ -483,14 +483,18 @@ class PhysicalFinancialAdvanceReport(View):
 
 class EstimatesReport():
     @staticmethod
-    def getReport(project_id):
+    def getReport(project_id, estimate_id=None):
 
         response = []
 
         project = Project.objects.get(pk=project_id)
-        estimate_set = Estimate.objects.filter(contract__project__id=project_id)
+        if estimate_id is None:
+            estimate_set = Estimate.objects.filter(contract__project__id=project_id)
+        else:
+            estimate_set = Estimate.objects.filter(id=estimate_id)
 
         for estimate in estimate_set:
+            print "Id: " + str(estimate_id.id)
             concepts_array = []
             contract_obj = ContratoContratista.objects.get(pk=estimate.contract.id)
             contactor = Contact.objects.filter(contractor_id=estimate.contract.contratista_id)
