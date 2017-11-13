@@ -185,7 +185,15 @@ class ProgressEstimateLogForm(forms.ModelForm):
         kwargs['initial'].update({'user': 1})
         # kwargs['initial'].update({'user_id': self.user_id})
 
+
+
         super(ProgressEstimateLogForm, self).__init__(*args, **kwargs)
+
+
+        if self.request is not None and not self.request.user.has_perm('ERP.change_log_status'):
+            self.fields['status'].choices = [(self.instance.status, self.instance.get_status_display())]
+
+
         # self.fields['date'].widget = widgets.AdminDateWidget()
 
     # To override the save method for the form.
@@ -211,6 +219,11 @@ class ProgressEstimateLogForm(forms.ModelForm):
         cleaned_data = super(ProgressEstimateLogForm, self).clean()
         cleaned_data['user'] = User.objects.get(pk=self.user_id)
         self.cleaned_data['project'] = Project.objects.get(pk=self.project_id)
+
+
+        if not self.request.user.has_perm('ERP.change_log_status'):
+            if self.instance.status != self.cleaned_data['status']:
+                self.cleaned_data['status'] = self.instance.status
 
         return cleaned_data
 

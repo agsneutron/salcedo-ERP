@@ -62,17 +62,20 @@
                         {% endif %}
 
                         {% if estimate.lock_status == 'U' %}
-                            <i class="fa fa-unlock"></i>
+                            <i class="fa fa-unlock"></i> &nbsp; | &nbsp;
                         {% endif %}
-                        Estimación
+
                         {% if perms.ERP.change_estimate %}
                             <a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
-                                <i class="fa fa-pencil color-default eliminar"></i>
-                            </a>
+                                <i class="fa fa-pencil"></i>
+                            </a> &nbsp; | &nbsp;
                         {% endif %}
 
+                        <a href="/reporting/get_estimates_report?project_id={{ estimate.contract.project.id }}&estimate_id={{ estimate.id }}">
+                            <i class="fa fa-print"></i>
+                        </a>
+                    </div>
 
-                    </h3>
 
                     <div class="col-xs-12 col-sm-6 text-left">
 

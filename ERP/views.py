@@ -825,9 +825,17 @@ class ProgressEstimateLogDetailView(generic.DetailView):
         context = super(ProgressEstimateLogDetailView, self).get_context_data(**kwargs)
         progressestimatelog = context['progressestimatelog']
         print 'the id log id:' + str(progressestimatelog)
-        context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
+        log_files = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
+        for record in log_files:
+            file_name = record.file.name
+            split_name = file_name.split('/')
 
-        print context['logfiles'][0].file
+            if len(split_name) <= 1:
+                record.file.name = "Archivo sin nombre"
+            else:
+                record.file.name = split_name[len(split_name) - 1]
+
+        context['logfiles'] = log_files
 
         return context
 
