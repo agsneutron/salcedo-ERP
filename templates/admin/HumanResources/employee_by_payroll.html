@@ -97,17 +97,17 @@
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <td>id</td>
+                                            <td>Clave</td>
                                             <td>Nombre</td>
                                             <td>Puesto Asignado</td>
                                             <td>Editar</td>
-                                            <td>Eliminar</td>
+                                            <td></td>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for record in employees %}
                                             <tr>
-                                                <td>{{ record.employee.id }}</td>
+                                                <td>{{ record.employee.employee_key }}</td>
                                                 <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
                                                 <td>{{ record.job_profile.job }}</td>
                                                 <td>
@@ -116,9 +116,7 @@
                                                     </a>
                                                 </td>
                                                 <td>
-                                                    <a href="/admin/HumanResources/payrollperiod/{{ record.id }}/delete/">
-                                                        Eliminar
-                                                    </a>
+                                                    <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}">
                                                 </td>
                                             </tr>
                                         {% endfor %}
