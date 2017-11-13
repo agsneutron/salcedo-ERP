@@ -19,6 +19,8 @@ from django.contrib.contenttypes.models import ContentType
 from django.forms.models import model_to_dict
 from django.utils.encoding import smart_text
 from django.utils.timezone import now
+from tinymce.models import HTMLField
+
 from users.models import ERPUser
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
@@ -1396,13 +1398,22 @@ class Estimate(models.Model):
 
     LOCKED = "L"
     UNLOCKED = "U"
+    CLOSED = "C"
 
     ESTIMATE_LOCK_CHOICES = (
         (LOCKED, 'Bloqueada'),
         (UNLOCKED, 'Desbloquada'),
+        (CLOSED, 'Cerrada'),
     )
     lock_status = models.CharField(max_length=1, choices=ESTIMATE_LOCK_CHOICES, default=LOCKED,
                                    verbose_name="Bloqueo de la Estimación")
+
+    deduction_comments = HTMLField(verbose_name='Razones por las que Hubo Deducciones')
+
+    # Fields to provide the Advance (payment) functionality.
+    deduction_amount = models.DecimalField(verbose_name='Deducciones Por Mala Calidad', decimal_places=2, blank=False, null=False,
+                                                 default=0, max_digits=20,
+                                                 validators=[MinValueValidator(Decimal('0.0'))])
 
     # Director General
     #
@@ -1461,6 +1472,9 @@ class Estimate(models.Model):
 
     def is_locked(self):
         return self.lock_status == self.LOCKED
+
+    def is_open(self):
+        return self.lock_status != self.CLOSED
 
     def get_html_approval_list(self):
 

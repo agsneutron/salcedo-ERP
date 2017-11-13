@@ -131,7 +131,7 @@
                         </div>
                     {% endif %}
 
-
+{##}
                     {% if field.field.name == "lock_status" %}
 
                         <div class="col-sm-4">
@@ -144,6 +144,33 @@
 
                         </div>
                     {% endif %}
+
+
+                         {% if field.field.name == "deduction_amount" %}
+
+                        <div class="col-sm-4">
+                            <div class="form-group field-fecha_final">
+                                <label class=" required" for="id_fecha_final_0">Bloqueo:</label>
+                                {{ field.field }}
+                                {{ field.errors }}
+                            </div>
+                        </div>
+
+                        </div>
+                    {% endif %}
+                        {% if field.field.name == "deduction_comments" %}
+
+                            <div class="col-sm-4">
+                                <div class="form-group field-fecha_final">
+                                    <label class=" required" for="id_fecha_final_0">Razones de las deducciones:</label>
+                                    {{ field.field }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+
+                            </div>
+                        {% endif %}
+
 
                         {% if field.field.name == "contractor" %}
 
@@ -167,6 +194,7 @@
             </div>
         </div>
 
+    </div>
 </fieldset>
 
 <script src="{% static "ERP/admin/js/custom.js" %}"></script>

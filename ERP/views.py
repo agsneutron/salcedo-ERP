@@ -21,7 +21,7 @@ from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 from django.views.generic.edit import CreateView
 
-from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm
+from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm, EstimateDedutionsForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
     Contact, AccessToProject, \
@@ -824,10 +824,8 @@ class ProgressEstimateLogDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ProgressEstimateLogDetailView, self).get_context_data(**kwargs)
         progressestimatelog = context['progressestimatelog']
-        print 'the id log id:'+str(progressestimatelog)
+        print 'the id log id:' + str(progressestimatelog)
         context['logfiles'] = LogFile.objects.filter(Q(progress_estimate_log_id=progressestimatelog.id))
-
-
 
         print context['logfiles'][0].file
 
@@ -963,6 +961,7 @@ class EstimateDetailView(generic.DetailView):
 
         # Shallow copy for the main object.
         estimate = context['estimate']
+        estimate.deduction_amount = Utilities.number_to_currency(estimate.deduction_amount)
         contract_amount = estimate.contract.monto_contrato
         estimate.contract.monto_contrato = Utilities.number_to_currency(estimate.contract.monto_contrato)
         estimate.contract_amount_override = Utilities.number_to_currency(estimate.contract_amount_override)
@@ -1207,3 +1206,46 @@ class ContactListView(ListView):
 class ContactDetailView(generic.DetailView):
     model = Contact
     template_name = "ERP/contact-detail.html"
+
+
+def apply_deductions_to_estimate(request):
+    # Form
+    if request.method == 'POST':
+        # This post comes from another place, so we just have estimate_id
+        estimate_id = request.POST.get('estimate_id')
+        if estimate_id is None:
+            raise PermissionDenied
+        form = EstimateDedutionsForm()
+        form.fields['estimate_id'].initial = estimate_id
+    else:
+        raise PermissionDenied
+    return render(request, 'ERP/apply_deductions_to_estimate.html', {'form': form})
+
+
+def save_deductions_to_estimate(request):
+    # Save
+    if request.method == 'POST':
+        estimate_id = request.POST.get('estimate_id')
+        if estimate_id is None:
+            raise PermissionDenied
+
+        # Save Estimate....
+        estimate_qs = Estimate.objects.filter(id=estimate_id)
+        if len(estimate_qs) == 0:
+            raise PermissionDenied
+
+
+        form = EstimateDedutionsForm(request.POST)
+
+        if not form.is_valid():
+            return render(request, 'ERP/apply_deductions_to_estimate.html', {'form': form})
+
+        estimate = estimate_qs[0]
+        estimate.lock_status = 'U'
+        estimate.deduction_comments = request.POST.get('deduction_comments')
+        estimate.deduction_amount = request.POST.get('deduction_amount')
+        estimate.save()
+
+        return HttpResponseRedirect('/admin/ERP/estimate/' + estimate_id + '/')
+    else:
+        raise PermissionDenied

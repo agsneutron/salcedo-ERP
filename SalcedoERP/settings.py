@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'reporting',
     'DataUpload',
     'HumanResources',
-    'multiselectfield'
+    'multiselectfield',
+    'tinymce'
 ]
 
 MIDDLEWARE = [
