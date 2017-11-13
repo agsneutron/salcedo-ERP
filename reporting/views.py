@@ -946,12 +946,16 @@ class GetEstimatesReportJson(View):
 class GetEstimatesReport(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
+        estimate_id = request.GET.get('estimate_id')
+
+        print "Estimate is:"
+        print estimate_id
 
         # Due to requirements issues, the detail level is no longer required to be dynamic. The report, from now on,
         # will be exported grouped by line_item.
         show_concepts = True
 
-        responseJson = api.EstimatesReport.getReport(project_id)
+        responseJson = api.EstimatesReport.getReport(project_id, estimate_id)
 
         # return HttpResponse(Utilities.json_to_dumps(report_json),'application/json; charset=utf-8')
 

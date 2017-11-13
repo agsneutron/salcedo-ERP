@@ -848,14 +848,14 @@ class EarningsDeductions(models.Model):
     )
 
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30,)
-    percent_taxable = models.IntegerField("Porcentaje Grabable", blank=False, null=False)
+    percent_taxable = models.IntegerField("Porcentaje Gravable", blank=False, null=False)
     sat_key = models.CharField(verbose_name="Clave SAT", null=False, blank=False, max_length=30,)
     law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30,)
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES, default=ACTIVA)
     accounting_account = models.IntegerField("Cuenta Contable", blank=False, null=False)
     comments = models.CharField(verbose_name="Observaciones", null=False, blank=False, max_length=500,)
     type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION, verbose_name="Tipo")
-    taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES,default=NO, verbose_name="Grabable")
+    taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES,default=NO, verbose_name="Gravable")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA, verbose_name="Categoria")
 
     class Meta:

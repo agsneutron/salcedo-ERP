@@ -39,11 +39,11 @@
                                             <thead>
                                             <tr>
                                                 <th>Nombre</th>
-                                                <th>Clave</th>
-                                                <th>Cliente</th>
+                                                <th>&nbsp; Clave &nbsp;</th>
+                                                <th>&nbsp; Cliente &nbsp;</th>
                                                 <th>Inicio</th>
                                                 <th>Término</th>
-                                                <th>Fecha de Última Edición</th>
+{#                                                <th>Fecha de Última Edición</th>#}
                                                 {% if perms.ERP.change_project %}
                                                     <th class="no-sorting">Configurar</th>
                                                 {% endif %}
@@ -52,7 +52,7 @@
                                                 {% if perms.ERP.change_project %}
                                                     <th class="no-sorting">Editar</th>
                                                 {% endif %}
-                                                <th class="no-sorting">Dashboard</th>
+                                                 <th class="no-sorting">Dashboard</th>
                                             </tr>
                                             </thead>
                                             {% for project in object_list %}
@@ -63,7 +63,7 @@
                                                     <td><span>{{ project.empresa }}</span></td>
                                                     <td><span>{{ project.fecha_inicial }}</span></td>
                                                     <td><span>{{ project.fecha_final }}</span></td>
-                                                    <td><span>{{ project.last_edit_date }}</span></td>
+{#                                                    <td><span>{{ project.last_edit_date }}</span></td>#}
 
 
                                                     {% comment %}   <td style="width: 7%"><a href="{{ project.id }}"

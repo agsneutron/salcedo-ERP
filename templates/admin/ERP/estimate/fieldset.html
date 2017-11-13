@@ -4,8 +4,11 @@
         pointer-events: none;
     }
 
+    .form-group > br {
+        display: none;
+    }
 </style>
-<fieldset class="module aligned {{ fieldset.classes }}">
+<fieldset class="module {{ fieldset.classes }}">
 
     {{ fieldset.management_form }}
 
@@ -92,17 +95,17 @@
 
                         </div>
                     {% endif %}
-                        {% if field.field.name == "period" %}
-                            <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group field-fecha_final">
-                                    <label class=" required" for="id_fecha_final_0">Periodo:</label>
-                                    {{ field.field }}
-                                    {{ field.errors }}
-                                </div>
+                    {% if field.field.name == "period" %}
+                        <div class="row">
+                        <div class="col-sm-4">
+                            <div class="form-group field-fecha_final">
+                                <label class=" required" for="id_fecha_final_0">Periodo:</label>
+                                {{ field.field }}
+                                {{ field.errors }}
                             </div>
+                        </div>
 
-                        {% endif %}
+                    {% endif %}
                     {% if field.field.name == "start_date" %}
 
                         <div class="col-sm-4">
@@ -129,7 +132,7 @@
                     {% endif %}
 
 
-                        {% if field.field.name == "lock_status" %}
+                    {% if field.field.name == "lock_status" %}
 
                         <div class="col-sm-4">
                             <div class="form-group field-fecha_final">
@@ -144,15 +147,15 @@
 
                         {% if field.field.name == "contractor" %}
 
-                                <div class="col-sm-12">
-                                    <div class="form-group field-{{ field.field.name }}">
-                                        <div>
-                                            <div style="position: relative">{{ field.label_tag }}</div>
-                                            <div style="position: relative">{{ field.field|addcss:"form-control" }}</div>
-                                            <div style="position: relative">{{ field.errors }}</div>
-                                        </div>
+                            <div class="col-sm-12">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        <div style="position: relative">{{ field.label_tag }}</div>
+                                        <div style="position: relative">{{ field.field|addcss:"form-control" }}</div>
+                                        <div style="position: relative">{{ field.errors }}</div>
                                     </div>
                                 </div>
+                            </div>
                         {% endif %}
                         {% if field.field.name == "version" %}
                             {{ field.field|addcss:"form-control" }}
@@ -161,10 +164,9 @@
                     {% endfor %}
                 {% endfor %}
                 </div>
-                </div>
             </div>
-
         </div>
+
 </fieldset>
 
 <script src="{% static "ERP/admin/js/custom.js" %}"></script>
