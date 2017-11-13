@@ -89,16 +89,29 @@
 {% block content %}
 
     <div class="container">
-
+         <h3 class="section-title">Listado de Nómina</h3>
         <hr>
+        <div class="col-md-12">
+            {% for record_period in payrolldata %}
+                <div class="col-md-3"><strong>Periodo :</strong> <br> {{ record_period.name }}</div>
+                <div class="col-md-3"><strong>Grupo :</strong> <br> {{ record_period.payroll_group}}</div>
+                <div class="col-md-3"><strong>Inicio de Periodo : </strong><br>{{ record_period.start_period }}</div>
+                <div class="col-md-3"><strong>Fin de Periodo :</strong><br> {{ record_period.end_period }}</div>
+
+            {% endfor %}
+
+        </div>
+
+
 
         <div class="col-md-12">
+            <hr>
             <div class="table-respponsive">
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
-                                            <td>id</td>
-                                            <td>nombre</td>
+                                            <td>Clave</td>
+                                            <td>Empleado</td>
 
                                             <td>Editar</td>
                                             <td>Eliminar</td>
@@ -107,7 +120,7 @@
                                         <tbody>
                                         {% for record in employees %}
                                             <tr>
-                                                <td>{{ record.employee.id }}</td>
+                                                <td>{{ record.employee.employee_key }}</td>
                                                 <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
 
                                                 <td>
