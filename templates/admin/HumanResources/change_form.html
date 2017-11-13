@@ -244,7 +244,7 @@
                             {% endblock %}
 
                             <!-- Implementing the data list section -->
-                            {% if template == "education" %}
+                            {% if template == "education" and education%}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -278,7 +278,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/education/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                    <a href="/admin/HumanResources/education/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                     </a>
                                                 </td>
@@ -288,7 +288,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "emergencycontact" %}
+                            {% elif template == "emergencycontact" and emergencycontact%}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -320,7 +320,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/emergencycontact/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                    <a href="/admin/HumanResources/emergencycontact/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                     </a>
                                                 </td>
@@ -330,7 +330,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "family_members" %}
+                            {% elif template == "family_members" and family_member%}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -346,7 +346,7 @@
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in family_member_set %}
+                                        {% for record in family_member %}
                                             <tr>
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.first_last_name }}</td>
@@ -358,7 +358,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/familymember/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                    <a href="/admin/HumanResources/familymember/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                     </a>
                                                 </td>
@@ -368,7 +368,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "work_reference" %}
+                            {% elif template == "work_reference" and work_reference %}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -404,7 +404,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/workreference/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                    <a href="/admin/HumanResources/workreference/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                     </a>
                                                 </td>
@@ -414,7 +414,7 @@
                                     </table>
                                 </div>
 
-                            {% elif template == "applications" %}
+                            {% elif template == "applications" and applications%}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -444,7 +444,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/testapplication/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                    <a href="/admin/HumanResources/testapplication/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                     </a>
                                                 </td>
@@ -453,7 +453,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            {% elif template == "documentation" %}
+                            {% elif template == "documentation" and documentation %}
 
                                 <hr>
                                 <div class="table-responsive mt-15">
@@ -486,7 +486,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/employeedocument/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                    <a href="/admin/HumanResources/employeedocument/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                     </a>
                                                 </td>
@@ -562,7 +562,7 @@
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/employeepositiondescription/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                    <a href="/admin/HumanResources/employeepositiondescription/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                     </a>
                                                 </td>

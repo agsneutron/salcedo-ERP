@@ -33,6 +33,7 @@ class PayrollClassification(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.name)
 
+
 class PayrollGroup(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
     payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina", null=False, blank=False)
@@ -782,7 +783,7 @@ class EmployeeFinancialData(models.Model):
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,verbose_name='Forma de Pago')
-    bank = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,verbose_name='Forma de Pago')
+
 
     class Meta:
         verbose_name_plural = "Datos Financieros del Empleado"
