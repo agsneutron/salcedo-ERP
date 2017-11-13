@@ -32,7 +32,8 @@
         .modal ul {
             list-style: circle;
         }
-        .deduction-comments{
+
+        .deduction-comments {
             color: #009690;
         }
     </style>
@@ -43,7 +44,8 @@
                 <div class="row">
                 <span class="ms-icon ms-icon-circle ms-icon mb-4 color-info" style="margin-bottom: 0rem !important"><i
                         class="zmdi zmdi-city-alt"></i></span>
-                    <h3 class="color-info">
+                    <h3 class="color-info">Estimación</h3>
+                    <div class="color-info" style="padding-bottom: 15px">
                         {% if estimate.lock_status == 'L' %}
 
                             {% if perms.ERP.can_unlock_estimate %}
@@ -378,9 +380,9 @@
                     </div>
                 </div>
 
-
             </div>
         </div>
+    </div>
     </div>
 
 
