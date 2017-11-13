@@ -176,12 +176,19 @@ class EducationAdmin(admin.ModelAdmin):
 
         return super(EducationAdmin, self).add_view(request, form_url, extra_context=extra)
 
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/education/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
         redirect_url = "/admin/HumanResources/education/add/?employee="+str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
-
+    # To redirect after object change
     def response_change(self, request, obj):
         employee_id = request.GET.get('employee')
         redirect_url = "/admin/HumanResources/education/add/?employee=" + str(employee_id)
@@ -248,6 +255,27 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         return super(EmergencyContactAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/emergencycontact/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/emergencycontact/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/emergencycontact/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+
 # Family Member Admin.
 @admin.register(FamilyMember)
 class FamilyMemberAdmin(admin.ModelAdmin):
@@ -279,6 +307,24 @@ class FamilyMemberAdmin(admin.ModelAdmin):
         extra['family_member'] = family_member_set
 
         return super(FamilyMemberAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/familymember/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/familymember/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/familymember/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 # Work Reference Admin.
@@ -315,6 +361,24 @@ class WorkReferenceAdmin(admin.ModelAdmin):
 
         return super(WorkReferenceAdmin, self).add_view(request, form_url, extra_context=extra)
 
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/workreference/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/workreference/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/workreference/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
 
 # Test Application Admin.
 @admin.register(TestApplication)
@@ -349,6 +413,23 @@ class TestApplicationAdmin(admin.ModelAdmin):
 
         return super(TestApplicationAdmin, self).add_view(request, form_url, extra_context=extra)
 
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/testapplication/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/testapplication/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/testapplication/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 # Employee Document Admin.
@@ -385,6 +466,23 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
 
         return super(EmployeeDocumentAdmin, self).add_view(request, form_url, extra_context=extra)
 
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeedocument/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeedocument/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeedocument/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 # Checker Data Admin.
 @admin.register(CheckerData)
@@ -423,6 +521,24 @@ class CheckerDataAdmin(admin.ModelAdmin):
 
 
         return super(CheckerDataAdmin, self).add_view(request, form_url, extra)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/checkerdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/checkerdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/checkerdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 
@@ -464,10 +580,11 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
     form = EmployeePositionDescriptionForm
     fieldsets = (
         ("Descripción de Puesto", {
-            #contract
-            'fields': ('employee','start_date', 'end_date', 'direction', 'subdirection','area','department','job_profile', 'physical_location',
-                       'insurance_type','insurance_number','monday','tuesday', 'wednesday', 'thursday','friday','saturday','sunday','entry_time','departure_time',
-                       'observations','payroll_group')
+            # contract
+            'fields': (
+                'employee', 'start_date', 'end_date', 'direction', 'subdirection', 'area', 'department', 'job_profile',
+                'physical_location', 'insurance_type', 'insurance_number', 'entry_time', 'departure_time', 'monday',
+                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'observations', 'payroll_group')
         }),
     )
 
@@ -517,7 +634,24 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 
         return super(EmployeePositionDescriptionAdmin, self).change_view(request, object_id, form_url, extra)
 
-    # Infonavit Data Admin.
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeepositiondescription/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeepositiondescription/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeepositiondescription/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 #@admin.register(InfonavitData)
@@ -946,3 +1080,8 @@ class JobInstanceAdmin(admin.ModelAdmin):
             url(r'^$', views.JobInstanceListView.as_view(), name='employee-detail'),
         ]
         return my_urls + urls
+
+
+
+
+admin.site.register(PayrollClassification)
