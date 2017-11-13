@@ -65,7 +65,7 @@ class LogFileInline(admin.TabularInline):
     list_display = ('id', 'progress_estimate_log', 'file',)
     fields = ('id', 'progress_estimate_log', 'file', 'version',)
     model = LogFile
-    extra = 1
+    extra = 0
 
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
