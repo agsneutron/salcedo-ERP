@@ -149,6 +149,8 @@
 
 
 
+
+
                                 {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle fadeIn"
                                data-toggle="dropdown"
@@ -193,6 +195,8 @@
 
 
 
+
+
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown"
@@ -231,6 +235,8 @@
 
                     </li>{% endcomment %}
                         <li class="dropdown
+
+
 
 
 
@@ -317,60 +323,79 @@
 
 
 
+
+
                                 {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="#" class="dropdown-toggle "
-                               data-toggle="dropdown"
-                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                               data-name="portfolio">
-                                <i class="fa fa-user-circle-o text-center"></i><br class="hidden-xs">
-                                Recursos Humanos
-                                <i class="zmdi zmdi-chevron-down hidden-xs"></i>
-                            </a>
+
+                            {% if perms.auth.change_user or  perms.HumanResources.change_payrollperiod or perms.HumanResources.change_employee %}
+                                <a href="#" class="dropdown-toggle "
+                                   data-toggle="dropdown"
+                                   data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                                   data-name="portfolio">
+                                    <i class="fa fa-user-circle-o text-center"></i><br class="hidden-xs">
+                                    Recursos Humanos
+                                    <i class="zmdi zmdi-chevron-down hidden-xs"></i>
+                                </a>
+                            {% endif %}
                             <ul id="op_usuarios" class="dropdown-menu dropdown-menu-left">
 
-                                <li class="dropdown-submenu">
-                                    <a href="#" class="has_children">
-                                        <i class="zmdi zmdi-view-dashboard"></i>Usuarios</a>
 
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/auth/user/add">Agregar</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/auth/user/">Consultar</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                 <li class="dropdown-submenu">
-                                    <a href="#" class="has_children">
-                                        <i class="zmdi zmdi-view-dashboard"></i>Empleados</a>
+                                {% if perms.auth.change_user %}
+                                    <li class="dropdown-submenu">
+                                        <a href="#" class="has_children">
+                                            <i class="zmdi zmdi-view-dashboard"></i>Usuarios</a>
 
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/HumanResources/employee/add/">Agregar</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/employee/">Consultar</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="#" class="has_children">
-                                        <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
+                                        <ul class="dropdown-menu dropdown-menu-left">
+                                            <li>
+                                                <a href="/admin/auth/user/add">Agregar</a>
+                                            </li>
+                                            <li>
+                                                <a href="/admin/auth/user/">Consultar</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
 
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/HumanResources/payrollperiod/add/">Generar Periodo</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/employee/">Consultar</a>
-                                        </li>
-                                    </ul>
-                                </li>
+
+                                {% if perms.HumanResources.change_employee %}
+                                    <li class="dropdown-submenu">
+                                        <a href="#" class="has_children">
+                                            <i class="zmdi zmdi-view-dashboard"></i>Empleados</a>
+
+                                        <ul class="dropdown-menu dropdown-menu-left">
+                                            <li>
+                                                <a href="/admin/HumanResources/employee/add/">Agregar</a>
+                                            </li>
+                                            <li>
+                                                <a href="/admin/HumanResources/employee/">Consultar</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+
+
+                                {% if perms.HumanResources.change_payrollperiod %}
+
+                                    <li class="dropdown-submenu">
+                                        <a href="#" class="has_children">
+                                            <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
+
+                                        <ul class="dropdown-menu dropdown-menu-left">
+                                            <li>
+                                                <a href="/admin/HumanResources/payrollperiod/add/">Generar Periodo</a>
+                                            </li>
+                                            <li>
+                                                <a href="/admin/HumanResources/employee/">Consultar</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
                             </ul>
 
                         </li>
                         <li id="op_reportes" class="dropdown
+
+
 
 
 
@@ -603,7 +628,7 @@
 </script>
 <script>
     $(document).ready(function () {
-       $('table.table_s').DataTable({
+        $('table.table_s').DataTable({
 
             columnDefs: [
                 {
@@ -629,7 +654,7 @@
                 "sInfoThousands": ",",
                 "sLoadingRecords": "Cargando...",
 
-        "sEmptyTable":     "No hay contactos registrados para el Cliente",
+                "sEmptyTable": "No hay contactos registrados para el Cliente",
 
                 "oPaginate": {
                     "sFirst": "Primero",
@@ -641,8 +666,8 @@
             },
 
         });
-document.getElementById('DataTables_Table_1_wrapper').style.width = "100%";
-document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
+        document.getElementById('DataTables_Table_1_wrapper').style.width = "100%";
+        document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
     });
 </script>
 
