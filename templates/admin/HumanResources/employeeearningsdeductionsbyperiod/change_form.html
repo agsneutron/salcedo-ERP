@@ -140,13 +140,12 @@
                                 <td style="border:1px solid">{{ record.ammount }}</td>
 
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}">
-                                        Editar
-                                    </a>
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}"  class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-pencil color-default eliminar"></i>
                                 </td>
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/">
-                                        Eliminar
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-trash-o color-danger eliminar"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -163,7 +162,7 @@
                     <thead>
                     <tr>
                         <td style="border:1px solid">Deducciones</td>
-                        <td style="border:1px solid">% o Monto</td>
+                        <td style="border:1px solid">Monto ó %</td>
 
                         <td style="border:1px solid">Editar</td>
                         <td style="border:1px solid">Eliminar</td>
@@ -189,13 +188,13 @@
                                  <td style="border:1px solid">{{ record.ammount }}</td>
 
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}">
-                                        Editar
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-pencil color-default eliminar"></i>
                                     </a>
                                 </td>
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/">
-                                        Eliminar
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-trash-o color-danger eliminar"></i>
                                     </a>
                                 </td>
                             </tr>
