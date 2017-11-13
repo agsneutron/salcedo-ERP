@@ -134,6 +134,15 @@ class EmployeeAdmin(admin.ModelAdmin):
         return super(EmployeeAdmin, self).change_view(request, object_id, form_url, extra)
 
 
+    def response_add(self, request, obj, post_url_continue=None):
+        redirect_url = "/admin/HumanResources/employee/"+str(obj.id)+"/change/?employee="+str(obj.id)
+        return HttpResponseRedirect(redirect_url)
+
+    def response_change(self, request, obj):
+        redirect_url = "/admin/HumanResources/employee/" + str(obj.id) + "/change/?employee=" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
+
+
 # Education Admin.
 @admin.register(Education)
 class EducationAdmin(admin.ModelAdmin):
@@ -166,6 +175,17 @@ class EducationAdmin(admin.ModelAdmin):
         extra['education'] = education_set
 
         return super(EducationAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/education/add/?employee="+str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/education/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 # Admin for the inline documents of the current education of an employee.

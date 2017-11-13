@@ -43,7 +43,7 @@ function callGraphicOne() {
                 setMapa(data);
                 for (var i = 0; i <= data.length-1; i++) {
                     $("#cardGrafica"+i).show();
-                    $("#tituloGrafica"+i).html('<h3 class="card-title">' + data[i].general.project_name + '</h3>');
+                    $("#tituloGrafica"+i).html('<h3 class="card-title"><a href="/admin/ERP/project/dashboard/'+data[i].general.project_id+'/">' + data[i].general.project_name + '</a></h3>' + '<div class="item-right"><a href="/admin/ERP/project/dashboard/'+data[i].general.project_id+'/" class="btn btn-raised btn-default btn-xs"><i class="fa fa-tachometer color-danger eliminar" style="margin:0;vertical-align: baseline;"></i> Dashboard<div class="ripple-container"></div></a></div>');
 
                     setDataCircles(data[i].general.percentaje_estimated, data[i].general.percentaje_paid_estimated,i);
                     Series = obtenSeries_Mensual_Grupo(data[i].schedule);
@@ -51,10 +51,9 @@ function callGraphicOne() {
                 }
             },
             error: function(data) {
-                 var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
+var message = 'Ocurrió un error al configurar el proyecto, favor de informar al administrador del sistema el siguiente código de error:\n' + data.status;
             $('#alertModal').find('.modal-body p').text(message);
-            $('#alertModal').modal('show')
-                //$j("#ajaxProgress").hide();
+            $('#alertModal').modal('show')                //$j("#ajaxProgress").hide();
             }
         });
     //});
@@ -223,6 +222,7 @@ function graficaUno(contenedor,Series,Categorias,titulo,subtitulo,leyenda) {
             tickColor: '#707073',
             tickWidth: 1,
             title: {
+                text: 'Montos',
                 style: {
                     color: '#A0A0A3'
                 }
