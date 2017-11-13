@@ -491,10 +491,10 @@ class EstimatesReport():
         if estimate_id is None:
             estimate_set = Estimate.objects.filter(contract__project__id=project_id)
         else:
-            estimate_set = Estimate.objects.filter(id=estimate_id)
+            estimate_set = Estimate.objects.filter(Q(contract__project__id=project_id)&Q(id=estimate_id))
 
         for estimate in estimate_set:
-            print "Id: " + str(estimate_id.id)
+            print "Is:" + str(estimate.id)
             concepts_array = []
             contract_obj = ContratoContratista.objects.get(pk=estimate.contract.id)
             contactor = Contact.objects.filter(contractor_id=estimate.contract.contratista_id)
