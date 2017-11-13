@@ -212,6 +212,11 @@ class ProgressEstimateLogForm(forms.ModelForm):
         cleaned_data['user'] = User.objects.get(pk=self.user_id)
         self.cleaned_data['project'] = Project.objects.get(pk=self.project_id)
 
+
+        if not self.request.user.has_perm('ERP.change_log_status'):
+            if self.instance.status != self.cleaned_data['status']:
+                self.cleaned_data['status'] = self.instance.status
+
         return cleaned_data
 
     def save(self, commit=True):

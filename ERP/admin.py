@@ -70,7 +70,7 @@ class LogFileInline(admin.TabularInline):
 
 class ProgressEstimateLogAdmin(admin.ModelAdmin):
     form = ProgressEstimateLogForm
-    fields = ('user', 'project', 'date', 'description', 'version')
+    fields = ('user', 'project', 'date', 'description', 'version', 'status')
     list_display = ('user', 'date', 'description')
     search_fields = ('user', 'date', 'description')
     list_display_links = ('user', 'date', 'description')
@@ -94,6 +94,7 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
         project.widget.can_add_related = False
         project.widget.can_change_related = False
+
 
         class ModelFormEMetaClass(ModelFormE):
             def __new__(cls, *args, **kwargs):

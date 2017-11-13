@@ -1638,8 +1638,26 @@ class ProgressEstimateLog(models.Model):
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
+    NOT_REVIEWED = 'N'
+    REVIEWED = 'R'
+    APPROVED = 'A'
+
+    STATUS_CHOICES = (
+        (NOT_REVIEWED, 'Sin Revisar'),
+        (REVIEWED, 'Revisada'),
+        (APPROVED, 'Aprobada'),
+    )
+    status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=NOT_REVIEWED,
+                                   verbose_name="Estado de la Bitácora")
+
+
+
     class Meta:
         verbose_name_plural = 'Bitácoras'
+
+        permissions = (
+            ("change_log_status", "Can change project log status"),
+        )
 
     def to_serializable_dict(self):
         answer = model_to_dict(self)
