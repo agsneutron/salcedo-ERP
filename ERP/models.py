@@ -1795,7 +1795,7 @@ class ProgressEstimateAuthorization(models.Model):
         return self.full_name
 
     def __unicode__(self):
-        return self.descripcion
+        return self.full_name
 
 
 class EstimateAdvanceAuthorization(models.Model):
