@@ -174,3 +174,17 @@ def EmployeeByPeriod(request):
                'payrollperiod': payrollperiod,
                'payrolldata':period_data}
     return HttpResponse(template.render(context,request))
+
+
+@login_required()
+def payrollhome(request):
+
+    template = loader.get_template('admin/HumanResources/payroll-home.html')
+    period_data = PayrollPeriod.objects.all().query
+    employees = EmployeePositionDescription.objects.all()
+    employees.group_by = ['payroll_group_id']
+    period_data
+    #context = RequestContext.request
+    context = {'employees': employees,
+               'payrolldata':period_data}
+    return HttpResponse(template.render(context,request))
