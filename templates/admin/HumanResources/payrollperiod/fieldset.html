@@ -33,7 +33,7 @@
 
     <div>
 
-        {% for line in fieldset %}
+         {% for line in fieldset %}
             <div class="campo{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}
             {% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}
                 {% if field.field.name %}field-{{ field.field.name }}{% endif %}{% endfor %}">
