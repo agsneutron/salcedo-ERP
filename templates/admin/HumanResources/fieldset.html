@@ -8,12 +8,14 @@
     }
 
     .col-xs-4 {
-    min-height: 65px;
+    max-height: 65px;
     }
     .col-xs-4 br {
     display: none !important;
 }
-
+br {
+    display: none;
+}
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}

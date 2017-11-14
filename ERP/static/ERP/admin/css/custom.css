@@ -1561,10 +1561,10 @@ select.form-control {
     padding-left: 70px;
 }
 .datetimeshortcuts {
-    position: absolute;
-
+       position: absolute;
     z-index: 1;
-        top: 30px;
+           bottom: 4px;
+    left: 16px;
 }
 
 .errorlist li {
