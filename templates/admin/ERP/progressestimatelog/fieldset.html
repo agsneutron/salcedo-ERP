@@ -1,5 +1,5 @@
 {% load app_filters admin_static %}
-<fieldset class="module aligned {{ fieldset.classes }}">
+<fieldset class="module {{ fieldset.classes }}">
 
     {{ fieldset.management_form }}
 
@@ -19,54 +19,43 @@
                         {% for field in line %}
                             {% if field.field.name == "date" %}
                                 <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group field-{{ field.field.name }}">
-                                            <div>
-                                                {{ field.label_tag }}
-                                                {{ field.field }}
-                                                {{ field.errors }}
-                                            </div>
+                                <div class="col-md-4">
+                                    <div class="form-group field-{{ field.field.name }}">
+                                        <div>
+                                            {{ field.label_tag }}
+                                            {{ field.field }}
+                                            {{ field.errors }}
                                         </div>
                                     </div>
                                 </div>
                             {% endif %}
 
-                            {% if field.field.name == "description" %}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group field-{{ field.field.name }}">
-                                            <div>
-                                                {{ field.label_tag }}
-                                                {{ field.field|addcss:"form-control" }}
-                                                {{ field.errors }}
-                                            </div>
-                                        </div>
+                        {% if field.field.name == "description" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
                                 </div>
-                            {% endif %}
+                            </div>
+                        {% endif %}
 
-
-
-
-
-
-
-                            {% if field.field.name == "payment_status" %}
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="form-group field-{{ field.field.name }}">
-                                            <div>
-                                                {{ field.label_tag }}
-                                                {{ field.field|addcss:"form-control" }}
-                                                {{ field.errors }}
-                                            </div>
-                                        </div>
+                        {% if field.field.name == "payment_status" %}
+                            <div class="col-md-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
                                     </div>
-
                                 </div>
+                            </div>
+                            </div>
 
 
-                            {% endif %}
+                        {% endif %}
                             {% if field.field.name == "version" %}
                                 {{ field.field|addcss:"form-control" }}
                             {% endif %}
