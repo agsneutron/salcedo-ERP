@@ -1,123 +1,6 @@
-{% extends "admin/base_site.html" %}
-{% load i18n admin_static %}
-{% block coltype %}colMS{% endblock %}
-
-
-{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
-
-{% block breadcrumbs %}{% endblock %}
-{% block extrastyle %}{{ block.super }}
-    <style>
-        p {
-            margin: 0;
-        }
-
-        hr {
-            display: block;
-            border-top: 1px solid #00a09b;
-            margin: 10px 0;
-        }
-
-        .card .card-block, .card.card-block {
-            padding: 20px;
-            padding: 0rem;
-        }
-
-        .card.card-info {
-            border-bottom: solid 0px #00bcd4;
-            border-radius: 0px;
-        }
-
-        .card {
-            box-shadow: none;
-            box-shadow: 0 0px 0px 0 rgba(0, 0, 0, .14), 0 0px 0px 0px rgba(0, 0, 0, .2), 0 0px 0px 0 rgba(0, 0, 0, .12);
-            border-radius: 2px;
-            background-color: #fff;
-            margin-bottom: 20px;
-            margin-bottom: 2rem;
-        }
-
-        .truncate {
-            width: 420px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .ms-hero-bg-info:after {
-            background-color: #204280 !important;
-        }
-
-        .list-group .list-group-item, .list-group a.list-group-item {
-            font-size: 13px !important;
-            line-height: 26px;
-        }
-
-        .nav.nav-tabs li a {
-            font-weight: 400;
-            padding: 1.7rem 7px;
-            color: rgba(255, 255, 255, .5) !important;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        .list-group {
-            border-left: solid 0px #eee;
-            border-right: solid 0px #eee;
-        }
-
-        .list-group .list-group-item, .list-group a.list-group-item {
-            border: 0;
-            padding: 10px 15px;
-            margin: 0;
-            transition: all ease .3s;
-            border-bottom: solid 0px #eee;
-            vertical-align: middle;
-        }
-
-        .checkbox label .checkbox-material {
-            margin-right: 10px;
-            margin-right: 0;
-        }
-
-        .list-group .list-group-item:first-child, .list-group a.list-group-item:first-child {
-            border-top: solid 0px #eee;
-        }
-
-        dd, dt {
-            line-height: 1.3 !important;
-        }
-        .ms-paper-menu-left-container .ms-paper-menu-left {
-    background-color: #eee;
-    margin-bottom: -99999px;
-    padding-bottom: 99999px;
-    position: relative;
-}
-    .ms-paper-menu-left-container .ms-paper-menu-left .ms-paper-menu-title {
-    margin: 0;
-    padding: 15px 10px;
-    text-align: center;
-    font-size: 17px;
-    font-size: 1.7rem;
-    background-color: #204280;
-    color: #fff;
-    text-transform: uppercase;
-    position: relative;
-}
-    .ms-collapse-nav li.panel a {
-    background-color: #204280;
-    color: #fff;
-}
-    .ms-collapse-nav li.panel a:hover {
-    background-color: #204280 !important;
-    color: #fff;
-}
-    </style>
-{% endblock %}
 {% block content %}
 
-    <div class="container">
-        <div class="col-md-3 ms-paper-menu-left-container">
+<div class="col-md-3 ms-paper-menu-left-container">
             <div class="ms-paper-menu-left">
                 <h3 class="ms-paper-menu-title">
                    Nómina
@@ -132,11 +15,11 @@
                                 Periodos de Nómina</a>
                             <ul id="c1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e1">
                                 <li>
-                                    <a class="withripple" href="component-typography.html">
+                                    <a class="withripple" href="/admin/HumanResources/payrollperiod/add">
                                         <i class="fa fa-plus"></i> Agregar</a>
                                 </li>
                                 <li>
-                                    <a class="withripple" href="component-headers.html">
+                                    <a class="withripple" href="/admin/HumanResources/payrollperiod/">
                                         <i class="fa fa-search"></i> Consultar</a>
                                 </li>
                             </ul>
@@ -147,11 +30,11 @@
                                 Grupo de Nómina</a>
                             <ul id="c2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e2">
                                 <li>
-                                    <a class="withripple" href="component-typography.html">
+                                    <a class="withripple" href="/admin/HumanResources/payrollgroup/add">
                                         <i class="fa fa-plus"></i> Agregar</a>
                                 </li>
                                 <li>
-                                    <a class="withripple" href="component-headers.html">
+                                    <a class="withripple" href="/admin/HumanResources/payrollgroup/">
                                         <i class="fa fa-search"></i> Consultar</a>
                                 </li>
                             </ul>
@@ -162,11 +45,11 @@
                                 Percepciones y Deducciones</a>
                             <ul id="c3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e3">
                                 <li>
-                                    <a class="withripple" href="component-typography.html">
+                                    <a class="withripple" href="/admin/HumanResources/earningsdeductions/add">
                                         <i class="fa fa-plus"></i> Agregar</a>
                                 </li>
                                 <li>
-                                    <a class="withripple" href="component-headers.html">
+                                    <a class="withripple" href="/admin/HumanResources/earningsdeductions/">
                                         <i class="fa fa-search"></i> Consultar</a>
                                 </li>
                             </ul>
@@ -178,14 +61,6 @@
             </div>
         </div>
         <!-- col-md-3 -->
-
-        <div class="col-md-9">
-            contenido
-
-        </div>
-    </div>
-
-
 
 {% endblock %}
 
