@@ -1684,3 +1684,7 @@ input[type=file] {
 .pagination li a:hover {
     background-color: #00a09b;
 }
+.vTimeField {
+    /* min-width: 4.7em; */
+    padding-left: 80px;
+}
