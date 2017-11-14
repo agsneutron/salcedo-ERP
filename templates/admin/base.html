@@ -115,7 +115,6 @@
     <!-- End Header -->
     <!-- begins navigation -- request.resolver_match.view_name }}---->
 
-
     {% if user.is_active and user.is_staff %}
         <nav class="navbar  yamm ms-navbar ms-navbar-primary">
             <div class="container container-full container-nav">
@@ -145,8 +144,6 @@
                             </a>
                         </li>
                         <li class="dropdown
-
-
 
 
 
@@ -196,8 +193,6 @@
 
 
 
-
-
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown"
@@ -236,8 +231,6 @@
 
                     </li>{% endcomment %}
                         <li class="dropdown
-
-
 
 
 
@@ -324,9 +317,7 @@
 
 
 
-
-
-                                {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete,admin:HumanResources_payrollperiod_add,admin:HumanResources_employee_changelist,admin:HumanResources_employee_add,admin:HumanResources_employee_change,admin:employee-detail,admin:HumanResources_employeeearningsdeductions_add,admin:HumanResources_testapplication_add,admin:HumanResources_employee_change,admin:HumanResources_education_add,admin:HumanResources_emergencycontact_add,admin:HumanResources_familymember_add,admin:HumanResources_workreference_add,admin:HumanResources_testapplication_add,admin:HumanResources_employeedocument_add,admin:HumanResources_employeeassistance_add,admin:HumanResources_employeepositiondescription_change,admin:HumanResources_employeepositiondescription_change,admin:HumanResources_employeefinancialdata_add,employeebyperiod,admin:HumanResources_employeeearningsdeductionsbyperiod_add,admin:HumanResources_payrollgroup_add,admin:HumanResources_earningsdeductions_add"|slice:"," %}{{ "active" }}{% endif %}">
+                                {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
 
                             {% if perms.auth.change_user or  perms.HumanResources.change_payrollperiod or perms.HumanResources.change_employee %}
                                 <a href="#" class="dropdown-toggle "
@@ -378,22 +369,16 @@
                                 {% if perms.HumanResources.change_payrollperiod %}
 
                                     <li class="dropdown-submenu">
-                                        <a href="/humanresources/payrollhome" >
+                                        <a href="#" class="has_children">
                                             <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
 
                                         <ul class="dropdown-menu dropdown-menu-left">
                                             <li>
-                                                <a href="/admin/HumanResources/payrollgroup/add/">Generar Grupo</a>
-                                            </li>
-                                            <li>
                                                 <a href="/admin/HumanResources/payrollperiod/add/">Generar Periodo</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/earningsdeductions/add/">Percepciones y Deducciones</a>
-                                            </li>
-                                            {% comment %}<li>
                                                 <a href="/admin/HumanResources/employee/">Consultar</a>
-                                            </li>{% endcomment %}
+                                            </li>
                                         </ul>
                                     </li>
                                 {% endif %}
@@ -401,8 +386,6 @@
 
                         </li>
                         <li id="op_reportes" class="dropdown
-
-
 
 
 
@@ -440,7 +423,7 @@
                 {% endif %}
 
             {% endblock messages %}
-            <a onclick="goBack()" class="btn-circle btn-circle-default go-back-btn"><i
+            <a onclick="goBack()" class="btn-circle btn-circle-default go-back-btn" style="position: absolute; top:0;"><i
                     class="fa fa-arrow-left"></i></a>
         </nav>
     {% endif %}
@@ -634,16 +617,14 @@
 
 </script>
 <script>
-    $(document).ready(function () {
-        $('table.table_s').DataTable({
 
-            columnDefs: [
-                {
-                    className: 'mdl-data-table__cell--non-numeric'
-                }
-            ],
+    $(document).ready(function () {
+       $('table.table_s').DataTable({
+
+
 
             responsive: true,
+           paging: true,
             "bInfo": false,
             "pageLength": 10,
             "bLengthChange": false, //used to hide the property
@@ -675,13 +656,7 @@
         });
         document.getElementById('DataTables_Table_1_wrapper').style.width = "100%";
         document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
-
-
-
-
     });
-       $('.vDateField').addClass('form-control');
-
 </script>
 
 {% comment %}<script>
@@ -698,6 +673,10 @@
 	});
 </script>{% endcomment %}
 <!-- Latest compiled and minified JavaScript -->
-
+ <script>
+        $(document).ready(function () {
+            $('.vDateField').addClass('form-control');
+        });
+    </script>
 </body>
 </html>
