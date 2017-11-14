@@ -38,56 +38,60 @@
     </table>{% endcomment %}
 
 
-    <div class="col-xs-12" style="margin-bottom: 25px">
+    <div class="col-xs-10 col-xs-offset-1" style="margin-bottom: 25px">
         <div class="card">
             <div class="card-block text-center">
                 <div class="row">
 
-                    <div class="col-xs-4 text-left">
-                        <div style="display: inline-flex">
-                        <span class="ms-icon ms-icon-circle ms-icon mb-4 color-info"
+                    <div class="col-xs-12 text-center">
+                        <div style="">
+                        <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"
                               style="margin-bottom: 0rem !important"><i
                                 class="zmdi zmdi-city-alt"></i></span>
                             <h3 class="color-info">Bitácoras</h3>
                         </div>
 
                     </div>
-                    <div class="col-xs-4 text-left">
-                        <div style="    padding-top: 15px;">
-                            <dl>
-                                <dd>Proyecto</dd>
-                                <dt>{{ progressestimatelog.project.nombreProyecto }}</dt>
 
-                            </dl>
-                        </div>
-                    </div>
-                    <div class="col-xs-4 text-left">
-                        <div style="    padding-top: 15px;">
-                            <dl>
-                                <dd>Fecha</dd>
-                                <dt>{{ progressestimatelog.date }}</dt>
-                            </dl>
-                        </div>
-                    </div>
+                        <div class="col-xs-3 text-left">
+                            <div style="">
+                                <dl>
+                                    <dd>Proyecto</dd>
+                                    <dt>{{ progressestimatelog.project.nombreProyecto }}</dt>
 
-                    <div class="clearfix"></div>
-                    <div class="col-xs-12 text-left">
-                        <div style="    padding-top: 15px;">
-                            <dl>
-                                <dd>Notas</dd>
-                                <dt>{{ progressestimatelog.description }}</dt>
-                                <hr>
-                            </dl>
+                                </dl>
+                            </div>
                         </div>
-                        <div style="    padding-top: 15px;">
-                            <dl>
-                                <dd>Estado</dd>
-                                <dt>{{ progressestimatelog.get_status_display }}</dt>
-                                <hr>
-                            </dl>
+                        <div class="col-xs-3 text-left">
+                            <div >
+                                <dl>
+                                    <dd>Fecha</dd>
+                                    <dt>{{ progressestimatelog.date }}</dt>
+
+                                </dl>
+                            </div>
                         </div>
-                    </div>
-                    <div class="clearfix"></div>
+
+                        <div class="col-xs-3 text-left">
+                            <div>
+                                <dl>
+                                    <dd>Notas</dd>
+                                    <dt>{{ progressestimatelog.description }}</dt>
+
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="col-xs-3 text-left">
+                            <div>
+                                <dl>
+                                    <dd>Estado</dd>
+                                    <dt>{{ progressestimatelog.get_status_display }}</dt>
+
+                                </dl>
+                            </div>
+                        </div>
+
+
                     <div class="col-xs-12 text-left">
                         <div class="card card-default">
                             <div class="card-header">
@@ -99,7 +103,7 @@
                                     <thead>
                                     <tr>
                                         <th>Archivo</th>
-
+                                        <th style="width: 5%">Descargar</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -107,9 +111,11 @@
                                         <tr>
                                             <td>
                                                 {{ logfile.file.name }}
-                                                <a download="" href="/media/{{ logfile.file }}">Descargar</a>
                                             </td>
-
+                                            <td>
+                                                <a href="/media/{{ logfile.file }}" class="btn btn-raised btn-default btn-xs"><i class="fa fa-download color-default eliminar"></i><div class="ripple-container"></div></a>
+                                                {% comment %}<a download="" href="/media/{{ logfile.file }}">Descargar</a>{% endcomment %}
+                                            </td>
                                         </tr>
                                     {% empty %}
                                         <li>No se encontraron Estimaciones.</li>
@@ -120,7 +126,6 @@
                                 <div>No se encontraron Estimaciones.</div>
                             {% endif %}
                         </div>
-
                     </div>
 
                 </div>
