@@ -186,6 +186,5 @@ def payrollhome(request):
     period_data
     #context = RequestContext.request
     context = {'employees': employees,
-               'payrollperiod': payrollperiod,
                'payrolldata':period_data}
     return HttpResponse(template.render(context,request))
