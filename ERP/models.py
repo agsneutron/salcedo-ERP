@@ -626,6 +626,7 @@ class ContratoContratista(models.Model):
     payment_distribution= models.CharField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
     assigment_number = models.IntegerField(verbose_name="Número de asignación", max_length=1024, null=False, blank=False)
     pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
+    advanced_payment = models.FloatField(verbose_name="Anticipio", null=False, blank=False, default=0)
 
 
     class Meta:
