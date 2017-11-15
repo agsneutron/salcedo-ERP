@@ -195,6 +195,109 @@
                                 </div>
                             </div>
                         </div>
+                    {% endif %}
+                    {% if field.field.name == "employer_registration_number" %}
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "infonavit" %}
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "services" %}
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "tax_person_type" %}
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+                    {% if field.field.name == "bank" %}
+
+                        <h2 class="text-center" style="margin-top: 300px;">Datos Bancarios</h2>
+                        <hr>
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "bank_account_name" %}
+
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+
+                    {% if field.field.name == "bank_account" %}
+
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
+
+                    {% endif %}
+                    {% if field.field.name == "CLABE" %}
+
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     {% endif %}
                         {% if field.field.name == "version" %}

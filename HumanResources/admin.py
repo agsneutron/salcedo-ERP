@@ -588,6 +588,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         }),
     )
 
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeePositionDescriptionAdmin, self).get_form(request, obj, **kwargs)
@@ -600,6 +601,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
 
     # Overriding the add_wiew method for the employee position description admin.
     def add_view(self, request, form_url='', extra_context=None):

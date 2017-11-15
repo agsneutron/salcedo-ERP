@@ -36,6 +36,8 @@ import locale
 
 from django.template import Library
 
+#from HumanResources.models import Bank
+
 
 # Create your models here.
 
@@ -388,6 +390,25 @@ class Contratista(models.Model):
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
+    # Aggregated fields as part of the requirements found in the training.
+    bank = models.ForeignKey('Bank', verbose_name="Banco", null=True, blank=False)
+    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True, blank=True)
+    bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
+    CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
+    CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
+    employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24, default="", null=True, blank=True)
+    infonavit = models.CharField(verbose_name="Infonavit", max_length=24, default="", null=True, blank=True)
+    services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
+
+    FISICA = "f"
+    MORAL = "m"
+
+    TYPE_CHOICES = (
+        (FISICA, 'Física'),
+        (MORAL, 'Moral'),
+    )
+    tax_person_type = models.CharField(verbose_name="Tipo de Persona", max_length=1, default=MORAL, null=False, blank=False, choices=TYPE_CHOICES)
+
     class Meta:
         verbose_name_plural = 'Contratista'
 
@@ -453,6 +474,9 @@ class Contact(models.Model):
                              auto_choose=True,
                              sort=True,
                              verbose_name="Municipio")
+
+    # Aggregated fields as part of the requirements found in the training.
+    is_legal_representantive = models.BooleanField(verbose_name="Representante Legal", default=False, null=False)
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -553,6 +577,10 @@ class Empresa(models.Model):
             Logs.log("Couldn't save")
 
 
+def upload_contract_file(instance, filename):
+    return '/'.join(['documentosFuente', instance.proyecto.key, 'contracts',instance.contratista.nombreContratista])
+
+
 class ContratoContratista(models.Model):
     version = IntegerVersionField()
     clave_contrato = models.CharField(verbose_name='Clave del Contrato', max_length=32, null=False, blank=False)
@@ -593,6 +621,12 @@ class ContratoContratista(models.Model):
     )
 
     concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
+
+    # Aggregated fields as part of the requirements found in the training.
+    payment_distribution= models.CharField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
+    assigment_number = models.IntegerField(verbose_name="Número de asignación", max_length=1024, null=False, blank=False)
+    pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
+
 
     class Meta:
         verbose_name_plural = 'Contratos'
@@ -1809,3 +1843,18 @@ class EstimateAdvanceAuthorization(models.Model):
 
     def __unicode__(self):
         return self.full_name
+
+
+
+class Bank(models.Model):
+    name = models.CharField(max_length=2512, null=False, blank=False, verbose_name="Nombre")
+
+    class Meta:
+        verbose_name = "Banco"
+        verbose_name_plural = "Bancos"
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name

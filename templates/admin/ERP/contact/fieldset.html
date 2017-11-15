@@ -228,6 +228,17 @@
                                 </div>
                             </div>
                         </div>
+                    {% endif %}
+                    {% if field.field.name == "is_legal_representantive" %}
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
                         </div>
                     {% endif %}
                         {% if field.field.name == "version" %}
