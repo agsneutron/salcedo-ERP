@@ -17,21 +17,21 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='estimate',
             name='end_date',
-            field=models.DateField(default=datetime.datetime(2017, 11, 13, 8, 24, 41, 768109, tzinfo=utc), null=True, verbose_name='Fecha de fin'),
+            field=models.DateField(default=datetime.datetime(2017, 11, 13, 8, 24, 21, 443348, tzinfo=utc), null=True, verbose_name='Fecha de fin'),
         ),
         migrations.AlterField(
             model_name='estimate',
             name='period',
-            field=models.DateField(default=datetime.datetime(2017, 11, 13, 8, 24, 41, 768145, tzinfo=utc), null=True, verbose_name='Periodo'),
+            field=models.DateField(default=datetime.datetime(2017, 11, 13, 8, 24, 21, 443381, tzinfo=utc), null=True, verbose_name='Periodo'),
         ),
         migrations.AlterField(
             model_name='estimate',
             name='start_date',
-            field=models.DateField(default=datetime.datetime(2017, 11, 13, 8, 24, 41, 767921, tzinfo=utc), null=True, verbose_name='Fecha de inicio'),
+            field=models.DateField(default=datetime.datetime(2017, 11, 13, 8, 24, 21, 443303, tzinfo=utc), null=True, verbose_name='Fecha de inicio'),
         ),
         migrations.AlterField(
             model_name='progressestimatelog',
             name='date',
-            field=models.DateTimeField(default=datetime.datetime(2017, 11, 13, 8, 24, 41, 771109, tzinfo=utc), null=True, verbose_name='Fecha'),
+            field=models.DateTimeField(default=datetime.datetime(2017, 11, 13, 8, 24, 21, 446141, tzinfo=utc), null=True, verbose_name='Fecha'),
         ),
     ]

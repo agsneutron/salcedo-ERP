@@ -188,7 +188,7 @@
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Documentación
                                 </a>
-                                <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/employeeassistance/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
+                                <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/checkerdata/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeeassistance_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Checador
                                 </a>

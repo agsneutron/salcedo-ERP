@@ -53,7 +53,7 @@ class PayrollGroup(models.Model):
 
 # Employee General Information.
 class Employee(models.Model):
-    employee_key = models.CharField(verbose_name="Clave del Empleado", max_length=64, null=False, blank=False, unique=False)
+    employee_key = models.CharField(verbose_name="Clave", max_length=64, null=False, blank=False, unique=False)
     name = models.CharField(verbose_name="Nombre", max_length=255, null=False, blank=False, unique=False)
     first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
     second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
