@@ -1808,4 +1808,4 @@ class EstimateAdvanceAuthorization(models.Model):
         return self.full_name
 
     def __unicode__(self):
-        return self.descripcion
+        return self.full_name

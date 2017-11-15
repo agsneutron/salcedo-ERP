@@ -44,40 +44,38 @@
                 <div class="row">
                 <span class="ms-icon ms-icon-circle ms-icon mb-4 color-info" style="margin-bottom: 0rem !important"><i
                         class="zmdi zmdi-city-alt"></i></span>
-                    <h3 class="color-info">Estimación</h3>
-                    <div class="color-info" style="padding-bottom: 15px">
-                        {% if estimate.lock_status == 'L' %}
+                    <h3 class="color-info">
 
-                            {% if perms.ERP.can_unlock_estimate %}
-                                <form action="/admin/ERP/estimate/apply_deductions_to_estimate" method="post"
-                                      style="display: inline-block">
-                                    {% csrf_token %}
-                                    <input type="hidden" name="estimate_id" value="{{ estimate.id }}">
-                                    <i class="fa fa-lock" onclick="submit()" style="cursor: pointer;"></i>
-                                </form>
+                        {% if perms.ERP.can_unlock_estimate and  estimate.lock_status == 'L' %}
+                            <form action="/admin/ERP/estimate/apply_deductions_to_estimate" method="post"
+                                  style="display: inline-block" id="unlock_form" name="unlock_form">
+                                {% csrf_token %}
+                                <input type="hidden" name="estimate_id" value="{{ estimate.id }}">
+                                <i class="fa fa-lock" onclick="unlock_form.submit()" style="cursor: pointer;"></i>
+                            </form>
 
-                            {% else %}
-                                <i class="fa fa-lock"></i>
-                            {% endif %}
-
-
+                        {% elif estimate.lock_status == 'U' or estimate.lock_status == 'C' %}
+                            <i class="fa fa-unlock"></i>
+                        {% else %}
+                            <i class="fa fa-lock"></i>
                         {% endif %}
 
-                        {% if estimate.lock_status == 'U' %}
-                            <i class="fa fa-unlock"></i> &nbsp; | &nbsp;
-                        {% endif %}
 
+
+
+                        Estimación
                         {% if perms.ERP.change_estimate %}
                             <a href="/admin/ERP/estimate/{{ estimate.id }}/change/">
-                                <i class="fa fa-pencil"></i>
-                            </a> &nbsp; | &nbsp;
+                                <i class="fa fa-pencil color-default eliminar"></i>
+                            </a>
                         {% endif %}
 
                         <a href="/reporting/get_estimates_report?project_id={{ estimate.contract.project.id }}&estimate_id={{ estimate.id }}">
                             <i class="fa fa-print"></i>
                         </a>
-                    </div>
 
+
+                    </h3>
 
                     <div class="col-xs-12 col-sm-6 text-left">
 
@@ -380,9 +378,9 @@
                     </div>
                 </div>
 
+
             </div>
         </div>
-    </div>
     </div>
 
 
