@@ -92,7 +92,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     list_display_links = None
 
     def get_full_name(self, obj):
-        return obj.name + " " + obj.first_last_name + " " + obj.second_last_name
+        return obj.get_full_name()
 
     def get_detail_column(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
@@ -964,6 +964,20 @@ class PayrollGroupAdmin(admin.ModelAdmin):
     )
 
 
+
+
+    list_display = ('name','get_detail_button')
+
+
+
+
+
+    def get_detail_button(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+    get_detail_button.short_description = 'Ver'
+    get_detail_button.allow_tags = True
+
     # Adding extra context to the change view.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
@@ -978,32 +992,56 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
         return super(PayrollGroupAdmin, self).add_view(request, form_url, extra_context=extra)
 
+
+
+    def get_urls(self):
+        urls = super(PayrollGroupAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.PayrollPeriodListView.as_view(), name='payroll-detail'),
+        ]
+        return my_urls + urls
+
+
 # Payroll Period Admin.
 @admin.register(PayrollPeriod)
 class PayrollPeriodAdmin(admin.ModelAdmin):
+
     form = PayrollPeriodForm
-
-
     fieldsets = (
         ("Periodos de Nómina", {
-            'fields': ('name','start_period','end_period', 'week', 'month', 'year', 'payroll_group','payroll_to_process')
+            'fields': ('name','start_period','end_period', 'payroll_group','payroll_to_process')
         }),
     )
 
-
+    def response_add(self, request, obj, post_url_continue=None):
+        return HttpResponseRedirect('/admin/HumanResources/payrollgroup/'+str(obj.payroll_group.id)+'/')
     # Adding extra context to the change view.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
-        #employee_id = request.GET.get('employee')
+        payroll_group_id = request.GET.get('payroll_group')
+
+        print 'the id id ' + str(payroll_group_id)
+
         period_set = PayrollPeriod.objects.all()
+
+        if payroll_group_id is not None:
+            period_set = period_set.filter(payroll_group_id=payroll_group_id)
 
         extra['template'] = "payrollperiod"
         extra['period'] = period_set
 
 
         return super(PayrollPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def get_urls(self):
+        urls = super(PayrollPeriodAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.PayrollPeriodDetail.as_view(), name='payroll-period-detail'),
+            url(r'^employee/(?P<pk>\d+)/$', views.PayrollPeriodEmployeeDetail.as_view(), name='payroll-period-detail'),
+        ]
+        return my_urls + urls
 
 
 # Tax Regime Admin.
