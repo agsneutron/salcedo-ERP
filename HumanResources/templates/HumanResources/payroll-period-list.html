@@ -1,0 +1,64 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block content %}
+
+
+    <div class="card ">
+        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+            <li role="presentation" class="active">
+                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                    Grupo de Nómina: {{ payrollgroup.name }}
+                </a>
+            </li>
+
+
+            <div class="item-right">
+
+                <a href="/admin/HumanResources/payrollperiod/add/?payroll_group={{ payrollgroup.id }}"
+                   class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
+                        class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                </a>
+            </div>
+        </ul>
+        <div class="card-block">
+            <div class="tab-content">
+
+
+                <div class="table-responsive mt-15">
+                    {% if object_list %}
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th>Periodo Inicial</th>
+                                <th>Periodo Final</th>
+                                <th>Tipo de Nómina</th>
+                                <th>Ver</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for object in object_list %}
+                                <tr>
+                                    <td>{{ object.id }}</td>
+                                    <td>{{ object.name }}</td>
+                                    <td>{{ object.start_period }}</td>
+                                    <td>{{ object.end_period }}</td>
+                                    <td>{{ object.payroll_to_process }}</td>
+                                    <td><a href="/admin/HumanResources/payrollperiod/{{ object.id }}/" class="btn btn-raised btn-default btn-xs"><i class="fa fa-eye color-default eliminar"> </i><div class="ripple-container"></div></a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        No hay periodos aún.
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
