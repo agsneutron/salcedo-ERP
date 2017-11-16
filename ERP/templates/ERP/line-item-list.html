@@ -12,6 +12,11 @@
                         insumos</a>
              </div>
     </div>{% endcomment %}
+
+    
+
+
+
     {% if parent_line_item is not None %}
         <h3 class="color-info text-center">Partida Actual: {{ parent_line_item.description }}</h3>
     {% endif %}
@@ -37,9 +42,9 @@
 
                         {% if line_item.can_be_deleted %}
 
-                        <a href="/admin/ERP/lineitem/{{ line_item.id }}/delete/"
-                           class="btn btn-raised btn-default btn-xs"><i
-                                class="fa fa-trash-o color-danger eliminar"></i> </a>
+                            <a href="/admin/ERP/lineitem/{{ line_item.id }}/delete/"
+                               class="btn btn-raised btn-default btn-xs"><i
+                                    class="fa fa-trash-o color-danger eliminar"></i> </a>
                         {% endif %}
 
                     </td>
@@ -81,9 +86,9 @@
     </div>
 
     {#          {% include 'ERP/list-pagination.html' %}#}
- </div>
-             </div>
-         </div>
     </div>
- </div>
+    </div>
+    </div>
+    </div>
+    </div>
 {% endblock %}

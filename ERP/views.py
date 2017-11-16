@@ -540,7 +540,6 @@ class LineItemListView(ListView):
     """
        Display a Blog List page filtered by the search query.
     """
-    paginate_by = 10
 
     def get_queryset(self):
         result = super(LineItemListView, self).get_queryset()
@@ -567,18 +566,20 @@ class LineItemListView(ListView):
         result = result.filter(
             Q(project__id=LineItemListView.project_id) & Q(parent_line_item__id=LineItemListView.parent_id))
 
+
+
         # Query to filter the list content.
         query = self.request.GET.get('q')
 
         if query:
             LineItemListView.query = query
             query_list = query.split()
-            result = result.filter(
-                reduce(operator.and_,
-                       (Q(key__icontains=q) for q in query_list)) |
-                reduce(operator.and_,
-                       (Q(description__icontains=q) for q in query_list))
-            )
+            # result = result.filter(
+            #     reduce(operator.and_,
+            #            (Q(key__icontains=q) for q in query_list)) |
+            #     reduce(operator.and_,
+            #            (Q(description__icontains=q) for q in query_list))
+            # )
         else:
             LineItemListView.query = ''
 
