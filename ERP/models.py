@@ -577,7 +577,7 @@ class Empresa(models.Model):
 
 
 def upload_contract_file(instance, filename):
-    return '/'.join(['documentosFuente', instance.proyecto.key, 'contracts',instance.contratista.nombreContratista])
+    return '/'.join(['documentosFuente', instance.project.key, 'contracts',instance.contratista.nombreContratista])
 
 
 class ContratoContratista(models.Model):
