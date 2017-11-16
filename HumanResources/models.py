@@ -13,7 +13,7 @@ from django.core.validators import MinValueValidator,MaxValueValidator
 from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
-from ERP.models import Pais, Estado, Municipio, Project
+from ERP.models import Pais, Estado, Municipio, Project, Bank
 
 # Create your models here.
 from multiselectfield import MultiSelectField
@@ -53,7 +53,7 @@ class PayrollGroup(models.Model):
 
 # Employee General Information.
 class Employee(models.Model):
-    employee_key = models.CharField(verbose_name="Clave del Empleado", max_length=64, null=False, blank=False, unique=False)
+    employee_key = models.CharField(verbose_name="Clave", max_length=64, null=False, blank=False, unique=False)
     name = models.CharField(verbose_name="Nombre", max_length=255, null=False, blank=False, unique=False)
     first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
     second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
@@ -772,14 +772,6 @@ class EmployeeFinancialData(models.Model):
         ('T', 'Transferencia Interbancaria'),
     )
 
-    BANK_CHOICES = (
-        ('1', 'BANCOMER'),
-        ('2', 'BANAMEX'),
-        ('3', 'BANORTE'),
-        ('4', 'SANTANDER'),
-        ('5', 'HSBC'),
-    )
-    bank = models.CharField(max_length=1, choices=BANK_CHOICES)
 
     account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, default=0)
     CLABE = models.IntegerField(verbose_name='CLABE', null=False, default=0)
@@ -789,6 +781,7 @@ class EmployeeFinancialData(models.Model):
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,verbose_name='Forma de Pago')
+    bank = models.ForeignKey(Bank, null=False, blank=False, verbose_name="Banco")
 
 
     class Meta:

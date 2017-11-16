@@ -253,7 +253,31 @@
                         </div>
                     {% endif %}{% endcomment %}
 
+                        {% if field.field.name == "payment_distribution" %}
+                            <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
 
+                        {% if field.field.name == "assigment_number" %}
+                            <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
 
                         {% if field.field.name == "objeto_contrato" %}
                             <div class="row">
@@ -289,6 +313,18 @@
                                 </div>
                             </div>
                         </div>
+
+                    {% endif %}
+                    {% if field.field.name == "pdf_version" %}
+                        <div class="col-sm-6">
+                            <div class="form-group field-{{ field.field.name }}">
+                                <div>
+                                    {{ field.label_tag }}
+                                    {{ field.field|addcss:"form-control" }}
+                                    {{ field.errors }}
+                                </div>
+                            </div>
+                        </div>
                         </div>
 
 
@@ -296,8 +332,8 @@
 
                 </div>
 
-</fieldset>
- {% endif %}
+                </fieldset>
+                {% endif %}
                         {% if field.field.name == "version" %}
                             {{ field.field|addcss:"form-control" }}
                         {% endif %}

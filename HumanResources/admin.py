@@ -88,7 +88,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    list_display = ('get_full_name','get_detail_column','get_change_column', 'get_delete_column','get_payroll_column')
+    list_display = ('employee_key','get_full_name','work_email','get_detail_column','get_change_column', 'get_delete_column','get_payroll_column')
     list_display_links = None
 
     def get_full_name(self, obj):
@@ -588,6 +588,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         }),
     )
 
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeePositionDescriptionAdmin, self).get_form(request, obj, **kwargs)
@@ -600,6 +601,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
 
     # Overriding the add_wiew method for the employee position description admin.
     def add_view(self, request, form_url='', extra_context=None):
