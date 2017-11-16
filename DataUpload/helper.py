@@ -138,6 +138,8 @@ class DBObject(object):
             :param record_list_length: The length of the first row of the file used for the upload of line items.
             :return: The maximum level of line items the specified project will have.
             """
+
+            print 'max level: ' + str(record_list_length - 1)
             cls.max_level = record_list_length - 1
 
         @classmethod
@@ -235,6 +237,7 @@ class DBObject(object):
                 self.save_all_concept_input(record_list, model, project_id)
             elif model == self.LINE_ITEM_UPLOAD:
                 # Handle line items
+                print 'the project id is: ' + str(project_id)
                 self.save_all_line_items(record_list, project_id)
             else:
                 raise ErrorDataUpload(
@@ -261,6 +264,8 @@ class DBObject(object):
             raise e
 
     def save_all_line_items(self, record_list, project_id):
+
+        print 'Saving all line_items'
         self.LineItemConstants.set_max_level(len(record_list[0]))
 
         try:
@@ -269,6 +274,7 @@ class DBObject(object):
                 print record
 
                 if record[self.LineItemConstants.get_max_level()] != "":
+                    print 'will save'
                     self.save_line_item(record, project_id)
 
         except Exception, e:
@@ -288,7 +294,7 @@ class DBObject(object):
 
         # If the file defines a parent for the line item, we will check if it exists.
         if line_item_has_parent:
-            line_item_qs = LineItem.objects.filter(key=line_item_parent_key.upper())
+            line_item_qs = LineItem.objects.filter(Q(key=line_item_parent_key.upper()) & Q(project_id=project_id))
             if line_item_parent_key is not None and len(line_item_qs) == 0:
                 raise ErrorDataUpload(
                     'No existe la partida padre con clave ' + line_item_parent_key + ' para la partida ' + line_item_key + '.',
@@ -298,7 +304,7 @@ class DBObject(object):
 
             # Now we'll check if the top parent exists
             if line_item_top_parent_key is not None:
-                line_item_qs = LineItem.objects.filter(key=line_item_top_parent_key.upper())
+                line_item_qs = LineItem.objects.filter(Q(key=line_item_top_parent_key.upper()) & Q(project_id=project_id))
                 if line_item_top_parent_key is not None and len(line_item_qs) == 0:
                     raise ErrorDataUpload(
                         'No existe la partida padre con clave ' + line_item_top_parent_key + ' para la partida ' + line_item_key + '.',
@@ -312,11 +318,16 @@ class DBObject(object):
         # Now we will validate that a line item with a duplicated key is not being added.
         # We will do that by first checking if the key already exists on the database.
         # If the key already exists, we have to make sure the description is also the same.
+
         line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
         if len(line_item_validation_qs) != 0:
             # The key already exists. Make sure the description is the same for both instances.
             old_description = line_item_validation_qs[0].description
             new_description = line_item_description
+
+
+            print 'there were items on the validation qs'
+            print line_item_validation_qs[0]
 
             if old_description != new_description:
                 project_key = Project.objects.filter(Q(pk=project_id))[0].key
@@ -333,6 +344,7 @@ class DBObject(object):
                                      top_parent_line_item_id=top_parent_id,
                                      description=line_item_description)
             line_item_obj.save()
+            print 'saved line item ----- '
 
     def concept_has_been_estimated(self, concept_id):
         # Check if there are contracts with the concept

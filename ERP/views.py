@@ -562,6 +562,7 @@ class LineItemListView(ListView):
         print "Project Id: " + str(LineItemListView.project_id)
         print "Parent Id: " + str(LineItemListView.parent_id)
 
+
         # Filtering the results.
         result = result.filter(
             Q(project__id=LineItemListView.project_id) & Q(parent_line_item__id=LineItemListView.parent_id))

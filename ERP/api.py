@@ -111,7 +111,7 @@ class CleanProject(View):
 
 
 
-        return HttpResponse('ok', 'application/json; charset=utf-8')
+        return HttpResponse('ok cleaning project', 'application/json; charset=utf-8')
 
 
 class CleanEstimate(View):
