@@ -301,6 +301,7 @@ class DBObject(object):
                     LoggingConstants.ERROR, self.user_id)
             else:
                 parent_id = line_item_qs[0].id
+                print '1 el padre es ' + str(line_item_qs[0].id)
 
             # Now we'll check if the top parent exists
             if line_item_top_parent_key is not None:
