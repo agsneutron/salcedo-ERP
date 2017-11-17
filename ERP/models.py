@@ -623,7 +623,7 @@ class ContratoContratista(models.Model):
     concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
 
     # Aggregated fields as part of the requirements found in the training.
-    payment_distribution= models.CharField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
+    payment_distribution= models.TextField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
     assigment_number = models.IntegerField(verbose_name="Número de asignación", max_length=1024, null=False, blank=False)
     pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
 

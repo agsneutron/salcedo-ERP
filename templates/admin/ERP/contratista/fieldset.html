@@ -242,23 +242,26 @@
                                 </div>
                             </div>
                         </div>
-                    {% endif %}
-
-
-                    {% if field.field.name == "bank" %}
-
-                        <h2 class="text-center" style="margin-top: 300px;">Datos Bancarios</h2>
-                        <hr>
-                        <div class="col-sm-3">
-                            <div class="form-group field-{{ field.field.name }}">
-                                <div>
-                                    {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
-                            </div>
                         </div>
                     {% endif %}
+
+
+                        {% if field.field.name == "bank" %}
+                            <div class="row">
+                            <div class="col-xs-12">
+                                <h2 class="text-center" style="">Datos Bancarios</h2>
+                                <hr>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
 
                     {% if field.field.name == "bank_account_name" %}
 
