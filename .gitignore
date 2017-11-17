@@ -3,3 +3,9 @@
 SalcedoERP/local_settings.py
 #Folders
 .idea
+
+
+
+# migrations
+ERP/migrations/
+HumanResources/migrations/

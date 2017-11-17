@@ -1024,6 +1024,31 @@ class Project(models.Model):
             Logs.log("Couldn't save")
 
 
+def upload_blueprint(instance, filename):
+    return '/'.join(['documentosFuente', instance.project.key, 'blueprints',filename])
+
+class Blueprint(models.Model):
+    file = models.FileField(verbose_name="Archivo", blank="", upload_to=upload_blueprint)
+    description = models.CharField(verbose_name="Descripción", max_length=512, null=False, blank=True, default="")
+    upload_date = models.DateField(verbose_name="Fecha de carga", auto_now=True)
+
+    # Foreign Keys.
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+
+
+    class Meta:
+        verbose_name_plural = "Planos"
+        verbose_name = "Plano"
+
+    def __str__(self):
+        return str(self.upload_date) + ": " + self.file.name
+
+
+    def __unicode__(self):
+        return str(self.upload_date) + ": " + self.file.name
+
+
+
 class PaymentSchedule(models.Model):
     JANUARY = 1
     FEBRUARY = 2
