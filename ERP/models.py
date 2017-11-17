@@ -395,7 +395,6 @@ class Contratista(models.Model):
     bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True, blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
     CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
-    CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
     employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24, default="", null=True, blank=True)
     infonavit = models.CharField(verbose_name="Infonavit", max_length=24, default="", null=True, blank=True)
     services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
@@ -578,7 +577,7 @@ class Empresa(models.Model):
 
 
 def upload_contract_file(instance, filename):
-    return '/'.join(['documentosFuente', instance.proyecto.key, 'contracts',instance.contratista.nombreContratista])
+    return '/'.join(['documentosFuente', instance.project.key, 'contracts',instance.contratista.nombreContratista])
 
 
 class ContratoContratista(models.Model):
@@ -623,9 +622,10 @@ class ContratoContratista(models.Model):
     concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
 
     # Aggregated fields as part of the requirements found in the training.
-    payment_distribution= models.TextField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
-    assigment_number = models.IntegerField(verbose_name="Número de asignación", max_length=1024, null=False, blank=False)
+    payment_distribution= models.CharField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
+    assigment_number = models.IntegerField(verbose_name="Número de asignación",  null=False, blank=False)
     pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
+    advanced_payment = models.FloatField(verbose_name="Anticipio", null=False, blank=False, default=0)
 
 
     class Meta:
