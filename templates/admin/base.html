@@ -369,16 +369,31 @@
                                 {% if perms.HumanResources.change_payrollperiod %}
 
                                     <li class="dropdown-submenu">
-                                        <a href="#" class="has_children">
+                                        <a href="" >
                                             <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
 
                                         <ul class="dropdown-menu dropdown-menu-left">
                                             <li>
+                                                <a href="/admin/HumanResources/payrollgroup/add/">Generar Grupo</a>
+                                            </li>
+                                            <li>
                                                 <a href="/admin/HumanResources/payrollperiod/add/">Generar Periodo</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/employee/">Consultar</a>
+                                                <a href="/admin/HumanResources/earningsdeductions/add/">Percepciones y Deducciones</a>
                                             </li>
+                                             <li>
+                                                <a href="/admin/HumanResources/">Asistencias</a>
+                                            </li>
+                                             <li>
+                                                <a href="/admin/HumanResources/">Préstamos</a>
+                                            </li>
+                                             <li>
+                                                <a href="/admin/HumanResources/">Bajas</a>
+                                            </li>
+                                            {% comment %}<li>
+                                                <a href="/admin/HumanResources/employee/">Consultar</a>
+                                            </li>{% endcomment %}
                                         </ul>
                                     </li>
                                 {% endif %}
@@ -423,7 +438,7 @@
                 {% endif %}
 
             {% endblock messages %}
-            <a onclick="goBack()" class="btn-circle btn-circle-default go-back-btn" style="position: absolute; top:0;"><i
+            <a onclick="goBack()" class="btn-circle btn-circle-default go-back-btn"><i
                     class="fa fa-arrow-left"></i></a>
         </nav>
     {% endif %}
@@ -621,10 +636,13 @@
     $(document).ready(function () {
        $('table.table_s').DataTable({
 
-
+            columnDefs: [
+                {
+                    className: 'mdl-data-table__cell--non-numeric'
+                }
+            ],
 
             responsive: true,
-           paging: true,
             "bInfo": false,
             "pageLength": 10,
             "bLengthChange": false, //used to hide the property
@@ -657,6 +675,8 @@
         document.getElementById('DataTables_Table_1_wrapper').style.width = "100%";
         document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
     });
+       $('.vDateField').addClass('form-control');
+
 </script>
 
 {% comment %}<script>
@@ -673,10 +693,6 @@
 	});
 </script>{% endcomment %}
 <!-- Latest compiled and minified JavaScript -->
- <script>
-        $(document).ready(function () {
-            $('.vDateField').addClass('form-control');
-        });
-    </script>
+
 </body>
 </html>

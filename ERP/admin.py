@@ -95,7 +95,6 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
         project.widget.can_add_related = False
         project.widget.can_change_related = False
 
-
         class ModelFormEMetaClass(ModelFormE):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
@@ -716,7 +715,7 @@ class ContactModelAdmin(admin.ModelAdmin):
         fields = (
             'name', 'rfc', 'contractor', 'email', 'phone_number_1', 'phone_number_2', 'country', 'state', 'town',
             'post_code',
-            'street', 'number', 'colony', 'version',)
+            'street', 'number', 'colony', 'is_legal_representantive', 'version',)
         return fields
 
     def get_urls(self):
@@ -769,7 +768,8 @@ class ContractorModelAdmin(admin.ModelAdmin):
         fields = (
             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
             'calle',
-            'numero', 'colonia', 'version')
+            'numero', 'colonia', 'employer_registration_number', 'infonavit', 'services', 'tax_person_type', 'version',
+            'bank', 'bank_account_name', 'bank_account', 'CLABE')
         return fields
 
     def get_urls(self):
@@ -828,7 +828,8 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         fields = (
             'clave_contrato', 'project', 'line_item', 'no_licitacion', 'contratista', 'modalidad_contrato',
             'dias_pactados', 'dependencia', 'fecha_firma', 'fecha_inicio', 'fecha_termino',
-            'monto_contrato', 'porcentaje_iva', 'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version',)
+            'monto_contrato', 'porcentaje_iva',  'assigment_number', 'pdf_version', 'payment_distribution', 'objeto_contrato',
+            'lugar_ejecucion', 'observaciones', 'version')
         return fields
 
     def get_urls(self):
@@ -1260,8 +1261,6 @@ class EstimateAdmin(admin.ModelAdmin):
         contract.widget.can_add_related = False
         contract.widget.can_change_related = False
 
-
-
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
@@ -1351,3 +1350,4 @@ admin.site.register(LogFile, LogFileAdmin)
 admin.site.register(AccessToProject, AccessToProjectAdmin)
 admin.site.register(Section)
 admin.site.register(ProjectSections)
+admin.site.register(Bank)

@@ -1,67 +1,112 @@
 
 {% block content %}
 
-<div class="col-md-3 ms-paper-menu-left-container">
-            <div class="ms-paper-menu-left">
-                <h3 class="ms-paper-menu-title">
-                   Nómina
+    <div class="col-md-3 ms-paper-menu-left-container">
+        <div class="ms-paper-menu-left">
+            <h3 class="ms-paper-menu-title">
+                Nómina
 
-                </h3>
-                <div class="panel-menu collapse" id="collapseMenu">
-                    <ul class="panel-group ms-collapse-nav" id="components-nav" role="tablist"
-                        aria-multiselectable="true">
-                        <li class="panel" role="tab" id="e1">
-                            <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c1"
-                               aria-expanded="true" aria-controls="c1" class="collapsed withripple">
-                                Periodos de Nómina</a>
-                            <ul id="c1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e1">
-                                <li>
-                                    <a class="withripple" href="/admin/HumanResources/payrollperiod/add">
-                                        <i class="fa fa-plus"></i> Agregar</a>
-                                </li>
-                                <li>
-                                    <a class="withripple" href="/admin/HumanResources/payrollperiod/">
-                                        <i class="fa fa-search"></i> Consultar</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="panel" role="tab" id="e2">
-                            <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c2"
-                               aria-expanded="true" aria-controls="c2" class="collapsed withripple">
-                                Grupo de Nómina</a>
-                            <ul id="c2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e2">
-                                <li>
-                                    <a class="withripple" href="/admin/HumanResources/payrollgroup/add">
-                                        <i class="fa fa-plus"></i> Agregar</a>
-                                </li>
-                                <li>
-                                    <a class="withripple" href="/admin/HumanResources/payrollgroup/">
-                                        <i class="fa fa-search"></i> Consultar</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="panel" role="tab" id="e3">
-                            <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c3"
-                               aria-expanded="true" aria-controls="c3" class="collapsed withripple">
-                                Percepciones y Deducciones</a>
-                            <ul id="c3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e3">
-                                <li>
-                                    <a class="withripple" href="/admin/HumanResources/earningsdeductions/add">
-                                        <i class="fa fa-plus"></i> Agregar</a>
-                                </li>
-                                <li>
-                                    <a class="withripple" href="/admin/HumanResources/earningsdeductions/">
-                                        <i class="fa fa-search"></i> Consultar</a>
-                                </li>
-                            </ul>
-                        </li>
+            </h3>
+            <div class="panel-menu collapse" id="collapseMenu">
+                <ul class="panel-group ms-collapse-nav" id="components-nav" role="tablist"
+                    aria-multiselectable="true">
+                    <li class="panel" role="tab" id="e2">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c2"
+                           aria-expanded="true" aria-controls="c2" class="collapsed withripple">
+                            Grupo de Nómina</a>
+                        <ul id="c2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e2">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/payrollgroup/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/payrollgroup/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="panel" role="tab" id="e1">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c1"
+                           aria-expanded="true" aria-controls="c1" class="collapsed withripple">
+                            Periodos de Nómina</a>
+                        <ul id="c1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e1">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/payrollperiod/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/payrollperiod/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
 
-                    </ul>
-                    <!-- ms-collapse-nav -->
-                </div>
+                    <li class="panel" role="tab" id="e3">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c3"
+                           aria-expanded="true" aria-controls="c3" class="collapsed withripple">
+                            Percepciones y Deducciones</a>
+                        <ul id="c3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e3">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/earningsdeductions/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/earningsdeductions/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                     <li class="panel" role="tab" id="e3">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c3"
+                           aria-expanded="true" aria-controls="c3" class="collapsed withripple">
+                            Asistencias</a>
+                        <ul id="c3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e3">
+                            <li>
+                                <a class="withripple" href="">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                     <li class="panel" role="tab" id="e3">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c3"
+                           aria-expanded="true" aria-controls="c3" class="collapsed withripple">
+                            Préstamos</a>
+                        <ul id="c3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e3">
+                            <li>
+                                <a class="withripple" href="">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                     <li class="panel" role="tab" id="e3">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c3"
+                           aria-expanded="true" aria-controls="c3" class="collapsed withripple">
+                            Bajas</a>
+                        <ul id="c3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e3">
+                            <li>
+                                <a class="withripple" href="">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <!-- ms-collapse-nav -->
             </div>
         </div>
-        <!-- col-md-3 -->
+    </div>
+    <!-- col-md-3 -->
 
 {% endblock %}
 
