@@ -1483,11 +1483,11 @@ body .sb-site-container {
     }
 
     .nav.nav-tabs li a {
-        font-weight: 400;
-        padding: 1.7rem 13px;
-        color: rgba(255, 255, 255, .5) !important;
-        text-align: center;
-        font-size: 1.5rem;
+           font-weight: 400;
+    padding: 1.7rem 11px;
+    color: rgba(255, 255, 255, .5) !important;
+    text-align: center;
+    font-size: 1.4rem;
     }
 
     .btn, .input-group-btn .btn {
