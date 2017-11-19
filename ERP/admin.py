@@ -1007,9 +1007,15 @@ class PaymentScheduleInline(admin.TabularInline):
     fields = ('project', 'year', 'month', 'amount')
 
 
+class BlueprintInline(admin.TabularInline):
+    model = Blueprint
+    extra = 1
+    fields = ('file','description')
+
+
 @admin.register(Project)
 class ProjectModelAdmin(admin.ModelAdmin):
-    inlines = (TipoProyectoDetalleInline, PaymentScheduleInline)
+    inlines = (TipoProyectoDetalleInline, PaymentScheduleInline, BlueprintInline)
     exclude = None
 
     @staticmethod
