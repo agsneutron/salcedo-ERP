@@ -14,6 +14,7 @@ from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
 from ERP.models import Pais, Estado, Municipio, Project, Bank
+from utilities import getParameters
 
 # Create your models here.
 from multiselectfield import MultiSelectField
@@ -568,9 +569,9 @@ class EmployeeLoan(models.Model):
         (PLAN_B, 'Plan B (14 meses)'),
     )
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
-    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False, default=0)
     payment_plan = models.IntegerField(verbose_name="Plan de Pago", choices=PLAN_TYPE_CHOICES, default=PLAN_A)
-    request_date = models.DateField(verbose_name="Fecha de Solicitud", auto_now_add=True)
+    request_date = models.DateField(verbose_name="Fecha de Solicitud",null=True, auto_now_add=False)
 
 
     class Meta:
@@ -583,9 +584,22 @@ class EmployeeLoan(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
-class EmployeeLoanDetail (models.Model):
-    period = models.ForeignKey(PayrollPeriod, verbose_name="Empleado", null=False, blank=False)
+class EmployeeLoanDetail(models.Model):
+    employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
+    period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+
+
+    class Meta:
+        verbose_name_plural = "Préstamos Detalle"
+        verbose_name = "Préstamo Detalle"
+
+    def __str__(self):
+        return self.employeeloan.employee.name + " " + self.employeeloan.employee.first_last_name + " " + self.employeeloan.employee.second_last_name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.employeeloan.employee.name + " " + self.employeeloan.employee.first_last_name + " " + self.employeeloan.employee.second_last_name
+
 
 # To represent a Job Profile.
 class JobProfile(models.Model):

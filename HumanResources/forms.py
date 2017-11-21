@@ -559,6 +559,13 @@ class RegisterView(FormView):
 '''
 
 # Form to include the fields of the Payroll Group Form.
+class EmployeeLoanDetailForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeLoanDetail
+        fields = '__all__'
+
+
+# Form to include the fields of the Payroll Group Form.
 class PayrollGroupForm(forms.ModelForm):
     class Meta:
         model = PayrollGroup
