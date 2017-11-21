@@ -1082,6 +1082,9 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
     form = EmployeeLoanForm
 
 
+class EmployeeLoanDetailAdmin(admin.TabularInline):
+    model = EmployeeLoanDetail
+
 # JobProfile Admin.
 @admin.register(JobProfile)
 class JobProfileAdmin(admin.ModelAdmin):

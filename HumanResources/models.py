@@ -561,18 +561,31 @@ class EmployeeAssistance(models.Model):
 
 
 class EmployeeLoan(models.Model):
+    PLAN_A = 1
+    PLAN_B = 2
+    PLAN_TYPE_CHOICES = (
+        (PLAN_A, 'Plan A (12 meses)'),
+        (PLAN_B, 'Plan B (14 meses)'),
+    )
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
-    # Period
-
-    # Start_Period ***
-    # End_Period   ***
-
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+    payment_plan = models.IntegerField(verbose_name="Plan de Pago", choices=PLAN_TYPE_CHOICES, default=PLAN_A)
+    request_date = models.DateField(verbose_name="Fecha de Solicitud", auto_now_add=True)
+
 
     class Meta:
         verbose_name_plural = "Préstamos"
         verbose_name = "Préstamo"
 
+    def __str__(self):
+        return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
+class EmployeeLoanDetail (models.Model):
+    period = models.ForeignKey(PayrollPeriod, verbose_name="Empleado", null=False, blank=False)
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
 
 # To represent a Job Profile.
 class JobProfile(models.Model):
