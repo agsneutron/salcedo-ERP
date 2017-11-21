@@ -21,6 +21,8 @@ from django.http import HttpResponseRedirect
 from django.conf import settings
 
 import reporting
+from Assistance import urls
+import Assistance
 from users import urls
 import users
 from ERP import urls
@@ -43,6 +45,7 @@ urlpatterns = [
     url(r'^users/', include(users.urls)),
     url(r'^erp/', include(ERP.urls)),
     url(r'^humanresources/', include(HumanResources.urls)),
+    url(r'^assistance/', include(Assistance.urls)),
     url(r'^reporting/', include(ERP.urls)),
     url(r'^$', RedirectView.as_view(url='/admin')),
     url(r'^data_upload/', include(DataUpload.urls)),

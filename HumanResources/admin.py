@@ -1,9 +1,22 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from _mysql import IntegrityError
+
+import django
+
 # Django Libraries.
 from django.conf.urls import url
-from django.contrib import admin
+from django.contrib import admin, messages
+
+from Assistance.helper import AssistanceFileInterface, AssistanceDBObject, ErrorDataUpload
+
+# Constants.
+from SalcedoERP.lib.SystemLog import LoggingConstants
+
+
+# Atomic Transactions.
+from django.db import transaction
 
 # Importing the views.
 from django.contrib.admin.views.main import ChangeList
@@ -1074,6 +1087,47 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(EmployeeAssistance)
 class EmployeeAssistanceAdmin(admin.ModelAdmin):
     form = EmployeeAssistanceForm
+
+
+# Assistance Admin.
+@admin.register(UploadedEmployeeAssistanceHistory)
+class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
+    form = UploadedEmployeeAssistanceHistoryForm
+
+
+    def save_model(self, request, obj, form, change):
+        print "Saving assistance file."
+        current_user = request.user
+        payroll_period_id = int(request.POST.get('payroll_period'))
+
+        try:
+            with transaction.atomic():
+                assistance_file = request.FILES['assistance_file']
+                print "The File:"
+                print assistance_file
+                file_interface_obj = AssistanceFileInterface(assistance_file)
+
+                # Getting the elements from the file.
+                elements = file_interface_obj.get_element_list()
+
+                # Processing the results.
+                assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
+                assitance_db_object.process_records()
+
+
+                super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
+
+
+        except ErrorDataUpload as e:
+            e.save()
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, e.get_error_message())
+
+        except django.db.utils.IntegrityError as e:
+            # Create exception without raising it.
+            edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, current_user.id)
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, edu.get_error_message())
 
 
 # Loan Admin.

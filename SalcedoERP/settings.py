@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'reporting',
     'DataUpload',
     'HumanResources',
+    'Assistance',
     'multiselectfield',
     'tinymce'
 ]
