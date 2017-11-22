@@ -176,6 +176,115 @@ def EmployeeByPeriod(request):
     return HttpResponse(template.render(context,request))
 
 
+class PayrollPeriodListView(generic.ListView):
+    model = PayrollPeriod
+    template_name = "HumanResources/payroll-period-list.html"
+
+
+    def get_queryset(self):
+        result = super(PayrollPeriodListView, self).get_queryset()
+
+        payroll_group_id = self.kwargs['pk']
+
+        result = result.filter(payroll_group_id=payroll_group_id)
+
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(PayrollPeriodListView, self).get_context_data(**kwargs)
+
+        payroll_group_id = self.kwargs['pk']
+        payroll_group = PayrollGroup.objects.get(pk=payroll_group_id)
+
+        context['payrollgroup'] = payroll_group
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(PayrollPeriodListView, self).dispatch(request, args, kwargs)
+
+
+
+class PayrollPeriodDetail(generic.ListView):
+    model = Employee
+    template_name = "HumanResources/payroll-period-detail.html"
+
+
+    def get_queryset(self):
+        result = super(PayrollPeriodDetail, self).get_queryset()
+
+        payroll_period_id = self.kwargs['pk']
+
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        payroll_group_id = payroll_period.payroll_group_id
+
+
+        employees = EmployeePositionDescription.objects.filter(payroll_group_id=payroll_group_id).values('employee')
+        employee_ids = []
+
+
+        for employee in employees:
+            employee_ids.append(employee['employee'])
+
+        result = result.filter(id__in=employee_ids)
+
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(PayrollPeriodDetail, self).get_context_data(**kwargs)
+
+        payroll_period_id = self.kwargs['pk']
+
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        payroll_group_id = payroll_period.payroll_group_id
+
+        payroll_group = PayrollGroup.objects.get(pk=payroll_group_id)
+
+        context['payrollgroup'] = payroll_group
+        context['payrollperiod'] = payroll_period
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(PayrollPeriodDetail, self).dispatch(request, args, kwargs)
+
+
+
+
+class PayrollPeriodEmployeeDetail(generic.DetailView):
+    model = Employee
+    template_name = "HumanResources/payroll-period-employee-detail.html"
+
+
+    def get_queryset(self):
+        result = super(PayrollPeriodEmployeeDetail, self).get_queryset()
+
+        employee_id = self.kwargs['pk']
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(PayrollPeriodEmployeeDetail, self).get_context_data(**kwargs)
+
+        employee_id = self.kwargs['pk']
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(PayrollPeriodEmployeeDetail, self).dispatch(request, args, kwargs)
+
+
+
 @login_required()
 def payrollhome(request):
 
