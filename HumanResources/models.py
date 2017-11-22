@@ -548,16 +548,17 @@ class EmployeeDropOut(models.Model):
 
 
 class EmployeeAssistance(models.Model):
-    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
-    # Period
-
-    date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha")
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
+    record_date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha")
     entry_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Entrada")
     exit_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Salida")
+    absence = models.BooleanField(verbose_name="Ausente", default=True)
 
     class Meta:
         verbose_name_plural = "Asistencias"
         verbose_name = "Asistencia"
+        unique_together = ('employee', 'payroll_period', 'record_date')
 
 
 class EmployeeLoan(models.Model):
