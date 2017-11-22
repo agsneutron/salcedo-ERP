@@ -584,7 +584,7 @@ class EmployeeLoan(models.Model):
         return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 class EmployeeLoanDetail (models.Model):
-    period = models.ForeignKey(PayrollPeriod, verbose_name="Empleado", null=False, blank=False)
+    #period = models.ForeignKey(PayrollPeriod, verbose_name="Empleado", null=False, blank=False)
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
 
 # To represent a Job Profile.
