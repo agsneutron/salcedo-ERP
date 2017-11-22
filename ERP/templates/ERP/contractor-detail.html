@@ -13,7 +13,6 @@
                         class="zmdi zmdi-city-alt"></i></span>
                     <h3 class="color-info">Nombre: {{ contratista.nombreContratista }}</h3>
                     <div class="col-xs-12 col-sm-6 text-left">
-
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Calle:</span> {{ contratista.calle }}</span>
                         <span href="" class="list-group-item withripple "><i
@@ -39,6 +38,30 @@
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Email:</span> {{ contratista.email }} </span>
                     </div>
                 </div>
+
+                <div class="row">
+                    <div class="col-xs-12">
+                        <h3 class="color-info">Datos Bancarios</h3>
+                    </div>
+
+                    <div class="col-xs-3">
+                         <span href="" class="list-group-item withripple "><span class="color-active">Banco:</span><br> {{ contratista.bank }}</span>
+                    </div>
+
+                    <div class="col-xs-3">
+                         <span href="" class="list-group-item withripple "><span class="color-active">Nombre de la Persona:</span><br> {{ contratista.bank_account_name }}</span>
+                    </div>
+
+                     <div class="col-xs-3">
+                         <span href="" class="list-group-item withripple "><span class="color-active">Cuenta Bancaria:</span><br> {{ contratista.bank_account }}</span>
+                    </div>
+
+                    <div class="col-xs-3">
+                         <span href="" class="list-group-item withripple "><span class="color-active">CLABE Interbancaria:</span><br> {{ contratista.CLABE }}</span>
+                    </div>
+
+                </div>
+
 
 
                 <a href="change" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-pencil"></i> Editar</a>
