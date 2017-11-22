@@ -20,7 +20,7 @@ def get_array_or_none(the_string):
 
 class DataUpload(ListView):
     def handle_uploaded_file(self, archivo):
-        ruta = 'DataUpload/tmp/' + str(datetime.datetime.now()) + '.csv'
+        ruta = 'DataUpload/tmp /' + str(datetime.datetime.now()) + '.csv'
         with open(ruta, 'wb+') as destination:
             for chunk in archivo.chunks():
                 destination.write(chunk)

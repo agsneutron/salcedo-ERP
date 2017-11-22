@@ -828,7 +828,7 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         fields = (
             'clave_contrato', 'project', 'line_item', 'no_licitacion', 'contratista', 'modalidad_contrato',
             'dias_pactados', 'dependencia', 'fecha_firma', 'fecha_inicio', 'fecha_termino',
-            'monto_contrato', 'porcentaje_iva',  'assigment_number', 'pdf_version', 'payment_distribution', 'objeto_contrato',
+            'monto_contrato', 'porcentaje_iva', 'advanced_payment',  'assigment_number', 'pdf_version',  'payment_distribution', 'objeto_contrato',
             'lugar_ejecucion', 'observaciones', 'version')
         return fields
 
