@@ -620,10 +620,11 @@ class TagForm(forms.ModelForm):
 class EmployeeAssistanceForm(forms.ModelForm):
     class Meta:
         model = EmployeeAssistance
-        fields = '__all__'
+        fields = ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time','absence')
 
 
-# Form to include the fields of Tag Form.
+
+    # Form to include the fields of Tag Form.
 class UploadedEmployeeAssistanceHistoryForm(forms.ModelForm):
     class Meta:
         model = UploadedEmployeeAssistanceHistory

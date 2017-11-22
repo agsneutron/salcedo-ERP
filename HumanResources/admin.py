@@ -5,6 +5,9 @@ from _mysql import IntegrityError
 
 import django
 
+import datetime
+from datetime import date
+
 # Django Libraries.
 from django.conf.urls import url
 from django.contrib import admin, messages
@@ -13,6 +16,10 @@ from Assistance.helper import AssistanceFileInterface, AssistanceDBObject, Error
 
 # Constants.
 from SalcedoERP.lib.SystemLog import LoggingConstants
+
+
+# DBObject assistant.
+from Assistance.helper import AssistanceDBObject
 
 
 # Atomic Transactions.
@@ -1087,6 +1094,39 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(EmployeeAssistance)
 class EmployeeAssistanceAdmin(admin.ModelAdmin):
     form = EmployeeAssistanceForm
+    readonly_fields = ('absence',)
+
+
+    def save_model(self, request, obj, form, change):
+        print "Saving Assistance."
+
+        if obj.entry_time is None or obj.exit_time is None:
+            return True
+
+        employee_position = EmployeePositionDescription.objects.get(employee_id=obj.employee.id)
+
+        position_entry_time = employee_position.entry_time
+        position_exit_time = employee_position.departure_time
+
+        entry_diff = datetime.datetime.combine(date.today(), obj.entry_time) - datetime.datetime.combine(date.today(), position_entry_time)
+        exit_diff = datetime.datetime.combine(date.today(), position_exit_time) - datetime.datetime.combine(date.today(), obj.exit_time)
+
+        arrived_minutes_late = entry_diff.total_seconds() / 60
+        left_minutes_early = exit_diff.total_seconds() / 60
+
+        absent = False
+        allowed_minutes = 15
+
+        if arrived_minutes_late > allowed_minutes or left_minutes_early > allowed_minutes:
+            absent = True
+
+        obj.absence = absent
+
+        print "About to save."
+
+
+        super(EmployeeAssistanceAdmin, self).save_model(request, obj, form, change)
+
 
 
 # Assistance Admin.
