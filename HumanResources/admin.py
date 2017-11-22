@@ -1065,6 +1065,10 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+# Tax Regime Admin.
+@admin.register(EmployeeLoanDetail)
+class EmployeeLoanDetailAdmin(admin.ModelAdmin):
+    form = EmployeeLoanDetailForm
 
 # Tax Regime Admin.
 @admin.register(TaxRegime)
@@ -1176,8 +1180,8 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
     form = EmployeeLoanForm
 
 
-class EmployeeLoanDetailAdmin(admin.TabularInline):
-    model = EmployeeLoanDetail
+#class EmployeeLoanDetailAdmin(admin.TabularInline):
+#    model = EmployeeLoanDetail
 
 # JobProfile Admin.
 @admin.register(JobProfile)

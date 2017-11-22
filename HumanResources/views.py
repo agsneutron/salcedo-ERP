@@ -176,6 +176,20 @@ def EmployeeByPeriod(request):
     return HttpResponse(template.render(context,request))
 
 
+@login_required()
+def payrollhome(request):
+
+    template = loader.get_template('admin/HumanResources/payroll-home.html')
+    period_data = PayrollPeriod.objects.all().query
+    employees = EmployeePositionDescription.objects.all()
+    employees.group_by = ['payroll_group_id']
+    period_data
+    #context = RequestContext.request
+    context = {'employees': employees,
+               'payrolldata':period_data}
+    return HttpResponse(template.render(context,request))
+
+
 class PayrollPeriodListView(generic.ListView):
     model = PayrollPeriod
     template_name = "HumanResources/payroll-period-list.html"
@@ -282,18 +296,3 @@ class PayrollPeriodEmployeeDetail(generic.DetailView):
         # if not request.user.has_perm('ERP.view_list_empresa'):
         #     raise PermissionDenied
         return super(PayrollPeriodEmployeeDetail, self).dispatch(request, args, kwargs)
-
-
-
-@login_required()
-def payrollhome(request):
-
-    template = loader.get_template('admin/HumanResources/payroll-home.html')
-    period_data = PayrollPeriod.objects.all().query
-    employees = EmployeePositionDescription.objects.all()
-    employees.group_by = ['payroll_group_id']
-    period_data
-    #context = RequestContext.request
-    context = {'employees': employees,
-               'payrolldata':period_data}
-    return HttpResponse(template.render(context,request))
