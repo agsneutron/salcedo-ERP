@@ -1184,14 +1184,13 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
     model = EmployeeLoanDetail
-    #form = EmployeeLoanDetailForm
     extra = 1
-
 
 # Loan Admin.
 @admin.register(EmployeeLoan)
 class EmployeeLoanAdmin(admin.ModelAdmin):
     form = EmployeeLoanForm
+    inlines = (EmployeeLoanDetailInLine,)
 
     fieldsets = (
         ("Prestamos a Empleados", {
@@ -1199,7 +1198,6 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
         }),
     )
 
-    inlines = (EmployeeLoanDetailInLine,)
 
 
 # JobProfile Admin.
