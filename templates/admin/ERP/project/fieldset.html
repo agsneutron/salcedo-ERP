@@ -99,7 +99,14 @@
                         </li>
                     {% endif %}
 
+
                 {% endfor %}
+
+                <li role="presentation">
+                    <a class="withoutripple" href="#otro10" aria-controls="otro10" role="tab" data-toggle="tab">
+                        <span class="">Planos</span>
+                    </a>
+                </li>
 
                 <li role="presentation">
                     <a class="withoutripple" href="#otro9" aria-controls="otro9" role="tab" data-toggle="tab">
@@ -151,6 +158,11 @@
                 <li role="presentation">
                     <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
                         <span class="">Tipo de Construcción</span>
+                    </a>
+                </li>
+                <li role="presentation">
+                    <a class="withoutripple" href="#otro10" aria-controls="otro10" role="tab" data-toggle="tab">
+                        <span class="">Planos</span>
                     </a>
                 </li>
                 <li role="presentation">
@@ -1774,6 +1786,13 @@
                         </div>
                     {% endif %}
                     <!-- Ends block for the payment schedule -->
+                     <!-- Added block for the payment schedule -->
+                    {% if inline_admin_formset.formset.prefix == "blueprint_set" %}
+                        <!-- proyecto programa-->
+                        <div role="tabpanel" class="tab-pane fade" id="otro10">
+                            {% include "admin/ERP/blueprint/tabular.html" %}
+                        </div>
+                    {% endif %}
                 {% endfor %}
 
             </div>
