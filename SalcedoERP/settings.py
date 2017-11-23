@@ -21,7 +21,7 @@ import locale
 # español para windows
 # locale.setlocale(locale.LC_ALL, "esp")
 # español para linux
-# locale.setlocale(locale.LC_ALL, "es_MX.utf8")
+# locale.setlocale(locale.LC_ALL, "es_MX.UTF-8")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

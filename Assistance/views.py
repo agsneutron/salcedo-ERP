@@ -2,6 +2,8 @@
 
 from django.db import transaction
 from django.http import HttpResponse
+from django.views.generic.list import ListView
+
 from helper import AssistanceFileInterface, AssistanceDBObject, ErrorDataUpload
 
 
@@ -37,4 +39,7 @@ def assistance_upload_test_view(request):
 
 
     return HttpResponse('Done')
+
+
+
 
