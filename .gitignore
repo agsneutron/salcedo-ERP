@@ -9,3 +9,6 @@ SalcedoERP/local_settings.py
 # migrations
 ERP/migrations/
 HumanResources/migrations/
+Assistance/migrations
+users/migrations
+DataUpload/migrations
