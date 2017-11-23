@@ -1244,5 +1244,15 @@ class JobInstanceAdmin(admin.ModelAdmin):
 
 
 
+#EmployeeDropOut
+@admin.register(EmployeeDropOut)
+class EmployeeDropOutAdmin(admin.ModelAdmin):
+    form = EmployeeDropOutForm
+
+    fieldsets = (
+        ("Baja de Empleados", {
+            'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
+        }),
+    )
 
 admin.site.register(PayrollClassification)

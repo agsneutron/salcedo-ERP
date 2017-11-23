@@ -689,3 +689,14 @@ class JobInstanceForm(forms.ModelForm):
     class Meta:
         model = JobInstance
         fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
+class EmployeeDropOutForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeDropOut
+        fields = '__all__'
+
+
+
+
