@@ -91,16 +91,21 @@
                             </a>
                         </li>
                     {% endif %}
-                    {% if section.section_name == "Tipo de Construcción" and section.total_inner_sections > 0 %}
+                    {% comment %}{% if section.section_name == "Tipo de Construcción" and section.total_inner_sections > 0 %}
                         <li role="presentation">
                             <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
                                 <span class="">Tipo de Construcción</span>
                             </a>
                         </li>
-                    {% endif %}
+                    {% endif %}{% endcomment %}
 
 
                 {% endfor %}
+                        <li role="presentation">
+                            <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
+                                <span class="">Tipo de Construcción</span>
+                            </a>
+                        </li>
 
                 <li role="presentation">
                     <a class="withoutripple" href="#otro10" aria-controls="otro10" role="tab" data-toggle="tab">
@@ -1771,7 +1776,7 @@
 
 
                 {% for inline_admin_formset in inline_admin_formsets %}
-                    {{ nline_admin_formset }}
+
                     {% if inline_admin_formset.formset.prefix == "tipoproyectodetalle_set" %}
                         <!-- proyecto detalle-->
                         <div role="tabpanel" class="tab-pane fade" id="otro8">
