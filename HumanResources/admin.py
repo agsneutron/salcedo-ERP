@@ -1079,15 +1079,18 @@ class TagAdmin(admin.ModelAdmin):
 class EmployeeAssistanceAdmin(admin.ModelAdmin):
     form = EmployeeAssistanceForm
 
+class EmployeeLoanDetailInLine(admin.TabularInline):
+    model = EmployeeLoanDetail
+    extra = 1
 
 # Loan Admin.
 @admin.register(EmployeeLoan)
 class EmployeeLoanAdmin(admin.ModelAdmin):
     form = EmployeeLoanForm
+    inlines = (EmployeeLoanDetailInLine,)
 
 
-#class EmployeeLoanDetailAdmin(admin.TabularInline):
-#    model = EmployeeLoanDetail
+
 
 # JobProfile Admin.
 @admin.register(JobProfile)
