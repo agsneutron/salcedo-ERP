@@ -1,0 +1,83 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block content %}
+
+    <script type="text/javascript" src="/perro/HumanResources/js/jquery.jOrgChart.js"></script>
+    <link rel="stylesheet" href="/perro/HumanResources/css/jquery.jOrgChart.css"/>
+
+
+
+
+    <div class="card ">
+
+
+        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+            <li role="presentation" class="active">
+                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                    Incidencias del empleado <strong>{{ employee.employee_key }} - {{ employee.get_full_name }}</strong>
+                    del periodo <strong>{{ payroll_period }}</strong>
+                </a>
+            </li>
+        </ul>
+
+
+        <div class="card-block">
+            <div class="tab-content">
+
+
+                <div class="table-responsive mt-15">
+                    {% if object_list %}
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fecha</th>
+                                <th>Hora de Entrada</th>
+                                <th>Hora de Salida</th>
+                                <th style="text-align: center">Justificantes</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for record in incidences %}
+                                <tr>
+                                    <td>{{ record.id }}</td>
+                                    <td>{{ record.record_date }}</td>
+                                    <td>
+                                        {{ record.entry_time}}
+                                    </td>
+                                    <td>
+                                        {{ record.exit_time}}
+                                    </td>
+                                    <td style="text-align: center">
+                                        <a href="/admin/HumanResources/employeeassistance/incidences_by_employee/{{ record.employee__employee_key }}"
+                                           class="btn btn-raised btn-default btn-xs"><i
+                                                class="fa fa-eye color-default"> </i>
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        No hay periodos aún.
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+    <script>
+        jQuery(document).ready(function () {
+            $("#org").jOrgChart();
+        });
+    </script>
+
+{% endblock %}

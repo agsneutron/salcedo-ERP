@@ -496,7 +496,7 @@ class ConceptInputListView(ListView):
                        (Q(key__icontains=q) for q in query_list)) |
                 reduce(operator.and_,
                        (Q(description__icontains=q) for q in query_list)) |
-                reduce(operator.and_,
+                reduce(operator.and_,x
                        (Q(status__icontains=q) for q in query_list))
             )
         else:
