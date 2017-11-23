@@ -557,11 +557,16 @@ class EmployeeAssistance(models.Model):
     exit_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Salida")
     absence = models.BooleanField(verbose_name="Ausente", default=True)
 
-
     class Meta:
         verbose_name_plural = "Asistencias"
         verbose_name = "Asistencia"
         unique_together = ('employee', 'payroll_period', 'record_date')
+
+    def __str__(self):
+        return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name + ": " + self.payroll_period.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name + ": " + self.payroll_period.name
 
 
 def uploaded_employees_assistance_destination(instance, filename):
@@ -610,6 +615,7 @@ class EmployeeLoan(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
 
 class EmployeeLoanDetail(models.Model):
     employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)

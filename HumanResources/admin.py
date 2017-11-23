@@ -1037,6 +1037,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect('/admin/HumanResources/payrollgroup/'+str(obj.payroll_group.id)+'/')
+
     # Adding extra context to the change view.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
@@ -1065,10 +1066,6 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-# Tax Regime Admin.
-@admin.register(EmployeeLoanDetail)
-class EmployeeLoanDetailAdmin(admin.ModelAdmin):
-    form = EmployeeLoanDetailForm
 
 # Tax Regime Admin.
 @admin.register(TaxRegime)
@@ -1098,8 +1095,14 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(EmployeeAssistance)
 class EmployeeAssistanceAdmin(admin.ModelAdmin):
     form = EmployeeAssistanceForm
-    readonly_fields = ('absence',)
 
+    fieldsets = (
+        ("Registro de Asistencia por Empleado", {
+            'fields': ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time', 'absence')
+        }),
+    )
+
+    readonly_fields = ('absence',)
 
     def save_model(self, request, obj, form, change):
         print "Saving Assistance."
@@ -1138,6 +1141,11 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     form = UploadedEmployeeAssistanceHistoryForm
 
+    fieldsets = (
+        ("Carga de Archivo de Asistencias", {
+            'fields': ('payroll_period', 'assistance_file',)
+        }),
+    )
 
     def save_model(self, request, obj, form, change):
         print "Saving assistance file."
@@ -1174,14 +1182,25 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
             messages.error(request, edu.get_error_message())
 
 
+class EmployeeLoanDetailInLine(admin.TabularInline):
+    model = EmployeeLoanDetail
+    #form = EmployeeLoanDetailForm
+    extra = 1
+
+
 # Loan Admin.
 @admin.register(EmployeeLoan)
 class EmployeeLoanAdmin(admin.ModelAdmin):
     form = EmployeeLoanForm
 
+    fieldsets = (
+        ("Prestamos a Empleados", {
+            'fields': ('employee', 'amount', 'payment_plan', 'request_date')
+        }),
+    )
 
-#class EmployeeLoanDetailAdmin(admin.TabularInline):
-#    model = EmployeeLoanDetail
+    inlines = (EmployeeLoanDetailInLine,)
+
 
 # JobProfile Admin.
 @admin.register(JobProfile)
