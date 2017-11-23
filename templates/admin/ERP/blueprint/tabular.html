@@ -1,6 +1,6 @@
 {% load i18n admin_urls static admin_modify app_filters%}
 <div class=" ">
-        <h2 class="text-center">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
+       <h2 class="text-center">Planos</h2>
     <div class="">
 
                  <div class="row" style="margin-left: -5px; margin-right: -5px;">
@@ -61,7 +61,7 @@
                                   {% if field.is_readonly %}
                                       <p>{{ field.contents }}</p>
                                   {% else %}
-                                      {% if field.field.name == "documento" %}
+                                      {% if field.field.name == "file" %}
                                             <div class="form-group field-{{ field.field.name }}">
                                                     {{ field.field|addcss:"form-control" }}
                                                     {{ field.errors }}

@@ -549,15 +549,61 @@ class EmployeeDropOut(models.Model):
 
 class EmployeeAssistance(models.Model):
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
-    # Period
+    payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
 
-    date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha")
+    record_date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha")
     entry_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Entrada")
     exit_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Salida")
+    absence = models.BooleanField(verbose_name="Ausente", default=True)
+
 
     class Meta:
         verbose_name_plural = "Asistencias"
         verbose_name = "Asistencia"
+        unique_together = ('employee', 'payroll_period', 'record_date')
+
+    def __str__(self):
+        return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name + \
+               " registro de asistencia del " + str(self.record_date)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name + \
+               " registro de asistencia del " + str(self.record_date)
+
+
+def uploaded_absences_proofs(instance, filename):
+    return '/'.join(
+        ['absences_uploads', str(instance.employee_assistance.payroll_period.id) + instance.employee_assistance.payroll_period.name, filename])
+
+    
+class AbsenceProof(models.Model):
+    employee_assistance = models.ForeignKey(EmployeeAssistance, verbose_name='Registro de Asistencia', null=False, blank=False)
+    reasons = models.CharField(verbose_name="Razones", max_length=1024, null=False, blank=True)
+    proof_document = models.FileField(verbose_name="Documento Justificante", blank=True, upload_to=uploaded_absences_proofs)
+
+
+def uploaded_employees_assistance_destination(instance, filename):
+    return '/'.join(['assistance_uploads', str(instance.payroll_period.id) + instance.payroll_period.name, filename])
+
+
+class UploadedEmployeeAssistanceHistory(models.Model):
+    payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
+    assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
+                                       verbose_name="Archivo de Asistencias")
+
+
+    class Meta:
+        verbose_name_plural = "Archivos de Asistencias"
+        verbose_name = "Archivo de asistencias"
+
+
+    def __str__(self):
+        return "Del " + str(self.payroll_period.start_period) + " al " + str(self.payroll_period.end_period) + \
+               " - " + self.assistance_file.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return "Del " + str(self.payroll_period.start_period) + " al " + str(self.payroll_period.end_period) + \
+               " - " + self.assistance_file.name
 
 
 class EmployeeLoan(models.Model):
@@ -952,10 +998,10 @@ class PayrollPeriod(models.Model):
         verbose_name = "Periodos de Nómina"
 
     def __str__(self):
-        return self.name
+        return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.name
+        return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
 
 
 class EmployeeEarningsDeductionsbyPeriod(models.Model):

@@ -622,7 +622,7 @@ class ContratoContratista(models.Model):
     concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
 
     # Aggregated fields as part of the requirements found in the training.
-    payment_distribution= models.CharField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
+    payment_distribution= models.TextField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
     assigment_number = models.IntegerField(verbose_name="Número de asignación",  null=False, blank=False)
     pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
     advanced_payment = models.FloatField(verbose_name="Anticipio", null=False, blank=False, default=0)
@@ -767,13 +767,10 @@ class DocumentoFuente(models.Model):
 class TipoProyectoDetalle(models.Model):
     version = IntegerVersionField()
     proyecto = models.ForeignKey('Project', verbose_name="proyecto", null=True, blank=True)
-    nombreTipoProyecto = models.CharField(verbose_name="tipo Proyecto", max_length=8, null=False, blank=False)
-    numero = models.DecimalField(verbose_name='número', decimal_places=2, blank=False,
-                                 null=False,
-                                 default=0, max_digits=20)
-    m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=False, null=False,
-                                    default=0,
-                                    max_digits=20)
+    nombreTipoProyecto = models.CharField(verbose_name="Nombre de Tipo Proyecto", max_length=8, null=True, blank=True)
+    numero = models.DecimalField(verbose_name='número', decimal_places=2, blank=True,
+                                 null=True, max_digits=20)
+    m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=True, null=True, max_digits=20)
     documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
 
     class Meta:
@@ -1022,6 +1019,31 @@ class Project(models.Model):
             super(Project, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
+
+
+def upload_blueprint(instance, filename):
+    return '/'.join(['documentosFuente', instance.project.key, 'blueprints',filename])
+
+class Blueprint(models.Model):
+    file = models.FileField(verbose_name="Archivo", blank="", upload_to=upload_blueprint)
+    description = models.CharField(verbose_name="Descripción", max_length=512, null=False, blank=True, default="")
+    upload_date = models.DateField(verbose_name="Fecha de carga", auto_now=True)
+
+    # Foreign Keys.
+    project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+
+
+    class Meta:
+        verbose_name_plural = "Planos"
+        verbose_name = "Plano"
+
+    def __str__(self):
+        return str(self.upload_date) + ": " + self.file.name
+
+
+    def __unicode__(self):
+        return str(self.upload_date) + ": " + self.file.name
+
 
 
 class PaymentSchedule(models.Model):

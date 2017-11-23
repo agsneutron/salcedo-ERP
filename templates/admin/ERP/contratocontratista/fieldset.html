@@ -254,7 +254,7 @@
                     {% endif %}{% endcomment %}
                         {% if field.field.name == "advanced_payment" %}
                             <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-4">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
                                         {{ field.label_tag }}
@@ -264,12 +264,8 @@
                                 </div>
                             </div>
                         {% endif %}
-
-
-
-
                     {% if field.field.name == "assigment_number" %}
-                        <div class="row">
+
                         <div class="col-sm-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
@@ -283,7 +279,7 @@
 
                     {% if field.field.name == "pdf_version" %}
 
-                        <div class="col-sm-8">
+                        <div class="col-sm-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 {{ field.field|addcss:"form-control" }}
                                 {{ field.errors }}
@@ -300,7 +296,7 @@
                                 </div>
                             </div>
                         </div>
-                        </div>
+</div>
                     {% endif %}
 
                     {% if field.field.name == "payment_distribution" %}

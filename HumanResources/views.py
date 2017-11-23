@@ -5,6 +5,7 @@ from __future__ import unicode_literals
 import operator
 
 from django.core.exceptions import PermissionDenied
+from django.db.models.aggregates import Count
 from django.shortcuts import render
 from django.views import generic
 from django.views.generic.list import ListView
@@ -282,3 +283,76 @@ class PayrollPeriodEmployeeDetail(generic.DetailView):
         # if not request.user.has_perm('ERP.view_list_empresa'):
         #     raise PermissionDenied
         return super(PayrollPeriodEmployeeDetail, self).dispatch(request, args, kwargs)
+
+
+
+
+class IncidencesByPayrollPeriod(ListView):
+    model = EmployeeAssistance
+    template_name = "HumanResources/inicidences-by-payroll-period.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(IncidencesByPayrollPeriod, self).get_context_data(**kwargs)
+
+        payroll_period_id = self.request.GET.get("payroll_period")
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        incidences = EmployeeAssistance.objects.filter(Q(absence=True))\
+            .values('employee__id','employee__employee_key','employee__name', 'employee__first_last_name', 'employee__second_last_name')\
+            .annotate(Count('employee__id'))
+
+        context['payroll_period'] = payroll_period
+        context['incidences'] = incidences
+
+        print incidences
+
+        return context
+
+
+
+class IncidencesByPayrollPeriod(ListView):
+    model = EmployeeAssistance
+    template_name = "HumanResources/inicidences-by-payroll-period.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(IncidencesByPayrollPeriod, self).get_context_data(**kwargs)
+
+        payroll_period_id = self.kwargs['payroll_period_id']
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        incidences = EmployeeAssistance.objects.filter(Q(absence=True))\
+            .values('employee__id','employee__employee_key','employee__name', 'employee__first_last_name', 'employee__second_last_name')\
+            .annotate(Count('employee__id'))
+
+        context['payroll_period'] = payroll_period
+        context['incidences'] = incidences
+
+        print incidences
+
+        return context
+
+
+
+class IncidencesByEmployee(ListView):
+    model = EmployeeAssistance
+    template_name = "HumanResources/inicidences-by-employee.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super(IncidencesByEmployee, self).get_context_data(**kwargs)
+
+        employee_key = self.kwargs['employee_key']
+        payroll_period_id = self.kwargs['payroll_period_id']
+
+
+        employee = Employee.objects.get(employee_key=employee_key)
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+
+        incidences = EmployeeAssistance.objects.filter(Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
+
+        context['employee'] = employee
+        context['payroll_period'] = payroll_period
+        context['incidences'] = incidences
+
+        return context

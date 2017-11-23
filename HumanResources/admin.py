@@ -1,9 +1,29 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from _mysql import IntegrityError
+
+import django
+
+import datetime
+from datetime import date
+
 # Django Libraries.
 from django.conf.urls import url
-from django.contrib import admin
+from django.contrib import admin, messages
+
+from Assistance.helper import AssistanceFileInterface, AssistanceDBObject, ErrorDataUpload
+
+# Constants.
+from SalcedoERP.lib.SystemLog import LoggingConstants
+
+
+# DBObject assistant.
+from Assistance.helper import AssistanceDBObject
+
+
+# Atomic Transactions.
+from django.db import transaction
 
 # Importing the views.
 from django.contrib.admin.views.main import ChangeList
@@ -1074,6 +1094,94 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(EmployeeAssistance)
 class EmployeeAssistanceAdmin(admin.ModelAdmin):
     form = EmployeeAssistanceForm
+    readonly_fields = ('absence',)
+
+
+    def save_model(self, request, obj, form, change):
+
+        if obj.entry_time is None or obj.exit_time is None:
+            return True
+
+        employee_position = EmployeePositionDescription.objects.get(employee_id=obj.employee.id)
+
+        position_entry_time = employee_position.entry_time
+        position_exit_time = employee_position.departure_time
+
+        entry_diff = datetime.datetime.combine(date.today(), obj.entry_time) - datetime.datetime.combine(date.today(), position_entry_time)
+        exit_diff = datetime.datetime.combine(date.today(), position_exit_time) - datetime.datetime.combine(date.today(), obj.exit_time)
+
+        arrived_minutes_late = entry_diff.total_seconds() / 60
+        left_minutes_early = exit_diff.total_seconds() / 60
+
+        absent = False
+        allowed_minutes = 15
+
+        if arrived_minutes_late > allowed_minutes or left_minutes_early > allowed_minutes:
+            absent = True
+
+        obj.absence = absent
+
+
+        super(EmployeeAssistanceAdmin, self).save_model(request, obj, form, change)
+
+
+    def get_urls(self):
+        urls = super(EmployeeAssistanceAdmin, self).get_urls()
+        my_urls = [
+            url(r'^incidences_by_period/(?P<payroll_period_id>\d+)/$', self.admin_site.admin_view(views.IncidencesByPayrollPeriod.as_view()),
+                name='incidences-list-view',
+                ),
+            url(r'^incidences_by_employee/(?P<payroll_period_id>\d+)/(?P<employee_key>[\w-]+)/$', self.admin_site.admin_view(views.IncidencesByEmployee.as_view()),
+                name='incidences-list-view',
+                ),
+        ]
+        return my_urls + urls
+
+
+# Assistance Admin.
+@admin.register(AbsenceProof)
+class AbsenceProofAdmin(admin.ModelAdmin):
+    pass
+
+
+# Uploaded Assistances Admin.
+@admin.register(UploadedEmployeeAssistanceHistory)
+class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
+    form = UploadedEmployeeAssistanceHistoryForm
+
+
+    def save_model(self, request, obj, form, change):
+        print "Saving assistance file."
+        current_user = request.user
+        payroll_period_id = int(request.POST.get('payroll_period'))
+
+        try:
+            with transaction.atomic():
+                assistance_file = request.FILES['assistance_file']
+                file_interface_obj = AssistanceFileInterface(assistance_file)
+
+                # Getting the elements from the file.
+                elements = file_interface_obj.get_element_list()
+
+                # Processing the results.
+                assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
+                assitance_db_object.process_records()
+
+
+
+                super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
+
+
+        except ErrorDataUpload as e:
+            e.save()
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, e.get_error_message())
+
+        except django.db.utils.IntegrityError as e:
+            # Create exception without raising it.
+            edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, current_user.id)
+            messages.set_level(request, messages.ERROR)
+            messages.error(request, edu.get_error_message())
 
 
 # Loan Admin.
