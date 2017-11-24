@@ -365,8 +365,11 @@ class IncidencesByEmployee(ListView):
 
         incidences = EmployeeAssistance.objects.filter(Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
 
+        absence_proofs = AbsenceProof.objects.filter(Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
+
         context['employee'] = employee
         context['payroll_period'] = payroll_period
         context['incidences'] = incidences
+        context['absence_proofs'] = absence_proofs
 
         return context

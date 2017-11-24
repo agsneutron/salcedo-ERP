@@ -27,7 +27,7 @@
 
 
                 <div class="table-responsive mt-15">
-                    {% if object_list %}
+                    {% if incidences %}
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -58,7 +58,7 @@
                             </tbody>
                         </table>
                     {% else %}
-                        No hay periodos aún.
+                        No hay empleados con incidencias en este periodo.
                     {% endif %}
                 </div>
 
@@ -67,14 +67,5 @@
     </div>
 
 
-
-
-
-
-    <script>
-        jQuery(document).ready(function () {
-            $("#org").jOrgChart();
-        });
-    </script>
 
 {% endblock %}

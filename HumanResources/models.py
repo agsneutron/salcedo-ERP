@@ -558,6 +558,7 @@ class EmployeeAssistance(models.Model):
     entry_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Entrada")
     exit_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Salida")
     absence = models.BooleanField(verbose_name="Ausente", default=True)
+    justified = models.BooleanField(verbose_name="Justificada", default=False)
 
     class Meta:
         verbose_name_plural = "Asistencias"
@@ -575,13 +576,17 @@ class EmployeeAssistance(models.Model):
 
 def uploaded_absences_proofs(instance, filename):
     return '/'.join(
-        ['absences_uploads', str(instance.employee_assistance.payroll_period.id) + instance.employee_assistance.payroll_period.name, filename])
+        ['absences_proof_uploads', str(instance.payroll_period.id) + instance.payroll_period.name, filename])
 
 
 class AbsenceProof(models.Model):
-    employee_assistance = models.ForeignKey(EmployeeAssistance, verbose_name='Registro de Asistencia', null=False, blank=False)
-    reasons = models.CharField(verbose_name="Razones", max_length=1024, null=False, blank=True)
-    proof_document = models.FileField(verbose_name="Documento Justificante", blank=True, upload_to=uploaded_absences_proofs)
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+    payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
+
+
+    document = models.FileField(verbose_name="Documento", blank=False, null=False, upload_to=uploaded_absences_proofs)
+    description = models.CharField(verbose_name="Descripción", max_length=4096, null=False, blank=True)
+
 
 
 def uploaded_employees_assistance_destination(instance, filename):

@@ -1148,7 +1148,45 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 # Assistance Admin.
 @admin.register(AbsenceProof)
 class AbsenceProofAdmin(admin.ModelAdmin):
-    pass
+    form = AbsenceProofForm
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(AbsenceProofAdmin, self).get_form(request, obj, **kwargs)
+
+        # To pass the request object to the model form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+
+
+        return ModelFormMetaClass
+
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        if '_continue' not in request.POST:
+            url = "/admin/HumanResources/employeeassistance/incidences_by_employee/" + str(
+                obj.payroll_period.id) + "/" + obj.employee.employee_key + "/"
+            return HttpResponseRedirect(url)
+        else:
+            return super(AbsenceProofAdmin, self).response_add(request, obj, post_url_continue)
+
+    def response_change(self, request, obj):
+        if '_continue' not in request.POST:
+            url = "/admin/HumanResources/employeeassistance/incidences_by_employee/" + str(
+                obj.payroll_period.id) + "/" + obj.employee.employee_key + "/"
+            return HttpResponseRedirect(url)
+        else:
+            return super(AbsenceProofAdmin, self).response_change(request, obj)
+
+    def response_delete(self, request, obj_display, obj_id):
+        payroll_period_id = request.GET.get('payroll_period')
+        employee_id = request.GET.get('employee')
+
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+        employee = Employee.objects.get(pk=employee_id)
+
+        url = "/admin/HumanResources/employeeassistance/incidences_by_employee/"+str(payroll_period.id)+"/"+employee.employee_key+"/"
+        return redirect(url)
 
 
 # Uploaded Assistances Admin.
