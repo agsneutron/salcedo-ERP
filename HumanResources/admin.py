@@ -1037,6 +1037,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect('/admin/HumanResources/payrollgroup/'+str(obj.payroll_group.id)+'/')
+
     # Adding extra context to the change view.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
@@ -1094,8 +1095,14 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(EmployeeAssistance)
 class EmployeeAssistanceAdmin(admin.ModelAdmin):
     form = EmployeeAssistanceForm
-    readonly_fields = ('absence',)
 
+    fieldsets = (
+        ("Registro de Asistencia por Empleado", {
+            'fields': ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time', 'absence')
+        }),
+    )
+
+    readonly_fields = ('absence',)
 
     def save_model(self, request, obj, form, change):
 
@@ -1141,7 +1148,45 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 # Assistance Admin.
 @admin.register(AbsenceProof)
 class AbsenceProofAdmin(admin.ModelAdmin):
-    pass
+    form = AbsenceProofForm
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(AbsenceProofAdmin, self).get_form(request, obj, **kwargs)
+
+        # To pass the request object to the model form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+
+
+        return ModelFormMetaClass
+
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        if '_continue' not in request.POST:
+            url = "/admin/HumanResources/employeeassistance/incidences_by_employee/" + str(
+                obj.payroll_period.id) + "/" + obj.employee.employee_key + "/"
+            return HttpResponseRedirect(url)
+        else:
+            return super(AbsenceProofAdmin, self).response_add(request, obj, post_url_continue)
+
+    def response_change(self, request, obj):
+        if '_continue' not in request.POST:
+            url = "/admin/HumanResources/employeeassistance/incidences_by_employee/" + str(
+                obj.payroll_period.id) + "/" + obj.employee.employee_key + "/"
+            return HttpResponseRedirect(url)
+        else:
+            return super(AbsenceProofAdmin, self).response_change(request, obj)
+
+    def response_delete(self, request, obj_display, obj_id):
+        payroll_period_id = request.GET.get('payroll_period')
+        employee_id = request.GET.get('employee')
+
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+        employee = Employee.objects.get(pk=employee_id)
+
+        url = "/admin/HumanResources/employeeassistance/incidences_by_employee/"+str(payroll_period.id)+"/"+employee.employee_key+"/"
+        return redirect(url)
 
 
 # Uploaded Assistances Admin.
@@ -1149,6 +1194,11 @@ class AbsenceProofAdmin(admin.ModelAdmin):
 class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     form = UploadedEmployeeAssistanceHistoryForm
 
+    fieldsets = (
+        ("Carga de Archivo de Asistencias", {
+            'fields': ('payroll_period', 'assistance_file',)
+        }),
+    )
 
     def save_model(self, request, obj, form, change):
         print "Saving assistance file."
@@ -1184,11 +1234,21 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
             messages.error(request, edu.get_error_message())
 
 
+class EmployeeLoanDetailInLine(admin.TabularInline):
+    model = EmployeeLoanDetail
+    extra = 14
+
 # Loan Admin.
 @admin.register(EmployeeLoan)
 class EmployeeLoanAdmin(admin.ModelAdmin):
     form = EmployeeLoanForm
+    inlines = (EmployeeLoanDetailInLine,)
 
+    fieldsets = (
+        ("Prestamos a Empleados", {
+            'fields': ('employee', 'amount', 'payment_plan', 'request_date')
+        }),
+    )
 
 # JobProfile Admin.
 @admin.register(JobProfile)
@@ -1234,5 +1294,15 @@ class JobInstanceAdmin(admin.ModelAdmin):
 
 
 
+#EmployeeDropOut
+@admin.register(EmployeeDropOut)
+class EmployeeDropOutAdmin(admin.ModelAdmin):
+    form = EmployeeDropOutForm
+
+    fieldsets = (
+        ("Baja de Empleados", {
+            'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
+        }),
+    )
 
 admin.site.register(PayrollClassification)

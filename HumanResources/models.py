@@ -14,6 +14,7 @@ from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
 from ERP.models import Pais, Estado, Municipio, Project, Bank
+from utilities import getParameters
 
 # Create your models here.
 from multiselectfield import MultiSelectField
@@ -524,9 +525,11 @@ class EmployeeDropOut(models.Model):
 
     DROP_TYPE_A = 1
     DROP_TYPE_B = 2
+    DROP_TYPE_C = 3
     DROP_TYPE_CHOICES = (
         (DROP_TYPE_A, 'Despido'),
-        (DROP_TYPE_B, 'Incapacidad'),
+        (DROP_TYPE_B, 'Renuncia'),
+        (DROP_TYPE_C, 'Incapacidad'),
     )
     type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Tipo de Baja')
     reason = models.CharField(verbose_name="Motivo", max_length=4096, null=False, blank=True)
@@ -537,7 +540,7 @@ class EmployeeDropOut(models.Model):
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
 
     class Meta:
-        verbose_name_plural = "Bajas de Empleado"
+        verbose_name_plural = "Bajas de Empleados"
         verbose_name = "Baja de Empleado"
 
     def __str__(self):
@@ -555,7 +558,7 @@ class EmployeeAssistance(models.Model):
     entry_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Entrada")
     exit_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Salida")
     absence = models.BooleanField(verbose_name="Ausente", default=True)
-
+    justified = models.BooleanField(verbose_name="Justificada", default=False)
 
     class Meta:
         verbose_name_plural = "Asistencias"
@@ -573,13 +576,17 @@ class EmployeeAssistance(models.Model):
 
 def uploaded_absences_proofs(instance, filename):
     return '/'.join(
-        ['absences_uploads', str(instance.employee_assistance.payroll_period.id) + instance.employee_assistance.payroll_period.name, filename])
+        ['absences_proof_uploads', str(instance.payroll_period.id) + instance.payroll_period.name, filename])
 
-    
+
 class AbsenceProof(models.Model):
-    employee_assistance = models.ForeignKey(EmployeeAssistance, verbose_name='Registro de Asistencia', null=False, blank=False)
-    reasons = models.CharField(verbose_name="Razones", max_length=1024, null=False, blank=True)
-    proof_document = models.FileField(verbose_name="Documento Justificante", blank=True, upload_to=uploaded_absences_proofs)
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+    payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
+
+
+    document = models.FileField(verbose_name="Documento", blank=False, null=False, upload_to=uploaded_absences_proofs)
+    description = models.CharField(verbose_name="Descripción", max_length=4096, null=False, blank=True)
+
 
 
 def uploaded_employees_assistance_destination(instance, filename):
@@ -607,17 +614,44 @@ class UploadedEmployeeAssistanceHistory(models.Model):
 
 
 class EmployeeLoan(models.Model):
+    PLAN_A = 1
+    PLAN_B = 2
+    PLAN_TYPE_CHOICES = (
+        (PLAN_A, 'Plan A (12 periodos)'),
+        (PLAN_B, 'Plan B (14 periodos)'),
+    )
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
-    # Period
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False, default=0)
+    payment_plan = models.IntegerField(verbose_name="Plan de Pago", choices=PLAN_TYPE_CHOICES, default=PLAN_A)
+    request_date = models.DateField(verbose_name="Fecha de Solicitud",null=True, auto_now_add=False)
 
-    # Start_Period ***
-    # End_Period   ***
-
-    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Préstamos"
         verbose_name = "Préstamo"
+
+    def __str__(self):
+        return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
+
+class EmployeeLoanDetail(models.Model):
+    employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
+    period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+
+
+    class Meta:
+        verbose_name_plural = "Préstamos Detalle"
+        verbose_name = "Préstamo Detalle"
+
+    def __str__(self):
+        return self.employeeloan.employee.name + " " + self.employeeloan.employee.first_last_name + " " + self.employeeloan.employee.second_last_name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.employeeloan.employee.name + " " + self.employeeloan.employee.first_last_name + " " + self.employeeloan.employee.second_last_name
 
 
 # To represent a Job Profile.

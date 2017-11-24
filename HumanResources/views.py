@@ -177,6 +177,20 @@ def EmployeeByPeriod(request):
     return HttpResponse(template.render(context,request))
 
 
+@login_required()
+def payrollhome(request):
+
+    template = loader.get_template('admin/HumanResources/payroll-home.html')
+    period_data = PayrollPeriod.objects.all().query
+    employees = EmployeePositionDescription.objects.all()
+    employees.group_by = ['payroll_group_id']
+    period_data
+    #context = RequestContext.request
+    context = {'employees': employees,
+               'payrolldata':period_data}
+    return HttpResponse(template.render(context,request))
+
+
 class PayrollPeriodListView(generic.ListView):
     model = PayrollPeriod
     template_name = "HumanResources/payroll-period-list.html"
@@ -351,8 +365,11 @@ class IncidencesByEmployee(ListView):
 
         incidences = EmployeeAssistance.objects.filter(Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
 
+        absence_proofs = AbsenceProof.objects.filter(Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
+
         context['employee'] = employee
         context['payroll_period'] = payroll_period
         context['incidences'] = incidences
+        context['absence_proofs'] = absence_proofs
 
         return context

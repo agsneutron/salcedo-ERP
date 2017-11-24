@@ -1689,3 +1689,6 @@ input[type=file] {
     /* min-width: 4.7em; */
     padding-left: 80px;
 }
+.dynamic-paymentschedule_set > td > p{
+    display: none;
+}
