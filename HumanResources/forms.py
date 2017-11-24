@@ -558,6 +558,7 @@ class RegisterView(FormView):
 
 '''
 
+
 # Form to include the fields of the Payroll Group Form.
 class EmployeeLoanDetailForm(forms.ModelForm):
     class Meta:
@@ -571,11 +572,13 @@ class PayrollGroupForm(forms.ModelForm):
         model = PayrollGroup
         fields = '__all__'
 
+
 # Form to include the fields of the Earning Deduction Period Form.
 class EarningDeductionPeriodForm(forms.ModelForm):
     class Meta:
         model = EarningDeductionPeriod
         fields = '__all__'
+
 
 # Form to include the fields of the Payroll To Process Form.
 class PayrollToProcessForm(forms.ModelForm):
@@ -583,17 +586,20 @@ class PayrollToProcessForm(forms.ModelForm):
         model = PayrollToProcess
         fields = '__all__'
 
+
 # Form to include the fields of the Payroll Type Form.
 class PayrollTypeForm(forms.ModelForm):
     class Meta:
         model = PayrollType
         fields = '__all__'
 
+
 # Form to include the fields of the Payroll Period Form.
 class PayrollPeriodForm(forms.ModelForm):
     class Meta:
         model = PayrollPeriod
         fields = '__all__'
+
 
 # Form to include the fields of the Tax Regime Form.
 class TaxRegimeForm(forms.ModelForm):
@@ -677,7 +683,7 @@ class UploadedEmployeeAssistanceHistoryForm(forms.ModelForm):
 # Form to include the fields of Tag Form.
 class EmployeeLoanForm(forms.ModelForm):
     class Meta:
-        model = Tag
+        model = EmployeeLoan
         fields = '__all__'
 
 
@@ -701,6 +707,7 @@ class SubdirectionForm(forms.ModelForm):
         model = Subdirection
         fields = '__all__'
 
+
 # Form to include the fields of Tag Form.
 class DepartmentForm(forms.ModelForm):
     class Meta:
@@ -714,9 +721,19 @@ class AreaForm(forms.ModelForm):
         fields = '__all__'
 
 
-
 # Form to include the fields of Tag Form.
 class JobInstanceForm(forms.ModelForm):
     class Meta:
         model = JobInstance
         fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
+class EmployeeDropOutForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeDropOut
+        fields = '__all__'
+
+
+
+

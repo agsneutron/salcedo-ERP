@@ -525,9 +525,11 @@ class EmployeeDropOut(models.Model):
 
     DROP_TYPE_A = 1
     DROP_TYPE_B = 2
+    DROP_TYPE_C = 3
     DROP_TYPE_CHOICES = (
         (DROP_TYPE_A, 'Despido'),
-        (DROP_TYPE_B, 'Incapacidad'),
+        (DROP_TYPE_B, 'Renuncia'),
+        (DROP_TYPE_C, 'Incapacidad'),
     )
     type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Tipo de Baja')
     reason = models.CharField(verbose_name="Motivo", max_length=4096, null=False, blank=True)
@@ -538,7 +540,7 @@ class EmployeeDropOut(models.Model):
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
 
     class Meta:
-        verbose_name_plural = "Bajas de Empleado"
+        verbose_name_plural = "Bajas de Empleados"
         verbose_name = "Baja de Empleado"
 
     def __str__(self):
@@ -558,7 +560,6 @@ class EmployeeAssistance(models.Model):
     absence = models.BooleanField(verbose_name="Ausente", default=True)
     justified = models.BooleanField(verbose_name="Justificada", default=False)
 
-
     class Meta:
         verbose_name_plural = "Asistencias"
         verbose_name = "Asistencia"
@@ -577,7 +578,7 @@ def uploaded_absences_proofs(instance, filename):
     return '/'.join(
         ['absences_proof_uploads', str(instance.payroll_period.id) + instance.payroll_period.name, filename])
 
-    
+
 class AbsenceProof(models.Model):
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
     payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
@@ -616,8 +617,8 @@ class EmployeeLoan(models.Model):
     PLAN_A = 1
     PLAN_B = 2
     PLAN_TYPE_CHOICES = (
-        (PLAN_A, 'Plan A (12 meses)'),
-        (PLAN_B, 'Plan B (14 meses)'),
+        (PLAN_A, 'Plan A (12 periodos)'),
+        (PLAN_B, 'Plan B (14 periodos)'),
     )
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False, default=0)
@@ -634,6 +635,7 @@ class EmployeeLoan(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
 
 class EmployeeLoanDetail(models.Model):
     employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
