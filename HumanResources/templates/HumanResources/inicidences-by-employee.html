@@ -24,9 +24,8 @@
         <div class="card-block">
             <div class="tab-content">
 
-
                 <div class="table-responsive mt-15">
-                    {% if object_list %}
+                    {% if incidences %}
                         <table class="table table-striped">
                             <thead>
                             <tr>
@@ -34,12 +33,13 @@
                                 <th>Fecha</th>
                                 <th>Hora de Entrada</th>
                                 <th>Hora de Salida</th>
-                                <th style="text-align: center">Justificantes</th>
+                                <th style="text-align: center">Justificada</th>
                             </tr>
                             </thead>
 
                             <tbody>
                             {% for record in incidences %}
+
                                 <tr>
                                     <td>{{ record.id }}</td>
                                     <td>{{ record.record_date }}</td>
@@ -50,34 +50,150 @@
                                         {{ record.exit_time}}
                                     </td>
                                     <td style="text-align: center">
-                                        <a href="/admin/HumanResources/employeeassistance/incidences_by_employee/{{ record.employee__employee_key }}"
-                                           class="btn btn-raised btn-default btn-xs"><i
-                                                class="fa fa-eye color-default"> </i>
-                                            <div class="ripple-container"></div>
-                                        </a>
+
+                                        <form method="POST" action="/humanresources/api/change_justified_status" style="display: inline-block">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="redirect_url" value="{{ request.path }}">
+                                            <input type="hidden" name="employee_assistance" value="{{ record.id }}">
+                                            <input type="hidden" name="status" value="1">
+                                            <button type="submit" class="btn btn-raised btn-default btn-sm"
+                                                {% if record.justified == False %}
+                                                    style="opacity: .4"
+                                                {% endif %}
+                                            >
+                                                <i class="fa fa-check color-default"
+                                                   {% if record.justified == True %}
+                                                        style="color: #3FA43F"
+                                                   {% endif %}
+                                                >
+                                                </i>
+                                            </button>
+                                        </form>
+
+                                        <form method="POST" action="/humanresources/api/change_justified_status" style="display: inline-block">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="redirect_url" value="{{ request.path }}">
+                                            <input type="hidden" name="employee_assistance" value="{{ record.id }}">
+                                            <input type="hidden" name="status" value="0">
+                                            <button type="submit" class="btn btn-raised btn-default btn-sm"
+                                                {% if record.justified == True %}
+                                                    style="opacity: .4"
+                                                {% endif %}
+                                            >
+                                                <i class="fa fa-close color-default"
+                                                   {% if record.justified == False %}
+                                                        style="color: #EE2A2A"
+                                                   {% endif %}
+                                                >
+                                                </i>
+                                            </button>
+                                        </form>
+
                                     </td>
                                 </tr>
                             {% endfor %}
                             </tbody>
                         </table>
                     {% else %}
-                        No hay periodos aún.
+                        No se han encontrado incidencias del empleado.
                     {% endif %}
                 </div>
 
             </div>
         </div>
+
+    </div>
+
+    <h2>Documentos Justificantes</h2>
+
+
+    <div class="card ">
+
+        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+
+            <div class="item-right">
+
+                <a href="/admin/HumanResources/absenceproof/add/?payroll_period={{ payroll_period.id }}&employee={{ employee.id }}"
+                   class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
+                        class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                </a>
+            </div>
+        </ul>
+
+
+        <div class="card-block">
+            <div class="tab-content">
+
+                <div class="table-responsive mt-15">
+                    {% if absence_proofs %}
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Descripción</th>
+                                <th class="text-center">Ver</th>
+                                <th class="text-center">Descargar</th>
+                                <th class="text-center">Editar</th>
+                                <th class="text-center">Eliminar</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for record in absence_proofs %}
+
+                                <tr>
+                                    <td style="width: 64%">
+                                        {{ record.description }}
+                                    </td>
+
+                                    <td class="text-center" style="width: 8%">
+                                        <a href="/media/{{ record.document.name }}"
+                                           class="btn btn-raised btn-default btn-sm" target="_blank">
+                                            <i class="fa fa-eye" >
+                                            </i>
+                                        </a>
+                                    </td>
+
+                                    <td class="text-center" style="width: 8%">
+                                        <a href="/media/{{ record.document.name }}" download
+                                           class="btn btn-raised btn-default btn-sm" >
+                                            <i class="fa fa-cloud-download color-info">
+                                            </i>
+                                        </a>
+                                    </td>
+
+                                    <td class="text-center" style="width: 8%">
+                                        <a href="/admin/HumanResources/absenceproof/{{ record.id }}/change/?payroll_period={{ record.payroll_period.id }}&employee={{ record.employee.id  }}"
+                                           class="btn btn-raised btn-default btn-sm" >
+                                            <i class="fa fa-pencil color-black" >
+                                            </i>
+                                        </a>
+                                    </td>
+
+
+                                    <td class="text-center" style="width: 8%">
+                                        <a href="/admin/HumanResources/absenceproof/{{ record.id }}/delete/?payroll_period={{ record.payroll_period.id }}&employee={{ record.employee.id  }}"
+                                           class="btn btn-raised btn-default btn-sm" >
+                                            <i class="fa fa-trash color-danger">
+                                            </i>
+                                        </a>
+                                    </td>
+
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        No se han encontrado documentos justificantes.
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
     </div>
 
 
 
 
-
-
-    <script>
-        jQuery(document).ready(function () {
-            $("#org").jOrgChart();
-        });
-    </script>
 
 {% endblock %}
