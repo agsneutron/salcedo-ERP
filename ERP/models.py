@@ -767,13 +767,10 @@ class DocumentoFuente(models.Model):
 class TipoProyectoDetalle(models.Model):
     version = IntegerVersionField()
     proyecto = models.ForeignKey('Project', verbose_name="proyecto", null=True, blank=True)
-    nombreTipoProyecto = models.CharField(verbose_name="tipo Proyecto", max_length=8, null=False, blank=False)
-    numero = models.DecimalField(verbose_name='número', decimal_places=2, blank=False,
-                                 null=False,
-                                 default=0, max_digits=20)
-    m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=False, null=False,
-                                    default=0,
-                                    max_digits=20)
+    nombreTipoProyecto = models.CharField(verbose_name="Nombre de Tipo Proyecto", max_length=8, null=True, blank=True)
+    numero = models.DecimalField(verbose_name='número', decimal_places=2, blank=True,
+                                 null=True, max_digits=20)
+    m2terreno = models.DecimalField(verbose_name='terreno (m2)', decimal_places=2, blank=True, null=True, max_digits=20)
     documento = models.FileField(blank=True, null=True, upload_to=content_file_documento_fuente, )
 
     class Meta:

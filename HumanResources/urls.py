@@ -13,6 +13,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
 from django.conf.urls import url, include
+import api
 from django.contrib import admin
 from django.views.generic.base import RedirectView
 from django.contrib.auth import views as auth_views
@@ -45,5 +46,9 @@ urlpatterns = [
     url(r'^employeehome$', views.employeehome, name='employeehome'),
     url(r'^payrollhome$', views.payrollhome, name='payrollhome'),
     url(r'^employeebyperiod', views.EmployeeByPeriod, name='employeebyperiod'),
+
+    # Calls to API
+
+    url(r'^api/change_justified_status', api.ChangeAbsenceJustifiedStatus.as_view(), name='change_justified_status'),
 
 ]

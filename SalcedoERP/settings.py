@@ -16,12 +16,12 @@ import os
 
 import locale
 
-#locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
 # locale.currency(1000, grouping=True)
 # español para windows
 # locale.setlocale(locale.LC_ALL, "esp")
 # español para linux
-# locale.setlocale(locale.LC_ALL, "es_MX.utf8")
+#locale.setlocale(locale.LC_ALL, "es_MX.utf8")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -154,9 +154,7 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # https://docs.djangoproject.com/en/1.9/howto/static-files
 
 STATIC_URL = '/static/'
-
 #STATIC_ROOT = os.path.join('static')
-
 STATICFILES_DIRS = [
      os.path.join(BASE_DIR, "static"),
 ]

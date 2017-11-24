@@ -630,8 +630,44 @@ class EmployeeAssistanceForm(forms.ModelForm):
         fields = ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time','absence')
 
 
+# Form to include the fields of Tag Form.
+class EmployeeAssistanceForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeAssistance
+        fields = ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time', 'justified','absence')
 
-    # Form to include the fields of Tag Form.
+
+# Form to include the fields of Tag Form.
+class AbsenceProofForm(forms.ModelForm):
+    class Meta:
+        model = AbsenceProof
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+
+        # Getting the request object.
+        self.request = kwargs.pop('request', None)
+        payroll_period_id = self.request.GET.get('payroll_period')
+        employee_id = self.request.GET.get('employee')
+
+
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        # Updating the initial value of the dropdown.
+        kwargs['initial'].update({'employee': employee_id})
+        kwargs['initial'].update({'payroll_period': payroll_period_id})
+
+        # After this point, we can filter the querysets for the intended fields.
+        super(AbsenceProofForm, self).__init__(*args, **kwargs)
+
+        self.fields['employee'].queryset = Employee.objects.filter(pk=employee_id)
+        self.fields['payroll_period'].queryset = PayrollPeriod.objects.filter(pk=payroll_period_id)
+
+
+
+# Form to include the fields of Tag Form.
 class UploadedEmployeeAssistanceHistoryForm(forms.ModelForm):
     class Meta:
         model = UploadedEmployeeAssistanceHistory

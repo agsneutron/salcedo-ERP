@@ -1,0 +1,71 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block content %}
+
+    <script type="text/javascript" src="/perro/HumanResources/js/jquery.jOrgChart.js"></script>
+    <link rel="stylesheet" href="/perro/HumanResources/css/jquery.jOrgChart.css"/>
+
+
+
+
+    <div class="card ">
+
+
+        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+            <li role="presentation" class="active">
+                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                    Empleados con Incidencias del Grupo Nominal
+                    <strong>{{ payroll_period.payroll_group.name }}</strong>
+                    del periodo <strong>{{ payroll_period }}</strong>
+                </a>
+            </li>
+        </ul>
+
+
+        <div class="card-block">
+            <div class="tab-content">
+
+
+                <div class="table-responsive mt-15">
+                    {% if incidences %}
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Clave</th>
+                                <th>Nombre</th>
+                                <th>Ver</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+                            {% for record in incidences %}
+                                <tr>
+                                    <td>{{ record.employee__id }}</td>
+                                    <td>{{ record.employee__employee_key }}</td>
+                                    <td>
+                                        {{ record.employee__name}} {{ record.employee__first_last_name }} {{ record.employee__second_last_name }}
+                                    </td>
+                                    <td>
+                                        <a href="/admin/HumanResources/employeeassistance/incidences_by_employee/{{ payroll_period.id }}/{{ record.employee__employee_key }}/"
+                                           class="btn btn-raised btn-default btn-xs"><i
+                                                class="fa fa-eye color-default"> </i>
+                                            <div class="ripple-container"></div>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% else %}
+                        No hay empleados con incidencias en este periodo.
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}

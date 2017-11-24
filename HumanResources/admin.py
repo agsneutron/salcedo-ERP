@@ -1102,7 +1102,6 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 
 
     def save_model(self, request, obj, form, change):
-        print "Saving Assistance."
 
         if obj.entry_time is None or obj.exit_time is None:
             return True
@@ -1126,14 +1125,68 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 
         obj.absence = absent
 
-        print "About to save."
-
 
         super(EmployeeAssistanceAdmin, self).save_model(request, obj, form, change)
 
 
+    def get_urls(self):
+        urls = super(EmployeeAssistanceAdmin, self).get_urls()
+        my_urls = [
+            url(r'^incidences_by_period/(?P<payroll_period_id>\d+)/$', self.admin_site.admin_view(views.IncidencesByPayrollPeriod.as_view()),
+                name='incidences-list-view',
+                ),
+            url(r'^incidences_by_employee/(?P<payroll_period_id>\d+)/(?P<employee_key>[\w-]+)/$', self.admin_site.admin_view(views.IncidencesByEmployee.as_view()),
+                name='incidences-list-view',
+                ),
+        ]
+        return my_urls + urls
+
 
 # Assistance Admin.
+@admin.register(AbsenceProof)
+class AbsenceProofAdmin(admin.ModelAdmin):
+    form = AbsenceProofForm
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(AbsenceProofAdmin, self).get_form(request, obj, **kwargs)
+
+        # To pass the request object to the model form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+
+
+        return ModelFormMetaClass
+
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        if '_continue' not in request.POST:
+            url = "/admin/HumanResources/employeeassistance/incidences_by_employee/" + str(
+                obj.payroll_period.id) + "/" + obj.employee.employee_key + "/"
+            return HttpResponseRedirect(url)
+        else:
+            return super(AbsenceProofAdmin, self).response_add(request, obj, post_url_continue)
+
+    def response_change(self, request, obj):
+        if '_continue' not in request.POST:
+            url = "/admin/HumanResources/employeeassistance/incidences_by_employee/" + str(
+                obj.payroll_period.id) + "/" + obj.employee.employee_key + "/"
+            return HttpResponseRedirect(url)
+        else:
+            return super(AbsenceProofAdmin, self).response_change(request, obj)
+
+    def response_delete(self, request, obj_display, obj_id):
+        payroll_period_id = request.GET.get('payroll_period')
+        employee_id = request.GET.get('employee')
+
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+        employee = Employee.objects.get(pk=employee_id)
+
+        url = "/admin/HumanResources/employeeassistance/incidences_by_employee/"+str(payroll_period.id)+"/"+employee.employee_key+"/"
+        return redirect(url)
+
+
+# Uploaded Assistances Admin.
 @admin.register(UploadedEmployeeAssistanceHistory)
 class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     form = UploadedEmployeeAssistanceHistoryForm
@@ -1147,8 +1200,6 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         try:
             with transaction.atomic():
                 assistance_file = request.FILES['assistance_file']
-                print "The File:"
-                print assistance_file
                 file_interface_obj = AssistanceFileInterface(assistance_file)
 
                 # Getting the elements from the file.
@@ -1157,6 +1208,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 # Processing the results.
                 assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
                 assitance_db_object.process_records()
+
 
 
                 super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
