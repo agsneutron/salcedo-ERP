@@ -212,20 +212,7 @@ class Migration(migrations.Migration):
                 'verbose_name_plural': 'Empleados',
             },
         ),
-        migrations.CreateModel(
-            name='EmployeeAssistance',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('date', models.DateField(default=datetime.datetime(2017, 11, 21, 7, 25, 41, 144005, tzinfo=utc), verbose_name='Fecha')),
-                ('entry_time', models.TimeField(default=datetime.datetime(2017, 11, 21, 7, 25, 41, 144078, tzinfo=utc), verbose_name='Hora de Entrada')),
-                ('exit_time', models.TimeField(default=datetime.datetime(2017, 11, 21, 7, 25, 41, 144164, tzinfo=utc), verbose_name='Hora de Salida')),
-                ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='HumanResources.Employee', verbose_name='Empleado')),
-            ],
-            options={
-                'verbose_name': 'Asistencia',
-                'verbose_name_plural': 'Asistencias',
-            },
-        ),
+
         migrations.CreateModel(
             name='EmployeeContract',
             fields=[
