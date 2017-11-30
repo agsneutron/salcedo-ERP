@@ -1236,7 +1236,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
     model = EmployeeLoanDetail
-    extra = 14
+    form = EmployeeLoanDetailForm
+    extra = 1
 
 # Loan Admin.
 @admin.register(EmployeeLoan)

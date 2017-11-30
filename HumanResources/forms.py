@@ -4,6 +4,7 @@ from django import forms
 from HumanResources.models import *
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect
+from django.utils.timezone import now
 
 # Form to include the fields of the Employee Form.
 class EmployeeForm(forms.ModelForm):

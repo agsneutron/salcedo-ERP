@@ -647,11 +647,11 @@ class EmployeeLoanDetail(models.Model):
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
 
-    def __str__(self):
-        return self.employeeloan.employee.name + " " + self.employeeloan.employee.first_last_name + " " + self.employeeloan.employee.second_last_name
+    def save(self, *args, **kwargs):
+        modelo=EmployeeEarningsDeductionsbyPeriod()
+        modelo.create(self)
 
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.employeeloan.employee.name + " " + self.employeeloan.employee.first_last_name + " " + self.employeeloan.employee.second_last_name
+        super(EmployeeLoanDetail, self).save(*args, **kwargs)
 
 
 # To represent a Job Profile.
@@ -1052,6 +1052,17 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Periodo"
         verbose_name = "Deducciones y Percepciones por Periodo"
+
+    def create(self, data):
+        self.ammount = data.amount
+        self.date = now()
+        self.employee_id = data.employeeloan.employee.id
+        self.concept_id = 1
+        self.payroll_period_id = 1
+        super(EmployeeEarningsDeductionsbyPeriod, self).save()
+
+    def save(self, *args, **kwargs):
+        super(EmployeeEarningsDeductionsbyPeriod, self).save(*args, **kwargs)
 
 
 class EarningDeductionPeriod(models.Model):
