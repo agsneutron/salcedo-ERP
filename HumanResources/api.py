@@ -5,6 +5,7 @@ from django.views.generic import View
 from ERP.lib.utilities import Utilities
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
     EmployeeFinancialData
+from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 
 
 class ChangeAbsenceJustifiedStatus(View):
@@ -32,6 +33,8 @@ class GeneratePayrollReceipt(View):
 
         total_earnings = 0
         total_deductions = 0
+        earnings_array = []
+        deductions_array = []
 
         receipt = {}
 
@@ -39,11 +42,13 @@ class GeneratePayrollReceipt(View):
         fixed_earnigs = employee.get_fixed_earnings()
         fixed_earnings_array = []
         for fixed_earning in fixed_earnigs:
-            fixed_earnings_array.append({
+            fixed_earning_json = {
                 "id" : str(fixed_earning.concept.id),
                 "name" : fixed_earning.concept.name,
                 "amount" : str(fixed_earning.ammount)
-            })
+            }
+            fixed_earnings_array.append(fixed_earning_json)
+            earnings_array.append(fixed_earning_json)
             total_earnings += fixed_earning.ammount
 
         receipt['fixed_earnings'] = fixed_earnings_array
@@ -53,42 +58,53 @@ class GeneratePayrollReceipt(View):
         fixed_deductions = employee.get_fixed_deductions()
         fixed_deductions_array = []
         for fixed_deduction in fixed_deductions:
-            fixed_deductions_array.append({
+            fixed_deduction_json = {
                 "id": str(fixed_deduction.concept.id),
                 "name": fixed_deduction.concept.name,
                 "amount": str(fixed_deduction.ammount)
-            })
+            }
+            fixed_deductions_array.append(fixed_deduction_json)
+            deductions_array.append(fixed_deduction_json)
             total_deductions += fixed_deduction.ammount
 
         receipt['fixed_deductions'] = fixed_deductions_array
+
 
 
         # Variable Earnings.
         variable_earnings = employee.get_variable_earnings_for_period(payroll_period)
         variable_earnings_array = []
         for variable_earning in variable_earnings:
-            variable_earnings_array.append({
+            variable_earning_json = {
                 "id": str(variable_earning.concept.id),
                 "name": variable_earning.concept.name,
                 "amount": str(variable_earning.ammount)
-            })
+            }
+            variable_earnings_array.append(variable_earning_json)
+            earnings_array.append(variable_earning_json)
             total_earnings += variable_earning.ammount
 
         receipt['variable_earnings'] = variable_earnings_array
+
 
 
         # Variable Deductions.
         variable_deductions = employee.get_variable_deductions_for_period(payroll_period)
         variable_deductions_array = []
         for variable_deduction in variable_deductions:
-            variable_deductions_array.append({
+            variable_deduction_json = {
                 "id": str(variable_deduction.concept.id),
                 "name": variable_deduction.concept.name,
                 "amount": str(variable_deduction.ammount)
-            })
+            }
+            variable_deductions_array.append(variable_deduction_json)
+            deductions_array.append(variable_deduction_json)
             total_deductions += variable_deduction.ammount
 
         receipt['variable_deductions'] = variable_deductions_array
+
+
+
 
 
         # Absences.
@@ -96,18 +112,28 @@ class GeneratePayrollReceipt(View):
         absences = employee.get_employee_absences_for_period(payroll_period)
         absences_array = []
         for absence in absences:
-            absences_array.append({
+            absence_json = {
                 "id" : absence.id,
-                "date": str(absence.record_date),
+                "name": "Falta del " + str(absence.record_date),
                 "amount" : str(employee_financial_data.daily_salary)
-            })
+            }
+            absences_array.append(absence_json)
+            deductions_array.append(absence_json)
             total_deductions += employee_financial_data.daily_salary
 
         receipt['absences'] = absences_array
 
+
+        # General array.
+        receipt['earnings'] = earnings_array
+        receipt['deductions'] = deductions_array
+
+
         # Adding the general data to the receipt (employee and totals).
         receipt["employee_id"] = str(employee.id)
         receipt["employee_key"] = str(employee.employee_key)
+        receipt["rfc"] = str(employee.rfc)
+        receipt["ssn"] = str(employee.social_security_number)
         receipt["employee_fullname"] = employee.get_full_name()
         receipt["total_earnings"] = str(total_earnings)
         receipt["total_deductions"] = str(total_deductions)
@@ -154,4 +180,6 @@ class GeneratePayrollReceipt(View):
 
 
 
-        return HttpResponse(Utilities.json_to_dumps(receipts_array),'application/json; charset=utf-8')
+        #return HttpResponse(Utilities.json_to_dumps(receipts_array),'application/json; charset=utf-8')
+        response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
+        return response
