@@ -38,6 +38,7 @@ class TipoProyectoDetalleAddForm(forms.ModelForm):
         instance = super(TipoProyectoDetalleAddForm, self).save(commit=False)
         if instance.id is not None:  # Revisa si existe ese objeto
             a = TipoProyectoDetalle.objects.filter(id=instance.id).first()
+
             Logs.log(a.documento.name, "Mensaje")
             if a.documento.name != "":  # revisa si tiene una foto asignada
 
