@@ -85,58 +85,62 @@
     line-height: 1.3 !important;
 }
     </style>
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
 {% endblock %}
 {% block content %}
 
     <div class="container">
-         <h3 class="section-title">Listado de Nómina</h3>
-        <hr>
-        <div class="col-md-12">
-            {% for record_period in payrolldata %}
-                <div class="col-md-3"><strong>Periodo :</strong> <br> {{ record_period.name }}</div>
-                <div class="col-md-3"><strong>Grupo :</strong> <br> {{ record_period.payroll_group}}</div>
-                <div class="col-md-3"><strong>Inicio de Periodo : </strong><br>{{ record_period.start_period }}</div>
-                <div class="col-md-3"><strong>Fin de Periodo :</strong><br> {{ record_period.end_period }}</div>
-
-            {% endfor %}
-
-        </div>
-
-
-
-        <div class="col-md-12">
+        {% include "admin/HumanResources/payroll-home.html" %}
+         <div class="col-xs-9">
+             <h3 class="section-title">Listado de Nómina</h3>
             <hr>
-            <div class="table-respponsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                        <tr>
-                                            <td>Clave</td>
-                                            <td>Nombre</td>
-                                            <td>Puesto Asignado</td>
-                                            <td>P/D por Periodo</td>
-                                            <td>Excluir</td>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for record in employees %}
-                                            <tr>
-                                                <td>{{ record.employee.employee_key }}</td>
-                                                <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
-                                                <td>{{ record.job_profile.job }}</td>
-                                                <td>
-                                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-address-card-o color-default"></i>
-                                                    </a>
-                                                </td>
-                                                <td>
+            <div class="col-md-12">
+                {% for record_period in payrolldata %}
+                    <div class="col-md-3"><strong>Periodo :</strong> <br> {{ record_period.name }}</div>
+                    <div class="col-md-3"><strong>Grupo :</strong> <br> {{ record_period.payroll_group}}</div>
+                    <div class="col-md-3"><strong>Inicio de Periodo : </strong><br>{{ record_period.start_period }}</div>
+                    <div class="col-md-3"><strong>Fin de Periodo :</strong><br> {{ record_period.end_period }}</div>
 
-                                                    <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}">
-                                                </td>
+                {% endfor %}
+
+            </div>
+
+
+
+            <div class="col-md-12">
+                <hr>
+                <div class="table-respponsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td>Clave</td>
+                                                <td>Nombre</td>
+                                                <td>Puesto Asignado</td>
+                                                <td>P/D por Periodo</td>
+                                                <td>Excluir</td>
                                             </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody>
+                                            {% for record in employees %}
+                                                <tr>
+                                                    <td>{{ record.employee.employee_key }}</td>
+                                                    <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
+                                                    <td>{{ record.job_profile.job }}</td>
+                                                    <td>
+                                                        <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
+                                                class="fa fa-address-card-o color-default"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+
+                                                        <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}">
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+            </div>
         </div>
     </div>
 
