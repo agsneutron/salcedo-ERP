@@ -1096,6 +1096,11 @@ class EmployeeLoanDetail(models.Model):
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
 
+    def delete(self):
+        delModel = EmployeeEarningsDeductionsbyPeriod()
+        delModel.deleteFromEmployeeLoanDetail(self)
+        super(EmployeeLoanDetail, self).delete()
+
     def save(self, *args, **kwargs):
         modelo=EmployeeEarningsDeductionsbyPeriod()
         modelo.create(self)
@@ -1122,6 +1127,10 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Periodo"
         verbose_name = "Deducciones y Percepciones por Periodo"
+    def deleteFromEmployeeLoanDetail(self, data):
+        obj = EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id,
+                                                             payroll_period_id=data.period.id)
+        super(EmployeeEarningsDeductionsbyPeriod, obj).delete()
 
     def create(self, data):
         existe = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
