@@ -46,6 +46,8 @@ class HumanResourcesAdminUtilities():
         link = "/admin/HumanResources/"+model_name+"/"+str(obj.id)+"/"
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+        if model_name == "payrollgroup":
+            button = "<i class ='fa fa-calendar-check-o color-default eliminar' > </i>"
 
         return '<a href="'+link+'" class="'+css+'" >'+button+'</a>'
 
@@ -1000,24 +1002,23 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('name','payroll_classification','project')
+            'fields': ('name', 'payroll_classification', 'project')
         }),
     )
 
-
-    list_display = ('name','get_detail_button','get_change_link','get_delete_link')
+    list_display = ('name', 'payroll_classification', 'project',  'get_detail_button', 'get_change_link', 'get_delete_link')
 
 
     def get_detail_button(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
     def get_change_link(self,obj):
-        return HumanResourcesAdminUtilities.get_change_link(obj, obj.id)
+        return HumanResourcesAdminUtilities.get_change_link(obj)
 
     def get_delete_link(self, obj):
         return HumanResourcesAdminUtilities.get_delete_link(obj)
 
-    get_detail_button.short_description = 'Ver Periodos'
+    get_detail_button.short_description = 'Periodos'
     get_detail_button.allow_tags = True
 
     get_change_link.short_description = 'Editar'
