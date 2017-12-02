@@ -1075,11 +1075,11 @@ class PayrollPeriod(models.Model):
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
     payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a procesar", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
-    # month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
-    # year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
-    #     validators=[MaxValueValidator(9999), MinValueValidator(2017)])
-    # week = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
-    #     validators=[MaxValueValidator(53), MinValueValidator(1)])
+    month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
+         validators=[MaxValueValidator(9999), MinValueValidator(2017)])
+    week = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
+         validators=[MaxValueValidator(53), MinValueValidator(1)])
     start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
 

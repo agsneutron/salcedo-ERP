@@ -70,6 +70,7 @@
                                 {% include "admin/HumanResources/payrollgroup/fieldset.html" %}
                             {% endfor %}
                             {% block after_related_objects %}
+                                {% if period %}
                                 <hr>
                                 <div class="table-respponsive">
                                     <table class="table table-striped">
@@ -105,7 +106,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-
+                              {% endif %}
 
 
                             {% endblock %}

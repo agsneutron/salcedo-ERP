@@ -987,8 +987,6 @@ class PayrollGroupAdmin(admin.ModelAdmin):
     )
 
 
-
-
     list_display = ('name','get_detail_button')
 
 
@@ -998,7 +996,7 @@ class PayrollGroupAdmin(admin.ModelAdmin):
     def get_detail_button(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
-    get_detail_button.short_description = 'Ver'
+    get_detail_button.short_description = 'Ver Periodos'
     get_detail_button.allow_tags = True
 
     # Adding extra context to the change view.
@@ -1035,6 +1033,8 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
             'fields': ('name','start_period','end_period', 'payroll_group','payroll_to_process')
         }),
     )
+
+    list_display = ('name', 'payroll_group')
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect('/admin/HumanResources/payrollgroup/'+str(obj.payroll_group.id)+'/')
