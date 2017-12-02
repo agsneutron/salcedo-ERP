@@ -566,6 +566,13 @@ class EmployeeLoanDetailForm(forms.ModelForm):
         model = EmployeeLoanDetail
         fields = '__all__'
 
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        employee = self.cleaned_data.get('username')
+        if email and EmployeeLoanDetail.objects.filter(period=email).exclude(employee=employee).exists():
+            raise forms.ValidationError(u'Email addresses must be unique.')
+        return email
+
 
 # Form to include the fields of the Payroll Group Form.
 class PayrollGroupForm(forms.ModelForm):
