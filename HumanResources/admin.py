@@ -43,16 +43,18 @@ class HumanResourcesAdminUtilities():
     @staticmethod
     def get_detail_link(obj):
         model_name =  obj.__class__.__name__.lower()
-        link = "http://localhost:8000/admin/HumanResources/"+model_name+"/"+str(obj.id)+"/"
+        link = "/admin/HumanResources/"+model_name+"/"+str(obj.id)+"/"
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+        if model_name == "payrollgroup":
+            button = "<i class ='fa fa-calendar-check-o color-default eliminar' > </i>"
 
         return '<a href="'+link+'" class="'+css+'" >'+button+'</a>'
 
     @staticmethod
     def get_delete_link(obj):
         model_name = obj.__class__.__name__.lower()
-        link = "http://localhost:8000/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/delete"
+        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/delete"
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-trash-o color-danger eliminar' > </i>"
 
@@ -62,7 +64,7 @@ class HumanResourcesAdminUtilities():
     @staticmethod
     def get_change_link_with_employee(obj, employee_id):
         model_name = obj.__class__.__name__.lower()
-        link = "http://localhost:8000/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change?employee="+str(employee_id)
+        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change?employee="+str(employee_id)
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
 
@@ -74,6 +76,24 @@ class HumanResourcesAdminUtilities():
         link = "/admin/HumanResources/" + model_name + "/add/?employee=" + str(employee_id)
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-address-card-o color-default' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_change_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_listpayroll_link(obj, payrollperiod_id, payrollgroup_id):
+        model_name = obj.__class__.__name__.lower()
+        link = "/humanresources/employeebyperiod/?payrollperiod=" + str(payrollperiod_id) + "&payrollgroup=" + str(payrollgroup_id)
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-list color-default eliminar' > </i>"
 
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
@@ -982,22 +1002,30 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('name','payroll_classification','project')
+            'fields': ('name', 'payroll_classification', 'project')
         }),
     )
 
-
-    list_display = ('name','get_detail_button')
-
-
-
+    list_display = ('name', 'payroll_classification', 'project',  'get_detail_button', 'get_change_link', 'get_delete_link')
 
 
     def get_detail_button(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
-    get_detail_button.short_description = 'Ver Periodos'
+    def get_change_link(self,obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_detail_button.short_description = 'Periodos'
     get_detail_button.allow_tags = True
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
 
     # Adding extra context to the change view.
     def add_view(self, request, form_url='', extra_context=None):
@@ -1034,7 +1062,25 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('name', 'payroll_group')
+    list_display = ('name', 'payroll_group', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
+
+    def get_listpayroll_link(self, obj):
+        return HumanResourcesAdminUtilities.get_listpayroll_link(obj, obj.id, obj.payroll_group.id)
+
+    def get_change_link(self,obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_listpayroll_link.short_description = 'Listado'
+    get_listpayroll_link.allow_tags = True
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
 
     def response_add(self, request, obj, post_url_continue=None):
         return HttpResponseRedirect('/admin/HumanResources/payrollgroup/'+str(obj.payroll_group.id)+'/')
