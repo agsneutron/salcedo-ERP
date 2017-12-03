@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 # Django Libraries.
+from django.core.checks import messages
 from django.db import models
 from django.db.models.query_utils import Q
 from django.utils.safestring import mark_safe
@@ -1233,3 +1234,14 @@ class JobInstance(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.id)
+
+    def can_be_deleted(self):
+        if self.id != 1:
+            return True
+        return False
+
+    def delete(self, using=None, keep_parents=False):
+        if self.can_be_deleted():
+            return super(JobInstance, self).delete(using, keep_parents)
+        print 'Job Instance can\'t be deleted, it is the root.'
+        return False
