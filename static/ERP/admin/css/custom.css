@@ -1564,8 +1564,8 @@ select.form-control {
         /* text-align: center; */
     position: relative;
     /* margin: 0 auto; */
-    left: calc(50% - 30px);
-    top: -8px;
+    /*left: calc(50% - 30px);*/
+        top: -33px;
 }
 
 .errorlist li {
@@ -1672,9 +1672,11 @@ errors > input {
     margin-top: 10px;
 }
 
+
 input[type=file] {
     font-size: 11px;
 }
+
 
 .section-title {
     color: #00bcd4 !important;
