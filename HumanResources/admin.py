@@ -759,9 +759,9 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
         deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
         earnings_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
-            concept__type='P')
+            concept__type='P').filter(payroll_period=payrollperiod_id)
         deductions_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
-            concept__type='D')
+            concept__type='D').filter(payroll_period=payrollperiod_id)
         payroll_set = PayrollPeriod.objects.filter(id=payrollperiod_id)
 
         extra['template'] = "employee_earnings_deductions"
