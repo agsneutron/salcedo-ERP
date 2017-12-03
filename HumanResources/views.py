@@ -90,6 +90,8 @@ class JobInstanceListView(generic.ListView):
         return html
 
     def get_employee_photo(self, employee):
+        if employee is not None and employee.photo is not None:
+            return '/media/' + str(employee.photo)
         return "/media/assets/avatar.jpg"
 
     def get_chart_node_content(self, job_instance):
@@ -100,7 +102,8 @@ class JobInstanceListView(generic.ListView):
                 "   <a target='_blank' href='/admin/HumanResources/jobinstance/" + str(
             job_instance.id) + "/change/' class='node-button'><i class='fa fa-edit'></i></a>" \
                                "   <a href='#' class='node-button node-button-collapse' data-expanded='true'><i class='fa fa-arrow-circle-up'></i></a>" \
-                               "   <a href='/admin/HumanResources/jobinstance/add/?parent_job_instance="+str(job_instance.id)+"' class='node-button' data-expanded='true'><i class='fa fa-plus-circle'></i></a>" \
+                               "   <a href='/admin/HumanResources/jobinstance/add/?parent_job_instance=" + str(
+            job_instance.id) + "' class='node-button' data-expanded='true'><i class='fa fa-plus-circle'></i></a>" \
                                "" \
                                "</div>"
 
