@@ -1255,30 +1255,25 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
 class JobProfileAdmin(admin.ModelAdmin):
     form = JobProfileForm
 
-
 # Loan Admin.
 @admin.register(Direction)
 class DirectionAdmin(admin.ModelAdmin):
     form = DirectionForm
-
 
 # Loan Admin.
 @admin.register(Subdirection)
 class SubdirectionAdmin(admin.ModelAdmin):
     form = SubdirectionForm
 
-
 # Loan Admin.
 @admin.register(Area)
 class AreaAdmin(admin.ModelAdmin):
     form = AreaForm
 
-
 # Loan Admin.
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
     form = DepartmentForm
-
 
 # Loan Admin.
 @admin.register(JobInstance)
@@ -1291,8 +1286,6 @@ class JobInstanceAdmin(admin.ModelAdmin):
             url(r'^$', views.JobInstanceListView.as_view(), name='employee-detail'),
         ]
         return my_urls + urls
-
-
 
 #EmployeeDropOut
 @admin.register(EmployeeDropOut)
