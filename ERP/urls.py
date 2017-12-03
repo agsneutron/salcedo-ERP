@@ -7,6 +7,7 @@ from ERP.lib import erp_forms_api
 from ERP.views import CompaniesListView
 
 urlpatterns = [
+
     url(r'^progress_estimate_log$', views.progress_estimate_log_view, name='progress_estimate_log_view'),
     #
     # Endpoints to retrieve information.

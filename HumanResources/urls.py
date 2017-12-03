@@ -50,5 +50,7 @@ urlpatterns = [
     # Calls to API
 
     url(r'^api/change_justified_status', api.ChangeAbsenceJustifiedStatus.as_view(), name='change_justified_status'),
+    url(r'^api/generate_payroll_receipt', api.GeneratePayrollReceipt.as_view(), name='generate_payroll_receipt'),
+
 
 ]

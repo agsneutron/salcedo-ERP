@@ -826,7 +826,7 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 
-    # Overriding the add_wiew method for the employee position description admin.
+    # Overriding the add_wiew method for the employee pfinancial data admin.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
@@ -844,6 +844,7 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
                     financial_data.first().id) + "/change?employee=" + str(employee_id) + "&position=1")
 
         return super(EmployeeFinancialDataAdmin, self).add_view(request, form_url, extra_context=extra)
+
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
 
@@ -1236,7 +1237,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
     model = EmployeeLoanDetail
-    extra = 14
+    form = EmployeeLoanDetailForm
+    extra = 1
 
 # Loan Admin.
 @admin.register(EmployeeLoan)

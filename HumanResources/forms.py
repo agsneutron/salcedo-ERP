@@ -4,6 +4,7 @@ from django import forms
 from HumanResources.models import *
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect
+from django.utils.timezone import now
 
 # Form to include the fields of the Employee Form.
 class EmployeeForm(forms.ModelForm):
@@ -564,6 +565,13 @@ class EmployeeLoanDetailForm(forms.ModelForm):
     class Meta:
         model = EmployeeLoanDetail
         fields = '__all__'
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email')
+        employee = self.cleaned_data.get('username')
+        if email and EmployeeLoanDetail.objects.filter(period=email).exclude(employee=employee).exists():
+            raise forms.ValidationError(u'Email addresses must be unique.')
+        return email
 
 
 # Form to include the fields of the Payroll Group Form.
