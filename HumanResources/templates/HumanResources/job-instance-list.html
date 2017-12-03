@@ -4,12 +4,29 @@
 
     <script type="text/javascript" src="/static/HumanResources/js/jquery.jOrgChart.js"></script>
     <link rel="stylesheet" href="/static/HumanResources/css/jquery.jOrgChart.css"/>
+    <link rel="stylesheet" href="/static/HumanResources/css/chart.css"/>
 
-   <div> {{ chart | safe }} </div>
+
+
+    <div> {{ chart | safe }} </div>
 
     <script>
         jQuery(document).ready(function () {
+
+
+
+
             $("#org").jOrgChart();
+
+            $('.node').click(function () {
+                if ($(this).data('expanded') == null || $(this).data('expanded') == true) {
+                    $(this).data('expanded', false);
+                    $(this).find('.node-button-collapse i').prop('class', 'fa fa fa-arrow-circle-down')
+                } else {
+                    $(this).data('expanded', true);
+                    $(this).find('.node-button-collapse i').prop('class', 'fa fa fa-arrow-circle-up')
+                }
+            });
         });
     </script>
 

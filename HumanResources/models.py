@@ -1219,6 +1219,7 @@ class PayrollProcessedDetail(models.Model):
 class JobInstance(models.Model):
     # Job Description ***
     job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleado', null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=True, blank=True)
     parent_job_instance = models.ForeignKey('self', verbose_name='Jefe Inmediato', null=True, blank=True)
 
     class Meta:
@@ -1230,3 +1231,4 @@ class JobInstance(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.id)
+
