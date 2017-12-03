@@ -16,7 +16,7 @@ $colors: (
   }
 
   .node {
-    width: 180px;
+    width: 240px;
     height: $height;
     line-height: 17px;
     box-sizing: border-box;
@@ -83,7 +83,8 @@ $colors: (
 
     .position-name {
       font-weight: bold;
-      font-size: 12px;
+      font-size: 10px;
+      line-height: 12px;
       text-transform: uppercase;
     }
   }

@@ -3,7 +3,7 @@
   .jOrgChart table .node-cell {
     padding: 0 0 0 52.8px; }
 .jOrgChart .node {
-  width: 180px;
+  width: 240px;
   height: 66px;
   line-height: 17px;
   box-sizing: border-box;
@@ -47,7 +47,8 @@
       display: inline-block; }
   .jOrgChart .node .position-name {
     font-weight: bold;
-    font-size: 12px;
+    font-size: 10px;
+    line-height: 12px;
     text-transform: uppercase; }
 
 /*# sourceMappingURL=chart.css.map */

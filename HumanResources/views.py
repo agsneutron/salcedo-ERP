@@ -98,8 +98,13 @@ class JobInstanceListView(generic.ListView):
         html = ""
         employee = job_instance.employee
 
-        html += "<div class='overlay'>" \
-                "   <a target='_blank' href='/admin/HumanResources/jobinstance/" + str(
+        html += "<div class='overlay'>"
+
+        if job_instance.employee is not None:
+            html += "   <a target='_blank' href='/admin/HumanResources/employee/" + str(
+                job_instance.employee_id) + "' class='node-button'><i class='fa fa-user'></i></a>"
+
+        html += "   <a target='_blank' href='/admin/HumanResources/jobinstance/" + str(
             job_instance.id) + "/change/' class='node-button'><i class='fa fa-edit'></i></a>" \
                                "   <a href='#' class='node-button node-button-collapse' data-expanded='true'><i class='fa fa-arrow-circle-up'></i></a>" \
                                "   <a href='/admin/HumanResources/jobinstance/add/?parent_job_instance=" + str(
@@ -117,7 +122,7 @@ class JobInstanceListView(generic.ListView):
         else:
             html += "<div>Sin Cubrir</div>"
 
-        html += "<div class='position-name'>" + job_instance.job_profile.job + "</div>"
+        html += "<div class='position-name'>" + job_instance.job_profile.job + " <br> " + job_instance.job_profile.area.name + "</div>"
 
         html += "</div>"
 
