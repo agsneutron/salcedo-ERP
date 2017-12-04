@@ -483,7 +483,7 @@ class TestApplicationAdmin(admin.ModelAdmin):
         'employee__name', '^test__name', 'result')
 
     def get_EmployeeModelDetail_link(self, obj):
-        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("employee", obj.employee.id, "#pruebas")
+        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("testapplication", obj.employee.id, "#pruebas")
 
     get_EmployeeModelDetail_link.short_description = 'Ver'
     get_EmployeeModelDetail_link.allow_tags = True
@@ -534,13 +534,13 @@ class TestApplicationAdmin(admin.ModelAdmin):
         redirect_url = "/admin/HumanResources/testapplication/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
-    # def get_urls(self):
-    #     urls = super(TestApplicationAdmin, self).get_urls()
-    #     my_urls = [
-    #         url(r'^$', views.Tests, name='tests'),
-    #         url(r'^(?P<pk>\d+)/$', views.TestApplicationDetail, name='test_application_detail'),
-    #     ]
-    #     return my_urls + urls
+    def get_urls(self):
+        urls = super(TestApplicationAdmin, self).get_urls()
+        my_urls = [
+            #url(r'^$', views.Tests, name='tests'),
+            url(r'^(?P<pk>\d+)/$', views.TestApplicationDetail, name='test_application_detail'),
+        ]
+        return my_urls + urls
 
 
 # Employee Document Admin.
