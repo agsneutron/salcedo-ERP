@@ -1376,4 +1376,10 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
         }),
     )
 
+
+# Employee Document Admin.
+@admin.register(ISRTable)
+class ISRTableAdmin(admin.ModelAdmin):
+    pass
+
 admin.site.register(PayrollClassification)
