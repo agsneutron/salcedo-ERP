@@ -163,7 +163,8 @@ class TestApplicationForm(forms.ModelForm):
         model = TestApplication
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'comments': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
@@ -191,7 +192,8 @@ class EmployeeDocumentForm(forms.ModelForm):
         model = EmployeeDocument
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'comments': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
@@ -272,7 +274,8 @@ class EmployeePositionDescriptionForm(forms.ModelForm):
         model = EmployeePositionDescription
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'observations': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
@@ -300,7 +303,8 @@ class EmployeeFinancialDataForm(forms.ModelForm):
         model = EmployeeFinancialData
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'comments': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
@@ -327,6 +331,7 @@ class InfonavitDataForm(forms.ModelForm):
     class Meta:
         model = InfonavitData
         fields = '__all__'
+
 
     def __init__(self, *args, **kwargs):
 
