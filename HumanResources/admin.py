@@ -1491,6 +1491,12 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         }),
     )
 
+    def get_UploadedEmployeeAssistanceHistory_link(self, obj):
+        return HumanResourcesAdminUtilities.get_UploadedEmployeeAssistanceHistory_link("UploadedEmployeeAssistanceHistory", obj.payroll_period.id, "")
+
+    get_UploadedEmployeeAssistanceHistory_link.short_description = 'Justificar Asistencias'
+    get_UploadedEmployeeAssistanceHistory_link.allow_tags = True
+
     def save_model(self, request, obj, form, change):
         current_user = request.user
         # payroll_group_id = int(request.POST.get('payroll_group'))
