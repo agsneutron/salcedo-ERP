@@ -698,6 +698,16 @@ def uploaded_employees_assistance_destination(instance, filename):
 
 
 class UploadedEmployeeAssistanceHistory(models.Model):
+    '''payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
+    payroll_period = ChainedForeignKey('PayrollPeriod',
+                               chained_field="payroll_group",
+                               chained_model_field="payroll_group",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True,
+                               unique=True)'''
+
+
     payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
     assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
                                        verbose_name="Archivo de Asistencias")

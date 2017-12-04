@@ -10,7 +10,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 {% endcomment %}
+<style>
+ .card .card-block, .card.card-block {
 
+    padding: 0;
+}
+   .card .card-block, .card.card-block {
+            padding: 20px;
+            padding: 0rem;
+        }
+
+        .card.card-info {
+            border-bottom: solid 0px #00bcd4;
+            border-radius: 0px;
+        }
+
+        .card {
+            box-shadow: none;
+            box-shadow: 0 0px 0px 0 rgba(0, 0, 0, .14), 0 0px 0px 0px rgba(0, 0, 0, .2), 0 0px 0px 0 rgba(0, 0, 0, .12);
+            border-radius: 2px;
+            background-color: #fff;
+            margin-bottom: 20px;
+            margin-bottom: 2rem;
+        }
+.text a {
+    color: white;
+}
+</style>
     {% if cl.formset %}
         <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
 
@@ -47,6 +73,11 @@
             .ui-selectmenu.ui-dialog .ui-header {
                 border-bottom-width: 1px;
             }
+        .card .card-block, .card.card-block {
+
+    padding: 0;
+}
+
         </style>
     {% endif %}
 {% endblock %}
@@ -85,11 +116,10 @@
     <div id="container">
         <div class="row">
             <div class="col-xs-12">
-                <div class="">
-                    <div class="card-header">
-                        <div class="item-left">
-                            <h3 class="card-title text">{{ cl.opts.verbose_name|capfirst }}</h3>
-                        </div>
+                <div class="card">
+                    <div class="">
+
+                    <h2 class=" text-center">{{ cl.opts.verbose_name|capfirst }}</h2>
                         {% block object-tools %}
                             {% if has_add_permission %}
                                 <ul class="object-tools">
@@ -103,15 +133,10 @@
                         </li>{% endcomment %}
 
                                         <div class="item-right">
-
-
                                             {% url cl.opts|admin_urlname:'add' as add_url %}
-
-                                            {% if add_url != "/admin/HumanResources/employeehastag/add/" and add_url != "/admin/HumanResources/testapplication/add/" %}
                                             <a href="{% add_preserved_filters add_url is_popup to_field %}"
                                                class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
                                             </a>
-                                            {% endif %}
                                         </div>
                                     {% endblock %}
                                 </ul>

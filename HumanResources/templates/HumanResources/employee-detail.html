@@ -576,7 +576,8 @@
                         <li class="list-group-item"><strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                     </ul>
                     <div>
-                        <a href="/admin/HumanResources/employeeearningsdeductions/?employee={{ employee.id }}" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+                        <a href="/admin/HumanResources/employeeearningsdeductions/?employee={{ employee.id }}"
+                           class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
                     </div>
 
                 </div>
@@ -585,7 +586,7 @@
             <div class="card-block text-center">
                 <h3 class="color-info">Etiquetas</h3>
                 {% for record in employee_has_tag %}
-                <span class="label label-default">{{ record.tag }}</span>
+                    <span class="label label-default">{{ record.tag }}</span>
                 {% endfor %}
 
             </div>
@@ -605,14 +606,15 @@
                     </li>
                     <li role="presentation">
                         <a href="#academica" aria-controls="academica" role="tab" data-toggle="tab">Formacion
-                            academica</a>
+                            <br>academica</a>
                     </li>
                     <li role="presentation">
-                        <a href="#contactos" aria-controls="contactos" role="tab" data-toggle="tab">Contactos de
+                        <a href="#contactos" aria-controls="contactos" role="tab" data-toggle="tab">Contactos<br> de
                             emergencia</a>
                     </li>
                     <li role="presentation">
-                        <a href="#familiares" aria-controls="familiares" role="tab" data-toggle="tab">Familiares</a>
+                        <a href="#familiares" aria-controls="familiares" role="tab" data-toggle="tab">Contactos<br>
+                            Familiares</a>
                     </li>
                     <li role="presentation">
                         <a href="#referencias" aria-controls="referencias" role="tab"
@@ -622,10 +624,16 @@
                         <a href="#pruebas" aria-controls="pruebas" role="tab" data-toggle="tab">Pruebas</a>
                     </li>
                     <li role="presentation">
-                        <a href="#doc" aria-controls="doc" role="tab" data-toggle="tab">Doc. Probatoria</a>
+                        <a href="#doc" aria-controls="doc" role="tab" data-toggle="tab">Documentacion</a>
                     </li>
                     <li role="presentation">
                         <a href="#checador" aria-controls="checador" role="tab" data-toggle="tab">Checador</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#puesto" aria-controls="checador" role="tab" data-toggle="tab">Puesto</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#financieros" aria-controls="checador" role="tab" data-toggle="tab">Datos <br>Financieros</a>
                     </li>
 
                 </ul>
@@ -941,7 +949,7 @@
                     <div role="tabpanel" class="tab-pane" id="doc">
                         <div class="card card-info">
                             <div class="">
-                                <h3 class="color-info card-title">Documentación Probatoria</h3>
+                                <h3 class="color-info card-title">Documentación</h3>
                             </div>
                             <div class="card-block text-left">
                                 <div class="table-responsive">
@@ -963,10 +971,8 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                     {% endfor %}
-                                        </div>
-
-
+                                    {% endfor %}
+                                </div>
 
 
                             </div>
@@ -1007,6 +1013,33 @@
                         </div>
                     </div>
 
+                    <div role="tabpanel" class="tab-pane" id="puesto">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Puesto</h3>
+                            </div>
+                            <div class="card-block text-left">
+                                {% for record in employee_position_description %}
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div role="tabpanel" class="tab-pane" id="financieros">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Datos Financieros</h3>
+                            </div>
+                            <div class="card-block text-left">
+                                {% for record in employee_financial %}
+
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -1027,7 +1060,12 @@
             checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
         }
 
-
+$(document).ready(function() {
+    if (location.hash !== '') $('a[href="' + location.hash + '"]').tab('show');
+    return $('a[data-toggle="tab"]').on('shown', function(e) {
+      return location.hash = $(e.target).attr('href').substr(1);
+    });
+});
     </script>
 
 
