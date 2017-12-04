@@ -269,6 +269,7 @@ hr {
     box-shadow: 0 3px 3px rgba(0, 0, 0, .29);
     height: auto !important;
     margin-bottom: 40px;
+z-index: 99;
 }
 
 .ms-navbar .ms-logo {
@@ -1483,7 +1484,7 @@ body .sb-site-container {
     }
 
     .nav.nav-tabs li a {
-         font-weight: 400;
+           font-weight: 400;
     padding: 1.7rem 11px;
     color: rgba(255, 255, 255, .5) !important;
     text-align: center;
@@ -1561,11 +1562,11 @@ select.form-control {
     padding-left: 70px;
 }
 .datetimeshortcuts {
-        /* text-align: center; */
+    /* text-align: center; */
     position: relative;
     /* margin: 0 auto; */
-    /*left: calc(50% - 30px);*/
-        top: -33px;
+    /* left: calc(50% - 30px); */
+    top: -33px;
 }
 
 .errorlist li {
@@ -1672,11 +1673,9 @@ errors > input {
     margin-top: 10px;
 }
 
-
 input[type=file] {
     font-size: 11px;
 }
-
 
 .section-title {
     color: #00bcd4 !important;
@@ -1691,6 +1690,10 @@ input[type=file] {
     /* min-width: 4.7em; */
     padding-left: 80px;
 }
-.dynamic-paymentschedule_set > td > p{
-    display: none;
+#photo-clear_id {
+    width:15px;
+}
+
+.clearable-file-input{
+display: -webkit-inline-box;
 }
