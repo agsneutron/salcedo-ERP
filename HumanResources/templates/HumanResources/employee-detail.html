@@ -583,7 +583,7 @@
                         <li class="list-group-item"><strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                     </ul>
                     <div>
-                        <a href="/admin/HumanResources/employeeearningsdeductions/?employee={{ employee.id }}" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+                        <a href="http://127.0.0.1:8000/admin/HumanResources/employee/{{ employee.id }}/#employeeED" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
                     </div>
 
                 </div>
@@ -629,7 +629,7 @@
                         <a href="#pruebas" aria-controls="pruebas" role="tab" data-toggle="tab">Pruebas</a>
                     </li>
                     <li role="presentation">
-                        <a href="#doc" aria-controls="doc" role="tab" data-toggle="tab">Doc. Probatoria</a>
+                        <a href="#doc" aria-controls="doc" role="tab" data-toggle="tab">Documentación</a>
                     </li>
                     <li role="presentation">
                         <a href="#checador" aria-controls="checador" role="tab" data-toggle="tab">Checador</a>
@@ -639,6 +639,9 @@
                     </li>
                     <li role="presentation">
                         <a href="#datosfinancieros" aria-controls="datosfinancieros" role="tab" data-toggle="tab">Datos Financieros</a>
+                    </li>
+                    <li role="presentation">
+                        <a href="#employeeED" aria-controls="employeeED" role="tab" data-toggle="tab"></a>
                     </li>
 
                 </ul>
@@ -1132,6 +1135,33 @@
                                     {% endfor %}
                                 </div>
                             </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="employeeED">
+                        <div class="card card-info">
+                            <div class="">
+                                <h3 class="color-info card-title">Percepciones y Deducciones</h3>
+                            </div>
+                            <div class="card-block text-left">
+                                {% for pd in employee_ed %}
+                                     <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Tipo</th>
+                                                <th>Concepto</th>
+                                                <th>Monto</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>{{ pd.concept.type }}</td>
+                                                <td>{{ pd.concept}}</td>
+                                                <td>{{ pd.ammount }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                {% endfor %}
+                            </div>
+                        </div>
                     </div>
 
                 </div>
