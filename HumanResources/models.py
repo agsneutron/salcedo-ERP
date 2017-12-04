@@ -1214,13 +1214,13 @@ class PayrollReceiptProcessed(models.Model):
     stamp_version = models.DecimalField(verbose_name="Versión de Timbrado", null=True, blank=True, max_digits=20,
                                         decimal_places=2)
     stamp_UUID = models.CharField(verbose_name="UUID de Timbrado", null=True, blank=True, max_length=500)
-    stamp_date = models.DateTimeField(verbose_name="Fecha de Timbrado")
+    stamp_date = models.DateTimeField(verbose_name="Fecha de Timbrado", null=True, blank=True)
     stamp_CFDI = models.CharField(verbose_name="CFDI Timbrado", null=True, blank=True, max_length=500)
     sat_certificate = models.CharField(verbose_name="Certificado del SAT", null=True, blank=True, max_length=500)
     stamp_sat = models.CharField(verbose_name="Timbrado del SAT", null=True, blank=True, max_length=500)
     stamp_xml = models.CharField(verbose_name="XML del Timbrado", null=True, blank=True, max_length=500)
     stamp_serie_id = models.CharField(verbose_name="Serie ID  de Timbrado", null=True, blank=True, max_length=500)
-    payment_date = models.DateField(verbose_name="Fecha de Pago")
+    payment_date = models.DateField(verbose_name="Fecha de Pago", null=True, blank=True)
 
     # foreign
 
