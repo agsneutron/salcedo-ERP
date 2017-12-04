@@ -67,7 +67,7 @@ class Employee(models.Model):
     first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
     second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
 
-    photo = models.FileField(upload_to=upload_employee_photo, null=True, verbose_name="Foto")
+    photo = models.FileField(upload_to=upload_employee_photo, null=True, blank=True, verbose_name="Foto")
 
     TYPE_A = 1
     TYPE_B = 2
