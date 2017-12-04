@@ -107,7 +107,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Datos de Empleado", {
-            'fields': ('employee_key', 'type', 'registry_date', 'status','photo')
+            'fields': ('employee_key', 'type', 'registry_date', 'status')
         }),
         ("Datos Personales", {
             'fields': (
@@ -122,12 +122,13 @@ class EmployeeAdmin(admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
         keywords = search_term.split(" ")
 
-        q = ()
+        r = Employee.objects.none()
 
         for k in keywords:
-            q = q + super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+            q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+            r |= q
 
-        return q
+        return r, True
 
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
