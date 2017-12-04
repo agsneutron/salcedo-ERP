@@ -92,6 +92,25 @@ class AutomaticAbsences(ListView):
                     employee_assistance.save()
 
 
+    def generate_automatic_absences_for_period(self, payroll_period):
+        # Getting the employee object for batch generation.
+        payroll_group = payroll_period.payroll_group
+
+        # Getting all the position descriptions related to the payroll group.
+        position_description_set = EmployeePositionDescription.objects.filter(payroll_group_id=payroll_group.id)
+        employee_array = []
+
+        for position_description in position_description_set:
+            employee_array.append(position_description.employee.id)
+
+        # Getting all the employees realted to the found payroll groups.
+        employee_set = Employee.objects.filter(id__in=employee_array)
+
+        for employee in employee_set:
+            self.generate_automatic_absecences_for_employee(payroll_period, employee)
+
+
+
 
     def get(self, request):
         payroll_period_id = int(request.GET.get('payroll_period'))

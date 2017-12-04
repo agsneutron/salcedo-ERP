@@ -12,6 +12,7 @@ from datetime import date
 from django.conf.urls import url
 from django.contrib import admin, messages
 
+from Assistance.api import AutomaticAbsences
 from Assistance.helper import AssistanceFileInterface, AssistanceDBObject, ErrorDataUpload
 
 # Constants.
@@ -1499,6 +1500,10 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 # Processing the results.
                 assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
                 assitance_db_object.process_records()
+
+                # If everything went ok, generatethe automatic absences
+                atm_mgr = AutomaticAbsences()
+                atm_mgr.generate_automatic_absences_for_period(payroll_period_id)
 
                 super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
 
