@@ -107,7 +107,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Datos de Empleado", {
-            'fields': ('employee_key', 'type', 'registry_date', 'status')
+            'fields': ('employee_key', 'type', 'registry_date', 'status', 'photo')
         }),
         ("Datos Personales", {
             'fields': (

@@ -110,7 +110,7 @@ class Employee(models.Model):
         (STATUS_ACTIVE, 'Activo'),
         (STATUS_INNACTIVE, 'Inactivo'),
     )
-    
+
     status = models.IntegerField(choices=EMPLOYEE_STATUS_CHOICES, default=STATUS_ACTIVE,
                                  verbose_name='Estatus del Empleado')
     birthdate = models.DateField(null=False, blank=False, verbose_name="Fecha de Nacimiento")
@@ -150,13 +150,26 @@ class Employee(models.Model):
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
     zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
 
-    BLOOD_TYPE_A = 1
-    BLOOD_TYPE_B = 2
+    BLOOD_TYPE_AP = 1
+    BLOOD_TYPE_AM = 2
+    BLOOD_TYPE_BP = 3
+    BLOOD_TYPE_BM = 4
+    BLOOD_TYPE_OP = 5
+    BLOOD_TYPE_OM = 6
+    BLOOD_TYPE_ABP = 7
+    BLOOD_TYPE_ABM = 8
+
     BLOOD_TYPE_CHOICES = (
-        (BLOOD_TYPE_A, 'O Negativo'),
-        (BLOOD_TYPE_B, 'O Positivo'),
+        (BLOOD_TYPE_AP, 'A+'),
+        (BLOOD_TYPE_AM, 'A-'),
+        (BLOOD_TYPE_BP, 'B+'),
+        (BLOOD_TYPE_BM, 'B-'),
+        (BLOOD_TYPE_OP, 'O+'),
+        (BLOOD_TYPE_OM, 'O-'),
+        (BLOOD_TYPE_ABP, 'AB+'),
+        (BLOOD_TYPE_ABM, 'AB-'),
     )
-    blood_type = models.IntegerField(choices=BLOOD_TYPE_CHOICES, default=BLOOD_TYPE_A, verbose_name='Tipo Sanguíneo')
+    blood_type = models.IntegerField(choices=BLOOD_TYPE_CHOICES, default=BLOOD_TYPE_AP, verbose_name='Tipo Sanguíneo')
     driving_license_number = models.CharField(verbose_name="Número de Licencia de Conducir", max_length=20, null=False,
                                               blank=True)
     driving_license_expiry_date = models.DateField(null=False, blank=True,
