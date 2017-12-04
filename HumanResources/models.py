@@ -21,7 +21,7 @@ from utilities import getParameters
 # Create your models here.
 from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
-
+from django.db.models import Sum
 
 
 # To represent ISRTable.
@@ -1129,15 +1129,29 @@ class EmployeeLoanDetail(models.Model):
         verbose_name = "Préstamo Detalle"
 
     def delete(self):
-        delModel = EmployeeEarningsDeductionsbyPeriod()
-        delModel.deleteFromEmployeeLoanDetail(self)
-        super(EmployeeLoanDetail, self).delete()
+        payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
+                                                              payroll_period_id=self.period.id)
+        existReceipt=0
+        for pE in payrollExist:
+            existReceipt=1
+        if existReceipt == 0:
+            delModel = EmployeeEarningsDeductionsbyPeriod()
+            delModel.deleteFromEmployeeLoanDetail(self)
+            super(EmployeeLoanDetail, self).delete()
 
     def save(self, *args, **kwargs):
-        modelo = EmployeeEarningsDeductionsbyPeriod()
-        modelo.create(self)
+        total=EmployeeLoanDetail.objects.values('employeeloan__id').filter(employeeloan_id=self.employeeloan.id).annotate(total=Sum('amount')).exclude(id=self.id)
+        sumTotal =0
+        for tot in total:
+            sumTotal += tot['total']
 
-        super(EmployeeLoanDetail, self).save(*args, **kwargs)
+        payrollExist=PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,payroll_period_id=self.period.id)
+        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count()>0:
+            modelo = EmployeeEarningsDeductionsbyPeriod()
+            modelo.create(self)
+            super(EmployeeLoanDetail, self).save(*args, **kwargs)
+        else:
+            return 'la suma de los pagos no puede exceder al total del préstamo'
 
     def unique_error_message(self, model_class, unique_check):
         if model_class == type(self) and unique_check == ('employeeloan', 'period'):
