@@ -186,7 +186,10 @@ class EmployeeDetailView(generic.DetailView):
         context['employee_documents'] = EmployeeDocument.objects.filter(employee__id=employee.id)
 
         # Obtaining the employee's checker info and setting it to the context.
-        context['checker_data'] = CheckerData.objects.get(employee__id=employee.id)
+        checker_data = CheckerData.objects.filter(employee__id=employee.id)
+
+        if (len(checker_data) > 0):
+            context['checker_data'] = checker_data[0]
 
         # Obtaining the employee's position description and setting it to the context.
         context['employee_position_description'] = EmployeePositionDescription.objects.filter(employee__id=employee.id)
@@ -199,7 +202,6 @@ class EmployeeDetailView(generic.DetailView):
 
         # Obtaining the employee's Employee EmployeeEarningsDeductions Data and setting it to the context.
         context['employee_ed'] = EmployeeEarningsDeductions.objects.filter(employee__id=employee.id)
-
 
         return context
 
@@ -231,10 +233,9 @@ def Tests(request):
 def TestApplicationDetail(request, pk):
     template = loader.get_template('HumanResources/testapplication_detail.html')
 
-
     object = TestApplication.objects.get(pk=pk)
 
-    context = {'object':object}
+    context = {'object': object}
 
     return HttpResponse(template.render(context, request))
 
