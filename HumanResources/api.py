@@ -223,7 +223,7 @@ class GeneratePayrollReceipt(View):
             variable_earnings_array.append(variable_earning_json)
             earnings_array.append(variable_earning_json)
             total_earnings += variable_earning.ammount
-            total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
+            total_taxable += variable_earning.ammount * variable_earning.concept.percent_taxable / 100
 
         receipt['variable_earnings'] = variable_earnings_array
 
