@@ -1,21 +1,28 @@
 {% extends "admin/base_site.html" %}
 {% load i18n admin_static app_filters %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+{% endblock %}
 {% block content %}
 
+         {% include "admin/HumanResources/payroll-home.html" %}
 
-    <div class="card ">
-        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
-            <li role="presentation" class="active">
-                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    Configuración de Nómina Para {{ object.get_full_name }}
-                </a>
-            </li>
+    <div class="col-xs-9">
 
-        </ul>
-        <div class="card-block">
-            <div class="tab-content">
+        <div class="card ">
+            <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
+                <li role="presentation" class="active">
+                    <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
+                        Configuración de Nómina Para {{ object.get_full_name }}
+                    </a>
+                </li>
+
+            </ul>
+            <div class="card-block">
+                <div class="tab-content">
 
 
+                </div>
             </div>
         </div>
     </div>
