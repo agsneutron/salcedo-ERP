@@ -150,8 +150,7 @@ class EmployeePaymentReceipt:
                 earnings_data.append('')
 
             earnings_cell.append(earnings_data)
-            print "Earnings Cell:"
-            print earnings_cell
+
             earnings_table = Table(earnings_cell, colWidths=(60*cm, 40*cm), rowHeights=20)
             table_row.append(earnings_table)
 

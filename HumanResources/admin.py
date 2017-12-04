@@ -1335,6 +1335,13 @@ class DepartmentAdmin(admin.ModelAdmin):
 class JobInstanceAdmin(admin.ModelAdmin):
     form = JobInstanceForm
 
+    fieldsets = (
+        ("Puesto", {
+            'fields': (
+                'job_profile', 'employee',)
+        }),
+    )
+
     def get_urls(self):
         urls = super(JobInstanceAdmin, self).get_urls()
         my_urls = [

@@ -67,7 +67,7 @@ class Employee(models.Model):
     first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
     second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
 
-    photo = models.FileField(upload_to=upload_employee_photo, null=True, verbose_name="Foto")
+    photo = models.FileField(upload_to=upload_employee_photo, null=True, blank=True, verbose_name="Foto")
 
     TYPE_A = 1
     TYPE_B = 2
@@ -221,6 +221,16 @@ class Employee(models.Model):
         absences = EmployeeAssistance.objects.filter(Q(employee__id=self.id) &
                                                      Q(payroll_period__id=payroll_period.id) &
                                                      Q(absence=True))
+
+        return absences
+
+
+    # To get all the absences for an employee that haven't been justified in a specific period.
+    def get_unjustified_employee_absences_for_period(self, payroll_period=None):
+        absences = EmployeeAssistance.objects.filter(Q(employee__id=self.id) &
+                                                     Q(payroll_period__id=payroll_period.id) &
+                                                     Q(absence=True) &
+                                                     Q(justified=False))
 
         return absences
 
@@ -1192,24 +1202,24 @@ class PayrollReceiptProcessed(models.Model):
                                            decimal_places=2)
     total_payroll = models.DecimalField(verbose_name="Total Neto", null=False, blank=False, max_digits=20,
                                         decimal_places=2)
-    taxed = models.DecimalField(verbose_name="Grabado", null=False, blank=False, max_digits=20, decimal_places=2)
-    exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
-    daily_salry = models.DecimalField(verbose_name="Salario Diario", null=False, blank=False, max_digits=20,
+    taxed = models.DecimalField(verbose_name="Grabado", null=True, blank=True, max_digits=20, decimal_places=2)
+    exempt = models.DecimalField(verbose_name="Excento", null=True, blank=True, max_digits=20, decimal_places=2)
+    daily_salry = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
                                       decimal_places=2)
-    total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=False, blank=False,
+    total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=True, blank=True,
                                              max_digits=20, decimal_places=2)
-    total_discounts = models.DecimalField(verbose_name="Total de Descuentos", null=False, blank=False, max_digits=20,
+    total_discounts = models.DecimalField(verbose_name="Total de Descuentos", null=True, blank=True, max_digits=20,
                                           decimal_places=2)
     printed_receipt = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=SI)
-    stamp_version = models.DecimalField(verbose_name="Versión de Timbrado", null=False, blank=False, max_digits=20,
+    stamp_version = models.DecimalField(verbose_name="Versión de Timbrado", null=True, blank=True, max_digits=20,
                                         decimal_places=2)
-    stamp_UUID = models.CharField(verbose_name="UUID de Timbrado", null=False, blank=False, max_length=500)
+    stamp_UUID = models.CharField(verbose_name="UUID de Timbrado", null=True, blank=True, max_length=500)
     stamp_date = models.DateTimeField(verbose_name="Fecha de Timbrado")
-    stamp_CFDI = models.CharField(verbose_name="CFDI Timbrado", null=False, blank=False, max_length=500)
-    sat_certificate = models.CharField(verbose_name="Certificado del SAT", null=False, blank=False, max_length=500)
-    stamp_sat = models.CharField(verbose_name="Timbrado del SAT", null=False, blank=False, max_length=500)
-    stamp_xml = models.CharField(verbose_name="XML del Timbrado", null=False, blank=False, max_length=500)
-    stamp_serie_id = models.CharField(verbose_name="Serie ID  de Timbrado", null=False, blank=False, max_length=500)
+    stamp_CFDI = models.CharField(verbose_name="CFDI Timbrado", null=True, blank=True, max_length=500)
+    sat_certificate = models.CharField(verbose_name="Certificado del SAT", null=True, blank=True, max_length=500)
+    stamp_sat = models.CharField(verbose_name="Timbrado del SAT", null=True, blank=True, max_length=500)
+    stamp_xml = models.CharField(verbose_name="XML del Timbrado", null=True, blank=True, max_length=500)
+    stamp_serie_id = models.CharField(verbose_name="Serie ID  de Timbrado", null=True, blank=True, max_length=500)
     payment_date = models.DateField(verbose_name="Fecha de Pago")
 
     # foreign
@@ -1228,10 +1238,17 @@ class PayrollProcessedDetail(models.Model):
     # Foreign Keys.
     payroll_receip_processed = models.ForeignKey(PayrollReceiptProcessed, verbose_name="Recibo de Nómina Procesado",
                                                  null=False, blank=False)
-    earnings_deductions = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
-    total = models.DecimalField(verbose_name="Total", null=False, blank=False, max_digits=20, decimal_places=2)
-    taxed = models.DecimalField(verbose_name="Grabable", null=False, blank=False, max_digits=20, decimal_places=2)
-    exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
+
+    name = models.CharField(verbose_name="Nombre", null=True, blank=True, max_length=30, )
+    percent_taxable = models.IntegerField("Porcentaje Gravable", blank=True, null=True)
+    sat_key = models.CharField(verbose_name="Clave SAT", null=True, blank=True, max_length=30, )
+    law_type = models.CharField(verbose_name="Tipo de Ley", null=True, blank=True, max_length=30, )
+    status = models.CharField(verbose_name="Estatus", null=True, blank=True, max_length=1)
+    accounting_account = models.IntegerField("Cuenta Contable", blank=True, null=True)
+    comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
+    type = models.CharField(verbose_name="Tipo", max_length=64)
+    taxable = models.CharField(verbose_name="Gravable", max_length=64)
+    category = models.CharField(verbose_name="Categoria", max_length=64)
 
     class Meta:
         verbose_name_plural = "Detalle de Nómina Procesada"
@@ -1240,7 +1257,7 @@ class PayrollProcessedDetail(models.Model):
 
 class JobInstance(models.Model):
     # Job Description ***
-    job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleado', null=False, blank=False)
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleo', null=False, blank=False)
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=True, blank=True)
     parent_job_instance = models.ForeignKey('self', verbose_name='Jefe Inmediato', null=True, blank=True)
 
