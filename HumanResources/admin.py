@@ -104,6 +104,14 @@ class HumanResourcesAdminUtilities():
 
         return '<a href="' + link + anchor + '" class="' + css + '" >' + button + '</a>'
 
+    @staticmethod
+    def get_UploadedEmployeeAssistanceHistory_link(model_name, payroll_period_id, anchor):
+        link = "/admin/HumanResources/employeeassistance/incidences_by_period/" + str(payroll_period_id) + "/"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+
+        return '<a href="' + link + anchor + '" class="' + css + '" >' + button + '</a>'
+
 
 # Employee Admin.
 @admin.register(Employee)
@@ -1504,6 +1512,13 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
             'fields': ('payroll_period', 'assistance_file',)
         }),
     )
+    list_display = ('payroll_period', 'assistance_file', 'get_UploadedEmployeeAssistanceHistory_link')
+
+    def get_UploadedEmployeeAssistanceHistory_link(self, obj):
+        return HumanResourcesAdminUtilities.get_UploadedEmployeeAssistanceHistory_link("UploadedEmployeeAssistanceHistory", obj.payroll_period.id, "")
+
+    get_UploadedEmployeeAssistanceHistory_link.short_description = 'Justificar Asistencias'
+    get_UploadedEmployeeAssistanceHistory_link.allow_tags = True
 
     list_display = ('payroll_period', 'assistance_file',)
 
