@@ -1,5 +1,7 @@
 # coding=utf-8
 
+
+import django
 from django.db.models.query_utils import Q
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse, HttpResponseRedirect
@@ -289,6 +291,8 @@ class GeneratePayrollReceipt(View):
         payroll_period_id = request.GET.get('payroll_period')
         employee_id = request.GET.get('employee')
 
+        print "Is: " + str(payroll_period_id)
+
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
 
@@ -326,8 +330,9 @@ class GeneratePayrollReceipt(View):
 
                     # If any of the employees lacks of financial data, return an error.
                     if not financial_data_exists:
-                        raise ErrorDataUpload('Ha habido un problema generando los recibos de nómina. El empleado '+employee.employee_key+
-                                              " no cuenta con datos financieros cargados en el sistema", LoggingConstants.ERROR, request.user.id)
+                        raise Exception('Ha habido un problema generando los recibos de nómina. El empleado '+employee.employee_key+
+                                              " no cuenta con datos financieros cargados en el sistema")
+
 
 
                     receipt = self.generate_single_payroll(employee, payroll_period)
@@ -343,9 +348,9 @@ class GeneratePayrollReceipt(View):
 
 
 
-        except ErrorDataUpload as e:
-            e.save()
-            raise e
+        except Exception as e:
+            django.contrib.messages.error(request, "Ya se han generado los recibos de nómina anteriormente.")
+            return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(payroll_period.id)+"&payrollgroup="+str(payroll_period.payroll_group.id))
 
 
 
