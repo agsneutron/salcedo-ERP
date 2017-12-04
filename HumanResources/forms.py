@@ -6,6 +6,7 @@ from django.views.generic.edit import FormView
 from django.shortcuts import redirect
 from django.utils.timezone import now
 
+
 # Form to include the fields of the Employee Form.
 class EmployeeForm(forms.ModelForm):
     contractor_id = None
@@ -346,7 +347,6 @@ class InfonavitDataForm(forms.ModelForm):
             self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
 
 
-
 # Form to include the fields of Earnings Deductions Form.
 class EarningsDeductionsForm(forms.ModelForm):
     class Meta:
@@ -399,6 +399,7 @@ class EmployeeEarningsDeductionsForm(forms.ModelForm):
         if self.employee_id is not None:
             self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
 
+
 # Form to include the fields of Employee Earnings Deductions Form.
 class EmployeeEarningsDeductionsbyPeriodForm(forms.ModelForm):
     class Meta:
@@ -432,6 +433,7 @@ class EmployeeEarningsDeductionsbyPeriodForm(forms.ModelForm):
         if self.payroll_period_id is not None:
             self.fields['payroll_period'].queryset = PayrollPeriod.objects.filter(pk=self.payroll_period_id)
 
+
 # Form to include the fields of Employee Earnings Deductions Form.
 class PayrollTeForm(forms.ModelForm):
     class Meta:
@@ -455,7 +457,6 @@ class PayrollTeForm(forms.ModelForm):
         # Filtering the values for the contractor if it , otherwise, None.
         if self.employee_id is not None:
             self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
-
 
 
 # Form to include the fields of Payroll Receipt Processed Form.
@@ -483,7 +484,6 @@ class PayrollReceiptProcessedForm(forms.ModelForm):
             self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
 
 
-
 # Form to include the fields of Payroll Processed Detail Form.
 class PayrollProcessedDetailForm(forms.ModelForm):
     class Meta:
@@ -506,7 +506,10 @@ class PayrollProcessedDetailForm(forms.ModelForm):
 
         # Filtering the values for the contractor if it , otherwise, None.
         if self.payroll_receip_processed_id is not None:
-            self.fields['payroll_receip_processed'].queryset = PayrollReceiptProcessed.objects.filter(pk=self.payroll_receip_processed_id)
+            self.fields['payroll_receip_processed'].queryset = PayrollReceiptProcessed.objects.filter(
+                pk=self.payroll_receip_processed_id)
+
+
 '''
 class CombinedFormBase(forms.Form):
     form_classes = []
@@ -641,14 +644,14 @@ class TagForm(forms.ModelForm):
 class EmployeeAssistanceForm(forms.ModelForm):
     class Meta:
         model = EmployeeAssistance
-        fields = ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time','absence')
+        fields = ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time', 'absence')
 
 
 # Form to include the fields of Tag Form.
 class EmployeeAssistanceForm(forms.ModelForm):
     class Meta:
         model = EmployeeAssistance
-        fields = ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time', 'justified','absence')
+        fields = ('employee', 'payroll_period', 'record_date', 'entry_time', 'exit_time', 'justified', 'absence')
 
 
 # Form to include the fields of Tag Form.
@@ -658,13 +661,10 @@ class AbsenceProofForm(forms.ModelForm):
         fields = '__all__'
 
     def __init__(self, *args, **kwargs):
-
         # Getting the request object.
         self.request = kwargs.pop('request', None)
         payroll_period_id = self.request.GET.get('payroll_period')
         employee_id = self.request.GET.get('employee')
-
-
 
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
@@ -678,7 +678,6 @@ class AbsenceProofForm(forms.ModelForm):
 
         self.fields['employee'].queryset = Employee.objects.filter(pk=employee_id)
         self.fields['payroll_period'].queryset = PayrollPeriod.objects.filter(pk=payroll_period_id)
-
 
 
 # Form to include the fields of Tag Form.
@@ -722,6 +721,7 @@ class DepartmentForm(forms.ModelForm):
         model = Department
         fields = '__all__'
 
+
 # Form to include the fields of Tag Form.
 class AreaForm(forms.ModelForm):
     class Meta:
@@ -735,13 +735,13 @@ class JobInstanceForm(forms.ModelForm):
         model = JobInstance
         fields = '__all__'
 
+        widgets = {
+            'parent_job_instance': forms.HiddenInput
+        }
+
 
 # Form to include the fields of Tag Form.
 class EmployeeDropOutForm(forms.ModelForm):
     class Meta:
         model = EmployeeDropOut
         fields = '__all__'
-
-
-
-
