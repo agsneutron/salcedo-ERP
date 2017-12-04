@@ -70,6 +70,7 @@
                                 {% include "admin/HumanResources/earningsdeductions/fieldset.html" %}
                             {% endfor %}
                             {% block after_related_objects %}
+                                {% if earnings %}
                                 <hr>
                                 <div class="">
                                     <div class="col-xs-6">
@@ -80,8 +81,8 @@
                                                 <thead>
                                                 <tr>
                                                     <td style="border:1px solid">Percepciones</td>
-                                                    <td style="border:1px solid">% Gravable</td>
-                                                    <td style="border:1px solid">Tipo</td>
+                                                    <td style="border:1px solid">%Gravable</td>
+                                                    <td style="border:1px solid">Categoria</td>
                                                     <td style="border:1px solid">Editar</td>
                                                     <td style="border:1px solid">Eliminar</td>
                                                 </tr>
@@ -118,8 +119,8 @@
                                                 <thead>
                                                 <tr>
                                                     <td style="border:1px solid">Deducciones</td>
-                                                    <td style="border:1px solid">% Gravable</td>
-                                                    <td style="border:1px solid">Tipo</td>
+                                                    <td style="border:1px solid">%Gravable</td>
+                                                    <td style="border:1px solid">Categoria</td>
                                                     <td style="border:1px solid">Editar</td>
                                                     <td style="border:1px solid">Eliminar</td>
                                                 </tr>
@@ -151,7 +152,7 @@
                                 </div>
 
 
-
+                                {% endif %}
                             {% endblock %}
                         </div>
                     </div>

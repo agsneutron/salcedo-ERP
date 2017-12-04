@@ -173,7 +173,6 @@ class EmployeeAdmin(admin.ModelAdmin):
         extra['employee'] = employee
         return super(EmployeeAdmin, self).change_view(request, object_id, form_url, extra)
 
-
     def response_add(self, request, obj, post_url_continue=None):
         redirect_url = "/admin/HumanResources/employee/"+str(obj.id)+"/change/?employee="+str(obj.id)
         return HttpResponseRedirect(redirect_url)
@@ -294,20 +293,17 @@ class EmergencyContactAdmin(admin.ModelAdmin):
 
         return super(EmergencyContactAdmin, self).add_view(request, form_url, extra_context=extra)
 
-
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
         employee_id = request.GET.get('employee')
         redirect_url = "/admin/HumanResources/emergencycontact/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
-
     # To redirect after add
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
         redirect_url = "/admin/HumanResources/emergencycontact/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
-
 
     # To redirect after object change
     def response_change(self, request, obj):
@@ -384,7 +380,6 @@ class WorkReferenceAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
-
 
     # Overriding the add_wiew method for the work reference admin.
     def add_view(self, request, form_url='', extra_context=None):
@@ -499,7 +494,6 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
         employee = Employee.objects.get(pk=employee_id)
         documents_set = EmployeeDocument.objects.filter(employee_id=employee_id)
 
-
         extra['template'] = "documentation"
         extra['employee'] = employee
         extra['documentation'] = documents_set
@@ -580,8 +574,6 @@ class CheckerDataAdmin(admin.ModelAdmin):
         redirect_url = "/admin/HumanResources/checkerdata/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
-
-
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra = extra_context or {}
         employee_id = request.GET.get('employee')
@@ -628,7 +620,6 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         }),
     )
 
-
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeePositionDescriptionAdmin, self).get_form(request, obj, **kwargs)
@@ -641,7 +632,6 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
-
 
     # Overriding the add_wiew method for the employee position description admin.
     def add_view(self, request, form_url='', extra_context=None):
@@ -675,7 +665,6 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         extra['employee'] = Employee.objects.get(pk=employee_id)
 
         return super(EmployeePositionDescriptionAdmin, self).change_view(request, object_id, form_url, extra)
-
 
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
@@ -759,9 +748,9 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
         deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
         earnings_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
-            concept__type='P')
+            concept__type='P').filter(payroll_period=payrollperiod_id)
         deductions_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
-            concept__type='D')
+            concept__type='D').filter(payroll_period=payrollperiod_id)
         payroll_set = PayrollPeriod.objects.filter(id=payrollperiod_id)
 
         extra['template'] = "employee_earnings_deductions"
@@ -772,8 +761,6 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         extra['deductions'] = deductions_set
         extra['periodearnings'] = earnings_by_period_set
         extra['perioddeductions'] = deductions_by_period_set
-
-
 
         return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
 
@@ -845,7 +832,6 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
-
     # Overriding the add_wiew method for the employee pfinancial data admin.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
@@ -865,7 +851,6 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
 
         return super(EmployeeFinancialDataAdmin, self).add_view(request, form_url, extra_context=extra)
 
-
     def change_view(self, request, object_id, form_url='', extra_context=None):
 
         extra = extra_context or {}
@@ -881,6 +866,7 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
         return super(EmployeeFinancialDataAdmin, self).change_view(request, object_id, form_url,
                                                                          extra)
 
+
 # Earnings Deductions Admin.
 @admin.register(EarningsDeductions)
 class EarningsDeductionsAdmin(admin.ModelAdmin):
@@ -893,6 +879,23 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
                 'law_type', 'status', 'comments',)
         }),
     )
+
+
+    list_display = ('name','type','category','taxable','percent_taxable','get_change_link','get_delete_link')
+    list_display_links = None
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
@@ -941,7 +944,6 @@ class PayrollReceiptProcessedAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
 
-
 # Earning Deduction Period Project Admin.
 @admin.register(EarningDeductionPeriod)
 class EarningDeductionPeriodAdmin(admin.ModelAdmin):
@@ -982,7 +984,6 @@ class PayrollProcessedDetailAdmin(admin.ModelAdmin):
 ''' ----------------------------------
 Administrators to fill the database.
 ----------------------------------  '''
-
 
 
 # Payroll To Process Admin.
@@ -1054,7 +1055,6 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 # Payroll Period Admin.
 @admin.register(PayrollPeriod)
 class PayrollPeriodAdmin(admin.ModelAdmin):
-
     form = PayrollPeriodForm
     fieldsets = (
         ("Periodos de Nómina", {
@@ -1062,7 +1062,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('name', 'payroll_group', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
+    list_display = ('name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
     def get_listpayroll_link(self, obj):
         return HumanResourcesAdminUtilities.get_listpayroll_link(obj, obj.id, obj.payroll_group.id)
@@ -1101,7 +1101,6 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
 
         extra['template'] = "payrollperiod"
         extra['period'] = period_set
-
 
         return super(PayrollPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
 
@@ -1264,8 +1263,6 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
                 assitance_db_object.process_records()
 
-
-
                 super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
 
 
@@ -1286,6 +1283,7 @@ class EmployeeLoanDetailInLine(admin.TabularInline):
     form = EmployeeLoanDetailForm
     extra = 1
 
+
 # Loan Admin.
 @admin.register(EmployeeLoan)
 class EmployeeLoanAdmin(admin.ModelAdmin):
@@ -1297,6 +1295,7 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
             'fields': ('employee', 'amount', 'payment_plan', 'request_date')
         }),
     )
+
 
 # JobProfile Admin.
 @admin.register(JobProfile)
@@ -1340,6 +1339,14 @@ class JobInstanceAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
+        # To redirect after object delete.
+
+    def response_delete(self, request, obj_display, obj_id):
+        if obj_id == 1:
+            django.contrib.messages.set_level(request, messages.ERROR)
+            django.contrib.messages.error(request, 'No se puede eliminar la raíz del organigrama.')
+
+        return super(JobInstanceAdmin, self).response_delete(request, obj_display, obj_id)
 
 
 #EmployeeDropOut

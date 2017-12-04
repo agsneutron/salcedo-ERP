@@ -8,13 +8,13 @@ from helper import AssistanceFileInterface, AssistanceDBObject, ErrorDataUpload
 
 
 
-def assistance_upload_test_view(request):
+def assistance_upload_view(request):
 
     payroll_period_id = int(request.GET.get('payroll_period'))
 
     # Creating an object to work with the specified excel document.
     # The file_path has been set for temporary testing.
-    file_path = "/Users/oscarsanchez/Documents/Work/Salcedo/Fase_2/Archivos/test.xlsx"
+    file_path = "/Users/oscarsanchez/Documents/Work/Salcedo/Fase_2_Nomina/Archivos/test.xlsx"
     file_interface_obj = AssistanceFileInterface(file_path)
 
     # Getting the elements from the file.
@@ -39,7 +39,4 @@ def assistance_upload_test_view(request):
 
 
     return HttpResponse('Done')
-
-
-
 
