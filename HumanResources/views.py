@@ -90,7 +90,7 @@ class JobInstanceListView(generic.ListView):
         return html
 
     def get_employee_photo(self, employee):
-        if employee is not None and employee.photo is not None:
+        if employee is not None and employee.photo is not None and str(employee.photo) != "":
             return '/media/' + str(employee.photo)
         return "/media/assets/avatar.jpg"
 
@@ -101,7 +101,7 @@ class JobInstanceListView(generic.ListView):
         html += "<div class='overlay'>"
 
         if job_instance.employee is not None:
-            html += "   <a target='_blank' href='/admin/HumanResources/employee/" + str(
+            html += "   <a href='/admin/HumanResources/employee/" + str(
                 job_instance.employee_id) + "' class='node-button'><i class='fa fa-user'></i></a>"
 
         html += "   <a target='_blank' href='/admin/HumanResources/jobinstance/" + str(
