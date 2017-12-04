@@ -7,18 +7,29 @@
         color: white;
     }
 
-    .col-xs-6 {
-    height: 65px;
-    }
+
+
     .col-xs-6 br {
-    display: none !important;
-}
-  .datetimeshortcuts {
+        display: none !important;
+    }
 
+    .datetimeshortcuts {
 
-}
+    }
+
     .dias-fields > .col-xs-6 {
-    width: 7%;
+        width: 14%;
+    }
+    label {
+    display: block;
+
+}
+    .vLargeTextField, .vXMLLargeTextField {
+    width: 100%;
+}
+    textarea {
+    overflow: auto;
+    width: 100%;
 }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
@@ -80,6 +91,10 @@
         $('input').addClass('form-control');
         $('select').addClass('form-control');
 
+        $('.field-job>div').removeClass('col-xs-6');
+        $('.field-job>div').addClass('col-xs-12');
+
+
 
     });
 
@@ -87,13 +102,13 @@
 <script>
 
 
-    $( ".field-monday" ).addClass( "dias-fields" );
-    $( ".field-tuesday" ).addClass( "dias-fields" );
-    $( ".field-wednesday" ).addClass( "dias-fields" );
-    $( ".field-thursday" ).addClass( "dias-fields" );
-    $( ".field-friday" ).addClass( "dias-fields" );
-    $( ".field-saturday" ).addClass( "dias-fields" );
-    $( ".field-sunday" ).addClass( "dias-fields" );
+    $(".field-monday").addClass("dias-fields");
+    $(".field-tuesday").addClass("dias-fields");
+    $(".field-wednesday").addClass("dias-fields");
+    $(".field-thursday").addClass("dias-fields");
+    $(".field-friday").addClass("dias-fields");
+    $(".field-saturday").addClass("dias-fields");
+    $(".field-sunday").addClass("dias-fields");
 
 
 </script>

@@ -709,17 +709,17 @@ class EmployeeLoan(models.Model):
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
                            unique=False)
-    abilities = models.CharField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
+    abilities = models.TextField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
                                  unique=False)
-    aptitudes = models.CharField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
+    aptitudes = models.TextField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
                                  unique=False)
-    knowledge = models.CharField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
+    knowledge = models.TextField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
                                  unique=False)
-    competitions = models.CharField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
+    competitions = models.TextField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
                                     unique=False)
-    scholarship = models.CharField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
+    scholarship = models.TextField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    experience = models.CharField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
+    experience = models.TextField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
                                   unique=False)
     entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
     exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
