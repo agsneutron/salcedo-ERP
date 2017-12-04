@@ -185,6 +185,11 @@ class EmployeeAdmin(admin.ModelAdmin):
 @admin.register(Education)
 class EducationAdmin(admin.ModelAdmin):
     form = EducationForm
+    fieldsets = (
+        ("Formación Académica", {
+            'fields': ('type', 'name', 'institution', 'license_code', 'evidence', 'employee')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -264,6 +269,13 @@ class CurrentEducationAdmin(admin.ModelAdmin):
 class EmergencyContactAdmin(admin.ModelAdmin):
     form = EmergencyContactForm
 
+    fieldsets = (
+        ("Contactos de Emergencia", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'phone_number', 'cellphone_number', 'email', 'employee')
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmergencyContactAdmin, self).get_form(request, obj, **kwargs)
@@ -316,6 +328,13 @@ class EmergencyContactAdmin(admin.ModelAdmin):
 class FamilyMemberAdmin(admin.ModelAdmin):
     form = FamilyMemberForm
 
+    fieldsets = (
+        ("Familiares", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'relationship', 'employee')
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(FamilyMemberAdmin, self).get_form(request, obj, **kwargs)
@@ -366,6 +385,14 @@ class FamilyMemberAdmin(admin.ModelAdmin):
 @admin.register(WorkReference)
 class WorkReferenceAdmin(admin.ModelAdmin):
     form = WorkReferenceForm
+
+    fieldsets = (
+        ("Referencias", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'company_name', 'first_phone_number',
+                'second_phone_number', 'email', 'notes', 'employee')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -418,6 +445,13 @@ class WorkReferenceAdmin(admin.ModelAdmin):
 @admin.register(TestApplication)
 class TestApplicationAdmin(admin.ModelAdmin):
     form = TestApplicationForm
+
+    fieldsets = (
+        ("Pruebas Aplicadas", {
+            'fields': (
+                'application_date', 'result', 'test', 'comments', 'employee',)
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -479,6 +513,12 @@ class TestApplicationAdmin(admin.ModelAdmin):
 class EmployeeDocumentAdmin(admin.ModelAdmin):
     form = EmployeeDocumentForm
 
+    fieldsets = (
+        ("Documentación", {
+            'fields': ('file', 'document_type', 'comments', 'employee',)
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeDocumentAdmin, self).get_form(request, obj, **kwargs)
@@ -530,6 +570,12 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
 @admin.register(CheckerData)
 class CheckerDataAdmin(admin.ModelAdmin):
     form = CheckerDataForm
+
+    fieldsets = (
+        ("Documentación", {
+            'fields': ('checks_entry', 'checks_exit', 'employee',)
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -1015,7 +1061,7 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('name', 'payroll_classification', 'project','checker_type')
+            'fields': ('name', 'payroll_classification', 'project', 'checker_type')
         }),
     )
 
@@ -1262,7 +1308,6 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         current_user = request.user
         payroll_period_id = int(request.POST.get('payroll_period'))
 
-
         try:
             with transaction.atomic():
                 assistance_file = request.FILES['assistance_file']
@@ -1280,7 +1325,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
         except ErrorDataUpload as e:
             e.save()
-            #messages.set_level(request, messages.ERROR)
+            # messages.set_level(request, messages.ERROR)
             django.contrib.messages.error(request, e.get_error_message())
 
         except django.db.utils.IntegrityError as e:
