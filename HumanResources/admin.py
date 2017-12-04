@@ -96,7 +96,7 @@ class HumanResourcesAdminUtilities():
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
     @staticmethod
-    def get_EmployeeModelDetail_link(model_name,employee_id,anchor):
+    def get_EmployeeModelDetail_link(model_name, employee_id, anchor):
         link = "/admin/HumanResources/" + str(model_name) + "/" + str(employee_id) + "/"
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-eye color-default eliminar' > </i>"
@@ -477,7 +477,7 @@ class TestApplicationAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('test', 'employee', 'application_date','result','get_EmployeeModelDetail_link')
+    list_display = ('test', 'employee', 'application_date', 'result', 'get_EmployeeModelDetail_link')
     list_display_links = None
     search_fields = (
         'employee__name', '^test__name', 'result')
@@ -537,7 +537,7 @@ class TestApplicationAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(TestApplicationAdmin, self).get_urls()
         my_urls = [
-            #url(r'^$', views.Tests, name='tests'),
+            # url(r'^$', views.Tests, name='tests'),
             url(r'^(?P<pk>\d+)/$', views.TestApplicationDetail, name='test_application_detail'),
         ]
         return my_urls + urls
@@ -687,16 +687,15 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('tag','employee','get_EmployeeModelDetail_link')
+    list_display = ('tag', 'employee', 'get_EmployeeModelDetail_link')
 
     search_fields = (
         '^employee__name', 'tag__name',)
 
     model_name = str(object.__class__.__name__.lower())
 
-    def get_EmployeeModelDetail_link(self,obj):
-        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("employee", obj.employee.id,"")
-
+    def get_EmployeeModelDetail_link(self, obj):
+        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("employee", obj.employee.id, "")
 
     get_EmployeeModelDetail_link.short_description = 'Ver'
     get_EmployeeModelDetail_link.allow_tags = True
@@ -715,6 +714,7 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
         # Overriding the add_wiew method for the employee document admin.
+
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
@@ -757,7 +757,8 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
             'fields': (
                 'employee', 'start_date', 'end_date', 'direction', 'subdirection', 'area', 'department', 'job_profile',
                 'physical_location', 'insurance_type', 'insurance_number', 'entry_time', 'departure_time', 'monday',
-                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'payroll_group', 'contract', 'observations',)
+                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'payroll_group', 'contract',
+                'observations',)
         }),
     )
 
@@ -906,14 +907,13 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
 
         return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
 
-
     def response_delete(self, request, obj_display, obj_id):
         employee_id = request.GET.get('employee')
         payroll_period_id = request.GET.get('payrollperiod')
         django.contrib.messages.success(request, "Deducción borrada exitosamente.")
 
-        return HttpResponseRedirect("http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee="+employee_id+"&payrollperiod="+payroll_period_id)
-
+        return HttpResponseRedirect(
+            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
 
     def response_change(self, request, obj):
         employee_id = request.GET.get('employee')
@@ -1297,10 +1297,9 @@ class TaxRegimeAdmin(admin.ModelAdmin):
 class TestAdmin(admin.ModelAdmin):
     form = TestForm
 
-
     fieldsets = (
         ("Pruebas", {
-            'fields': ('name', )
+            'fields': ('name',)
         }),
     )
 
@@ -1328,11 +1327,18 @@ class DocumentTypeAdmin(admin.ModelAdmin):
     form = DocumentTypeForm
 
 
+    fieldsets = (
+        ("Tipos de Documento de Empleado", {
+            'fields': (
+                'name',)
+        }),
+    )
+
+
 # Tag Admin.
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     form = TagForm
-
 
     fieldsets = (
         ("Etiquetas", {
@@ -1356,6 +1362,7 @@ class TagAdmin(admin.ModelAdmin):
 
     get_delete_link.short_description = 'Eliminar'
     get_delete_link.allow_tags = True
+
 
 # Assistance Admin.
 @admin.register(EmployeeAssistance)
@@ -1470,7 +1477,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         current_user = request.user
-        #payroll_group_id = int(request.POST.get('payroll_group'))
+        # payroll_group_id = int(request.POST.get('payroll_group'))
         payroll_period_id = int(request.POST.get('payroll_period'))
 
         try:
@@ -1522,10 +1529,27 @@ class JobProfileAdmin(admin.ModelAdmin):
     form = JobProfileForm
 
 
+    fieldsets = (
+        ("Perfil de Puesto", {
+            'fields': (
+                'job','abilities','aptitudes','knowledge','competitions','scholarship','experience','entry_time','exit_time','sunday','monday','tuesday','wednesday','thursday','friday','saturday','direction','subdirection','area','department')
+        }),
+    )
+
+
+
 # Loan Admin.
 @admin.register(Direction)
 class DirectionAdmin(admin.ModelAdmin):
     form = DirectionForm
+
+
+    fieldsets = (
+        ("Dirección", {
+            'fields': (
+                'name',)
+        }),
+    )
 
 
 # Loan Admin.
@@ -1534,16 +1558,37 @@ class SubdirectionAdmin(admin.ModelAdmin):
     form = SubdirectionForm
 
 
+    fieldsets = (
+    ("Subdirección", {
+        'fields': (
+            'name',)
+    }),
+)
+
+
 # Loan Admin.
 @admin.register(Area)
 class AreaAdmin(admin.ModelAdmin):
     form = AreaForm
+
+    fieldsets = (
+        ("Área", {
+            'fields': (
+                'name',)
+        }),
+    )
 
 
 # Loan Admin.
 @admin.register(Department)
 class DepartmentAdmin(admin.ModelAdmin):
     form = DepartmentForm
+    fieldsets = (
+        ("Departamento", {
+            'fields': (
+                'name',)
+        }),
+    )
 
 
 # Loan Admin.
