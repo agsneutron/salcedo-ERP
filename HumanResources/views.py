@@ -194,6 +194,9 @@ class EmployeeDetailView(generic.DetailView):
         # Obtaining the employee's Employee Financial Data and setting it to the context.
         context['employee_financial_data'] = EmployeeFinancialData.objects.filter(employee__id=employee.id)
 
+        # Obtaining the employee's Employee Has TAG Data and setting it to the context.
+        context['employee_has_tag'] = EmployeeHasTag.objects.filter(employee__id=employee.id)
+
         return context
 
 
