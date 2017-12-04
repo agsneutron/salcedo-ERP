@@ -269,6 +269,7 @@ hr {
     box-shadow: 0 3px 3px rgba(0, 0, 0, .29);
     height: auto !important;
     margin-bottom: 40px;
+z-index: 99;
 }
 
 .ms-navbar .ms-logo {
@@ -1688,4 +1689,11 @@ input[type=file] {
 .vTimeField {
     /* min-width: 4.7em; */
     padding-left: 80px;
+}
+#photo-clear_id {
+    width:15px;
+}
+
+.clearable-file-input{
+display: -webkit-inline-box;
 }

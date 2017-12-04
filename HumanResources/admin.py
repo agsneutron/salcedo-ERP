@@ -662,6 +662,23 @@ class CheckerDataAdmin(admin.ModelAdmin):
 class EmployeeHasTagAdmin(admin.ModelAdmin):
     form = EmployeeHasTagForm
 
+    fieldsets = (
+        ("Etiquetas", {
+            'fields': ('employee', 'tag',)
+        }),
+    )
+
+    list_display = ('tag','employee','get_detail_button')
+
+    search_fields = (
+        'employee', 'tag',)
+
+    def get_detail_button(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+    get_detail_button.short_description = 'Ver'
+    get_detail_button.allow_tags = True
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeHasTagAdmin, self).get_form(request, obj, **kwargs)
@@ -675,6 +692,38 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+        # Overriding the add_wiew method for the employee document admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        employeehastag_set = EmployeeHasTag.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "employeehastag"
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+        extra['employee_hastag'] = employeehastag_set
+
+        return super(EmployeeHasTagAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
 
 # Employee Position Description Admin.
 @admin.register(EmployeePositionDescription)
@@ -686,7 +735,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
             'fields': (
                 'employee', 'start_date', 'end_date', 'direction', 'subdirection', 'area', 'department', 'job_profile',
                 'physical_location', 'insurance_type', 'insurance_number', 'entry_time', 'departure_time', 'monday',
-                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'observations', 'payroll_group')
+                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'payroll_group', 'contract', 'observations',)
         }),
     )
 
@@ -1210,6 +1259,12 @@ class DocumentTypeAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     form = TagForm
 
+
+    fieldsets = (
+        ("Etiquetas", {
+            'fields': ('name',)
+        }),
+    )
 
 # Assistance Admin.
 @admin.register(EmployeeAssistance)

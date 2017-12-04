@@ -184,6 +184,24 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="dropdown-submenu">
+                                    <a href="blog-sidebar.html" class="has_children">
+                                        <i class="zmdi zmdi-view-compact"></i> Recursos Humanos</a>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>
+                                            <a href="/admin/HumanResources/tag/">Etiquetas</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/admin/HumanResources/documenttype/">Documentos</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/admin/HumanResources/direction/">Dirección</a>
+                                        </li>
+
+                                    </ul>
+                                </li>
 
                             </ul>
                         </li>
@@ -383,13 +401,13 @@
                                                 <a href="/admin/HumanResources/earningsdeductions/add/">Percepciones y Deducciones</a>
                                             </li>
                                              <li>
-                                                <a href="/admin/HumanResources/">Asistencias</a>
+                                                <a href="/admin/HumanResources/uploadedemployeeassistancehistory/add/">Asistencias</a>
                                             </li>
                                              <li>
-                                                <a href="/admin/HumanResources/">Préstamos</a>
+                                                <a href="/admin/HumanResources/employeeloan/add/">Préstamos</a>
                                             </li>
                                              <li>
-                                                <a href="/admin/HumanResources/">Bajas</a>
+                                                <a href="/admin/HumanResources/employeedropout/add/">Bajas</a>
                                             </li>
                                             {% comment %}<li>
                                                 <a href="/admin/HumanResources/employee/">Consultar</a>
@@ -397,6 +415,45 @@
                                         </ul>
                                     </li>
                                 {% endif %}
+
+                                {% if perms.HumanResources.change_employee %}
+                                    <li>
+                                        <a href="/admin/HumanResources/employeehastag/">
+                                            <i class="zmdi zmdi-view-dashboard"></i>Buscador de Etiquetas</a>
+                                    </li>
+                                {% endif %}
+
+                                {% if perms.HumanResources.change_employee %}
+                                    <li class="dropdown-submenu">
+                                        <a href="#" class="has_children">
+                                            <i class="zmdi zmdi-view-dashboard"></i>Pruebas</a>
+
+                                        <ul class="dropdown-menu dropdown-menu-left">
+                                            <li>
+                                                <a href="/admin/HumanResources/test/add/">Agregar</a>
+                                            </li>
+                                            <li>
+                                                <a href="/admin/HumanResources/test/">Consultar</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+
+                                 {% if perms.HumanResources.change_payrollperiod %}
+
+                                    <li class="">
+                                        <a href="/admin/HumanResources/jobinstance/" >
+                                            <i class="zmdi zmdi-view-compact"></i>Organigrama</a>
+                                     </li>
+                                 {% endif %}
+
+                                {% if perms.HumanResources.change_payrollperiod %}
+
+                                    <li class="dropdown-menu">
+                                        <a href="/admin/HumanResources/jobprofile/add/" >
+                                            <i class="zmdi zmdi-view-compact"></i>Descripción de Puesto</a>
+                                     </li>
+                                 {% endif %}
                             </ul>
 
                         </li>

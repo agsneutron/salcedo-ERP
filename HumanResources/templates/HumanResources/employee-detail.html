@@ -576,7 +576,7 @@
                         <li class="list-group-item"><strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                     </ul>
                     <div>
-                        <a href="" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+                        <a href="/admin/HumanResources/employeeearningsdeductions/?employee={{ employee.id }}" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
                     </div>
 
                 </div>
@@ -584,14 +584,9 @@
             <hr>
             <div class="card-block text-center">
                 <h3 class="color-info">Etiquetas</h3>
-                <span class="label label-default">EtiquetaA</span>
-                <span class="label label-default">EtiquetaB</span>
-                <span class="label label-default">EtiquetaD</span>
-                <span class="label label-default">EtiquetaE</span>
-                <span class="label label-default">EtiquetaF</span>
-                <span class="label label-default">EtiquetaG</span>
-                <span class="label label-default">EtiquetaH</span>
-                <span class="label label-default">EtiquetaI</span>
+                {% for record in employee_has_tag %}
+                <span class="label label-default">{{ record.tag }}</span>
+                {% endfor %}
 
             </div>
 
