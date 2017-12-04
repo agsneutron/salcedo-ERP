@@ -1,6 +1,6 @@
 from datetime import datetime, date, time, timedelta
 import calendar
-
+from HumanResources.models import *
 
 class getParameters():
     @classmethod

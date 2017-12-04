@@ -759,9 +759,9 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
         deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
         earnings_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
-            concept__type='P')
+            concept__type='P').filter(payroll_period=payrollperiod_id)
         deductions_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
-            concept__type='D')
+            concept__type='D').filter(payroll_period=payrollperiod_id)
         payroll_set = PayrollPeriod.objects.filter(id=payrollperiod_id)
 
         extra['template'] = "employee_earnings_deductions"
@@ -893,6 +893,22 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
                 'law_type', 'status', 'comments',)
         }),
     )
+
+    list_display = ('name','type','category','taxable','percent_taxable','get_change_link','get_delete_link')
+    list_display_links = None
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EarningsDeductionsAdmin, self).get_form(request, obj, **kwargs)
@@ -1062,7 +1078,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('name', 'payroll_group', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
+    list_display = ('name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
     def get_listpayroll_link(self, obj):
         return HumanResourcesAdminUtilities.get_listpayroll_link(obj, obj.id, obj.payroll_group.id)

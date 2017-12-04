@@ -690,21 +690,6 @@ class EmployeeLoan(models.Model):
         return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 
-class EmployeeLoanDetail(models.Model):
-    employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
-    period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
-    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
-
-
-    class Meta:
-        verbose_name_plural = "Préstamos Detalle"
-        verbose_name = "Préstamo Detalle"
-
-    def save(self, *args, **kwargs):
-        modelo=EmployeeEarningsDeductionsbyPeriod()
-        modelo.create(self)
-
-        super(EmployeeLoanDetail, self).save(*args, **kwargs)
 
 
 # To represent a Job Profile.
@@ -1078,8 +1063,8 @@ class PayrollPeriod(models.Model):
     month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
     year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
          validators=[MaxValueValidator(9999), MinValueValidator(2017)])
-    week = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
-         validators=[MaxValueValidator(53), MinValueValidator(1)])
+    fortnight = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
+         validators=[MaxValueValidator(24), MinValueValidator(1)])
     start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
 
@@ -1093,6 +1078,40 @@ class PayrollPeriod(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
 
+class EmployeeLoanDetail(models.Model):
+    employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
+    #period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
+    period = ChainedForeignKey(PayrollPeriod,
+                               chained_field="payroll_group",
+                               chained_model_field="payroll_group",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True,
+                               unique=True)
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+
+
+    class Meta:
+        verbose_name_plural = "Préstamos Detalle"
+        verbose_name = "Préstamo Detalle"
+
+    def delete(self):
+        delModel = EmployeeEarningsDeductionsbyPeriod()
+        delModel.deleteFromEmployeeLoanDetail(self)
+        super(EmployeeLoanDetail, self).delete()
+
+    def save(self, *args, **kwargs):
+        modelo=EmployeeEarningsDeductionsbyPeriod()
+        modelo.create(self)
+
+        super(EmployeeLoanDetail, self).save(*args, **kwargs)
+
+    def unique_error_message(self, model_class, unique_check):
+        if model_class == type(self) and unique_check == ('employeeloan', 'period'):
+            return 'la amortización del préstamo para este periodo ya existe'
+        else:
+            return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
 
 class EmployeeEarningsDeductionsbyPeriod(models.Model):
     ammount = models.DecimalField(verbose_name="Monto", decimal_places=2, blank=False, null=False,
@@ -1108,14 +1127,27 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Periodo"
         verbose_name = "Deducciones y Percepciones por Periodo"
+    def deleteFromEmployeeLoanDetail(self, data):
+        obj = EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id,
+                                                             payroll_period_id=data.period.id)
+        super(EmployeeEarningsDeductionsbyPeriod, obj).delete()
 
     def create(self, data):
-        self.ammount = data.amount
-        self.date = now()
-        self.employee_id = data.employeeloan.employee.id
-        self.concept_id = 1
-        self.payroll_period_id = 1
-        super(EmployeeEarningsDeductionsbyPeriod, self).save()
+        existe = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
+        if existe.count()>0:
+            obj=EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
+            if obj.id >0:
+                obj.ammount=data.amount
+                obj.payroll_period_id=data.period.id
+                super(EmployeeEarningsDeductionsbyPeriod, obj).save()
+        else:
+            self.ammount = data.amount
+            self.date = now()
+            self.employee_id = data.employeeloan.employee.id
+            self.concept_id = 1
+            self.payroll_period_id = data.period.id
+
+            super(EmployeeEarningsDeductionsbyPeriod, self).save()
 
     def save(self, *args, **kwargs):
         super(EmployeeEarningsDeductionsbyPeriod, self).save(*args, **kwargs)
