@@ -31,11 +31,33 @@ class ChangeAbsenceJustifiedStatus(View):
 
 class GeneratePayrollReceipt(View):
 
-    def create_historic_record(self, receipts):
+    def create_historic_record(self, payroll_period, receipts):
 
         for receipt in receipts:
-            payroll_receipt_processed = PayrollReceiptProcessed()
-            pass
+
+            employee = Employee.objects.get(pk=receipt['employee_id'])
+            employee_total_earnings = float(receipt['total_earnings'])
+            employee_total_deductions = float(receipt['total_deductions'])
+
+
+            payroll_receipt_processed = PayrollReceiptProcessed(
+                employee=employee,
+                payroll_period=payroll_period,
+                worked_days=0,
+                total_perceptions=employee_total_earnings,
+                total_deductions=employee_total_deductions,
+                total_payroll=employee_total_earnings - employee_total_deductions,
+                taxed=0,
+                exempt=0,
+                daily_salry=0,
+                total_withholdings=0,
+                total_discounts=0
+            )
+
+
+
+
+        return True
 
     def validate_employee_financial_data(self, employee):
         try:
@@ -213,7 +235,7 @@ class GeneratePayrollReceipt(View):
                 #return HttpResponse(Utilities.json_to_dumps(receipts_array),'application/json; charset=utf-8')
 
 
-                result = self.create_historic_record(receipts_array)
+                result = self.create_historic_record(payroll_period, receipts_array)
                 # response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
                 # return response
 

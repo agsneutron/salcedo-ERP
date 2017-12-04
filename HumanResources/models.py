@@ -1180,24 +1180,24 @@ class PayrollReceiptProcessed(models.Model):
                                            decimal_places=2)
     total_payroll = models.DecimalField(verbose_name="Total Neto", null=False, blank=False, max_digits=20,
                                         decimal_places=2)
-    taxed = models.DecimalField(verbose_name="Grabado", null=False, blank=False, max_digits=20, decimal_places=2)
-    exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
-    daily_salry = models.DecimalField(verbose_name="Salario Diario", null=False, blank=False, max_digits=20,
+    taxed = models.DecimalField(verbose_name="Grabado", null=True, blank=True, max_digits=20, decimal_places=2)
+    exempt = models.DecimalField(verbose_name="Excento", null=True, blank=True, max_digits=20, decimal_places=2)
+    daily_salry = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
                                       decimal_places=2)
-    total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=False, blank=False,
+    total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=True, blank=True,
                                              max_digits=20, decimal_places=2)
-    total_discounts = models.DecimalField(verbose_name="Total de Descuentos", null=False, blank=False, max_digits=20,
+    total_discounts = models.DecimalField(verbose_name="Total de Descuentos", null=True, blank=True, max_digits=20,
                                           decimal_places=2)
     printed_receipt = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=SI)
-    stamp_version = models.DecimalField(verbose_name="Versión de Timbrado", null=False, blank=False, max_digits=20,
+    stamp_version = models.DecimalField(verbose_name="Versión de Timbrado", null=True, blank=True, max_digits=20,
                                         decimal_places=2)
-    stamp_UUID = models.CharField(verbose_name="UUID de Timbrado", null=False, blank=False, max_length=500)
+    stamp_UUID = models.CharField(verbose_name="UUID de Timbrado", null=True, blank=True, max_length=500)
     stamp_date = models.DateTimeField(verbose_name="Fecha de Timbrado")
-    stamp_CFDI = models.CharField(verbose_name="CFDI Timbrado", null=False, blank=False, max_length=500)
-    sat_certificate = models.CharField(verbose_name="Certificado del SAT", null=False, blank=False, max_length=500)
-    stamp_sat = models.CharField(verbose_name="Timbrado del SAT", null=False, blank=False, max_length=500)
-    stamp_xml = models.CharField(verbose_name="XML del Timbrado", null=False, blank=False, max_length=500)
-    stamp_serie_id = models.CharField(verbose_name="Serie ID  de Timbrado", null=False, blank=False, max_length=500)
+    stamp_CFDI = models.CharField(verbose_name="CFDI Timbrado", null=True, blank=True, max_length=500)
+    sat_certificate = models.CharField(verbose_name="Certificado del SAT", null=True, blank=True, max_length=500)
+    stamp_sat = models.CharField(verbose_name="Timbrado del SAT", null=True, blank=True, max_length=500)
+    stamp_xml = models.CharField(verbose_name="XML del Timbrado", null=True, blank=True, max_length=500)
+    stamp_serie_id = models.CharField(verbose_name="Serie ID  de Timbrado", null=True, blank=True, max_length=500)
     payment_date = models.DateField(verbose_name="Fecha de Pago")
 
     # foreign
