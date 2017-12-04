@@ -591,6 +591,12 @@ class CheckerDataAdmin(admin.ModelAdmin):
 class EmployeeHasTagAdmin(admin.ModelAdmin):
     form = EmployeeHasTagForm
 
+    fieldsets = (
+        ("Etiquetas", {
+            'fields': ('employee', 'tag',)
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeHasTagAdmin, self).get_form(request, obj, **kwargs)
@@ -603,6 +609,38 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+        # Overriding the add_wiew method for the employee document admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        employeehastag_set = EmployeeHasTag.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "employeehastag"
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+        extra['employee_hastag'] = employeehastag_set
+
+        return super(EmployeeHasTagAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 # Employee Position Description Admin.

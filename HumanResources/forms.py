@@ -246,6 +246,9 @@ class EmployeeHasTagForm(forms.ModelForm):
     class Meta:
         model = EmployeeHasTag
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput,
+        }
 
     def __init__(self, *args, **kwargs):
 
