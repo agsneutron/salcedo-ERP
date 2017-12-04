@@ -225,6 +225,16 @@ class Employee(models.Model):
         return absences
 
 
+    # To get all the absences for an employee that haven't been justified in a specific period.
+    def get_unjustified_employee_absences_for_period(self, payroll_period=None):
+        absences = EmployeeAssistance.objects.filter(Q(employee__id=self.id) &
+                                                     Q(payroll_period__id=payroll_period.id) &
+                                                     Q(absence=True) &
+                                                     Q(justified=False))
+
+        return absences
+
+
 # Employee Checker Data.
 class CheckerData(models.Model):
     CHECKER_TYPE_A = 1
@@ -1062,11 +1072,11 @@ class PayrollPeriod(models.Model):
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
     payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a procesar", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
-    # month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
-    # year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
-    #     validators=[MaxValueValidator(9999), MinValueValidator(2017)])
-    # week = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
-    #     validators=[MaxValueValidator(53), MinValueValidator(1)])
+    month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
+         validators=[MaxValueValidator(9999), MinValueValidator(2017)])
+    fortnight = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
+         validators=[MaxValueValidator(24), MinValueValidator(1)])
     start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
 
@@ -1090,12 +1100,18 @@ class EmployeeLoanDetail(models.Model):
                                chained_model_field="payroll_group",
                                show_all=False,
                                auto_choose=True,
-                               sort=True)
+                               sort=True,
+                               unique=True)
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
+
+    def delete(self):
+        delModel = EmployeeEarningsDeductionsbyPeriod()
+        delModel.deleteFromEmployeeLoanDetail(self)
+        super(EmployeeLoanDetail, self).delete()
 
     def save(self, *args, **kwargs):
         modelo = EmployeeEarningsDeductionsbyPeriod()
@@ -1124,14 +1140,27 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Periodo"
         verbose_name = "Deducciones y Percepciones por Periodo"
+    def deleteFromEmployeeLoanDetail(self, data):
+        obj = EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id,
+                                                             payroll_period_id=data.period.id)
+        super(EmployeeEarningsDeductionsbyPeriod, obj).delete()
 
     def create(self, data):
-        self.ammount = data.amount
-        self.date = now()
-        self.employee_id = data.employeeloan.employee.id
-        self.concept_id = 1
-        self.payroll_period_id = 1
-        super(EmployeeEarningsDeductionsbyPeriod, self).save()
+        existe = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
+        if existe.count()>0:
+            obj=EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
+            if obj.id >0:
+                obj.ammount=data.amount
+                obj.payroll_period_id=data.period.id
+                super(EmployeeEarningsDeductionsbyPeriod, obj).save()
+        else:
+            self.ammount = data.amount
+            self.date = now()
+            self.employee_id = data.employeeloan.employee.id
+            self.concept_id = 1
+            self.payroll_period_id = data.period.id
+
+            super(EmployeeEarningsDeductionsbyPeriod, self).save()
 
     def save(self, *args, **kwargs):
         super(EmployeeEarningsDeductionsbyPeriod, self).save(*args, **kwargs)
@@ -1173,24 +1202,24 @@ class PayrollReceiptProcessed(models.Model):
                                            decimal_places=2)
     total_payroll = models.DecimalField(verbose_name="Total Neto", null=False, blank=False, max_digits=20,
                                         decimal_places=2)
-    taxed = models.DecimalField(verbose_name="Grabado", null=False, blank=False, max_digits=20, decimal_places=2)
-    exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
-    daily_salry = models.DecimalField(verbose_name="Salario Diario", null=False, blank=False, max_digits=20,
+    taxed = models.DecimalField(verbose_name="Grabado", null=True, blank=True, max_digits=20, decimal_places=2)
+    exempt = models.DecimalField(verbose_name="Excento", null=True, blank=True, max_digits=20, decimal_places=2)
+    daily_salry = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
                                       decimal_places=2)
-    total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=False, blank=False,
+    total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=True, blank=True,
                                              max_digits=20, decimal_places=2)
-    total_discounts = models.DecimalField(verbose_name="Total de Descuentos", null=False, blank=False, max_digits=20,
+    total_discounts = models.DecimalField(verbose_name="Total de Descuentos", null=True, blank=True, max_digits=20,
                                           decimal_places=2)
     printed_receipt = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=SI)
-    stamp_version = models.DecimalField(verbose_name="Versión de Timbrado", null=False, blank=False, max_digits=20,
+    stamp_version = models.DecimalField(verbose_name="Versión de Timbrado", null=True, blank=True, max_digits=20,
                                         decimal_places=2)
-    stamp_UUID = models.CharField(verbose_name="UUID de Timbrado", null=False, blank=False, max_length=500)
+    stamp_UUID = models.CharField(verbose_name="UUID de Timbrado", null=True, blank=True, max_length=500)
     stamp_date = models.DateTimeField(verbose_name="Fecha de Timbrado")
-    stamp_CFDI = models.CharField(verbose_name="CFDI Timbrado", null=False, blank=False, max_length=500)
-    sat_certificate = models.CharField(verbose_name="Certificado del SAT", null=False, blank=False, max_length=500)
-    stamp_sat = models.CharField(verbose_name="Timbrado del SAT", null=False, blank=False, max_length=500)
-    stamp_xml = models.CharField(verbose_name="XML del Timbrado", null=False, blank=False, max_length=500)
-    stamp_serie_id = models.CharField(verbose_name="Serie ID  de Timbrado", null=False, blank=False, max_length=500)
+    stamp_CFDI = models.CharField(verbose_name="CFDI Timbrado", null=True, blank=True, max_length=500)
+    sat_certificate = models.CharField(verbose_name="Certificado del SAT", null=True, blank=True, max_length=500)
+    stamp_sat = models.CharField(verbose_name="Timbrado del SAT", null=True, blank=True, max_length=500)
+    stamp_xml = models.CharField(verbose_name="XML del Timbrado", null=True, blank=True, max_length=500)
+    stamp_serie_id = models.CharField(verbose_name="Serie ID  de Timbrado", null=True, blank=True, max_length=500)
     payment_date = models.DateField(verbose_name="Fecha de Pago")
 
     # foreign
@@ -1209,10 +1238,17 @@ class PayrollProcessedDetail(models.Model):
     # Foreign Keys.
     payroll_receip_processed = models.ForeignKey(PayrollReceiptProcessed, verbose_name="Recibo de Nómina Procesado",
                                                  null=False, blank=False)
-    earnings_deductions = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
-    total = models.DecimalField(verbose_name="Total", null=False, blank=False, max_digits=20, decimal_places=2)
-    taxed = models.DecimalField(verbose_name="Grabable", null=False, blank=False, max_digits=20, decimal_places=2)
-    exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
+
+    name = models.CharField(verbose_name="Nombre", null=True, blank=True, max_length=30, )
+    percent_taxable = models.IntegerField("Porcentaje Gravable", blank=True, null=True)
+    sat_key = models.CharField(verbose_name="Clave SAT", null=True, blank=True, max_length=30, )
+    law_type = models.CharField(verbose_name="Tipo de Ley", null=True, blank=True, max_length=30, )
+    status = models.CharField(verbose_name="Estatus", null=True, blank=True, max_length=1)
+    accounting_account = models.IntegerField("Cuenta Contable", blank=True, null=True)
+    comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
+    type = models.CharField(verbose_name="Tipo", max_length=64)
+    taxable = models.CharField(verbose_name="Gravable", max_length=64)
+    category = models.CharField(verbose_name="Categoria", max_length=64)
 
     class Meta:
         verbose_name_plural = "Detalle de Nómina Procesada"

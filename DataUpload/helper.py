@@ -27,7 +27,7 @@ locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 
 # Mac
-# locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 
 # español para linux

@@ -24,8 +24,8 @@ class AssistanceFileInterface(object):
         """ Inits the FileInterface object with a file.
         :param file_path: the path of the file with which the object will be initialized.
         """
-        self.book = xlrd.open_workbook(file_contents=file_path.read())
-       # self.book = xlrd.open_workbook(file_path)
+        #self.book = xlrd.open_workbook(file_contents=file_path.read())
+        self.book = xlrd.open_workbook(file_path)
 
     def get_element_list(self):
         """ Obtains an list containing all the records of the first sheet of the object's file.
@@ -85,7 +85,7 @@ class AssistanceDBObject:
     # Method to save create and save each given element.
     def save_assistance_record(self, record):
 
-        employee_key = int(record[self.ElementPosition.EMPLOYEE_KEY_COL])
+        employee_key = record[self.ElementPosition.EMPLOYEE_KEY_COL]
         record_date = record[self.ElementPosition.DATE_COL]
         entry_time_record = record[self.ElementPosition.ENTRY_COL]
         exit_time_record = record[self.ElementPosition.EXIT_COL]
@@ -154,8 +154,8 @@ class AssistanceDBObject:
             raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
 
         # Obtaining the date object from the Payroll Period object.
-        start_period = datetime.datetime.strptime(self.payroll_period.start_period, "%Y-%m-%d").date()
-        end_period = datetime.datetime.strptime(self.payroll_period.end_period, "%Y-%m-%d").date()
+        start_period = self.payroll_period.start_period
+        end_period = self.payroll_period.end_period
 
         # Checking if the file contains information for the correct Payroll Period date.
         if date_to_save < start_period or date_to_save > end_period:
