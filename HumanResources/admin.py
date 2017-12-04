@@ -1137,10 +1137,10 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         urls = super(EmployeeAssistanceAdmin, self).get_urls()
         my_urls = [
             url(r'^incidences_by_period/(?P<payroll_period_id>\d+)/$', self.admin_site.admin_view(views.IncidencesByPayrollPeriod.as_view()),
-                name='incidences-list-view',
+                name='incidences-by-period-list-view',
                 ),
             url(r'^incidences_by_employee/(?P<payroll_period_id>\d+)/(?P<employee_key>[\w-]+)/$', self.admin_site.admin_view(views.IncidencesByEmployee.as_view()),
-                name='incidences-list-view',
+                name='incidences-by-employee-list-view',
                 ),
         ]
         return my_urls + urls

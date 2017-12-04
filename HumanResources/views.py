@@ -363,7 +363,7 @@ class IncidencesByEmployee(ListView):
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
 
-        incidences = EmployeeAssistance.objects.filter(Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
+        incidences = EmployeeAssistance.objects.filter(Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id)).order_by('record_date')
 
         absence_proofs = AbsenceProof.objects.filter(Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
 

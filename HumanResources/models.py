@@ -215,6 +215,16 @@ class Employee(models.Model):
         return absences
 
 
+    # To get all the absences for an employee that haven't been justified in a specific period.
+    def get_unjustified_employee_absences_for_period(self, payroll_period=None):
+        absences = EmployeeAssistance.objects.filter(Q(employee__id=self.id) &
+                                                     Q(payroll_period__id=payroll_period.id) &
+                                                     Q(absence=True) &
+                                                     Q(justified=False))
+
+        return absences
+
+
 # Employee Checker Data.
 class CheckerData(models.Model):
     CHECKER_TYPE_A = 1
@@ -1206,10 +1216,17 @@ class PayrollProcessedDetail(models.Model):
     # Foreign Keys.
     payroll_receip_processed = models.ForeignKey(PayrollReceiptProcessed, verbose_name="Recibo de Nómina Procesado",
                                                  null=False, blank=False)
-    earnings_deductions = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
-    total = models.DecimalField(verbose_name="Total", null=False, blank=False, max_digits=20, decimal_places=2)
-    taxed = models.DecimalField(verbose_name="Grabable", null=False, blank=False, max_digits=20, decimal_places=2)
-    exempt = models.DecimalField(verbose_name="Excento", null=False, blank=False, max_digits=20, decimal_places=2)
+
+    name = models.CharField(verbose_name="Nombre", null=True, blank=True, max_length=30, )
+    percent_taxable = models.IntegerField("Porcentaje Gravable", blank=True, null=True)
+    sat_key = models.CharField(verbose_name="Clave SAT", null=True, blank=True, max_length=30, )
+    law_type = models.CharField(verbose_name="Tipo de Ley", null=True, blank=True, max_length=30, )
+    status = models.CharField(verbose_name="Estatus", null=True, blank=True, max_length=1)
+    accounting_account = models.IntegerField("Cuenta Contable", blank=True, null=True)
+    comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
+    type = models.CharField(verbose_name="Tipo", max_length=64)
+    taxable = models.CharField(verbose_name="Gravable", max_length=64)
+    category = models.CharField(verbose_name="Categoria", max_length=64)
 
     class Meta:
         verbose_name_plural = "Detalle de Nómina Procesada"

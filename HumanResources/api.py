@@ -1,11 +1,15 @@
+# coding=utf-8
+
 from django.db.models.query_utils import Q
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from ERP.lib.utilities import Utilities
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
-    EmployeeFinancialData
+    EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed
+from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
+from django.db import transaction
 
 
 class ChangeAbsenceJustifiedStatus(View):
@@ -26,6 +30,20 @@ class ChangeAbsenceJustifiedStatus(View):
 
 
 class GeneratePayrollReceipt(View):
+
+    def create_historic_record(self, receipts):
+
+        for receipt in receipts:
+            payroll_receipt_processed = PayrollReceiptProcessed()
+            pass
+
+    def validate_employee_financial_data(self, employee):
+        try:
+            employee_financial_data = EmployeeFinancialData.objects.get(employee__id = employee.id)
+            return True
+
+        except EmployeeFinancialData.DoesNotExist as e:
+            return False
 
 
 
@@ -109,7 +127,7 @@ class GeneratePayrollReceipt(View):
 
         # Absences.
         employee_financial_data = EmployeeFinancialData.objects.get(employee_id=employee.id)
-        absences = employee.get_employee_absences_for_period(payroll_period)
+        absences = employee.get_unjustified_employee_absences_for_period(payroll_period)
         absences_array = []
         for absence in absences:
             absence_json = {
@@ -137,6 +155,7 @@ class GeneratePayrollReceipt(View):
         receipt["employee_fullname"] = employee.get_full_name()
         receipt["total_earnings"] = str(total_earnings)
         receipt["total_deductions"] = str(total_deductions)
+
 
         return receipt
 
@@ -172,14 +191,41 @@ class GeneratePayrollReceipt(View):
             employee_set = Employee.objects.filter(id__in=employee_array)
 
 
+
         # Generating the payroll for every single employee.
         receipts_array = []
-        for employee in employee_set:
-            receipt = self.generate_single_payroll(employee, payroll_period)
-            receipts_array.append(receipt)
+        try:
+            with transaction.atomic():
+                for employee in employee_set:
+                    financial_data_exists = self.validate_employee_financial_data(employee)
+
+                    # If any of the employees lacks of financial data, return an error.
+                    if not financial_data_exists:
+                        raise ErrorDataUpload('Ha habido un problema generando los recibos de nómina. El empleado '+employee.employee_key+
+                                              " no cuenta con datos financieros cargados en el sistema", LoggingConstants.ERROR, request.user.id)
+
+
+                    receipt = self.generate_single_payroll(employee, payroll_period)
+                    receipts_array.append(receipt)
 
 
 
-        #return HttpResponse(Utilities.json_to_dumps(receipts_array),'application/json; charset=utf-8')
-        response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
-        return response
+                #return HttpResponse(Utilities.json_to_dumps(receipts_array),'application/json; charset=utf-8')
+
+
+                result = self.create_historic_record(receipts_array)
+                # response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
+                # return response
+
+                return HttpResponse(Utilities.json_to_dumps(receipts_array),'application/json; charset=utf-8')
+
+
+        except ErrorDataUpload as e:
+            e.save()
+            raise e
+
+
+
+class ErrorDataUpload(SystemException):
+    def __init__(self, message, priority, user_id):
+        SystemException.__init__(self, message, LoggingConstants.OPERATION_LOGIC, priority, user_id)

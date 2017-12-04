@@ -394,7 +394,7 @@ class Contratista(models.Model):
     bank = models.ForeignKey('Bank', verbose_name="Banco", null=True, blank=False)
     bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True, blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
-    CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
+   # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
     employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24, default="", null=True, blank=True)
     infonavit = models.CharField(verbose_name="Infonavit", max_length=24, default="", null=True, blank=True)
     services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
