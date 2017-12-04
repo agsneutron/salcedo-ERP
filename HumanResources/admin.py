@@ -1448,6 +1448,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         current_user = request.user
+        #payroll_group_id = int(request.POST.get('payroll_group'))
         payroll_period_id = int(request.POST.get('payroll_period'))
 
         try:
