@@ -439,6 +439,28 @@ class GeneratePayrollReceiptForEmployee(View):
 
 
 
+class DeletePayrollReceiptsForPeriod(View):
+
+    def get(selfself, request):
+        payroll_period_id = request.GET.get('payroll_period')
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period_id=payroll_period_id)
+        '''
+        if len(payroll_receipt_processed) > 0:
+            payroll_processed_detail = PayrollProcessedDetail.objects.filter(payroll_receip_processed = payroll_receipt_processed)
+            print payroll_processed_detail
+
+            for record in payroll_processed_detail:
+                record.delete()
+        '''
+        payroll_receipt_processed.delete()
+
+        django.contrib.messages.success(request, "Se han borrado exitosamente los recibos de nómina.")
+
+        return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(payroll_period.id)+"&payrollgroup="+str(payroll_period.payroll_group.id))
+
+
 
 class ErrorDataUpload(SystemException):
     def __init__(self, message, priority, user_id):
