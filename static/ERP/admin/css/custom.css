@@ -1700,3 +1700,9 @@ display: -webkit-inline-box;
 #changelist table thead th div a {
     color: white;
 }
+.button-buscar {
+        right: 20px !important;
+    left: inherit !important;
+    z-index: 9;
+    top: 3px !important;
+}

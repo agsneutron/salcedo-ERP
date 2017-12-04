@@ -59,6 +59,7 @@ class PayrollGroup(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
     payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina",
                                                null=False, blank=False)
+
     CHECKER_TYPE_AUTOMATIC = 1
     CHECKER_TYPE_MANUAL = 2
     CHECKER_TYPE_CHOICES = (
@@ -67,6 +68,7 @@ class PayrollGroup(models.Model):
     )
     checker_type = models.IntegerField(choices=CHECKER_TYPE_CHOICES, default=CHECKER_TYPE_AUTOMATIC,
                                        verbose_name='Tipo de Checador')
+
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=True, blank=True)
 
     class Meta:
@@ -696,6 +698,16 @@ def uploaded_employees_assistance_destination(instance, filename):
 
 
 class UploadedEmployeeAssistanceHistory(models.Model):
+    '''payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
+    payroll_period = ChainedForeignKey('PayrollPeriod',
+                               chained_field="payroll_group",
+                               chained_model_field="payroll_group",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True,
+                               unique=True)'''
+
+
     payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
     assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
                                        verbose_name="Archivo de Asistencias")
@@ -1251,7 +1263,7 @@ class PayrollReceiptProcessed(models.Model):
                                         decimal_places=2)
     taxed = models.DecimalField(verbose_name="Grabado", null=True, blank=True, max_digits=20, decimal_places=2)
     exempt = models.DecimalField(verbose_name="Excento", null=True, blank=True, max_digits=20, decimal_places=2)
-    daily_salry = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
+    daily_salary = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
                                       decimal_places=2)
     total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=True, blank=True,
                                              max_digits=20, decimal_places=2)
@@ -1279,6 +1291,7 @@ class PayrollReceiptProcessed(models.Model):
     class Meta:
         verbose_name_plural = "Recibo de Nómina Procesada"
         verbose_name = "Recibo de Nómina Procesada"
+        unique_together = ('payroll_period', 'employee')
 
 
 class PayrollProcessedDetail(models.Model):
@@ -1290,12 +1303,13 @@ class PayrollProcessedDetail(models.Model):
     percent_taxable = models.IntegerField("Porcentaje Gravable", blank=True, null=True)
     sat_key = models.CharField(verbose_name="Clave SAT", null=True, blank=True, max_length=30, )
     law_type = models.CharField(verbose_name="Tipo de Ley", null=True, blank=True, max_length=30, )
-    status = models.CharField(verbose_name="Estatus", null=True, blank=True, max_length=1)
+    status = models.CharField(verbose_name="Estatus", null=True, blank=True, max_length=64)
     accounting_account = models.IntegerField("Cuenta Contable", blank=True, null=True)
     comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
     type = models.CharField(verbose_name="Tipo", max_length=64)
     taxable = models.CharField(verbose_name="Gravable", max_length=64)
     category = models.CharField(verbose_name="Categoria", max_length=64)
+    amount = models.FloatField(verbose_name="Monto", null=False)
 
     class Meta:
         verbose_name_plural = "Detalle de Nómina Procesada"

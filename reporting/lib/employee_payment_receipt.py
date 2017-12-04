@@ -140,7 +140,7 @@ class EmployeePaymentReceipt:
                 earnings_record = receipt_data['earnings'][i]
                 name = Paragraph(earnings_record['name'],
                                  EmployeePaymentReceipt.Styles.EARNINGS_AND_DEDUCTIONS_TEXT_LEFT_STYLE)
-                amount = Paragraph("$ " + earnings_record['amount'],
+                amount = Paragraph("$ " + str(earnings_record['amount']),
                                    EmployeePaymentReceipt.Styles.EARNINGS_AND_DEDUCTIONS_TEXT_LEFT_STYLE)
                 earnings_data.append(name)
                 earnings_data.append(amount)
@@ -158,7 +158,7 @@ class EmployeePaymentReceipt:
             try:
                 deductions_record = receipt_data['deductions'][i]
                 name = Paragraph(deductions_record['name'], EmployeePaymentReceipt.Styles.EARNINGS_AND_DEDUCTIONS_TEXT_LEFT_STYLE)
-                amount = Paragraph("$ " + deductions_record['amount'], EmployeePaymentReceipt.Styles.EARNINGS_AND_DEDUCTIONS_TEXT_LEFT_STYLE)
+                amount = Paragraph("$ " + str(deductions_record['amount']), EmployeePaymentReceipt.Styles.EARNINGS_AND_DEDUCTIONS_TEXT_LEFT_STYLE)
                 deductions_data.append(name)
                 deductions_data.append(amount)
 
