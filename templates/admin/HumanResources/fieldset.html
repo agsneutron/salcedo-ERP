@@ -7,9 +7,16 @@
         color: white;
     }
 
+    .col-xs-4 {
+    max-height: 65px;
+    }
+    .col-xs-4 br {
+    display: none !important;
+
+}
     .datetimeshortcuts {
 
-    top: -38px !important;
+    top: -32px !important;
 }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
@@ -70,6 +77,7 @@
     $(document).ready(function () {
         $('input').addClass('form-control');
         $('select').addClass('form-control');
+        $('.col-xs-4>div').removeClass('form-group');
 
 
     });
