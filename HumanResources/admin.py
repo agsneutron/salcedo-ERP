@@ -1117,6 +1117,8 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
+    search_fields = (
+        'name', 'payroll_group__name', 'payroll_to_process__name')
     list_display = (
         'name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
@@ -1420,6 +1422,14 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
             'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
         }),
     )
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee = obj.employee
+        employee.status = Employee.STATUS_INNACTIVE
+        employee.save()
+
+        return super(EmployeeDropOutAdmin, self).response_add(request, obj, post_url_continue)
 
 
 # Employee Document Admin.
