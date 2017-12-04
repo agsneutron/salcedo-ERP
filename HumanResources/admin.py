@@ -1260,6 +1260,12 @@ class TagAdmin(admin.ModelAdmin):
     form = TagForm
 
 
+    fieldsets = (
+        ("Etiquetas", {
+            'fields': ('name',)
+        }),
+    )
+
 # Assistance Admin.
 @admin.register(EmployeeAssistance)
 class EmployeeAssistanceAdmin(admin.ModelAdmin):
