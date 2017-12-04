@@ -15,6 +15,15 @@ from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 from django.db import transaction
 
 
+# Convierte a un string separado por comas en un arreglo o None
+def get_array_or_none(the_string):
+    if the_string is None:
+        return None
+    else:
+        return map(str, the_string.split(','))
+
+
+
 class ChangeAbsenceJustifiedStatus(View):
     def post(self, request):
 
@@ -291,7 +300,12 @@ class GeneratePayrollReceipt(View):
         payroll_period_id = request.GET.get('payroll_period')
         employee_id = request.GET.get('employee')
 
-        print "Is: " + str(payroll_period_id)
+        excluded_employees_csv = request.GET.get('employeesSelected')
+        if excluded_employees_csv == "":
+            excluded_employees = []
+        else:
+            excluded_employees = get_array_or_none(excluded_employees_csv)
+
 
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
@@ -316,7 +330,7 @@ class GeneratePayrollReceipt(View):
 
 
             # Getting all the employees realted to the found payroll groups.
-            employee_set = Employee.objects.filter(id__in=employee_array)
+            employee_set = Employee.objects.filter(Q(id__in=employee_array)).exclude(id__in=excluded_employees)
 
 
 

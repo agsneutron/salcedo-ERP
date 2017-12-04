@@ -10,7 +10,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic.list import ListView
 
 from ERP.lib.utilities import Utilities
-from HumanResources.models import PayrollPeriod, EmployeePositionDescription, Employee, EmployeeAssistance
+from HumanResources.models import PayrollPeriod, EmployeePositionDescription, Employee, EmployeeAssistance, CheckerData
 
 
 class AutomaticAbsences(ListView):
@@ -68,12 +68,15 @@ class AutomaticAbsences(ListView):
 
             if day_of_the_week in assistance_days:
 
+                # To verify the registry does not exist.
                 control_assistance = EmployeeAssistance.objects.filter(
                     Q(employee=employee) &
                     Q(payroll_period=payroll_period) &
                     Q(record_date=control_date))
 
                 if len(control_assistance) < 0:
+
+                    employee_checker_data = CheckerData.objects.get(employee_id=employee.id)
 
                     employee_assistance = EmployeeAssistance(
                         employee = employee,
