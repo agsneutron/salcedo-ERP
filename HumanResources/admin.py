@@ -1532,8 +1532,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
 
     def response_add(self, request, obj, post_url_continue=None):
-
-        return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
+        #return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
+        return HttpResponseRedirect("/admin/HumanResources/uploadedemployeeassistancehistory/")
 
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
