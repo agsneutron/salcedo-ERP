@@ -1103,17 +1103,31 @@
                                     <h3 class="color-info card-title">Datos Financieros</h3>
                                 </div>
                                 <div class="card-block text-left">
-                                    {% for test in employee_financial_data %}
+                                    {% for efd in employee_financial_data %}
                                         <ul class="list-group text-left">
-                                            <li class="list-group-item"><strong>Nombre de la
-                                                Prueba: </strong> {{ test.test.name }} </li>
-                                            <li class="list-group-item"><strong>Fecha de
-                                                Aplicación: </strong> {{ test.application_date }} </li>
-                                            <li class="list-group-item"><strong>Resultado: </strong> {{ test.result }}
-                                            </li>
-                                            <li class="list-group-item">
-                                                <strong>Comentarios: </strong> {{ test.comments }}
-                                            </li>
+                                            <li class="list-group-item"><strong>Forma de Pago: </strong> {{ efd.payment_method }} </li>
+                                            <li class="list-group-item"><strong>Número de Cuenta: </strong> {{ efd.account_number }} </li>
+                                            <li class="list-group-item"><strong>CLABE: </strong> {{ efd.CLABE }}</li>
+                                            <li class="list-group-item"><strong>Banco: </strong> {{ efd.bank }}</li>
+                                            <li class="list-group-item"><strong>Salario Mensual: </strong> {{ efd.monthly_salary }}</li>
+                                            <li class="list-group-item"><strong>Salario Diario: </strong> {{ efd.daily_salary }}</li>
+                                            <li class="list-group-item"><strong>Salario Diario Acumulado: </strong> {{ efd.aggregate_daily_salary }}</li>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
+                                <div class="">
+                                    <h3 class="color-info card-title">Datos de Crédito Infonavit</h3>
+                                </div>
+                                <div class="card-block text-left">
+                                    {% for efd in employee_financial_data %}
+                                        <ul class="list-group text-left">
+                                            <li class="list-group-item"><strong>Número de Crédito: </strong> {{ efd.infonavitdata.infonavit_credit_number }}</li>
+                                            <li class="list-group-item"><strong>Tipo de Descuento: </strong> {{ efd.infonavitdata.discount_type }}</li>
+                                            <li class="list-group-item"><strong>Monto de Descuento: </strong> {{ efd.infonavitdata.discount_amount }}</li>
+                                            <li class="list-group-item"><strong>Fecha de Inicio: </strong> {{ efd.infonavitdata.start_date }}</li>
+                                            <li class="list-group-item"><strong>Duración de Crédito: </strong> {{ efd.infonavitdata.credit_term }}</li>
+                                            <li class="list-group-item"><strong>Observaciones: </strong> {{ efd.infonavitdata.comments }}</li>
+
                                         </ul>
                                     {% endfor %}
                                 </div>
