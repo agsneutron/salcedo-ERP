@@ -930,7 +930,7 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
         payroll_period_id = request.GET.get('payrollperiod')
-        redirect_url = "/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + str(employee_id) + "&payrollperiod=" + str(payroll_period_id)
+        redirect_url = "/humanresources/employeebyperiod?&payrollperiod=" + str(payroll_period_id) + "&payrollgroup=" +request.GET.get('payrollgroup')
         return HttpResponseRedirect(redirect_url)
 
 
