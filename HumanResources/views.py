@@ -6,6 +6,7 @@ import operator
 
 from django.core.exceptions import PermissionDenied
 from django.db.models.aggregates import Count
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import generic
 from django.views.generic.list import ListView
@@ -239,6 +240,13 @@ def TestApplicationDetail(request, pk):
 def EmployeeByPeriod(request):
     payrollgroup = request.GET.get('payrollgroup')
     payrollperiod = request.GET.get('payrollperiod')
+
+
+    # Check if the payroll has been processed.
+    payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period__id=payrollperiod)
+    if len(payroll_receipt_processed) > 0:
+        return HttpResponseRedirect("/admin/HumanResources/payrollreceiptprocessed/receipts_by_period/"+payrollperiod)
+
     template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
     employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup)
     period_data = PayrollPeriod.objects.filter(id=payrollperiod)
