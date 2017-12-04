@@ -367,7 +367,7 @@ class EmployeeHasTag(models.Model):
 
     class Meta:
         unique_together = ('employee', 'tag')
-        verbose_name = "Etiqueta del Empleado"
+        verbose_name = "Etiquetas del Empleado"
         verbose_name_plural = "Etiquetas del Empleado"
 
     def __str__(self):
