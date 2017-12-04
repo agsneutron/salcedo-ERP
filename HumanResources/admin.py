@@ -652,7 +652,7 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('tag__name','employee__name','get_detail_button')
+    list_display = ('tag','employee','get_detail_button')
 
     search_fields = (
         'employee', 'tag',)
