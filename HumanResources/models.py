@@ -1257,7 +1257,7 @@ class PayrollProcessedDetail(models.Model):
 
 class JobInstance(models.Model):
     # Job Description ***
-    job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleado', null=False, blank=False)
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleo', null=False, blank=False)
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=True, blank=True)
     parent_job_instance = models.ForeignKey('self', verbose_name='Jefe Inmediato', null=True, blank=True)
 
