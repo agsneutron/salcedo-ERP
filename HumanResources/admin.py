@@ -139,11 +139,15 @@ class EmployeeAdmin(admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
         keywords = search_term.split(" ")
 
+        if search_term is None or search_term == "" :
+            return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
+
         r = Employee.objects.none()
 
         for k in keywords:
-            q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
-            r |= q
+            if k != "":
+                q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+                r |= q
 
         return r, True
 
@@ -276,12 +280,24 @@ class CurrentEducationDocumentInline(admin.TabularInline):
     model = CurrentEducationDocument
     extra = 1
 
+    fieldsets = (
+        ("Documento", {
+            'fields': ('file','comments',)
+        }),
+    )
+
 
 # Current Education Admin.
 @admin.register(CurrentEducation)
 class CurrentEducationAdmin(admin.ModelAdmin):
     form = CurrentEducationForm
     inlines = (CurrentEducationDocumentInline,)
+
+    fieldsets = (
+        ("Formación Académica Actual", {
+            'fields': ('type', 'name', 'institution', 'employee', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday',)
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -492,7 +508,7 @@ class TestApplicationAdmin(admin.ModelAdmin):
         'employee__name', '^test__name', 'result')
 
     def get_EmployeeModelDetail_link(self, obj):
-        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("testapplication", obj.employee.id, "#pruebas")
+        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("testapplication", obj.id, "")
 
     get_EmployeeModelDetail_link.short_description = 'Ver'
     get_EmployeeModelDetail_link.allow_tags = True
