@@ -100,9 +100,14 @@ class HumanResourcesAdminUtilities():
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
     form = EmployeeForm
+
+    search_fields = ('^employee_key', '^name', '^type', '^registry_date', '^work_email', '^status', '^tags__name')
+
+    list_display = ('employee_key', 'type', 'registry_date', 'status')
+
     fieldsets = (
         ("Datos de Empleado", {
-            'fields': ('employee_key', 'type', 'registry_date', 'status')
+            'fields': ('employee_key', 'type', 'registry_date', 'status', 'photo')
         }),
         ("Datos Personales", {
             'fields': (
@@ -113,6 +118,17 @@ class EmployeeAdmin(admin.ModelAdmin):
                 'driving_license_expiry_date')
         }),
     )
+
+    def get_search_results(self, request, queryset, search_term):
+        keywords = search_term.split(" ")
+
+        r = Employee.objects.none()
+
+        for k in keywords:
+            q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+            r |= q
+
+        return r, True
 
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
@@ -185,6 +201,11 @@ class EmployeeAdmin(admin.ModelAdmin):
 @admin.register(Education)
 class EducationAdmin(admin.ModelAdmin):
     form = EducationForm
+    fieldsets = (
+        ("Formación Académica", {
+            'fields': ('type', 'name', 'institution', 'license_code', 'evidence', 'employee')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -264,6 +285,13 @@ class CurrentEducationAdmin(admin.ModelAdmin):
 class EmergencyContactAdmin(admin.ModelAdmin):
     form = EmergencyContactForm
 
+    fieldsets = (
+        ("Contactos de Emergencia", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'phone_number', 'cellphone_number', 'email', 'employee')
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmergencyContactAdmin, self).get_form(request, obj, **kwargs)
@@ -316,6 +344,13 @@ class EmergencyContactAdmin(admin.ModelAdmin):
 class FamilyMemberAdmin(admin.ModelAdmin):
     form = FamilyMemberForm
 
+    fieldsets = (
+        ("Familiares", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'relationship', 'employee')
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(FamilyMemberAdmin, self).get_form(request, obj, **kwargs)
@@ -366,6 +401,14 @@ class FamilyMemberAdmin(admin.ModelAdmin):
 @admin.register(WorkReference)
 class WorkReferenceAdmin(admin.ModelAdmin):
     form = WorkReferenceForm
+
+    fieldsets = (
+        ("Referencias", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'company_name', 'first_phone_number',
+                'second_phone_number', 'email', 'notes', 'employee')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -418,6 +461,13 @@ class WorkReferenceAdmin(admin.ModelAdmin):
 @admin.register(TestApplication)
 class TestApplicationAdmin(admin.ModelAdmin):
     form = TestApplicationForm
+
+    fieldsets = (
+        ("Pruebas Aplicadas", {
+            'fields': (
+                'application_date', 'result', 'test', 'comments', 'employee',)
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -479,6 +529,12 @@ class TestApplicationAdmin(admin.ModelAdmin):
 class EmployeeDocumentAdmin(admin.ModelAdmin):
     form = EmployeeDocumentForm
 
+    fieldsets = (
+        ("Documentación", {
+            'fields': ('file', 'document_type', 'comments', 'employee',)
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeDocumentAdmin, self).get_form(request, obj, **kwargs)
@@ -530,6 +586,12 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
 @admin.register(CheckerData)
 class CheckerDataAdmin(admin.ModelAdmin):
     form = CheckerDataForm
+
+    fieldsets = (
+        ("Documentación", {
+            'fields': ('checks_entry', 'checks_exit', 'employee',)
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -600,6 +662,23 @@ class CheckerDataAdmin(admin.ModelAdmin):
 class EmployeeHasTagAdmin(admin.ModelAdmin):
     form = EmployeeHasTagForm
 
+    fieldsets = (
+        ("Etiquetas", {
+            'fields': ('employee', 'tag',)
+        }),
+    )
+
+    list_display = ('tag','employee','get_detail_button')
+
+    search_fields = (
+        'employee', 'tag',)
+
+    def get_detail_button(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+    get_detail_button.short_description = 'Ver'
+    get_detail_button.allow_tags = True
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeHasTagAdmin, self).get_form(request, obj, **kwargs)
@@ -613,6 +692,38 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+        # Overriding the add_wiew method for the employee document admin.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        employeehastag_set = EmployeeHasTag.objects.filter(employee_id=employee_id)
+
+        extra['template'] = "employeehastag"
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+        extra['employee_hastag'] = employeehastag_set
+
+        return super(EmployeeHasTagAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeehastag/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
 
 # Employee Position Description Admin.
 @admin.register(EmployeePositionDescription)
@@ -624,7 +735,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
             'fields': (
                 'employee', 'start_date', 'end_date', 'direction', 'subdirection', 'area', 'department', 'job_profile',
                 'physical_location', 'insurance_type', 'insurance_number', 'entry_time', 'departure_time', 'monday',
-                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'observations', 'payroll_group')
+                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'payroll_group', 'contract', 'observations',)
         }),
     )
 
@@ -1043,7 +1154,7 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('name', 'payroll_classification', 'project','checker_type')
+            'fields': ('name', 'payroll_classification', 'project', 'checker_type')
         }),
     )
 
@@ -1099,6 +1210,8 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
+    search_fields = (
+        'name', 'payroll_group__name', 'payroll_to_process__name')
     list_display = (
         'name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
@@ -1163,6 +1276,30 @@ class TestAdmin(admin.ModelAdmin):
     form = TestForm
 
 
+    fieldsets = (
+        ("Pruebas", {
+            'fields': ('name', )
+        }),
+    )
+
+    list_display = ('name', 'get_change_link', 'get_delete_link')
+    list_display_links = None
+
+    search_fields = ('name',)
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
+
+
 # DocumentType Admin.
 @admin.register(DocumentType)
 class DocumentTypeAdmin(admin.ModelAdmin):
@@ -1174,6 +1311,29 @@ class DocumentTypeAdmin(admin.ModelAdmin):
 class TagAdmin(admin.ModelAdmin):
     form = TagForm
 
+
+    fieldsets = (
+        ("Etiquetas", {
+            'fields': ('name',)
+        }),
+    )
+
+    search_fields = ('name',)
+
+    list_display = ('name', 'get_change_link', 'get_delete_link')
+    list_display_links = None
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
 
 # Assistance Admin.
 @admin.register(EmployeeAssistance)
@@ -1290,7 +1450,6 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         current_user = request.user
         payroll_period_id = int(request.POST.get('payroll_period'))
 
-
         try:
             with transaction.atomic():
                 assistance_file = request.FILES['assistance_file']
@@ -1308,7 +1467,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
         except ErrorDataUpload as e:
             e.save()
-            #messages.set_level(request, messages.ERROR)
+            # messages.set_level(request, messages.ERROR)
             django.contrib.messages.error(request, e.get_error_message())
 
         except django.db.utils.IntegrityError as e:
@@ -1403,6 +1562,14 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
             'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
         }),
     )
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee = obj.employee
+        employee.status = Employee.STATUS_INNACTIVE
+        employee.save()
+
+        return super(EmployeeDropOutAdmin, self).response_add(request, obj, post_url_continue)
 
 
 # Employee Document Admin.

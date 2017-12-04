@@ -21,8 +21,7 @@ from utilities import getParameters
 # Create your models here.
 from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
-
-
+from django.db.models import Sum
 
 # To represent ISRTable.
 class ISRTable(models.Model):
@@ -40,7 +39,6 @@ class ISRTable(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.lower_limit
-
 
 
 class PayrollClassification(models.Model):
@@ -108,13 +106,15 @@ class Employee(models.Model):
     type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleando')
     registry_date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha de Registro")
 
-    STATUS_A = 1
-    STATUS_B = 2
+    STATUS_ACTIVE = 1
+    STATUS_INNACTIVE = 2
     EMPLOYEE_STATUS_CHOICES = (
-        (STATUS_A, 'Estatus A del Empleado'),
-        (STATUS_B, 'Estatus B del Empleado'),
+        (STATUS_ACTIVE, 'Activo'),
+        (STATUS_INNACTIVE, 'Inactivo'),
     )
-    status = models.IntegerField(choices=EMPLOYEE_STATUS_CHOICES, default=STATUS_A, verbose_name='Estatus del Empleado')
+
+    status = models.IntegerField(choices=EMPLOYEE_STATUS_CHOICES, default=STATUS_ACTIVE,
+                                 verbose_name='Estatus del Empleado')
     birthdate = models.DateField(null=False, blank=False, verbose_name="Fecha de Nacimiento")
     birthplace = models.CharField(null=False, blank=False, verbose_name="Lugar de Nacimiento", max_length=255)
 
@@ -152,13 +152,26 @@ class Employee(models.Model):
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
     zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
 
-    BLOOD_TYPE_A = 1
-    BLOOD_TYPE_B = 2
+    BLOOD_TYPE_AP = 1
+    BLOOD_TYPE_AM = 2
+    BLOOD_TYPE_BP = 3
+    BLOOD_TYPE_BM = 4
+    BLOOD_TYPE_OP = 5
+    BLOOD_TYPE_OM = 6
+    BLOOD_TYPE_ABP = 7
+    BLOOD_TYPE_ABM = 8
+
     BLOOD_TYPE_CHOICES = (
-        (BLOOD_TYPE_A, 'O Negativo'),
-        (BLOOD_TYPE_B, 'O Positivo'),
+        (BLOOD_TYPE_AP, 'A+'),
+        (BLOOD_TYPE_AM, 'A-'),
+        (BLOOD_TYPE_BP, 'B+'),
+        (BLOOD_TYPE_BM, 'B-'),
+        (BLOOD_TYPE_OP, 'O+'),
+        (BLOOD_TYPE_OM, 'O-'),
+        (BLOOD_TYPE_ABP, 'AB+'),
+        (BLOOD_TYPE_ABM, 'AB-'),
     )
-    blood_type = models.IntegerField(choices=BLOOD_TYPE_CHOICES, default=BLOOD_TYPE_A, verbose_name='Tipo Sanguíneo')
+    blood_type = models.IntegerField(choices=BLOOD_TYPE_CHOICES, default=BLOOD_TYPE_AP, verbose_name='Tipo Sanguíneo')
     driving_license_number = models.CharField(verbose_name="Número de Licencia de Conducir", max_length=20, null=False,
                                               blank=True)
     driving_license_expiry_date = models.DateField(null=False, blank=True,
@@ -254,7 +267,6 @@ class Employee(models.Model):
 
         return absences
 
-
     # To get all the absences for an employee that haven't been justified in a specific period.
     def get_unjustified_employee_absences_for_period(self, payroll_period=None):
         absences = EmployeeAssistance.objects.filter(Q(employee__id=self.id) &
@@ -267,7 +279,6 @@ class Employee(models.Model):
 
 # Employee Checker Data.
 class CheckerData(models.Model):
-
     CHECKER_TYPE_A = 1
     CHECKER_TYPE_B = 2
     CHECKER_TYPE_C = 3
@@ -345,8 +356,8 @@ class DocumentType(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Tipo de Documento'
-        verbose_name = 'Etiquetas'
+        verbose_name_plural = 'Tipos de Documento'
+        verbose_name = 'Tipo de Documento'
 
 
 # Tags to describe the Employee.
@@ -371,7 +382,7 @@ class EmployeeHasTag(models.Model):
 
     class Meta:
         unique_together = ('employee', 'tag')
-        verbose_name = "Etiqueta del Empleado"
+        verbose_name = "Etiquetas del Empleado"
         verbose_name_plural = "Etiquetas del Empleado"
 
     def __str__(self):
@@ -731,17 +742,17 @@ class EmployeeLoan(models.Model):
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
                            unique=False)
-    abilities = models.CharField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
+    abilities = models.TextField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
                                  unique=False)
-    aptitudes = models.CharField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
+    aptitudes = models.TextField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
                                  unique=False)
-    knowledge = models.CharField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
+    knowledge = models.TextField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
                                  unique=False)
-    competitions = models.CharField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
+    competitions = models.TextField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
                                     unique=False)
-    scholarship = models.CharField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
+    scholarship = models.TextField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    experience = models.CharField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
+    experience = models.TextField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
                                   unique=False)
     entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
     exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
@@ -888,8 +899,7 @@ class EmployeePositionDescription(models.Model):
     #                          sort=True)
 
     job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
-
-    # contract = models.ForeignKey(Contract, verbose_name="Contrato", null=False, blank=False)
+    contract = models.CharField(verbose_name="Contrato", null=False, blank=False, max_length=45)
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
 
 
@@ -946,7 +956,7 @@ class InfonavitData(models.Model):
     discount_amount = models.CharField(verbose_name="Monto de Descuento", null=False, blank=False, max_length=30, )
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     credit_term = models.CharField(verbose_name="Duración de Crédito", null=False, blank=False, max_length=200)
-    comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
+    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
 
     # Foreign Keys.
     employee_financial_data = models.OneToOneField(EmployeeFinancialData)
@@ -1095,10 +1105,10 @@ class PayrollPeriod(models.Model):
     payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a procesar", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
     month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
-    year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
-         validators=[MaxValueValidator(9999), MinValueValidator(2017)])
-    fortnight = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
-         validators=[MaxValueValidator(24), MinValueValidator(1)])
+    year = models.IntegerField(verbose_name="Año", null=False, blank=False, default=2017,
+                               validators=[MaxValueValidator(9999), MinValueValidator(2017)])
+    fortnight = models.IntegerField(verbose_name="Semana", null=False, blank=False, default=1,
+                                    validators=[MaxValueValidator(24), MinValueValidator(1)])
     start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
 
@@ -1131,15 +1141,29 @@ class EmployeeLoanDetail(models.Model):
         verbose_name = "Préstamo Detalle"
 
     def delete(self):
-        delModel = EmployeeEarningsDeductionsbyPeriod()
-        delModel.deleteFromEmployeeLoanDetail(self)
-        super(EmployeeLoanDetail, self).delete()
+        payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
+                                                              payroll_period_id=self.period.id)
+        existReceipt=0
+        for pE in payrollExist:
+            existReceipt=1
+        if existReceipt == 0:
+            delModel = EmployeeEarningsDeductionsbyPeriod()
+            delModel.deleteFromEmployeeLoanDetail(self)
+            super(EmployeeLoanDetail, self).delete()
 
     def save(self, *args, **kwargs):
-        modelo = EmployeeEarningsDeductionsbyPeriod()
-        modelo.create(self)
+        total=EmployeeLoanDetail.objects.values('employeeloan__id').filter(employeeloan_id=self.employeeloan.id).annotate(total=Sum('amount')).exclude(id=self.id)
+        sumTotal =0
+        for tot in total:
+            sumTotal += tot['total']
 
-        super(EmployeeLoanDetail, self).save(*args, **kwargs)
+        payrollExist=PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,payroll_period_id=self.period.id)
+        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count()>0:
+            modelo = EmployeeEarningsDeductionsbyPeriod()
+            modelo.create(self)
+            super(EmployeeLoanDetail, self).save(*args, **kwargs)
+        else:
+            return 'la suma de los pagos no puede exceder al total del préstamo'
 
     def unique_error_message(self, model_class, unique_check):
         if model_class == type(self) and unique_check == ('employeeloan', 'period'):
@@ -1162,18 +1186,21 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Periodo"
         verbose_name = "Deducciones y Percepciones por Periodo"
+
     def deleteFromEmployeeLoanDetail(self, data):
         obj = EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id,
                                                              payroll_period_id=data.period.id)
         super(EmployeeEarningsDeductionsbyPeriod, obj).delete()
 
     def create(self, data):
-        existe = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
-        if existe.count()>0:
-            obj=EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
-            if obj.id >0:
-                obj.ammount=data.amount
-                obj.payroll_period_id=data.period.id
+        existe = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=data.employeeloan.employee.id,
+                                                                   payroll_period_id=data.period.id)
+        if existe.count() > 0:
+            obj = EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id,
+                                                                 payroll_period_id=data.period.id)
+            if obj.id > 0:
+                obj.ammount = data.amount
+                obj.payroll_period_id = data.period.id
                 super(EmployeeEarningsDeductionsbyPeriod, obj).save()
         else:
             self.ammount = data.amount

@@ -163,7 +163,8 @@ class TestApplicationForm(forms.ModelForm):
         model = TestApplication
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'comments': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
@@ -191,7 +192,8 @@ class EmployeeDocumentForm(forms.ModelForm):
         model = EmployeeDocument
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'comments': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
@@ -246,6 +248,9 @@ class EmployeeHasTagForm(forms.ModelForm):
     class Meta:
         model = EmployeeHasTag
         fields = '__all__'
+        widgets = {
+            "employee": forms.HiddenInput,
+        }
 
     def __init__(self, *args, **kwargs):
 
@@ -272,7 +277,8 @@ class EmployeePositionDescriptionForm(forms.ModelForm):
         model = EmployeePositionDescription
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'observations': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
@@ -300,7 +306,8 @@ class EmployeeFinancialDataForm(forms.ModelForm):
         model = EmployeeFinancialData
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'comments': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
@@ -327,6 +334,7 @@ class InfonavitDataForm(forms.ModelForm):
     class Meta:
         model = InfonavitData
         fields = '__all__'
+
 
     def __init__(self, *args, **kwargs):
 
@@ -699,6 +707,13 @@ class JobProfileForm(forms.ModelForm):
     class Meta:
         model = JobProfile
         fields = '__all__'
+        widgets = {'abilities': forms.Textarea(attrs={'rows': 4}),
+                   'aptitudes': forms.Textarea(attrs={'rows': 4}),
+                   'knowledge': forms.Textarea(attrs={'rows': 4}),
+                   'competitions': forms.Textarea(attrs={'rows': 4}),
+                   'scholarship': forms.Textarea(attrs={'rows': 4}),
+                   'experience': forms.Textarea(attrs={'rows': 4}),
+                   }
 
 
 # Form to include the fields of Tag Form.
