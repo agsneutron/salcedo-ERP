@@ -9,7 +9,6 @@ function sendSelected(url) {
     }).get();
 
     url=url+"&employeesSelected="+seleccionados.toString();
-    alert(url);
     location.href = url;
 }
 
