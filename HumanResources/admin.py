@@ -1488,6 +1488,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         current_user = request.user
         #payroll_group_id = int(request.POST.get('payroll_group'))
         payroll_period_id = int(request.POST.get('payroll_period'))
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
         try:
             with transaction.atomic():
@@ -1503,7 +1504,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
                 # If everything went ok, generatethe automatic absences
                 atm_mgr = AutomaticAbsences()
-                atm_mgr.generate_automatic_absences_for_period(payroll_period_id)
+                atm_mgr.generate_automatic_absences_for_period(payroll_period)
 
                 super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
 
@@ -1515,6 +1516,11 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
         except django.db.utils.IntegrityError as e:
             django.contrib.messages.error(request, "Error de integridad de datos.")
+
+
+    def response_add(self, request, obj, post_url_continue=None):
+
+        return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
 
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
