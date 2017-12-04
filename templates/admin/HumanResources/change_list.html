@@ -103,10 +103,15 @@
                         </li>{% endcomment %}
 
                                         <div class="item-right">
+
+
                                             {% url cl.opts|admin_urlname:'add' as add_url %}
+
+                                            {% if add_url != "/admin/HumanResources/employeehastag/add/" and add_url != "/admin/HumanResources/testapplication/add/" %}
                                             <a href="{% add_preserved_filters add_url is_popup to_field %}"
                                                class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
                                             </a>
+                                            {% endif %}
                                         </div>
                                     {% endblock %}
                                 </ul>
