@@ -401,6 +401,22 @@
                                 {% if perms.HumanResources.change_employee %}
                                     <li class="dropdown-submenu">
                                         <a href="#" class="has_children">
+                                            <i class="zmdi zmdi-view-dashboard"></i>Etiquetas</a>
+
+                                        <ul class="dropdown-menu dropdown-menu-left">
+                                            <li>
+                                                <a href="/admin/HumanResources/tag/add/">Agregar</a>
+                                            </li>
+                                            <li>
+                                                <a href="/admin/HumanResources/employeehastag/">Consultar</a>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                {% endif %}
+
+                                {% if perms.HumanResources.change_employee %}
+                                    <li class="dropdown-submenu">
+                                        <a href="#" class="has_children">
                                             <i class="zmdi zmdi-view-dashboard"></i>Pruebas</a>
 
                                         <ul class="dropdown-menu dropdown-menu-left">
