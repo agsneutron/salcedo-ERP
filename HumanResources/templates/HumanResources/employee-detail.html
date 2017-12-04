@@ -1060,7 +1060,12 @@
             checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
         }
 
-
+$(document).ready(function() {
+    if (location.hash !== '') $('a[href="' + location.hash + '"]').tab('show');
+    return $('a[data-toggle="tab"]').on('shown', function(e) {
+      return location.hash = $(e.target).attr('href').substr(1);
+    });
+});
     </script>
 
 
