@@ -97,13 +97,14 @@
                 <h3 class="section-title">Listado de Nómina</h3>
              </div>
             <div class="col-md-6">
-                    <div class="text-right" style="display: flex;text-align: right;float: right;">
+                  {% comment %}  <div class="text-right" style="display: flex;text-align: right;float: right;">
                          <a href=# onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"  class="btn btn-raised btn-success">
                             <i class="fa fa-file-pdf-o"></i> Generar Recibos
-                         </a>
-                     </div>
+                         </a> {% endcomment %}
+                  &nbsp;   </div>
 
-                </div>
+
+
 
 
             <div class="col-md-12">
@@ -118,32 +119,32 @@
 
             </div>
 
-             {% comment %}<div class="col-md-12">
-                <hr>{% endcomment %}
-                 <!--<div class="col-md-4">
+            <div class="col-md-12">
+                <hr>
+                <div class="col-md-4">
                      <div class="text-right" style="display: flex;text-align: right;float: right;">
                          <a href="/admin/HumanResources/uploadedemployeeassistancehistory/add?payroll_period={{ payrollperiod }}" class="btn btn-raised btn-primary">
                             <i class="fa fa-users"></i> Cargar Asistencias
                          </a>
                      </div>
-                </div>-->
-                {% comment %}<div class="col-md-5">
+                </div>
+               <div class="col-md-4">
                      <div class="text-right" style="display: flex;text-align: right;float: right;">
                          <a href=" /admin/HumanResources/employeeassistance/incidences_by_period/{{ payrollperiod }}/" class="btn btn-raised btn-warning">
                             <i class="fa fa-user-times"></i> Justificar Asistencias
                          </a>
                      </div>
-                </div>{% endcomment %}
-                {% comment %}<div class="col-md-5">
+                </div>
+                <div class="col-md-4">
                     <div class="text-right" style="display: flex;text-align: right;float: right;">
                          <a href=# onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"  class="btn btn-raised btn-success">
                             <i class="fa fa-file-pdf-o"></i> Generar Recibos
                          </a>
                      </div>
 
-                </div>{% endcomment %}
-                {% comment %} <hr>
-            </div>{% endcomment %}
+                </div>
+                <hr>
+            </div>
             <div class="col-md-12">
                 <hr>
                 <div class="table-respponsive">
