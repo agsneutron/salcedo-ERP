@@ -6,7 +6,8 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from ERP.lib.utilities import Utilities
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
-    EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed
+    EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed, ISRTable, EarningsDeductions, \
+    EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions
 from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 from django.db import transaction
@@ -31,15 +32,90 @@ class ChangeAbsenceJustifiedStatus(View):
 
 class GeneratePayrollReceipt(View):
 
-    def create_historic_record(self, payroll_period, receipts):
+    def get_ISR_from_taxable(self, earnings):
+
+        isr_rules = ISRTable.objects.all()
+        for rule in isr_rules:
+            # Finding the range the earnings belong to.
+            if (earnings >= rule.lower_limit and earnings <= rule.upper_limit) or (earnings >= rule.lower_limit and rule.upper_limit == 0):
+
+                # Subtracting the lower limit to the earnings.
+                tax_minus_lower_limit = earnings - rule.lower_limit
+
+                # Multiplying by the rate.
+                value_per_rate = tax_minus_lower_limit * rule.rate
+
+                # Adding the fixed fee to the result.
+                result = value_per_rate + rule.fixed_fee
+
+                # Rounding the result to two decimals.
+                result = round(result, 2)
+
+
+                return result
+
+        return 0
+
+
+    def create_earnings_deductions_historic(self, payroll_receipt_processed, concept_json):
+
+
+
+        try:
+            if concept_json["id"] != "":
+                concept_id = int(concept_json["id"])
+            else:
+                concept_id = None
+
+            concept = EarningsDeductions.objects.get(pk=concept_id)
+
+            new_obj = PayrollProcessedDetail(
+                name=concept.name,
+                percent_taxable=concept.percent_taxable,
+                sat_key=concept.sat_key,
+                law_type=concept.law_type,
+                status=concept.status,
+                accounting_account=concept.accounting_account,
+                comments=concept.comments,
+                type=concept.type,
+                taxable=concept.get_taxable_display(),
+                category=concept.get_category_display(),
+                payroll_receip_processed=payroll_receipt_processed,
+                amount=concept_json['amount']
+            )
+
+        except EarningsDeductions.DoesNotExist as e:
+
+            new_obj = PayrollProcessedDetail(
+                name=concept_json["name"],
+                percent_taxable=100,
+                sat_key=0,
+                law_type="-",
+                status="Activa",
+                accounting_account=0,
+                comments="-",
+                type=EarningsDeductions.DEDUCCION,
+                taxable="Sí",
+                category="Variable",
+                payroll_receip_processed=payroll_receipt_processed,
+                amount=float(concept_json['amount'])
+            )
+
+
+        new_obj.save()
+
+
+    def create_receipt_historic_record(self, payroll_period, receipts):
 
         for receipt in receipts:
 
             employee = Employee.objects.get(pk=receipt['employee_id'])
             employee_total_earnings = float(receipt['total_earnings'])
             employee_total_deductions = float(receipt['total_deductions'])
-            employee_total_taxed = float(receipt['total_taxed'])
+            employee_total_taxed = float(receipt['total_taxable'])
+            employee_isr = float(receipt['isr'])
 
+            employee_financial_data= EmployeeFinancialData.objects.get(employee_id=employee.id)
 
             payroll_receipt_processed = PayrollReceiptProcessed(
                 employee=employee,
@@ -50,15 +126,26 @@ class GeneratePayrollReceipt(View):
                 total_payroll=employee_total_earnings - employee_total_deductions,
                 taxed=employee_total_taxed,
                 exempt=employee_total_earnings - employee_total_taxed,
-                daily_salry=0,
-                total_withholdings=0,
-                total_discounts=0
+                daily_salary=employee_financial_data.daily_salary,
+                total_withholdings=employee_isr,
+                total_discounts=employee_total_deductions
             )
 
             payroll_receipt_processed.save()
 
 
+            for deduction in receipt['deductions']:
+                self.create_earnings_deductions_historic(payroll_receipt_processed, deduction)
+
+
+            for earning in receipt['earnings']:
+                self.create_earnings_deductions_historic(payroll_receipt_processed, earning)
+
+
+
+
         return True
+
 
     def validate_employee_financial_data(self, employee):
         try:
@@ -67,7 +154,6 @@ class GeneratePayrollReceipt(View):
 
         except EmployeeFinancialData.DoesNotExist as e:
             return False
-
 
 
     def generate_single_payroll(self, employee, payroll_period):
@@ -168,10 +254,21 @@ class GeneratePayrollReceipt(View):
         receipt['absences'] = absences_array
 
 
+        # ISR.
+        isr = self.get_ISR_from_taxable(float(total_taxable))
+        deductions_array.append({
+            "id" : "",
+            "name" : "ISR",
+            "amount": isr
+        })
+        total_deductions = float(total_deductions) +  isr
+
+
         # General array.
         receipt['earnings'] = earnings_array
         receipt['deductions'] = deductions_array
         receipt['total_taxable'] = float(total_taxable)
+        receipt['isr'] = isr
 
 
         # Adding the general data to the receipt (employee and totals).
@@ -221,6 +318,7 @@ class GeneratePayrollReceipt(View):
 
         # Generating the payroll for every single employee.
         receipts_array = []
+
         try:
             with transaction.atomic():
                 for employee in employee_set:
@@ -237,19 +335,89 @@ class GeneratePayrollReceipt(View):
 
 
 
-                #return HttpResponse(Utilities.json_to_dumps(receipts_array),'application/json; charset=utf-8')
+
+                result = self.create_receipt_historic_record(payroll_period, receipts_array)
+                response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
+                return response
 
 
-                result = self.create_historic_record(payroll_period, receipts_array)
-                # response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
-                # return response
-
-                return HttpResponse(Utilities.json_to_dumps(receipts_array),'application/json; charset=utf-8')
 
 
         except ErrorDataUpload as e:
             e.save()
             raise e
+
+
+
+
+
+class GeneratePayrollReceiptForEmployee(View):
+
+    def get_historic_deductions(self, payroll_receipt_processed, employee):
+        deductions_array = []
+        details = PayrollProcessedDetail.objects.filter(Q(payroll_receip_processed=payroll_receipt_processed)&Q(payroll_receip_processed__employee=employee)&Q(type=EarningsDeductions.DEDUCCION))
+        for record in details:
+            deductions_array.append({
+                "name" : record.name,
+                "amount" : record.amount
+            })
+
+        return deductions_array
+
+
+
+    def get_historic_earnings(self, payroll_receipt_processed, employee):
+        earnings_array = []
+        details = PayrollProcessedDetail.objects.filter(Q(payroll_receip_processed=payroll_receipt_processed) & Q(payroll_receip_processed__employee=employee)&Q(type=EarningsDeductions.PERCEPCION))
+        for record in details:
+            earnings_array.append({
+                "name": record.name,
+                "amount": record.amount
+            })
+
+        return earnings_array
+
+
+    def get(self, request):
+        payroll_period_id = request.GET.get('payroll_period')
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        employee_id = request.GET.get('employee')
+        employee = Employee.objects.get(pk=employee_id)
+
+
+        payroll_receipt_processed = PayrollReceiptProcessed.objects.get(Q(payroll_period__id=payroll_period.id) & Q(employee_id=employee.id))
+
+        receipts_array = []
+        receipt = {}
+        deductions_array = self.get_historic_deductions(payroll_receipt_processed, employee)
+        earnings_array = self.get_historic_earnings(payroll_receipt_processed, employee)
+
+        receipt['earnings'] = earnings_array
+        receipt['deductions'] = deductions_array
+
+        # General array.
+        receipt['total_taxable'] = payroll_receipt_processed.taxed
+        receipt['isr'] = payroll_receipt_processed.total_withholdings
+
+        # Adding the general data to the receipt (employee and totals).
+        receipt["employee_id"] = str(employee.id)
+        receipt["employee_key"] = str(employee.employee_key)
+        receipt["rfc"] = str(employee.rfc)
+        receipt["ssn"] = str(employee.social_security_number)
+        receipt["employee_fullname"] = employee.get_full_name()
+        receipt["total_earnings"] = str(payroll_receipt_processed.total_perceptions)
+        receipt["total_deductions"] = str(payroll_receipt_processed.total_deductions)
+
+
+        receipts_array.append(receipt)
+        response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
+
+
+
+        #return HttpResponse(Utilities.json_to_dumps({}),'application/json; charset=utf-8')
+        return response
+
 
 
 

@@ -413,6 +413,7 @@ class IncidencesByEmployee(ListView):
         employee_key = self.kwargs['employee_key']
         payroll_period_id = self.kwargs['payroll_period_id']
 
+
         employee = Employee.objects.get(employee_key=employee_key)
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
@@ -426,5 +427,27 @@ class IncidencesByEmployee(ListView):
         context['payroll_period'] = payroll_period
         context['incidences'] = incidences
         context['absence_proofs'] = absence_proofs
+
+        return context
+
+
+
+# Views for the model Payroll Receipt Processed.
+class PayrollReceiptProcessedListView(ListView):
+    model = PayrollReceiptProcessed
+    template_name = "HumanResources/payroll_receipt-processed-list.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super(PayrollReceiptProcessedListView, self).get_context_data(**kwargs)
+
+        payroll_period_id = self.kwargs['payroll_period_id']
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        payroll_receipts_processed = PayrollReceiptProcessed.objects.filter(payroll_period_id=payroll_period_id)
+
+
+        context['receipts'] = payroll_receipts_processed
+        context['payroll_period'] = payroll_period
 
         return context

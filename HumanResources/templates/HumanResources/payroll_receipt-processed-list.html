@@ -1,0 +1,62 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+{% endblock %}
+{% block content %}
+
+
+
+
+    <div class="col-xs-12">
+
+
+        <div class="card ">
+
+
+
+
+
+            <div class="card-block">
+                <div class="tab-content">
+
+
+                    <div class="table-responsive mt-15">
+                        {% if receipts %}
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Empleado</th>
+                                    <th>Descargar</th>
+                                </tr>
+                                </thead>
+
+                                <tbody>
+                                {% for record in receipts %}
+                                    <tr>
+                                        <td>{{ record.employee.employee_key }}</td>
+                                        <td>{{ record.employee.get_full_name }}</td>
+                                        <td>
+                                            <a href="/humanresources/api/generate_payroll_receipt_for_employee?employee={{ record.employee.id }}&payroll_period={{ payroll_period.id }}"
+                                               class="btn btn-raised btn-default btn-xs">
+                                                <i class="fa fa-download color-default eliminar"></i>
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            No hay empleados con incidencias en este periodo.
+                        {% endif %}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+{% endblock %}

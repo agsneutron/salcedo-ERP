@@ -774,6 +774,23 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        payroll_period_id = request.GET.get('payrollperiod')
+        django.contrib.messages.success(request, "Deducción borrada exitosamente.")
+
+        return HttpResponseRedirect("http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee="+employee_id+"&payrollperiod="+payroll_period_id)
+
+
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        payroll_period_id = request.GET.get('payrollperiod')
+        django.contrib.messages.success(request, "La deducción se modificó exitosamente.")
+
+        return HttpResponseRedirect(
+            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
+
+
 @admin.register(EmployeeEarningsDeductions)
 class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
     form = EmployeeEarningsDeductionsForm
@@ -951,6 +968,17 @@ class PayrollReceiptProcessedAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    def get_urls(self):
+        urls = super(PayrollReceiptProcessedAdmin, self).get_urls()
+        my_urls = [
+            url(r'^receipts_by_period/(?P<payroll_period_id>\d+)/$',
+                self.admin_site.admin_view(views.PayrollReceiptProcessedListView.as_view()),
+                name='payroll-receipt-processed-list-view')
+
+        ]
+
+        return my_urls + urls
 
 
 # Earning Deduction Period Project Admin.
