@@ -105,7 +105,7 @@ class AssistanceDBObject:
             exit_time_record = record[self.ElementPosition.MANUAL_EXIT_COL]
             print "Manual Assistance Upload"
 
-    
+
 
         # Obtaining the related employee by theit key number. If the given employeee does not exist,
         # the system will throw an exception.
