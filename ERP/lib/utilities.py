@@ -5,7 +5,7 @@ import copy
 from decimal import Decimal
 from datetime import date
 from django.utils.safestring import mark_safe
-
+from HumanResources.models import ISRTable
 
 class Utilities():
     @staticmethod
@@ -89,3 +89,4 @@ class Utilities():
             return '${:,.2f}'.format(number)
         else:
             return '-${:,.2f}'.format(-number)
+
