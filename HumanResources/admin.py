@@ -40,8 +40,8 @@ from HumanResources.models import *
 class HumanResourcesAdminUtilities():
     @staticmethod
     def get_detail_link(obj):
-        model_name =  obj.__class__.__name__.lower()
-        link = "/admin/HumanResources/"+model_name+"/"+str(obj.id)+"/"
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/"
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-eye color-default eliminar' > </i>"
         if model_name == "payrollgroup":
@@ -61,7 +61,7 @@ class HumanResourcesAdminUtilities():
     @staticmethod
     def get_change_link_with_employee(obj, employee_id):
         model_name = obj.__class__.__name__.lower()
-        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change?employee="+str(employee_id)
+        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change?employee=" + str(employee_id)
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
 
@@ -88,7 +88,8 @@ class HumanResourcesAdminUtilities():
     @staticmethod
     def get_listpayroll_link(obj, payrollperiod_id, payrollgroup_id):
         model_name = obj.__class__.__name__.lower()
-        link = "/humanresources/employeebyperiod/?payrollperiod=" + str(payrollperiod_id) + "&payrollgroup=" + str(payrollgroup_id)
+        link = "/humanresources/employeebyperiod/?payrollperiod=" + str(payrollperiod_id) + "&payrollgroup=" + str(
+            payrollgroup_id)
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-list color-default eliminar' > </i>"
 
@@ -101,7 +102,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     form = EmployeeForm
     fieldsets = (
         ("Datos de Empleado", {
-            'fields': ('employee_key', 'type', 'registry_date', 'status', 'photo')
+            'fields': ('employee_key', 'type', 'registry_date', 'status')
         }),
         ("Datos Personales", {
             'fields': (
@@ -184,6 +185,11 @@ class EmployeeAdmin(admin.ModelAdmin):
 @admin.register(Education)
 class EducationAdmin(admin.ModelAdmin):
     form = EducationForm
+    fieldsets = (
+        ("Formación Académica", {
+            'fields': ('type', 'name', 'institution', 'license_code', 'evidence', 'employee')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -263,6 +269,13 @@ class CurrentEducationAdmin(admin.ModelAdmin):
 class EmergencyContactAdmin(admin.ModelAdmin):
     form = EmergencyContactForm
 
+    fieldsets = (
+        ("Contactos de Emergencia", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'phone_number', 'cellphone_number', 'email', 'employee')
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmergencyContactAdmin, self).get_form(request, obj, **kwargs)
@@ -315,6 +328,13 @@ class EmergencyContactAdmin(admin.ModelAdmin):
 class FamilyMemberAdmin(admin.ModelAdmin):
     form = FamilyMemberForm
 
+    fieldsets = (
+        ("Familiares", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'relationship', 'employee')
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(FamilyMemberAdmin, self).get_form(request, obj, **kwargs)
@@ -365,6 +385,14 @@ class FamilyMemberAdmin(admin.ModelAdmin):
 @admin.register(WorkReference)
 class WorkReferenceAdmin(admin.ModelAdmin):
     form = WorkReferenceForm
+
+    fieldsets = (
+        ("Referencias", {
+            'fields': (
+                'name', 'first_last_name', 'second_last_name', 'company_name', 'first_phone_number',
+                'second_phone_number', 'email', 'notes', 'employee')
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -418,6 +446,13 @@ class WorkReferenceAdmin(admin.ModelAdmin):
 class TestApplicationAdmin(admin.ModelAdmin):
     form = TestApplicationForm
 
+    fieldsets = (
+        ("Pruebas Aplicadas", {
+            'fields': (
+                'application_date', 'result', 'test', 'comments', 'employee',)
+        }),
+    )
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(TestApplicationAdmin, self).get_form(request, obj, **kwargs)
@@ -464,11 +499,25 @@ class TestApplicationAdmin(admin.ModelAdmin):
         redirect_url = "/admin/HumanResources/testapplication/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
+    def get_urls(self):
+        urls = super(TestApplicationAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', views.Tests, name='tests'),
+            url(r'^(?P<pk>\d+)/$', views.TestApplicationDetail, name='test_application_detail'),
+        ]
+        return my_urls + urls
+
 
 # Employee Document Admin.
 @admin.register(EmployeeDocument)
 class EmployeeDocumentAdmin(admin.ModelAdmin):
     form = EmployeeDocumentForm
+
+    fieldsets = (
+        ("Documentación", {
+            'fields': ('file', 'document_type', 'comments', 'employee',)
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -521,6 +570,12 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
 @admin.register(CheckerData)
 class CheckerDataAdmin(admin.ModelAdmin):
     form = CheckerDataForm
+
+    fieldsets = (
+        ("Documentación", {
+            'fields': ('checks_entry', 'checks_exit', 'employee',)
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -919,8 +974,7 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         }),
     )
 
-
-    list_display = ('name','type','category','taxable','percent_taxable','get_change_link','get_delete_link')
+    list_display = ('name', 'type', 'category', 'taxable', 'percent_taxable', 'get_change_link', 'get_delete_link')
     list_display_links = None
 
     def get_change_link(self, obj):
@@ -1045,17 +1099,17 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('name', 'payroll_classification', 'project')
+            'fields': ('name', 'payroll_classification', 'project', 'checker_type')
         }),
     )
 
-    list_display = ('name', 'payroll_classification', 'project',  'get_detail_button', 'get_change_link', 'get_delete_link')
-
+    list_display = (
+        'name', 'payroll_classification', 'project', 'get_detail_button', 'get_change_link', 'get_delete_link')
 
     def get_detail_button(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
-    def get_change_link(self,obj):
+    def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
 
     def get_delete_link(self, obj):
@@ -1101,12 +1155,15 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
+    search_fields = (
+        'name', 'payroll_group__name', 'payroll_to_process__name')
+    list_display = (
+        'name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
     def get_listpayroll_link(self, obj):
         return HumanResourcesAdminUtilities.get_listpayroll_link(obj, obj.id, obj.payroll_group.id)
 
-    def get_change_link(self,obj):
+    def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
 
     def get_delete_link(self, obj):
@@ -1288,7 +1345,6 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     )
 
     def save_model(self, request, obj, form, change):
-        print "Saving assistance file."
         current_user = request.user
         payroll_period_id = int(request.POST.get('payroll_period'))
 
@@ -1309,14 +1365,11 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
         except ErrorDataUpload as e:
             e.save()
-            messages.set_level(request, messages.ERROR)
-            messages.error(request, e.get_error_message())
+            # messages.set_level(request, messages.ERROR)
+            django.contrib.messages.error(request, e.get_error_message())
 
         except django.db.utils.IntegrityError as e:
-            # Create exception without raising it.
-            edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, current_user.id)
-            messages.set_level(request, messages.ERROR)
-            messages.error(request, edu.get_error_message())
+            django.contrib.messages.error(request, "Error de integridad de datos.")
 
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
@@ -1407,6 +1460,20 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
             'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
         }),
     )
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee = obj.employee
+        employee.status = Employee.STATUS_INNACTIVE
+        employee.save()
+
+        return super(EmployeeDropOutAdmin, self).response_add(request, obj, post_url_continue)
+
+
+# Employee Document Admin.
+@admin.register(ISRTable)
+class ISRTableAdmin(admin.ModelAdmin):
+    pass
 
 
 admin.site.register(PayrollClassification)

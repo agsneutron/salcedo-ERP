@@ -4,8 +4,9 @@ from _mysql import IntegrityError
 from datetime import date
 
 import xlrd
+from django.db.models.query_utils import Q
 
-from HumanResources.models import Employee, PayrollPeriod, EmployeePositionDescription, EmployeeAssistance
+from HumanResources.models import Employee, PayrollPeriod, EmployeePositionDescription, EmployeeAssistance, PayrollGroup
 from SalcedoERP.lib.SystemLog import SystemException, LoggingConstants
 
 
@@ -24,8 +25,8 @@ class AssistanceFileInterface(object):
         """ Inits the FileInterface object with a file.
         :param file_path: the path of the file with which the object will be initialized.
         """
-        #self.book = xlrd.open_workbook(file_contents=file_path.read())
-        self.book = xlrd.open_workbook(file_path)
+        self.book = xlrd.open_workbook(file_contents=file_path.read())
+        #self.book = xlrd.open_workbook(file_path)
 
     def get_element_list(self):
         """ Obtains an list containing all the records of the first sheet of the object's file.
@@ -74,10 +75,15 @@ class AssistanceDBObject:
 
     # Constants that define the value position in the given array.
     class ElementPosition:
-        EMPLOYEE_KEY_COL = 0
-        DATE_COL = 5
-        ENTRY_COL = 9
-        EXIT_COL = 10
+        ATM_EMPLOYEE_KEY_COL = 0
+        ATM_DATE_COL = 5
+        ATM_ENTRY_COL = 9
+        ATM_EXIT_COL = 10
+
+        MANUAL_EMPLOYEE_KEY_COL = 0
+        MANUAL_DATE_COL = 1
+        MANUAL_ENTRY_COL = 2
+        MANUAL_EXIT_COL = 3
 
     class AbsenceConditions:
         MINUTES_TO_BE_ABSENT = 15
@@ -85,10 +91,21 @@ class AssistanceDBObject:
     # Method to save create and save each given element.
     def save_assistance_record(self, record):
 
-        employee_key = record[self.ElementPosition.EMPLOYEE_KEY_COL]
-        record_date = record[self.ElementPosition.DATE_COL]
-        entry_time_record = record[self.ElementPosition.ENTRY_COL]
-        exit_time_record = record[self.ElementPosition.EXIT_COL]
+        if self.payroll_period.payroll_group.checker_type == PayrollGroup.CHECKER_TYPE_AUTOMATIC:
+            employee_key = record[self.ElementPosition.ATM_EMPLOYEE_KEY_COL]
+            record_date = record[self.ElementPosition.ATM_DATE_COL]
+            entry_time_record = record[self.ElementPosition.ATM_ENTRY_COL]
+            exit_time_record = record[self.ElementPosition.ATM_EXIT_COL]
+            print "Automatic Assistance Upload"
+
+        else:
+            employee_key = record[self.ElementPosition.MANUAL_EMPLOYEE_KEY_COL]
+            record_date = record[self.ElementPosition.MANUAL_DATE_COL]
+            entry_time_record = record[self.ElementPosition.MANUAL_ENTRY_COL]
+            exit_time_record = record[self.ElementPosition.MANUAL_EXIT_COL]
+            print "Manual Assistance Upload"
+
+
 
         # Obtaining the related employee by theit key number. If the given employeee does not exist,
         # the system will throw an exception.
@@ -103,20 +120,31 @@ class AssistanceDBObject:
 
         employee_was_absent = self.check_if_absent(employee_to_save, entry_time_to_save, exit_time_to_save)
 
-        print "Employee absent is: " + str(employee_was_absent)
-
-        assistance_obj = EmployeeAssistance(
-            entry_time=entry_time_to_save,
-            exit_time=exit_time_to_save,
-            record_date = date_to_save,
-            employee = employee_to_save,
-            payroll_period=self.payroll_period,
-            absence=employee_was_absent
-        )
+        # To check if the assistance exists before saving it.
+        assistance_existed = EmployeeAssistance.objects.filter(
+            Q(record_date = date_to_save) &
+            Q(employee = employee_to_save) &
+            Q(payroll_period=self.payroll_period))
 
 
+        if len(assistance_existed) > 0:
+            error_message = "La asistencia del empleado con la clave " + str(employee_key) + " el día " + str(record_date) + " ha sido registrada anteriormente."
+            raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
 
-        assistance_obj.save()
+        else:
+            assistance_obj = EmployeeAssistance(
+                entry_time=entry_time_to_save,
+                exit_time=exit_time_to_save,
+                record_date = date_to_save,
+                employee = employee_to_save,
+                payroll_period=self.payroll_period,
+                absence=employee_was_absent
+            )
+
+
+
+            assistance_obj.save()
+
 
 
 

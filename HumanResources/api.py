@@ -38,6 +38,7 @@ class GeneratePayrollReceipt(View):
             employee = Employee.objects.get(pk=receipt['employee_id'])
             employee_total_earnings = float(receipt['total_earnings'])
             employee_total_deductions = float(receipt['total_deductions'])
+            employee_total_taxed = float(receipt['total_taxed'])
 
 
             payroll_receipt_processed = PayrollReceiptProcessed(
@@ -47,8 +48,8 @@ class GeneratePayrollReceipt(View):
                 total_perceptions=employee_total_earnings,
                 total_deductions=employee_total_deductions,
                 total_payroll=employee_total_earnings - employee_total_deductions,
-                taxed=0,
-                exempt=0,
+                taxed=employee_total_taxed,
+                exempt=employee_total_earnings - employee_total_taxed,
                 daily_salry=0,
                 total_withholdings=0,
                 total_discounts=0
@@ -73,6 +74,7 @@ class GeneratePayrollReceipt(View):
 
         total_earnings = 0
         total_deductions = 0
+        total_taxable = 0
         earnings_array = []
         deductions_array = []
 
@@ -90,6 +92,7 @@ class GeneratePayrollReceipt(View):
             fixed_earnings_array.append(fixed_earning_json)
             earnings_array.append(fixed_earning_json)
             total_earnings += fixed_earning.ammount
+            total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
 
         receipt['fixed_earnings'] = fixed_earnings_array
 
@@ -123,6 +126,7 @@ class GeneratePayrollReceipt(View):
             variable_earnings_array.append(variable_earning_json)
             earnings_array.append(variable_earning_json)
             total_earnings += variable_earning.ammount
+            total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
 
         receipt['variable_earnings'] = variable_earnings_array
 
@@ -167,6 +171,7 @@ class GeneratePayrollReceipt(View):
         # General array.
         receipt['earnings'] = earnings_array
         receipt['deductions'] = deductions_array
+        receipt['total_taxable'] = float(total_taxable)
 
 
         # Adding the general data to the receipt (employee and totals).

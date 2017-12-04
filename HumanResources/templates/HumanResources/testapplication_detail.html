@@ -1,0 +1,15 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block extrastyle %}{{ block.super }}
+
+{% endblock %}
+{% block content %}
+
+    <div>Prueba: {{ object.test.name }}</div>
+    <div>Empleado: {{ object.employee.get_full_name }}</div>
+    <div>Resultado: {{ object.result }}</div>
+    <div>Fecha de aplicación: {{ object.application_date }}</div>
+    <div>Comentarios: <br>{{ object.comments}}</div>
+
+{% endblock %}
+
