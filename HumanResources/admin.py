@@ -690,7 +690,7 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
     list_display = ('tag', 'employee', 'get_EmployeeModelDetail_link')
 
     search_fields = (
-        '^employee__name', 'tag__name',)
+        '^employee__name', '^employee__first_last_name', '^employee__second_last_name', 'tag__name',)
 
     model_name = str(object.__class__.__name__.lower())
 
@@ -1326,7 +1326,6 @@ class TestAdmin(admin.ModelAdmin):
 class DocumentTypeAdmin(admin.ModelAdmin):
     form = DocumentTypeForm
 
-
     fieldsets = (
         ("Tipos de Documento de Empleado", {
             'fields': (
@@ -1528,21 +1527,20 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
 class JobProfileAdmin(admin.ModelAdmin):
     form = JobProfileForm
 
-
     fieldsets = (
         ("Perfil de Puesto", {
             'fields': (
-                'job','abilities','aptitudes','knowledge','competitions','scholarship','experience','entry_time','exit_time','sunday','monday','tuesday','wednesday','thursday','friday','saturday','direction','subdirection','area','department')
+                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience', 'entry_time',
+                'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
+                'subdirection', 'area', 'department')
         }),
     )
-
 
 
 # Loan Admin.
 @admin.register(Direction)
 class DirectionAdmin(admin.ModelAdmin):
     form = DirectionForm
-
 
     fieldsets = (
         ("Dirección", {
@@ -1557,13 +1555,12 @@ class DirectionAdmin(admin.ModelAdmin):
 class SubdirectionAdmin(admin.ModelAdmin):
     form = SubdirectionForm
 
-
     fieldsets = (
-    ("Subdirección", {
-        'fields': (
-            'name',)
-    }),
-)
+        ("Subdirección", {
+            'fields': (
+                'name',)
+        }),
+    )
 
 
 # Loan Admin.
