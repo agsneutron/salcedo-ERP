@@ -210,6 +210,29 @@ def EmployeeByPeriod(request):
 
 
 @login_required()
+def Tests(request):
+    template = loader.get_template('HumanResources/testapplication_list.html')
+
+    test_applications = TestApplication.objects.all()
+
+    # context = RequestContext.request
+    context = {'object_list': test_applications}
+    return HttpResponse(template.render(context, request))
+
+
+@login_required()
+def TestApplicationDetail(request, pk):
+    template = loader.get_template('HumanResources/testapplication_detail.html')
+
+
+    object = TestApplication.objects.get(pk=pk)
+
+    context = {'object':object}
+
+    return HttpResponse(template.render(context, request))
+
+
+@login_required()
 def EmployeeByPeriod(request):
     payrollgroup = request.GET.get('payrollgroup')
     payrollperiod = request.GET.get('payrollperiod')

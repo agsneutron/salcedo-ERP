@@ -465,6 +465,15 @@ class TestApplicationAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(redirect_url)
 
 
+    def get_urls(self):
+        urls = super(TestApplicationAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', views.Tests, name='tests'),
+            url(r'^(?P<pk>\d+)/$', views.TestApplicationDetail, name='test_application_detail'),
+        ]
+        return my_urls + urls
+
+
 # Employee Document Admin.
 @admin.register(EmployeeDocument)
 class EmployeeDocumentAdmin(admin.ModelAdmin):
