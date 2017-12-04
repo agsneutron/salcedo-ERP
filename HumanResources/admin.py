@@ -1117,6 +1117,8 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
+    search_fields = (
+        'name', 'payroll_group__name', 'payroll_to_process__name')
     list_display = (
         'name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
