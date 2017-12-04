@@ -95,6 +95,14 @@ class HumanResourcesAdminUtilities():
 
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
+    @staticmethod
+    def get_EmployeeModelDetail_link(model_name,employee_id,anchor):
+        link = "/admin/HumanResources/" + str(model_name) + "/" + str(employee_id) + "/"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+
+        return '<a href="' + link + anchor + '" class="' + css + '" >' + button + '</a>'
+
 
 # Employee Admin.
 @admin.register(Employee)
@@ -469,6 +477,17 @@ class TestApplicationAdmin(admin.ModelAdmin):
         }),
     )
 
+    list_display = ('test', 'employee', 'application_date','result','get_EmployeeModelDetail_link')
+    list_display_links = None
+    search_fields = (
+        'employee__name', '^test__name', 'result')
+
+    def get_EmployeeModelDetail_link(self, obj):
+        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("employee", obj.employee.id, "#pruebas")
+
+    get_EmployeeModelDetail_link.short_description = 'Ver'
+    get_EmployeeModelDetail_link.allow_tags = True
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(TestApplicationAdmin, self).get_form(request, obj, **kwargs)
@@ -515,13 +534,13 @@ class TestApplicationAdmin(admin.ModelAdmin):
         redirect_url = "/admin/HumanResources/testapplication/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
-    def get_urls(self):
-        urls = super(TestApplicationAdmin, self).get_urls()
-        my_urls = [
-            url(r'^$', views.Tests, name='tests'),
-            url(r'^(?P<pk>\d+)/$', views.TestApplicationDetail, name='test_application_detail'),
-        ]
-        return my_urls + urls
+    # def get_urls(self):
+    #     urls = super(TestApplicationAdmin, self).get_urls()
+    #     my_urls = [
+    #         url(r'^$', views.Tests, name='tests'),
+    #         url(r'^(?P<pk>\d+)/$', views.TestApplicationDetail, name='test_application_detail'),
+    #     ]
+    #     return my_urls + urls
 
 
 # Employee Document Admin.
@@ -668,16 +687,19 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('tag','employee','get_detail_button')
+    list_display = ('tag','employee','get_EmployeeModelDetail_link')
 
     search_fields = (
-        'employee', 'tag',)
+        '^employee__name', 'tag__name',)
 
-    def get_detail_button(self, obj):
-        return HumanResourcesAdminUtilities.get_detail_link(obj)
+    model_name = str(object.__class__.__name__.lower())
 
-    get_detail_button.short_description = 'Ver'
-    get_detail_button.allow_tags = True
+    def get_EmployeeModelDetail_link(self,obj):
+        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("employee", obj.employee.id,"")
+
+
+    get_EmployeeModelDetail_link.short_description = 'Ver'
+    get_EmployeeModelDetail_link.allow_tags = True
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):

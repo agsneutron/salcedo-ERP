@@ -83,6 +83,13 @@
             border-top: solid 0px #eee;
         }
     </style>
+    <script>
+
+        $( document ).ready(function() {
+            //alert(window.location.hash);
+            $('.nav-tabs a[href="'+ window.location.hash +'"]').tab('show')
+        });
+    </script>
 {% endblock %}
 {% block content %}
 
