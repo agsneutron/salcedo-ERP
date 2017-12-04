@@ -1,54 +1,57 @@
-.jOrgChart table {
-  margin: 0 auto; }
-  .jOrgChart table .node-cell {
-    padding: 0 0 0 52.8px; }
-.jOrgChart .node {
-  width: 240px;
-  height: 66px;
-  line-height: 17px;
-  box-sizing: border-box;
-  position: relative;
-  padding: 6px 6px 6px 40px;
-  border-radius: 0 10px 10px 0;
-  color: #f0f0f0;
-  font-size: 14px; }
-  .jOrgChart .node.uncovered {
-    background: #9d9d9d; }
-  .jOrgChart .node .profile-photo {
-    width: 66px;
+.jOrgChart {
+  overflow: scroll;
+  min-height: 100vh; }
+  .jOrgChart table {
+    margin: 0 auto; }
+    .jOrgChart table .node-cell {
+      padding: 0 0 0 52.8px; }
+  .jOrgChart .node {
+    width: 240px;
     height: 66px;
-    position: absolute;
-    left: -33px;
-    top: 0;
-    border-radius: 33px;
-    background-size: cover;
-    border: 2px solid #e3e3e3; }
-  .jOrgChart .node:hover .overlay {
-    display: block; }
-  .jOrgChart .node .overlay {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: -33px;
-    padding-left: 20px !important;
-    background: #1D3A75;
-    border-radius: 33px 10px 10px 33px;
-    z-index: 1;
-    text-align: center;
-    cursor: auto !important; }
-    .jOrgChart .node .overlay .node-button {
-      width: 50px;
-      line-height: 66px;
-      vertical-align: middle;
-      font-size: 35px;
-      color: white;
-      display: inline-block; }
-  .jOrgChart .node .position-name {
-    font-weight: bold;
-    font-size: 10px;
-    line-height: 12px;
-    text-transform: uppercase; }
+    line-height: 17px;
+    box-sizing: border-box;
+    position: relative;
+    padding: 6px 6px 6px 40px;
+    border-radius: 0 10px 10px 0;
+    color: #f0f0f0;
+    font-size: 14px; }
+    .jOrgChart .node.uncovered {
+      background: #9d9d9d; }
+    .jOrgChart .node .profile-photo {
+      width: 66px;
+      height: 66px;
+      position: absolute;
+      left: -33px;
+      top: 0;
+      border-radius: 33px;
+      background-size: cover;
+      border: 2px solid #e3e3e3; }
+    .jOrgChart .node:hover .overlay {
+      display: block; }
+    .jOrgChart .node .overlay {
+      display: none;
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: -33px;
+      padding-left: 20px !important;
+      background: #1D3A75;
+      border-radius: 33px 10px 10px 33px;
+      z-index: 1;
+      text-align: center;
+      cursor: auto !important; }
+      .jOrgChart .node .overlay .node-button {
+        width: 50px;
+        line-height: 66px;
+        vertical-align: middle;
+        font-size: 35px;
+        color: white;
+        display: inline-block; }
+    .jOrgChart .node .position-name {
+      font-weight: bold;
+      font-size: 10px;
+      line-height: 12px;
+      text-transform: uppercase; }
 
 /*# sourceMappingURL=chart.css.map */

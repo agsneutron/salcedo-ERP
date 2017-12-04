@@ -613,9 +613,9 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         ("Descripción de Puesto", {
             # contract
             'fields': (
-                'employee', 'start_date', 'end_date', 'direction', 'subdirection', 'area', 'department', 'job_profile',
+                'employee', 'contract', 'start_date', 'end_date', 'direction', 'subdirection', 'area', 'department', 'job_profile',
                 'physical_location', 'insurance_type', 'insurance_number', 'entry_time', 'departure_time', 'monday',
-                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'observations', 'payroll_group')
+                'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday', 'payroll_group','observations', )
         }),
     )
 
@@ -1334,6 +1334,13 @@ class DepartmentAdmin(admin.ModelAdmin):
 @admin.register(JobInstance)
 class JobInstanceAdmin(admin.ModelAdmin):
     form = JobInstanceForm
+
+    fieldsets = (
+        ("Puesto", {
+            'fields': (
+                'job_profile', 'employee',)
+        }),
+    )
 
     def get_urls(self):
         urls = super(JobInstanceAdmin, self).get_urls()
