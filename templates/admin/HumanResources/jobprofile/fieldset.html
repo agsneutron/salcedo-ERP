@@ -7,13 +7,19 @@
         color: white;
     }
 
-    .col-xs-4 {
-    min-height: 65px;
+    .col-xs-6 {
+    height: 65px;
     }
-    .col-xs-4 br {
+    .col-xs-6 br {
     display: none !important;
 }
+  .datetimeshortcuts {
 
+
+}
+    .dias-fields > .col-xs-6 {
+    width: 7%;
+}
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -41,7 +47,7 @@
                 {% for field in line %}
 
 
-                    <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
+                    <div class="col-xs-6"{% if not line.fields|length_is:'1' %}
                          class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
                          class=“checkbox-row”{% endif %}>
                         {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
@@ -76,5 +82,18 @@
 
 
     });
+
+</script>
+<script>
+
+
+    $( ".field-monday" ).addClass( "dias-fields" );
+    $( ".field-tuesday" ).addClass( "dias-fields" );
+    $( ".field-wednesday" ).addClass( "dias-fields" );
+    $( ".field-thursday" ).addClass( "dias-fields" );
+    $( ".field-friday" ).addClass( "dias-fields" );
+    $( ".field-saturday" ).addClass( "dias-fields" );
+    $( ".field-sunday" ).addClass( "dias-fields" );
+
 
 </script>

@@ -112,3 +112,10 @@
     background-color: #fefefe;
     padding: 0;
 }
+    .datetimeshortcuts {
+    /* text-align: center; */
+    position: relative;
+    /* margin: 0 auto; */
+    /* left: calc(50% - 30px); */
+    top: -33px !important;
+}
