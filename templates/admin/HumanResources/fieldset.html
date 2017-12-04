@@ -12,8 +12,12 @@
     }
     .col-xs-4 br {
     display: none !important;
-}
 
+}
+    .datetimeshortcuts {
+
+    top: -32px !important;
+}
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -73,6 +77,7 @@
     $(document).ready(function () {
         $('input').addClass('form-control');
         $('select').addClass('form-control');
+        $('.col-xs-4>div').removeClass('form-group');
 
 
     });

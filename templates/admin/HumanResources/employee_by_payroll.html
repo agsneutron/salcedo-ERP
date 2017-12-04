@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %}
+    {% extends "admin/base_site.html" %}
 {% load i18n admin_static %}
 {% block coltype %}colMS{% endblock %}
 
@@ -85,61 +85,96 @@
     line-height: 1.3 !important;
 }
     </style>
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
 {% endblock %}
 {% block content %}
 
     <div class="container">
-         <h3 class="section-title">Listado de Nómina</h3>
-        <hr>
-        <div class="col-md-12">
-            {% for record_period in payrolldata %}
-                <div class="col-md-3"><strong>Periodo :</strong> <br> {{ record_period.name }}</div>
-                <div class="col-md-3"><strong>Grupo :</strong> <br> {{ record_period.payroll_group}}</div>
-                <div class="col-md-3"><strong>Inicio de Periodo : </strong><br>{{ record_period.start_period }}</div>
-                <div class="col-md-3"><strong>Fin de Periodo :</strong><br> {{ record_period.end_period }}</div>
-
-            {% endfor %}
-
-        </div>
+        {% include "admin/HumanResources/payroll-home.html" %}
+         <div class="col-xs-9">
+             <div class="col-md-12">
+                <h3 class="section-title">Listado de Nómina</h3>
+             </div>
 
 
-
-        <div class="col-md-12">
+            <div class="col-md-12">
             <hr>
-            <div class="table-respponsive">
-                                    <table class="table table-striped">
-                                        <thead>
-                                        <tr>
-                                            <td>Clave</td>
-                                            <td>Nombre</td>
-                                            <td>Puesto Asignado</td>
-                                            <td>P/D por Periodo</td>
-                                            <td>Excluir</td>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for record in employees %}
-                                            <tr>
-                                                <td>{{ record.employee.employee_key }}</td>
-                                                <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
-                                                <td>{{ record.job_profile.job }}</td>
-                                                <td>
-                                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-address-card-o color-default"></i>
-                                                    </a>
-                                                </td>
-                                                <td>
+                {% for record_period in payrolldata %}
+                    <div class="col-md-3"><strong>Periodo :</strong> <br> {{ record_period.name }}</div>
+                    <div class="col-md-3"><strong>Grupo :</strong> <br> {{ record_period.payroll_group}}</div>
+                    <div class="col-md-3"><strong>Inicio de Periodo : </strong><br>{{ record_period.start_period }}</div>
+                    <div class="col-md-3"><strong>Fin de Periodo :</strong><br> {{ record_period.end_period }}</div>
 
-                                                    <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}">
-                                                </td>
+                {% endfor %}
+
+            </div>
+
+             <div class="col-md-12">
+                <hr>
+                 <div class="col-md-4">
+                     <div class="text-right" style="display: flex;text-align: right;float: right;">
+                         <a href="/admin/HumanResources/uploadedemployeeassistancehistory/add?payroll_period_id={{ payrollperiod }}" class="btn btn-raised btn-primary">
+                            <i class="fa fa-users"></i> Cargar Asistencias
+                         </a>
+                     </div>
+                </div>
+                <div class="col-md-4">
+                     <div class="text-right" style="display: flex;text-align: right;float: right;">
+                         <a href=" /admin/HumanResources/employeeassistance/incidences_by_period/{{ payrollperiod }}/" class="btn btn-raised btn-warning">
+                            <i class="fa fa-user-times"></i> Justificar Asistencias
+                         </a>
+                     </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="text-right" style="display: flex;text-align: right;float: right;">
+                         <a href="/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}" class="btn btn-raised btn-success">
+                            <i class="fa fa-file-pdf-o"></i> Generar Recibos
+                         </a>
+                     </div>
+
+                </div>
+                 <hr>
+            </div>
+            <div class="col-md-12">
+
+                <div class="table-respponsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <td>Clave</td>
+                                                <td>Nombre</td>
+                                                <td>Puesto Asignado</td>
+                                                <td>P/D por Periodo</td>
+                                                <td>Excluir</td>
                                             </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
+                                            </thead>
+                                            <tbody>
+                                            {% for record in employees %}
+                                                <tr>
+                                                    <td>{{ record.employee.employee_key }}</td>
+                                                    <td>{{ record.employee.name }}  {{ record.employee.first_last_name }}  {{ record.employee.second_last_name }}</td>
+                                                    <td>{{ record.job_profile.job }}</td>
+                                                    <td>
+                                                        <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
+                                                class="fa fa-address-card-o color-default"></i>
+                                                        </a>
+                                                    </td>
+                                                    <td>
+
+                                                        <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}">
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+            </div>
+         <script>
+ $('.col-xs-4>.required>div').removeClass('form-group');
+
+</script>
         </div>
     </div>
-
 
 
 {% endblock %}

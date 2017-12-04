@@ -74,6 +74,7 @@
                             {% endfor %}
 
                             {% block after_related_objects %}
+                              {% if period %}
                                 <hr>
                                 <div class="table-respponsive">
                                     <table class="table table-striped">
@@ -96,8 +97,9 @@
                                                 <td>{{ record.start_period }}</td>
                                                 <td>{{ record.end_period }}</td>
                                                 <td>
-                                                    <a href="/humanresources/employeebyperiod?payrollperiod={{ record.id }}&payrollgroup={{ record.payroll_group.id }}">
-                                                        Listar Nómina
+                                                    <a href="/humanresources/employeebyperiod?payrollperiod={{ record.id }}&payrollgroup={{ record.payroll_group.id }}"
+                                                        class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-list color-default eliminar"></i>
                                                     </a>
                                                 </td>
                                                 <td>
@@ -117,6 +119,7 @@
                                         </tbody>
                                     </table>
                                 </div>
+                              {% endif %}
 
 
 
