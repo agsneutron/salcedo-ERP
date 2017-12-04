@@ -169,6 +169,10 @@
                                     Académica
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_education_add" %}{{ "active_btn" }}{% endif %}"></div>
                                 </a>
+                     <a class="btn btn-primary employee-menu" href="{% if request.GET.employee %}/admin/HumanResources/currenteducation/add/?employee={{request.GET.employee}}{% else %}#{% endif %}">Formación<br>
+                                    Académica Actual
+                                    <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_currenteducation_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                </a>
                                 <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/emergencycontact/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_emergencycontact_add" %}{{ "active_btn" }}{% endif %}"></div>
                                     Contactos de<br> Emergencia
@@ -183,7 +187,7 @@
                                 </a>
                                 <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/testapplication/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_testapplication_add" %}{{ "active_btn" }}{% endif %}"></div>
-                                    Examen <br>Psicometrico
+                                    Pruebas
                                 </a>
                                 <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/employeedocument/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
