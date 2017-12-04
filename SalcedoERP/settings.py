@@ -154,10 +154,10 @@ PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 # https://docs.djangoproject.com/en/1.9/howto/static-files
 
 STATIC_URL = '/static/'
-#STATIC_ROOT = os.path.join('static')
-STATICFILES_DIRS = [
+STATIC_ROOT = os.path.join('static')
+'''STATICFILES_DIRS = [
      os.path.join(BASE_DIR, "static"),
-]
+]'''
 
 STATIC_FILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',

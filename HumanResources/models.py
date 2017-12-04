@@ -23,6 +23,7 @@ from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
 
 
+
 # To represent ISRTable.
 class ISRTable(models.Model):
     lower_limit = models.FloatField(verbose_name="Límite Inferior", null=False, blank=False, default=0)
@@ -39,6 +40,8 @@ class ISRTable(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.lower_limit
+
+
 
 class PayrollClassification(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=100, null=False, blank=False, unique=False, default='')
