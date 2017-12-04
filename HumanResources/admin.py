@@ -17,10 +17,8 @@ from Assistance.helper import AssistanceFileInterface, AssistanceDBObject, Error
 # Constants.
 from SalcedoERP.lib.SystemLog import LoggingConstants
 
-
 # DBObject assistant.
 from Assistance.helper import AssistanceDBObject
-
 
 # Atomic Transactions.
 from django.db import transaction
@@ -42,14 +40,14 @@ from HumanResources.models import *
 class HumanResourcesAdminUtilities():
     @staticmethod
     def get_detail_link(obj):
-        model_name =  obj.__class__.__name__.lower()
-        link = "/admin/HumanResources/"+model_name+"/"+str(obj.id)+"/"
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/"
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-eye color-default eliminar' > </i>"
         if model_name == "payrollgroup":
             button = "<i class ='fa fa-calendar-check-o color-default eliminar' > </i>"
 
-        return '<a href="'+link+'" class="'+css+'" >'+button+'</a>'
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
     @staticmethod
     def get_delete_link(obj):
@@ -60,11 +58,10 @@ class HumanResourcesAdminUtilities():
 
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
-
     @staticmethod
     def get_change_link_with_employee(obj, employee_id):
         model_name = obj.__class__.__name__.lower()
-        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change?employee="+str(employee_id)
+        link = "/admin/HumanResources/" + model_name + "/" + str(obj.id) + "/change?employee=" + str(employee_id)
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
 
@@ -91,7 +88,8 @@ class HumanResourcesAdminUtilities():
     @staticmethod
     def get_listpayroll_link(obj, payrollperiod_id, payrollgroup_id):
         model_name = obj.__class__.__name__.lower()
-        link = "/humanresources/employeebyperiod/?payrollperiod=" + str(payrollperiod_id) + "&payrollgroup=" + str(payrollgroup_id)
+        link = "/humanresources/employeebyperiod/?payrollperiod=" + str(payrollperiod_id) + "&payrollgroup=" + str(
+            payrollgroup_id)
         css = "btn btn-raised btn-default btn-xs"
         button = "<i class ='fa fa-list color-default eliminar' > </i>"
 
@@ -128,7 +126,9 @@ class EmployeeAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-    list_display = ('employee_key','get_full_name','work_email','get_detail_column','get_change_column', 'get_delete_column','get_payroll_column')
+    list_display = (
+        'employee_key', 'get_full_name', 'work_email', 'get_detail_column', 'get_change_column', 'get_delete_column',
+        'get_payroll_column')
     list_display_links = None
 
     def get_full_name(self, obj):
@@ -144,7 +144,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         return HumanResourcesAdminUtilities.get_delete_link(obj)
 
     def get_payroll_column(self, obj):
-        return HumanResourcesAdminUtilities.get_nomina_link_with_employee(obj,obj.id)
+        return HumanResourcesAdminUtilities.get_nomina_link_with_employee(obj, obj.id)
 
     # Added columns meta data.
     get_full_name.short_description = "Nombre"
@@ -161,7 +161,6 @@ class EmployeeAdmin(admin.ModelAdmin):
     get_payroll_column.allow_tags = True
     get_payroll_column.short_description = 'Nómina'
 
-
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra = extra_context or {}
 
@@ -174,7 +173,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         return super(EmployeeAdmin, self).change_view(request, object_id, form_url, extra)
 
     def response_add(self, request, obj, post_url_continue=None):
-        redirect_url = "/admin/HumanResources/employee/"+str(obj.id)+"/change/?employee="+str(obj.id)
+        redirect_url = "/admin/HumanResources/employee/" + str(obj.id) + "/change/?employee=" + str(obj.id)
         return HttpResponseRedirect(redirect_url)
 
     def response_change(self, request, obj):
@@ -224,7 +223,7 @@ class EducationAdmin(admin.ModelAdmin):
     # To redirect after add
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
-        redirect_url = "/admin/HumanResources/education/add/?employee="+str(employee_id)
+        redirect_url = "/admin/HumanResources/education/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
     # To redirect after object change
@@ -466,7 +465,6 @@ class TestApplicationAdmin(admin.ModelAdmin):
         redirect_url = "/admin/HumanResources/testapplication/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
-
     def get_urls(self):
         urls = super(TestApplicationAdmin, self).get_urls()
         my_urls = [
@@ -527,6 +525,7 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
         redirect_url = "/admin/HumanResources/employeedocument/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
+
 # Checker Data Admin.
 @admin.register(CheckerData)
 class CheckerDataAdmin(admin.ModelAdmin):
@@ -557,11 +556,11 @@ class CheckerDataAdmin(admin.ModelAdmin):
 
         checker_data = CheckerData.objects.filter(employee_id=employee_id)
 
-
         if len(checker_data) > 0 and found_checker is None:
             # There's checker info for the current employee and found_checker control variable was not sent.
-            return HttpResponseRedirect("/admin/HumanResources/checkerdata/"+str(checker_data.first().id)+"/change?employee="+str(employee_id)+"&checker=1")
-
+            return HttpResponseRedirect(
+                "/admin/HumanResources/checkerdata/" + str(checker_data.first().id) + "/change?employee=" + str(
+                    employee_id) + "&checker=1")
 
         return super(CheckerDataAdmin, self).add_view(request, form_url, extra)
 
@@ -656,7 +655,8 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 
         if len(position_description_data) > 0 and found_position is None:
             return HttpResponseRedirect(
-                "/admin/HumanResources/employeepositiondescription/" + str(position_description_data.first().id) + "/change?employee=" + str(
+                "/admin/HumanResources/employeepositiondescription/" + str(
+                    position_description_data.first().id) + "/change?employee=" + str(
                     employee_id) + "&position=1")
 
         return super(EmployeePositionDescriptionAdmin, self).add_view(request, form_url, extra_context=extra)
@@ -694,7 +694,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(redirect_url)
 
 
-#@admin.register(InfonavitData)
+# @admin.register(InfonavitData)
 class InfonavitDataAdmin(admin.StackedInline):
     model = InfonavitData
 
@@ -728,7 +728,7 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Percepciones y Deducciones", {
-            'fields': ('employee','concept','ammount','date','payroll_period',)
+            'fields': ('employee', 'concept', 'ammount', 'date', 'payroll_period',)
         }),
     )
 
@@ -821,8 +821,9 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Datos Financieros", {
-            'fields': ('employee', 'payment_method', 'account_number', 'CLABE', 'bank', 'monthly_salary', 'daily_salary',
-                       'aggregate_daily_salary',)
+            'fields': (
+                'employee', 'payment_method', 'account_number', 'CLABE', 'bank', 'monthly_salary', 'daily_salary',
+                'aggregate_daily_salary',)
         }),
     )
 
@@ -873,7 +874,7 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
         extra['employee'] = Employee.objects.get(pk=employee_id)
 
         return super(EmployeeFinancialDataAdmin, self).change_view(request, object_id, form_url,
-                                                                         extra)
+                                                                   extra)
 
 
 # Earnings Deductions Admin.
@@ -889,8 +890,7 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         }),
     )
 
-
-    list_display = ('name','type','category','taxable','percent_taxable','get_change_link','get_delete_link')
+    list_display = ('name', 'type', 'category', 'taxable', 'percent_taxable', 'get_change_link', 'get_delete_link')
     list_display_links = None
 
     def get_change_link(self, obj):
@@ -923,7 +923,7 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
-        #employee_id = request.GET.get('employee')
+        # employee_id = request.GET.get('employee')
         earnings_set = EarningsDeductions.objects.filter(type='P')
         deductions_set = EarningsDeductions.objects.filter(type='D')
 
@@ -971,6 +971,7 @@ class EarningDeductionPeriodAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+
 # Payroll Processed Detail Admin.
 @admin.register(PayrollProcessedDetail)
 class PayrollProcessedDetailAdmin(admin.ModelAdmin):
@@ -1000,10 +1001,12 @@ Administrators to fill the database.
 class PayrollToProcessAdmin(admin.ModelAdmin):
     form = PayrollToProcessForm
 
+
 # Payroll Type Admin.
 @admin.register(PayrollType)
 class PayrollTypeAdmin(admin.ModelAdmin):
     form = PayrollTypeForm
+
 
 # Payroll Type Admin.
 @admin.register(PayrollGroup)
@@ -1016,13 +1019,13 @@ class PayrollGroupAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('name', 'payroll_classification', 'project',  'get_detail_button', 'get_change_link', 'get_delete_link')
-
+    list_display = (
+        'name', 'payroll_classification', 'project', 'get_detail_button', 'get_change_link', 'get_delete_link')
 
     def get_detail_button(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
-    def get_change_link(self,obj):
+    def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
 
     def get_delete_link(self, obj):
@@ -1042,16 +1045,13 @@ class PayrollGroupAdmin(admin.ModelAdmin):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
-        #employee_id = request.GET.get('employee')
+        # employee_id = request.GET.get('employee')
         period_set = PayrollGroup.objects.all()
 
         extra['template'] = "payrollgroup"
         extra['period'] = period_set
 
-
         return super(PayrollGroupAdmin, self).add_view(request, form_url, extra_context=extra)
-
-
 
     def get_urls(self):
         urls = super(PayrollGroupAdmin, self).get_urls()
@@ -1067,16 +1067,17 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
     form = PayrollPeriodForm
     fieldsets = (
         ("Periodos de Nómina", {
-            'fields': ('name','start_period','end_period', 'payroll_group','payroll_to_process')
+            'fields': ('name', 'start_period', 'end_period', 'payroll_group', 'payroll_to_process')
         }),
     )
 
-    list_display = ('name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
+    list_display = (
+        'name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
     def get_listpayroll_link(self, obj):
         return HumanResourcesAdminUtilities.get_listpayroll_link(obj, obj.id, obj.payroll_group.id)
 
-    def get_change_link(self,obj):
+    def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
 
     def get_delete_link(self, obj):
@@ -1092,7 +1093,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
     get_delete_link.allow_tags = True
 
     def response_add(self, request, obj, post_url_continue=None):
-        return HttpResponseRedirect('/admin/HumanResources/payrollgroup/'+str(obj.payroll_group.id)+'/')
+        return HttpResponseRedirect('/admin/HumanResources/payrollgroup/' + str(obj.payroll_group.id) + '/')
 
     # Adding extra context to the change view.
     def add_view(self, request, form_url='', extra_context=None):
@@ -1169,8 +1170,10 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         position_entry_time = employee_position.entry_time
         position_exit_time = employee_position.departure_time
 
-        entry_diff = datetime.datetime.combine(date.today(), obj.entry_time) - datetime.datetime.combine(date.today(), position_entry_time)
-        exit_diff = datetime.datetime.combine(date.today(), position_exit_time) - datetime.datetime.combine(date.today(), obj.exit_time)
+        entry_diff = datetime.datetime.combine(date.today(), obj.entry_time) - datetime.datetime.combine(date.today(),
+                                                                                                         position_entry_time)
+        exit_diff = datetime.datetime.combine(date.today(), position_exit_time) - datetime.datetime.combine(
+            date.today(), obj.exit_time)
 
         arrived_minutes_late = entry_diff.total_seconds() / 60
         left_minutes_early = exit_diff.total_seconds() / 60
@@ -1183,17 +1186,17 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 
         obj.absence = absent
 
-
         super(EmployeeAssistanceAdmin, self).save_model(request, obj, form, change)
-
 
     def get_urls(self):
         urls = super(EmployeeAssistanceAdmin, self).get_urls()
         my_urls = [
-            url(r'^incidences_by_period/(?P<payroll_period_id>\d+)/$', self.admin_site.admin_view(views.IncidencesByPayrollPeriod.as_view()),
+            url(r'^incidences_by_period/(?P<payroll_period_id>\d+)/$',
+                self.admin_site.admin_view(views.IncidencesByPayrollPeriod.as_view()),
                 name='incidences-list-view',
                 ),
-            url(r'^incidences_by_employee/(?P<payroll_period_id>\d+)/(?P<employee_key>[\w-]+)/$', self.admin_site.admin_view(views.IncidencesByEmployee.as_view()),
+            url(r'^incidences_by_employee/(?P<payroll_period_id>\d+)/(?P<employee_key>[\w-]+)/$',
+                self.admin_site.admin_view(views.IncidencesByEmployee.as_view()),
                 name='incidences-list-view',
                 ),
         ]
@@ -1213,7 +1216,6 @@ class AbsenceProofAdmin(admin.ModelAdmin):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
                 return ModelForm(*args, **kwargs)
-
 
         return ModelFormMetaClass
 
@@ -1240,7 +1242,8 @@ class AbsenceProofAdmin(admin.ModelAdmin):
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
         employee = Employee.objects.get(pk=employee_id)
 
-        url = "/admin/HumanResources/employeeassistance/incidences_by_employee/"+str(payroll_period.id)+"/"+employee.employee_key+"/"
+        url = "/admin/HumanResources/employeeassistance/incidences_by_employee/" + str(
+            payroll_period.id) + "/" + employee.employee_key + "/"
         return redirect(url)
 
 
@@ -1365,7 +1368,7 @@ class JobInstanceAdmin(admin.ModelAdmin):
         return super(JobInstanceAdmin, self).response_delete(request, obj_display, obj_id)
 
 
-#EmployeeDropOut
+# EmployeeDropOut
 @admin.register(EmployeeDropOut)
 class EmployeeDropOutAdmin(admin.ModelAdmin):
     form = EmployeeDropOutForm
@@ -1381,5 +1384,6 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
 @admin.register(ISRTable)
 class ISRTableAdmin(admin.ModelAdmin):
     pass
+
 
 admin.site.register(PayrollClassification)
