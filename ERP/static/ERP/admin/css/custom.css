@@ -1703,6 +1703,6 @@ display: -webkit-inline-box;
 .button-buscar {
         right: 20px !important;
     left: inherit !important;
-    z-index: 9999;
+    z-index: 9;
     top: 3px !important;
 }

@@ -135,7 +135,8 @@ class WorkReferenceForm(forms.ModelForm):
         model = WorkReference
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+            'notes': forms.Textarea(attrs={'rows': 3})
         }
 
     def __init__(self, *args, **kwargs):
