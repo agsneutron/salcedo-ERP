@@ -1248,6 +1248,30 @@ class TestAdmin(admin.ModelAdmin):
     form = TestForm
 
 
+    fieldsets = (
+        ("Pruebas", {
+            'fields': ('name', )
+        }),
+    )
+
+    list_display = ('name', 'get_change_link', 'get_delete_link')
+    list_display_links = None
+
+    search_fields = ('name',)
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
+
+
 # DocumentType Admin.
 @admin.register(DocumentType)
 class DocumentTypeAdmin(admin.ModelAdmin):
@@ -1265,6 +1289,23 @@ class TagAdmin(admin.ModelAdmin):
             'fields': ('name',)
         }),
     )
+
+    search_fields = ('name',)
+
+    list_display = ('name', 'get_change_link', 'get_delete_link')
+    list_display_links = None
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
 
 # Assistance Admin.
 @admin.register(EmployeeAssistance)

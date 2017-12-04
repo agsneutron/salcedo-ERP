@@ -1697,3 +1697,6 @@ input[type=file] {
 .clearable-file-input{
 display: -webkit-inline-box;
 }
+#changelist table thead th div a {
+    color: white;
+}
