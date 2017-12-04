@@ -584,14 +584,9 @@
             <hr>
             <div class="card-block text-center">
                 <h3 class="color-info">Etiquetas</h3>
-                <span class="label label-default">EtiquetaA</span>
-                <span class="label label-default">EtiquetaB</span>
-                <span class="label label-default">EtiquetaD</span>
-                <span class="label label-default">EtiquetaE</span>
-                <span class="label label-default">EtiquetaF</span>
-                <span class="label label-default">EtiquetaG</span>
-                <span class="label label-default">EtiquetaH</span>
-                <span class="label label-default">EtiquetaI</span>
+                {% for record in employee_has_tag %}
+                <span class="label label-default">{{ record.tag }}</span>
+                {% endfor %}
 
             </div>
 
