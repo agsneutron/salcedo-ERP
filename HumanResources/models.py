@@ -354,8 +354,8 @@ class DocumentType(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Tipo de Documento'
-        verbose_name = 'Etiquetas'
+        verbose_name_plural = 'Tipos de Documento'
+        verbose_name = 'Tipo de Documento'
 
 
 # Tags to describe the Employee.
