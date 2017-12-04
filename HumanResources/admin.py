@@ -883,6 +883,8 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
+    list_display = ('payroll_period','employee', 'concept', 'ammount',)
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeEarningsDeductionsbyPeriodAdmin, self).get_form(request, obj, **kwargs)
@@ -939,6 +941,13 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
 
         return HttpResponseRedirect(
             "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
+
+        # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        payroll_period_id = request.GET.get('payrollperiod')
+        redirect_url = "/humanresources/employeebyperiod?&payrollperiod=" + str(payroll_period_id) + "&payrollgroup=" +request.GET.get('payrollgroup')
+        return HttpResponseRedirect(redirect_url)
 
 
 @admin.register(EmployeeEarningsDeductions)
@@ -1456,6 +1465,12 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 class AbsenceProofAdmin(admin.ModelAdmin):
     form = AbsenceProofForm
 
+    fieldsets = (
+        ("Documentos Justificantes", {
+            'fields': ('employee','payroll_period','document','description')
+        }),
+    )
+
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(AbsenceProofAdmin, self).get_form(request, obj, **kwargs)
 
@@ -1506,6 +1521,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         }),
     )
 
+    list_display = ('payroll_period', 'assistance_file',)
+
     def save_model(self, request, obj, form, change):
         current_user = request.user
         # payroll_group_id = int(request.POST.get('payroll_group'))
@@ -1541,8 +1558,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
 
     def response_add(self, request, obj, post_url_continue=None):
-
-        return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
+        #return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
+        return HttpResponseRedirect("/admin/HumanResources/uploadedemployeeassistancehistory/")
 
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
