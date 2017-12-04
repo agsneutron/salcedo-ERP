@@ -8,8 +8,9 @@ function sendSelected(url) {
         return this.value;
     }).get();
 
-    url=url+"&xemployeesSelected="+seleccionados.toString();
-    clocation.href = url;
+    url=url+"&employeesSelected="+seleccionados.toString();
+    alert(url);
+    location.href = url;
 }
 
 function callSave(seleccionados, payrollperiod) {
