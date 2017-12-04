@@ -832,6 +832,7 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
             'lugar_ejecucion', 'observaciones', 'version')
         return fields
 
+
     def get_urls(self):
         urls = super(ContractorContractModelAdmin, self).get_urls()
         my_urls = [

@@ -1021,8 +1021,10 @@ class Project(models.Model):
             Logs.log("Couldn't save")
 
 
+
 def upload_blueprint(instance, filename):
     return '/'.join(['documentosFuente', instance.project.key, 'blueprints',filename])
+
 
 class Blueprint(models.Model):
     file = models.FileField(verbose_name="Archivo", blank="", upload_to=upload_blueprint)
