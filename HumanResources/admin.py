@@ -1353,7 +1353,21 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         if obj.entry_time is None or obj.exit_time is None:
             return True
 
+
+        # Obtaining the position to know the entry time.
         employee_position = EmployeePositionDescription.objects.get(employee_id=obj.employee.id)
+
+        # To know if the employee checks entry or exit.
+        try:
+            checker_data = CheckerData.objects.get(employee_id=obj.employee.id)
+            checks_entry = checker_data.checks_entry
+            checks_exit = checker_data.checks_exit
+
+        except CheckerData.DoesNotExist as e:
+            checks_entry = False
+            checks_exit = False
+
+
 
         position_entry_time = employee_position.entry_time
         position_exit_time = employee_position.departure_time
@@ -1369,12 +1383,13 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         absent = False
         allowed_minutes = 15
 
-        if arrived_minutes_late > allowed_minutes or left_minutes_early > allowed_minutes:
+        if (arrived_minutes_late > allowed_minutes and checks_entry==True) or (left_minutes_early > allowed_minutes and checks_exit==True):
             absent = True
 
         obj.absence = absent
 
         super(EmployeeAssistanceAdmin, self).save_model(request, obj, form, change)
+
 
     def get_urls(self):
         urls = super(EmployeeAssistanceAdmin, self).get_urls()
