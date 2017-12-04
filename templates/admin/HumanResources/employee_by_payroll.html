@@ -1,4 +1,4 @@
-{% extends "admin/base_site.html" %}
+    {% extends "admin/base_site.html" %}
 {% load i18n admin_static %}
 {% block coltype %}colMS{% endblock %}
 
@@ -169,9 +169,12 @@
                                         </table>
                                     </div>
             </div>
+         <script>
+ $('.col-xs-4>.required>div').removeClass('form-group');
+
+</script>
         </div>
     </div>
-
 
 
 {% endblock %}
