@@ -48,8 +48,8 @@ class GeneratePayrollReceipt(View):
                 total_perceptions=employee_total_earnings,
                 total_deductions=employee_total_deductions,
                 total_payroll=employee_total_earnings - employee_total_deductions,
-                taxed=0,
-                exempt=0,
+                taxed=employee_total_taxed,
+                exempt=employee_total_earnings - employee_total_taxed,
                 daily_salry=0,
                 total_withholdings=0,
                 total_discounts=0

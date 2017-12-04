@@ -41,6 +41,14 @@ class PayrollGroup(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
     payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina",
                                                null=False, blank=False)
+    CHECKER_TYPE_AUTOMATIC = 1
+    CHECKER_TYPE_MANUAL = 2
+    CHECKER_TYPE_CHOICES = (
+        (CHECKER_TYPE_AUTOMATIC, 'Automático'),
+        (CHECKER_TYPE_MANUAL, 'Manual')
+    )
+    checker_type = models.IntegerField(choices=CHECKER_TYPE_CHOICES, default=CHECKER_TYPE_AUTOMATIC,
+                                       verbose_name='Tipo de Checador')
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=True, blank=True)
 
     class Meta:
@@ -237,14 +245,6 @@ class Employee(models.Model):
 
 # Employee Checker Data.
 class CheckerData(models.Model):
-    CHECKER_TYPE_A = 1
-    CHECKER_TYPE_B = 2
-    CHECKER_TYPE_CHOICES = (
-        (CHECKER_TYPE_A, 'Automático'),
-        (CHECKER_TYPE_B, 'Manual')
-    )
-    checker_type = models.IntegerField(choices=CHECKER_TYPE_CHOICES, default=CHECKER_TYPE_A,
-                                       verbose_name='Tipo de Checador')
 
     CHECKER_TYPE_A = 1
     CHECKER_TYPE_B = 2
@@ -566,11 +566,11 @@ class EmergencyContact(models.Model):
 
 # To represent an employee's work reference.
 class WorkReference(models.Model):
-    name = models.CharField(verbose_name="Nombre de la Persona que Hace la Referencia", max_length=255, null=False,
+    name = models.CharField(verbose_name="Nombre", max_length=255, null=False,
                             blank=False, unique=False)
-    first_last_name = models.CharField(verbose_name="Apellido Paterno de la Persona que Hace la Referencia",
+    first_last_name = models.CharField(verbose_name="Apellido Paterno",
                                        max_length=255, null=False, blank=False)
-    second_last_name = models.CharField(verbose_name="Apellido Materno de la Persona que Hace la Referencia",
+    second_last_name = models.CharField(verbose_name="Apellido Materno",
                                         max_length=255, null=False, blank=False)
     company_name = models.CharField(verbose_name="Empresa", max_length=255, null=False, blank=False)
     first_phone_number = models.CharField(verbose_name="Número de Teléfono #1", max_length=20, null=False, blank=False)

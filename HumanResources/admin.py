@@ -1007,7 +1007,7 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('name', 'payroll_classification', 'project')
+            'fields': ('name', 'payroll_classification', 'project','checker_type')
         }),
     )
 
@@ -1250,9 +1250,9 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     )
 
     def save_model(self, request, obj, form, change):
-        print "Saving assistance file."
         current_user = request.user
         payroll_period_id = int(request.POST.get('payroll_period'))
+
 
         try:
             with transaction.atomic():
@@ -1271,14 +1271,11 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
         except ErrorDataUpload as e:
             e.save()
-            messages.set_level(request, messages.ERROR)
-            messages.error(request, e.get_error_message())
+            #messages.set_level(request, messages.ERROR)
+            django.contrib.messages.error(request, e.get_error_message())
 
         except django.db.utils.IntegrityError as e:
-            # Create exception without raising it.
-            edu = ErrorDataUpload(str(e), LoggingConstants.ERROR, current_user.id)
-            messages.set_level(request, messages.ERROR)
-            messages.error(request, edu.get_error_message())
+            django.contrib.messages.error(request, "Error de integridad de datos.")
 
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
