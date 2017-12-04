@@ -1421,6 +1421,14 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
         }),
     )
 
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee = obj.employee
+        employee.status = Employee.STATUS_INNACTIVE
+        employee.save()
+
+        return super(EmployeeDropOutAdmin, self).response_add(request, obj, post_url_continue)
+
 
 # Employee Document Admin.
 @admin.register(ISRTable)

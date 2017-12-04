@@ -23,7 +23,6 @@ from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
 
 
-
 # To represent ISRTable.
 class ISRTable(models.Model):
     lower_limit = models.FloatField(verbose_name="Límite Inferior", null=False, blank=False, default=0)
@@ -40,7 +39,6 @@ class ISRTable(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.lower_limit
-
 
 
 class PayrollClassification(models.Model):
@@ -106,13 +104,15 @@ class Employee(models.Model):
     type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleando')
     registry_date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha de Registro")
 
-    STATUS_A = 1
-    STATUS_B = 2
+    STATUS_ACTIVE = 1
+    STATUS_INNACTIVE = 2
     EMPLOYEE_STATUS_CHOICES = (
-        (STATUS_A, 'Estatus A del Empleado'),
-        (STATUS_B, 'Estatus B del Empleado'),
+        (STATUS_ACTIVE, 'Activo'),
+        (STATUS_INNACTIVE, 'Inactivo'),
     )
-    status = models.IntegerField(choices=EMPLOYEE_STATUS_CHOICES, default=STATUS_A, verbose_name='Estatus del Empleado')
+    
+    status = models.IntegerField(choices=EMPLOYEE_STATUS_CHOICES, default=STATUS_ACTIVE,
+                                 verbose_name='Estatus del Empleado')
     birthdate = models.DateField(null=False, blank=False, verbose_name="Fecha de Nacimiento")
     birthplace = models.CharField(null=False, blank=False, verbose_name="Lugar de Nacimiento", max_length=255)
 
@@ -252,7 +252,6 @@ class Employee(models.Model):
 
         return absences
 
-
     # To get all the absences for an employee that haven't been justified in a specific period.
     def get_unjustified_employee_absences_for_period(self, payroll_period=None):
         absences = EmployeeAssistance.objects.filter(Q(employee__id=self.id) &
@@ -265,7 +264,6 @@ class Employee(models.Model):
 
 # Employee Checker Data.
 class CheckerData(models.Model):
-
     CHECKER_TYPE_A = 1
     CHECKER_TYPE_B = 2
     CHECKER_TYPE_C = 3
@@ -1093,10 +1091,10 @@ class PayrollPeriod(models.Model):
     payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a procesar", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
     month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
-    year = models.IntegerField(verbose_name="Año", null=False, blank=False,default=2017,
-         validators=[MaxValueValidator(9999), MinValueValidator(2017)])
-    fortnight = models.IntegerField(verbose_name="Semana", null=False, blank=False,default=1,
-         validators=[MaxValueValidator(24), MinValueValidator(1)])
+    year = models.IntegerField(verbose_name="Año", null=False, blank=False, default=2017,
+                               validators=[MaxValueValidator(9999), MinValueValidator(2017)])
+    fortnight = models.IntegerField(verbose_name="Semana", null=False, blank=False, default=1,
+                                    validators=[MaxValueValidator(24), MinValueValidator(1)])
     start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
 
@@ -1160,18 +1158,21 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Periodo"
         verbose_name = "Deducciones y Percepciones por Periodo"
+
     def deleteFromEmployeeLoanDetail(self, data):
         obj = EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id,
                                                              payroll_period_id=data.period.id)
         super(EmployeeEarningsDeductionsbyPeriod, obj).delete()
 
     def create(self, data):
-        existe = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
-        if existe.count()>0:
-            obj=EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id, payroll_period_id=data.period.id)
-            if obj.id >0:
-                obj.ammount=data.amount
-                obj.payroll_period_id=data.period.id
+        existe = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=data.employeeloan.employee.id,
+                                                                   payroll_period_id=data.period.id)
+        if existe.count() > 0:
+            obj = EmployeeEarningsDeductionsbyPeriod.objects.get(employee_id=data.employeeloan.employee.id,
+                                                                 payroll_period_id=data.period.id)
+            if obj.id > 0:
+                obj.ammount = data.amount
+                obj.payroll_period_id = data.period.id
                 super(EmployeeEarningsDeductionsbyPeriod, obj).save()
         else:
             self.ammount = data.amount
