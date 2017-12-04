@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 # Django Libraries.
+from django.core.checks import messages
 from django.db import models
 from django.db.models.query_utils import Q
 from django.utils.safestring import mark_safe
@@ -52,6 +53,12 @@ class PayrollGroup(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.name)
 
+        # Method to save the employee document file.
+
+
+def upload_employee_photo(instance, filename):
+    return '/'.join(['human_resources', 'employee_documents', instance.employee_key, filename])
+
 
 # Employee General Information.
 class Employee(models.Model):
@@ -59,6 +66,8 @@ class Employee(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=255, null=False, blank=False, unique=False)
     first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
     second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
+
+    photo = models.FileField(upload_to=upload_employee_photo, null=True, verbose_name="Foto")
 
     TYPE_A = 1
     TYPE_B = 2
@@ -169,47 +178,48 @@ class Employee(models.Model):
         verbose_name_plural = 'Empleados'
         verbose_name = 'Empleado'
 
-
     # To get all the fixed earnings for an employee.
     def get_fixed_earnings(self):
-        employee_earnings = EmployeeEarningsDeductions.objects.filter(Q(employee__id=self.id)&
-                                                                                Q(concept__type=EarningsDeductions.PERCEPCION)&
-                                                                                Q(concept__status=EarningsDeductions.ACTIVA))
+        employee_earnings = EmployeeEarningsDeductions.objects.filter(Q(employee__id=self.id) &
+                                                                      Q(concept__type=EarningsDeductions.PERCEPCION) &
+                                                                      Q(concept__status=EarningsDeductions.ACTIVA))
 
         return employee_earnings
 
-
     # To get all the variable earnings for an employee in a specific period.
     def get_variable_earnings_for_period(self, payroll_period=None):
-        employee_earnings_by_period = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(employee__id=self.id)&
-                                                                                Q(payroll_period__id=payroll_period.id)&
-                                                                                Q(concept__type=EarningsDeductions.PERCEPCION)&
-                                                                                Q(concept__status=EarningsDeductions.ACTIVA))
+        employee_earnings_by_period = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(employee__id=self.id) &
+                                                                                        Q(
+                                                                                            payroll_period__id=payroll_period.id) &
+                                                                                        Q(
+                                                                                            concept__type=EarningsDeductions.PERCEPCION) &
+                                                                                        Q(
+                                                                                            concept__status=EarningsDeductions.ACTIVA))
         return employee_earnings_by_period
-
 
     # To get all the fixed deductions for an employee.
     def get_fixed_deductions(self):
         employee_deductions = EmployeeEarningsDeductions.objects.filter(Q(employee__id=self.id) &
-                                                                      Q(concept__type=EarningsDeductions.DEDUCCION) &
-                                                                      Q(concept__status=EarningsDeductions.ACTIVA))
+                                                                        Q(concept__type=EarningsDeductions.DEDUCCION) &
+                                                                        Q(concept__status=EarningsDeductions.ACTIVA))
 
         return employee_deductions
-
 
     # To get all the variable deductions for an employee in a specific period.
     def get_variable_deductions_for_period(self, payroll_period=None):
         employee_deductions_by_period = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(employee__id=self.id) &
-                                                                                        Q(payroll_period__id=payroll_period.id) &
-                                                                                        Q(concept__type=EarningsDeductions.DEDUCCION) &
-                                                                                        Q(concept__status=EarningsDeductions.ACTIVA))
+                                                                                          Q(
+                                                                                              payroll_period__id=payroll_period.id) &
+                                                                                          Q(
+                                                                                              concept__type=EarningsDeductions.DEDUCCION) &
+                                                                                          Q(
+                                                                                              concept__status=EarningsDeductions.ACTIVA))
         return employee_deductions_by_period
-
 
     # To get all the absences for an employee in a specific period.
     def get_employee_absences_for_period(self, payroll_period=None):
-        absences = EmployeeAssistance.objects.filter(Q(employee__id=self.id)&
-                                                     Q(payroll_period__id=payroll_period.id)&
+        absences = EmployeeAssistance.objects.filter(Q(employee__id=self.id) &
+                                                     Q(payroll_period__id=payroll_period.id) &
                                                      Q(absence=True))
 
         return absences
@@ -646,10 +656,8 @@ class AbsenceProof(models.Model):
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
     payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
 
-
     document = models.FileField(verbose_name="Documento", blank=False, null=False, upload_to=uploaded_absences_proofs)
     description = models.CharField(verbose_name="Descripción", max_length=4096, null=False, blank=True)
-
 
 
 def uploaded_employees_assistance_destination(instance, filename):
@@ -661,11 +669,9 @@ class UploadedEmployeeAssistanceHistory(models.Model):
     assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
                                        verbose_name="Archivo de Asistencias")
 
-
     class Meta:
         verbose_name_plural = "Archivos de Asistencias"
         verbose_name = "Archivo de asistencias"
-
 
     def __str__(self):
         return "Del " + str(self.payroll_period.start_period) + " al " + str(self.payroll_period.end_period) + \
@@ -686,8 +692,7 @@ class EmployeeLoan(models.Model):
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False, default=0)
     payment_plan = models.IntegerField(verbose_name="Plan de Pago", choices=PLAN_TYPE_CHOICES, default=PLAN_A)
-    request_date = models.DateField(verbose_name="Fecha de Solicitud",null=True, auto_now_add=False)
-
+    request_date = models.DateField(verbose_name="Fecha de Solicitud", null=True, auto_now_add=False)
 
     class Meta:
         verbose_name_plural = "Préstamos"
@@ -698,8 +703,6 @@ class EmployeeLoan(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
-
-
 
 
 # To represent a Job Profile.
@@ -895,7 +898,6 @@ class EmployeeFinancialData(models.Model):
         ('T', 'Transferencia Interbancaria'),
     )
 
-
     account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, default=0)
     CLABE = models.IntegerField(verbose_name='CLABE', null=False, default=0)
     monthly_salary = models.DecimalField(verbose_name='Salario Mensual', max_digits=20, decimal_places=2, null=True)
@@ -906,9 +908,9 @@ class EmployeeFinancialData(models.Model):
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
                                       verbose_name='Forma de Pago')
-    payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,verbose_name='Forma de Pago')
+    payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
+                                      verbose_name='Forma de Pago')
     bank = models.ForeignKey(Bank, null=False, blank=False, verbose_name="Banco")
-
 
     class Meta:
         verbose_name_plural = "Datos Financieros del Empleado"
@@ -1088,9 +1090,10 @@ class PayrollPeriod(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
 
+
 class EmployeeLoanDetail(models.Model):
     employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
-    #period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
+    # period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
     period = ChainedForeignKey(PayrollPeriod,
                                chained_field="payroll_group",
@@ -1100,13 +1103,12 @@ class EmployeeLoanDetail(models.Model):
                                sort=True)
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
 
-
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
 
     def save(self, *args, **kwargs):
-        modelo=EmployeeEarningsDeductionsbyPeriod()
+        modelo = EmployeeEarningsDeductionsbyPeriod()
         modelo.create(self)
 
         super(EmployeeLoanDetail, self).save(*args, **kwargs)
@@ -1116,6 +1118,7 @@ class EmployeeLoanDetail(models.Model):
             return 'la amortización del préstamo para este periodo ya existe'
         else:
             return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
+
 
 class EmployeeEarningsDeductionsbyPeriod(models.Model):
     ammount = models.DecimalField(verbose_name="Monto", decimal_places=2, blank=False, null=False,
@@ -1236,6 +1239,7 @@ class PayrollProcessedDetail(models.Model):
 class JobInstance(models.Model):
     # Job Description ***
     job_profile = models.ForeignKey(JobProfile, verbose_name='Perfil de Empleado', null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=True, blank=True)
     parent_job_instance = models.ForeignKey('self', verbose_name='Jefe Inmediato', null=True, blank=True)
 
     class Meta:
@@ -1247,3 +1251,14 @@ class JobInstance(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.id)
+
+    def can_be_deleted(self):
+        if self.id != 1:
+            return True
+        return False
+
+    def delete(self, using=None, keep_parents=False):
+        if self.can_be_deleted():
+            return super(JobInstance, self).delete(using, keep_parents)
+        print 'Job Instance can\'t be deleted, it is the root.'
+        return False

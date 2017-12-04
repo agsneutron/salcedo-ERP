@@ -54,7 +54,7 @@ class GeneratePayrollReceipt(View):
                 total_discounts=0
             )
 
-
+            payroll_receipt_processed.save()
 
 
         return True
