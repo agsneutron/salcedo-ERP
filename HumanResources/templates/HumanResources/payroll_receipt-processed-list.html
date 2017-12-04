@@ -8,15 +8,20 @@
 
     <div class="col-xs-9">
 
-        <div class="text-right" style="display: flex;text-align: right;float: right;">
-            <a href="/humanresources/api/delete_payroll_receipts?payroll_period={{ payroll_period.id }}"
-               class="btn btn-raised">
-                <i class="fa fa-trash"></i> Eliminar Recibos de Nómina
-            </a>
-        </div>
 
 
-        <div class="col-xs-12">
+    <div class="text-right" style="display: flex;text-align: right;float: right;">
+        <a href="/humanresources/api/delete_payroll_receipts?payroll_period={{ payroll_period.id }}"
+           class="btn btn-raised">
+            <i class="fa fa-trash"></i> Eliminar Recibos de Nómina
+        </a>
+    </div>
+
+    {% include "admin/HumanResources/payroll-home.html" %}
+    <div class="text-left" style="display: flex;text-align: left;float: left;">
+        <h2 class=" text-left">Recibos de Pago</h2>
+    </div>
+    <div class="col-xs-9">
 
 
             <div class="card ">
