@@ -23,6 +23,23 @@ from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
 
 
+# To represent ISRTable.
+class ISRTable(models.Model):
+    lower_limit = models.FloatField(verbose_name="Límite Inferior", null=False, blank=False, default=0)
+    upper_limit = models.FloatField(verbose_name="Límite Superior", null=False, blank=False, default=0)
+    fixed_fee = models.FloatField(verbose_name="Cuota Fija", null=False, blank=False, default=0)
+    rate = models.FloatField(verbose_name="Tasa Aplicable", null=False, blank=False, default=0)
+
+    class Meta:
+        verbose_name_plural = "Tabla de ISR"
+        verbose_name = "Tabla de ISR"
+
+    def __str__(self):
+        return self.lower_limit
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.lower_limit
+
 class PayrollClassification(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=100, null=False, blank=False, unique=False, default='')
 
