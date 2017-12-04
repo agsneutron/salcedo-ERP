@@ -1506,6 +1506,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         }),
     )
 
+    list_display = ('payroll_period', 'assistance_file',)
+
     def save_model(self, request, obj, form, change):
         current_user = request.user
         # payroll_group_id = int(request.POST.get('payroll_group'))
