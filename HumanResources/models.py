@@ -866,8 +866,7 @@ class EmployeePositionDescription(models.Model):
     #                          sort=True)
 
     job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
-
-    # contract = models.ForeignKey(Contract, verbose_name="Contrato", null=False, blank=False)
+    contract = models.CharField(verbose_name="Contrato", null=False, blank=False, max_length=45)
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
 
 
