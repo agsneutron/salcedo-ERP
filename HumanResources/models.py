@@ -295,10 +295,10 @@ class CheckerData(models.Model):
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
 
     def __str__(self):
-        return self.get_checker_type_display()
+        return str(self.id)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.get_checker_type_display()
+        return str(self.id)
 
     class Meta:
         verbose_name_plural = 'Datos de Checador del Empleado'
