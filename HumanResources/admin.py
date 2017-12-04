@@ -100,6 +100,11 @@ class HumanResourcesAdminUtilities():
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
     form = EmployeeForm
+
+    search_fields = ('^employee_key', '^name', '^type', '^registry_date', '^work_email', '^status', '^tags__name')
+
+    list_display = ('employee_key', 'type', 'registry_date', 'status')
+
     fieldsets = (
         ("Datos de Empleado", {
             'fields': ('employee_key', 'type', 'registry_date', 'status')
@@ -113,6 +118,17 @@ class EmployeeAdmin(admin.ModelAdmin):
                 'driving_license_expiry_date')
         }),
     )
+
+    def get_search_results(self, request, queryset, search_term):
+        keywords = search_term.split(" ")
+
+        r = Employee.objects.none()
+
+        for k in keywords:
+            q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+            r |= q
+
+        return r, True
 
     def get_urls(self):
         urls = super(EmployeeAdmin, self).get_urls()
