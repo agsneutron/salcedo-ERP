@@ -29,7 +29,6 @@
                             <table class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>ID</th>
                                     <th>Fecha</th>
                                     <th>Hora de Entrada</th>
                                     <th>Hora de Salida</th>
@@ -41,7 +40,6 @@
                                 {% for record in incidences %}
 
                                     <tr>
-                                        <td>{{ record.id }}</td>
                                         <td>{{ record.record_date }}</td>
                                         <td>
                                             {{ record.entry_time}}
