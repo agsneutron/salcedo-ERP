@@ -92,6 +92,15 @@
                         </li>
                     {% endfor %}
                 </ul>
+                   {% comment %} <div class="text-left" style="display: flex;text-align: right;float: left;">
+                         <a href=# onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"  class="btn btn-raised btn-success">
+                            <i class="fa fa-file-pdf-o"></i> Generar Recibo
+                         </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href=# onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"  class="btn btn-raised btn-primary">
+                            <i class="fa fa-file-pdf-o"></i> Regresar a Listado
+                         </a>
+                     </div>{% endcomment %}
             </div>
 
 

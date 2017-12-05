@@ -1168,7 +1168,7 @@ class EmployeeLoanDetail(models.Model):
             sumTotal += tot['total']
 
         payrollExist=PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,payroll_period_id=self.period.id)
-        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count()>0:
+        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count()==0:
             modelo = EmployeeEarningsDeductionsbyPeriod()
             modelo.create(self)
             super(EmployeeLoanDetail, self).save(*args, **kwargs)
