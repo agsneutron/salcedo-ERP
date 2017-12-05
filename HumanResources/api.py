@@ -363,6 +363,7 @@ class GeneratePayrollReceipt(View):
 
 
         except Exception as e:
+            print e
             django.contrib.messages.error(request, "Ya se han generado los recibos de nómina anteriormente.")
             return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(payroll_period.id)+"&payrollgroup="+str(payroll_period.payroll_group.id))
 

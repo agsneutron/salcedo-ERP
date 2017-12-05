@@ -249,6 +249,7 @@ def EmployeeByPeriod(request):
 
     # Check if the payroll has been processed.
     payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period__id=payrollperiod)
+    print str(len(payroll_receipt_processed))
     if len(payroll_receipt_processed) > 0:
         return HttpResponseRedirect("/admin/HumanResources/payrollreceiptprocessed/receipts_by_period/"+payrollperiod)
 
@@ -429,12 +430,23 @@ class IncidencesByEmployee(ListView):
         employee_key = self.kwargs['employee_key']
         payroll_period_id = self.kwargs['payroll_period_id']
 
+        print "Got: "
+        print str(employee_key)
+        print str(payroll_period_id)
+
 
         employee = Employee.objects.get(employee_key=employee_key)
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
+        print "Objects"
+        print employee
+        print payroll_period
+
         incidences = EmployeeAssistance.objects.filter(
-            Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
+            Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id) &Q(absence=True))
+
+        print "Length"
+        print len(incidences)
 
         absence_proofs = AbsenceProof.objects.filter(
             Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
