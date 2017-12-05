@@ -373,28 +373,6 @@ class PayrollPeriodEmployeeDetail(generic.DetailView):
         return super(PayrollPeriodEmployeeDetail, self).dispatch(request, args, kwargs)
 
 
-class IncidencesByPayrollPeriod(ListView):
-    model = EmployeeAssistance
-    template_name = "HumanResources/inicidences-by-payroll-period.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(IncidencesByPayrollPeriod, self).get_context_data(**kwargs)
-
-        payroll_period_id = self.request.GET.get("payroll_period")
-        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
-
-        incidences = EmployeeAssistance.objects.filter(Q(absence=True)) \
-            .values('employee__id', 'employee__employee_key', 'employee__name', 'employee__first_last_name',
-                    'employee__second_last_name') \
-            .annotate(Count('employee__id'))
-
-        context['payroll_period'] = payroll_period
-        context['incidences'] = incidences
-
-        print incidences
-
-        return context
-
 
 class IncidencesByPayrollPeriod(ListView):
     model = EmployeeAssistance
@@ -406,7 +384,7 @@ class IncidencesByPayrollPeriod(ListView):
         payroll_period_id = self.kwargs['payroll_period_id']
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
-        incidences = EmployeeAssistance.objects.filter(Q(absence=True)) \
+        incidences = EmployeeAssistance.objects.filter(Q(absence=True) & Q(payroll_period=payroll_period)) \
             .values('employee__id', 'employee__employee_key', 'employee__name', 'employee__first_last_name',
                     'employee__second_last_name') \
             .annotate(Count('employee__id'))
