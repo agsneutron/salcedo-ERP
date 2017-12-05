@@ -223,7 +223,7 @@ class GeneratePayrollReceipt(View):
             variable_earnings_array.append(variable_earning_json)
             earnings_array.append(variable_earning_json)
             total_earnings += variable_earning.ammount
-            total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
+            total_taxable += variable_earning.ammount * variable_earning.concept.percent_taxable / 100
 
         receipt['variable_earnings'] = variable_earnings_array
 
@@ -363,6 +363,7 @@ class GeneratePayrollReceipt(View):
 
 
         except Exception as e:
+            print e
             django.contrib.messages.error(request, "Ya se han generado los recibos de nómina anteriormente.")
             return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(payroll_period.id)+"&payrollgroup="+str(payroll_period.payroll_group.id))
 

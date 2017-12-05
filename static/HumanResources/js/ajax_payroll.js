@@ -12,6 +12,21 @@ function sendSelected(url) {
     location.href = url;
 }
 
+function callAssistanceValidate() {
+    var path = window.location.pathname
+    var arreglo_id = path.substr(56).split('/');
+    var id_numero = arreglo_id[0];
+
+
+    //$.get("/obras/register_by_token", function(respu) {
+        var URL="/admin/HumanResources/employeeassistance/incidences_by_period/" + id_numero + "/";
+
+        location.href = URL
+    //});
+
+}
+
+
 function callSave(seleccionados, payrollperiod) {
     // Setup CSRF tokens and all that good stuff so we don't get hacked
     $.ajaxSetup(

@@ -131,11 +131,15 @@ class EmployeeAdmin(admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
         keywords = search_term.split(" ")
 
+        if search_term is None or search_term == "" :
+            return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
+
         r = Employee.objects.none()
 
         for k in keywords:
-            q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
-            r |= q
+            if k != "":
+                q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+                r |= q
 
         return r, True
 
@@ -268,12 +272,24 @@ class CurrentEducationDocumentInline(admin.TabularInline):
     model = CurrentEducationDocument
     extra = 1
 
+    fieldsets = (
+        ("Documento", {
+            'fields': ('file','comments',)
+        }),
+    )
+
 
 # Current Education Admin.
 @admin.register(CurrentEducation)
 class CurrentEducationAdmin(admin.ModelAdmin):
     form = CurrentEducationForm
     inlines = (CurrentEducationDocumentInline,)
+
+    fieldsets = (
+        ("Formación Académica Actual", {
+            'fields': ('type', 'name', 'institution', 'employee', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday',)
+        }),
+    )
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -484,7 +500,7 @@ class TestApplicationAdmin(admin.ModelAdmin):
         'employee__name', '^test__name', 'result')
 
     def get_EmployeeModelDetail_link(self, obj):
-        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("testapplication", obj.employee.id, "#pruebas")
+        return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("testapplication", obj.id, "")
 
     get_EmployeeModelDetail_link.short_description = 'Ver'
     get_EmployeeModelDetail_link.allow_tags = True
@@ -691,7 +707,7 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
     list_display = ('tag', 'employee', 'get_EmployeeModelDetail_link')
 
     search_fields = (
-        '^employee__name', 'tag__name',)
+        '^employee__name', '^employee__first_last_name', '^employee__second_last_name', 'tag__name',)
 
     model_name = str(object.__class__.__name__.lower())
 
@@ -867,6 +883,8 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
+    list_display = ('payroll_period','employee', 'concept', 'ammount',)
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeEarningsDeductionsbyPeriodAdmin, self).get_form(request, obj, **kwargs)
@@ -923,6 +941,13 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
 
         return HttpResponseRedirect(
             "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
+
+        # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        payroll_period_id = request.GET.get('payrollperiod')
+        redirect_url = "/humanresources/employeebyperiod?&payrollperiod=" + str(payroll_period_id) + "&payrollgroup=" +request.GET.get('payrollgroup')
+        return HttpResponseRedirect(redirect_url)
 
 
 @admin.register(EmployeeEarningsDeductions)
@@ -1327,7 +1352,6 @@ class TestAdmin(admin.ModelAdmin):
 class DocumentTypeAdmin(admin.ModelAdmin):
     form = DocumentTypeForm
 
-
     fieldsets = (
         ("Tipos de Documento de Empleado", {
             'fields': (
@@ -1441,6 +1465,12 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
 class AbsenceProofAdmin(admin.ModelAdmin):
     form = AbsenceProofForm
 
+    fieldsets = (
+        ("Documentos Justificantes", {
+            'fields': ('employee','payroll_period','document','description')
+        }),
+    )
+
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(AbsenceProofAdmin, self).get_form(request, obj, **kwargs)
 
@@ -1491,6 +1521,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         }),
     )
 
+    list_display = ('payroll_period', 'assistance_file',)
+
     def save_model(self, request, obj, form, change):
         current_user = request.user
         # payroll_group_id = int(request.POST.get('payroll_group'))
@@ -1526,8 +1558,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
 
     def response_add(self, request, obj, post_url_continue=None):
-
-        return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
+        #return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
+        return HttpResponseRedirect("/admin/HumanResources/uploadedemployeeassistancehistory/")
 
 
 class EmployeeLoanDetailInLine(admin.TabularInline):
@@ -1554,21 +1586,20 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
 class JobProfileAdmin(admin.ModelAdmin):
     form = JobProfileForm
 
-
     fieldsets = (
         ("Perfil de Puesto", {
             'fields': (
-                'job','abilities','aptitudes','knowledge','competitions','scholarship','experience','entry_time','exit_time','sunday','monday','tuesday','wednesday','thursday','friday','saturday','direction','subdirection','area','department')
+                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience', 'entry_time',
+                'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
+                'subdirection', 'area', 'department')
         }),
     )
-
 
 
 # Loan Admin.
 @admin.register(Direction)
 class DirectionAdmin(admin.ModelAdmin):
     form = DirectionForm
-
 
     fieldsets = (
         ("Dirección", {
@@ -1583,13 +1614,12 @@ class DirectionAdmin(admin.ModelAdmin):
 class SubdirectionAdmin(admin.ModelAdmin):
     form = SubdirectionForm
 
-
     fieldsets = (
-    ("Subdirección", {
-        'fields': (
-            'name',)
-    }),
-)
+        ("Subdirección", {
+            'fields': (
+                'name',)
+        }),
+    )
 
 
 # Loan Admin.
@@ -1625,7 +1655,7 @@ class JobInstanceAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Puesto", {
             'fields': (
-                'job_profile', 'employee',)
+                'job_profile', 'employee','parent_job_instance')
         }),
     )
 

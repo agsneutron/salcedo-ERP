@@ -76,13 +76,13 @@
 
                     {% endblock %}
 
-                     {% block after_field_sets %}{% endblock %}
+                    {% block after_field_sets %}{% endblock %}
 
                     {% block inline_field_sets %}
                         <div class="col-xs-9">
                         {% for inline_admin_formset in inline_admin_formsets %}
                             {% include "admin/HumanResources/employeeloan/tabular.html" %}
-                            {{ inline_admin_formset.opts.template }}
+                             {% comment %}{{ inline_admin_formset.opts.template }} {% endcomment %}
                         {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
                         {% endfor %}
                         </div>
