@@ -1668,7 +1668,7 @@ class JobInstanceAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Puesto", {
             'fields': (
-                'job_profile', 'employee',)
+                'job_profile', 'employee','parent_job_instance')
         }),
     )
 
