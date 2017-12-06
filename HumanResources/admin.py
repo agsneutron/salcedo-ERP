@@ -1536,7 +1536,6 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     get_UploadedEmployeeAssistanceHistory_link.short_description = 'Justificar Asistencias'
     get_UploadedEmployeeAssistanceHistory_link.allow_tags = True
 
-    list_display = ('payroll_period', 'assistance_file',)
 
     def save_model(self, request, obj, form, change):
         current_user = request.user
