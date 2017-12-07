@@ -146,6 +146,8 @@ class Employee(models.Model):
 
     social_security_number = models.CharField(verbose_name="Número de Seguro Social", max_length=20, null=False,
                                               blank=False)
+    social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
+
     colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
     outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
@@ -869,8 +871,6 @@ class EmployeePositionDescription(models.Model):
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     end_date = models.DateField(verbose_name="Fecha de Termino", null=False, blank=False)
     physical_location = models.CharField(verbose_name="Ubicación Física", max_length=250, null=False, blank=True)
-    insurance_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
-    insurance_number = models.CharField(verbose_name="Número de Seguro", null=True, blank=False, max_length=100)
     entry_time = models.TimeField(verbose_name="Hora de Entrada", null=True, auto_now_add=False)
     departure_time = models.TimeField(verbose_name="Hora de Salida", null=True, auto_now_add=False)
     observations = models.CharField(verbose_name="Observaciones", null=True, blank=False, max_length=500)
