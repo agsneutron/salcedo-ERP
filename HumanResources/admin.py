@@ -746,6 +746,7 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
+
         employeehastag_set = EmployeeHasTag.objects.filter(employee_id=employee_id)
 
         extra['template'] = "employeehastag"
@@ -988,12 +989,14 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
+        employee = Employee.objects.get(pk=employee_id)
         earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
         deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(
             concept__type='D')
 
         extra['template'] = "employee_earnings_deductions"
         extra['earnings'] = earnings_set
+        extra['employee'] = employee
         extra['deductions'] = deductions_set
 
         return super(EmployeeEarningsDeductionsAdmin, self).add_view(request, form_url, extra_context=extra)
