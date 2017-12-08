@@ -381,7 +381,7 @@ class FamilyMemberAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Familiares", {
             'fields': (
-                'name', 'first_last_name', 'second_last_name', 'relationship', 'employee')
+                'name', 'first_last_name', 'second_last_name', 'relationship', 'employee','career','age','phone_number')
         }),
     )
 

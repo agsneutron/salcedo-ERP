@@ -595,6 +595,9 @@ class FamilyMember(models.Model):
     first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
     second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
     relationship = models.CharField(verbose_name="Parentesco", max_length=128, null=False, blank=True)
+    career = models.CharField(verbose_name="Profesión", max_length=128, null=False, blank=True)
+    age = models.IntegerField(verbose_name="Edad", null=True, blank=True, default=0)
+    phone_number = models.CharField(verbose_name="Número de Teléfono", max_length=20, null=True, blank=True)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
