@@ -7,3 +7,4 @@ from django.contrib import admin
 from Accounting.models import *
 
 admin.site.register(GroupingCode)
+admin.site.register(Account)
