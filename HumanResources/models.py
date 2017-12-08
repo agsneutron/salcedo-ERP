@@ -584,8 +584,31 @@ class EmergencyContact(models.Model):
     phone_number = models.CharField(verbose_name="Número de Teléfono", max_length=20, null=True, blank=True)
     cellphone_number = models.CharField(verbose_name="Número de Celular", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True)
+    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
+    indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
+    zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
 
     # Foreign Keys.
+
+    # Attribute for the Chained Keys.
+    country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    state = ChainedForeignKey(Estado,
+                              chained_field="country",
+                              chained_model_field="pais",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True,
+                              verbose_name="Estado")
+    town = ChainedForeignKey(Municipio,
+                             chained_field="state",
+                             chained_model_field="estado",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name="Municipio")
+
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
 
     class Meta:

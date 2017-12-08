@@ -321,7 +321,8 @@ class EmergencyContactAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Contactos de Emergencia", {
             'fields': (
-                'name', 'first_last_name', 'second_last_name', 'phone_number', 'cellphone_number', 'email', 'employee')
+                'name', 'first_last_name', 'second_last_name', 'phone_number', 'cellphone_number', 'email', 'employee',
+                'street', 'outdoor_number', 'indoor_number', 'colony', 'country', 'state', 'town',)
         }),
     )
 
