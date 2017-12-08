@@ -83,6 +83,13 @@
             border-top: solid 0px #eee;
         }
     </style>
+    <script>
+
+        $( document ).ready(function() {
+            //alert(window.location.hash);
+            $('.nav-tabs a[href="'+ window.location.hash +'"]').tab('show')
+        });
+    </script>
 {% endblock %}
 {% block content %}
 
@@ -602,15 +609,15 @@
                 <ul class="nav nav-tabs" role="tablist">
                     <li role="presentation" class="active">
                         <a href="#personales" aria-controls="personales" role="tab" data-toggle="tab">Datos
-                            personales</a>
+                            Personales</a>
                     </li>
                     <li role="presentation">
-                        <a href="#academica" aria-controls="academica" role="tab" data-toggle="tab">Formacion
-                            <br>academica</a>
+                        <a href="#academica" aria-controls="academica" role="tab" data-toggle="tab">Formación<br>
+                            Académica</a>
                     </li>
                     <li role="presentation">
-                        <a href="#contactos" aria-controls="contactos" role="tab" data-toggle="tab">Contactos<br> de
-                            emergencia</a>
+                        <a href="#contactos" aria-controls="contactos" role="tab" data-toggle="tab">Contactos de<br>
+                            Emergencia</a>
                     </li>
                     <li role="presentation">
                         <a href="#familiares" aria-controls="familiares" role="tab" data-toggle="tab">Contactos<br>
@@ -630,10 +637,10 @@
                         <a href="#checador" aria-controls="checador" role="tab" data-toggle="tab">Checador</a>
                     </li>
                     <li role="presentation">
-                        <a href="#puesto" aria-controls="checador" role="tab" data-toggle="tab">Puesto</a>
+                        <a href="#puesto" aria-controls="puesto" role="tab" data-toggle="tab">Puesto</a>
                     </li>
                     <li role="presentation">
-                        <a href="#financieros" aria-controls="checador" role="tab" data-toggle="tab">Datos <br>Financieros</a>
+                        <a href="#datosfinancieros" aria-controls="datosfinancieros" role="tab" data-toggle="tab">Datos Financieros</a>
                     </li>
 
                 </ul>
@@ -749,6 +756,7 @@
                                 <h3 class="color-info card-title">Formación Académica Actual</h3>
                             </div>
                             <div class="card-block text-center">
+
                                 {% for record in current_education %}
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
@@ -762,7 +770,7 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td>{{ record.get_type_display }}</td>
+                                                <td>{{ record.type }}</td>
                                                 <td>{{ record.name }}</td>
                                                 <td>{{ record.institution }}</td>
                                                 <td> {% for document in record.documents %}
@@ -996,10 +1004,10 @@
 
                                 <div class="checkbox">
                                     <div class="checkbox">
-                                        <label>
+                                        {% comment %}<label>
                                             <strong>Tipo de
                                                 Checador: </strong> {{ checker_data.get_checker_type_display }}
-                                        </label>
+                                        </label>{% endcomment %}
                                         <label id="checaEntrada" class="text-center {{ checker_data.checks_entry }}">
 
 
@@ -1014,31 +1022,103 @@
                     </div>
 
                     <div role="tabpanel" class="tab-pane" id="puesto">
-                        <div class="card card-info">
-                            <div class="">
-                                <h3 class="color-info card-title">Puesto</h3>
-                            </div>
-                            <div class="card-block text-left">
-                                {% for record in employee_position_description %}
+                            <div class="card card-info">
+                                <div class="">
+                                    <h3 class="color-info card-title">Puesto</h3>
+                                </div>
+                                <div class="card-block text-left">
+                                    {% for epd in employee_position_description %}
+                                        <ul class="list-group text-left">
+                                            <li class="list-group-item"><strong>Fecha de Inicio: </strong> {{ epd.start_date }} </li>
+                                            <li class="list-group-item"><strong>Fecha de Término: </strong> {{ epd.end_date }} </li>
+                                            <li class="list-group-item"><strong>Dirección: </strong> {{ epd.direction }}</li>
+                                            <li class="list-group-item"><strong>Subdirección: </strong> {{ epd.subdirection }}</li>
+                                            <li class="list-group-item"><strong>Departamento: </strong> {{ epd.department }}</li>
+                                            <li class="list-group-item"><strong>Área: </strong> {{ epd.area }}</li>
+                                            <li class="list-group-item"><strong>Puesto: </strong> {{ epd.job_profile }}</li>
+                                            <li class="list-group-item"><strong>Ubicación Física: </strong> {{ epd.physical_location }}</li>
+                                            <li class="list-group-item"><strong>Tipo de Seguro: </strong> {{ epd.insurance_type }}</li>
+                                            <li class="list-group-item"><strong>Número de Seguro: </strong> {{ epd.insurance_number }}</li>
+                                            <li class="list-group-item"><strong>Hora de Entrada: </strong> {{ epd.entry_time }}</li>
+                                            <li class="list-group-item"><strong>Hora de Salida: </strong> {{ epd.departure_time }}</li>
+                                            <li class="list-group-item"><strong>Grupo de Nómina: </strong> {{ epd.payroll_group }}</li>
+                                            <li class="list-group-item"><strong>Contrato: </strong> {{ epd.contract }}</li>
+                                            <li class="list-group-item"><strong>Observaciones: </strong> {{ epd.observations }}</li>
+                                            <li class="list-group-item"><strong>Días Laborales: </strong> <br>
+                                                 <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.sunday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{% if epd.sunday == True %}check{% else %}close{% endif %}"></i>
+                                                    </a>
+                                                    <br>Domingo
+                                                </label>
+                                                <label class="">
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.monday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{% if  epd.monday == True %}check{% else %}close{% endif %}"></i>
+                                                    </a>
+                                                    <br>Lunes
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.tuesday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{% if  epd.tuesday %}check{% else %}close{% endif %}"></i>
+                                                    </a><br>Martes
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.wednesday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{% if  epd.wednesday %}check{% else %}close{% endif %}"></i>
+                                                    </a><br>Miércoles
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.thursday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{% if  epd.thursday %}check{% else %}close{% endif %}"></i>
+                                                    </a><br>Jueves
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.friday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{% if  epd.friday %}check{% else %}close{% endif %}"></i>
+                                                    </a><br>Viernes
+                                                </label>
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.saturday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{% if  epd.saturday %}check{% else %}close{% endif %}"></i>
+                                                    </a><br>Sábado
+                                                </label>
+                                            </li>
 
-                                {% endfor %}
+                                        </ul>
+                                    {% endfor %}
+                                </div>
                             </div>
-                        </div>
                     </div>
 
-                    <div role="tabpanel" class="tab-pane" id="financieros">
-                        <div class="card card-info">
-                            <div class="">
-                                <h3 class="color-info card-title">Datos Financieros</h3>
+                    <div role="tabpanel" class="tab-pane" id="datosfinancieros">
+                            <div class="card card-info">
+                                <div class="">
+                                    <h3 class="color-info card-title">Datos Financieros</h3>
+                                </div>
+                                <div class="card-block text-left">
+                                    {% for test in employee_financial_data %}
+                                        <ul class="list-group text-left">
+                                            <li class="list-group-item"><strong>Nombre de la
+                                                Prueba: </strong> {{ test.test.name }} </li>
+                                            <li class="list-group-item"><strong>Fecha de
+                                                Aplicación: </strong> {{ test.application_date }} </li>
+                                            <li class="list-group-item"><strong>Resultado: </strong> {{ test.result }}
+                                            </li>
+                                            <li class="list-group-item">
+                                                <strong>Comentarios: </strong> {{ test.comments }}
+                                            </li>
+                                        </ul>
+                                    {% endfor %}
+                                </div>
                             </div>
-                            <div class="card-block text-left">
-                                {% for record in employee_financial %}
-
-                                {% endfor %}
-                            </div>
-                        </div>
                     </div>
-
 
                 </div>
             </div>
