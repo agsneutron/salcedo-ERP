@@ -397,10 +397,28 @@ class CurrentEducation(models.Model):
     EDUCATION_TYPE_A = 1
     EDUCATION_TYPE_B = 2
     EDUCATION_TYPE_C = 3
+    EDUCATION_TYPE_D = 4
+    EDUCATION_TYPE_E = 5
+    EDUCATION_TYPE_F = 6
+    EDUCATION_TYPE_G = 7
+    EDUCATION_TYPE_H = 8
+    EDUCATION_TYPE_I = 9
+    EDUCATION_TYPE_J = 10
+    EDUCATION_TYPE_K = 11
+    EDUCATION_TYPE_L = 12
     EDUCATION_TYPE_CHOICES = (
-        (EDUCATION_TYPE_A, 'Licenciatura'),
-        (EDUCATION_TYPE_B, 'Maestría'),
-        (EDUCATION_TYPE_C, 'Doctorado')
+        (EDUCATION_TYPE_A, 'Sin Estudios'),
+        (EDUCATION_TYPE_B, 'Primaria'),
+        (EDUCATION_TYPE_C, 'Secundaria'),
+        (EDUCATION_TYPE_D, 'Preparatoria'),
+        (EDUCATION_TYPE_E, 'Técnico'),
+        (EDUCATION_TYPE_F, 'Certificación'),
+        (EDUCATION_TYPE_G, 'Licenciatura (Trunca)'),
+        (EDUCATION_TYPE_H, 'Licenciatura (Sin Título)'),
+        (EDUCATION_TYPE_I, 'Licenciatura (Título)'),
+        (EDUCATION_TYPE_J, 'Especialidad'),
+        (EDUCATION_TYPE_K, 'Maestría'),
+        (EDUCATION_TYPE_L, 'Doctorado')
     )
     type = models.IntegerField(choices=EDUCATION_TYPE_CHOICES, default=EDUCATION_TYPE_A,
                                verbose_name='Tipo de Educación')
@@ -466,10 +484,28 @@ class Education(models.Model):
     EDUCATION_TYPE_A = 1
     EDUCATION_TYPE_B = 2
     EDUCATION_TYPE_C = 3
+    EDUCATION_TYPE_D = 4
+    EDUCATION_TYPE_E = 5
+    EDUCATION_TYPE_F = 6
+    EDUCATION_TYPE_G = 7
+    EDUCATION_TYPE_H = 8
+    EDUCATION_TYPE_I = 9
+    EDUCATION_TYPE_J = 10
+    EDUCATION_TYPE_K = 11
+    EDUCATION_TYPE_L = 12
     EDUCATION_TYPE_CHOICES = (
-        (EDUCATION_TYPE_A, 'Licenciatura'),
-        (EDUCATION_TYPE_B, 'Maestría'),
-        (EDUCATION_TYPE_C, 'Doctorado')
+        (EDUCATION_TYPE_A, 'Sin Estudios'),
+        (EDUCATION_TYPE_B, 'Primaria'),
+        (EDUCATION_TYPE_C, 'Secundaria'),
+        (EDUCATION_TYPE_D, 'Preparatoria'),
+        (EDUCATION_TYPE_E, 'Técnico'),
+        (EDUCATION_TYPE_F, 'Certificación'),
+        (EDUCATION_TYPE_G, 'Licenciatura (Trunca)'),
+        (EDUCATION_TYPE_H, 'Licenciatura (Sin Título)'),
+        (EDUCATION_TYPE_I, 'Licenciatura (Título)'),
+        (EDUCATION_TYPE_J, 'Especialidad'),
+        (EDUCATION_TYPE_K, 'Maestría'),
+        (EDUCATION_TYPE_L, 'Doctorado')
     )
     type = models.IntegerField(choices=EDUCATION_TYPE_CHOICES, default=EDUCATION_TYPE_A,
                                verbose_name='Tipo de Educación')
@@ -583,7 +619,30 @@ class EmergencyContact(models.Model):
     cellphone_number = models.CharField(verbose_name="Número de Celular", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True)
 
+    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
+    indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
+    zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
+
     # Foreign Keys.
+
+    # Attribute for the Chained Keys.
+    country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    state = ChainedForeignKey(Estado,
+                              chained_field="country",
+                              chained_model_field="pais",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True,
+                              verbose_name="Estado")
+    town = ChainedForeignKey(Municipio,
+                             chained_field="state",
+                             chained_model_field="estado",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name="Municipio")
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
 
     class Meta:

@@ -874,6 +874,16 @@
                                         <li class="list-group-item"><strong>Correo
                                             Electrónico: </strong> {{ record.email }}
                                         </li>
+
+                                        <li class="list-group-item"><strong>Calle: </strong> {{ record.street }} </li>
+                                        <li class="list-group-item"><strong>Colonia: </strong> {{ record.colony }} </li>
+                                        <li class="list-group-item"><strong>No. Exterior: </strong> {{ record.outdoor_number }} </li>
+                                        <li class="list-group-item"><strong>No. Interior: </strong> {{ record.indoor_number }} </li>
+                                        <li class="list-group-item"><strong>CP: </strong> {{ record.zip_code }} </li>
+                                        <li class="list-group-item"><strong>País: </strong> {{ record.country }} </li>
+                                        <li class="list-group-item"><strong>Estado: </strong> {{ record.state }} </li>
+                                        <li class="list-group-item"><strong>Municipio: </strong> {{ record.town }} </li>
+
                                     </ul>
                                 {% endfor %}
                             </div>
