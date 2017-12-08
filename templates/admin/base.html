@@ -149,7 +149,7 @@
 
 
 
-                                {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
+                                {% if request.resolver_match.view_name in "admin:HumanResources_tag_changelist,admin:HumanResources_test_changelist,admin:HumanResources_documenttype_changelist,admin:HumanResources_documenttype_changelist,admin:HumanResources_direction_changelist,admin:HumanResources_subdirection_changelist,admin:HumanResources_area_changelist,admin:HumanResources_department_changelist,admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle fadeIn"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -351,7 +351,7 @@
 
 
 
-                                {% if request.resolver_match.view_name in "admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                                {% if request.resolver_match.view_name in "admin:HumanResources_employee_add,admin:HumanResources_payrollgroup_add,admin:HumanResources_employee_changelist,admin:HumanResources_payrollperiod_add,admin:HumanResources_earningsdeductions_add,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_employeeloan_add,admin:HumanResources_employeedropout_add,admin:HumanResources_employeehastag_changelist,admin:HumanResources_testapplication_changelist,admin:employee-detail,admin:HumanResources_jobprofile_add,admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
 
                             {% if perms.auth.change_user or  perms.HumanResources.change_payrollperiod or perms.HumanResources.change_employee %}
                                 <a href="#" class="dropdown-toggle "
