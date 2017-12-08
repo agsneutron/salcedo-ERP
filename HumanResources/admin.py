@@ -982,21 +982,58 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
-    # Adding extra context to the change view.
+    # Adding extra context to the add view.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
+        employee_set = Employee.objects.get(pk=employee_id)
         earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
         deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(
             concept__type='D')
 
         extra['template'] = "employee_earnings_deductions"
+        extra['employee'] = employee_set
         extra['earnings'] = earnings_set
         extra['deductions'] = deductions_set
 
         return super(EmployeeEarningsDeductionsAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        employee_set = Employee.objects.get(pk=employee_id)
+
+        extra['template'] = "employee_earnings_deductions"
+        extra['employee'] = employee_set
+
+
+        return super(EmployeeEarningsDeductionsAdmin, self).change_view(request, object_id, form_url, extra)
+
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        django.contrib.messages.success(request, "Percepción/Deducción borrada exitosamente.")
+
+        return HttpResponseRedirect(
+            "/admin/HumanResources/employeeearningsdeductions/add/?employee=" + employee_id)
+
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        django.contrib.messages.success(request, "La Percepción/Deducción se modificó exitosamente.")
+
+        return HttpResponseRedirect(
+            "/admin/HumanResources/employeeearningsdeductions/add/?employee=" + employee_id)
+
+        # To redirect after add
+
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeeearningsdeductions/add/?employee=" + employee_id
+        return HttpResponseRedirect(redirect_url)
 
 
 # Employee Financial Data Admin.
