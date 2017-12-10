@@ -8,3 +8,4 @@ from Accounting.models import *
 
 admin.site.register(GroupingCode)
 admin.site.register(Account)
+admin.site.register(Provider)

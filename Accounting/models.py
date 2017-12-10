@@ -8,6 +8,14 @@ from django.utils.timezone import now
 
 
 # Model for grouping code for accounts
+from django.forms import model_to_dict
+from django.utils.timezone import now
+from smart_selects.db_fields import ChainedForeignKey
+
+from ERP.models import Pais, Estado, Municipio, Bank
+from Logs.controller import Logs
+
+
 class GroupingCode(models.Model):
     level = models.CharField(verbose_name="Nivel", max_length=5,)
     grouping_code = models.DecimalField(verbose_name="Código Agrupador", max_digits=20, decimal_places=2,)
@@ -159,3 +167,96 @@ class AccountingPolicyDetail(models.Model):
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
+
+class Provider(models.Model):
+    ACTIVE = 1
+    NON_ACTIVE = 2
+
+    STATUS_CHOICES = (
+        (ACTIVE, 'Activo'),
+        (NON_ACTIVE, 'Inactivo'),
+    )
+
+    name = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
+    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
+    indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
+    zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
+    rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
+    curp = models.CharField(verbose_name="CURP", max_length=18, null=False, blank=False, unique=True)
+    phone_number = models.CharField(verbose_name="Teléfono", max_length=20, null=False, blank=False)
+    cellphone_number = models.CharField(verbose_name="Celular", max_length=20, null=False, blank=True)
+    office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=20, null=False, blank=True)
+    extension_number = models.CharField(verbose_name="Número de Extensión", max_length=10, null=False, blank=True)
+
+    # Attribute for the Chained Keys.
+    country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    state = ChainedForeignKey(Estado,
+                              chained_field="country",
+                              chained_model_field="pais",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True,
+                              verbose_name="Estado")
+    town = ChainedForeignKey(Municipio,
+                             chained_field="state",
+                             chained_model_field="estado",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name="Municipio")
+
+    last_edit_date = models.DateTimeField(auto_now_add=True)
+
+    accounting_account = models.IntegerField("Cuenta Contable", blank=False, null=False)
+    bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
+    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
+                                         blank=True)
+    bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
+    # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
+    employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
+                                                    default="", null=True, blank=True)
+    services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
+
+    FISICA = "f"
+    MORAL = "m"
+
+    TYPE_CHOICES = (
+        (FISICA, 'Física'),
+        (MORAL, 'Moral'),
+    )
+    tax_person_type = models.CharField(verbose_name="Tipo de Persona", max_length=1, default=MORAL, null=False,
+                                       blank=False, choices=TYPE_CHOICES)
+    status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
+
+    class Meta:
+        verbose_name_plural = 'Proveedores'
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['id'] = str(self.id)
+        ans['name'] = str(self.nombreContratista)
+        ans['street'] = str(self.calle)
+        ans['number'] = str(self.numero)
+        ans['outdoor_number'] = str(self.colonia)
+        ans['town'] = str(self.municipio.nombreMunicipio)
+        ans['state'] = str(self.estado.nombreEstado)
+        ans['country'] = str(self.pais.nombrePais)
+        ans['cp'] = str(self.cp)
+        ans['rfc'] = str(self.rfc)
+
+        return ans
+
+    def __str__(self):
+        return self.nombreContratista
+
+    def save(self, *args, **kwargs):
+        can_save = True
+
+        if can_save:
+            self.last_edit_date = now()
+            Logs.log("Saving new Proveedor", "Te")
+            super(Provider, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
