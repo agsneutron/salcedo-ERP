@@ -11,7 +11,7 @@ from django.forms import model_to_dict
 from django.utils.timezone import now
 from smart_selects.db_fields import ChainedForeignKey
 
-from ERP.models import Pais, Estado, Municipio
+from ERP.models import Pais, Estado, Municipio, Bank
 from Logs.controller import Logs
 
 
@@ -95,7 +95,6 @@ class Provider(models.Model):
     zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
     curp = models.CharField(verbose_name="CURP", max_length=18, null=False, blank=False, unique=True)
-    rfc = models.CharField(verbose_name="RFC", max_length=13, null=False, blank=False, unique=True)
     phone_number = models.CharField(verbose_name="Teléfono", max_length=20, null=False, blank=False)
     cellphone_number = models.CharField(verbose_name="Celular", max_length=20, null=False, blank=True)
     office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=20, null=False, blank=True)
@@ -121,14 +120,13 @@ class Provider(models.Model):
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     accounting_account = models.IntegerField("Cuenta Contable", blank=False, null=False)
-    bank = models.ForeignKey('Bank', verbose_name="Banco", null=True, blank=False)
+    bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
     bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
                                          blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
     employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
                                                     default="", null=True, blank=True)
-    infonavit = models.CharField(verbose_name="Infonavit", max_length=24, default="", null=True, blank=True)
     services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
 
     FISICA = "f"
