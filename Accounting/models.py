@@ -83,7 +83,7 @@ class Account(models.Model):
 class FiscalPeriod(models.Model):
     OPENED = 1
     CLOSED = 2
-    AUDITED=3
+    AUDITED = 3
 
     STATUS_CHOICES = (
         (OPENED, 'Abierto'),
@@ -128,8 +128,8 @@ class TypePolicy(models.Model):
         return str(self.name)
 
     class Meta:
-        verbose_name_plural = 'Año contable'
-        verbose_name = 'Año Contable'
+        verbose_name_plural = 'Tipos de Póliza'
+        verbose_name = 'Tipo de Póliza'
 
 # Model for accounting policy
 class AccountingPolicy(models.Model):

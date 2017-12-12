@@ -470,6 +470,18 @@
                             </ul>
 
                         </li>
+
+                        <li id="op_contabilidad" class="dropdown
+                                {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
+                            <a href="/admin/Accounting/accountingpolicy/" class="dropdown-toggle"
+                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                               data-name="ecommerce">
+                                <i class="fa fa-calculator text-center"></i><br class="hidden-xs">
+                                Contabilidad
+                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
+
+                            </a>
+                        </li>
                         <li id="op_reportes" class="dropdown
 
 
@@ -486,6 +498,7 @@
 
                             </a>
                         </li>
+
                     </ul>
                 </div>
                 <!-- navbar-collapse collapse -->
