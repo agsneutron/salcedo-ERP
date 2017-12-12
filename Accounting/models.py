@@ -64,7 +64,6 @@ class Account(models.Model):
     item = models.CharField(verbose_name="Rubro", max_length=500, null=False,)
 
 
-
     #foreign
     grouping_code = models.ForeignKey(GroupingCode, verbose_name="Código Agrupador SAT",)
     subsidiary_account = models.ForeignKey('self', verbose_name='Subcuenta de', null=True, blank=True)
