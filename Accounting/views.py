@@ -11,8 +11,7 @@ from django.shortcuts import render
 # For Search Account filter objects view
 def SearchAccount(request):
     template = loader.get_template('Accounting/search_account.html')
-    context = RequestContext(request, {
-        'account': Account.objects.all(),
+    accounts = Account.objects.all()
 
-    })
-    return HttpResponse(template.render(context))
+    context = {'object_list': accounts}
+    return HttpResponse(template.render(context, request))
