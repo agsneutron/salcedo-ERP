@@ -10,11 +10,12 @@ from datetime import datetime
 def get_array_or_none(the_string):
     if the_string is None or the_string == "":
         return None
-    else:
-        return map(int, the_string.split(','))
+    return map(int, the_string.split(','))
 
 
 def string_to_date(str):
+    if str is None:
+        return None
     return datetime.strptime(str, '%m/%d/%Y')
 
 
@@ -52,9 +53,9 @@ class SearchProviders(ListView):
 
         nature_account_array = get_array_or_none(request.GET.get('nature_account_array'))
 
-        engine = ProviderSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
-                                      level, item)
+        # engine = ProviderSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
+        #                               level, item)
+        #
+        # results = engine.search()
 
-        results = engine.search()
-
-        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps({}), 'application/json', )
