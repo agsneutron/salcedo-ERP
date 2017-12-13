@@ -22,6 +22,7 @@ from django.utils.timezone import now
 from tinymce.models import HTMLField
 
 from users.models import ERPUser
+
 from smart_selects.db_fields import ChainedForeignKey, ChainedManyToManyField
 
 from django.db import models
@@ -36,7 +37,8 @@ import locale
 
 from django.template import Library
 
-#from HumanResources.models import Bank
+
+# from HumanResources.models import Bank
 
 
 # Create your models here.
@@ -392,10 +394,12 @@ class Contratista(models.Model):
 
     # Aggregated fields as part of the requirements found in the training.
     bank = models.ForeignKey('Bank', verbose_name="Banco", null=True, blank=False)
-    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True, blank=True)
+    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
+                                         blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
-   # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
-    employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24, default="", null=True, blank=True)
+    # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
+    employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
+                                                    default="", null=True, blank=True)
     infonavit = models.CharField(verbose_name="Infonavit", max_length=24, default="", null=True, blank=True)
     services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
 
@@ -406,7 +410,8 @@ class Contratista(models.Model):
         (FISICA, 'Física'),
         (MORAL, 'Moral'),
     )
-    tax_person_type = models.CharField(verbose_name="Tipo de Persona", max_length=1, default=MORAL, null=False, blank=False, choices=TYPE_CHOICES)
+    tax_person_type = models.CharField(verbose_name="Tipo de Persona", max_length=1, default=MORAL, null=False,
+                                       blank=False, choices=TYPE_CHOICES)
 
     class Meta:
         verbose_name_plural = 'Contratista'
@@ -577,7 +582,7 @@ class Empresa(models.Model):
 
 
 def upload_contract_file(instance, filename):
-    return '/'.join(['documentosFuente', instance.project.key, 'contracts',instance.contratista.nombreContratista])
+    return '/'.join(['documentosFuente', instance.project.key, 'contracts', instance.contratista.nombreContratista])
 
 
 class ContratoContratista(models.Model):
@@ -622,11 +627,11 @@ class ContratoContratista(models.Model):
     concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
 
     # Aggregated fields as part of the requirements found in the training.
-    payment_distribution= models.TextField(verbose_name="Distribución del pago", max_length=1024, default="", null=True, blank=True)
-    assigment_number = models.IntegerField(verbose_name="Número de asignación",  null=False, blank=False)
+    payment_distribution = models.TextField(verbose_name="Distribución del pago", max_length=1024, default="",
+                                            null=True, blank=True)
+    assigment_number = models.IntegerField(verbose_name="Número de asignación", null=False, blank=False)
     pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
     advanced_payment = models.FloatField(verbose_name="Anticipio", null=False, blank=False, default=0)
-
 
     class Meta:
         verbose_name_plural = 'Contratos'
@@ -801,7 +806,7 @@ def cover_file_document_destination(instance, filename):
 # Projects model.
 class Project(models.Model):
     version = IntegerVersionField()
-    users = models.ManyToManyField(User, verbose_name="Usuarios con Acceso", through='AccessToProject', null=False,
+    users = models.ManyToManyField(User, verbose_name="Usuarios con Acceso", through='AccessToProject',
                                    blank=False)
     key = models.CharField(verbose_name="Clave del Proyecto", max_length=255, null=False, blank=False, unique=True)
     empresa = models.ForeignKey(Empresa, verbose_name="Empresa Cliente", null=True, blank=False)
@@ -1021,9 +1026,8 @@ class Project(models.Model):
             Logs.log("Couldn't save")
 
 
-
 def upload_blueprint(instance, filename):
-    return '/'.join(['documentosFuente', instance.project.key, 'blueprints',filename])
+    return '/'.join(['documentosFuente', instance.project.key, 'blueprints', filename])
 
 
 class Blueprint(models.Model):
@@ -1034,7 +1038,6 @@ class Blueprint(models.Model):
     # Foreign Keys.
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
 
-
     class Meta:
         verbose_name_plural = "Planos"
         verbose_name = "Plano"
@@ -1042,10 +1045,8 @@ class Blueprint(models.Model):
     def __str__(self):
         return str(self.upload_date) + ": " + self.file.name
 
-
     def __unicode__(self):
         return str(self.upload_date) + ": " + self.file.name
-
 
 
 class PaymentSchedule(models.Model):
@@ -1076,7 +1077,7 @@ class PaymentSchedule(models.Model):
         (NOVEMBER, 'Noviembre'),
         (DECEMBER, 'Diciembre'),
     )
-    month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    month = models.IntegerField(verbose_name="Mes", choices=MONTH_CHOICES, default=JANUARY)
 
     YEAR_CHOICES = (
         (2016, '2016'),
@@ -1087,7 +1088,7 @@ class PaymentSchedule(models.Model):
         (2026, '2026'), (2027, '2027'), (2028, '2028'), (2029, '2029'), (2030, '2030')
     )
 
-    year = models.IntegerField(verbose_name="Año", max_length=4,
+    year = models.IntegerField(verbose_name="Año",
                                choices=YEAR_CHOICES, default=2017)
 
     amount = models.DecimalField(verbose_name='Monto', decimal_places=2, blank=False, null=False,
@@ -1265,7 +1266,7 @@ class LineItem(models.Model):
         return ans
 
     def __str__(self):
-        return self.key + " - "+self.description
+        return self.key + " - " + self.description
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.key + " - " + self.description
@@ -1424,9 +1425,9 @@ class Concept_Input(models.Model):
 
 class Estimate(models.Model):
     version = IntegerVersionField()
-    start_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de inicio")
-    end_date = models.DateField(default=now(), null=True, blank=False, verbose_name="Fecha de fin")
-    period = models.DateField(default=now(), null=True, blank=False, verbose_name="Periodo")
+    start_date = models.DateField(default=now, null=True, blank=False, verbose_name="Fecha de inicio")
+    end_date = models.DateField(default=now, null=True, blank=False, verbose_name="Fecha de fin")
+    period = models.DateField(default=now, null=True, blank=False, verbose_name="Periodo")
 
     # Chained key attributes 'project'. Might be unnecessary, but it is required to reach the expected behaviour.
     contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False, default=None)
@@ -1469,9 +1470,10 @@ class Estimate(models.Model):
     deduction_comments = HTMLField(verbose_name='Razones por las que Hubo Deducciones')
 
     # Fields to provide the Advance (payment) functionality.
-    deduction_amount = models.DecimalField(verbose_name='Deducciones Por Mala Calidad', decimal_places=2, blank=False, null=False,
-                                                 default=0, max_digits=20,
-                                                 validators=[MinValueValidator(Decimal('0.0'))])
+    deduction_amount = models.DecimalField(verbose_name='Deducciones Por Mala Calidad', decimal_places=2, blank=False,
+                                           null=False,
+                                           default=0, max_digits=20,
+                                           validators=[MinValueValidator(Decimal('0.0'))])
 
     # Director General
     #
@@ -1692,7 +1694,7 @@ class ProgressEstimateLog(models.Model):
     user = models.ForeignKey(User, verbose_name="Usuario", null=True, blank=True)
     description = models.TextField(verbose_name="Notas", max_length=512, null=False, blank=False)
     register_date = models.DateTimeField(auto_now_add=True)
-    date = models.DateTimeField(default=now(), null=True, verbose_name="Fecha")
+    date = models.DateTimeField(default=now, null=True, verbose_name="Fecha")
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -1706,9 +1708,7 @@ class ProgressEstimateLog(models.Model):
         (APPROVED, 'Aprobada'),
     )
     status = models.CharField(max_length=1, choices=STATUS_CHOICES, default=NOT_REVIEWED,
-                                   verbose_name="Estado de la Bitácora")
-
-
+                              verbose_name="Estado de la Bitácora")
 
     class Meta:
         verbose_name_plural = 'Bitácoras'
@@ -1869,9 +1869,25 @@ class EstimateAdvanceAuthorization(models.Model):
         return self.full_name
 
 
+class SATBank(models.Model):
+    key = models.CharField(verbose_name="Clave Cuenta SAT", null=False, max_length=3)
+    name = models.CharField(verbose_name="Nombre Cuenta SAT", max_length=100, null=False, )
+    business_name = models.CharField(verbose_name="Razón social", max_length=500, null=False, )
+
+    def __str__(self):
+        return self.key + ": " + self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.key + ": " + self.name
+
+    class Meta:
+        verbose_name_plural = 'Bancos del SAT.'
+        verbose_name = 'Bancos del SAT.'
+
 
 class Bank(models.Model):
     name = models.CharField(max_length=2512, null=False, blank=False, verbose_name="Nombre")
+    sat_bank = models.OneToOneField(SATBank, verbose_name="Banco del SAT", null=True, blank=True)
 
     class Meta:
         verbose_name = "Banco"
@@ -1882,4 +1898,3 @@ class Bank(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name
-
