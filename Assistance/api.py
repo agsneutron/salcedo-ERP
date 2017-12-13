@@ -10,7 +10,7 @@ from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic.list import ListView
 
 from ERP.lib.utilities import Utilities
-from HumanResources.models import PayrollPeriod, EmployeePositionDescription, Employee, EmployeeAssistance
+from HumanResources.models import PayrollPeriod, EmployeePositionDescription, Employee, EmployeeAssistance, CheckerData
 
 
 class AutomaticAbsences(ListView):
@@ -55,9 +55,15 @@ class AutomaticAbsences(ListView):
 
 
     def generate_automatic_absecences_for_employee(self, payroll_period, employee):
+
         assistance_days = self.get_assistance_days_for_employee(employee)
+
         start_date = payroll_period.start_period
         end_date = payroll_period.end_period
+
+        print start_date
+        print end_date
+        print "While"
 
         control_date = start_date
         while control_date <= end_date:
@@ -67,13 +73,17 @@ class AutomaticAbsences(ListView):
 
 
             if day_of_the_week in assistance_days:
+                print "Control: " +  str(control_date)
 
+                # To verify the registry does not exist.
                 control_assistance = EmployeeAssistance.objects.filter(
                     Q(employee=employee) &
                     Q(payroll_period=payroll_period) &
                     Q(record_date=control_date))
 
-                if len(control_assistance) < 0:
+                print "Length is: " +  str(len(control_assistance))
+                if len(control_assistance) <= 0:
+                    print "Saved"
 
                     employee_assistance = EmployeeAssistance(
                         employee = employee,
@@ -87,6 +97,25 @@ class AutomaticAbsences(ListView):
 
 
                     employee_assistance.save()
+
+
+    def generate_automatic_absences_for_period(self, payroll_period):
+        # Getting the employee object for batch generation.
+        payroll_group = payroll_period.payroll_group
+
+        # Getting all the position descriptions related to the payroll group.
+        position_description_set = EmployeePositionDescription.objects.filter(payroll_group_id=payroll_group.id)
+        employee_array = []
+
+        for position_description in position_description_set:
+            employee_array.append(position_description.employee.id)
+
+        # Getting all the employees realted to the found payroll groups.
+        employee_set = Employee.objects.filter(id__in=employee_array)
+
+        for employee in employee_set:
+            self.generate_automatic_absecences_for_employee(payroll_period, employee)
+
 
 
 

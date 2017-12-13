@@ -6,6 +6,7 @@ import operator
 
 from django.core.exceptions import PermissionDenied
 from django.db.models.aggregates import Count
+from django.http.response import HttpResponseRedirect
 from django.shortcuts import render
 from django.views import generic
 from django.views.generic.list import ListView
@@ -186,7 +187,10 @@ class EmployeeDetailView(generic.DetailView):
         context['employee_documents'] = EmployeeDocument.objects.filter(employee__id=employee.id)
 
         # Obtaining the employee's checker info and setting it to the context.
-        context['checker_data'] = CheckerData.objects.get(employee__id=employee.id)
+        checker_data = CheckerData.objects.filter(employee__id=employee.id)
+
+        if (len(checker_data) > 0):
+            context['checker_data'] = checker_data[0]
 
         # Obtaining the employee's position description and setting it to the context.
         context['employee_position_description'] = EmployeePositionDescription.objects.filter(employee__id=employee.id)
@@ -197,6 +201,8 @@ class EmployeeDetailView(generic.DetailView):
         # Obtaining the employee's Employee Has TAG Data and setting it to the context.
         context['employee_has_tag'] = EmployeeHasTag.objects.filter(employee__id=employee.id)
 
+        # Obtaining the employee's Employee EmployeeEarningsDeductions Data and setting it to the context.
+        context['employee_ed'] = EmployeeEarningsDeductions.objects.filter(employee__id=employee.id)
 
         return context
 
@@ -228,10 +234,9 @@ def Tests(request):
 def TestApplicationDetail(request, pk):
     template = loader.get_template('HumanResources/testapplication_detail.html')
 
-
     object = TestApplication.objects.get(pk=pk)
 
-    context = {'object':object}
+    context = {'object': object}
 
     return HttpResponse(template.render(context, request))
 
@@ -240,6 +245,14 @@ def TestApplicationDetail(request, pk):
 def EmployeeByPeriod(request):
     payrollgroup = request.GET.get('payrollgroup')
     payrollperiod = request.GET.get('payrollperiod')
+
+
+    # Check if the payroll has been processed.
+    payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period__id=payrollperiod)
+    print str(len(payroll_receipt_processed))
+    if len(payroll_receipt_processed) > 0:
+        return HttpResponseRedirect("/admin/HumanResources/payrollreceiptprocessed/receipts_by_period/"+payrollperiod)
+
     template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
     employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup)
     period_data = PayrollPeriod.objects.filter(id=payrollperiod)
@@ -361,28 +374,6 @@ class PayrollPeriodEmployeeDetail(generic.DetailView):
         return super(PayrollPeriodEmployeeDetail, self).dispatch(request, args, kwargs)
 
 
-class IncidencesByPayrollPeriod(ListView):
-    model = EmployeeAssistance
-    template_name = "HumanResources/inicidences-by-payroll-period.html"
-
-    def get_context_data(self, **kwargs):
-        context = super(IncidencesByPayrollPeriod, self).get_context_data(**kwargs)
-
-        payroll_period_id = self.request.GET.get("payroll_period")
-        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
-
-        incidences = EmployeeAssistance.objects.filter(Q(absence=True)) \
-            .values('employee__id', 'employee__employee_key', 'employee__name', 'employee__first_last_name',
-                    'employee__second_last_name') \
-            .annotate(Count('employee__id'))
-
-        context['payroll_period'] = payroll_period
-        context['incidences'] = incidences
-
-        print incidences
-
-        return context
-
 
 class IncidencesByPayrollPeriod(ListView):
     model = EmployeeAssistance
@@ -394,7 +385,7 @@ class IncidencesByPayrollPeriod(ListView):
         payroll_period_id = self.kwargs['payroll_period_id']
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
-        incidences = EmployeeAssistance.objects.filter(Q(absence=True)) \
+        incidences = EmployeeAssistance.objects.filter(Q(absence=True) & Q(payroll_period=payroll_period)) \
             .values('employee__id', 'employee__employee_key', 'employee__name', 'employee__first_last_name',
                     'employee__second_last_name') \
             .annotate(Count('employee__id'))
@@ -417,11 +408,23 @@ class IncidencesByEmployee(ListView):
         employee_key = self.kwargs['employee_key']
         payroll_period_id = self.kwargs['payroll_period_id']
 
+        print "Got: "
+        print str(employee_key)
+        print str(payroll_period_id)
+
+
         employee = Employee.objects.get(employee_key=employee_key)
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
+        print "Objects"
+        print employee
+        print payroll_period
+
         incidences = EmployeeAssistance.objects.filter(
-            Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
+            Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id) &Q(absence=True))
+
+        print "Length"
+        print len(incidences)
 
         absence_proofs = AbsenceProof.objects.filter(
             Q(employee_id=employee.id) & Q(payroll_period_id=payroll_period.id))
@@ -430,5 +433,27 @@ class IncidencesByEmployee(ListView):
         context['payroll_period'] = payroll_period
         context['incidences'] = incidences
         context['absence_proofs'] = absence_proofs
+
+        return context
+
+
+
+# Views for the model Payroll Receipt Processed.
+class PayrollReceiptProcessedListView(ListView):
+    model = PayrollReceiptProcessed
+    template_name = "HumanResources/payroll_receipt-processed-list.html"
+
+
+    def get_context_data(self, **kwargs):
+        context = super(PayrollReceiptProcessedListView, self).get_context_data(**kwargs)
+
+        payroll_period_id = self.kwargs['payroll_period_id']
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        payroll_receipts_processed = PayrollReceiptProcessed.objects.filter(payroll_period_id=payroll_period_id)
+
+
+        context['receipts'] = payroll_receipts_processed
+        context['payroll_period'] = payroll_period
 
         return context

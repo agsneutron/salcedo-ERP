@@ -92,6 +92,15 @@
                         </li>
                     {% endfor %}
                 </ul>
+                   {% comment %} <div class="text-left" style="display: flex;text-align: right;float: left;">
+                         <a href=# onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"  class="btn btn-raised btn-success">
+                            <i class="fa fa-file-pdf-o"></i> Generar Recibo
+                         </a>
+                            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <a href=# onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"  class="btn btn-raised btn-primary">
+                            <i class="fa fa-file-pdf-o"></i> Regresar a Listado
+                         </a>
+                     </div>{% endcomment %}
             </div>
 
 
@@ -190,12 +199,12 @@
                                  <td style="border:1px solid">{{ record.ammount }}</td>
 
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}&payrollperiod={{ request.GET.payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-pencil color-default eliminar"></i>
                                     </a>
                                 </td>
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/?employee={{ request.GET.employee }}&payrollperiod={{ request.GET.payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-trash-o color-danger eliminar"></i>
                                     </a>
                                 </td>

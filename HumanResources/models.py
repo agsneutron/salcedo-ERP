@@ -59,6 +59,7 @@ class PayrollGroup(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
     payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina",
                                                null=False, blank=False)
+
     CHECKER_TYPE_AUTOMATIC = 1
     CHECKER_TYPE_MANUAL = 2
     CHECKER_TYPE_CHOICES = (
@@ -67,6 +68,7 @@ class PayrollGroup(models.Model):
     )
     checker_type = models.IntegerField(choices=CHECKER_TYPE_CHOICES, default=CHECKER_TYPE_AUTOMATIC,
                                        verbose_name='Tipo de Checador')
+
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=True, blank=True)
 
     class Meta:
@@ -144,6 +146,8 @@ class Employee(models.Model):
 
     social_security_number = models.CharField(verbose_name="Número de Seguro Social", max_length=20, null=False,
                                               blank=False)
+    social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
+
     colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
     outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
@@ -293,10 +297,10 @@ class CheckerData(models.Model):
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
 
     def __str__(self):
-        return self.get_checker_type_display()
+        return str(self.id)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.get_checker_type_display()
+        return str(self.id)
 
     class Meta:
         verbose_name_plural = 'Datos de Checador del Empleado'
@@ -395,10 +399,28 @@ class CurrentEducation(models.Model):
     EDUCATION_TYPE_A = 1
     EDUCATION_TYPE_B = 2
     EDUCATION_TYPE_C = 3
+    EDUCATION_TYPE_D = 4
+    EDUCATION_TYPE_E = 5
+    EDUCATION_TYPE_F = 6
+    EDUCATION_TYPE_G = 7
+    EDUCATION_TYPE_H = 8
+    EDUCATION_TYPE_I = 9
+    EDUCATION_TYPE_J = 10
+    EDUCATION_TYPE_K = 11
+    EDUCATION_TYPE_L = 12
     EDUCATION_TYPE_CHOICES = (
-        (EDUCATION_TYPE_A, 'Licenciatura'),
-        (EDUCATION_TYPE_B, 'Maestría'),
-        (EDUCATION_TYPE_C, 'Doctorado')
+        (EDUCATION_TYPE_A, 'Sin Estudios'),
+        (EDUCATION_TYPE_B, 'Primaria'),
+        (EDUCATION_TYPE_C, 'Secundaria'),
+        (EDUCATION_TYPE_D, 'Preparatoria'),
+        (EDUCATION_TYPE_E, 'Técnico'),
+        (EDUCATION_TYPE_F, 'Certificación'),
+        (EDUCATION_TYPE_G, 'Licenciatura (Trunca)'),
+        (EDUCATION_TYPE_H, 'Licenciatura (Sin Título)'),
+        (EDUCATION_TYPE_I, 'Licenciatura (Título)'),
+        (EDUCATION_TYPE_J, 'Especialidad'),
+        (EDUCATION_TYPE_K, 'Maestría'),
+        (EDUCATION_TYPE_L, 'Doctorado')
     )
     type = models.IntegerField(choices=EDUCATION_TYPE_CHOICES, default=EDUCATION_TYPE_A,
                                verbose_name='Tipo de Educación')
@@ -464,10 +486,28 @@ class Education(models.Model):
     EDUCATION_TYPE_A = 1
     EDUCATION_TYPE_B = 2
     EDUCATION_TYPE_C = 3
+    EDUCATION_TYPE_D = 4
+    EDUCATION_TYPE_E = 5
+    EDUCATION_TYPE_F = 6
+    EDUCATION_TYPE_G = 7
+    EDUCATION_TYPE_H = 8
+    EDUCATION_TYPE_I = 9
+    EDUCATION_TYPE_J = 10
+    EDUCATION_TYPE_K = 11
+    EDUCATION_TYPE_L = 12
     EDUCATION_TYPE_CHOICES = (
-        (EDUCATION_TYPE_A, 'Licenciatura'),
-        (EDUCATION_TYPE_B, 'Maestría'),
-        (EDUCATION_TYPE_C, 'Doctorado')
+        (EDUCATION_TYPE_A, 'Sin Estudios'),
+        (EDUCATION_TYPE_B, 'Primaria'),
+        (EDUCATION_TYPE_C, 'Secundaria'),
+        (EDUCATION_TYPE_D, 'Preparatoria'),
+        (EDUCATION_TYPE_E, 'Técnico'),
+        (EDUCATION_TYPE_F, 'Certificación'),
+        (EDUCATION_TYPE_G, 'Licenciatura (Trunca)'),
+        (EDUCATION_TYPE_H, 'Licenciatura (Sin Título)'),
+        (EDUCATION_TYPE_I, 'Licenciatura (Título)'),
+        (EDUCATION_TYPE_J, 'Especialidad'),
+        (EDUCATION_TYPE_K, 'Maestría'),
+        (EDUCATION_TYPE_L, 'Doctorado')
     )
     type = models.IntegerField(choices=EDUCATION_TYPE_CHOICES, default=EDUCATION_TYPE_A,
                                verbose_name='Tipo de Educación')
@@ -557,6 +597,9 @@ class FamilyMember(models.Model):
     first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
     second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
     relationship = models.CharField(verbose_name="Parentesco", max_length=128, null=False, blank=True)
+    career = models.CharField(verbose_name="Profesión", max_length=128, null=False, blank=True)
+    age = models.IntegerField(verbose_name="Edad", null=True, blank=True, default=0)
+    phone_number = models.CharField(verbose_name="Número de Teléfono", max_length=20, null=True, blank=True)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
@@ -581,7 +624,30 @@ class EmergencyContact(models.Model):
     cellphone_number = models.CharField(verbose_name="Número de Celular", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True)
 
+    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
+    indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
+    zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
+
     # Foreign Keys.
+
+    # Attribute for the Chained Keys.
+    country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    state = ChainedForeignKey(Estado,
+                              chained_field="country",
+                              chained_model_field="pais",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True,
+                              verbose_name="Estado")
+    town = ChainedForeignKey(Municipio,
+                             chained_field="state",
+                             chained_model_field="estado",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name="Municipio")
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
 
     class Meta:
@@ -696,6 +762,16 @@ def uploaded_employees_assistance_destination(instance, filename):
 
 
 class UploadedEmployeeAssistanceHistory(models.Model):
+    '''payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
+    payroll_period = ChainedForeignKey('PayrollPeriod',
+                               chained_field="payroll_group",
+                               chained_model_field="payroll_group",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True,
+                               unique=True)'''
+
+
     payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
     assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
                                        verbose_name="Archivo de Asistencias")
@@ -857,8 +933,6 @@ class EmployeePositionDescription(models.Model):
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     end_date = models.DateField(verbose_name="Fecha de Termino", null=False, blank=False)
     physical_location = models.CharField(verbose_name="Ubicación Física", max_length=250, null=False, blank=True)
-    insurance_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
-    insurance_number = models.CharField(verbose_name="Número de Seguro", null=True, blank=False, max_length=100)
     entry_time = models.TimeField(verbose_name="Hora de Entrada", null=True, auto_now_add=False)
     departure_time = models.TimeField(verbose_name="Hora de Salida", null=True, auto_now_add=False)
     observations = models.CharField(verbose_name="Observaciones", null=True, blank=False, max_length=500)
@@ -1156,7 +1230,7 @@ class EmployeeLoanDetail(models.Model):
             sumTotal += tot['total']
 
         payrollExist=PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,payroll_period_id=self.period.id)
-        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count()>0:
+        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count()==0:
             modelo = EmployeeEarningsDeductionsbyPeriod()
             modelo.create(self)
             super(EmployeeLoanDetail, self).save(*args, **kwargs)
@@ -1251,7 +1325,7 @@ class PayrollReceiptProcessed(models.Model):
                                         decimal_places=2)
     taxed = models.DecimalField(verbose_name="Grabado", null=True, blank=True, max_digits=20, decimal_places=2)
     exempt = models.DecimalField(verbose_name="Excento", null=True, blank=True, max_digits=20, decimal_places=2)
-    daily_salry = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
+    daily_salary = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
                                       decimal_places=2)
     total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=True, blank=True,
                                              max_digits=20, decimal_places=2)
@@ -1279,6 +1353,7 @@ class PayrollReceiptProcessed(models.Model):
     class Meta:
         verbose_name_plural = "Recibo de Nómina Procesada"
         verbose_name = "Recibo de Nómina Procesada"
+        unique_together = ('payroll_period', 'employee')
 
 
 class PayrollProcessedDetail(models.Model):
@@ -1290,12 +1365,13 @@ class PayrollProcessedDetail(models.Model):
     percent_taxable = models.IntegerField("Porcentaje Gravable", blank=True, null=True)
     sat_key = models.CharField(verbose_name="Clave SAT", null=True, blank=True, max_length=30, )
     law_type = models.CharField(verbose_name="Tipo de Ley", null=True, blank=True, max_length=30, )
-    status = models.CharField(verbose_name="Estatus", null=True, blank=True, max_length=1)
+    status = models.CharField(verbose_name="Estatus", null=True, blank=True, max_length=64)
     accounting_account = models.IntegerField("Cuenta Contable", blank=True, null=True)
     comments = models.CharField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
     type = models.CharField(verbose_name="Tipo", max_length=64)
     taxable = models.CharField(verbose_name="Gravable", max_length=64)
     category = models.CharField(verbose_name="Categoria", max_length=64)
+    amount = models.FloatField(verbose_name="Monto", null=False)
 
     class Meta:
         verbose_name_plural = "Detalle de Nómina Procesada"

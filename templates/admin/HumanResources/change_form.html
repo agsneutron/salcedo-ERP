@@ -212,9 +212,13 @@
                                 <div class="ms-hero-bg-info">
                                     <h3 class="color-white index-1 text-center no-m pt-2"> {{ employee.name }}  </h3>
                                     <div class="color-medium index-1 text-center np-m"> {{ employee.first_last_name }}</div>
-                                    <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png"
-                                         alt=""
-                                         class="img-avatar-circle"></div>
+                                        {% if employee.photo %}
+                                                <img alt="" src="/media/{{ employee.photo }}" alt="" class="img-avatar-circle">
+                                            {% else %}
+                                                <img alt="" src="/media/assets/avatar.jpg" alt="" class="img-avatar-circle">
+                                            {% endif %}
+                                             {% comment %}<img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png" alt="" class="img-avatar-circle">{% endcomment %}
+                                    </div>
                                 <div class="card-block pt-4 text-center">
                                     <h3 class="color-info">Empleado</h3>
                                     <ul class="list-group text-left">
