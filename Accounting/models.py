@@ -15,6 +15,21 @@ from smart_selects.db_fields import ChainedForeignKey
 from ERP.models import Pais, Estado, Municipio, Bank
 from Logs.controller import Logs
 
+class SATBanks(models.Model):
+    key = models.CharField(verbose_name="Clave Cuenta SAT", null=False, max_length=3 )
+    name = models.CharField(verbose_name="Nombre Cuenta SAT", max_length=100, null=False, )
+    business_name = models.CharField(verbose_name="Razón social", max_length=500, null=False, )
+
+    def __str__(self):
+        return self.key + ": " + self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.key + ": " + self.name
+
+    class Meta:
+        verbose_name_plural = 'Bancos del SAT.'
+        verbose_name = 'Bancos del SAT.'
+
 
 class GroupingCode(models.Model):
     level = models.CharField(verbose_name="Nivel", max_length=5,)
@@ -62,7 +77,6 @@ class Account(models.Model):
     ledger_account = models.IntegerField(choices=LG_ACCOUNT_CHOICES, default=LEDGER, verbose_name='Cuenta de Mayor')
     level = models.CharField(verbose_name="Nivel", max_length=500, null=False,)
     item = models.CharField(verbose_name="Rubro", max_length=500, null=False,)
-
 
 
     #foreign

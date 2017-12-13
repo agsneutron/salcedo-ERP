@@ -12,3 +12,4 @@ ERP/migrations
 HumanResources/migrations
 users/migrations
 DataUpload/migrations
+Accounting/migrations
