@@ -13,10 +13,23 @@ class AccountingPolicyDetailInline(admin.TabularInline):
     model = AccountingPolicyDetail
     extra = 1
 
+    fieldsets = (
+        ("Detalle", {
+            'fields': ('account', 'description','debit','credit')
+        }),
+    )
+
 @admin.register(AccountingPolicy)
 class AccountingPolicyAdmin(admin.ModelAdmin):
     form = AccountingPolicyForm
     inlines = (AccountingPolicyDetailInline,)
+
+    fieldsets = (
+        ("Póliza", {
+            'fields': (
+            'fiscal_period', 'type_policy', 'folio', 'registry_date', 'description',)
+        }),
+    )
 
 
 
