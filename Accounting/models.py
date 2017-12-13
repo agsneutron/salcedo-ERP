@@ -4,9 +4,6 @@ from __future__ import unicode_literals
 from django.db import models
 from django.utils.timezone import now
 
-# Create your models here.
-
-
 # Model for grouping code for accounts
 from django.forms import model_to_dict
 from django.utils.timezone import now
@@ -14,22 +11,6 @@ from smart_selects.db_fields import ChainedForeignKey
 
 from ERP.models import Pais, Estado, Municipio, Bank
 from Logs.controller import Logs
-
-class SATBanks(models.Model):
-    key = models.CharField(verbose_name="Clave Cuenta SAT", null=False, max_length=3 )
-    name = models.CharField(verbose_name="Nombre Cuenta SAT", max_length=100, null=False, )
-    business_name = models.CharField(verbose_name="Razón social", max_length=500, null=False, )
-
-    def __str__(self):
-        return self.key + ": " + self.name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.key + ": " + self.name
-
-    class Meta:
-        verbose_name_plural = 'Bancos del SAT.'
-        verbose_name = 'Bancos del SAT.'
-
 
 class GroupingCode(models.Model):
     level = models.CharField(verbose_name="Nivel", max_length=5,)
@@ -150,7 +131,7 @@ class AccountingPolicy(models.Model):
     fiscal_period = models.ForeignKey(FiscalPeriod, verbose_name='Periodo Fiscal', null=False, blank=False)
     type_policy = models.ForeignKey(TypePolicy, verbose_name='Tipo de Póliza', null=False, blank=False)
     folio =  models.IntegerField("Folio", blank=True, null=True)
-    registry_date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha de Registro")
+    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
 
     def __str__(self):
@@ -170,7 +151,7 @@ class AccountingPolicyDetail(models.Model):
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit=models.FloatField(verbose_name="Debe", null=False, blank=False, default=0)
     credit=models.FloatField(verbose_name="Haber", null=False, blank=False,default=0)
-    registry_date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha de Registro")
+    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
 
     def __str__(self):
         return str(self.account.number) + ": " + self.account.name

@@ -104,7 +104,7 @@ class Employee(models.Model):
         (TYPE_B, 'Empleado Tipo B'),
     )
     type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleando')
-    registry_date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha de Registro")
+    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
 
     STATUS_ACTIVE = 1
     STATUS_INNACTIVE = 2
@@ -724,9 +724,9 @@ class EmployeeAssistance(models.Model):
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
     payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
 
-    record_date = models.DateField(default=now(), null=False, blank=False, verbose_name="Fecha")
-    entry_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Entrada")
-    exit_time = models.TimeField(default=now(), null=False, blank=False, verbose_name="Hora de Salida")
+    record_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha")
+    entry_time = models.TimeField(default=now, null=False, blank=False, verbose_name="Hora de Entrada")
+    exit_time = models.TimeField(default=now, null=False, blank=False, verbose_name="Hora de Salida")
     absence = models.BooleanField(verbose_name="Ausente", default=True)
     justified = models.BooleanField(verbose_name="Justificada", default=False)
 
@@ -1176,7 +1176,7 @@ class PayrollPeriod(models.Model):
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
     payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a procesar", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
-    month = models.IntegerField(verbose_name="Mes", max_length=2, choices=MONTH_CHOICES, default=JANUARY)
+    month = models.IntegerField(verbose_name="Mes", choices=MONTH_CHOICES, default=JANUARY)
     year = models.IntegerField(verbose_name="Año", null=False, blank=False, default=2017,
                                validators=[MaxValueValidator(9999), MinValueValidator(2017)])
     fortnight = models.IntegerField(verbose_name="Semana", null=False, blank=False, default=1,
@@ -1204,13 +1204,13 @@ class EmployeeLoanDetail(models.Model):
                                chained_model_field="payroll_group",
                                show_all=False,
                                auto_choose=True,
-                               sort=True,
-                               unique=True)
+                               sort=True)
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
+        unique_together = ('employeeloan','period',)
 
     def delete(self):
         payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
