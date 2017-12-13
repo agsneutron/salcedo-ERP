@@ -29,6 +29,8 @@ from ERP import urls
 import ERP
 from HumanResources import urls
 import HumanResources
+import Accounting
+from Accounting import urls
 
 from reporting import urls
 
@@ -44,6 +46,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^users/', include(users.urls)),
     url(r'^erp/', include(ERP.urls)),
+    url(r'^accounting/', include(Accounting.urls)),
     url(r'^humanresources/', include(HumanResources.urls)),
     url(r'^assistance/', include(Assistance.urls)),
     url(r'^reporting/', include(ERP.urls)),
