@@ -231,20 +231,20 @@ class Provider(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['id'] = str(self.id)
-        ans['name'] = str(self.nombre)
-        ans['street'] = str(self.calle)
-        ans['number'] = str(self.numero)
-        ans['outdoor_number'] = str(self.colonia)
-        ans['town'] = str(self.municipio.nombreMunicipio)
-        ans['state'] = str(self.estado.nombreEstado)
-        ans['country'] = str(self.pais.nombrePais)
+        ans['name'] = str(self.name)
+        ans['street'] = str(self.street)
+        ans['number'] = str(self.indoor_number)
+        ans['outdoor_number'] = str(self.outdoor_number)
+        ans['town'] = str(self.town.name)
+        ans['state'] = str(self.state.name)
+        ans['country'] = str(self.country.nombrePais)
         ans['cp'] = str(self.cp)
         ans['rfc'] = str(self.rfc)
 
         return ans
 
     def __str__(self):
-        return self.nombre
+        return self.name
 
     def save(self, *args, **kwargs):
         can_save = True

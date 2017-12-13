@@ -145,10 +145,6 @@
                         </li>
                         <li class="dropdown
 
-
-
-
-
                                 {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle fadeIn"
                                data-toggle="dropdown"
@@ -218,7 +214,22 @@
 
                                     </ul>
                                 </li>
+                                <li class="dropdown-submenu">
+                                    <a href="blog-sidebar.html" class="has_children">
+                                        <i class="zmdi zmdi-view-compact"></i> Contabilidad</a>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>
+                                            <a href="/admin/Accounting/provider/">Proveedores</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/Accounting/fiscalperiod/">Periodos Fiscales</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
+                                        </li>
 
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="dropdown
