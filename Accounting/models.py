@@ -198,6 +198,7 @@ class Provider(models.Model):
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
     curp = models.CharField(verbose_name="CURP", max_length=18, null=False, blank=False, unique=True)
     phone_number = models.CharField(verbose_name="Teléfono", max_length=20, null=False, blank=False)
+    email = models.CharField(verbose_name="Email", max_length=255, null=False, blank=False)
     cellphone_number = models.CharField(verbose_name="Celular", max_length=20, null=False, blank=True)
     office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=20, null=False, blank=True)
     extension_number = models.CharField(verbose_name="Número de Extensión", max_length=10, null=False, blank=True)
@@ -220,6 +221,7 @@ class Provider(models.Model):
                              verbose_name="Municipio")
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
+    register_date = models.DateTimeField(default=now)
 
     accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
     bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
