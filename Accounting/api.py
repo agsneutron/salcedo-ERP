@@ -2,6 +2,7 @@ from django.http.response import HttpResponse
 from django.views.generic.list import ListView
 
 from Accounting.search_engines.account_engine import AccountSearchEngine
+from Accounting.search_engines.policy_engine import PolicySearchEngine
 from ERP.lib.utilities import Utilities
 
 
@@ -13,11 +14,13 @@ def get_array_or_none(the_string):
 
 
 class SearchPolicies(ListView):
+
+
     def get(self, request):
         lower_fiscal_period = request.GET.get('lower_fiscal_period')
         upper_fiscal_period = request.GET.get('upper_fiscal_period')
 
-        type_policy = get_array_or_none(request.GET.get('type_policy'))
+        type_policy_array = get_array_or_none(request.GET.get('type_policy_array'))
 
         lower_folio = request.GET.get('lower_folio')
         upper_folio = request.GET.get('upper_folio')
@@ -26,7 +29,6 @@ class SearchPolicies(ListView):
         upper_registry_date = request.GET.get('upper_registry_date')
 
         description = request.GET.get('description')
-
 
         lower_account_number = request.GET.get('lower_account_number')
         upper_account_number = request.GET.get('upper_account_number')
@@ -37,8 +39,30 @@ class SearchPolicies(ListView):
         lower_credit = request.GET.get('lower_credit')
         upper_credit = request.GET.get('upper_credit')
 
+        reference = request.GET.get('reference')
 
-        return HttpResponse(Utilities.json_to_dumps({}),'application/json', )
+        engine = PolicySearchEngine(
+            lower_fiscal_period=lower_fiscal_period,
+            upper_fiscal_period=upper_fiscal_period,
+            type_policy_array=type_policy_array,
+            lower_folio=lower_folio,
+            upper_folio=upper_folio,
+            lower_registry_date=lower_registry_date,
+            upper_registry_date=upper_registry_date,
+            description=description,
+            lower_account_number=lower_account_number,
+            upper_account_number=upper_account_number,
+            lower_debit=lower_debit,
+            upper_debit=upper_debit,
+            lower_credit=lower_credit,
+            upper_credit=upper_credit,
+            reference=reference
+        )
+
+        result = engine.search_policies()
+
+
+        return HttpResponse(Utilities.json_to_dumps(result),'application/json', )
 
 
 class SearchAccounts(ListView):

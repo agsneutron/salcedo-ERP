@@ -133,6 +133,7 @@ class AccountingPolicy(models.Model):
     folio =  models.IntegerField("Folio", blank=True, null=True)
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
+    reference = models.CharField(verbose_name="Referencia", max_length=1024, null=False, blank=False)
 
     def __str__(self):
         return str(self.type_policy) + ": " + self.folio
