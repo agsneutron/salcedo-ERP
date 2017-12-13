@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from datetime import date
+
 from django.db import models
 from django.utils.timezone import now
 
@@ -221,7 +223,7 @@ class Provider(models.Model):
                              verbose_name="Municipio")
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
-    register_date = models.DateTimeField(default=now)
+    register_date = models.DateField(default=date.today)
 
     accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
     bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
@@ -249,21 +251,23 @@ class Provider(models.Model):
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['name'] = str(self.nombre)
-        ans['street'] = str(self.calle)
-        ans['number'] = str(self.numero)
-        ans['outdoor_number'] = str(self.colonia)
-        ans['town'] = str(self.municipio.nombreMunicipio)
-        ans['state'] = str(self.estado.nombreEstado)
-        ans['country'] = str(self.pais.nombrePais)
-        ans['cp'] = str(self.cp)
-        ans['rfc'] = str(self.rfc)
+        ans['register_date'] = self.register_date.strftime('%m/%d/%Y')
+        ans['accounting_account'] = self.accounting_account.number
+        # ans['id'] = str(self.id)
+        # ans['name'] = str(self.name)
+        # ans['street'] = str(self.street)
+        # ans['number'] = str(self.number)
+        # ans['outdoor_number'] = str(self.colonia)
+        # ans['town'] = str(self.municipio.nombreMunicipio)
+        # ans['state'] = str(self.estado.nombreEstado)
+        # ans['country'] = str(self.pais.nombrePais)
+        # ans['cp'] = str(self.cp)
+        # ans['rfc'] = str(self.rfc)
 
         return ans
 
     def __str__(self):
-        return self.nombre
+        return self.name
 
     def save(self, *args, **kwargs):
         can_save = True

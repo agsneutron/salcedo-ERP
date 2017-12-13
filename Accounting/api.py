@@ -12,13 +12,6 @@ def get_array_or_none(the_string):
         return None
     return map(int, the_string.split(','))
 
-
-def string_to_date(str):
-    if str is None:
-        return None
-    return datetime.strptime(str, '%m/%d/%Y')
-
-
 class SearchPolicies(ListView):
     def get(self, request):
         return HttpResponse(Utilities.json_to_dumps({}), 'application/json', )
@@ -49,13 +42,13 @@ class SearchProviders(ListView):
         email = request.GET.get('email')
         phone_number = request.GET.get('phone_number')
         accounting_account_number = request.GET.get('accounting_account_number')
-        register_date = request.GET.get('register_date')
+        bank_account = request.GET.get('bank_account')
+        register_date = Utilities.string_to_date(request.GET.get('register_date'))
+        services = request.GET.get('services')
 
-        nature_account_array = get_array_or_none(request.GET.get('nature_account_array'))
+        engine = ProviderSearchEngine(name, rfc, email, phone_number, accounting_account_number, bank_account,
+                                      register_date, services)
 
-        # engine = ProviderSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
-        #                               level, item)
-        #
-        # results = engine.search()
+        results = engine.search()
 
-        return HttpResponse(Utilities.query_set_to_dumps({}), 'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json', )
