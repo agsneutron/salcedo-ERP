@@ -1,3 +1,5 @@
+# coding=utf-8
+
 from django.http.response import HttpResponse
 from django.views.generic.list import ListView
 
@@ -17,8 +19,11 @@ class SearchPolicies(ListView):
 
 
     def get(self, request):
-        lower_fiscal_period = request.GET.get('lower_fiscal_period')
-        upper_fiscal_period = request.GET.get('upper_fiscal_period')
+        lower_fiscal_period_year = request.GET.get('lower_fiscal_period_year')
+        upper_fiscal_period_year = request.GET.get('upper_fiscal_period_year')
+
+        lower_fiscal_period_month = request.GET.get('lower_fiscal_period_month')
+        upper_fiscal_period_month = request.GET.get('upper_fiscal_period_month')
 
         type_policy_array = get_array_or_none(request.GET.get('type_policy_array'))
 
@@ -42,8 +47,10 @@ class SearchPolicies(ListView):
         reference = request.GET.get('reference')
 
         engine = PolicySearchEngine(
-            lower_fiscal_period=lower_fiscal_period,
-            upper_fiscal_period=upper_fiscal_period,
+            lower_fiscal_period_year=lower_fiscal_period_year,
+            upper_fiscal_period_year=upper_fiscal_period_year,
+            lower_fiscal_period_month=lower_fiscal_period_month,
+            upper_fiscal_period_month=upper_fiscal_period_month,
             type_policy_array=type_policy_array,
             lower_folio=lower_folio,
             upper_folio=upper_folio,
@@ -62,21 +69,22 @@ class SearchPolicies(ListView):
         result = engine.search_policies()
 
 
-        return HttpResponse(Utilities.json_to_dumps(result),'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json', )
 
 
 class SearchAccounts(ListView):
     def get(self, request):
         number = request.GET.get('number')
         name = request.GET.get('name')
-        subsidiary_account_array = get_array_or_none(request.GET.get('subsidiary_account'))
-        nature_account_array = get_array_or_none(request.GET.get('nature_account'))
-        grouping_code_array = get_array_or_none(request.GET.get('grouping_code'))
-        level_array = get_array_or_none(request.GET.get('level'))
-        item_array = get_array_or_none(request.GET.get('item'))
+        subsidiary_account_array = get_array_or_none(request.GET.get('subsidiary_account_array'))
+        nature_account_array = get_array_or_none(request.GET.get('nature_account_array'))
+        grouping_code_array = get_array_or_none(request.GET.get('grouping_code_array'))
+        level = request.GET.get('level')
+        item = request.GET.get('item')
 
+        engine = AccountSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
+                                     level, item)
 
-        engine = AccountSearchEngine(number,name,subsidiary_account_array,nature_account_array,grouping_code_array,level_array,item_array)
+        results = engine.search()
 
-
-        return HttpResponse(Utilities.json_to_dumps({}), 'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json', )
