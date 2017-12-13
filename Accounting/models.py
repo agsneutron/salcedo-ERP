@@ -1,5 +1,7 @@
-# -*- coding: utf-8 -*-
+# coding=utf-8
 from __future__ import unicode_literals
+
+from datetime import date
 
 from django.db import models
 from django.utils.timezone import now
@@ -101,14 +103,33 @@ class FiscalPeriod(models.Model):
     )
 
     accounting_year = models.IntegerField(verbose_name="Ejercicio Contable", null=False, )
-    account_period = models.IntegerField(verbose_name="Periodo Contable", null=False, )
+
+
+    MONTH_CHOICES = (
+        (1, 'Enero'),
+        (2, 'Febrero'),
+        (3, 'Marzo'),
+        (4, 'Abril'),
+        (5, 'Mayo'),
+        (6, 'Junio'),
+        (7, 'Julio'),
+        (8, 'Agosto'),
+        (9, 'Septiembre'),
+        (10, 'Octubre'),
+        (11, 'Noviembre'),
+        (12, 'Diciembre'),
+    )
+    account_period = models.IntegerField(verbose_name="Mes", choices=MONTH_CHOICES, default=1)
+
+
+
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPENED, verbose_name='Estatus')
 
     def __str__(self):
-        return str(self.accounting_year) + ": " + self.account_period
+        return str(self.accounting_year) + " " + self.get_account_period_display()
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.accounting_year) + ": " + self.account_period
+        return str(self.accounting_year) + " " + self.get_account_period_display()
 
     class Meta:
         verbose_name_plural = 'Año contable'
@@ -117,17 +138,8 @@ class FiscalPeriod(models.Model):
 
 # Model for accounting policy
 class TypePolicy(models.Model):
-    AVERAGE = 1
-    EXPENSES = 2
-    DAILY = 3
 
-    TYPE_CHOICES = (
-        (AVERAGE, 'Ingresos'),
-        (EXPENSES, 'Egresos'),
-        (DAILY, 'Diario'),
-    )
-
-    name = models.IntegerField(choices=TYPE_CHOICES, default=AVERAGE, verbose_name='Tipo de Póliza')
+    name = models.CharField(verbose_name='Tipo de Póliza', null=False, blank=False, max_length=256)
     balanced_accounts = models.BooleanField(verbose_name="Cuadrar póliza", default=False)
 
     def __str__(self):
@@ -148,16 +160,24 @@ class AccountingPolicy(models.Model):
     folio = models.IntegerField("Folio", blank=True, null=True)
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
+    reference = models.CharField(verbose_name="Referencia", max_length=1024, null=False, blank=False)
 
     def __str__(self):
-        return str(self.type_policy) + ": " + self.folio
+        return str(self.type_policy) + ": " + str(self.folio)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.type_policy) + ": " + self.folio
+        return str(self.type_policy) + ": " + str(self.folio)
 
     class Meta:
         verbose_name_plural = 'Pólizas Contables'
         verbose_name = 'Póliza contable'
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['registry_date'] = str(self.registry_date)
+        ans['fiscal_period_year'] = str(self.fiscal_period.accounting_year)
+        ans['fiscal_period_month'] = str(self.fiscal_period.account_period)
+        return ans
 
 
 # Model for accounting policy
@@ -221,7 +241,7 @@ class Provider(models.Model):
                              verbose_name="Municipio")
 
     last_edit_date = models.DateTimeField(auto_now_add=True)
-    register_date = models.DateTimeField(default=now)
+    register_date = models.DateField(default=date.today)
 
     accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
     bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
@@ -246,24 +266,27 @@ class Provider(models.Model):
 
     class Meta:
         verbose_name_plural = 'Proveedores'
+        verbose_name = 'Proveedores'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['name'] = str(self.nombre)
-        ans['street'] = str(self.calle)
-        ans['number'] = str(self.numero)
-        ans['outdoor_number'] = str(self.colonia)
-        ans['town'] = str(self.municipio.nombreMunicipio)
-        ans['state'] = str(self.estado.nombreEstado)
-        ans['country'] = str(self.pais.nombrePais)
-        ans['cp'] = str(self.cp)
-        ans['rfc'] = str(self.rfc)
+        ans['register_date'] = self.register_date.strftime('%m/%d/%Y')
+        ans['accounting_account'] = self.accounting_account.number
+        # ans['id'] = str(self.id)
+        # ans['name'] = str(self.name)
+        # ans['street'] = str(self.street)
+        # ans['number'] = str(self.number)
+        # ans['outdoor_number'] = str(self.colonia)
+        # ans['town'] = str(self.municipio.nombreMunicipio)
+        # ans['state'] = str(self.estado.nombreEstado)
+        # ans['country'] = str(self.pais.nombrePais)
+        # ans['cp'] = str(self.cp)
+        # ans['rfc'] = str(self.rfc)
 
         return ans
 
     def __str__(self):
-        return self.nombre
+        return self.name
 
     def save(self, *args, **kwargs):
         can_save = True

@@ -1,8 +1,11 @@
+# coding=utf-8
+
 from django.http.response import HttpResponse
 from django.views.generic.list import ListView
 
 from Accounting.search_engines.account_engine import AccountSearchEngine
 from Accounting.search_engines.provider_engine import ProviderSearchEngine
+from Accounting.search_engines.policy_engine import PolicySearchEngine
 from ERP.lib.utilities import Utilities
 from datetime import datetime
 
@@ -12,16 +15,61 @@ def get_array_or_none(the_string):
         return None
     return map(int, the_string.split(','))
 
-
-def string_to_date(str):
-    if str is None:
-        return None
-    return datetime.strptime(str, '%m/%d/%Y')
-
-
 class SearchPolicies(ListView):
+
+
     def get(self, request):
-        return HttpResponse(Utilities.json_to_dumps({}), 'application/json', )
+        lower_fiscal_period_year = request.GET.get('lower_fiscal_period_year')
+        upper_fiscal_period_year = request.GET.get('upper_fiscal_period_year')
+
+        lower_fiscal_period_month = request.GET.get('lower_fiscal_period_month')
+        upper_fiscal_period_month = request.GET.get('upper_fiscal_period_month')
+
+        type_policy_array = get_array_or_none(request.GET.get('type_policy_array'))
+
+        lower_folio = request.GET.get('lower_folio')
+        upper_folio = request.GET.get('upper_folio')
+
+        lower_registry_date = Utilities.string_to_date(request.GET.get('lower_registry_date'))
+        upper_registry_date = Utilities.string_to_date(request.GET.get('upper_registry_date'))
+
+        description = request.GET.get('description')
+
+        lower_account_number = request.GET.get('lower_account_number')
+        upper_account_number = request.GET.get('upper_account_number')
+
+        lower_debit = request.GET.get('lower_debit')
+        upper_debit = request.GET.get('upper_debit')
+
+        lower_credit = request.GET.get('lower_credit')
+        upper_credit = request.GET.get('upper_credit')
+
+        reference = request.GET.get('reference')
+
+        engine = PolicySearchEngine(
+            lower_fiscal_period_year=lower_fiscal_period_year,
+            upper_fiscal_period_year=upper_fiscal_period_year,
+            lower_fiscal_period_month=lower_fiscal_period_month,
+            upper_fiscal_period_month=upper_fiscal_period_month,
+            type_policy_array=type_policy_array,
+            lower_folio=lower_folio,
+            upper_folio=upper_folio,
+            lower_registry_date=lower_registry_date,
+            upper_registry_date=upper_registry_date,
+            description=description,
+            lower_account_number=lower_account_number,
+            upper_account_number=upper_account_number,
+            lower_debit=lower_debit,
+            upper_debit=upper_debit,
+            lower_credit=lower_credit,
+            upper_credit=upper_credit,
+            reference=reference
+        )
+
+        result = engine.search_policies()
+
+
+        return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )
 
 
 class SearchAccounts(ListView):
@@ -39,7 +87,7 @@ class SearchAccounts(ListView):
 
         results = engine.search()
 
-        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
 
 
 class SearchProviders(ListView):
@@ -49,13 +97,14 @@ class SearchProviders(ListView):
         email = request.GET.get('email')
         phone_number = request.GET.get('phone_number')
         accounting_account_number = request.GET.get('accounting_account_number')
-        register_date = request.GET.get('register_date')
+        bank_account = request.GET.get('bank_account')
+        register_date_lower = Utilities.string_to_date(request.GET.get('register_date_lower'))
+        register_date_upper = Utilities.string_to_date(request.GET.get('register_date_upper'))
+        services = request.GET.get('services')
 
-        nature_account_array = get_array_or_none(request.GET.get('nature_account_array'))
+        engine = ProviderSearchEngine(name, rfc, email, phone_number, accounting_account_number, bank_account,
+                                      register_date_lower, register_date_upper, services)
 
-        # engine = ProviderSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
-        #                               level, item)
-        #
-        # results = engine.search()
+        results = engine.search()
 
-        return HttpResponse(Utilities.query_set_to_dumps({}), 'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )

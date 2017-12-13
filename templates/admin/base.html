@@ -145,11 +145,7 @@
                         </li>
                         <li class="dropdown
 
-
-
-
-
-                                {% if request.resolver_match.view_name in "admin:HumanResources_tag_changelist,admin:HumanResources_test_changelist,admin:HumanResources_documenttype_changelist,admin:HumanResources_documenttype_changelist,admin:HumanResources_direction_changelist,admin:HumanResources_subdirection_changelist,admin:HumanResources_area_changelist,admin:HumanResources_department_changelist,admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
+                                {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle fadeIn"
                                data-toggle="dropdown"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -218,7 +214,25 @@
 
                                     </ul>
                                 </li>
+                                <li class="dropdown-submenu">
+                                    <a href="blog-sidebar.html" class="has_children">
+                                        <i class="zmdi zmdi-view-compact"></i> Contabilidad</a>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>
+                                            <a href="/admin/Accounting/provider/">Proveedores</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/Accounting/creditors/">Acreedores</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/Accounting/fiscalperiod/">Periodos Fiscales</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
+                                        </li>
 
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="dropdown

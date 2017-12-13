@@ -1,49 +1,61 @@
+from datetime import date
+
 from django.db.models import Q
 
-from Accounting.models import Account
+from Accounting.models import Provider
+from ERP.lib.utilities import Utilities
 
 
 class ProviderSearchEngine(object):
     """
-        Search engines for the Account model
+        Search engines for the Provider model
     """
 
-    def __init__(self, number, name, subsidiary_account_array, nature_account_array, grouping_code_array, level,
-                 item):
-        self.number = number
+    def __init__(self, name, rfc, email, phone_number, accounting_account_number, bank_account, register_date_lower,
+                 register_date_upper, services):
         self.name = name
-        self.subsidiary_account_array = subsidiary_account_array
-        self.nature_account_array = nature_account_array
-        self.grouping_code_array = grouping_code_array
-        self.level = level
-        self.item = item
+        self.rfc = rfc
+        self.email = email
+        self.phone_number = phone_number
+        self.accounting_account_number = accounting_account_number
+        self.bank_account = bank_account
+        self.register_date_lower = register_date_lower
+        self.register_date_upper = register_date_upper
+        self.services = services
 
     def search(self):
         """
-        Searches for accounts according to the parameters set in constructor
+        Searches for providers according to the parameters set in constructor
         :return: Queryset with the results
         """
         q = Q()
 
-        if self.number is not None:
-            q = q & Q(number=self.number)
-
         if self.name is not None:
-            q = q & Q(name=self.name)
+            q = q & Q(name__icontains=self.name)
 
-        if self.subsidiary_account_array is not None:
-            q = q & Q(subsidiary_account__in=self.subsidiary_account_array)
+        if self.rfc is not None:
+            q = q & Q(rfc__icontains=self.rfc)
 
-        if self.nature_account_array is not None:
-            q = q & Q(nature_account__in=self.nature_account_array)
+        if self.email is not None:
+            q = q & Q(email__icontains=self.email)
 
-        if self.grouping_code_array is not None:
-            q = q & Q(grouping_code__in=self.grouping_code_array)
+        if self.phone_number is not None:
+            q = q & Q(phone_number__icontains=self.phone_number)
 
-        if self.level is not None:
-            q = q & Q(level__icontains=str(self.level))
+        if self.accounting_account_number is not None:
+            q = q & Q(accounting_account__number__icontains=self.accounting_account_number)
 
-        if self.item is not None:
-            q = q & Q(item__icontains=str(self.item))
+        if self.bank_account is not None:
+            q = q & Q(bank_account__icontains=self.bank_account)
 
-        return Account.objects.filter(q)
+        if self.register_date_lower is not None:
+            # dt = date(self.register_date.year, self.register_date.month, self.register_date.day)
+            q = q & Q(register_date__gte=self.register_date_lower)
+
+        if self.register_date_upper is not None:
+            q = q & Q(register_date__lte=self.register_date_upper)
+
+        if self.services is not None:
+            q = q & Q(services__icontains=self.services)
+
+        return Provider.objects.filter(q)
