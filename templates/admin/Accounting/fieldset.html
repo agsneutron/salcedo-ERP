@@ -1,4 +1,10 @@
 {% load app_filters %}
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
 <style>
     .header {
@@ -16,6 +22,42 @@
   .datetimeshortcuts {
 
     top: -38px !important;
+}
+
+   .bootstrap-select {
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+    line-height: 1.42857;
+    border: 1px solid #e2e2e2;
+    width: 100% !important;
+    color: black;
+    }
+    .bootstrap-select>button {
+        color: black !important;
+    position: inherit !important;
+    padding: 0px 5px !important;
+    margin: 0 !important;
+    }
+    .bootstrap-select.btn-group .dropdown-toggle .caret {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -2px;
+    vertical-align: middle;
+}
+    .bootstrap-select.btn-group .dropdown-menu {
+    height: 200px !important;
+}
+    .bootstrap-select.btn-group .dropdown-menu li a {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* word-break: keep-all; */
+    word-wrap: break-word;
+    white-space: normal;
 }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
@@ -78,6 +120,19 @@
         $('select').addClass('form-control');
 
 
+    });
+
+</script>
+<script>
+    var d = document.getElementById("id_grouping_code");
+d.setAttribute("data-live-search", "true");
+d.setAttribute("data-width", "auto");
+
+
+    $("#id_grouping_code").addClass("selectpicker");
+    $('#id_grouping_code').selectpicker({
+        style: 'btn-info',
+        size: 4
     });
 
 </script>
