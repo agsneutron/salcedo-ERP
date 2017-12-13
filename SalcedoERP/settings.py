@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'Assistance',
     'Accounting',
     'multiselectfield',
-    'tinymce'
+    'tinymce',
 ]
 
 MIDDLEWARE = [
