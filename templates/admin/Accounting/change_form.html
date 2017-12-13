@@ -61,11 +61,12 @@
                     </p>
                     {{ adminform.form.non_field_errors }}
                 {% endif %}
+             <div class="container">
+                {% include "admin/Accounting/accounting-home.html" %}
+                    <div class="col-xs-9">
+                        {% block field_sets %}
 
-                {% block field_sets %}
-                    <div class="container">
-                    {% include "admin/Accounting/accounting-home.html" %}
-                        <div class="col-xs-9">
+
                             {% for fieldset in adminform %}
                                 {% include "admin/Accounting/fieldset.html" %}
                             {% endfor %}
@@ -107,22 +108,23 @@
                                     </table>
                                 </div>
                               {% endif %}
-
-
                             {% endblock %}
-                        </div>
-                    </div>
                 {% endblock %}
+
 
                 {% block after_field_sets %}{% endblock %}
 
                 {% block inline_field_sets %}
+
                     {% for inline_admin_formset in inline_admin_formsets %}
-                        {% include inline_admin_formset.opts.template %}
+                        {% include "admin/Accounting/tabular.html" %}
+                        {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
                     {% endfor %}
+
                 {% endblock %}
 
-
+                </div>
+             </div>
 
                 {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 
