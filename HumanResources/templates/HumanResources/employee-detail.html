@@ -10,19 +10,23 @@
         p {
             margin: 0;
         }
+
         hr {
             display: block;
             border-top: 1px solid #00a09b;
             margin: 10px 0;
         }
+
         .card .card-block, .card.card-block {
             padding: 20px;
             padding: 0rem;
         }
+
         .card.card-info {
             border-bottom: solid 0px #00bcd4;
             border-radius: 0px;
         }
+
         .card {
             box-shadow: none;
             box-shadow: 0 0px 0px 0 rgba(0, 0, 0, .14), 0 0px 0px 0px rgba(0, 0, 0, .2), 0 0px 0px 0 rgba(0, 0, 0, .12);
@@ -31,19 +35,23 @@
             margin-bottom: 20px;
             margin-bottom: 2rem;
         }
+
         .truncate {
             width: 420px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
         .ms-hero-bg-info:after {
             background-color: #204280 !important;
         }
+
         .list-group .list-group-item, .list-group a.list-group-item {
             font-size: 13px !important;
             line-height: 26px;
         }
+
         .nav.nav-tabs li a {
             font-weight: 400;
             padding: 1.7rem 7px;
@@ -51,10 +59,12 @@
             text-align: center;
             font-size: 12px;
         }
+
         .list-group {
             border-left: solid 0px #eee;
             border-right: solid 0px #eee;
         }
+
         .list-group .list-group-item, .list-group a.list-group-item {
             border: 0;
             padding: 10px 15px;
@@ -63,23 +73,21 @@
             border-bottom: solid 0px #eee;
             vertical-align: middle;
         }
+
         .checkbox label .checkbox-material {
             margin-right: 10px;
             margin-right: 0;
         }
+
         .list-group .list-group-item:first-child, .list-group a.list-group-item:first-child {
             border-top: solid 0px #eee;
         }
     </style>
     <script>
+
         $( document ).ready(function() {
             //alert(window.location.hash);
             $('.nav-tabs a[href="'+ window.location.hash +'"]').tab('show')
-
-            $('#EED').click(function () {
-                $('.nav-tabs a[href="#employeeED"]').tab('show')
-
-            })
         });
     </script>
 {% endblock %}
@@ -563,17 +571,8 @@
                 <div class="ms-hero-bg-info">
                     <h3 class="color-white index-1 text-center no-m pt-2">{{ employee.name }} {{ employee.first_last_name }}</h3>
                     <div class="color-medium index-1 text-center np-m">ID: {{ employee.id }}</div>
-
-                        {% if employee.photo %}
-                            <img alt="" src="/media/{{ employee.photo }}" alt="" class="img-avatar-circle">
-                        {% else %}
-                            <img alt="" src="/media/assets/avatar.jpg" alt="" class="img-avatar-circle">
-                        {% endif %}
-
-                    {% comment %}<img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png" alt="" class="img-avatar-circle">{% endcomment %}
-
-
-                    </div>
+                    <img src="/media/documentos_del_usuario/7/profile_Screen_Shot_2017-09-26_at_16.56.30.png" alt=""
+                         class="img-avatar-circle"></div>
                 <div class="card-block pt-4 text-center">
                     <h3 class="color-info">Datos del Empleado</h3>
                     <ul class="list-group text-left">
@@ -584,7 +583,8 @@
                         <li class="list-group-item"><strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                     </ul>
                     <div>
-                        <a href="#employeeED" id="EED" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+                        <a href="/admin/HumanResources/employeeearningsdeductions/?employee={{ employee.id }}"
+                           class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
                     </div>
 
                 </div>
@@ -593,7 +593,7 @@
             <div class="card-block text-center">
                 <h3 class="color-info">Etiquetas</h3>
                 {% for record in employee_has_tag %}
-                <span class="label label-default">{{ record.tag }}</span>
+                    <span class="label label-default">{{ record.tag }}</span>
                 {% endfor %}
 
             </div>
@@ -620,7 +620,8 @@
                             Emergencia</a>
                     </li>
                     <li role="presentation">
-                        <a href="#familiares" aria-controls="familiares" role="tab" data-toggle="tab">Familiares</a>
+                        <a href="#familiares" aria-controls="familiares" role="tab" data-toggle="tab">Contactos<br>
+                            Familiares</a>
                     </li>
                     <li role="presentation">
                         <a href="#referencias" aria-controls="referencias" role="tab"
@@ -630,7 +631,7 @@
                         <a href="#pruebas" aria-controls="pruebas" role="tab" data-toggle="tab">Pruebas</a>
                     </li>
                     <li role="presentation">
-                        <a href="#doc" aria-controls="doc" role="tab" data-toggle="tab">Documentación</a>
+                        <a href="#doc" aria-controls="doc" role="tab" data-toggle="tab">Documentacion</a>
                     </li>
                     <li role="presentation">
                         <a href="#checador" aria-controls="checador" role="tab" data-toggle="tab">Checador</a>
@@ -640,9 +641,6 @@
                     </li>
                     <li role="presentation">
                         <a href="#datosfinancieros" aria-controls="datosfinancieros" role="tab" data-toggle="tab">Datos Financieros</a>
-                    </li>
-                    <li role="presentation">
-                        <a href="#employeeED" aria-controls="employeeED" role="tab" data-toggle="tab"></a>
                     </li>
 
                 </ul>
@@ -874,16 +872,6 @@
                                         <li class="list-group-item"><strong>Correo
                                             Electrónico: </strong> {{ record.email }}
                                         </li>
-
-                                        <li class="list-group-item"><strong>Calle: </strong> {{ record.street }} </li>
-                                        <li class="list-group-item"><strong>Colonia: </strong> {{ record.colony }} </li>
-                                        <li class="list-group-item"><strong>No. Exterior: </strong> {{ record.outdoor_number }} </li>
-                                        <li class="list-group-item"><strong>No. Interior: </strong> {{ record.indoor_number }} </li>
-                                        <li class="list-group-item"><strong>CP: </strong> {{ record.zip_code }} </li>
-                                        <li class="list-group-item"><strong>País: </strong> {{ record.country }} </li>
-                                        <li class="list-group-item"><strong>Estado: </strong> {{ record.state }} </li>
-                                        <li class="list-group-item"><strong>Municipio: </strong> {{ record.town }} </li>
-
                                     </ul>
                                 {% endfor %}
                             </div>
@@ -906,9 +894,6 @@
                                     <li class="list-group-item">
                                         <strong>Parentesco: </strong> {{ record.relationship }}
                                     </li>
-                                    <li class="list-group-item"><strong>Profesión: </strong> {{ record.career }} </li>
-                                    <li class="list-group-item"><strong>Edad: </strong> {{ record.age }} </li>
-                                    <li class="list-group-item"><strong>Teléfono: </strong> {{ record.phone_number }} </li>
                                 </ul>
                             {% endfor %}
                         </div>
@@ -972,7 +957,7 @@
                     <div role="tabpanel" class="tab-pane" id="doc">
                         <div class="card card-info">
                             <div class="">
-                                <h3 class="color-info card-title">Documentación Probatoria</h3>
+                                <h3 class="color-info card-title">Documentación</h3>
                             </div>
                             <div class="card-block text-left">
                                 <div class="table-responsive">
@@ -994,10 +979,8 @@
                                             </tr>
                                             </tbody>
                                         </table>
-                                     {% endfor %}
-                                        </div>
-
-
+                                    {% endfor %}
+                                </div>
 
 
                             </div>
@@ -1062,45 +1045,45 @@
                                             <li class="list-group-item"><strong>Contrato: </strong> {{ epd.contract }}</li>
                                             <li class="list-group-item"><strong>Observaciones: </strong> {{ epd.observations }}</li>
                                             <li class="list-group-item"><strong>Días Laborales: </strong> <br>
-                                                 <label>
+                                                 <label class="text-center">
                                                     <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.sunday %}primary{% else %}default{% endif %} mb-1">
                                                         <i class="zmdi zmdi-{% if epd.sunday == True %}check{% else %}close{% endif %}"></i>
                                                     </a>
                                                     <br>Domingo
                                                 </label>
-                                                <label class="">
+                                                <label class="text-center">
                                                     <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.monday %}primary{% else %}default{% endif %} mb-1">
                                                         <i class="zmdi zmdi-{% if  epd.monday == True %}check{% else %}close{% endif %}"></i>
                                                     </a>
                                                     <br>Lunes
                                                 </label>
-                                                <label>
+                                                <label class="text-center">
                                                     <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.tuesday %}primary{% else %}default{% endif %} mb-1">
                                                         <i class="zmdi zmdi-{% if  epd.tuesday %}check{% else %}close{% endif %}"></i>
                                                     </a><br>Martes
                                                 </label>
-                                                <label>
+                                                <label class="text-center">
                                                     <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.wednesday %}primary{% else %}default{% endif %} mb-1">
                                                         <i class="zmdi zmdi-{% if  epd.wednesday %}check{% else %}close{% endif %}"></i>
                                                     </a><br>Miércoles
                                                 </label>
-                                                <label>
+                                                <label class="text-center">
                                                     <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.thursday %}primary{% else %}default{% endif %} mb-1">
                                                         <i class="zmdi zmdi-{% if  epd.thursday %}check{% else %}close{% endif %}"></i>
                                                     </a><br>Jueves
                                                 </label>
-                                                <label>
+                                                <label class="text-center">
                                                     <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.friday %}primary{% else %}default{% endif %} mb-1">
                                                         <i class="zmdi zmdi-{% if  epd.friday %}check{% else %}close{% endif %}"></i>
                                                     </a><br>Viernes
                                                 </label>
-                                                <label>
+                                                <label class="text-center">
                                                     <a href="javascript:void(0)"
                                                        class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  epd.saturday %}primary{% else %}default{% endif %} mb-1">
                                                         <i class="zmdi zmdi-{% if  epd.saturday %}check{% else %}close{% endif %}"></i>
@@ -1120,62 +1103,21 @@
                                     <h3 class="color-info card-title">Datos Financieros</h3>
                                 </div>
                                 <div class="card-block text-left">
-                                    {% for efd in employee_financial_data %}
+                                    {% for test in employee_financial_data %}
                                         <ul class="list-group text-left">
-                                            <li class="list-group-item"><strong>Forma de Pago: </strong> {{ efd.payment_method }} </li>
-                                            <li class="list-group-item"><strong>Número de Cuenta: </strong> {{ efd.account_number }} </li>
-                                            <li class="list-group-item"><strong>CLABE: </strong> {{ efd.CLABE }}</li>
-                                            <li class="list-group-item"><strong>Banco: </strong> {{ efd.bank }}</li>
-                                            <li class="list-group-item"><strong>Salario Mensual: </strong> {{ efd.monthly_salary }}</li>
-                                            <li class="list-group-item"><strong>Salario Diario: </strong> {{ efd.daily_salary }}</li>
-                                            <li class="list-group-item"><strong>Salario Diario Acumulado: </strong> {{ efd.aggregate_daily_salary }}</li>
-                                        </ul>
-                                    {% endfor %}
-                                </div>
-                                <div class="">
-                                    <h3 class="color-info card-title">Datos de Crédito Infonavit</h3>
-                                </div>
-                                <div class="card-block text-left">
-                                    {% for efd in employee_financial_data %}
-                                        <ul class="list-group text-left">
-                                            <li class="list-group-item"><strong>Número de Crédito: </strong> {{ efd.infonavitdata.infonavit_credit_number }}</li>
-                                            <li class="list-group-item"><strong>Tipo de Descuento: </strong> {{ efd.infonavitdata.discount_type }}</li>
-                                            <li class="list-group-item"><strong>Monto de Descuento: </strong> {{ efd.infonavitdata.discount_amount }}</li>
-                                            <li class="list-group-item"><strong>Fecha de Inicio: </strong> {{ efd.infonavitdata.start_date }}</li>
-                                            <li class="list-group-item"><strong>Duración de Crédito: </strong> {{ efd.infonavitdata.credit_term }}</li>
-                                            <li class="list-group-item"><strong>Observaciones: </strong> {{ efd.infonavitdata.comments }}</li>
-
+                                            <li class="list-group-item"><strong>Nombre de la
+                                                Prueba: </strong> {{ test.test.name }} </li>
+                                            <li class="list-group-item"><strong>Fecha de
+                                                Aplicación: </strong> {{ test.application_date }} </li>
+                                            <li class="list-group-item"><strong>Resultado: </strong> {{ test.result }}
+                                            </li>
+                                            <li class="list-group-item">
+                                                <strong>Comentarios: </strong> {{ test.comments }}
+                                            </li>
                                         </ul>
                                     {% endfor %}
                                 </div>
                             </div>
-                    </div>
-                    <div role="tabpanel" class="tab-pane" id="employeeED">
-                        <div class="card card-info">
-                            <div class="">
-                                <h3 class="color-info card-title">Percepciones y Deducciones</h3>
-                            </div>
-                            <div class="card-block text-left">
-                                {% for pd in employee_ed %}
-                                     <table class="table table-bordered">
-                                            <thead>
-                                            <tr>
-                                                <th>Tipo</th>
-                                                <th>Concepto</th>
-                                                <th>Monto</th>
-                                            </tr>
-                                            </thead>
-                                            <tbody>
-                                            <tr>
-                                                <td>{{ pd.concept.type }}</td>
-                                                <td>{{ pd.concept}}</td>
-                                                <td>{{ pd.ammount }}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
-                                {% endfor %}
-                            </div>
-                        </div>
                     </div>
 
                 </div>
@@ -1185,21 +1127,27 @@
     <script>
         var checkEntrada = document.getElementById('checaEntrada');
         var checkSalida = document.getElementById('checaSalida');
+
         if ($(checkEntrada).hasClass("True")) {
             checkEntrada.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1"><i class="zmdi zmdi-check"></i></button> <br>Checa Entrada';
         } else {
             checkEntrada.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
         }
+
         if ($(checkSalida).hasClass("True")) {
             checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1"><i class="zmdi zmdi-check"></i></button> <br>Checa Entrada';
         } else {
             checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
         }
+
+$(document).ready(function() {
+    if (location.hash !== '') $('a[href="' + location.hash + '"]').tab('show');
+    return $('a[data-toggle="tab"]').on('shown', function(e) {
+      return location.hash = $(e.target).attr('href').substr(1);
+    });
+});
     </script>
 
 
 {% endblock %}
-
-
-
 
