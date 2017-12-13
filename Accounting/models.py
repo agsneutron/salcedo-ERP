@@ -227,6 +227,7 @@ class Provider(models.Model):
 
     class Meta:
         verbose_name_plural = 'Proveedores'
+        verbose_name = 'Proveedores'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)

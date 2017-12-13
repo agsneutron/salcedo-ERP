@@ -30,3 +30,10 @@ class ProviderForm(forms.ModelForm):
     class Meta:
         model = Provider
         fields = '__all__'
+
+# Form to include the fields of the Creditors Form.
+class CreditorsForm(forms.ModelForm):
+    class Meta:
+        model = Creditors
+        fields = '__all__'
+
