@@ -21,11 +21,11 @@ class SearchAccounts(ListView):
     def get(self, request):
         number = request.GET.get('number')
         name = request.GET.get('name')
-        subsidiary_account = request.GET.get('subsidiary_account')
-        nature_account = request.GET.get('nature_account')
-        grouping_code = request.GET.get('grouping_code')
-        level = request.GET.get('level')
-        item = request.GET.get('item')
+        subsidiary_account = get_array_or_none(request.GET.get('subsidiary_account'))
+        nature_account = get_array_or_none(request.GET.get('nature_account'))
+        grouping_code = get_array_or_none(request.GET.get('grouping_code'))
+        level = get_array_or_none(request.GET.get('level'))
+        item = get_array_or_none(request.GET.get('item'))
 
 
         return HttpResponse(Utilities.json_to_dumps({}), 'application/json', )
