@@ -30,8 +30,8 @@ class SearchPolicies(ListView):
         lower_folio = request.GET.get('lower_folio')
         upper_folio = request.GET.get('upper_folio')
 
-        lower_registry_date = request.GET.get('lower_registry_date')
-        upper_registry_date = request.GET.get('upper_registry_date')
+        lower_registry_date = Utilities.string_to_date(request.GET.get('lower_registry_date'))
+        upper_registry_date = Utilities.string_to_date(request.GET.get('upper_registry_date'))
 
         description = request.GET.get('description')
 
@@ -87,7 +87,7 @@ class SearchAccounts(ListView):
 
         results = engine.search()
 
-        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
 
 
 class SearchProviders(ListView):
@@ -107,4 +107,4 @@ class SearchProviders(ListView):
 
         results = engine.search()
 
-        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )

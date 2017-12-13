@@ -84,6 +84,7 @@ class PolicySearchEngine():
         if self.lower_registry_date is not None:
             query &= Q(registry_date__gte=self.lower_registry_date)
 
+
         if self.upper_registry_date is not None:
             query &= Q(registry_date__lte=self.upper_registry_date)
 
