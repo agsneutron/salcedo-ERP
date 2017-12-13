@@ -14,23 +14,22 @@ def get_array_or_none(the_string):
 
 class SearchPolicies(ListView):
     def get(self, request):
-
-
-        return HttpResponse(Utilities.json_to_dumps({}),'application/json', )
+        return HttpResponse(Utilities.json_to_dumps({}), 'application/json', )
 
 
 class SearchAccounts(ListView):
     def get(self, request):
         number = request.GET.get('number')
         name = request.GET.get('name')
-        subsidiary_account_array = get_array_or_none(request.GET.get('subsidiary_account'))
-        nature_account_array = get_array_or_none(request.GET.get('nature_account'))
-        grouping_code_array = get_array_or_none(request.GET.get('grouping_code'))
-        level_array = get_array_or_none(request.GET.get('level'))
-        item_array = get_array_or_none(request.GET.get('item'))
+        subsidiary_account_array = get_array_or_none(request.GET.get('subsidiary_account_array'))
+        nature_account_array = get_array_or_none(request.GET.get('nature_account_array'))
+        grouping_code_array = get_array_or_none(request.GET.get('grouping_code_array'))
+        level = request.GET.get('level')
+        item = request.GET.get('item')
 
+        engine = AccountSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
+                                     level, item)
 
-        engine = AccountSearchEngine(number,name,subsidiary_account_array,nature_account_array,grouping_code_array,level_array,item_array)
+        results = engine.search()
 
-
-        return HttpResponse(Utilities.json_to_dumps({}), 'application/json', )
+        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json', )
