@@ -47,38 +47,11 @@ class ProviderSearchEngine(object):
         if self.bank_account is not None:
             q = q & Q(bank_account__icontains=self.bank_account)
 
-
         if self.register_date is not None:
-
-
-            obj = Provider.objects.all()[0]
-
-            dt = date(self.register_date.year,self.register_date.month,self.register_date.day)
-
-
+            dt = date(self.register_date.year, self.register_date.month, self.register_date.day)
             q = q & Q(register_date=dt)
-            # print q
 
-            # q = q & Q(register_date__year=self.register_date.year)
-            # q = q & Q(register_date__month=self.register_date.month)
-            # q = q & Q(register_date__day=self.register_date.day)
-
-        # if self.name is not None:
-        #     q = q & Q(name=self.name)
-        #
-        # if self.subsidiary_account_array is not None:
-        #     q = q & Q(subsidiary_account__in=self.subsidiary_account_array)
-        #
-        # if self.nature_account_array is not None:
-        #     q = q & Q(nature_account__in=self.nature_account_array)
-        #
-        # if self.grouping_code_array is not None:
-        #     q = q & Q(grouping_code__in=self.grouping_code_array)
-        #
-        # if self.level is not None:
-        #     q = q & Q(level__icontains=str(self.level))
-        #
-        # if self.item is not None:
-        #     q = q & Q(item__icontains=str(self.item))
+        if self.services is not None:
+            q = q & Q(services__icontains=self.services)
 
         return Provider.objects.filter(q)
