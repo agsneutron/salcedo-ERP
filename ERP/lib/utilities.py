@@ -3,7 +3,7 @@ import json
 import copy
 
 from decimal import Decimal
-from datetime import date
+from datetime import date, datetime
 from django.utils.safestring import mark_safe
 from HumanResources.models import ISRTable
 
@@ -89,4 +89,10 @@ class Utilities():
             return '${:,.2f}'.format(number)
         else:
             return '-${:,.2f}'.format(-number)
+
+    @staticmethod
+    def string_to_date(str):
+        if str is None:
+            return None
+        return datetime.strptime(str, '%m/%d/%Y')
 
