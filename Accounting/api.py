@@ -98,11 +98,12 @@ class SearchProviders(ListView):
         phone_number = request.GET.get('phone_number')
         accounting_account_number = request.GET.get('accounting_account_number')
         bank_account = request.GET.get('bank_account')
-        register_date = Utilities.string_to_date(request.GET.get('register_date'))
+        register_date_lower = Utilities.string_to_date(request.GET.get('register_date_lower'))
+        register_date_upper = Utilities.string_to_date(request.GET.get('register_date_upper'))
         services = request.GET.get('services')
 
         engine = ProviderSearchEngine(name, rfc, email, phone_number, accounting_account_number, bank_account,
-                                      register_date, services)
+                                      register_date_lower, register_date_upper, services)
 
         results = engine.search()
 
