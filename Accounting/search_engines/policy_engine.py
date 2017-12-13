@@ -79,7 +79,7 @@ class PolicySearchEngine():
             query &= Q(folio__gte=self.lower_folio)
 
         if self.upper_folio is not None:
-            query &= Q(folio__lte=self.lower_folio)
+            query &= Q(folio__lte=self.upper_folio)
 
         if self.lower_registry_date is not None:
             query &= Q(registry_date__gte=self.lower_registry_date)
@@ -138,7 +138,7 @@ class PolicySearchEngine():
         if self.lower_credit is not None:
             policy_detail_array = []
             accounting_policy_detail_set = AccountingPolicyDetail.objects \
-                .filter(Q(credit__gte=self.lower_debit)) \
+                .filter(Q(credit__gte=self.lower_credit)) \
                 .values('accounting_policy__id').annotate(Count('accounting_policy__id'))
 
             for record in accounting_policy_detail_set:
@@ -149,7 +149,7 @@ class PolicySearchEngine():
         if self.upper_credit is not None:
             policy_detail_array = []
             accounting_policy_detail_set = AccountingPolicyDetail.objects \
-                .filter(Q(debit__lte=self.upper_credit)) \
+                .filter(Q(credit__lte=self.upper_credit)) \
                 .values('accounting_policy__id').annotate(Count('accounting_policy__id'))
 
             for record in accounting_policy_detail_set:
@@ -159,6 +159,7 @@ class PolicySearchEngine():
 
         if self.reference is not None:
             query &= Q(reference__icontains=self.reference)
+
 
 
 

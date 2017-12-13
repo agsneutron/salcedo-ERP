@@ -175,6 +175,8 @@ class AccountingPolicy(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['registry_date'] = str(self.registry_date)
+        ans['fiscal_period_year'] = str(self.fiscal_period.accounting_year)
+        ans['fiscal_period_month'] = str(self.fiscal_period.account_period)
         return ans
 
 
