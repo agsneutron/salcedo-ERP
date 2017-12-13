@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscador de Cuentas</title>
+</head>
+
+<script type="text/javascript">
+        var $j = jQuery.noConflict();
+        $j(function () {
+            $j("#msName").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Nombre',
+                selectedText: '# Nombre'
+            });
+
+            $j("#msSubsidiaryAccountArray").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Subcuenta de',
+                selectedText: '# Subcuenta de'
+            });
+            $j("#msNatureAccountArray").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Naturaleza de Cuenta',
+                selectedText: '# Naturaleza de Cuenta'
+            });
+            $j("#msGroupingCodeArray").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Código Agrupador SAT',
+                selectedText: '# Código Agrupador SAT'
+            });
+            $j('.ui-widget-content').css('width', 'auto');
+        });
+    </script>
+
+<body>
+
+{% comment %}http://127.0.0.1:8000/accounting/search_accounts?
+name=Cuenta%202
+&number=2
+&subsidiary_account_array=1
+&nature_account_array=2
+&grouping_code_array=2
+&level=2
+&item=2{% endcomment %}
+
+    <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msName">
+        {% for obj in account %}
+            <option value={{ obj.name }}>{{ obj.name }}</option>
+        {% endfor %}
+    </select>
+    <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msSubsidiaryAccountArray">
+        {% for obj in alineacionPed %}
+            <option value={{ obj.subsidiary_account }}>{{ obj.subsidiary_account }}</option>
+        {% endfor %}
+    </select>
+    <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msNatureAccountArray">
+        {% for obj in alineacionPed %}
+            <option value={{ obj.nature_account }}>{{ obj.nature_account }}</option>
+        {% endfor %}
+    </select>
+    <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msGroupingCodeArray">
+        {% for obj in alineacionPed %}
+            <option value={{ obj.grouping_code }}>{{ obj.grouping_code }}</option>
+        {% endfor %}
+    </select>
+
+    Nivel:<input type="text" class="form-control" id="level">
+    Rubro:<input type="text" class="form-control" id="item">
+    Número:<input type="text" class="form-control" id="number">
+</body>
+</html>
