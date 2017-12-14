@@ -145,6 +145,7 @@
                         </li>
                         <li class="dropdown
 
+
                                 {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle fadeIn"
                                data-toggle="dropdown"
@@ -241,6 +242,7 @@
 
 
 
+
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown"
@@ -279,6 +281,7 @@
 
                     </li>{% endcomment %}
                         <li class="dropdown
+
 
 
 
@@ -365,6 +368,7 @@
 
 
 
+
                                 {% if request.resolver_match.view_name in "admin:HumanResources_employee_add,admin:HumanResources_payrollgroup_add,admin:HumanResources_employee_changelist,admin:HumanResources_payrollperiod_add,admin:HumanResources_earningsdeductions_add,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_employeeloan_add,admin:HumanResources_employeedropout_add,admin:HumanResources_employeehastag_changelist,admin:HumanResources_testapplication_changelist,admin:employee-detail,admin:HumanResources_jobprofile_add,admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
 
                             {% if perms.auth.change_user or  perms.HumanResources.change_payrollperiod or perms.HumanResources.change_employee %}
@@ -420,7 +424,7 @@
                                 {% if perms.HumanResources.change_payrollperiod %}
 
                                     <li class="dropdown-submenu">
-                                        <a href="" >
+                                        <a href="">
                                             <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
 
                                         <ul class="dropdown-menu dropdown-menu-left">
@@ -431,15 +435,16 @@
                                                 <a href="/admin/HumanResources/payrollperiod/add/">Generar Periodo</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/earningsdeductions/add/">Percepciones y Deducciones</a>
+                                                <a href="/admin/HumanResources/earningsdeductions/add/">Percepciones y
+                                                    Deducciones</a>
                                             </li>
-                                             <li>
+                                            <li>
                                                 <a href="/admin/HumanResources/uploadedemployeeassistancehistory/add/">Asistencias</a>
                                             </li>
-                                             <li>
+                                            <li>
                                                 <a href="/admin/HumanResources/employeeloan/add/">Préstamos</a>
                                             </li>
-                                             <li>
+                                            <li>
                                                 <a href="/admin/HumanResources/employeedropout/add/">Bajas</a>
                                             </li>
                                             {% comment %}<li>
@@ -456,36 +461,39 @@
 
                                         <ul class="dropdown-menu dropdown-menu-left">
                                             <li>
-                                                <a href="/admin/HumanResources/employeehastag/">Etiquetas de Empleados</a>
+                                                <a href="/admin/HumanResources/employeehastag/">Etiquetas de
+                                                    Empleados</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/testapplication/">Aplicaciones de Prueba</a>
+                                                <a href="/admin/HumanResources/testapplication/">Aplicaciones de
+                                                    Prueba</a>
                                             </li>
                                         </ul>
                                     </li>
 
                                 {% endif %}
 
-                                 {% if perms.HumanResources.change_payrollperiod %}
+                                {% if perms.HumanResources.change_payrollperiod %}
 
                                     <li class="">
-                                        <a href="/admin/HumanResources/jobinstance/" >
+                                        <a href="/admin/HumanResources/jobinstance/">
                                             <i class="zmdi zmdi-view-compact"></i>Organigrama</a>
-                                     </li>
-                                 {% endif %}
+                                    </li>
+                                {% endif %}
 
                                 {% if perms.HumanResources.change_payrollperiod %}
 
                                     <li class="dropdown-menu">
-                                        <a href="/admin/HumanResources/jobprofile/" >
+                                        <a href="/admin/HumanResources/jobprofile/">
                                             <i class="zmdi zmdi-view-compact"></i>Perfil de Puesto</a>
-                                     </li>
-                                 {% endif %}
+                                    </li>
+                                {% endif %}
                             </ul>
 
                         </li>
 
                         <li id="op_contabilidad" class="dropdown
+
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/admin/Accounting/accountingpolicy/" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -497,6 +505,7 @@
                             </a>
                         </li>
                         <li id="op_reportes" class="dropdown
+
 
 
 
@@ -731,48 +740,50 @@
 <script>
 
     $(document).ready(function () {
-       $('table.table_s').DataTable({
+        if (document.getElementsByClassName("table_s")) {
+            $('table.table_s').DataTable({
 
-            columnDefs: [
-                {
-                    className: 'mdl-data-table__cell--non-numeric'
-                }
-            ],
+                columnDefs: [
+                    {
+                        className: 'mdl-data-table__cell--non-numeric'
+                    }
+                ],
 
-            responsive: true,
-            "bInfo": false,
-            "pageLength": 10,
-            "bLengthChange": false, //used to hide the property
-            "language": {
-                "sProcessing": "Procesando...",
-                "sLengthMenu": "Mostrar _MENU_ registros",
-                "sZeroRecords": "No se encontraron resultados",
-                "sEmptyTable": "NingÃºn dato disponible en esta tabla",
-                "sInfo": "",
-                "sInfoEmpty": "",
-                "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
-                "sInfoPostFix": "",
-                "sSearch": "",
-                "sUrl": "",
-                "sInfoThousands": ",",
-                "sLoadingRecords": "Cargando...",
+                responsive: true,
+                "bInfo": false,
+                "pageLength": 10,
+                "bLengthChange": false, //used to hide the property
+                "language": {
+                    "sProcessing": "Procesando...",
+                    "sLengthMenu": "Mostrar _MENU_ registros",
+                    "sZeroRecords": "No se encontraron resultados",
+                    "sEmptyTable": "NingÃºn dato disponible en esta tabla",
+                    "sInfo": "",
+                    "sInfoEmpty": "",
+                    "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix": "",
+                    "sSearch": "",
+                    "sUrl": "",
+                    "sInfoThousands": ",",
+                    "sLoadingRecords": "Cargando...",
 
-                "sEmptyTable": "No hay contactos registrados para el Cliente",
+                    "sEmptyTable": "No hay contactos registrados para el Cliente",
 
-                "oPaginate": {
-                    "sFirst": "Primero",
-                    "sLast": "Ãšltimo",
-                    "sNext": "»",
-                    "sPrevious": "«"
-                }
-
-            },
-
-        });
-        document.getElementById('DataTables_Table_1_wrapper').style.width = "100%";
-        document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast": "Ãšltimo",
+                        "sNext": "»",
+                        "sPrevious": "«"
+                    }
+                },
+            });
+            document.getElementById('DataTables_Table_1_wrapper').style.width = "100%";
+            document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
+        }
     });
-       $('.vDateField').addClass('form-control');
+
+
+    $('.vDateField').addClass('form-control');
 
 </script>
 

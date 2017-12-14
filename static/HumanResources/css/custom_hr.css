@@ -119,3 +119,6 @@
     /* left: calc(50% - 30px); */
     top: -33px !important;
 }
+       .original>p{
+        display: none;
+    }
