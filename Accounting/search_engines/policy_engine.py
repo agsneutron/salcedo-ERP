@@ -10,23 +10,25 @@ class PolicySearchEngine():
 
 
     def __init__(self,
-                 lower_fiscal_period_year,
-                 upper_fiscal_period_year,
-                 lower_fiscal_period_month,
-                 upper_fiscal_period_month,
-                 type_policy_array,
-                 lower_folio,
-                 upper_folio,
-                 lower_registry_date,
-                 upper_registry_date,
-                 description,
-                 lower_account_number,
-                 upper_account_number,
-                 lower_debit,
-                 upper_debit,
-                 lower_credit,
-                 upper_credit,
-                 reference):
+                 lower_fiscal_period_year=None,
+                 upper_fiscal_period_year=None,
+                 lower_fiscal_period_month=None,
+                 upper_fiscal_period_month=None,
+                 type_policy_array=None,
+                 lower_folio=None,
+                 upper_folio=None,
+                 lower_registry_date=None,
+                 upper_registry_date=None,
+                 description=None,
+                 lower_account_number=None,
+                 upper_account_number=None,
+                 lower_debit=None,
+                 upper_debit=None,
+                 lower_credit=None,
+                 upper_credit=None,
+                 reference=None,
+                 only_with_transactions=None
+                 ):
 
         self.lower_fiscal_period_year = lower_fiscal_period_year
         self.upper_fiscal_period_year = upper_fiscal_period_year
@@ -54,6 +56,8 @@ class PolicySearchEngine():
         self.upper_credit = upper_credit
 
         self.reference = reference
+
+        self.only_with_transactions = only_with_transactions
 
 
     def search_policies(self):
@@ -163,5 +167,24 @@ class PolicySearchEngine():
 
 
 
+        results = AccountingPolicy.objects.filter(query)
 
-        return AccountingPolicy.objects.filter(query)
+
+        if bool(self.only_with_transactions) == True:
+            print "Here"
+            exclude_array = []
+            for record in results:
+                accounting_policy_detail_set = AccountingPolicyDetail.objects.filter(Q(accounting_policy__id=record.id))
+                if len(accounting_policy_detail_set) <= 0:
+                    exclude_array.append(record.id)
+
+            results = results.exclude(Q(id__in=exclude_array))
+            return results
+
+        else:
+            return results
+
+
+
+
+

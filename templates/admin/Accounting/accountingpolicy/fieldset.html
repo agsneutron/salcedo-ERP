@@ -59,10 +59,6 @@
     word-wrap: break-word;
     white-space: normal;
 }
-    #id_registry_date>.form-group{
-            margin: 0px 0 0 !important;
-    }
-
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -125,21 +121,5 @@
 
 
     });
-
-</script>
-<script>
-    if (document.getElementById("id_grouping_code")){
-        var d = document.getElementById("id_grouping_code");
-
-        d.setAttribute("data-live-search", "true");
-        d.setAttribute("data-width", "auto");
-
-
-        $("#id_grouping_code").addClass("selectpicker");
-        $('#id_grouping_code').selectpicker({
-            style: 'btn-info',
-            size: 4
-        });
-    }
 
 </script>

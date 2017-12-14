@@ -104,7 +104,6 @@ class FiscalPeriod(models.Model):
 
     accounting_year = models.IntegerField(verbose_name="Ejercicio Contable", null=False, )
 
-
     MONTH_CHOICES = (
         (1, 'Enero'),
         (2, 'Febrero'),
@@ -121,8 +120,6 @@ class FiscalPeriod(models.Model):
     )
     account_period = models.IntegerField(verbose_name="Mes", choices=MONTH_CHOICES, default=1)
 
-
-
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPENED, verbose_name='Estatus')
 
     def __str__(self):
@@ -138,7 +135,6 @@ class FiscalPeriod(models.Model):
 
 # Model for accounting policy
 class TypePolicy(models.Model):
-
     name = models.CharField(verbose_name='Tipo de Póliza', null=False, blank=False, max_length=256)
     balanced_accounts = models.BooleanField(verbose_name="Cuadrar póliza", default=False)
 
@@ -200,13 +196,23 @@ class AccountingPolicyDetail(models.Model):
         verbose_name = 'Detalle de Póliza'
 
 
-class Provider(models.Model):
+class CommercialAlly(models.Model):
     ACTIVE = 1
     NON_ACTIVE = 2
 
     STATUS_CHOICES = (
         (ACTIVE, 'Activo'),
         (NON_ACTIVE, 'Inactivo'),
+    )
+
+    PROVIDER = 0
+    CREDITOR = 1
+    THIRD_PARTY = 2
+
+    COMMERCIAL_ALLY_TYPE_CHOICES = (
+        (PROVIDER, 'Proveedor'),
+        (CREDITOR, 'Acreedor'),
+        (THIRD_PARTY, 'Tercero'),
     )
 
     name = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
@@ -263,15 +269,16 @@ class Provider(models.Model):
     tax_person_type = models.CharField(verbose_name="Tipo de Persona", max_length=1, default=MORAL, null=False,
                                        blank=False, choices=TYPE_CHOICES)
     status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
+    type = models.IntegerField(choices=COMMERCIAL_ALLY_TYPE_CHOICES, default=PROVIDER, verbose_name='Tipo')
 
     class Meta:
-        verbose_name_plural = 'Proveedores'
-        verbose_name = 'Proveedores'
+        verbose_name_plural = 'Aliado Comercial'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['register_date'] = self.register_date.strftime('%m/%d/%Y')
         ans['accounting_account'] = self.accounting_account.number
+        ans['type'] = self.get_type_display()
         # ans['id'] = str(self.id)
         # ans['name'] = str(self.name)
         # ans['street'] = str(self.street)
@@ -293,35 +300,23 @@ class Provider(models.Model):
 
         if can_save:
             self.last_edit_date = now()
-            Logs.log("Saving new Proveedor", "Te")
-            super(Provider, self).save(*args, **kwargs)
+            Logs.log("Saving new commercial ally", "Te")
+            super(CommercialAlly, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
 
 
-class ThirdParty(models.Model):
-    ACTIVE = 1
-    NON_ACTIVE = 2
-
-    STATUS_CHOICES = (
-        (ACTIVE, 'Activo'),
-        (NON_ACTIVE, 'Inactivo'),
-    )
-
+class CommercialAllyContact(models.Model):
     name = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
-    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
+    rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
     street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
     outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
+    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
     zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
-    rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
-    curp = models.CharField(verbose_name="CURP", max_length=18, null=False, blank=False, unique=True)
-    phone_number = models.CharField(verbose_name="Teléfono", max_length=20, null=False, blank=False)
-    cellphone_number = models.CharField(verbose_name="Celular", max_length=20, null=False, blank=True)
-    office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=20, null=False, blank=True)
-    extension_number = models.CharField(verbose_name="Número de Extensión", max_length=10, null=False, blank=True)
-
-    # Attribute for the Chained Keys.
+    phone_number = models.CharField(verbose_name="Teléfono Principal", max_length=20, null=False, blank=False)
+    secondary_number = models.CharField(verbose_name="Teléfono Secundario", max_length=20, null=False, blank=True)
+    email = models.CharField(verbose_name="Email", max_length=255, null=False, blank=False)
     country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
     state = ChainedForeignKey(Estado,
                               chained_field="country",
@@ -338,152 +333,25 @@ class ThirdParty(models.Model):
                              sort=True,
                              verbose_name="Municipio")
 
-    last_edit_date = models.DateTimeField(auto_now_add=True)
-
-    accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
-    bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
-    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
-                                         blank=True)
-    bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
-    # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
-    employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
-                                                    default="", null=True, blank=True)
-    services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
-
-    FISICA = "f"
-    MORAL = "m"
-
-    TYPE_CHOICES = (
-        (FISICA, 'Física'),
-        (MORAL, 'Moral'),
-    )
-    tax_person_type = models.CharField(verbose_name="Tipo de Persona", max_length=1, default=MORAL, null=False,
-                                       blank=False, choices=TYPE_CHOICES)
-    status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
+    is_legal_representative = models.BooleanField(verbose_name="Es Representante Legal", default=False)
 
     class Meta:
-        verbose_name_plural = 'Terceros'
-        verbose_name = 'Tercero'
+        verbose_name_plural = 'Contactos'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['name'] = str(self.nombre)
-        ans['street'] = str(self.calle)
-        ans['number'] = str(self.numero)
-        ans['outdoor_number'] = str(self.colonia)
-        ans['town'] = str(self.municipio.nombreMunicipio)
-        ans['state'] = str(self.estado.nombreEstado)
-        ans['country'] = str(self.pais.nombrePais)
-        ans['cp'] = str(self.cp)
-        ans['rfc'] = str(self.rfc)
+        # ans['id'] = str(self.id)
 
         return ans
 
     def __str__(self):
-        return self.nombre
+        return self.name
 
     def save(self, *args, **kwargs):
         can_save = True
 
         if can_save:
-            self.last_edit_date = now()
-            Logs.log("Saving new Tercero", "Te")
-            super(ThirdParty, self).save(*args, **kwargs)
-        else:
-            Logs.log("Couldn't save")
-
-
-class Creditors(models.Model):
-    ACTIVE = 1
-    NON_ACTIVE = 2
-
-    STATUS_CHOICES = (
-        (ACTIVE, 'Activo'),
-        (NON_ACTIVE, 'Inactivo'),
-    )
-
-    name = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
-    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
-    street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
-    outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
-    indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
-    zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
-    rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
-    curp = models.CharField(verbose_name="CURP", max_length=18, null=False, blank=False, unique=True)
-    phone_number = models.CharField(verbose_name="Teléfono", max_length=20, null=False, blank=False)
-    cellphone_number = models.CharField(verbose_name="Celular", max_length=20, null=False, blank=True)
-    office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=20, null=False, blank=True)
-    extension_number = models.CharField(verbose_name="Número de Extensión", max_length=10, null=False, blank=True)
-
-    # Attribute for the Chained Keys.
-    country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
-    state = ChainedForeignKey(Estado,
-                              chained_field="country",
-                              chained_model_field="pais",
-                              show_all=False,
-                              auto_choose=True,
-                              sort=True,
-                              verbose_name="Estado")
-    town = ChainedForeignKey(Municipio,
-                             chained_field="state",
-                             chained_model_field="estado",
-                             show_all=False,
-                             auto_choose=True,
-                             sort=True,
-                             verbose_name="Municipio")
-
-    last_edit_date = models.DateTimeField(auto_now_add=True)
-
-    accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
-    bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
-    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
-                                         blank=True)
-    bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
-    # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
-    employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
-                                                    default="", null=True, blank=True)
-    services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
-
-    FISICA = "f"
-    MORAL = "m"
-
-    TYPE_CHOICES = (
-        (FISICA, 'Física'),
-        (MORAL, 'Moral'),
-    )
-    tax_person_type = models.CharField(verbose_name="Tipo de Persona", max_length=1, default=MORAL, null=False,
-                                       blank=False, choices=TYPE_CHOICES)
-    status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
-
-    class Meta:
-        verbose_name_plural = 'Acreedores'
-        verbose_name = 'Acreedor'
-
-    def to_serializable_dict(self):
-        ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['name'] = str(self.nombre)
-        ans['street'] = str(self.calle)
-        ans['number'] = str(self.numero)
-        ans['outdoor_number'] = str(self.colonia)
-        ans['town'] = str(self.municipio.nombreMunicipio)
-        ans['state'] = str(self.estado.nombreEstado)
-        ans['country'] = str(self.pais.nombrePais)
-        ans['cp'] = str(self.cp)
-        ans['rfc'] = str(self.rfc)
-
-        return ans
-
-    def __str__(self):
-        return self.nombre
-
-    def save(self, *args, **kwargs):
-        can_save = True
-
-        if can_save:
-            self.last_edit_date = now()
-            Logs.log("Saving new Acreedor", "Te")
-            super(Creditors, self).save(*args, **kwargs)
+            Logs.log("Saving new commercial ally contact", "Te")
+            super(CommercialAllyContact, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")

@@ -3,6 +3,7 @@
 from django.http.response import HttpResponse
 from django.views.generic.list import ListView
 
+from Accounting.reports.trial_balance import TrialBalanceReport
 from Accounting.search_engines.account_engine import AccountSearchEngine
 from Accounting.search_engines.provider_engine import ProviderSearchEngine
 from Accounting.search_engines.policy_engine import PolicySearchEngine
@@ -15,8 +16,8 @@ def get_array_or_none(the_string):
         return None
     return map(int, the_string.split(','))
 
-class SearchPolicies(ListView):
 
+class SearchPolicies(ListView):
 
     def get(self, request):
         lower_fiscal_period_year = request.GET.get('lower_fiscal_period_year')
@@ -68,7 +69,6 @@ class SearchPolicies(ListView):
 
         result = engine.search_policies()
 
-
         return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )
 
 
@@ -92,6 +92,18 @@ class SearchAccounts(ListView):
 
 class SearchProviders(ListView):
     def get(self, request):
+        type = request.GET.get('type')
+        if type is None:
+            return HttpResponse(Utilities.json_to_dumps({"error": {"message": "The parameter 'type' is required."}}),
+                                'application/json; charset=utf-8', )
+
+        # Make it uppercase so that it's easier to compare.
+        type = type.upper()
+
+        if type not in ('PROVIDER', 'CREDITOR', 'THIRD_PARTY'):
+            return HttpResponse(Utilities.json_to_dumps({"error": {"message": "The parameter 'type' must be PROVIDER, CREDITOR or THIRD_PARTY."}}),
+                                'application/json; charset=utf-8', )
+
         name = request.GET.get('name')
         rfc = request.GET.get('rfc')
         email = request.GET.get('email')
@@ -102,9 +114,40 @@ class SearchProviders(ListView):
         register_date_upper = Utilities.string_to_date(request.GET.get('register_date_upper'))
         services = request.GET.get('services')
 
-        engine = ProviderSearchEngine(name, rfc, email, phone_number, accounting_account_number, bank_account,
+        engine = ProviderSearchEngine(type, name, rfc, email, phone_number, accounting_account_number, bank_account,
                                       register_date_lower, register_date_upper, services)
 
         results = engine.search()
 
         return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
+
+
+#
+#   Reports.
+#
+
+class GenerateTrialBalance(ListView):
+    def get(self, request):
+        lower_account_number = request.GET.get('lower_account_number')
+        upper_account_number = request.GET.get('upper_account_number')
+
+        fiscal_period_year = request.GET.get('fiscal_period_year')
+        fiscal_period_month = request.GET.get('fiscal_period_month')
+
+        only_with_transactions = request.GET.get('only_with_transactions')
+
+        engine = PolicySearchEngine(
+            lower_fiscal_period_year=fiscal_period_year,
+            upper_fiscal_period_year=fiscal_period_year,
+            lower_fiscal_period_month=fiscal_period_month,
+            upper_fiscal_period_month=fiscal_period_month,
+            lower_account_number=lower_account_number,
+            upper_account_number=upper_account_number,
+            only_with_transactions=only_with_transactions
+        )
+
+        result = engine.search_policies()
+
+        report_result = TrialBalanceReport.generate_report(result)
+
+        return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )

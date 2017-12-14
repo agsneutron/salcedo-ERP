@@ -14,3 +14,10 @@ def SearchAccount(request):
     context = {'account': Account.objects.all(),}
 
     return HttpResponse(template.render(context,request))
+
+# For Search Comercial Allie filter objects view
+def SearchComercialAllie(request):
+    template = loader.get_template('Accounting/search_account.html')
+    context = {'account': Account.objects.all(),}
+
+    return HttpResponse(template.render(context,request))
