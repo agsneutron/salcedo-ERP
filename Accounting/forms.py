@@ -26,16 +26,11 @@ class TypePolicyForm(forms.ModelForm):
         fields = '__all__'
 
 # Form to include the fields of the Provider Form.
-class ProviderForm(forms.ModelForm):
+class CommercialAllyForm(forms.ModelForm):
     class Meta:
-        model = Provider
+        model = CommercialAlly
         fields = '__all__'
 
-# Form to include the fields of the Creditors Form.
-class CreditorsForm(forms.ModelForm):
-    class Meta:
-        model = Creditors
-        fields = '__all__'
 
 # Form to include the fields of the Account Form.
 class AccountForm(forms.ModelForm):

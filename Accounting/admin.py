@@ -53,25 +53,12 @@ class TypePolicyAdmin(admin.ModelAdmin):
         }),
     )
 
-@admin.register(Provider)
-class ProviderAdmin(admin.ModelAdmin):
-    form = ProviderForm
+@admin.register(CommercialAlly)
+class CommercialAllyAdmin(admin.ModelAdmin):
+    form = CommercialAllyForm
 
     fieldsets = (
-        ("Proveedor", {
-            'fields': (
-            'name', 'curp','rfc','phone_number','cellphone_number','office_number','extension_number','street','outdoor_number',
-            'indoor_number','colony','zip_code','country','state','town','accounting_account','bank',
-            'bank_account_name','bank_account','employer_registration_number','services','tax_person_type','status',)
-        }),
-    )
-
-@admin.register(Creditors)
-class CreditorsAdmin(admin.ModelAdmin):
-    form = CreditorsForm
-
-    fieldsets = (
-        ("Acreedores", {
+        ("Aliados Comerciales", {
             'fields': (
             'name', 'curp','rfc','phone_number','cellphone_number','office_number','extension_number','street','outdoor_number',
             'indoor_number','colony','zip_code','country','state','town','accounting_account','bank',
