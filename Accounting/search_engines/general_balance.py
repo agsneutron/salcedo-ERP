@@ -2,10 +2,12 @@
 import StringIO
 from rexec import FileWrapper
 
+import time
 from django.db.models.aggregates import Count
 from django.db.models.query_utils import Q
 import xlsxwriter
 from django.http import StreamingHttpResponse
+import os
 
 from Accounting.models import AccountingPolicyDetail, AccountingPolicy, GroupingCode
 
@@ -163,10 +165,31 @@ class GeneralBalanceEngine():
         formats = self.get_formats(workbook)
 
         offset = 1  # Horizontal offset
-        start_row = 9  # Everything else should be dynamic
+        header_start_row = 1  # Everything else should be dynamic
+        start_row = header_start_row + 6  # Everything else should be dynamic
         current_row = start_row  # Everything else should be dynamic
-        active_column_width = 20
+        active_column_width = 30
         passive_column_width = 30
+
+        # Setup Worksheet
+        worksheet.set_portrait()
+        worksheet.set_paper(1)
+        worksheet.fit_to_pages(1, 1)
+        # Left, right, top, bottom
+        worksheet.set_margins(0, 0.7, 0.75, 0.75)
+
+        # Header
+        # Insert Logo
+        worksheet.insert_image(header_start_row, offset, os.path.dirname(os.path.abspath(__file__)) + '/salcedo.png',
+                               {
+                                   'x_offset': 80,
+                                   'y_offset': 0
+                               })
+
+        worksheet.merge_range(header_start_row + 2, 1 + offset, header_start_row + 2, 4 + offset,
+                              'Salcedo Construcción y Supervision SA de CV', formats['report_header'])
+        worksheet.merge_range(header_start_row + 3, 1 + offset, header_start_row + 3, 4 + offset,
+                              'Balance General al ' + time.strftime("%d de %B de %Y"), formats['report_header'])
 
         # Add the 'Active' label
         worksheet.set_column(offset, offset, active_column_width)
@@ -181,6 +204,7 @@ class GeneralBalanceEngine():
         current_row += 1
         # Add records.
         total_short_term_active = len(info[short_term_active])  # For readability
+        short_term_active_total = 0
         for idx, record in enumerate(info[short_term_active]):
             name = record['code'].account_name
             ammount = record['amount']
@@ -188,9 +212,19 @@ class GeneralBalanceEngine():
             worksheet.write(current_row, 0 + offset, name, formats['level_1_label'])
             worksheet.write(current_row, 1 + offset, ammount, formats['currency_1'])
 
+            short_term_active_total += ammount
+
             current_row += 1
 
-        current_row += 1
+        # Write Totals
+        short_term_active_total_row = current_row
+        worksheet.write(current_row, 0 + offset, 'Total de ' + short_term_active_label, formats['level_1_total_label'])
+        worksheet.write(current_row, 1 + offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+            1 + offset) + '' + str(current_row - total_short_term_active + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+            1 + offset) + '' + str(current_row) + ')',
+                        formats['currency_1'])
+
+        current_row += 2
         # -- Long Term Actives Section
         # Add label
         long_term_active_label = long_term_active.account_name
@@ -208,17 +242,39 @@ class GeneralBalanceEngine():
 
             current_row += 1
 
+        # Write Totals
+        long_term_active_total_row = current_row
+        worksheet.write(current_row, 0 + offset, 'Total de ' + long_term_active_label, formats['level_1_total_label'])
+        worksheet.write(current_row, 1 + offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+            1 + offset) + '' + str(
+            current_row - total_long_term_active + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+            1 + offset) + '' + str(current_row) + ')',
+                        formats['currency_1'])
+
+        current_row += 2
+
+        # Absolute Totals
+        active_absolute_total_row = current_row
+        worksheet.write(current_row, 0 + offset, 'Total de Activo', formats['level_00_total_label'])
+        worksheet.write(current_row, 1 + offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+            1 + offset) + '' + str(
+            short_term_active_total_row + 1) + ',' + xlsxwriter.utility.xl_col_to_name(
+            1 + offset) + '' + str(long_term_active_total_row + 1) + ')',
+                        formats['currency_2'])
+
         current_row = start_row
 
+        # Use to write the next sections
         passive_offset = offset + 3
 
         # Add the 'Passive' label
         worksheet.set_column(passive_offset, passive_offset, passive_column_width)
-        worksheet.merge_range(current_row, 0 + passive_offset, current_row, 1 + passive_offset, 'Pasivo', formats['level_0_header'])
+        worksheet.merge_range(current_row, 0 + passive_offset, current_row, 1 + passive_offset, 'Pasivo',
+                              formats['level_0_header'])
 
         current_row += 1
 
-        # -- Short Term Pasives Section
+        # -- Short Term Passives Section
         # Add label
         short_term_passive_label = short_term_passive.account_name
         worksheet.merge_range(current_row, 0 + passive_offset, current_row, 1 + passive_offset,
@@ -236,7 +292,17 @@ class GeneralBalanceEngine():
 
             current_row += 1
 
-        current_row += 1
+        # Write Totals
+        short_term_passive_total_row = current_row
+        worksheet.write(current_row, 0 + passive_offset, 'Total de ' + short_term_passive_label,
+                        formats['level_1_total_label'])
+        worksheet.write(current_row, 1 + passive_offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(
+            current_row - total_short_term_passive + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(current_row) + ')',
+                        formats['currency_1'])
+        current_row += 2
+
         # -- Long Term Pasives Section
         # Add label
         long_term_passive_label = long_term_passive.account_name
@@ -254,29 +320,66 @@ class GeneralBalanceEngine():
 
             current_row += 1
 
-        #
-        # # Widen the first column to make the text clearer.
-        # worksheet.set_column('A:A', 20)
-        #
-        # # Add a bold format to use to highlight cells.
-        # bold = workbook.add_format({'bold': True})
-        #
-        # # Write some simple text.
-        # worksheet.write('A1', 'Hello')
-        #
-        # # Text with formatting.
-        # worksheet.write('A2', 'World', bold)
-        #
-        # # Write some numbers, with row/column notation.
-        # worksheet.write(2, 0, 123)
-        # worksheet.write(3, 0, 123.456)
-        #
-        # # Insert an image.
-        # worksheet.insert_image('B5', 'logo.png')
-        #
+        # Write Totals
+        long_term_passive_total_row = current_row
+        worksheet.write(current_row, 0 + passive_offset, 'Total de ' + long_term_passive_label,
+                        formats['level_1_total_label'])
+        worksheet.write(current_row, 1 + passive_offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(
+            current_row - total_long_term_passive + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(current_row) + ')',
+                        formats['currency_1'])
 
+        current_row += 2
 
+        # Absolute Totals
+        passive_absolute_total_row = current_row
+        worksheet.write(current_row, 0 + passive_offset, 'Total de Passivo', formats['level_00_total_label'])
+        worksheet.write(current_row, 1 + passive_offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(
+            short_term_passive_total_row + 1) + ',' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(long_term_passive_total_row + 1) + ')',
+                        formats['currency_2'])
 
+        current_row += 2
+
+        # -- Accounting Capital Section
+        # Add label
+        accounting_capital_label = accounting_capital.account_name
+        worksheet.merge_range(current_row, 0 + passive_offset, current_row, 1 + passive_offset,
+                              accounting_capital_label,
+                              formats['level_0_header'])
+        current_row += 1
+        # Add records.
+        total_accounting_capital = len(info[long_term_passive])  # For readability
+        for idx, record in enumerate(info[accounting_capital]):
+            name = record['code'].account_name
+            ammount = record['amount']
+
+            worksheet.write(current_row, 0 + passive_offset, name, formats['level_1_label'])
+            worksheet.write(current_row, 1 + passive_offset, ammount, formats['currency_1'])
+
+            current_row += 1
+
+        # Write Totals
+        accounting_capital_total_row = current_row
+        worksheet.write(current_row, 0 + passive_offset, 'Total de Capital Contable',
+                        formats['level_00_total_label'])
+        worksheet.write(current_row, 1 + passive_offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(
+            current_row - total_accounting_capital + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(current_row) + ')',
+                        formats['currency_1'])
+
+        current_row += 2
+
+        worksheet.write(current_row, 0 + passive_offset, 'Capital Contable + Pasivo',
+                        formats['level_00_total_label'])
+        worksheet.write(current_row, 1 + passive_offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(
+            passive_absolute_total_row + 1) + ',' + xlsxwriter.utility.xl_col_to_name(
+            1 + passive_offset) + '' + str(accounting_capital_total_row + 1) + ')',
+                        formats['currency_1'])
 
         workbook.close()
 
@@ -294,7 +397,10 @@ class GeneralBalanceEngine():
 
         colors = {
             'gray-1': '#E7E7E7',
+            'gray-2': '#F9F9F9',
             'white': '#FFFFFF',
+            'blue-1': '#0E156C',
+            'blue-2': '#96C6FF'
         }
         formats = {}
 
@@ -310,10 +416,18 @@ class GeneralBalanceEngine():
             'border': 1,
             'align': 'center',
             'valign': 'vcenter',
-            'fg_color': colors['white']})
+            'fg_color': colors['gray-2']})
 
         formats['currency_1'] = workbook.add_format({
             'border': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'num_format': '$#,##0',
+            'fg_color': colors['white']})
+
+        formats['currency_2'] = workbook.add_format({
+            'border': 1,
+            'bold': 1,
             'align': 'center',
             'valign': 'vcenter',
             'num_format': '$#,##0',
@@ -325,6 +439,32 @@ class GeneralBalanceEngine():
             'valign': 'vcenter',
             'num_format': '$#,##0',
             'fg_color': colors['white']})
+
+        formats['level_1_total_label'] = workbook.add_format({
+            'border': 1,
+            'bold': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'num_format': '$#,##0',
+            'fg_color': colors['gray-2']})
+
+        formats['level_00_total_label'] = workbook.add_format({
+            'border': 1,
+            'bold': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'num_format': '$#,##0',
+            'color': colors['white'],
+            'fg_color': colors['blue-1']})
+
+        formats['report_header'] = workbook.add_format({
+            'border': 1,
+            'bold': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'num_format': '$#,##0',
+            'color': colors['white'],
+            'fg_color': colors['blue-1']})
 
         return formats
 
