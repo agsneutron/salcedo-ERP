@@ -16,7 +16,7 @@ from Logs.controller import Logs
 
 
 class GroupingCode(models.Model):
-    level = models.CharField(verbose_name="Nivel", max_length=5, )
+    level = models.IntegerField(verbose_name="Nivel", null=True )
     grouping_code = models.DecimalField(verbose_name="Código Agrupador", max_digits=20, decimal_places=2, )
     account_name = models.CharField(verbose_name="Nombre de la Cuenta y/o subcuenta", max_length=500, )
 
@@ -190,6 +190,11 @@ class AccountingPolicyDetail(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.account.number) + ": " + self.account.name
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
+        return ans
 
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'

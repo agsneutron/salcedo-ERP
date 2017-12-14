@@ -5,6 +5,7 @@ from django.views.generic.list import ListView
 
 from Accounting.reports.trial_balance import TrialBalanceReport
 from Accounting.search_engines.account_engine import AccountSearchEngine
+from Accounting.search_engines.general_balance import GeneralBalanceEngine
 from Accounting.search_engines.provider_engine import ProviderSearchEngine
 from Accounting.search_engines.policy_engine import PolicySearchEngine
 from ERP.lib.utilities import Utilities
@@ -18,7 +19,6 @@ def get_array_or_none(the_string):
 
 
 class SearchPolicies(ListView):
-
     def get(self, request):
         lower_fiscal_period_year = request.GET.get('lower_fiscal_period_year')
         upper_fiscal_period_year = request.GET.get('upper_fiscal_period_year')
@@ -101,7 +101,8 @@ class SearchProviders(ListView):
         type = type.upper()
 
         if type not in ('PROVIDER', 'CREDITOR', 'THIRD_PARTY'):
-            return HttpResponse(Utilities.json_to_dumps({"error": {"message": "The parameter 'type' must be PROVIDER, CREDITOR or THIRD_PARTY."}}),
+            return HttpResponse(Utilities.json_to_dumps(
+                {"error": {"message": "The parameter 'type' must be PROVIDER, CREDITOR or THIRD_PARTY."}}),
                                 'application/json; charset=utf-8', )
 
         name = request.GET.get('name')
@@ -151,3 +152,12 @@ class GenerateTrialBalance(ListView):
         report_result = TrialBalanceReport.generate_report(result)
 
         return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )
+
+
+class GenerateBalance(ListView):
+    def get(self, request):
+        engine = GeneralBalanceEngine()
+
+        result = engine.generate()
+
+        return result
