@@ -11,95 +11,14 @@ from django.forms import model_to_dict
 from django.utils.timezone import now
 from smart_selects.db_fields import ChainedForeignKey
 
-from ERP.models import Pais, Estado, Municipio, Bank
+from ERP.models import Pais, Estado, Municipio
 from Logs.controller import Logs
 
 
-class GroupingCode(models.Model):
-    level = models.IntegerField(verbose_name="Nivel", null=True)
-    grouping_code = models.DecimalField(verbose_name="Código Agrupador", max_digits=20, decimal_places=2, )
-    account_name = models.CharField(verbose_name="Nombre de la Cuenta y/o subcuenta", max_length=500, )
-
-    def __str__(self):
-        return str(self.grouping_code) + ": " + self.account_name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.grouping_code) + ": " + self.account_name
-
-    def __hash__(self):
-        return self.grouping_code
-
-    def __eq__(self, other):
-        if other is None:
-            return False
-
-        if type(other) != GroupingCode:
-            return False
-
-        return self.grouping_code == other.grouping_code
-
-    class Meta:
-        verbose_name_plural = 'Código Agrupador de Cuentas del SAT.'
-        verbose_name = 'Código Agrupador de Cuentas del SAT.'
+# Shared Catalogs Imports.
+from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account
 
 
-class Account(models.Model):
-    ACTIVE = 1
-    NON_ACTIVE = 2
-
-    STATUS_CHOICES = (
-        (ACTIVE, 'Activa'),
-        (NON_ACTIVE, 'Inactiva'),
-    )
-
-    DEBIT = 1  # PAYABLE RECEIVABLE
-    CREDIT = 2
-    DEBIT_CREDIT_CHOICES = (
-        (DEBIT, "Deudora"),
-        (CREDIT, "Acreedora"),
-    )
-
-    LEDGER = 1
-    NO_LEDGER = 2
-    LG_ACCOUNT_CHOICES = (
-        (LEDGER, "Si"),
-        (NO_LEDGER, "No"),
-    )
-
-    number = models.IntegerField(verbose_name="Número de Cuenta", null=False, )
-    name = models.CharField(verbose_name="Nombre de la Cuenta", max_length=500, null=False, )
-    status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
-
-    nature_account = models.IntegerField(choices=DEBIT_CREDIT_CHOICES, default=DEBIT,
-                                         verbose_name='Naturaleza de Cuenta')
-    ledger_account = models.IntegerField(choices=LG_ACCOUNT_CHOICES, default=LEDGER, verbose_name='Cuenta de Mayor')
-    level = models.CharField(verbose_name="Nivel", max_length=500, null=False, )
-    item = models.CharField(verbose_name="Rubro", max_length=500, null=False, )
-
-    # foreign
-    grouping_code = models.ForeignKey(GroupingCode, verbose_name="Código Agrupador SAT", )
-    subsidiary_account = models.ForeignKey('self', verbose_name='Subcuenta de', null=True, blank=True)
-
-    def __str__(self):
-        return str(self.number) + ": " + self.name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.number) + ": " + self.name
-
-    class Meta:
-        verbose_name_plural = 'Cuentas'
-        verbose_name = 'Cuenta'
-
-    def to_serializable_dict(self):
-        dict = model_to_dict(self)
-        dict['nature_account'] = self.get_nature_account_display()
-        dict['ledger_account'] = self.get_ledger_account_display()
-        dict['grouping_code'] = self.grouping_code.account_name
-        dict['status'] = self.get_status_display()
-        if self.subsidiary_account is not None:
-            dict['subsidiary_account'] = self.subsidiary_account.number
-
-        return dict
 
 
 # Model for accounting policy
@@ -212,13 +131,13 @@ class AccountingPolicyDetail(models.Model):
         ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
         return ans
 
-    def save(self, *args, **kwargs):
-        self.registry_date = now()
-        super(AccountingPolicyDetail, self).save(*args, **kwargs)
-
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
+
+    def save(self, *args, **kwargs):
+        self.registry_date = now()
+        super(AccountingPolicyDetail, self).save(*args, **kwargs)
 
 
 class CommercialAlly(models.Model):
@@ -276,7 +195,7 @@ class CommercialAlly(models.Model):
 
     accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
     bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
-    bank_account_name = models.CharField(verbose_name="Nombre del Banco", max_length=512, default="", null=True,
+    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
                                          blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)

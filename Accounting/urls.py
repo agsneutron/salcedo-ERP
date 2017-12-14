@@ -17,5 +17,11 @@ urlpatterns = [
 
     # F/E
     url(r'^searchaccount', views.SearchAccount, name='searchaccount'),
-    url(r'^searchcomercialallie', views.SearchComercialAllie, name='searchcomercialallie')
+    url(r'^searchprovider', views.SearchProvider, name='searchprovider'),
+    url(r'^searchcreditors', views.SearchCreditors, name='searchcreditors'),
+    url(r'^searchthird', views.SearchThird, name='searchthird'),
+
+
+
+
 ]

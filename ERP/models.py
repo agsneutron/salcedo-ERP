@@ -20,6 +20,7 @@ from django.forms.models import model_to_dict
 from django.utils.encoding import smart_text
 from django.utils.timezone import now
 from tinymce.models import HTMLField
+#from Accounting.models import Bank
 
 from users.models import ERPUser
 
@@ -30,80 +31,14 @@ from django.db import models
 from django.db.models.signals import post_save
 
 from Logs.controller import Logs
-from django import forms
-import datetime
-
-import locale
-
-from django.template import Library
 
 
-# from HumanResources.models import Bank
+# Shared Catalogs Imports.
+from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank
 
 
 # Create your models here.
 
-# *********************************************************************
-#                                Estado                               *
-# *********************************************************************
-
-class Pais(models.Model):
-    nombrePais = models.CharField(max_length=200)
-    latitud = models.FloatField()
-    longitud = models.FloatField()
-
-    def to_serializable_dict(self):
-        ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['pais'] = self.nombrePais
-        return ans
-
-    def __str__(self):
-        return self.nombrePais
-
-    def __unicode__(self):
-        return self.nombrePais
-
-    class Meta:
-        verbose_name_plural = 'Países'
-        verbose_name = "País"
-
-
-class Estado(models.Model):
-    nombreEstado = models.CharField(max_length=200)
-    latitud = models.FloatField()
-    longitud = models.FloatField()
-    pais = models.ForeignKey(Pais, null=False, blank=False)
-
-    def __str__(self):  # __unicode__ on Python 2
-        return self.nombreEstado
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.nombreEstado
-
-    def to_serializable_dict(self):
-        ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        return ans
-
-
-class Municipio(models.Model):
-    nombreMunicipio = models.CharField(max_length=200)
-    latitud = models.FloatField()
-    longitud = models.FloatField()
-    estado = models.ForeignKey(Estado, null=False, blank=False)
-
-    def to_serializable_dict(self):
-        ans = model_to_dict(self)
-        ans['id'] = str(self.id)
-        ans['estado'] = self.estado.nombreEstado
-        return ans
-
-    def __str__(self):
-        return self.nombreMunicipio
-
-    def __unicode__(self):
-        return self.nombreMunicipio
 
 
 class TipoConstruccion(models.Model):
@@ -393,7 +328,7 @@ class Contratista(models.Model):
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     # Aggregated fields as part of the requirements found in the training.
-    bank = models.ForeignKey('Bank', verbose_name="Banco", null=True, blank=False)
+    bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
     bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
                                          blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
@@ -1869,32 +1804,3 @@ class EstimateAdvanceAuthorization(models.Model):
         return self.full_name
 
 
-class SATBank(models.Model):
-    key = models.CharField(verbose_name="Clave Cuenta SAT", null=False, max_length=3)
-    name = models.CharField(verbose_name="Nombre Cuenta SAT", max_length=100, null=False, )
-    business_name = models.CharField(verbose_name="Razón social", max_length=500, null=False, )
-
-    def __str__(self):
-        return self.key + ": " + self.name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.key + ": " + self.name
-
-    class Meta:
-        verbose_name_plural = 'Bancos del SAT.'
-        verbose_name = 'Bancos del SAT.'
-
-
-class Bank(models.Model):
-    name = models.CharField(max_length=2512, null=False, blank=False, verbose_name="Nombre")
-    sat_bank = models.OneToOneField(SATBank, verbose_name="Banco del SAT", null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Banco"
-        verbose_name_plural = "Bancos"
-
-    def __str__(self):
-        return self.name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.name

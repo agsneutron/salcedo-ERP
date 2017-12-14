@@ -25,10 +25,15 @@ class TypePolicyForm(forms.ModelForm):
         model = TypePolicy
         fields = '__all__'
 
-# Form to include the fields of the CommercialAlly Form.
+# Form to include the fields of the Provider Form.
 class CommercialAllyForm(forms.ModelForm):
     class Meta:
         model = CommercialAlly
         fields = '__all__'
 
 
+# Form to include the fields of the Account Form.
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = '__all__'
