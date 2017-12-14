@@ -2,7 +2,7 @@ from datetime import date
 
 from django.db.models import Q
 
-from Accounting.models import Provider
+from Accounting.models import CommercialAlly
 from ERP.lib.utilities import Utilities
 
 
@@ -11,8 +11,10 @@ class ProviderSearchEngine(object):
         Search engines for the Provider model
     """
 
-    def __init__(self, name, rfc, email, phone_number, accounting_account_number, bank_account, register_date_lower,
+    def __init__(self, commercial_ally_type, name, rfc, email, phone_number, accounting_account_number, bank_account,
+                 register_date_lower,
                  register_date_upper, services):
+        self.commercial_ally_type = commercial_ally_type
         self.name = name
         self.rfc = rfc
         self.email = email
@@ -58,4 +60,6 @@ class ProviderSearchEngine(object):
         if self.services is not None:
             q = q & Q(services__icontains=self.services)
 
-        return Provider.objects.filter(q)
+        q = q & Q(type=getattr(CommercialAlly(), self.commercial_ally_type))
+
+        return CommercialAlly.objects.filter(q)
