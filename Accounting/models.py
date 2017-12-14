@@ -16,7 +16,7 @@ from Logs.controller import Logs
 
 
 class GroupingCode(models.Model):
-    level = models.IntegerField(verbose_name="Nivel", null=True )
+    level = models.IntegerField(verbose_name="Nivel", null=True)
     grouping_code = models.DecimalField(verbose_name="Código Agrupador", max_digits=20, decimal_places=2, )
     account_name = models.CharField(verbose_name="Nombre de la Cuenta y/o subcuenta", max_length=500, )
 
@@ -25,6 +25,18 @@ class GroupingCode(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.grouping_code) + ": " + self.account_name
+
+    def __hash__(self):
+        return self.grouping_code
+
+    def __eq__(self, other):
+        if other is None:
+            return False
+
+        if type(other) != GroupingCode:
+            return False
+
+        return self.grouping_code == other.grouping_code
 
     class Meta:
         verbose_name_plural = 'Código Agrupador de Cuentas del SAT.'
@@ -199,6 +211,10 @@ class AccountingPolicyDetail(models.Model):
         ans = model_to_dict(self)
         ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
         return ans
+
+    def save(self, *args, **kwargs):
+        self.registry_date = now()
+        super(AccountingPolicyDetail, self).save(*args, **kwargs)
 
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
