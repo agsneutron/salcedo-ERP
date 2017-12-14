@@ -6,7 +6,7 @@ var $j = jQuery.noConflict();
 $j(document).on('ready', main);
 
 function main(){
-     $j('#searchaccount').on('click', search());
+     $j('#searchaccount').on('click', search);
 }
 
 //http://127.0.0.1:8000/accounting/search_accounts?name=Cuenta%202&number=2&subsidiary_account_array=1&
