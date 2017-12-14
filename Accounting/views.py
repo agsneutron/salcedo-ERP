@@ -16,8 +16,39 @@ def SearchAccount(request):
     return HttpResponse(template.render(context,request))
 
 # For Search Comercial Allie filter objects view
-def SearchComercialAllie(request):
-    template = loader.get_template('Accounting/search_account.html')
-    context = {'account': Account.objects.all(),}
+def SearchProvider(request):
+    title = "Proveedores"
+    template = loader.get_template('Accounting/search_commercialally.html')
+    context = {'commercialally': CommercialAlly.objects.filter(type=0),
+               's_type': str(title),
+               'type': str("PROVIDER"), }
+
+    return HttpResponse(template.render(context,request))
+
+def SearchCreditors(request):
+    title = "Acreedores"
+    template = loader.get_template('Accounting/search_commercialally.html')
+    context = {'commercialally': CommercialAlly.objects.filter(type=1),
+               's_type': str(title),
+               'type': str("CREDITOR"), }
+
+    return HttpResponse(template.render(context,request))
+
+def SearchThird(request):
+    title = "Terceros"
+    template = loader.get_template('Accounting/search_commercialally.html')
+    context = {'commercialally': CommercialAlly.objects.filter(type=2),
+               's_type': str(title),
+               'type': str("THIRD_PARTY"), }
+
+    return HttpResponse(template.render(context,request))
+
+
+# For Add Comercial Allie filter objects view
+def AddhProvider(request):
+    title = "Proveedores"
+    template = loader.get_template('/admin/Accounting/')
+    context = {'s_type': str(title),
+               'type': str("PROVIDER"), }
 
     return HttpResponse(template.render(context,request))
