@@ -7,8 +7,28 @@ from django.shortcuts import redirect
 from django.utils.timezone import now
 
 
-# Form to include the fields of the Employee Form.
+# Form to include the fields of the AccountingPolicy Form.
 class AccountingPolicyForm(forms.ModelForm):
     class Meta:
         model = AccountingPolicy
         fields = '__all__'
+
+# Form to include the fields of the FiscalPeriod Form.
+class FiscalPeriodForm(forms.ModelForm):
+    class Meta:
+        model = FiscalPeriod
+        fields = '__all__'
+
+# Form to include the fields of the TypePolicy Form.
+class TypePolicyForm(forms.ModelForm):
+    class Meta:
+        model = TypePolicy
+        fields = '__all__'
+
+# Form to include the fields of the CommercialAlly Form.
+class CommercialAllyForm(forms.ModelForm):
+    class Meta:
+        model = CommercialAlly
+        fields = '__all__'
+
+

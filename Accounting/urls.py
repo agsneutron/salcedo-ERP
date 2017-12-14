@@ -1,6 +1,7 @@
 from django.conf.urls import url
 
 from Accounting import api
+from Accounting import views
 
 app_name = 'DataUpload'
 
@@ -12,4 +13,9 @@ urlpatterns = [
 
     # Reports.
     url(r'^generate_trial_balance', api.GenerateTrialBalance.as_view(), name='trial-balance'),
+    url(r'^generate_general_balance', api.GenerateBalance.as_view(), name='general-balance'),
+
+    # F/E
+    url(r'^searchaccount', views.SearchAccount, name='searchaccount'),
+    url(r'^searchcomercialallie', views.SearchComercialAllie, name='searchcomercialallie')
 ]

@@ -8,7 +8,7 @@
     }
 
     .col-xs-4 {
-    min-height: 65px;
+    height: 65px;
     }
     .col-xs-4 br {
     display: none !important;
@@ -16,6 +16,18 @@
   .datetimeshortcuts {
 
     top: -38px !important;
+}
+        label {
+    display: block;
+
+}
+    .vLargeTextField, .vXMLLargeTextField {
+    width: 100%;
+}
+    textarea {
+    overflow: auto;
+    width: 100%;
+    padding: 10px 10px;
 }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
@@ -77,7 +89,8 @@
         $('input').addClass('form-control');
         $('select').addClass('form-control');
 
-
+        $('.field-observations>div').removeClass('col-xs-4');
+        $('.field-observations>div').addClass('col-xs-12');
     });
 
 </script>
