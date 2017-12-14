@@ -204,6 +204,10 @@ class AccountingPolicyDetail(models.Model):
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
 
+    def save(self, *args, **kwargs):
+        self.registry_date = now()
+        super(AccountingPolicyDetail, self).save(*args, **kwargs)
+
 
 class CommercialAlly(models.Model):
     ACTIVE = 1

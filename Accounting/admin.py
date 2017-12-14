@@ -19,6 +19,8 @@ class AccountingPolicyDetailInline(admin.TabularInline):
         }),
     )
 
+
+
 @admin.register(AccountingPolicy)
 class AccountingPolicyAdmin(admin.ModelAdmin):
     form = AccountingPolicyForm
@@ -30,6 +32,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
             'fiscal_period', 'type_policy', 'folio', 'registry_date', 'description',)
         }),
     )
+
 
 @admin.register(FiscalPeriod)
 class FiscalPeriodAdmin(admin.ModelAdmin):
