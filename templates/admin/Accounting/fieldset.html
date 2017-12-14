@@ -124,15 +124,18 @@
 
 </script>
 <script>
-    var d = document.getElementById("id_grouping_code");
-d.setAttribute("data-live-search", "true");
-d.setAttribute("data-width", "auto");
+    if (document.getElementById("id_grouping_code")){
+        var d = document.getElementById("id_grouping_code");
+
+        d.setAttribute("data-live-search", "true");
+        d.setAttribute("data-width", "auto");
 
 
-    $("#id_grouping_code").addClass("selectpicker");
-    $('#id_grouping_code').selectpicker({
-        style: 'btn-info',
-        size: 4
-    });
+        $("#id_grouping_code").addClass("selectpicker");
+        $('#id_grouping_code').selectpicker({
+            style: 'btn-info',
+            size: 4
+        });
+    }
 
 </script>
