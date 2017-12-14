@@ -58,11 +58,11 @@ class CommercialAllyAdmin(admin.ModelAdmin):
     form = CommercialAllyForm
 
     fieldsets = (
-        ("Aliados Comerciales", {
+        ("Aliado Comercial ", {
             'fields': (
             'name', 'curp','rfc','phone_number','cellphone_number','office_number','extension_number','street','outdoor_number',
             'indoor_number','colony','zip_code','country','state','town','accounting_account','bank',
-            'bank_account_name','bank_account','employer_registration_number','services','tax_person_type','status',)
+            'bank_account_name','bank_account','employer_registration_number','services','tax_person_type','status', 'type',)
         }),
     )
 
@@ -78,6 +78,7 @@ class AccountAdmin(admin.ModelAdmin):
     )
 
 admin.site.register(GroupingCode)
+admin.site.register(CommercialAllyContact)
 
 
 

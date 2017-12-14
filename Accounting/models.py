@@ -334,3 +334,54 @@ class CommercialAlly(models.Model):
             super(CommercialAlly, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
+
+
+class CommercialAllyContact(models.Model):
+    name = models.CharField(verbose_name='Nombre', max_length=50, null=False, blank=False, editable=True)
+    rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
+    street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
+    indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
+    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
+    zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
+    phone_number = models.CharField(verbose_name="Teléfono Principal", max_length=20, null=False, blank=False)
+    secondary_number = models.CharField(verbose_name="Teléfono Secundario", max_length=20, null=False, blank=True)
+    email = models.CharField(verbose_name="Email", max_length=255, null=False, blank=False)
+    country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    state = ChainedForeignKey(Estado,
+                              chained_field="country",
+                              chained_model_field="pais",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True,
+                              verbose_name="Estado")
+    town = ChainedForeignKey(Municipio,
+                             chained_field="state",
+                             chained_model_field="estado",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name="Municipio")
+
+    is_legal_representative = models.BooleanField(verbose_name="Es Representante Legal", default=False)
+
+    class Meta:
+        verbose_name_plural = 'Contactos'
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        # ans['id'] = str(self.id)
+
+        return ans
+
+    def __str__(self):
+        return self.name
+
+    def save(self, *args, **kwargs):
+        can_save = True
+
+        if can_save:
+            Logs.log("Saving new commercial ally contact", "Te")
+            super(CommercialAllyContact, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")

@@ -1,0 +1,144 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}{{ block.super }}
+
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/jquery.multiselect.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/multi-custom.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css"/>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/ajax_searchcommercialally.js" %}"></script>
+    <style>
+        #msSubsidiaryAccountArray, #msNatureAccountArray, #msGroupingCodeArray {
+            display: none !important;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var $j = jQuery.noConflict();
+        $j(function () {
+            $j("#msName").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Nombre',
+                selectedText: '# Nombre'
+            });
+
+            $j("#msSubsidiaryAccountArray").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Seleccione',
+                selectedText: 'Seleccione'
+            });
+            $j("#msNatureAccountArray").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Seleccione',
+                selectedText: 'Seleccione'
+            });
+            $j("#msGroupingCodeArray").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Seleccione',
+                selectedText: 'Seleccione'
+            });
+            $j('.ui-widget-content').css('width', 'auto');
+        });
+    </script>
+{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+    {% comment %}http://127.0.0.1:8000/accounting/search_commercial_allies?
+    name=nombre&rfc=12345678&email=test@test.com&phone_number=123456789&accounting_account_number=5&
+    bank_account=123456789&register_date_lower=12/12/2017&register_date_upper=12/14/2017&type=PROVIDER
+    {% endcomment %}
+    {% include "admin/Accounting/accounting-home.html" %}
+    <div class="col-xs-9">
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="">
+                    <h3 class="section-title">Buscador de {{ s_type }} </h3>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-xs-3"><input type="hidden" id="type" value="{{ type }}">
+                Nombre:<input type="text" class="form-control" id="name">
+            </div>
+            <div class="col-xs-3">
+                RFC:<input type="text" class="form-control" id="rfc">
+            </div>
+            <div class="col-xs-3">
+                Correo Electrónico:<input type="text" class="form-control" id="email">
+            </div>
+            <div class="col-xs-3">
+                Teléfono:<input type="text" class="form-control" id="phone_number">
+            </div>
+            <div class="col-xs-3">
+                Cuenta Contable:<input type="text" class="form-control" id="accounting_account_number">
+            </div>
+            <div class="col-xs-3">
+                Banco:<input type="text" class="form-control" id="bank_account">
+            </div>
+            <div class="col-xs-3">
+                Fecha de Registro de:<input type="text" class="form-control" id="register_date_lower">
+            </div>
+            <div class="col-xs-3">
+                Fecha de Registro a:<input type="text" class="form-control" id="register_date_upper">
+            </div>
+
+            <div class="col-xs-3">
+                &nbsp;
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+            <div class="col-xs-3 col-xs-offset-4">
+                <button type="button" id="searchaccount" class="btn btn-raised btn-primary btn-block">Buscar</button>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <div class="table-responsive" id="divTable">
+                    {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
+                           id="tablaResultados">
+
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>RFC</th>
+                            <th>Correo Electrónico</th>
+                            <th>Cuenta Contable</th>
+                            <th>Banco</th>
+                            <th>Fecha de Registro</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>{% endcomment %}
+                </div>
+        </div>
+    </div>
+
+{% endblock %}

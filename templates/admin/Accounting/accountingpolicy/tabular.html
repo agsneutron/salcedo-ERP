@@ -2,12 +2,19 @@
 <div class="js-inline-admin-formset inline-group" id="{{ inline_admin_formset.formset.prefix }}-group"
      data-inline-type="tabular"
      data-inline-formset="{{ inline_admin_formset.inline_formset_data }}">
-  <div class="tabular  {% if forloop.last %}last-related{% endif %}">
+  <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
 {{ inline_admin_formset.formset.management_form }}
-<fieldset class=" {{ inline_admin_formset.classes }}">
-   <h3 class="section-title">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h3><hr>
+<fieldset class="module {{ inline_admin_formset.classes }}">
+<div class="row">
+        <div class="col-xs-12">
+            <div class="">
+                <h2 class="section-title">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
+                <hr>
+            </div>
+        </div>
+</div>
    {{ inline_admin_formset.formset.non_form_errors }}
-   <table class="table">
+   <table>
      <thead><tr>
        <th class="original"></th>
      {% for field in inline_admin_formset.fields %}
