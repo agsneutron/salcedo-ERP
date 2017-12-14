@@ -81,4 +81,6 @@ class CommercialAllyAdmin(admin.ModelAdmin):
 
 admin.site.register(GroupingCode)
 admin.site.register(Account)
+admin.site.register(CommercialAllyContact)
+
 
