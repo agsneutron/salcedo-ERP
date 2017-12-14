@@ -89,7 +89,6 @@
 
                 {% for field in line %}
 
-
                     <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
                          class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
                          class=“checkbox-row”{% endif %}>
