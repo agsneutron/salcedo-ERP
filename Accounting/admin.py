@@ -22,7 +22,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
 
 admin.site.register(GroupingCode)
 admin.site.register(Account)
-admin.site.register(Provider)
+admin.site.register(CommercialAlly)
 admin.site.register(FiscalPeriod)
 admin.site.register(TypePolicy)
 
