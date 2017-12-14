@@ -171,7 +171,6 @@ class PolicySearchEngine():
 
 
         if bool(self.only_with_transactions) == True:
-            print "Here"
             exclude_array = []
             for record in results:
                 accounting_policy_detail_set = AccountingPolicyDetail.objects.filter(Q(accounting_policy__id=record.id))
