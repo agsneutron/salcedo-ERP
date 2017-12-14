@@ -20,6 +20,7 @@ from django.forms.models import model_to_dict
 from django.utils.encoding import smart_text
 from django.utils.timezone import now
 from tinymce.models import HTMLField
+from Accounting.models import Bank
 
 from users.models import ERPUser
 
@@ -1869,32 +1870,4 @@ class EstimateAdvanceAuthorization(models.Model):
         return self.full_name
 
 
-class SATBank(models.Model):
-    key = models.CharField(verbose_name="Clave Cuenta SAT", null=False, max_length=3)
-    name = models.CharField(verbose_name="Nombre Cuenta SAT", max_length=100, null=False, )
-    business_name = models.CharField(verbose_name="Razón social", max_length=500, null=False, )
 
-    def __str__(self):
-        return self.key + ": " + self.name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.key + ": " + self.name
-
-    class Meta:
-        verbose_name_plural = 'Bancos del SAT.'
-        verbose_name = 'Bancos del SAT.'
-
-
-class Bank(models.Model):
-    name = models.CharField(max_length=2512, null=False, blank=False, verbose_name="Nombre")
-    sat_bank = models.OneToOneField(SATBank, verbose_name="Banco del SAT", null=True, blank=True)
-
-    class Meta:
-        verbose_name = "Banco"
-        verbose_name_plural = "Bancos"
-
-    def __str__(self):
-        return self.name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return self.name

@@ -7,7 +7,7 @@
 <fieldset class=" {{ inline_admin_formset.classes }}">
    <h3 class="section-title">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h3><hr>
    {{ inline_admin_formset.formset.non_form_errors }}
-   <table>
+   <table class="table">
      <thead><tr>
        <th class="original"></th>
      {% for field in inline_admin_formset.fields %}

@@ -59,6 +59,10 @@
     word-wrap: break-word;
     white-space: normal;
 }
+    #id_registry_date>.form-group{
+            margin: 0px 0 0 !important;
+    }
+
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -84,7 +88,6 @@
                 {% if field.field.name %}field-{{ field.field.name }}{% endif %}{% endfor %}">
 
                 {% for field in line %}
-
 
                     <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
                          class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
@@ -124,15 +127,18 @@
 
 </script>
 <script>
-    var d = document.getElementById("id_grouping_code");
-d.setAttribute("data-live-search", "true");
-d.setAttribute("data-width", "auto");
+    if (document.getElementById("id_grouping_code")){
+        var d = document.getElementById("id_grouping_code");
+
+        d.setAttribute("data-live-search", "true");
+        d.setAttribute("data-width", "auto");
 
 
-    $("#id_grouping_code").addClass("selectpicker");
-    $('#id_grouping_code').selectpicker({
-        style: 'btn-info',
-        size: 4
-    });
+        $("#id_grouping_code").addClass("selectpicker");
+        $('#id_grouping_code').selectpicker({
+            style: 'btn-info',
+            size: 4
+        });
+    }
 
 </script>

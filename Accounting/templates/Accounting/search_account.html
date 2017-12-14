@@ -4,18 +4,22 @@
 {% block extrastyle %}{{ block.super }}
 
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/dataTables/css/material.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/dataTables/css/jquery.dataTables.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/jquery-mulsel/css/jquery.multiselect.css" %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/jquery-mulsel/css/style.css" %}"/>
-    <link rel="stylesheet" type="text/css" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css"/>
-    <script type="text/javascript" src="{% static "Accounting/js/ajax_searchaccount.js" %}"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/jquery.multiselect.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/multi-custom.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css"/>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
-    <script type="text/javascript" src="{% static "admin/assets/jquery-mulsel/js/jquery.multiselect.js" %}"></script>
-    <link rel="stylesheet" type="text/css" href="{% static "admin/assets/dataTables/css/custom-tables.css" %}">
+    <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/ajax_searchaccount.js" %}"></script>
+    <style>
+        #msSubsidiaryAccountArray, #msNatureAccountArray, #msGroupingCodeArray {
+            display: none !important;
+        }
+    </style>
 
-<script type="text/javascript">
+    <script type="text/javascript">
         var $j = jQuery.noConflict();
         $j(function () {
             $j("#msName").multiselect({
@@ -30,22 +34,22 @@
                 header: true,
                 checkAllText: 'Marcar todos',
                 uncheckAllText: 'Desmarcar todos',
-                noneSelectedText: 'Subcuenta de',
-                selectedText: '# Subcuenta de'
+                noneSelectedText: 'Seleccione',
+                selectedText: 'Seleccione'
             });
             $j("#msNatureAccountArray").multiselect({
                 header: true,
                 checkAllText: 'Marcar todos',
                 uncheckAllText: 'Desmarcar todos',
-                noneSelectedText: 'Naturaleza de Cuenta',
-                selectedText: '# Naturaleza de Cuenta'
+                noneSelectedText: 'Seleccione',
+                selectedText: 'Seleccione'
             });
             $j("#msGroupingCodeArray").multiselect({
                 header: true,
                 checkAllText: 'Marcar todos',
                 uncheckAllText: 'Desmarcar todos',
-                noneSelectedText: 'Código Agrupador SAT',
-                selectedText: '# Código Agrupador SAT'
+                noneSelectedText: 'Seleccione',
+                selectedText: 'Seleccione'
             });
             $j('.ui-widget-content').css('width', 'auto');
         });
@@ -55,7 +59,7 @@
 
 {% block content %}
 
-{% comment %}http://127.0.0.1:8000/accounting/search_accounts?
+    {% comment %}http://127.0.0.1:8000/accounting/search_accounts?
 name=Cuenta%202
 &number=2
 &subsidiary_account_array=1
@@ -64,59 +68,176 @@ name=Cuenta%202
 &level=2
 &item=2{% endcomment %}
     {% include "admin/Accounting/accounting-home.html" %}
-        <div class="col-xs-9">
-            <div class="row">
-                <div class="col-xs-12">
-
-                    <div class="">
-                        <h3 class="section-title">Buscador de Cuentas</h3>
-                        <hr>
-                    </div>
-                </div>
-            </div>
+    <div class="col-xs-9">
+        <div class="row">
             <div class="col-xs-12">
-                <div class="col-xs-3">
-                    Cuenta:<input type="text" class="form-control" id="account">
-                </div>
-                <div class="col-xs-3">
-                    Número:<input type="text" class="form-control" id="number">
-                </div>
-                <div class="col-xs-3">
-                    Nivel:<input type="text" class="form-control" id="level">
-                </div>
-                <div class="col-xs-3">
-                    Rubro:<input type="text" class="form-control" id="item">
-                </div>
-                <div class="col-xs-3">
-                    Subcuenta de:
-                    <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msSubsidiaryAccountArray">
-                        {% for obj in account %}
-                            <option value={{ obj.subsidiary_account }}>{{ obj.subsidiary_account }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-xs-3">
-                    Naturaleza de Cuenta:
-                    <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msNatureAccountArray">
-                        {% for obj in account %}
-                            <option value={{ obj.nature_account }}>{{ obj.nature_account }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="col-xs-3">
-                    Código Agrupador SAT:
-                    <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msGroupingCodeArray">
-                        {% for obj in account %}
-                            <option value={{ obj.grouping_code }}>{{ obj.grouping_code }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
 
-                <div class="col-xs-3">
-                    <button type="button" id="searchaccount" class="btn btn-primary">Buscar</button>
+                <div class="">
+                    <h3 class="section-title">Buscador de Cuentas</h3>
+                    <hr>
                 </div>
-
             </div>
         </div>
+        <div class="col-xs-12">
+            <div class="col-xs-3">
+                Cuenta:<input type="text" class="form-control" id="account">
+            </div>
+            <div class="col-xs-3">
+                Número:<input type="text" class="form-control" id="number">
+            </div>
+            <div class="col-xs-3">
+                Nivel:<input type="text" class="form-control" id="level">
+            </div>
+            <div class="col-xs-3">
+                Rubro:<input type="text" class="form-control" id="rubro">
+            </div>
+            <div class="col-xs-3">
+                Subcuenta de:
+                <select class="selectpicker form-control" multiple="multiple" data-size="5"
+                        id="msSubsidiaryAccountArray">
+                    {% for obj in account %}
+                        <option value={{ obj.subsidiary_account }}>{{ obj.subsidiary_account }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-3">
+                Naturaleza de Cuenta:
+                <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msNatureAccountArray">
+                    {% for obj in account %}
+                        <option value={{ obj.nature_account }}>{{ obj.nature_account }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-6">
+                Código Agrupador SAT:
+                <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msGroupingCodeArray">
+                    {% for obj in account %}
+                        <option value={{ obj.grouping_code }}>{{ obj.grouping_code }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-3">
+                &nbsp;
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+            <div class="col-xs-3 col-xs-offset-4">
+                <button type="button" id="searchaccount" class="btn btn-raised btn-primary btn-block">Buscar</button>
+            </div>
+        </div>
+
+        <div class="col-xs-12">
+            <div class="table-responsive" id="divTable">
+                    {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
+                           id="tablaResultados">
+
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Número</th>
+                            <th>Nivel</th>
+                            <th>Rubro</th>
+                            <th>Subcuenta</th>
+                            <th>Naturaleza de Cuenta</th>
+                            <th>Código Agrupador SAT</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        </tbody>
+                    </table>{% endcomment %}
+                </div>
+        </div>
+    </div>
 
 {% endblock %}

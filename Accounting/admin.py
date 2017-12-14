@@ -65,25 +65,23 @@ class CommercialAllyAdmin(admin.ModelAdmin):
             'fields': (
             'name', 'curp','rfc','phone_number','cellphone_number','office_number','extension_number','street','outdoor_number',
             'indoor_number','colony','zip_code','country','state','town','accounting_account','bank',
-            'bank_account_name','bank_account','employer_registration_number','services','tax_person_type','status',)
+            'bank_account_name','bank_account','employer_registration_number','services','tax_person_type','status', 'type',)
         }),
     )
 
-# @admin.register(Creditors)
-# class CreditorsAdmin(admin.ModelAdmin):
-#     form = CreditorsForm
-#
-#     fieldsets = (
-#         ("Acreedores", {
-#             'fields': (
-#             'name', 'curp','rfc','phone_number','cellphone_number','office_number','extension_number','street','outdoor_number',
-#             'indoor_number','colony','zip_code','country','state','town','accounting_account','bank',
-#             'bank_account_name','bank_account','employer_registration_number','services','tax_person_type','status',)
-#         }),
-#     )
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    form = AccountForm
+
+    fieldsets = (
+        ("Cuentas", {
+            'fields': (
+            'number','name','status','nature_account','ledger_account','level','item','grouping_code','subsidiary_account')
+        }),
+    )
 
 admin.site.register(GroupingCode)
-admin.site.register(Account)
 admin.site.register(CommercialAllyContact)
+
 
 

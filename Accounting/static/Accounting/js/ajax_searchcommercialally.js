@@ -1,4 +1,7 @@
 /**
+ * Created by ariaocho on 13/12/17.
+ */
+/**
  * Created by Ari_ on 13/12/17.
  */
 var $j = jQuery.noConflict();
@@ -9,41 +12,55 @@ function main(){
      $j('#searchaccount').on('click', search);
 }
 
-//http://127.0.0.1:8000/accounting/search_accounts?name=Cuenta%202&number=2&subsidiary_account_array=1&
-// nature_account_array=2&grouping_code_array=2&level=2&item=2
-function search() {
-    var subsidiary_account_array = $j("#msSubsidiaryAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var nature_account_array = $j("#msNatureAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var grouping_code_array = $j("#msGroupingCodeArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var account = $j("#account").val();
-    var number = $j("#number").val();
-    var level = $j("#level").val();
-    var rubro = $j("#rubro").val();
-    var url = "/accounting/search_accounts?";
+ //http://127.0.0.1:8000/accounting/search_commercial_allies?
+ //   name=nombre&rfc=12345678&email=test@test.com&phone_number=123456789&accounting_account_number=5&
+ //   bank_account=123456789&register_date_lower=12/12/2017&register_date_upper=12/14/2017&type=PROVIDER
 
-    if (account.toString()!="") {
-        url = url + "&name=" + account.toString();
+function search() {
+    var name = $j("#name").val();
+    var rfc = $j("#rfc").val();
+    var email = $j("#email").val();
+    var phone_number = $j("#phone_number").val();
+    var accounting_account_number = $j("#accounting_account_number").val();
+    var bank_account = $j("#bank_account").val();
+    var register_date_lower = $j("#register_date_lower").val();
+    var register_date_upper = $j("#register_date_upper").val();
+    var type = $j("#type").val();
+    var url = "/accounting/search_commercial_allies?";
+
+    if (name.toString()!="") {
+        url = url + "name=" + name.toString() + "&";
     }
-    if (number.toString()!="") {
-        url=url+"&number="+number.toString();
+    if (rfc.toString()!="") {
+        url=url+"rfc="+rfc.toString() + "&";
     }
-    if (subsidiary_account_array.toString()!="") {
-        url=url+"&subsidiary_account_array="+subsidiary_account_array.toString();
+    if (email.toString()!="") {
+        url=url+"email="+email.toString() + "&";
     }
-    if (nature_account_array.toString()!="") {
-        url=url+"&nature_account_array="+nature_account_array.toString();
+    if (phone_number.toString()!="") {
+        url=url+"phone_number="+phone_number.toString() + "&";
     }
-    if (grouping_code_array.toString()!="") {
-        url=url+"&grouping_code_array="+grouping_code_array.toString();
+    if (accounting_account_number.toString()!="") {
+        url=url+"accounting_account_number="+accounting_account_number.toString() + "&";
     }
-    if (level.toString()!="") {
-        url=url+"&level="+level.toString();
+    if (bank_account.toString()!="") {
+        url=url+"bank_account="+bank_account.toString() + "&";
     }
-    if (rubro.toString()!="") {
-        url=url+"&rubro="+rubro.toString();
+    if (register_date_lower.toString()!="") {
+        url=url+"register_date_lower="+register_date_lower.toString() + "&";
+    }
+    if (register_date_upper.toString()!="") {
+        url=url+"register_date_upper="+register_date_upper.toString() + "&";
+    }
+    if (type.toString()!="") {
+        url = url + "type=" + type.toString();
+        searchengine(url);
+    }
+    else{
+        console.log("No TYPE");
     }
     //alert(url);
-    searchengine(url);
+
 }
 
 
@@ -98,24 +115,22 @@ function displayResults(data){
     $j('#divTable').html("<div></div>");
     sHtml ='<table class="table-filtros display compact" cellspacing="0" width="100%" id="tablaResultados">'
             + ' <colgroup>'
-                +' <col width="15%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="15%">'
+                +' <col width="17%">'
+                +' <col width="16%">'
+                +' <col width="17%">'
+                +' <col width="16%">'
+                +' <col width="17%">'
+                +' <col width="17%">'
                 +' </colgroup>';
 
     sTable= '<thead>'
                         +'<tr>'
                             +'<th>Nombre</th>'
-                            +'<th>Número</th>'
-                            +'<th>Nivel</th>'
-                            +'<th>Rubro</th>'
-                            +'<th>Subcuenta de</th>'
-                            +'<th>Naturaleza</th>'
-                            +'<th>Código Agrupador SAT</th>'
+                            +'<th>RFC</th>'
+                            +'<th>Correo Electrónico</th>'
+                            +'<th>Cuenta Contable</th>'
+                            +'<th>Banco</th>'
+                            +'<th>Fecha de Registro</th>'
                         +'</tr>'
                     +'</thead>'
                     +'<tbody>';
@@ -123,12 +138,11 @@ function displayResults(data){
     for (var i = 0; i < data.length; i++) {
             sTable += '<tr>'
             + '<td class="result1 selectable">'+ data[i].name + '</td>'
-            + '<td class="result1 selectable">'+ data[i].number + '</td>'
-            + '<td class="result1 selectable">'+ data[i].level + '</td>'
-            + '<td class="result1 selectable">'+ data[i].item + '</td>'
-            + '<td class="result1 selectable">'+ data[i].subsidiary_account + '</td>'
-            + '<td class="result1 selectable">'+ data[i].nature_account + '</td>'
-            + '<td class="result1 selectable">'+ data[i].grouping_code + '</td>'
+            + '<td class="result1 selectable">'+ data[i].rfc + '</td>'
+            + '<td class="result1 selectable">'+ data[i].email + '</td>'
+            + '<td class="result1 selectable">'+ data[i].accounting_account + '</td>'
+            + '<td class="result1 selectable">'+ data[i].bank_account_name + '</td>'
+            + '<td class="result1 selectable">'+ data[i].register_date + '</td>'
             + '</tr>'
     }
 
