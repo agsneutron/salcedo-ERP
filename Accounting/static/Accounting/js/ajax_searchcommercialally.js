@@ -59,7 +59,7 @@ function search() {
     else{
         console.log("No TYPE");
     }
-    alert(url);
+    //alert(url);
 
 }
 
