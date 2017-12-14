@@ -79,7 +79,18 @@ class CreditorsAdmin(admin.ModelAdmin):
         }),
     )
 
+@admin.register(Account)
+class AccountAdmin(admin.ModelAdmin):
+    form = AccountForm
+
+    fieldsets = (
+        ("Cuentas", {
+            'fields': (
+            'number','name','status','nature_account','ledger_account','level','item','grouping_code','subsidiary_account')
+        }),
+    )
+
 admin.site.register(GroupingCode)
-admin.site.register(Account)
+
 
 

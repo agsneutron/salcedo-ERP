@@ -37,3 +37,8 @@ class CreditorsForm(forms.ModelForm):
         model = Creditors
         fields = '__all__'
 
+# Form to include the fields of the Account Form.
+class AccountForm(forms.ModelForm):
+    class Meta:
+        model = Account
+        fields = '__all__'
