@@ -1,0 +1,125 @@
+{% load app_filters %}
+    <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+<style>
+    .header {
+        background-color: #00a09b;
+        padding: 5px 10px;
+        color: white;
+    }
+
+    .col-xs-4 {
+    min-height: 65px;
+    }
+    .col-xs-4 br {
+    display: none !important;
+}
+  .datetimeshortcuts {
+
+    top: -38px !important;
+}
+
+   .bootstrap-select {
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+    line-height: 1.42857;
+    border: 1px solid #e2e2e2;
+    width: 100% !important;
+    color: black;
+    }
+    .bootstrap-select>button {
+        color: black !important;
+    position: inherit !important;
+    padding: 0px 5px !important;
+    margin: 0 !important;
+    }
+    .bootstrap-select.btn-group .dropdown-toggle .caret {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -2px;
+    vertical-align: middle;
+}
+    .bootstrap-select.btn-group .dropdown-menu {
+    height: 200px !important;
+}
+    .bootstrap-select.btn-group .dropdown-menu li a {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* word-break: keep-all; */
+    word-wrap: break-word;
+    white-space: normal;
+}
+</style>
+<fieldset class=" {{ fieldset.classes }}">
+    {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="">
+                <h3 class="section-title">{{ fieldset.name }}</h3>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+    <div>
+
+        {% for line in fieldset %}
+            <div class="campo{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}
+            {% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}
+                {% if field.field.name %}field-{{ field.field.name }}{% endif %}{% endfor %}">
+
+                {% for field in line %}
+
+
+                    <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
+                         class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
+                         class=“checkbox-row”{% endif %}>
+                        {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                        {% if field.is_checkbox %}
+                            {{ field.field }}{{ field.label_tag }}
+                        {% else %}
+                            {{ field.label_tag }}
+                            {% if field.is_readonly %}
+                                <div class=“readonly”>{{ field.contents }}</div>
+                            {% else %}
+                                {{ field.field }}
+                            {% endif %}
+                        {% endif %}
+                        {% if field.field.help_text %}
+                            <div class=“help”>{{ field.field.help_text|safe }}</div>
+                        {% endif %}
+                        {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+                    </div>
+                {% endfor %}
+
+            </div>
+        {% endfor %}
+    </div>
+
+
+</fieldset>
+<script>
+
+    $(document).ready(function () {
+        $('input').addClass('form-control');
+        $('select').addClass('form-control');
+
+
+    });
+
+</script>
