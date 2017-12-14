@@ -7,6 +7,9 @@ from django.contrib import admin
 from Accounting.models import *
 from Accounting.forms import *
 
+# Shared Catalogs Imports.
+from SharedCatalogs.models import GroupingCode, Account
+
 
 # Admin for the inline documents of the current education of an employee.
 class AccountingPolicyDetailInline(admin.TabularInline):
