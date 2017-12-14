@@ -128,6 +128,10 @@ class FiscalPeriod(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.accounting_year) + " " + self.get_account_period_display()
 
+    @staticmethod
+    def get_month_name_from_number(number):
+        return FiscalPeriod.MONTH_CHOICES[number - 1][1]
+
     class Meta:
         verbose_name_plural = 'Año contable'
         verbose_name = 'Año Contable'
@@ -183,7 +187,7 @@ class AccountingPolicyDetail(models.Model):
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit = models.FloatField(verbose_name="Debe", null=False, blank=False, default=0)
     credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
-    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
+    registry_date = models.DateField(null=False, blank=False, verbose_name="Fecha de Registro")
 
     def __str__(self):
         return str(self.account.number) + ": " + self.account.name
