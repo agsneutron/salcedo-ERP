@@ -34,8 +34,7 @@ class GeneralBalanceEngine():
 
     def generate(self):
 
-        level_1_debit_dict = {}
-        level_1_credit_dict = {}
+        accumulate_dict = {}
 
         records = AccountingPolicyDetail.objects.all()
 
@@ -60,39 +59,42 @@ class GeneralBalanceEngine():
                 print 'Parent ' + str(parent_grouping_code)
 
                 # Increase debit amount for parent
-                if not level_1_debit_dict.has_key(parent_grouping_code_number):
-                    level_1_debit_dict[parent_grouping_code_number] = 0
+                if not accumulate_dict.has_key(parent_grouping_code_number):
+                    accumulate_dict[parent_grouping_code_number] = 0
 
-                level_1_debit_dict[parent_grouping_code_number] += record.debit
+                code = account.grouping_code.grouping_code
 
-                # Increase credit amount for parent
-                if not level_1_credit_dict.has_key(parent_grouping_code_number):
-                    level_1_credit_dict[parent_grouping_code_number] = 0
+                if self.SHORT_TERM_ACTIVE_LOWER <= code <= self.LONG_TERM_ACTIVE_UPPER:
+                    # 100.01 - Active
+                    # Las cuentas de activo son de naturaleza deudora
+                    # -- Deber aumenta su saldo
+                    # -- Haber disminuye su saldo
+                    accumulate_dict[parent_grouping_code_number] += record.debit
+                    accumulate_dict[parent_grouping_code_number] -= record.credit
+                elif self.SHORT_TERM_PASSIVE_LOWER <= code <= self.LONG_TERM_PASSIVE_UPPER:
+                    # 200.01 - Passive
+                    # Las cuentas de pasivo son de naturaleza acreedora
+                    # -- Deber disminuye su saldo
+                    # -- Haber aumenta su saldo
+                    accumulate_dict[parent_grouping_code_number] -= record.debit
+                    accumulate_dict[parent_grouping_code_number] += record.credit
+                elif self.ACCOUNTING_CAPITAL_LOWER <= code <= self.ACCOUNTING_CAPITAL_UPPER:
+                    # 300.00 - Capital
+                    # Las cuentas de capital son de naturaleza crédito
+                    # -- Deber disminuye su saldo
+                    # -- Haber aumenta su saldo
+                    accumulate_dict[parent_grouping_code_number] -= record.debit
+                    accumulate_dict[parent_grouping_code_number] += record.credit
 
-                level_1_credit_dict[parent_grouping_code_number] += record.credit
-
-        print 'credit'
-        print level_1_credit_dict
-
-        print 'debit'
-        print level_1_debit_dict
+        print 'Accumulate'
+        print accumulate_dict
 
         # Now we have all the totals. Great.
 
-        debit_accumulate = self.create_accumulative_dict(level_1_debit_dict)
-        credit_accumulate = self.create_accumulative_dict(level_1_credit_dict)
+        debit_accumulate = self.create_accumulative_dict(accumulate_dict)
 
-        report_info = {
-            "debit": debit_accumulate,
-            "credit": credit_accumulate
-        }
-
-        print '-----'
-        print 'debit'
-        print debit_accumulate
-
-        print 'credit'
-        print credit_accumulate
+        report_info = debit_accumulate
+        print report_info
 
         response = self.generate_file(report_info, self.EXCEL)
         return response
@@ -149,7 +151,6 @@ class GeneralBalanceEngine():
         formats = self.get_formats(workbook)
         # Merge 3 cells.
         worksheet.merge_range('B10:D10', 'Activo', formats['level_0_header'])
-
 
         #
         # # Widen the first column to make the text clearer.
