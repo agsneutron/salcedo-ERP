@@ -10,6 +10,7 @@ from django.http import StreamingHttpResponse
 import os
 
 from Accounting.models import AccountingPolicyDetail, AccountingPolicy, GroupingCode
+from SharedCatalogs.models import Account
 
 
 class GeneralBalanceEngine():
@@ -38,8 +39,15 @@ class GeneralBalanceEngine():
         self.upper_account_number = upper_account_number
         self.fiscal_period_year = fiscal_period_year
         self.fiscal_period_month = fiscal_period_month
-        self.only_with_transactions = only_with_transactions,
-        self.only_with_balance = only_with_balance
+        if only_with_transactions is not None:
+            self.only_with_transactions = bool(int(only_with_transactions))
+        else:
+            self.only_with_transactions = False
+
+        if only_with_balance is not None:
+            self.only_with_balance = bool(int(only_with_balance))
+        else:
+            self.only_with_balance = False
 
     def get_filtered_records(self):
         q = Q()
@@ -61,7 +69,6 @@ class GeneralBalanceEngine():
 
         for record in records:
             account = record.account
-            print record.account.grouping_code
 
             if account.level is None:
                 # Top Level
@@ -77,7 +84,6 @@ class GeneralBalanceEngine():
                 current_grouping_code = account.grouping_code.grouping_code
                 parent_grouping_code_number = int(current_grouping_code)
                 parent_grouping_code = GroupingCode.objects.get(grouping_code=parent_grouping_code_number)
-                print 'Parent ' + str(parent_grouping_code)
 
                 # Increase debit amount for parent
                 if not accumulate_dict.has_key(parent_grouping_code):
@@ -107,15 +113,11 @@ class GeneralBalanceEngine():
                     accumulate_dict[parent_grouping_code] -= record.debit
                     accumulate_dict[parent_grouping_code] += record.credit
 
-        print 'Accumulate'
-        print accumulate_dict
-
         # Now we have all the totals. Great.
 
         debit_accumulate = self.create_accumulative_dict(accumulate_dict)
 
         report_info = debit_accumulate
-        print report_info
 
         response = self.generate_file(report_info, self.EXCEL)
         return response
@@ -139,22 +141,33 @@ class GeneralBalanceEngine():
 
         }
 
+        if not self.only_with_transactions:
+            # We have to add all the accounts that have no transactions
+            accounts = Account.objects.filter(grouping_code__level=2)
+            for account in accounts:
+                parent_groping_code_number = int(account.grouping_code.grouping_code)
+                parent_groping_code = GroupingCode.objects.get(grouping_code=parent_groping_code_number)
+                if not parent_groping_code in dict.keys():
+                    dict[parent_groping_code] = 0
+
         for (code, amount) in dict.iteritems():
-            if self.SHORT_TERM_ACTIVE_LOWER <= code.grouping_code <= self.SHORT_TERM_ACTIVE_UPPER:
-                # 100.01 - Short Term Active
-                response[short_term_active].append({"code": code, "amount": amount})
-            elif self.LONG_TERM_ACTIVE_LOWER <= code.grouping_code <= self.LONG_TERM_ACTIVE_UPPER:
-                # 100.02 - Long Term Active
-                response[long_term_active].append({"code": code, "amount": amount})
-            elif self.SHORT_TERM_PASSIVE_LOWER <= code.grouping_code <= self.SHORT_TERM_PASSIVE_UPPER:
-                # 200.01 - Short Term Passive
-                response[short_term_passive].append({"code": code, "amount": amount})
-            elif self.LONG_TERM_PASSIVE_LOWER <= code.grouping_code <= self.LONG_TERM_PASSIVE_UPPER:
-                # 200.02 - Long Term Active
-                response[long_term_passive].append({"code": code, "amount": amount})
-            elif self.ACCOUNTING_CAPITAL_LOWER <= code.grouping_code <= self.ACCOUNTING_CAPITAL_UPPER:
-                # 300.00 - Accounting Capital
-                response[accounting_capital].append({"code": code, "amount": amount})
+            if not self.only_with_balance or amount != 0:
+                if self.SHORT_TERM_ACTIVE_LOWER <= code.grouping_code <= self.SHORT_TERM_ACTIVE_UPPER:
+                    # 100.01 - Short Term Active
+                    response[short_term_active].append({"code": code, "amount": amount})
+                elif self.LONG_TERM_ACTIVE_LOWER <= code.grouping_code <= self.LONG_TERM_ACTIVE_UPPER:
+                    # 100.02 - Long Term Active
+                    response[long_term_active].append({"code": code, "amount": amount})
+                elif self.SHORT_TERM_PASSIVE_LOWER <= code.grouping_code <= self.SHORT_TERM_PASSIVE_UPPER:
+                    # 200.01 - Short Term Passive
+                    response[short_term_passive].append({"code": code, "amount": amount})
+                elif self.LONG_TERM_PASSIVE_LOWER <= code.grouping_code <= self.LONG_TERM_PASSIVE_UPPER:
+                    # 200.02 - Long Term Active
+                    response[long_term_passive].append({"code": code, "amount": amount})
+                elif self.ACCOUNTING_CAPITAL_LOWER <= code.grouping_code <= self.ACCOUNTING_CAPITAL_UPPER:
+                    # 300.00 - Accounting Capital
+                    response[accounting_capital].append({"code": code, "amount": amount})
+
         return response
 
     def generate_file(self, info, type):
@@ -199,7 +212,8 @@ class GeneralBalanceEngine():
 
         # Header
         # Insert Logo
-        worksheet.insert_image(header_start_row, offset, os.path.dirname(os.path.abspath(__file__)) + '/salcedo.png',
+        worksheet.insert_image(header_start_row, offset,
+                               os.path.dirname(os.path.abspath(__file__)) + '/assets/images/salcedo.png',
                                {
                                    'x_offset': 80,
                                    'y_offset': 0

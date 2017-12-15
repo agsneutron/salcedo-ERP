@@ -27,7 +27,8 @@ class PolicySearchEngine():
                  lower_credit=None,
                  upper_credit=None,
                  reference=None,
-                 only_with_transactions=None
+                 only_with_transactions=None,
+                 account_array = None
                  ):
 
         self.lower_fiscal_period_year = lower_fiscal_period_year
@@ -59,6 +60,7 @@ class PolicySearchEngine():
 
         self.only_with_transactions = only_with_transactions
 
+        self.account_array = account_array
 
     def search_policies(self):
         query = Q()
@@ -95,7 +97,7 @@ class PolicySearchEngine():
         if self.description is not None:
             query &= Q(description__icontains=self.description)
 
-        if self.lower_account_number is not None:
+        if self.lower_account_number is not None and self.account_array is None:
 
             policy_detail_array = []
             accounting_policy_detail_set = AccountingPolicyDetail.objects\
@@ -107,7 +109,7 @@ class PolicySearchEngine():
 
             query &= Q(id__in=policy_detail_array)
 
-        if self.upper_account_number is not None:
+        if self.upper_account_number is not None and self.account_array is None:
             policy_detail_array = []
             accounting_policy_detail_set = AccountingPolicyDetail.objects \
                 .filter(Q(account__number__lte=self.upper_account_number)) \
@@ -162,26 +164,40 @@ class PolicySearchEngine():
 
             query &= Q(id__in=policy_detail_array)
 
+
         if self.reference is not None:
             query &= Q(reference__icontains=self.reference)
+
+
+        if self.account_array is not None:
+            policy_detail_array = []
+            accounting_policy_detail_set = AccountingPolicyDetail.objects \
+                .filter(Q(account__number__in=self.account_array)) \
+                .values('accounting_policy__id').annotate(Count('accounting_policy__id'))
+
+            for record in accounting_policy_detail_set:
+                policy_detail_array.append(record['accounting_policy__id'])
+
+            query &= Q(id__in=policy_detail_array)
+
 
 
 
         results = AccountingPolicy.objects.filter(query)
 
 
-        if bool(self.only_with_transactions) == True:
-            exclude_array = []
-            for record in results:
-                accounting_policy_detail_set = AccountingPolicyDetail.objects.filter(Q(accounting_policy__id=record.id))
-                if len(accounting_policy_detail_set) <= 0:
-                    exclude_array.append(record.id)
+        if self.only_with_transactions is not None:
+            if bool(int(self.only_with_transactions)) == True:
+                exclude_array = []
+                for record in results:
+                    accounting_policy_detail_set = AccountingPolicyDetail.objects.filter(Q(accounting_policy__id=record.id))
+                    if len(accounting_policy_detail_set) <= 0:
+                        exclude_array.append(record.id)
 
-            results = results.exclude(Q(id__in=exclude_array))
-            return results
+                results = results.exclude(Q(id__in=exclude_array))
 
-        else:
-            return results
+
+        return results
 
 
 
