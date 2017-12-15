@@ -244,8 +244,8 @@ class SearchTransactionsByAccount(ListView):
 #
 
 class GenerateTrialBalance(ListView):
-    @staticmethod
-    def get_details_for_policies(policies_set):
+
+    def get_details_for_policies(self, policies_set):
         policies_id_array = []
         for policiy in policies_set:
             policies_id_array.append(policiy.id)
@@ -277,7 +277,7 @@ class GenerateTrialBalance(ListView):
 
         result = engine.search_policies()
 
-        policies_details_set = GenerateTrialBalance.get_details_for_policies(result)
+        policies_details_set = self.get_details_for_policies(result)
 
         # General data to send to the report maker.
         general_data = {
