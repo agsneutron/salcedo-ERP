@@ -14,13 +14,41 @@ from SharedCatalogs.models import GroupingCode, Account
 
 
 # Admin for the inline documents of the current education of an employee.
+class AccountingPolicyDetailInlineFormset(forms.models.BaseInlineFormSet):
+    def clean(self):
+        # get forms that actually have valid data
+        count = 0
+        for form in self.forms:
+            try:
+                if form.cleaned_data:
+                    count += 1
+
+                    data = form.cleaned_data
+                    debit = data['debit']
+                    credit = data['credit']
+
+                    if debit != 0 and credit != 0:
+                        raise forms.ValidationError(
+                            'No puede existir un valor de \'debe\' y \'haber\' para el mismo movimiento. ')
+
+                    if debit == 0 and credit == 0:
+                        raise forms.ValidationError(
+                            'Tiene que definirse un valor de \'debe\' o \'haber\' para todos los movimientos.')
+
+            except AttributeError:
+                # annoyingly, if a subform is invalid Django explicity raises
+                # an AttributeError for cleaned_data
+                pass
+
+
 class AccountingPolicyDetailInline(admin.TabularInline):
     model = AccountingPolicyDetail
     extra = 1
+    formset = AccountingPolicyDetailInlineFormset
 
     fieldsets = (
         ("Detalle", {
-            'fields': ('account', 'description','debit','credit')
+            'fields': ('account', 'description', 'debit', 'credit')
         }),
     )
 
@@ -34,11 +62,11 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Póliza", {
             'fields': (
-            'fiscal_period', 'type_policy', 'folio', 'registry_date', 'description',)
+                'fiscal_period', 'type_policy', 'folio', 'registry_date', 'description',)
         }),
     )
 
-    list_display = ('folio','type_policy', 'fiscal_period', 'description')
+    list_display = ('folio', 'type_policy', 'fiscal_period', 'description')
 
 
 @admin.register(FiscalPeriod)
@@ -48,7 +76,7 @@ class FiscalPeriodAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Periodo Fiscal", {
             'fields': (
-            'accounting_year', 'account_period', 'status')
+                'accounting_year', 'account_period', 'status')
         }),
     )
 
@@ -61,11 +89,10 @@ class FiscalPeriodAdmin(admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
         queryset, use_distinct = super(FiscalPeriodAdmin, self).get_search_results(request, queryset, search_term)
 
-
         if search_term is not "":
             keywords = search_term.split(" ")
 
-            years_array = None          # Set to none to control whether or not the user is searching for the year.
+            years_array = None  # Set to none to control whether or not the user is searching for the year.
             months_numbers_array = []
 
             for word in keywords:
@@ -99,7 +126,6 @@ class FiscalPeriodAdmin(admin.ModelAdmin):
         return queryset, use_distinct
 
 
-
 @admin.register(TypePolicy)
 class TypePolicyAdmin(admin.ModelAdmin):
     form = TypePolicyForm
@@ -107,7 +133,7 @@ class TypePolicyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Tipo de Póliza", {
             'fields': (
-            'name', 'balanced_accounts')
+                'name', 'balanced_accounts')
         }),
     )
 
@@ -123,15 +149,16 @@ class CommercialAllyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("", {
             'fields': (
-            'name', 'curp','rfc','phone_number','cellphone_number','office_number','extension_number','street','outdoor_number',
-            'indoor_number','colony','zip_code','country','state','town','accounting_account','bank',
-            'bank_account_name','bank_account','employer_registration_number','services','tax_person_type','status', 'type',)
+                'name', 'curp', 'rfc', 'phone_number', 'cellphone_number', 'office_number', 'extension_number',
+                'street', 'outdoor_number',
+                'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town', 'accounting_account', 'bank',
+                'bank_account_name', 'bank_account', 'employer_registration_number', 'services', 'tax_person_type',
+                'status', 'type',)
         }),
     )
 
-    list_display = ('name', 'rfc','phone_number','type','status')
+    list_display = ('name', 'rfc', 'phone_number', 'type', 'status')
     actions = None
-
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -179,8 +206,6 @@ class AccountAdmin(admin.ModelAdmin):
         }),
     )
 
+
 admin.site.register(GroupingCode)
 admin.site.register(CommercialAllyContact)
-
-
-
