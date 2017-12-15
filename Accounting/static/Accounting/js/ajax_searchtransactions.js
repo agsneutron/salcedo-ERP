@@ -32,6 +32,7 @@ function main(){
         reference = string*/
 
 function search() {
+    var url_policieslist=""
     var fiscal_period_year = $j("#fiscal_period_year").val();
     var fiscal_period_month = $j("#fiscal_period_month").val();
     var upper_fiscal_period_month = $j("#upper_fiscal_period_month").val();
@@ -101,15 +102,17 @@ function search() {
         url=url+"&reference="+reference.toString();
     }
 
+
+    url_policieslist = "lower_fiscal_period_year="+ fiscal_period_year.toString() +"&uppper_fiscal_period_year="+ fiscal_period_year.toString()  +"&lower_fiscal_period_month="+ fiscal_period_month.toString() +"&upper_fiscal_period_month="+ fiscal_period_month.toString() +"&account=";
     //alert(url);
     var staurl = sta_url+url;
-    searchengine(staurl);
+    searchengine(staurl,url_policieslist);
 }
 
 
 
 
-function searchengine(staurl) {
+function searchengine(staurl,url_policieslist) {
     // Setup CSRF tokens and all that good stuff so we don't get hacked
     $.ajaxSetup(
         {
@@ -133,7 +136,7 @@ function searchengine(staurl) {
         type: 'get',
         success: function (data) {
             //console.log(data);
-            displayResults(data);
+            displayResults(data,url_policieslist);
 
         },
         error: function (data) {
@@ -151,9 +154,11 @@ function searchengine(staurl) {
     /* });*/
 }
 
-function displayResults(data){
+function displayResults(data,url_policieslist){
     var sHtml="";
     var sTable="";
+    var sScript = "";
+
 
     $j('#divTable').html("<div></div>");
     sHtml ='<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
@@ -188,11 +193,10 @@ function displayResults(data){
             + '<td class="result1 selectable">'+ data.accounts[i].total_credit + '</td>'
             + '<td class="result1 selectable"><a href="' + tar_url + url + '&account=' + data.accounts[i].account_number + '" class="btn btn-raised btn-default btn-xs">'
             + '<i class="fa fa-file-excel-o color-default eliminar"></i></a>' + '</td>'
-            + '<td class="result1 selectable"><a href="" class="btn btn-raised btn-default btn-xs">'
+            + '<td class="result1 selectable"><a href="/accounting/policiesbyaccount?' + url_policieslist + data.accounts[i].account_number + '" class="btn btn-raised btn-default btn-xs">'
             + '<i class="fa fa-bars color-default eliminar"></i></a>' + '</td>'
             + '</tr>'
     }
-
     sTable +='</tbody>'
           +'</table>';
 

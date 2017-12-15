@@ -15,6 +15,7 @@ def SearchAccount(request):
 
     return HttpResponse(template.render(context,request))
 
+
 # For Search Comercial Allie filter objects view
 def SearchProvider(request):
     title = "Proveedores"
@@ -25,6 +26,7 @@ def SearchProvider(request):
 
     return HttpResponse(template.render(context,request))
 
+
 def SearchCreditors(request):
     title = "Acreedores"
     template = loader.get_template('Accounting/search_commercialally.html')
@@ -33,6 +35,7 @@ def SearchCreditors(request):
                'type': str("CREDITOR"), }
 
     return HttpResponse(template.render(context,request))
+
 
 def SearchThird(request):
     title = "Terceros"
@@ -50,11 +53,23 @@ def SearchPolicies(request):
 
     return HttpResponse(template.render(context,request))
 
-#For  Transactions by account filter objects view
+
+# For  Transactions by account filter objects view
 def SearchTransactions(request):
     template = loader.get_template('Accounting/search_transactions.html')
     context = {'typepolicy': TypePolicy.objects.all(),}
 
+    return HttpResponse(template.render(context, request))
+
+
+# For  Policies by account list view
+def PoliciesAccountList(request):
+    template = loader.get_template('Accounting/policiesbyaccount_list.html')
+    context = {'lower_fiscal_period_year': request.GET.get('lower_fiscal_period_year'),
+               'uppper_fiscal_period_year': request.GET.get('uppper_fiscal_period_year'),
+               'lower_fiscal_period_month': request.GET.get('lower_fiscal_period_month'),
+               'upper_fiscal_period_month': request.GET.get('upper_fiscal_period_month'),
+               'account': request.GET.get('account')}
     return HttpResponse(template.render(context, request))
 
 

@@ -1,0 +1,90 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}{{ block.super }}
+
+        <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/jquery.multiselect.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/multi-custom.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css"/>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
+
+    <style>
+
+    table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
+    position: absolute;
+    bottom: 8px;
+    right: 0px !important;
+    display: block;
+    font-family: 'Glyphicons Halflings';
+    opacity: 0.7;
+}
+    .form-inline {
+    display: block;
+}
+    .col-xs-4 {
+        height: 65px;
+    }
+    #msTypePolicyArray {
+            display: none !important;
+        }
+    .policy>.form-group {
+        margin: 0px;
+    }
+    </style>
+
+    <script type="text/javascript" src="{% static "Accounting/js/ajax_policiesbyaccount.js" %}"></script>
+
+{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+    {% include "admin/Accounting/accounting-home.html" %}
+    <div class="col-xs-9">
+        <div class="">
+            <div class="col-xs-12">
+
+                <div class="">
+                    <h3 class="section-title">Pólizas por Cuenta</h3>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <form>
+            <div class="col-xs-4">
+                Periodo Fiscal Año: {{ lower_fiscal_period_year }}
+                <input type="hidden" class="form-control" value="{{ lower_fiscal_period_year }}" id="lower_fiscal_period_year">
+                <input type="hidden" class="form-control" value="{{ upper_fiscal_period_year }}" id="upper_fiscal_period_year">
+            </div>
+            <div class="col-xs-4">
+                Periodo Fiscal Mes: {{ lower_fiscal_period_month }}
+                <input type="hidden" class="form-control" value="{{ lower_fiscal_period_month }}" id="lower_fiscal_period_month">
+                <input type="hidden" class="form-control" value="{{ upper_fiscal_period_month }}" id="upper_fiscal_period_month">
+            </div>
+            <div class="col-xs-4">
+                Número de Cuenta:{{ account }}
+                <input type="hidden" class="form-control" value="{{ account }}" id="account">
+            </div>
+
+            <div class="clearfix"></div>
+            <hr>
+                </form>
+        </div>
+
+        <div class="col-xs-12">
+            <div class="table-responsive" id="divTable">
+
+            </div>
+        </div>
+    </div>
+     <div class="clearfix"></div>
+    </div>
+
+
+{% endblock %}
