@@ -1,4 +1,5 @@
 # coding=utf-8
+from django.db.models.aggregates import Sum, Count
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
 from django.views.generic.list import ListView
@@ -9,6 +10,7 @@ from Accounting.search_engines.account_engine import AccountSearchEngine
 from Accounting.search_engines.general_balance import GeneralBalanceEngine
 from Accounting.search_engines.provider_engine import ProviderSearchEngine
 from Accounting.search_engines.policy_engine import PolicySearchEngine
+from Accounting.search_engines.transactions_engine import TransactionesEngine
 from ERP.lib.utilities import Utilities
 from datetime import datetime
 
@@ -65,7 +67,8 @@ class SearchPolicies(ListView):
             upper_debit=upper_debit,
             lower_credit=lower_credit,
             upper_credit=upper_credit,
-            reference=reference
+            reference=reference,
+            only_with_transactions= False
         )
 
         result = engine.search_policies()
@@ -122,6 +125,72 @@ class SearchProviders(ListView):
         results = engine.search()
 
         return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
+
+
+class SearchTransactionsByAccount(ListView):
+
+
+    def get(self, request, *args, **kwargs):
+        lower_fiscal_period_year = request.GET.get('lower_fiscal_period_year')
+        upper_fiscal_period_year = request.GET.get('upper_fiscal_period_year')
+
+        lower_fiscal_period_month = request.GET.get('lower_fiscal_period_month')
+        upper_fiscal_period_month = request.GET.get('upper_fiscal_period_month')
+
+        type_policy_array = get_array_or_none(request.GET.get('type_policy_array'))
+
+        lower_folio = request.GET.get('lower_folio')
+        upper_folio = request.GET.get('upper_folio')
+
+        lower_registry_date = Utilities.string_to_date(request.GET.get('lower_registry_date'))
+        upper_registry_date = Utilities.string_to_date(request.GET.get('upper_registry_date'))
+
+        description = request.GET.get('description')
+
+        lower_account_number = request.GET.get('lower_account_number')
+        upper_account_number = request.GET.get('upper_account_number')
+
+        lower_debit = request.GET.get('lower_debit')
+        upper_debit = request.GET.get('upper_debit')
+
+        lower_credit = request.GET.get('lower_credit')
+        upper_credit = request.GET.get('upper_credit')
+
+        reference = request.GET.get('reference')
+
+        # If the account number is set, the range is ignored.
+        account_number_array = get_array_or_none(request.GET.get('account'))
+
+        engine = TransactionesEngine(
+            lower_fiscal_period_year=lower_fiscal_period_year,
+            upper_fiscal_period_year=upper_fiscal_period_year,
+            lower_fiscal_period_month=lower_fiscal_period_month,
+            upper_fiscal_period_month=upper_fiscal_period_month,
+            type_policy_array=type_policy_array,
+            lower_folio=lower_folio,
+            upper_folio=upper_folio,
+            lower_registry_date=lower_registry_date,
+            upper_registry_date=upper_registry_date,
+            description=description,
+            lower_account_number=lower_account_number,
+            upper_account_number=upper_account_number,
+            lower_debit=lower_debit,
+            upper_debit=upper_debit,
+            lower_credit=lower_credit,
+            upper_credit=upper_credit,
+            reference=reference,
+            only_with_transactions=False,
+            account_array=account_number_array
+        )
+
+        result = engine.search_transactions()
+
+        grouped_by_accounts = result.values('account__id', 'account__name')\
+            .annotate(Count('account__id'), Count('account__name'), total_credit=Sum('credit'), total_debit=Sum('debit'))
+
+        print grouped_by_accounts
+
+        return  HttpResponse(Utilities.query_set_to_dumps(result) , 'application/json; charset=utf-8', )
 
 
 #
