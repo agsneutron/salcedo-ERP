@@ -31,14 +31,33 @@ class GeneralBalanceEngine():
     EXCEL = 1
     PDF = 2
 
-    def __init__(self):
-        pass
+    def __init__(self, title, lower_account_number, upper_account_number, fiscal_period_year, fiscal_period_month,
+                 only_with_transactions, only_with_balance):
+        self.title = title
+        self.lower_account_number = lower_account_number
+        self.upper_account_number = upper_account_number
+        self.fiscal_period_year = fiscal_period_year
+        self.fiscal_period_month = fiscal_period_month
+        self.only_with_transactions = only_with_transactions,
+        self.only_with_balance = only_with_balance
+
+    def get_filtered_records(self):
+        q = Q()
+        if self.lower_account_number is not None:
+            q &= Q(account__number__gte=self.lower_account_number)
+        if self.upper_account_number is not None:
+            q &= Q(account__number__lte=self.upper_account_number)
+        if self.fiscal_period_year is not None:
+            q &= Q(accounting_policy__fiscal_period__accounting_year=self.fiscal_period_year)
+        if self.fiscal_period_month is not None:
+            q &= Q(accounting_policy__fiscal_period__account_period=self.fiscal_period_month)
+        return AccountingPolicyDetail.objects.filter(q)
 
     def generate(self):
 
         accumulate_dict = {}
 
-        records = AccountingPolicyDetail.objects.all()
+        records = self.get_filtered_records()
 
         for record in records:
             account = record.account
