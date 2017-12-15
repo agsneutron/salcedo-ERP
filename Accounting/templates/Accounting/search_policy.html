@@ -2,6 +2,7 @@
 {% load i18n admin_static %}
 
 {% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
 
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
 
@@ -14,6 +15,9 @@
     <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
     <script type="text/javascript" src="{% static "Accounting/js/ajax_searchpolicy.js" %}"></script>
     <style>
+    #msTypePolicyArray{
+            display: none !important;
+        }
     table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
     position: absolute;
     bottom: 8px;
@@ -127,10 +131,10 @@
                 </select>
             </div>
             <div class="col-xs-3">
-                Fecha de Registro de:<input type="date" class="form-control" id="lower_registry_date">
+                Fecha de Registro de:<input type="date" class="vDateField form-control" id="lower_registry_date">
             </div>
             <div  class="col-xs-3">
-                Fecha de Registro a:<input type="date" class="form-control" id="upper_registry_date">
+                Fecha de Registro a:<input type="date" class=" vDateField form-control" id="upper_registry_date">
             </div>
             <div class="col-xs-3">
                 Número de Cuenta de:<input type="number" class="form-control" id="lower_account_number">
