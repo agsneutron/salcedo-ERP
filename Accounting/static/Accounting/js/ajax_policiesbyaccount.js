@@ -4,7 +4,7 @@
 
 var $j = jQuery.noConflict();
 
-$j(document).on('ready', main());
+$j(document).on('ready', main);
 
 function main() {
 
@@ -47,7 +47,6 @@ function list_policies() {
     var lower_fiscal_period_month = $j("#lower_fiscal_period_month").val();
     var upper_fiscal_period_month = $j("#upper_fiscal_period_month").val();
     var account = $j("#account").val();
-
 
     var url = "/accounting/search_policies?";
 
