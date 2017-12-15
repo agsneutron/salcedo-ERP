@@ -2,6 +2,7 @@
 {% load i18n admin_static %}
 
 {% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
 
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
 
@@ -121,10 +122,10 @@
                 </select>
             </div>
             <div class="col-xs-3">
-                Fecha de Registro de:<input type="date" class="form-control" id="lower_registry_date">
+                Fecha de Registro de:<input type="date" class="vDateField form-control" id="lower_registry_date">
             </div>
             <div  class="col-xs-3">
-                Fecha de Registro a:<input type="date" class="form-control" id="upper_registry_date">
+                Fecha de Registro a:<input type="date" class=" vDateField form-control" id="upper_registry_date">
             </div>
             <div class="col-xs-3">
                 Número de Cuenta de:<input type="number" class="form-control" id="lower_account_number">

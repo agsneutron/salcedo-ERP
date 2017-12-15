@@ -179,26 +179,25 @@ function displayResults(data){
 
     sTable= '<thead>'
                         +'<tr>'
-                            +'<th>Nombre</th>'
-                            +'<th>No.</th>'
-                            +'<th>Nivel</th>'
-                            +'<th>Rubro</th>'
-                            +'<th>Subcuenta</th>'
-                            +'<th>Naturaleza</th>'
-                            +'<th>Cód. Agrupador SAT</th>'
+                            +'<th>Periodo Fiscal</th>'
+                            +'<th>Tipo de Póliza</th>'
+                            +'<th>Folio</th>'
+                            +'<th>Fecha de Registro</th>'
+                            +'<th>Descripción</th>'
+                            +'<th>Referencia</th>'
+
                         +'</tr>'
                     +'</thead>'
                     +'<tbody>';
 
     for (var i = 0; i < data.length; i++) {
             sTable += '<tr>'
-            + '<td class="result1 selectable">'+ data[i].name + '</td>'
-            + '<td class="result1 selectable">'+ data[i].number + '</td>'
-            + '<td class="result1 selectable">'+ data[i].level + '</td>'
-            + '<td class="result1 selectable">'+ data[i].item + '</td>'
-            + '<td class="result1 selectable">'+ data[i].subsidiary_account + '</td>'
-            + '<td class="result1 selectable">'+ data[i].nature_account + '</td>'
-            + '<td class="result1 selectable">'+ data[i].grouping_code + '</td>'
+            + '<td class="result1 selectable">'+ data[i].fiscal_period_month + '-' + data[i].fiscal_period_year + '</td>'
+            + '<td class="result1 selectable">'+ data[i].type_policy + '</td>'
+            + '<td class="result1 selectable">'+ data[i].folio + '</td>'
+            + '<td class="result1 selectable">'+ data[i].registry_date + '</td>'
+            + '<td class="result1 selectable">'+ data[i].description + '</td>'
+            + '<td class="result1 selectable">'+ data[i].reference + '</td>'
             + '</tr>'
     }
 
