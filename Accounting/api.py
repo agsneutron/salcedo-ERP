@@ -4,13 +4,12 @@ from django.http.response import HttpResponse
 from django.views.generic.list import ListView
 
 from Accounting.models import AccountingPolicyDetail
+from Accounting.reports.general_balance import GeneralBalanceEngine
 from Accounting.reports.trial_balance import TrialBalanceReport
 from Accounting.search_engines.account_engine import AccountSearchEngine
-from Accounting.search_engines.general_balance import GeneralBalanceEngine
-from Accounting.search_engines.provider_engine import ProviderSearchEngine
 from Accounting.search_engines.policy_engine import PolicySearchEngine
+from Accounting.search_engines.provider_engine import ProviderSearchEngine
 from ERP.lib.utilities import Utilities
-from datetime import datetime
 
 
 def get_array_or_none(the_string):

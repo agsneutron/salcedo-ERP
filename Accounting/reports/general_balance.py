@@ -69,7 +69,6 @@ class GeneralBalanceEngine():
 
         for record in records:
             account = record.account
-            print record.account.grouping_code
 
             if account.level is None:
                 # Top Level
@@ -85,7 +84,6 @@ class GeneralBalanceEngine():
                 current_grouping_code = account.grouping_code.grouping_code
                 parent_grouping_code_number = int(current_grouping_code)
                 parent_grouping_code = GroupingCode.objects.get(grouping_code=parent_grouping_code_number)
-                print 'Parent ' + str(parent_grouping_code)
 
                 # Increase debit amount for parent
                 if not accumulate_dict.has_key(parent_grouping_code):
@@ -115,15 +113,11 @@ class GeneralBalanceEngine():
                     accumulate_dict[parent_grouping_code] -= record.debit
                     accumulate_dict[parent_grouping_code] += record.credit
 
-        print 'Accumulate'
-        print accumulate_dict
-
         # Now we have all the totals. Great.
 
         debit_accumulate = self.create_accumulative_dict(accumulate_dict)
 
         report_info = debit_accumulate
-        print report_info
 
         response = self.generate_file(report_info, self.EXCEL)
         return response
@@ -147,9 +141,6 @@ class GeneralBalanceEngine():
 
         }
 
-        print '::::::DICT'
-        print dict
-
         if not self.only_with_transactions:
             # We have to add all the accounts that have no transactions
             accounts = Account.objects.filter(grouping_code__level=2)
@@ -158,8 +149,6 @@ class GeneralBalanceEngine():
                 parent_groping_code = GroupingCode.objects.get(grouping_code=parent_groping_code_number)
                 if not parent_groping_code in dict.keys():
                     dict[parent_groping_code] = 0
-
-        print dict
 
         for (code, amount) in dict.iteritems():
             if not self.only_with_balance or amount != 0:
@@ -223,7 +212,8 @@ class GeneralBalanceEngine():
 
         # Header
         # Insert Logo
-        worksheet.insert_image(header_start_row, offset, os.path.dirname(os.path.abspath(__file__)) + '/salcedo.png',
+        worksheet.insert_image(header_start_row, offset,
+                               os.path.dirname(os.path.abspath(__file__)) + '/assets/images/salcedo.png',
                                {
                                    'x_offset': 80,
                                    'y_offset': 0
