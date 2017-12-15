@@ -61,13 +61,21 @@
                         calculateCredit();
                         calculateDebit();
 
+                        addListeners();
+
+                        $('.add-row a').click(function(){
+                            addListeners()
+                        });
+                    });
+
+                    function addListeners() {
                         $("input[name*='debit']").change(function () {
                             calculateDebit();
                         });
                         $("input[name*='credit']").change(function () {
                             calculateCredit();
                         });
-                    });
+                    }
 
                     function calculateDebit() {
                         var total = 0;
