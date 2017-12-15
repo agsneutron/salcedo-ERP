@@ -11,83 +11,14 @@ from django.forms import model_to_dict
 from django.utils.timezone import now
 from smart_selects.db_fields import ChainedForeignKey
 
-from ERP.models import Pais, Estado, Municipio, Bank
+from ERP.models import Pais, Estado, Municipio
 from Logs.controller import Logs
 
 
-class GroupingCode(models.Model):
-    level = models.CharField(verbose_name="Nivel", max_length=5, )
-    grouping_code = models.DecimalField(verbose_name="Código Agrupador", max_digits=20, decimal_places=2, )
-    account_name = models.CharField(verbose_name="Nombre de la Cuenta y/o subcuenta", max_length=500, )
-
-    def __str__(self):
-        return str(self.grouping_code) + ": " + self.account_name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.grouping_code) + ": " + self.account_name
-
-    class Meta:
-        verbose_name_plural = 'Código Agrupador de Cuentas del SAT.'
-        verbose_name = 'Código Agrupador de Cuentas del SAT.'
+# Shared Catalogs Imports.
+from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account
 
 
-class Account(models.Model):
-    ACTIVE = 1
-    NON_ACTIVE = 2
-
-    STATUS_CHOICES = (
-        (ACTIVE, 'Activa'),
-        (NON_ACTIVE, 'Inactiva'),
-    )
-
-    DEBIT = 1  # PAYABLE RECEIVABLE
-    CREDIT = 2
-    DEBIT_CREDIT_CHOICES = (
-        (DEBIT, "Deudora"),
-        (CREDIT, "Acreedora"),
-    )
-
-    LEDGER = 1
-    NO_LEDGER = 2
-    LG_ACCOUNT_CHOICES = (
-        (LEDGER, "Si"),
-        (NO_LEDGER, "No"),
-    )
-
-    number = models.IntegerField(verbose_name="Número de Cuenta", null=False, )
-    name = models.CharField(verbose_name="Nombre de la Cuenta", max_length=500, null=False, )
-    status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
-
-    nature_account = models.IntegerField(choices=DEBIT_CREDIT_CHOICES, default=DEBIT,
-                                         verbose_name='Naturaleza de Cuenta')
-    ledger_account = models.IntegerField(choices=LG_ACCOUNT_CHOICES, default=LEDGER, verbose_name='Cuenta de Mayor')
-    level = models.CharField(verbose_name="Nivel", max_length=500, null=False, )
-    item = models.CharField(verbose_name="Rubro", max_length=500, null=False, )
-
-    # foreign
-    grouping_code = models.ForeignKey(GroupingCode, verbose_name="Código Agrupador SAT", )
-    subsidiary_account = models.ForeignKey('self', verbose_name='Subcuenta de', null=True, blank=True)
-
-    def __str__(self):
-        return str(self.number) + ": " + self.name
-
-    def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.number) + ": " + self.name
-
-    class Meta:
-        verbose_name_plural = 'Cuentas'
-        verbose_name = 'Cuenta'
-
-    def to_serializable_dict(self):
-        dict = model_to_dict(self)
-        dict['nature_account'] = self.get_nature_account_display()
-        dict['ledger_account'] = self.get_ledger_account_display()
-        dict['grouping_code'] = self.grouping_code.account_name
-        dict['status'] = self.get_status_display()
-        if self.subsidiary_account is not None:
-            dict['subsidiary_account'] = self.subsidiary_account.number
-
-        return dict
 
 
 # Model for accounting policy
@@ -123,13 +54,41 @@ class FiscalPeriod(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPENED, verbose_name='Estatus')
 
     def __str__(self):
-        return str(self.accounting_year) + " " + self.get_account_period_display()
+        return self.get_account_period_display() + " " + str(self.accounting_year)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.accounting_year) + " " + self.get_account_period_display()
+        return self.get_account_period_display() + " " + str(self.accounting_year)
+
+    @staticmethod
+    def get_month_name_from_number(number):
+        return FiscalPeriod.MONTH_CHOICES[number - 1][1]
+
+    @staticmethod
+    def get_month_number_from_substring(substring):
+        months = {
+            "enero": 1,
+            "febrero": 2,
+            "marzo": 3,
+            "abril": 4,
+            "mayo": 5,
+            "junio": 6,
+            "julio": 7,
+            "agosto": 8,
+            "septiembre": 9,
+            "octubre": 10,
+            "noviembre": 11,
+            "diciembre": 12
+        }
+
+        months_numbers_array = []
+        for key, value in months.items():
+            if substring in key:
+                months_numbers_array.append(value)
+
+        return months_numbers_array
 
     class Meta:
-        verbose_name_plural = 'Año contable'
+        verbose_name_plural = 'Años contables'
         verbose_name = 'Año Contable'
 
 
@@ -159,10 +118,10 @@ class AccountingPolicy(models.Model):
     reference = models.CharField(verbose_name="Referencia", max_length=1024, null=False, blank=False)
 
     def __str__(self):
-        return str(self.type_policy) + ": " + str(self.folio)
+        return str(self.type_policy) + ": " + str(self.folio) + " del periodo fiscal " + str(self.fiscal_period)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.type_policy) + ": " + str(self.folio)
+        return str(self.type_policy) + ": " + str(self.folio) + " del periodo fiscal " + str(self.fiscal_period)
 
     class Meta:
         verbose_name_plural = 'Pólizas Contables'
@@ -183,7 +142,7 @@ class AccountingPolicyDetail(models.Model):
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit = models.FloatField(verbose_name="Debe", null=False, blank=False, default=0)
     credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
-    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
+    registry_date = models.DateField(null=False, blank=False, verbose_name="Fecha de Registro")
 
     def __str__(self):
         return str(self.account.number) + ": " + self.account.name
@@ -191,9 +150,18 @@ class AccountingPolicyDetail(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.account.number) + ": " + self.account.name
 
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
+        return ans
+
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
+
+    def save(self, *args, **kwargs):
+        self.registry_date = now()
+        super(AccountingPolicyDetail, self).save(*args, **kwargs)
 
 
 class CommercialAlly(models.Model):
@@ -251,7 +219,7 @@ class CommercialAlly(models.Model):
 
     accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
     bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
-    bank_account_name = models.CharField(verbose_name="Nombre del Banco", max_length=512, default="", null=True,
+    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
                                          blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
@@ -273,6 +241,7 @@ class CommercialAlly(models.Model):
 
     class Meta:
         verbose_name_plural = 'Aliado Comercial'
+        verbose_name = 'Aliado Comercial'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)

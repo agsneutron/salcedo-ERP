@@ -13,11 +13,13 @@ urlpatterns = [
 
     # Reports.
     url(r'^generate_trial_balance', api.GenerateTrialBalance.as_view(), name='trial-balance'),
+    url(r'^generate_general_balance', api.GenerateBalance.as_view(), name='general-balance'),
 
     # F/E
     url(r'^searchaccount', views.SearchAccount, name='searchaccount'),
     url(r'^searchprovider', views.SearchProvider, name='searchprovider'),
     url(r'^searchcreditors', views.SearchCreditors, name='searchcreditors'),
+    url(r'^searchpolicies', views.SearchPolicies, name='searchpolicies'),
     url(r'^searchthird', views.SearchThird, name='searchthird'),
 
 

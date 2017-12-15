@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'smart_selects',
     'oauth2_provider',
     'users',
+    'SharedCatalogs',
     'ERP',
     'reporting',
     'DataUpload',
