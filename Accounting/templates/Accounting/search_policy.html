@@ -31,34 +31,12 @@
 
         var $j = jQuery.noConflict();
         $j(function () {
-            $j("#msName").multiselect({
+            $j("#msTypePolicyArray").multiselect({
                 header: true,
                 checkAllText: 'Marcar todos',
                 uncheckAllText: 'Desmarcar todos',
-                noneSelectedText: 'Nombre',
-                selectedText: '# Nombre'
-            });
-
-            $j("#msSubsidiaryAccountArray").multiselect({
-                header: true,
-                checkAllText: 'Marcar todos',
-                uncheckAllText: 'Desmarcar todos',
-                noneSelectedText: 'Seleccione',
-                selectedText: 'Seleccione'
-            });
-            $j("#msNatureAccountArray").multiselect({
-                header: true,
-                checkAllText: 'Marcar todos',
-                uncheckAllText: 'Desmarcar todos',
-                noneSelectedText: 'Seleccione',
-                selectedText: 'Seleccione'
-            });
-            $j("#msGroupingCodeArray").multiselect({
-                header: true,
-                checkAllText: 'Marcar todos',
-                uncheckAllText: 'Desmarcar todos',
-                noneSelectedText: 'Seleccione',
-                selectedText: 'Seleccione'
+                noneSelectedText: 'Tipo de Póliza',
+                selectedText: '# Tipo de Póliza'
             });
             $j('.ui-widget-content').css('width', 'auto');
         });
