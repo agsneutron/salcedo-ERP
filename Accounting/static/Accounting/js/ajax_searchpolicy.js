@@ -10,39 +10,108 @@ function main(){
      $j('#searchpolicy').on('click', search);
 }
 
-//http://127.0.0.1:8000/accounting/search_accounts?name=Cuenta%202&number=2&subsidiary_account_array=1&
-// nature_account_array=2&grouping_code_array=2&level=2&item=2
-function search() {
-    var subsidiary_account_array = $j("#msSubsidiaryAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var nature_account_array = $j("#msNatureAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var grouping_code_array = $j("#msGroupingCodeArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var account = $j("#account").val();
-    var number = $j("#number").val();
-    var level = $j("#level").val();
-    var rubro = $j("#rubro").val();
-    var url = "/accounting/search_accounts?";
+/*  Parámetros:*
 
-    if (account.toString()!="") {
-        url = url + "&name=" + account.toString();
+        lower_fiscal_period_year (int)
+        upper_fiscal_period_year (int)
+
+        lower_fiscal_period_month (int)[1 - 12]
+        upper_fiscal_period_month (int)[1 - 12]
+
+        type_policy_array (int) [arreglo id’s de los tipos de póliza]
+
+        lower_folio (int)
+        upper_folio (int)
+
+        lower_registry_date (string) [m/d/YYYY]
+        upper_registry_date (string) [m/d/YYYY]
+
+        description (string)
+
+        lower_account_number (int)
+        upper_account_number (int)
+
+        lower_debit (int)
+        upper_debit (int)
+
+        lower_credit (int)
+        upper_credit (int)
+
+        reference (string)*/
+
+function search() {
+    var lower_fiscal_period_year = $j("#lower_fiscal_period_year").val();
+    var upper_fiscal_period_year = $j("#upper_fiscal_period_year").val();
+    var lower_fiscal_period_month = $j("#lower_fiscal_period_month").val();
+    var upper_fiscal_period_month = $j("#upper_fiscal_period_month").val();
+    var type_policy_array = $j("#msTypePolicyArray").multiselect("getChecked").map(function(){return this.value;}).get();
+    var lower_folio = $j("#lower_folio").val();
+    var upper_folio = $j("#upper_folio").val();
+    var lower_registry_date = $j("#lower_registry_date").val();
+    var upper_registry_date = $j("#upper_registry_date").val();
+    var description = $j("#description").val();
+    var lower_account_number = $j("#lower_account_number").val();
+    var upper_account_number = $j("#upper_account_number").val();
+    var lower_debit = $j("#lower_debit").val();
+    var upper_debit = $j("#upper_debit").val();
+    var lower_credit = $j("#lower_credit").val();
+    var upper_credit = $j("#upper_credit").val();
+    var reference = $j("#reference").val();
+
+    var url = "/accounting/search_policies?";
+
+    if (lower_fiscal_period_year.toString()!="") {
+        url = url + "&lower_fiscal_period_year=" + lower_fiscal_period_year.toString();
     }
-    if (number.toString()!="") {
-        url=url+"&number="+number.toString();
+    if (upper_fiscal_period_year.toString()!="") {
+        url=url+"&upper_fiscal_period_year="+upper_fiscal_period_year.toString();
     }
-    if (subsidiary_account_array.toString()!="") {
-        url=url+"&subsidiary_account_array="+subsidiary_account_array.toString();
+    if (lower_fiscal_period_month.toString()!="") {
+        url=url+"&lower_fiscal_period_month="+lower_fiscal_period_month.toString();
     }
-    if (nature_account_array.toString()!="") {
-        url=url+"&nature_account_array="+nature_account_array.toString();
+    if (upper_fiscal_period_month.toString()!="") {
+        url=url+"&upper_fiscal_period_month="+upper_fiscal_period_month.toString();
     }
-    if (grouping_code_array.toString()!="") {
-        url=url+"&grouping_code_array="+grouping_code_array.toString();
+    if (type_policy_array.toString()!="") {
+        url=url+"&type_policy_array="+type_policy_array.toString();
     }
-    if (level.toString()!="") {
-        url=url+"&level="+level.toString();
+    if (lower_folio.toString()!="") {
+        url=url+"&lower_folio="+lower_folio.toString();
     }
-    if (rubro.toString()!="") {
-        url=url+"&rubro="+rubro.toString();
+    if (upper_folio.toString()!="") {
+        url=url+"&upper_folio="+upper_folio.toString();
     }
+    if (lower_registry_date.toString()!="") {
+        url=url+"&lower_registry_date="+lower_registry_date.toString();
+    }
+    if (upper_registry_date.toString()!="") {
+        url=url+"&upper_registry_date="+upper_registry_date.toString();
+    }
+    if (description.toString()!="") {
+        url=url+"&description="+description.toString();
+    }
+    if (lower_account_number.toString()!="") {
+        url=url+"&lower_account_number="+lower_account_number.toString();
+    }
+    if (upper_account_number.toString()!="") {
+        url=url+"&upper_account_number="+upper_account_number.toString();
+    }
+    if (lower_debit.toString()!="") {
+        url=url+"&lower_debit="+lower_debit.toString();
+    }
+    if (upper_debit.toString()!="") {
+        url=url+"&upper_debit="+upper_debit.toString();
+    }
+    if (lower_credit.toString()!="") {
+        url=url+"&lower_credit="+lower_credit.toString();
+    }
+    if (upper_credit.toString()!="") {
+        url=url+"&upper_credit="+upper_credit.toString();
+    }
+    if (reference.toString()!="") {
+        url=url+"&reference="+reference.toString();
+    }
+
     //alert(url);
     searchengine(url);
 }
