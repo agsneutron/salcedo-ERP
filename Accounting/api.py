@@ -319,7 +319,7 @@ class GenerateBalance(ListView):
 
 class GenerateTransactionsByAccountReport(ListView):
 
-    def create_general_structure(self, year, month, account):
+    def create_general_structure(self, report_title, year, month, account):
 
         parent_account = account.subsidiary_account
         if parent_account is None:
@@ -329,7 +329,13 @@ class GenerateTransactionsByAccountReport(ListView):
             parent_account_name = parent_account.name
             parent_account_number = parent_account.number
 
+        if report_title is None or report_title is "":
+            title = "Transacciones de la cuenta " + str(account.number) + " " + account.name
+        else:
+            title = report_title
+
         general_structure = {
+            'report_title': title,
             'fiscal_period_year': year,
             'fiscal_period_month': month,
             'account_number': account.number,
@@ -382,6 +388,8 @@ class GenerateTransactionsByAccountReport(ListView):
 
         reference = request.GET.get('reference')
 
+        report_title = request.GET.get('report_title')
+
         # If the account number is set, the range is ignored.
         account_number_array = get_array_or_none(request.GET.get('account'))
 
@@ -417,6 +425,7 @@ class GenerateTransactionsByAccountReport(ListView):
 
         # Creating the general structure for the response.
         general_structure = self.create_general_structure(
+            report_title,
             fiscal_period_year,
             fiscal_period_month,
             account_object
@@ -437,4 +446,7 @@ class GenerateTransactionsByAccountReport(ListView):
         general_structure['total_debit'] =  total_debit
         general_structure['total_credit'] =  total_credit
 
-        return HttpResponse(Utilities.json_to_dumps(general_structure) , 'application/json; charset=utf-8', )
+
+        return engine.generate_report(general_structure)
+
+        #return HttpResponse(Utilities.json_to_dumps(general_structure) , 'application/json; charset=utf-8', )
