@@ -123,7 +123,8 @@ class TransactionsEngine():
         response = {"fiscal_period_year": 2017, "fiscal_period_month": "Septiembre", "account_number": 1231238,
                     "account_id": 132, "account_name": "Cool Account", "parent_account_name": "Super Parent",
                     "parent_account_number": "666", "grouping_code": 119.01,
-                    "grouping_code_name": "Gastos Innecesarios"}
+                    "grouping_code_name": "Gastos Innecesarios",
+                    "total_debit": 10000, "total_credit": 20000, "report_title": "Transacciones_por_cuenta"}
 
         transactions = []
         transactions += self.get_test_transactions()
@@ -257,7 +258,15 @@ class TransactionsEngine():
         '''
             Transactions Section
         '''
-        current_row += 4
+
+        current_row += 2
+        worksheet.write(current_row, 4 + offset, "Total Debe", formats['report_header'])
+        worksheet.write(current_row, 5 + offset, data['total_debit'], formats['currency_1'])
+        current_row += 1
+        worksheet.write(current_row, 4 + offset, "Total Haber", formats['report_header'])
+        worksheet.write(current_row, 5 + offset, data['total_credit'], formats['currency_1'])
+
+        current_row += 1
         # Headers
         worksheet.write(current_row, offset, '#', formats['info_label'])
         worksheet.write(current_row, 1 + offset, 'Descripción', formats['info_label'])
@@ -282,7 +291,7 @@ class TransactionsEngine():
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=Balanza_de_Comprobación.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=' + data['report_title']
         response['Content-Length'] = output.tell()
 
         output.seek(0)
@@ -335,6 +344,15 @@ class TransactionsEngine():
             'num_format': '$#,##0',
             'fg_color': colors['white']})
 
+        formats['report_header'] = workbook.add_format({
+            'border': 1,
+            'bold': 1,
+            'align': 'center',
+            'valign': 'vcenter',
+            'num_format': '$#,##0',
+            'color': colors['white'],
+            'fg_color': colors['blue-1']})
+
         ## old
 
         formats['level_00_header'] = workbook.add_format({
@@ -368,15 +386,6 @@ class TransactionsEngine():
             'fg_color': colors['gray-2']})
 
         formats['level_00_total_label'] = workbook.add_format({
-            'border': 1,
-            'bold': 1,
-            'align': 'center',
-            'valign': 'vcenter',
-            'num_format': '$#,##0',
-            'color': colors['white'],
-            'fg_color': colors['blue-1']})
-
-        formats['report_header'] = workbook.add_format({
             'border': 1,
             'bold': 1,
             'align': 'center',
