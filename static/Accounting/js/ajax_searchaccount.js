@@ -3,11 +3,14 @@
  */
 var $j = jQuery.noConflict();
 
-$j(document).on('ready', search);
+$j(document).on('ready', main);
+
+function main(){
+     $j('#searchaccount').on('click', search);
+}
 
 //http://127.0.0.1:8000/accounting/search_accounts?name=Cuenta%202&number=2&subsidiary_account_array=1&
 // nature_account_array=2&grouping_code_array=2&level=2&item=2
-    $j('#searchaccount').on('click', search());
 function search() {
     var subsidiary_account_array = $j("#msSubsidiaryAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
     var nature_account_array = $j("#msNatureAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
@@ -17,28 +20,29 @@ function search() {
     var level = $j("#level").val();
     var rubro = $j("#rubro").val();
     var url = "/accounting/search_accounts?";
-    if (account.toString() != "") {
+
+    if (account.toString()!="") {
         url = url + "&name=" + account.toString();
     }
-    if (number.toString() != "") {
+    if (number.toString()!="") {
         url=url+"&number="+number.toString();
     }
-    if (subsidiary_account_array.toString() != "") {
+    if (subsidiary_account_array.toString()!="") {
         url=url+"&subsidiary_account_array="+subsidiary_account_array.toString();
     }
-    if (nature_account_array.toString() != "") {
+    if (nature_account_array.toString()!="") {
         url=url+"&nature_account_array="+nature_account_array.toString();
     }
-    if (grouping_code_array.toString() != "") {
+    if (grouping_code_array.toString()!="") {
         url=url+"&grouping_code_array="+grouping_code_array.toString();
     }
-    if (level.toString() != "") {
+    if (level.toString()!="") {
         url=url+"&level="+level.toString();
     }
-    if (rubro.toString() != "") {
+    if (rubro.toString()!="") {
         url=url+"&rubro="+rubro.toString();
     }
-    alert(url);
+    //alert(url);
     searchengine(url);
 }
 
@@ -68,7 +72,8 @@ function searchengine(url) {
         url: url,
         type: 'get',
         success: function (data) {
-            alert(data);
+            //console.log(data);
+            displayResults(data);
 
         },
         error: function (data) {
@@ -82,5 +87,98 @@ function searchengine(url) {
         }
     });
 
+
     /* });*/
+}
+
+function displayResults(data){
+    var sHtml="";
+    var sTable="";
+
+    $j('#divTable').html("<div></div>");
+    sHtml ='<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
+            + ' <colgroup>'
+                +' <col width="15%">'
+                +' <col width="7%">'
+                +' <col width="14%">'
+                +' <col width="14%">'
+                +' <col width="14%">'
+                +' <col width="14%">'
+                +' <col width="29%">'
+                +' </colgroup>';
+
+    sTable= '<thead>'
+                        +'<tr>'
+                            +'<th>Nombre</th>'
+                            +'<th>No.</th>'
+                            +'<th>Nivel</th>'
+                            +'<th>Rubro</th>'
+                            +'<th>Subcuenta</th>'
+                            +'<th>Naturaleza</th>'
+                            +'<th>Cód. Agrupador SAT</th>'
+                        +'</tr>'
+                    +'</thead>'
+                    +'<tbody>';
+
+    for (var i = 0; i < data.length; i++) {
+            sTable += '<tr>'
+            + '<td class="result1 selectable">'+ data[i].name + '</td>'
+            + '<td class="result1 selectable">'+ data[i].number + '</td>'
+            + '<td class="result1 selectable">'+ data[i].level + '</td>'
+            + '<td class="result1 selectable">'+ data[i].item + '</td>'
+            + '<td class="result1 selectable">'+ data[i].subsidiary_account + '</td>'
+            + '<td class="result1 selectable">'+ data[i].nature_account + '</td>'
+            + '<td class="result1 selectable">'+ data[i].grouping_code + '</td>'
+            + '</tr>'
+    }
+
+    sTable +='</tbody>'
+          +'</table>';
+
+    sHtml +=sTable;
+
+    sScript='<script id="js" type="text/javascript"  class="init">'
+	        +'$("#tablaResultados").DataTable( {'
+            + 'destroy: true,';
+
+    sTable ='columnDefs: ['
+             +'       {'
+             +'           className: "mdl-data-table__cell--non-numeric"'
+             +'       }'
+             +'   ],'
+
+             +'   responsive: true,'
+             +'   "bInfo": false,';
+
+    sScript += sTable;
+    sScript +=' "pageLength": 6,';
+
+    sTable = '   "bLengthChange": false,'
+             +'   "language": {'
+             +'       "sProcessing": "Procesando...",'
+             +'       "sLengthMenu": "Mostrar _MENU_ registros",'
+             +'       "sZeroRecords": "No se encontraron resultados",'
+             +'       "sEmptyTable": "La consulta no generó resultados a mostrar",'
+             +'       "sInfo": "",'
+             +'       "sInfoEmpty": "",'
+             +'       "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",'
+             +'       "sInfoPostFix": "",'
+             +'       "sSearch": "",'
+             +'      "sUrl": "",'
+             +'       "sInfoThousands": ",",'
+             +'       "sLoadingRecords": "Cargando...",'
+             +'       "oPaginate": {'
+             +'           "sFirst": "Primero",'
+             +'           "sLast": "Último",'
+             +'          "sNext": ">",'
+             +'           "sPrevious": "<"'
+          +'}'
+          +'},'
+	      +'} );'
+          +'</script>';
+
+    sScript += sTable;
+
+    $j('#divTable').html(sHtml+sScript);
+
 }
