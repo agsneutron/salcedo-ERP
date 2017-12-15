@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^searchaccount', views.SearchAccount, name='searchaccount'),
     url(r'^searchprovider', views.SearchProvider, name='searchprovider'),
     url(r'^searchcreditors', views.SearchCreditors, name='searchcreditors'),
+    url(r'^searchpolicies', views.SearchPolicies, name='searchpolicies'),
     url(r'^searchthird', views.SearchThird, name='searchthird'),
 
     #catalogs

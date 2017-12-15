@@ -44,6 +44,13 @@ def SearchThird(request):
     return HttpResponse(template.render(context,request))
 
 
+def SearchPolicies(request):
+    template = loader.get_template('Accounting/search_policy.html')
+    context = {'typepolicy': TypePolicy.objects.all(),}
+
+    return HttpResponse(template.render(context,request))
+
+
 # For Add Comercial Allie filter objects view
 def AddhProvider(request):
     title = "Proveedores"

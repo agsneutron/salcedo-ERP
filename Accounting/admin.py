@@ -121,7 +121,7 @@ class CommercialAllyAdmin(admin.ModelAdmin):
     form = CommercialAllyForm
 
     fieldsets = (
-        ("Aliado Comercial ", {
+        ("", {
             'fields': (
             'name', 'curp','rfc','phone_number','cellphone_number','office_number','extension_number','street','outdoor_number',
             'indoor_number','colony','zip_code','country','state','town','accounting_account','bank',
@@ -131,6 +131,41 @@ class CommercialAllyAdmin(admin.ModelAdmin):
 
     list_display = ('name', 'rfc','phone_number','type','status')
     actions = None
+
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(CommercialAllyAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        type = request.GET.get('type')
+        title = ""
+        extra['type'] = type
+        if type == "0":
+            title = "Proveedor"
+        elif type == "1":
+            title = "Acreedor"
+        elif type == "2":
+            title = "Tercero"
+
+        extra['title'] = str(title)
+        print "title" + title
+        print "type" + type
+
+        return super(CommercialAllyAdmin, self).add_view(request, form_url, extra_context=extra)
 
 
 @admin.register(Account)
