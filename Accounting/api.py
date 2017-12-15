@@ -188,9 +188,14 @@ class SearchTransactionsByAccount(ListView):
         grouped_by_accounts = result.values('account__id', 'account__name')\
             .annotate(Count('account__id'), Count('account__name'), total_credit=Sum('credit'), total_debit=Sum('debit'))
 
-        print grouped_by_accounts
+        # print grouped_by_accounts
+        #
+        # return  HttpResponse(Utilities.query_set_to_dumps(result) , 'application/json; charset=utf-8', )
+        return engine.generate_report()
 
-        return  HttpResponse(Utilities.query_set_to_dumps(result) , 'application/json; charset=utf-8', )
+
+
+
 
 
 #
