@@ -54,17 +54,41 @@ class FiscalPeriod(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPENED, verbose_name='Estatus')
 
     def __str__(self):
-        return str(self.accounting_year) + " " + self.get_account_period_display()
+        return self.get_account_period_display() + " " + str(self.accounting_year)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.accounting_year) + " " + self.get_account_period_display()
+        return self.get_account_period_display() + " " + str(self.accounting_year)
 
     @staticmethod
     def get_month_name_from_number(number):
         return FiscalPeriod.MONTH_CHOICES[number - 1][1]
 
+    @staticmethod
+    def get_month_number_from_substring(substring):
+        months = {
+            "enero": 1,
+            "febrero": 2,
+            "marzo": 3,
+            "abril": 4,
+            "mayo": 5,
+            "junio": 6,
+            "julio": 7,
+            "agosto": 8,
+            "septiembre": 9,
+            "octubre": 10,
+            "noviembre": 11,
+            "diciembre": 12
+        }
+
+        months_numbers_array = []
+        for key, value in months.items():
+            if substring in key:
+                months_numbers_array.append(value)
+
+        return months_numbers_array
+
     class Meta:
-        verbose_name_plural = 'Año contable'
+        verbose_name_plural = 'Años contables'
         verbose_name = 'Año Contable'
 
 
@@ -94,10 +118,10 @@ class AccountingPolicy(models.Model):
     reference = models.CharField(verbose_name="Referencia", max_length=1024, null=False, blank=False)
 
     def __str__(self):
-        return str(self.type_policy) + ": " + str(self.folio)
+        return str(self.type_policy) + ": " + str(self.folio) + " del periodo fiscal " + str(self.fiscal_period)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.type_policy) + ": " + str(self.folio)
+        return str(self.type_policy) + ": " + str(self.folio) + " del periodo fiscal " + str(self.fiscal_period)
 
     class Meta:
         verbose_name_plural = 'Pólizas Contables'
@@ -217,6 +241,7 @@ class CommercialAlly(models.Model):
 
     class Meta:
         verbose_name_plural = 'Aliado Comercial'
+        verbose_name = 'Aliado Comercial'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
