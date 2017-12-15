@@ -71,7 +71,7 @@ class GeneralBalanceEngine():
         for record in records:
             account = record.account
 
-            if account.level is None:
+            if account.grouping_code.level is None:
                 # Top Level
                 pass
             elif account.grouping_code.level == 1:
