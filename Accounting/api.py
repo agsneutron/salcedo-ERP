@@ -203,3 +203,5 @@ class GenerateBalance(ListView):
         result = engine.generate()
 
         return result
+
+        # return HttpResponse(Utilities.json_to_dumps({}), 'application/json; charset=utf-8', )
