@@ -34,7 +34,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Póliza", {
             'fields': (
-            'fiscal_period', 'type_policy', 'folio', 'registry_date', 'description',)
+            'fiscal_period', 'type_policy', 'folio', 'registry_date', 'reference', 'description',)
         }),
     )
 

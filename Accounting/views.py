@@ -50,6 +50,13 @@ def SearchPolicies(request):
 
     return HttpResponse(template.render(context,request))
 
+#For  Transactions by account filter objects view
+def SearchTransactions(request):
+    template = loader.get_template('Accounting/search_transactions.html')
+    context = {'typepolicy': TypePolicy.objects.all(),}
+
+    return HttpResponse(template.render(context, request))
+
 
 # For Add Comercial Allie filter objects view
 def AddhProvider(request):
