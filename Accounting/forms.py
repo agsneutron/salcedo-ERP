@@ -31,6 +31,28 @@ class CommercialAllyForm(forms.ModelForm):
         model = CommercialAlly
         fields = '__all__'
 
+        widgets = {
+            "type": forms.HiddenInput
+        }
+
+    def __init__(self, *args, **kwargs):
+
+        self.request = kwargs.pop('request', None)
+        self.type = self.request.GET.get('type', None)
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        # Selecting the current value for the commercialally if it exists, otherwise, None.
+        kwargs['initial'].update({'type': self.type})
+
+        # Calling super class to have acces to the fields.
+        super(CommercialAllyForm, self).__init__(*args, **kwargs)
+
+        # Filtering the values for the commercialally if it , otherwise, None.
+        if self.type is not None:
+            self.fields['type'].queryset = CommercialAlly.objects.filter(type=self.type)
+
 
 # Form to include the fields of the Account Form.
 class AccountForm(forms.ModelForm):
