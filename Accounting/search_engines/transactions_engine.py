@@ -6,7 +6,7 @@ from django.db.models.query_utils import Q
 from Accounting.models import AccountingPolicyDetail, AccountingPolicy
 
 
-class TransactionesEngine():
+class TransactionsEngine():
 
 
     def __init__(self,

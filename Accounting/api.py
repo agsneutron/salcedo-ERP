@@ -5,14 +5,14 @@ from django.http.response import HttpResponse
 from django.views.generic.list import ListView
 
 from Accounting.models import AccountingPolicyDetail
+from Accounting.reports.general_balance import GeneralBalanceEngine
 from Accounting.reports.trial_balance import TrialBalanceReport
 from Accounting.search_engines.account_engine import AccountSearchEngine
-from Accounting.search_engines.general_balance import GeneralBalanceEngine
-from Accounting.search_engines.provider_engine import ProviderSearchEngine
 from Accounting.search_engines.policy_engine import PolicySearchEngine
-from Accounting.search_engines.transactions_engine import TransactionesEngine
+from Accounting.search_engines.transactions_engine import TransactionsEngine
+from Accounting.search_engines.provider_engine import ProviderSearchEngine
+
 from ERP.lib.utilities import Utilities
-from datetime import datetime
 
 
 def get_array_or_none(the_string):
@@ -107,7 +107,7 @@ class SearchProviders(ListView):
         if type not in ('PROVIDER', 'CREDITOR', 'THIRD_PARTY'):
             return HttpResponse(Utilities.json_to_dumps(
                 {"error": {"message": "The parameter 'type' must be PROVIDER, CREDITOR or THIRD_PARTY."}}),
-                                'application/json; charset=utf-8', )
+                'application/json; charset=utf-8', )
 
         name = request.GET.get('name')
         rfc = request.GET.get('rfc')
@@ -161,7 +161,7 @@ class SearchTransactionsByAccount(ListView):
         # If the account number is set, the range is ignored.
         account_number_array = get_array_or_none(request.GET.get('account'))
 
-        engine = TransactionesEngine(
+        engine = TransactionsEngine(
             lower_fiscal_period_year=lower_fiscal_period_year,
             upper_fiscal_period_year=upper_fiscal_period_year,
             lower_fiscal_period_month=lower_fiscal_period_month,
@@ -198,7 +198,6 @@ class SearchTransactionsByAccount(ListView):
 #
 
 class GenerateTrialBalance(ListView):
-
     @staticmethod
     def get_details_for_policies(policies_set):
         policies_id_array = []
@@ -208,7 +207,6 @@ class GenerateTrialBalance(ListView):
         policy_details_set = AccountingPolicyDetail.objects.filter(Q(accounting_policy__id__in=policies_id_array))
 
         return policy_details_set
-
 
     def get(self, request):
         lower_account_number = request.GET.get('lower_account_number')
@@ -239,20 +237,40 @@ class GenerateTrialBalance(ListView):
         # General data to send to the report maker.
         general_data = {
             "title": title,
-            "year" : fiscal_period_year,
-            "month" : fiscal_period_month
+            "year": fiscal_period_year,
+            "month": fiscal_period_month
         }
 
         report_result = TrialBalanceReport.generate_report(general_data, policies_details_set)
 
-        #return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )
+        # return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )
         return report_result
 
 
 class GenerateBalance(ListView):
     def get(self, request):
-        engine = GeneralBalanceEngine()
+        lower_account_number = request.GET.get('lower_account_number')
+        upper_account_number = request.GET.get('upper_account_number')
+
+        fiscal_period_year = request.GET.get('fiscal_period_year')
+        fiscal_period_month = request.GET.get('fiscal_period_month')
+
+        title = request.GET.get('title')
+
+        only_with_transactions = request.GET.get('only_with_transactions')
+        only_with_balance = request.GET.get('only_with_balance')
+
+        engine = GeneralBalanceEngine(
+            title=title,
+            lower_account_number=lower_account_number,
+            upper_account_number=upper_account_number,
+            fiscal_period_year=fiscal_period_year,
+            fiscal_period_month=fiscal_period_month,
+            only_with_transactions=only_with_transactions,
+            only_with_balance=only_with_balance)
 
         result = engine.generate()
 
         return result
+
+        # return HttpResponse(Utilities.json_to_dumps({}), 'application/json; charset=utf-8', )
