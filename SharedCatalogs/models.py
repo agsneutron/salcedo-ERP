@@ -5,6 +5,9 @@ from django.db import models
 from django.forms.models import model_to_dict
 
 # Create your models here.
+from django.forms import model_to_dict
+
+
 class Pais(models.Model):
     nombrePais = models.CharField(max_length=200)
     latitud = models.FloatField()
@@ -96,7 +99,7 @@ class Bank(models.Model):
 
 
 class GroupingCode(models.Model):
-    level = models.IntegerField(verbose_name="Nivel", null=True )
+    level = models.IntegerField(verbose_name="Nivel", null=True)
     grouping_code = models.DecimalField(verbose_name="Código Agrupador", max_digits=20, decimal_places=2, )
     account_name = models.CharField(verbose_name="Nombre de la Cuenta y/o subcuenta", max_length=500, )
 
@@ -105,6 +108,18 @@ class GroupingCode(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.grouping_code) + ": " + self.account_name
+
+    def __hash__(self):
+        return self.grouping_code
+
+    def __eq__(self, other):
+        if other is None:
+            return False
+
+        if type(other) != GroupingCode:
+            return False
+
+        return self.grouping_code == other.grouping_code
 
     class Meta:
         verbose_name_plural = 'Código Agrupador de Cuentas del SAT.'
