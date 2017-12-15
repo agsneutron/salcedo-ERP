@@ -11,6 +11,9 @@ from Accounting.search_engines.provider_engine import ProviderSearchEngine
 from Accounting.search_engines.policy_engine import PolicySearchEngine
 from ERP.lib.utilities import Utilities
 from datetime import datetime
+from django.shortcuts import redirect, render
+import requests
+
 
 
 def get_array_or_none(the_string):
@@ -186,3 +189,12 @@ class GenerateBalance(ListView):
         result = engine.generate()
 
         return result
+
+class CommercialAllyEndpoint(ListView):
+    def get(self, request,name):
+        r=requests.post('http://127.0.0.1:8000/admin/Accounting/commercialally/add',data={'name':'alex'})
+        #r=redirect('/admin/Accounting/commercialally/add',params={'name':'alex'})
+
+        return r
+        #return render(request,'/admin/Accounting/commercialally/add/',{'name':'alex'})
+        #return redirect('/admin/Accounting/commercialally/add',id=name)

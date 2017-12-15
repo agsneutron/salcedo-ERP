@@ -2,8 +2,11 @@ from django.conf.urls import url
 
 from Accounting import api
 from Accounting import views
+from django.core.urlresolvers import reverse
+from django.utils.functional import lazy
 
 app_name = 'DataUpload'
+reverse_lazy = lazy(reverse,str)
 
 urlpatterns = [
 
@@ -20,6 +23,9 @@ urlpatterns = [
     url(r'^searchprovider', views.SearchProvider, name='searchprovider'),
     url(r'^searchcreditors', views.SearchCreditors, name='searchcreditors'),
     url(r'^searchthird', views.SearchThird, name='searchthird'),
+
+    #catalogs
+    #url(r'^api/commercialally/$', api.CommercialAllyEndpoint.as_view(),{'name': 'provider'}),
 
 
 
