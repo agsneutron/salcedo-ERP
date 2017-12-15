@@ -59,6 +59,8 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
     inlines = (AccountingPolicyDetailInline,)
     actions = None
 
+    readonly_fields = []
+
     fieldsets = (
         ("Póliza", {
             'fields': (
@@ -67,6 +69,15 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
     )
 
     list_display = ('folio', 'type_policy', 'fiscal_period', 'description')
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = ('folio',)
+        return readonly_fields
+
+    def save_model(self, request, obj, form, change):
+
+        super(AccountingPolicyAdmin, self).save_model(request, obj, form, change)
+
 
 
 @admin.register(FiscalPeriod)
