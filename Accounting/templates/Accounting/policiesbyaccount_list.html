@@ -46,34 +46,20 @@
 
     {% include "admin/Accounting/accounting-home.html" %}
     <div class="col-xs-9">
-        <div class="">
-            <div class="col-xs-12">
 
-                <div class="">
-                    <h3 class="section-title">Pólizas por Cuenta</h3>
-                    <hr>
-                </div>
-            </div>
+        <div class="col-xs-12">
+            <div class="col-xs-4"><h3 class="section-title">Pólizas por Cuenta</h3></div>
+            <div class="col-xs-4"><h5>Periodo Fiscal: {{ lower_fiscal_period_year }} -  {{ lower_fiscal_period_month }}</h5></div>
+            <div class="col-xs-4"><h5>Número de Cuenta:{{ account }}</h5></div>
         </div>
         <div class="col-xs-12">
+             <hr>
             <form>
-            <div class="col-xs-4">
-                Periodo Fiscal Año: {{ lower_fiscal_period_year }}
                 <input type="hidden" class="form-control" value="{{ lower_fiscal_period_year }}" id="lower_fiscal_period_year">
                 <input type="hidden" class="form-control" value="{{ upper_fiscal_period_year }}" id="upper_fiscal_period_year">
-            </div>
-            <div class="col-xs-4">
-                Periodo Fiscal Mes: {{ lower_fiscal_period_month }}
                 <input type="hidden" class="form-control" value="{{ lower_fiscal_period_month }}" id="lower_fiscal_period_month">
                 <input type="hidden" class="form-control" value="{{ upper_fiscal_period_month }}" id="upper_fiscal_period_month">
-            </div>
-            <div class="col-xs-4">
-                Número de Cuenta:{{ account }}
                 <input type="hidden" class="form-control" value="{{ account }}" id="account">
-            </div>
-
-            <div class="clearfix"></div>
-            <hr>
             </form>
         </div>
 
