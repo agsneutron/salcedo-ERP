@@ -146,6 +146,10 @@ class GenerateTrialBalance(ListView):
         fiscal_period_year = request.GET.get('fiscal_period_year')
         fiscal_period_month = request.GET.get('fiscal_period_month')
 
+        print "----- Got -------"
+        print fiscal_period_year
+        print fiscal_period_month
+
         title = request.GET.get('title')
 
         only_with_transactions = request.GET.get('only_with_transactions')
