@@ -1,5 +1,6 @@
 # coding=utf-8
 import StringIO
+from decimal import Decimal
 from rexec import FileWrapper
 
 import time
@@ -124,13 +125,15 @@ class GeneralBalanceEngine():
 
     def create_accumulative_dict(self, dict):
         # Get Grouping Code Objects
-        short_term_active = GroupingCode.objects.get(grouping_code=100.01)
-        long_term_active = GroupingCode.objects.get(grouping_code=100.02)
+        print GroupingCode.objects.all()
+        print '-------'
+        short_term_active = GroupingCode.objects.get(grouping_code=Decimal("100.01"))
+        long_term_active = GroupingCode.objects.get(grouping_code=Decimal("100.02"))
 
-        short_term_passive = GroupingCode.objects.get(grouping_code=200.01)
-        long_term_passive = GroupingCode.objects.get(grouping_code=200.02)
+        short_term_passive = GroupingCode.objects.get(grouping_code=Decimal("200.01"))
+        long_term_passive = GroupingCode.objects.get(grouping_code=Decimal("200.02"))
 
-        accounting_capital = GroupingCode.objects.get(grouping_code=300.00)
+        accounting_capital = GroupingCode.objects.get(grouping_code=Decimal("300.00"))
 
         response = {
             short_term_active: [],
@@ -180,13 +183,13 @@ class GeneralBalanceEngine():
 
     def generate_excel_document(self, info):
         # Get Grouping Code Objects
-        short_term_active = GroupingCode.objects.get(grouping_code=100.01)
-        long_term_active = GroupingCode.objects.get(grouping_code=100.02)
+        short_term_active = GroupingCode.objects.get(grouping_code=Decimal("100.01"))
+        long_term_active = GroupingCode.objects.get(grouping_code=Decimal("100.02"))
 
-        short_term_passive = GroupingCode.objects.get(grouping_code=200.01)
-        long_term_passive = GroupingCode.objects.get(grouping_code=200.02)
+        short_term_passive = GroupingCode.objects.get(grouping_code=Decimal("200.01"))
+        long_term_passive = GroupingCode.objects.get(grouping_code=Decimal("200.02"))
 
-        accounting_capital = GroupingCode.objects.get(grouping_code=300.00)
+        accounting_capital = GroupingCode.objects.get(grouping_code=Decimal("300.00"))
 
         output = StringIO.StringIO()
         # Create an new Excel file and add a worksheet.
