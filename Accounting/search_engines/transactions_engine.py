@@ -10,9 +10,8 @@ class TransactionsEngine():
 
 
     def __init__(self,
-                 lower_fiscal_period_year=None,
-                 upper_fiscal_period_year=None,
-                 lower_fiscal_period_month=None,
+                 fiscal_period_year=None,
+                 fiscal_period_month=None,
                  upper_fiscal_period_month=None,
                  type_policy_array=None,
                  lower_folio=None,
@@ -31,11 +30,8 @@ class TransactionsEngine():
                  account_array = None
                  ):
 
-        self.lower_fiscal_period_year = lower_fiscal_period_year
-        self.upper_fiscal_period_year = upper_fiscal_period_year
-
-        self.lower_fiscal_period_month = lower_fiscal_period_month
-        self.upper_fiscal_period_month = upper_fiscal_period_month
+        self.fiscal_period_year = fiscal_period_year
+        self.fiscal_period_month = fiscal_period_month
 
         self.type_policy_array = type_policy_array
 
@@ -65,18 +61,13 @@ class TransactionsEngine():
     def search_transactions(self):
         query = Q()
 
-        if self.lower_fiscal_period_year is not None:
-            query &= Q(accounting_policy__fiscal_period__accounting_year__gte=self.lower_fiscal_period_year)
+        if self.fiscal_period_year is not None:
+            query &= Q(accounting_policy__fiscal_period__accounting_year=self.fiscal_period_year)
 
 
-        if self.upper_fiscal_period_year is not None:
-            query &= Q(accounting_policy__fiscal_period__accounting_year__lte=self.upper_fiscal_period_year)
+        if self.fiscal_period_month is not None:
+            query &= Q(accounting_policy__fiscal_period__account_period=self.fiscal_period_month)
 
-        if self.lower_fiscal_period_month is not None:
-            query &= Q(accounting_policy__fiscal_period__account_period__gte=self.lower_fiscal_period_month)
-
-        if self.upper_fiscal_period_month is not None:
-            query &= Q(accounting_policy__fiscal_period__account_period__lte=self.upper_fiscal_period_month)
 
         if self.type_policy_array is not None:
             query &= Q(accounting_policy__type_policy__id__in=self.type_policy_array)

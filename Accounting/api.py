@@ -13,6 +13,7 @@ from Accounting.search_engines.transactions_engine import TransactionsEngine
 from Accounting.search_engines.provider_engine import ProviderSearchEngine
 
 from ERP.lib.utilities import Utilities
+from SharedCatalogs.models import Account
 
 
 def get_array_or_none(the_string):
@@ -130,12 +131,35 @@ class SearchProviders(ListView):
 class SearchTransactionsByAccount(ListView):
 
 
-    def get(self, request, *args, **kwargs):
-        lower_fiscal_period_year = request.GET.get('lower_fiscal_period_year')
-        upper_fiscal_period_year = request.GET.get('upper_fiscal_period_year')
+    def group_transactions_by_account(self, transactions):
+        grouped = transactions.values('account__id', 'account__name', 'account__number')\
+            .annotate(Count('account__id'), Count('account__name'), Count('account__number'),
+                      total_credit=Sum('credit'),total_debit=Sum('debit'))
 
-        lower_fiscal_period_month = request.GET.get('lower_fiscal_period_month')
-        upper_fiscal_period_month = request.GET.get('upper_fiscal_period_month')
+        return grouped
+
+    def exclude_debit_limits(self, lower_debit, upper_debit, grouped_transactions):
+        if lower_debit is not None:
+            grouped_transactions = grouped_transactions.exclude(Q(total_debit__lt=lower_debit))
+
+        if upper_debit is not None:
+            grouped_transactions = grouped_transactions.exclude(Q(total_debit__gt=upper_debit))
+
+        return grouped_transactions
+
+    def exclude_credit_limits(self, lower_credit, upper_credit, grouped_transactions):
+        if lower_credit is not None:
+            grouped_transactions = grouped_transactions.exclude(Q(total_credit__lt=lower_credit))
+
+        if upper_credit is not None:
+            grouped_transactions = grouped_transactions.exclude(Q(total_credit__gt=upper_credit))
+
+        return grouped_transactions
+
+    def get(self, request, *args, **kwargs):
+        fiscal_period_year = request.GET.get('fiscal_period_year')
+
+        fiscal_period_month = request.GET.get('fiscal_period_month')
 
         type_policy_array = get_array_or_none(request.GET.get('type_policy_array'))
 
@@ -162,10 +186,8 @@ class SearchTransactionsByAccount(ListView):
         account_number_array = get_array_or_none(request.GET.get('account'))
 
         engine = TransactionsEngine(
-            lower_fiscal_period_year=lower_fiscal_period_year,
-            upper_fiscal_period_year=upper_fiscal_period_year,
-            lower_fiscal_period_month=lower_fiscal_period_month,
-            upper_fiscal_period_month=upper_fiscal_period_month,
+            fiscal_period_year=fiscal_period_year,
+            fiscal_period_month=fiscal_period_month,
             type_policy_array=type_policy_array,
             lower_folio=lower_folio,
             upper_folio=upper_folio,
@@ -183,14 +205,34 @@ class SearchTransactionsByAccount(ListView):
             account_array=account_number_array
         )
 
-        result = engine.search_transactions()
+        transactions = engine.search_transactions()
 
-        grouped_by_accounts = result.values('account__id', 'account__name')\
-            .annotate(Count('account__id'), Count('account__name'), total_credit=Sum('credit'), total_debit=Sum('debit'))
+        # Grouping all the transactions by accounts.
+        grouped_transactions = self.group_transactions_by_account(transactions)
 
-        print grouped_by_accounts
+        # Excluding the accounts that overpass the debit limits.
+        grouped_transactions = self.exclude_debit_limits(lower_debit, upper_debit, grouped_transactions)
 
-        return  HttpResponse(Utilities.query_set_to_dumps(result) , 'application/json; charset=utf-8', )
+        # Excluding the accounts that overpass the credit limits.
+        grouped_transactions = self.exclude_credit_limits(lower_credit, upper_credit, grouped_transactions)
+
+
+        response = {
+            'accounts': []
+        }
+
+        for account in grouped_transactions:
+            response['accounts'].append({
+                'account_id': account['account__id'],
+                'account_name': account['account__name'],
+                'account_number': account['account__number'],
+                'total_credit': account['total_credit'],
+                'total_debit': account['total_debit']
+            })
+
+
+
+        return HttpResponse(Utilities.json_to_dumps(response) , 'application/json; charset=utf-8', )
 
 
 #
@@ -214,7 +256,6 @@ class GenerateTrialBalance(ListView):
 
         fiscal_period_year = request.GET.get('fiscal_period_year')
         fiscal_period_month = request.GET.get('fiscal_period_month')
-
 
         title = request.GET.get('title')
 
@@ -274,3 +315,126 @@ class GenerateBalance(ListView):
         return result
 
         # return HttpResponse(Utilities.json_to_dumps({}), 'application/json; charset=utf-8', )
+
+
+class GenerateTransactionsByAccountReport(ListView):
+
+    def create_general_structure(self, year, month, account):
+
+        parent_account = account.subsidiary_account
+        if parent_account is None:
+            parent_account_name = '-'
+            parent_account_number = '-'
+        else:
+            parent_account_name = parent_account.name
+            parent_account_number = parent_account.number
+
+        general_structure = {
+            'fiscal_period_year': year,
+            'fiscal_period_month': month,
+            'account_number': account.number,
+            'account_name': account.name,
+            'parent_account_name': parent_account_name,
+            'parent_account_number': parent_account_number,
+            'grouping_code': float(account.grouping_code.grouping_code),
+            'grouping_code_name': account.grouping_code.account_name,
+            'transactions': []
+        }
+
+        return general_structure
+
+    def create_transaction_structure(self, transaction_info):
+
+        account_structure = {
+            'description' : transaction_info.description,
+            'debit': transaction_info.debit,
+            'credit': transaction_info.credit,
+            'policy_folio': transaction_info.accounting_policy.folio,
+            'policy_type': transaction_info.accounting_policy.type_policy.name
+        }
+
+        return account_structure
+
+
+    def get(self, request, *args, **kwargs):
+        fiscal_period_year = request.GET.get('fiscal_period_year')
+
+        fiscal_period_month = request.GET.get('fiscal_period_month')
+
+        type_policy_array = get_array_or_none(request.GET.get('type_policy_array'))
+
+        lower_folio = request.GET.get('lower_folio')
+        upper_folio = request.GET.get('upper_folio')
+
+        lower_registry_date = Utilities.string_to_date(request.GET.get('lower_registry_date'))
+        upper_registry_date = Utilities.string_to_date(request.GET.get('upper_registry_date'))
+
+        description = request.GET.get('description')
+
+        lower_account_number = request.GET.get('lower_account_number')
+        upper_account_number = request.GET.get('upper_account_number')
+
+        lower_debit = request.GET.get('lower_debit')
+        upper_debit = request.GET.get('upper_debit')
+
+        lower_credit = request.GET.get('lower_credit')
+        upper_credit = request.GET.get('upper_credit')
+
+        reference = request.GET.get('reference')
+
+        # If the account number is set, the range is ignored.
+        account_number_array = get_array_or_none(request.GET.get('account'))
+
+        engine = TransactionsEngine(
+            fiscal_period_year=fiscal_period_year,
+            fiscal_period_month=fiscal_period_month,
+            type_policy_array=type_policy_array,
+            lower_folio=lower_folio,
+            upper_folio=upper_folio,
+            lower_registry_date=lower_registry_date,
+            upper_registry_date=upper_registry_date,
+            description=description,
+            lower_account_number=lower_account_number,
+            upper_account_number=upper_account_number,
+            lower_debit=lower_debit,
+            upper_debit=upper_debit,
+            lower_credit=lower_credit,
+            upper_credit=upper_credit,
+            reference=reference,
+            only_with_transactions=False,
+            account_array=account_number_array
+        )
+
+
+        transactions_set = engine.search_transactions()
+
+        # Getting the account number.
+        account_number = account_number_array[0]
+
+        # Getting the account object.
+        account_object = Account.objects.get(number=account_number)
+
+
+        # Creating the general structure for the response.
+        general_structure = self.create_general_structure(
+            fiscal_period_year,
+            fiscal_period_month,
+            account_object
+        )
+
+        # Accumulated amounts.
+        total_debit = 0
+        total_credit = 0
+
+        # Creating the structure for each of the accounts.
+        for transaction in transactions_set:
+            total_debit += transaction.debit
+            total_credit += transaction.credit
+            transaction_structure = self.create_transaction_structure(transaction)
+            general_structure['transactions'].append(transaction_structure)
+
+        # Assigning the accumulated amounts.
+        general_structure['total_debit'] =  total_debit
+        general_structure['total_credit'] =  total_credit
+
+        return HttpResponse(Utilities.json_to_dumps(general_structure) , 'application/json; charset=utf-8', )
