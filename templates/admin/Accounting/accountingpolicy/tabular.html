@@ -20,10 +20,12 @@
                     display: inline-block;
                     font-size: 0;
                 }
-                .credit-info{
+
+                .credit-info {
                     margin-left: 20px;
                 }
-                .inline-info-label, .inline-info-value{
+
+                .inline-info-label, .inline-info-value {
                     display: inline-block;
                     font-size: 14px;
                     padding: 0 5px;
@@ -48,7 +50,7 @@
                         calculateCredit();
                         calculateDebit();
 
-                        $("input[name*='debit']").change(function(){
+                        $("input[name*='debit']").change(function () {
                             calculateDebit();
                         });
                         $("input[name*='credit']").change(function () {
@@ -78,15 +80,17 @@
                     }
                 });
             </script>
+
+            <!-- Siguiente 2 divs son para mostrar los totales -->
             <div class="inline-info debit-info">
                 <div class="inline-info-label">Total Debe:</div>
-                <div class="inline-info-value" id="debit-total">$ 5,000</div>
+                <div class="inline-info-value" id="debit-total">$ 0,000</div>
             </div>
 
 
             <div class="inline-info credit-info">
                 <div class="inline-info-label">Total Haber:</div>
-                <div class="inline-info-value" id="credit-total">$ 5,000</div>
+                <div class="inline-info-value" id="credit-total">$ 0,000</div>
             </div>
             <table>
                 <thead>
