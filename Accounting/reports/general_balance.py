@@ -252,9 +252,16 @@ class GeneralBalanceEngine():
         # Write Totals
         short_term_active_total_row = current_row
         worksheet.write(current_row, 0 + offset, 'Total de ' + short_term_active_label, formats['level_1_total_label'])
-        worksheet.write(current_row, 1 + offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
-            1 + offset) + '' + str(current_row - total_short_term_active + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
-            1 + offset) + '' + str(current_row) + ')',
+
+        if total_short_term_active > 0:
+            cell_value = '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+                1 + offset) + '' + str(
+                current_row - total_short_term_active + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+                1 + offset) + '' + str(current_row) + ')'
+        else:
+            cell_value = 0
+
+        worksheet.write(current_row, 1 + offset, cell_value,
                         formats['currency_1'])
 
         current_row += 2
@@ -278,10 +285,16 @@ class GeneralBalanceEngine():
         # Write Totals
         long_term_active_total_row = current_row
         worksheet.write(current_row, 0 + offset, 'Total de ' + long_term_active_label, formats['level_1_total_label'])
-        worksheet.write(current_row, 1 + offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
-            1 + offset) + '' + str(
-            current_row - total_long_term_active + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
-            1 + offset) + '' + str(current_row) + ')',
+
+        if total_long_term_active > 0:
+            cell_value = '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+                1 + offset) + '' + str(
+                current_row - total_long_term_active + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+                1 + offset) + '' + str(current_row) + ')'
+        else:
+            cell_value = 0
+
+        worksheet.write(current_row, 1 + offset, cell_value,
                         formats['currency_1'])
 
         current_row += 2
@@ -329,10 +342,15 @@ class GeneralBalanceEngine():
         short_term_passive_total_row = current_row
         worksheet.write(current_row, 0 + passive_offset, 'Total de ' + short_term_passive_label,
                         formats['level_1_total_label'])
-        worksheet.write(current_row, 1 + passive_offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
-            1 + passive_offset) + '' + str(
-            current_row - total_short_term_passive + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
-            1 + passive_offset) + '' + str(current_row) + ')',
+
+        if total_short_term_active > 0:
+            cell_value = '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+                1 + passive_offset) + '' + str(
+                current_row - total_short_term_passive + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+                1 + passive_offset) + '' + str(current_row) + ')'
+        else:
+            cell_value = 0
+        worksheet.write(current_row, 1 + passive_offset, cell_value,
                         formats['currency_1'])
         current_row += 2
 
@@ -357,10 +375,16 @@ class GeneralBalanceEngine():
         long_term_passive_total_row = current_row
         worksheet.write(current_row, 0 + passive_offset, 'Total de ' + long_term_passive_label,
                         formats['level_1_total_label'])
-        worksheet.write(current_row, 1 + passive_offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
-            1 + passive_offset) + '' + str(
-            current_row - total_long_term_passive + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
-            1 + passive_offset) + '' + str(current_row) + ')',
+
+        if total_long_term_passive > 0:
+            cell_value = '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+                1 + passive_offset) + '' + str(
+                current_row - total_long_term_passive + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+                1 + passive_offset) + '' + str(current_row) + ')'
+        else:
+            cell_value = 0
+
+        worksheet.write(current_row, 1 + passive_offset, cell_value,
                         formats['currency_1'])
 
         current_row += 2
@@ -398,10 +422,15 @@ class GeneralBalanceEngine():
         accounting_capital_total_row = current_row
         worksheet.write(current_row, 0 + passive_offset, 'Total de Capital Contable',
                         formats['level_00_total_label'])
-        worksheet.write(current_row, 1 + passive_offset, '=SUM(' + xlsxwriter.utility.xl_col_to_name(
-            1 + passive_offset) + '' + str(
-            current_row - total_accounting_capital + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
-            1 + passive_offset) + '' + str(current_row) + ')',
+
+        if total_accounting_capital > 0:
+            cell_value = '=SUM(' + xlsxwriter.utility.xl_col_to_name(
+                1 + passive_offset) + '' + str(
+                current_row - total_accounting_capital + 1) + ':' + xlsxwriter.utility.xl_col_to_name(
+                1 + passive_offset) + '' + str(current_row) + ')'
+        else:
+            cell_value = 0
+        worksheet.write(current_row, 1 + passive_offset, cell_value,
                         formats['currency_1'])
 
         current_row += 2
