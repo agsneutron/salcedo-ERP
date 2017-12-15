@@ -104,7 +104,7 @@ class SearchProviders(ListView):
         if type not in ('PROVIDER', 'CREDITOR', 'THIRD_PARTY'):
             return HttpResponse(Utilities.json_to_dumps(
                 {"error": {"message": "The parameter 'type' must be PROVIDER, CREDITOR or THIRD_PARTY."}}),
-                                'application/json; charset=utf-8', )
+                'application/json; charset=utf-8', )
 
         name = request.GET.get('name')
         rfc = request.GET.get('rfc')
@@ -129,7 +129,6 @@ class SearchProviders(ListView):
 #
 
 class GenerateTrialBalance(ListView):
-
     @staticmethod
     def get_details_for_policies(policies_set):
         policies_id_array = []
@@ -139,7 +138,6 @@ class GenerateTrialBalance(ListView):
         policy_details_set = AccountingPolicyDetail.objects.filter(Q(accounting_policy__id__in=policies_id_array))
 
         return policy_details_set
-
 
     def get(self, request):
         lower_account_number = request.GET.get('lower_account_number')
@@ -169,19 +167,37 @@ class GenerateTrialBalance(ListView):
         # General data to send to the report maker.
         general_data = {
             "title": title,
-            "year" : fiscal_period_year,
-            "month" : fiscal_period_month
+            "year": fiscal_period_year,
+            "month": fiscal_period_month
         }
 
         report_result = TrialBalanceReport.generate_report(general_data, policies_details_set)
 
-        #return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )
+        # return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )
         return report_result
 
 
 class GenerateBalance(ListView):
     def get(self, request):
-        engine = GeneralBalanceEngine()
+        lower_account_number = request.GET.get('lower_account_number')
+        upper_account_number = request.GET.get('upper_account_number')
+
+        fiscal_period_year = request.GET.get('fiscal_period_year')
+        fiscal_period_month = request.GET.get('fiscal_period_month')
+
+        title = request.GET.get('title')
+
+        only_with_transactions = request.GET.get('only_with_transactions')
+        only_with_balance = request.GET.get('only_with_balance')
+
+        engine = GeneralBalanceEngine(
+            title=title,
+            lower_account_number=lower_account_number,
+            upper_account_number=upper_account_number,
+            fiscal_period_year=fiscal_period_year,
+            fiscal_period_month=fiscal_period_month,
+            only_with_transactions=only_with_transactions,
+            only_with_balance=only_with_balance)
 
         result = engine.generate()
 
