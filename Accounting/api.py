@@ -14,6 +14,10 @@ from Accounting.search_engines.provider_engine import ProviderSearchEngine
 
 from ERP.lib.utilities import Utilities
 from SharedCatalogs.models import Account
+from datetime import datetime
+from django.shortcuts import redirect, render
+import requests
+
 
 
 def get_array_or_none(the_string):
@@ -450,3 +454,13 @@ class GenerateTransactionsByAccountReport(ListView):
         return engine.generate_report(general_structure)
 
         #return HttpResponse(Utilities.json_to_dumps(general_structure) , 'application/json; charset=utf-8', )
+
+
+class CommercialAllyEndpoint(ListView):
+    def get(self, request,name):
+        r=requests.post('http://127.0.0.1:8000/admin/Accounting/commercialally/add',data={'name':'alex'})
+        #r=redirect('/admin/Accounting/commercialally/add',params={'name':'alex'})
+
+        return r
+        #return render(request,'/admin/Accounting/commercialally/add/',{'name':'alex'})
+        #return redirect('/admin/Accounting/commercialally/add',id=name)
