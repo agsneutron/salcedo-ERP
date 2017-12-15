@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^searchcreditors', views.SearchCreditors, name='searchcreditors'),
     url(r'^searchpolicies', views.SearchPolicies, name='searchpolicies'),
     url(r'^searchthird', views.SearchThird, name='searchthird'),
+    url(r'^searchtransactions', views.SearchTransactions, name='searchtransactions'),
 
     #catalogs
     #url(r'^api/commercialally/$', api.CommercialAllyEndpoint.as_view(),{'name': 'provider'}),
