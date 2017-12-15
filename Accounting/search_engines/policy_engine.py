@@ -1,6 +1,6 @@
 # coding=utf-8
 
-from django.db.models.aggregates import Count
+from django.db.models.aggregates import Count, Sum
 from django.db.models.query_utils import Q
 
 from Accounting.models import AccountingPolicyDetail, AccountingPolicy
@@ -120,27 +120,6 @@ class PolicySearchEngine():
 
             query &= Q(id__in=policy_detail_array)
 
-        if self.lower_debit is not None:
-            policy_detail_array = []
-            accounting_policy_detail_set = AccountingPolicyDetail.objects \
-                .filter(Q(debit__gte=self.lower_debit)) \
-                .values('accounting_policy__id').annotate(Count('accounting_policy__id'))
-
-            for record in accounting_policy_detail_set:
-                policy_detail_array.append(record['accounting_policy__id'])
-
-            query &= Q(id__in=policy_detail_array)
-
-        if self.upper_debit is not None:
-            policy_detail_array = []
-            accounting_policy_detail_set = AccountingPolicyDetail.objects \
-                .filter(Q(debit__lte=self.upper_debit)) \
-                .values('accounting_policy__id').annotate(Count('accounting_policy__id'))
-
-            for record in accounting_policy_detail_set:
-                policy_detail_array.append(record['accounting_policy__id'])
-
-            query &= Q(id__in=policy_detail_array)
 
         if self.lower_credit is not None:
             policy_detail_array = []
@@ -196,6 +175,33 @@ class PolicySearchEngine():
 
                 results = results.exclude(Q(id__in=exclude_array))
 
+
+        # Excluding the policies that overpass the debit and credit limits.
+        exclude_array = []
+        for policy in results:
+            policy_details = AccountingPolicyDetail.objects.filter(accounting_policy__id=policy.id).values('accounting_policy__id')\
+                .annotate(Count('accounting_policy__id'), total_debit=Sum('debit'), total_credit=Sum('credit'))[0]
+
+
+            if self.lower_debit is not None:
+                if policy_details['total_debit'] < float(self.lower_debit):
+                    exclude_array.append(policy.id)
+
+            if self.upper_debit is not None:
+                if policy_details['total_debit'] > float(self.upper_debit):
+                    print "Excluding: " + str(policy.id)
+                    exclude_array.append(policy.id)
+
+            if self.lower_credit is not None:
+                if policy_details['total_credit'] < float(self.lower_credit):
+                    exclude_array.append(policy.id)
+
+            if self.upper_credit is not None:
+                if policy_details['total_credit'] > float(self.upper_credit):
+                    exclude_array.append(policy.id)
+
+
+        results= results.exclude(Q(id__in=exclude_array))
 
         return results
 
