@@ -291,7 +291,7 @@ class TransactionsEngine():
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=' + data['report_title']
+        response['Content-Disposition'] = 'attachment; filename=' + data['report_title'] + '.xlsx'
         response['Content-Length'] = output.tell()
 
         output.seek(0)

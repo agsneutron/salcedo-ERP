@@ -12,6 +12,10 @@ class AccountingPolicyForm(forms.ModelForm):
     class Meta:
         model = AccountingPolicy
         fields = '__all__'
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 3})
+        }
+
 
     def save(self, commit=True):
         instance = super(AccountingPolicyForm, self).save(commit=False)
@@ -38,11 +42,13 @@ class FiscalPeriodForm(forms.ModelForm):
         model = FiscalPeriod
         fields = '__all__'
 
+
 # Form to include the fields of the TypePolicy Form.
 class TypePolicyForm(forms.ModelForm):
     class Meta:
         model = TypePolicy
         fields = '__all__'
+
 
 # Form to include the fields of the Provider Form.
 class CommercialAllyForm(forms.ModelForm):
