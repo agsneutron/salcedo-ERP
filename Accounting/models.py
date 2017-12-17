@@ -136,10 +136,13 @@ class AccountingPolicy(models.Model):
         return ans
 
 
+
 # Model for accounting policy
 class AccountingPolicyDetail(models.Model):
     accounting_policy = models.ForeignKey(AccountingPolicy, verbose_name='Póliza', null=False, blank=False)
-    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False)
+    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False,limit_choices_to={
+                                               'type_account': 'D',
+                                           })
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit = models.FloatField(verbose_name="Debe", null=False, blank=False, default=0)
     credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
@@ -156,9 +159,12 @@ class AccountingPolicyDetail(models.Model):
         ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
         return ans
 
+
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
+
+
 
     def save(self, *args, **kwargs):
         self.registry_date = now()
