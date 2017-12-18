@@ -1,0 +1,248 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+{% endblock %}
+{% block content %}
+    {% comment %}<h1>Nombre: {{ empresa.nombreEmpresa }}  <a href="change">Editar</a></h1>{% endcomment %}
+ {% include "admin/Accounting/accounting-home.html" %}
+ <div class="col-xs-9">
+    <div class="col-xs-12">
+        <div class="card card-info">
+            <div class="card-block text-center">
+            {% for obj in commercialally %}
+                <div class="row">
+
+
+                    <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i
+                            class="zmdi zmdi-city-alt"></i></span>
+                        <h3 class="color-info">
+                            {% if obj.type == 0 %}
+                                Proveedor:
+                            {% elif obj.type == 1 %}
+                                Acreedor:
+                            {% elif obj.type == 2 %}
+                                Tercero:
+                            {% endif %}
+                            &nbsp;{{ obj.name }}</h3>
+                        <div class="col-xs-12 col-sm-6 text-left">
+
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Calle:</span> {{ obj.street }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Número externo:</span> {{ obj.outdoor_number }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Número interno:</span> {{ obj.indoor_number }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Colonia:</span> {{ obj.colony }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Municipio:</span> {{ obj.town }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Estado:</span> {{ obj.state }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                   class="fa fa-chevron-right color-active"></i> <span
+                                   class="color-active">País:</span> {{ obj.country }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">CP:</span> {{ obj.zip_code }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Tipo de Persona:</span> {{ obj.tax_person_type }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Número de Registro Patronal:</span> {{ obj.employer_registration_number }}</span>
+
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Servicios:</span> {{ obj.services }}</span>
+                        </div>
+
+
+                        <div class="col-xs-12 col-sm-6 text-left">
+
+                           <span href="" class="list-group-item withripple "><i
+                                   class="fa fa-chevron-right color-active"></i> <span
+                                   class="color-active">CURP:</span> {{ obj.curp }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">RFC:</span> {{ obj.rfc }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Teléfono:</span> {{ obj.phone_number }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Teléfono Celular:</span> {{ obj.cellphone_number }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Teléfono de Oficina:</span> {{ obj.office_number }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Extensión:</span> {{ obj.extension_number }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Estatus:</span> {{ obj.status }}</span>
+
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Banco:</span> {{ obj.bank }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Nombre del Titular:</span> {{ obj.bank_account_name }}</span>
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Número de Cuenta:</span> {{ obj.bank_account }}</span>
+                        <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span
+                                    class="color-active">Cuenta Contable:</span> {{ obj.accounting_account }}</span>
+
+
+
+                        </div>
+
+                </div>
+
+
+                <a href="change?type={{ obj.type }}" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-pencil"></i> Editar</a>
+             {% endfor %}
+            </div>
+        </div>
+    </div>
+
+
+    {% comment %}
+        This table shows the owner for the given company.
+    {% endcomment %}
+
+    <div class="col-xs-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">Contactos</h3>
+                </div>
+                <div class="item-right">
+                    <a onclick="myFunction()" href=""
+                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
+                            class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                    </a>
+
+                </div>
+            </div>
+            <div class="card-block text-center">
+                <div class="table-responsive">
+                    <table id="" class="table table-striped table_s" width="100%">
+                        {% if owners.count == 0 %}
+                            <style>
+                                #DataTables_Table_0_wrapper {
+                                    display: none !important;
+                                }
+                            </style>
+                            <thead>
+                            <td></td>
+                            </thead>
+                            <span align="center">No hay contactos registrados para el Cliente</span>
+                        {% else %}
+                            <thead>
+                            <td>Nombre</td>
+                            <td>Correo</td>
+                            <td>Teléfono</td>
+                            {% comment %}<td >Teléfono 2</td>{% endcomment %}
+
+                            <td class="no-sorting">Ver</td>
+                            <td class="no-sorting">Editar</td>
+                            <td class="no-sorting">Eliminar</td>
+                            </thead>
+                            <tbody>
+                            {% for contact in contacts %}
+                                <tr>
+                                    <td>{{ contact.name }}</td>
+                                    <td>{{ contact.email }}</td>
+                                    <td>{{ contact.phone_number }}</td>
+
+                                    {% comment %}<td >{{ owner.telefono2 }}</td>{% endcomment %}
+                                    <td class="text-center" style="width: 3%"><a onclick="popupsee({{ contact.id }},{{ contact.commercialally_id }})"
+                                            href="{% comment %}/admin/Accounting/commercialallycontact/{{ contact.id }}/?commercialally_id={{ contact.commercialally_id }}{% endcomment %}"
+                                            class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-eye color-default eliminar"></i></a></td>
+                                    <td class="text-center" style="width: 3%"><a onclick="popupedit({{ contact.id }},{{ contact.commercialally_id }})"
+                                                                                 href="{% comment %}/admin/ERP/propietario/{{ owner.id }}/change{% endcomment %}"
+                                                                                 class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-pencil color-default eliminar"></i></a></td>
+                                    <td class="text-center" style="width: 3%"><a
+                                            href="/admin/Accounting/commercialallycontact/{{ contact.id }}/delete"
+                                            class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-trash-o color-danger eliminar"></i></a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+
+    <script>
+        function PopupCenter(url, title, w, h) {
+            // Fixes dual-screen position                         Most browsers      Firefox
+            var dualScreenLeft = window.screenLeft != undefined ? window.screenLeft : screen.left;
+            var dualScreenTop = window.screenTop != undefined ? window.screenTop : screen.top;
+
+            var width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width;
+            var height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height;
+
+            var left = ((width / 2) - (w / 2)) + dualScreenLeft;
+            var top = ((height / 2) - (h / 2)) + dualScreenTop;
+            var newWindow = window.open(url, title, 'scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left);
+
+            // Puts focus on the newWindow
+            if (window.focus) {
+                newWindow.focus();
+            }
+            newWindow.onunload= windowClose;
+        }
+
+        function windowClose() {
+            window.location.reload();
+        }
+    </script>
+
+
+
+        <script>
+            function popupedit(cid,ccid) {
+
+                PopupCenter('/admin/Accounting/commercialallycontact/'+ cid + '/change?commercialally_id='+ ccid , 'xtf', '1024', '500');
+            }
+            function popupsee(cid,ccid) {
+                PopupCenter('/admin/Accounting/commercialallycontact/'+ cid + '/?commercialally_id='+ ccid , 'xtf', '1024', '500');
+            }
+        </script>
+
+
+  <script>
+    {% for ca in commercialally %}
+        function myFunction() {
+            PopupCenter('/admin/Accounting/commercialallycontact/add/?commercialally_id={{ ca.id }}','xtf','1024','500');
+
+        }
+    {% endfor %}
+        {% for contact in contacts %}
+        function change_contacto(commercialally_id) {
+            PopupCenter('/admin/ERP/contact/{{ contact.id }}/change?commercialally_id={{ contact.commercialally_id }}','xtf','1024','500');
+
+        }
+        {% endfor %}
+    </script>
+
+
+ </div>
+{% endblock %}

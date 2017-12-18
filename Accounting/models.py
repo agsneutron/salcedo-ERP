@@ -219,7 +219,7 @@ class CommercialAlly(models.Model):
 
     accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
     bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
-    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
+    bank_account_name = models.CharField(verbose_name="Nombre del Titular", max_length=512, default="", null=True,
                                          blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
@@ -303,6 +303,7 @@ class CommercialAllyContact(models.Model):
                              verbose_name="Municipio")
 
     is_legal_representative = models.BooleanField(verbose_name="Es Representante Legal", default=False)
+    commercialally = models.ForeignKey(CommercialAlly, verbose_name="Aliado Comercial", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Contactos'
