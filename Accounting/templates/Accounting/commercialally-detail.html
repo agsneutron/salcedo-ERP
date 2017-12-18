@@ -207,7 +207,8 @@
             if (window.focus) {
                 newWindow.focus();
             }
-            newWindow.onunload= windowClose;
+
+            newWindow.onbeforeunload= windowClose;
         }
 
         function windowClose() {
@@ -223,6 +224,7 @@
                 PopupCenter('/admin/Accounting/commercialallycontact/'+ cid + '/change?commercialally_id='+ ccid , 'xtf', '1024', '500');
             }
             function popupsee(cid,ccid) {
+
                 PopupCenter('/admin/Accounting/commercialallycontact/'+ cid + '/?commercialally_id='+ ccid , 'xtf', '1024', '500');
             }
         </script>

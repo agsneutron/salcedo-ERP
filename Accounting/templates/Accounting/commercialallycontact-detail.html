@@ -74,7 +74,7 @@
 
 
                 <a href="change?commercialally_id={{ obj.commercialally_id }}" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-pencil"></i> Editar</a>
-                <a href="javascript:_self.close()" class="btn btn-raised btn-success button-center-top"><i class="fa fa-pencil"></i> Cerrar</a>
+                <a href="javascript: window.opener.location.reload(); _self.close();" class="btn btn-raised btn-success button-center-top"><i class="fa fa-pencil"></i> Cerrar</a>
              {% endfor %}
             </div>
         </div>
