@@ -1,13 +1,14 @@
 /**
- * Created by ariaocho on 14/12/17.
+ * Created by ariaocho on 15/12/17.
  */
 
 var $j = jQuery.noConflict();
 
 $j(document).on('ready', main);
 
-function main(){
-     $j('#searchpolicy').on('click', search);
+function main() {
+
+    list_policies();
 }
 
 /*  Parámetros:*
@@ -39,24 +40,13 @@ function main(){
 
         reference (string)*/
 
-function search() {
+function list_policies() {
+
     var lower_fiscal_period_year = $j("#lower_fiscal_period_year").val();
     var upper_fiscal_period_year = $j("#upper_fiscal_period_year").val();
     var lower_fiscal_period_month = $j("#lower_fiscal_period_month").val();
     var upper_fiscal_period_month = $j("#upper_fiscal_period_month").val();
-    var type_policy_array = $j("#msTypePolicyArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var lower_folio = $j("#lower_folio").val();
-    var upper_folio = $j("#upper_folio").val();
-    var lower_registry_date = $j("#lower_registry_date").val();
-    var upper_registry_date = $j("#upper_registry_date").val();
-    var description = $j("#description").val();
-    var lower_account_number = $j("#lower_account_number").val();
-    var upper_account_number = $j("#upper_account_number").val();
-    var lower_debit = $j("#lower_debit").val();
-    var upper_debit = $j("#upper_debit").val();
-    var lower_credit = $j("#lower_credit").val();
-    var upper_credit = $j("#upper_credit").val();
-    var reference = $j("#reference").val();
+    var account = $j("#account").val();
 
     var url = "/accounting/search_policies?";
 
@@ -72,44 +62,8 @@ function search() {
     if (upper_fiscal_period_month.toString()!="") {
         url=url+"&upper_fiscal_period_month="+upper_fiscal_period_month.toString();
     }
-    if (type_policy_array.toString()!="") {
-        url=url+"&type_policy_array="+type_policy_array.toString();
-    }
-    if (lower_folio.toString()!="") {
-        url=url+"&lower_folio="+lower_folio.toString();
-    }
-    if (upper_folio.toString()!="") {
-        url=url+"&upper_folio="+upper_folio.toString();
-    }
-    if (lower_registry_date.toString()!="") {
-        url=url+"&lower_registry_date="+lower_registry_date.toString();
-    }
-    if (upper_registry_date.toString()!="") {
-        url=url+"&upper_registry_date="+upper_registry_date.toString();
-    }
-    if (description.toString()!="") {
-        url=url+"&description="+description.toString();
-    }
-    if (lower_account_number.toString()!="") {
-        url=url+"&lower_account_number="+lower_account_number.toString();
-    }
-    if (upper_account_number.toString()!="") {
-        url=url+"&upper_account_number="+upper_account_number.toString();
-    }
-    if (lower_debit.toString()!="") {
-        url=url+"&lower_debit="+lower_debit.toString();
-    }
-    if (upper_debit.toString()!="") {
-        url=url+"&upper_debit="+upper_debit.toString();
-    }
-    if (lower_credit.toString()!="") {
-        url=url+"&lower_credit="+lower_credit.toString();
-    }
-    if (upper_credit.toString()!="") {
-        url=url+"&upper_credit="+upper_credit.toString();
-    }
-    if (reference.toString()!="") {
-        url=url+"&reference="+reference.toString();
+    if (account.toString()!="") {
+        url=url+"&account="+account.toString();
     }
 
     //alert(url);
@@ -185,9 +139,9 @@ function displayResults(data){
                             +'<th>Folio</th>'
                             +'<th>Registro</th>'
                             +'<th>Descripción</th>'
-                            +'<th class="no-sorting">Ver</th>'
-                            +'<th class="no-sorting">Editar</th>'
-                            +'<th class="no-sorting">Eliminar</th>'
+                            +'<th>Ver</th>'
+                            +'<th>Editar</th>'
+                            +'<th>Eliminar</th>'
 
                         +'</tr>'
                     +'</thead>'

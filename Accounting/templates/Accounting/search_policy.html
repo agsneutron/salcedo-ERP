@@ -173,8 +173,17 @@
             </div>
 
             <div class="col-xs-3">
-                Fecha de Registro de:<input type="date" class="vDateField form-control" id="lower_registry_date">
-            </div>
+
+                Fecha de Registro de:<input type="text" class="datepicker2 vDateField form-control" id="lower_registry_date">
+               <label for="datepicker2" class="datetimeshortcuts">&nbsp;<span class="date-icon" title="Choose a Date"></span></label>
+
+                </div>
+                <script>
+$(document).ready(function() {
+    $('.datepicker2').datepicker();
+});
+</script>
+
             <div  class="col-xs-3">
                  a:<input type="date" class=" vDateField form-control" id="upper_registry_date">
             </div>

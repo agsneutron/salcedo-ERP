@@ -21,6 +21,7 @@ from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, Groupi
 
 
 
+
 # Model for accounting policy
 class FiscalPeriod(models.Model):
     OPENED = 1
