@@ -20,7 +20,7 @@ from SharedCatalogs.models import GroupingCode, Account
 
 class AccountingAdminUtilities():
     @staticmethod
-    def get_detail_link(obj):
+    def get_detail_link_accounting(obj):
         model_name = obj.__class__.__name__.lower()
         link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/"
         css = "btn btn-raised btn-default btn-xs"
@@ -31,7 +31,7 @@ class AccountingAdminUtilities():
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
     @staticmethod
-    def get_delete_link(obj):
+    def get_delete_link_accounting(obj):
         model_name = obj.__class__.__name__.lower()
         link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/delete"
         css = "btn btn-raised btn-default btn-xs"
@@ -40,7 +40,7 @@ class AccountingAdminUtilities():
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
     @staticmethod
-    def get_change_link(obj):
+    def get_change_link_accounting(obj):
         model_name = obj.__class__.__name__.lower()
         link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/change"
         css = "btn btn-raised btn-default btn-xs"
@@ -145,13 +145,13 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def get_detail_column(self, obj):
-        return AccountingAdminUtilities.get_detail_link(obj)
+        return AccountingAdminUtilities.get_detail_link_accounting(obj)
 
     def get_change_column(self, obj):
-        return AccountingAdminUtilities.get_change_link(obj)
+        return AccountingAdminUtilities.get_change_link_accounting(obj)
 
     def get_delete_column(self, obj):
-        return AccountingAdminUtilities.get_delete_link(obj)
+        return AccountingAdminUtilities.get_delete_link_accounting(obj)
 
     get_detail_column.short_description = 'Detalle'
     get_detail_column.allow_tags = True

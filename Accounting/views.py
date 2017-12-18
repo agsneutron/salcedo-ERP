@@ -139,17 +139,29 @@ def AddhProvider(request):
 
 class AccountingPolicyDetailView(generic.DetailView):
     model = AccountingPolicy
-    template_name = "ERP/AccountingPolicyDetail-detail.html"
+    template_name = "Accounting/policie-detail.html"
 
     def get_context_data(self, **kwargs):
         context = super(AccountingPolicyDetailView, self).get_context_data(**kwargs)
-        contractor_id = self.kwargs['pk']
-        context['details'] = AccountingPolicyDetail.objects.filter(Q(contractor__id=contractor_id))
+        policy_id = self.kwargs['pk']
+
+        totalDebit = 0
+        totalCredit=0
+        policies = AccountingPolicyDetail.objects.filter(Q(accounting_policy__id=policy_id))
+        for policy in policies:
+            totalDebit += policy.debit
+            totalCredit += policy.credit
+
+
+        context['policy'] = AccountingPolicy.objects.get(Q(id=policy_id))
+        context['totalDebit'] = totalDebit
+        context['totalCredit']=totalCredit
+        context['details'] = AccountingPolicyDetail.objects.filter(Q(accounting_policy__id=policy_id))
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        if not request.user.has_perm('ERP.view_list_accountingpolicy'):
-            raise PermissionDenied
+        #if not request.user.has_perm('ERP.view_list_accountingpolicy'):
+        #    raise PermissionDenied
         return super(AccountingPolicyDetailView, self).dispatch(request, args, kwargs)
 
 class AccountDetailView(generic.DetailView):
