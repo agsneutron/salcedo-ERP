@@ -180,9 +180,9 @@ function displayResults(data){
     sTable= '<thead>'
                         +'<tr>'
                             +'<th>Periodo Fiscal</th>'
-                            +'<th>Tipo de Póliza</th>'
+                            +'<th>Póliza Tipo</th>'
                             +'<th>Folio</th>'
-                            +'<th>Fecha de Registro</th>'
+                            +'<th>Registro</th>'
                             +'<th>Descripción</th>'
                             +'<th>Referencia</th>'
 
