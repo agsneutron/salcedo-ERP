@@ -131,7 +131,7 @@ class AccountingPolicy(models.Model):
         ans = model_to_dict(self)
         ans['registry_date'] = str(self.registry_date)
         ans['fiscal_period_year'] = str(self.fiscal_period.accounting_year)
-        ans['fiscal_period_month'] = str(self.fiscal_period.account_period)
+        ans['fiscal_period_month'] = str(self.fiscal_period.get_account_period_display())
         ans['type_policy_name'] = str(self.type_policy.name)
         return ans
 

@@ -181,12 +181,12 @@ class AccountingPolicyDetailView(generic.DetailView):
 
 class AccountDetailView(generic.DetailView):
     model = Account
-    template_name = "SharedCatalogs /account-detail.html"
+    template_name = "Accounting/account-detail.html"
 
     def get_context_data(self, **kwargs):
         context = super(AccountDetailView, self).get_context_data(**kwargs)
         contractor_id = self.kwargs['pk']
-        context['details'] = Account.objects.filter(Q(id=contractor_id))
+        context['accounts'] = Account.objects.get(Q(id=contractor_id))
         return context
 
     def dispatch(self, request, *args, **kwargs):

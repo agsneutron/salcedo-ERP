@@ -10,7 +10,7 @@ from django.db.models.query_utils import Q
 from Accounting import views
 from Accounting.models import *
 from Accounting.forms import *
-from Accounting.views import AccountingPolicyDetailView
+from Accounting.views import AccountDetailView
 
 
 from Accounting.views import CommercialAllyDetailView, CommercialAllyContactDetailView
@@ -246,6 +246,7 @@ class TypePolicyAdmin(admin.ModelAdmin):
     list_display = ('name', 'balanced_accounts')
     search_fields = ('name',)
     list_per_page = 25
+    actions = None
 
 
 @admin.register(CommercialAlly)
@@ -356,7 +357,7 @@ class AccountAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(AccountAdmin, self).get_urls()
         my_urls = [
-            url(r'^(?P<pk>\d+)/$', views.AccountDetailView.as_view(), name='contractor-detail'),
+            url(r'^(?P<pk>\d+)/$', views.AccountDetailView.as_view(), name='account-detail'),
         ]
 
         return my_urls + urls

@@ -13,6 +13,9 @@ import os
 from Accounting.models import AccountingPolicyDetail, AccountingPolicy, GroupingCode
 from SharedCatalogs.models import Account
 
+# Language Conf.
+import locale
+locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
 
 class GeneralBalanceEngine():
     SHORT_TERM_ACTIVE_LOWER = 101
@@ -224,6 +227,7 @@ class GeneralBalanceEngine():
 
         worksheet.merge_range(header_start_row + 2, 1 + offset, header_start_row + 2, 4 + offset,
                               'Salcedo Construcción y Supervision SA de CV', formats['report_header'])
+
         worksheet.merge_range(header_start_row + 3, 1 + offset, header_start_row + 3, 4 + offset,
                               'Balance General al ' + time.strftime("%d de %B de %Y"), formats['report_header'])
 
@@ -451,7 +455,7 @@ class GeneralBalanceEngine():
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=Balanza_de_Comprobación.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Balance_general.xlsx'
         response['Content-Length'] = output.tell()
 
         output.seek(0)
