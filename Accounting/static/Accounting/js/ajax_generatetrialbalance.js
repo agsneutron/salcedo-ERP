@@ -1,73 +1,73 @@
 /**
- * Created by ariaocho on 15/12/17.
+ * Created by ariaocho on 18/12/17.
  */
 
 var $j = jQuery.noConflict();
+var chk = "0";
 
 $j(document).on('ready', main);
 
-function main() {
+function main(){
+     $j('#generatetrialbalance').on('click', search);
 
-    list_policies();
+    $('input[name="only_with_transactions"]').on('click', function(){
+        if ( $(this).is(':checked') ) {
+           chk = 1;
+        }
+        else {
+            chk= 0;
+        }
+    });
 }
 
-/*  Parámetros:*
+//Balanza de Comprobación: /accounting/generate_trial_balance
+//lower_account_number = Entero
+//upper_account_number = Entero
+//fiscal_period_year = Entero
+//fiscal_period_month = Entero
+//title = String
+//only_with_transactions = [ 1(True) or 0(False)]
+function search() {
+     var lower_account_number = $j("#lower_account_number").val();
+    var upper_account_number = $j("#upper_account_number").val();
+    var fiscal_period_year = $j("#fiscal_period_year").val();
+    var fiscal_period_month = $j("#fiscal_period_month").val();
+    var title = $j("#title").val();
+    var only_with_transactions = $j("#only_with_transactions").val();
+    var url = "/accounting/generate_trial_balance?";
 
-        lower_fiscal_period_year (int)
-        upper_fiscal_period_year (int)
 
-        lower_fiscal_period_month (int)[1 - 12]
-        upper_fiscal_period_month (int)[1 - 12]
-
-        type_policy_array (int) [arreglo id’s de los tipos de póliza]
-
-        lower_folio (int)
-        upper_folio (int)
-
-        lower_registry_date (string) [m/d/YYYY]
-        upper_registry_date (string) [m/d/YYYY]
-
-        description (string)
-
-        lower_account_number (int)
-        upper_account_number (int)
-
-        lower_debit (int)
-        upper_debit (int)
-
-        lower_credit (int)
-        upper_credit (int)
-
-        reference (string)*/
-
-function list_policies() {
-
-    var lower_fiscal_period_year = $j("#lower_fiscal_period_year").val();
-    var upper_fiscal_period_year = $j("#upper_fiscal_period_year").val();
-    var lower_fiscal_period_month = $j("#lower_fiscal_period_month").val();
-    var upper_fiscal_period_month = $j("#upper_fiscal_period_month").val();
-    var account = $j("#account").val();
-
-    var url = "/accounting/search_policies?";
-
-    if (lower_fiscal_period_year.toString()!="") {
-        url = url + "&lower_fiscal_period_year=" + lower_fiscal_period_year.toString();
+    if (lower_account_number =="" || upper_account_number =="" || fiscal_period_year == "" || fiscal_period_month == "" ){
+        message = 'Favor de capturar todos los datos para generar la Balanza \n';
+            $('#alertModal').find('.modal-body p').text(message);
+            $('#alertModal').modal('show')
     }
-    if (upper_fiscal_period_year.toString()!="") {
-        url=url+"&upper_fiscal_period_year="+upper_fiscal_period_year.toString();
-    }
-    if (lower_fiscal_period_month.toString()!="") {
-        url=url+"&lower_fiscal_period_month="+lower_fiscal_period_month.toString();
-    }
-    if (upper_fiscal_period_month.toString()!="") {
-        url=url+"&upper_fiscal_period_month="+upper_fiscal_period_month.toString();
-    }
-    if (account.toString()!="") {
-        url=url+"&account="+account.toString();
-    }
+    else {
 
-    //alert(url);
-    searchengine(url);
+        if (lower_account_number.toString() != "") {
+            url = url + "lower_account_number=" + lower_account_number.toString() + "&";
+        }
+        if (upper_account_number.toString() != "") {
+            url = url + "upper_account_number=" + upper_account_number.toString() + "&";
+        }
+        if (fiscal_period_year.toString() != "") {
+            url = url + "fiscal_period_year=" + fiscal_period_year.toString() + "&";
+        }
+        if (fiscal_period_month.toString() != "") {
+            url = url + "fiscal_period_month=" + fiscal_period_month.toString() + "&";
+        }
+        if (title.toString() != "") {
+            url = url + "title=" + title.toString() + "&";
+        }
+
+        if (only_with_transactions.toString() != "") {
+            url = url + "only_with_transactions=" + chk.toString() + "&";
+        }
+
+        //alert(url);
+        window.location.href = url;
+        //searchengine(url);
+    }
 }
 
 
@@ -97,7 +97,7 @@ function searchengine(url) {
         type: 'get',
         success: function (data) {
             //console.log(data);
-            displayResults(data);
+           // displayResults(data);
 
         },
         error: function (data) {
@@ -122,41 +122,37 @@ function displayResults(data){
     $j('#divTable').html("<div></div>");
     sHtml ='<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
             + ' <colgroup>'
-                +' <col width="10%">'
-                +' <col width="10%">'
-                +' <col width="10%">'
                 +' <col width="15%">'
-                +' <col width="40%">'
-                +' <col width="5%">'
-                +' <col width="5%">'
-                +' <col width="5%">'
+                +' <col width="7%">'
+                +' <col width="14%">'
+                +' <col width="14%">'
+                +' <col width="14%">'
+                +' <col width="14%">'
+                +' <col width="29%">'
                 +' </colgroup>';
 
     sTable= '<thead>'
                         +'<tr>'
-                            +'<th>Periodo Fiscal</th>'
-                            +'<th>Póliza Tipo</th>'
-                            +'<th>Folio</th>'
-                            +'<th>Registro</th>'
-                            +'<th>Descripción</th>'
-                            +'<th>Ver</th>'
-                            +'<th>Editar</th>'
-                            +'<th>Eliminar</th>'
-
+                            +'<th>Nombre</th>'
+                            +'<th>No.</th>'
+                            +'<th>Nivel</th>'
+                            +'<th>Rubro</th>'
+                            +'<th>Subcuenta</th>'
+                            +'<th>Naturaleza</th>'
+                            +'<th>Cód. Agrupador SAT</th>'
                         +'</tr>'
                     +'</thead>'
                     +'<tbody>';
 
     for (var i = 0; i < data.length; i++) {
             sTable += '<tr>'
-            + '<td class="result1 selectable">'+ data[i].fiscal_period_month + '-' + data[i].fiscal_period_year + '</td>'
-            + '<td class="result1 selectable">'+ data[i].type_policy + '</td>'
-            + '<td class="result1 selectable">'+ data[i].folio + '</td>'
-            + '<td class="result1 selectable">'+ data[i].registry_date + '</td>'
-            + '<td class="result1 selectable">'+ data[i].description + '</td>'
-            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-eye color-default eliminar" > </i></a></td>'
-            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/change" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-pencil color-default eliminar" > </i></a></td>'
-            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/delete" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-trash-o color-danger eliminar" > </i></a></td>'
+            + '<td class="result1 selectable">'+ data[i].name + '</td>'
+            + '<td class="result1 selectable">'+ data[i].number + '</td>'
+            + '<td class="result1 selectable">'+ data[i].level + '</td>'
+            + '<td class="result1 selectable">'+ data[i].item + '</td>'
+            + '<td class="result1 selectable">'+ data[i].subsidiary_account + '</td>'
+            + '<td class="result1 selectable">'+ data[i].nature_account + '</td>'
+            + '<td class="result1 selectable">'+ data[i].grouping_code + '</td>'
             + '</tr>'
     }
 
