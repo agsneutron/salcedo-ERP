@@ -10,7 +10,7 @@ from Accounting.models import *
 from Accounting.forms import *
 from django.conf.urls import url
 from Accounting import views
-from Accounting.views import AccountingPolicyDetailView
+from Accounting.views import AccountDetailView
 
 
 
@@ -314,7 +314,7 @@ class AccountAdmin(admin.ModelAdmin):
     def get_urls(self):
         urls = super(AccountAdmin, self).get_urls()
         my_urls = [
-            url(r'^(?P<pk>\d+)/$', views.AccountDetailView.as_view(), name='contractor-detail'),
+            url(r'^(?P<pk>\d+)/$', views.AccountDetailView.as_view(), name='account-detail'),
         ]
 
         return my_urls + urls
