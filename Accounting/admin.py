@@ -2,17 +2,20 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from django.conf.urls import url
+
 
 # Register your models here.
 from django.db.models.query_utils import Q
-
+from Accounting import views
 from Accounting.models import *
 from Accounting.forms import *
-from django.conf.urls import url
-from Accounting import views
 from Accounting.views import AccountDetailView
 
 
+from Accounting.views import CommercialAllyDetailView, CommercialAllyContactDetailView
+from django.http.response import HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
 
 # Shared Catalogs Imports.
 from SharedCatalogs.models import GroupingCode, Account
@@ -255,8 +258,8 @@ class CommercialAllyAdmin(admin.ModelAdmin):
                 'name', 'curp', 'rfc', 'phone_number', 'cellphone_number', 'office_number', 'extension_number',
                 'street', 'outdoor_number',
                 'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town', 'accounting_account', 'bank',
-                'bank_account_name', 'bank_account', 'employer_registration_number', 'services', 'tax_person_type',
-                'status', 'type',)
+                'bank_account_name', 'bank_account', 'employer_registration_number', 'tax_person_type', 'status',
+                'services', 'type',)
         }),
     )
 
@@ -292,10 +295,49 @@ class CommercialAllyAdmin(admin.ModelAdmin):
             title = "Tercero"
 
         extra['title'] = str(title)
-        print "title" + title
-        print "type" + type
+        #print "title" + title
+        #print "type" + type
 
         return super(CommercialAllyAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+
+        type = request.GET.get('type')
+        title = ""
+        extra['type'] = type
+        if type == "0":
+            title = "Proveedor"
+        elif type == "1":
+            title = "Acreedor"
+        elif type == "2":
+            title = "Tercero"
+
+        commercialally_type = CommercialAlly.objects.values('type').filter(pk=object_id)
+        #print "ca_type" + str(commercialally_type[0]['type'])
+        #print "type" + type
+        if type != str(commercialally_type[0]['type']):
+            raise PermissionDenied
+
+        extra['type'] = type
+        extra['title'] = str(title)
+        return super(CommercialAllyAdmin, self).change_view(request, object_id, form_url, extra)
+
+    def get_urls(self):
+        urls = super(CommercialAllyAdmin, self).get_urls()
+        my_urls = [url(r'^(?P<pk>\d+)/$', views.CommercialAllyDetailView.as_view(), name='contact-detail'),
+
+        ]
+        return my_urls + urls
+
+    def response_add(self, request, obj, post_url_continue=None):
+        redirect_url = "/admin/Accounting/commercialally/" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
+
+    def response_change(self, request, obj):
+        #redirect_url = "/admin/Accounting/commercialally/" + str(obj.id) + "/change/?type=" + request.GET.get('type')
+        redirect_url = "/admin/Accounting/commercialally/" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
 
 
 @admin.register(Account)
@@ -337,5 +379,73 @@ class AccountAdmin(admin.ModelAdmin):
     get_delete_column.short_description = 'Eliminar'
     get_delete_column.allow_tags = True
 
+
+@admin.register(CommercialAllyContact)
+class CommercialAllyContactAdmin(admin.ModelAdmin):
+    form = CommercialAllyContactForm
+
+    fieldsets = (
+        ("Contacto", {
+            'fields': (
+                'name', 'rfc', 'phone_number', 'secondary_number','email',
+                'street', 'outdoor_number',
+                'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town',
+                'is_legal_representative', 'commercialally')
+        }),
+    )
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(CommercialAllyContactAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        commercialally_id = request.GET.get('commercialally_id')
+
+        extra['commercialally_id'] = commercialally_id
+
+        return super(CommercialAllyContactAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+
+        commercialally_id = request.GET.get('commercialally_id')
+
+        ca_c = CommercialAllyContact.objects.values('commercialally').filter(pk=object_id)
+        print commercialally_id
+        print ca_c
+        if commercialally_id != str(ca_c[0]['commercialally']):
+            raise PermissionDenied
+
+        return super(CommercialAllyContactAdmin, self).change_view(request, object_id, form_url, extra)
+
+    def get_urls(self):
+        urls = super(CommercialAllyContactAdmin, self).get_urls()
+        my_urls = [url(r'^(?P<pk>\d+)/$', views.CommercialAllyContactDetailView.as_view(), name='contact-detail'),
+
+                   ]
+        return my_urls + urls
+
+    def response_add(self, request, obj, post_url_continue=None):
+        redirect_url = "/admin/Accounting/commercialallycontact/" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
+
+    def response_change(self, request, obj):
+        # redirect_url = "/admin/Accounting/commercialally/" + str(obj.id) + "/change/?type=" + request.GET.get('type')
+        redirect_url = "/admin/Accounting/commercialallycontact/" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
+
+
 admin.site.register(GroupingCode)
-admin.site.register(CommercialAllyContact)

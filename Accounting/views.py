@@ -1,18 +1,19 @@
 # -*- coding: utf-8 -*-
-
 from __future__ import unicode_literals
+
+from django.core.exceptions import PermissionDenied
+from django.db.models import Q
 from django.template import RequestContext,loader
 from Accounting.models import *
 from django.http import HttpResponse
 from django.views import generic
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
+
 from django.shortcuts import render
-from django.core.exceptions import PermissionDenied
 
 import operator
 
-from django.db.models import Q
 
 # Create your views here.
 def PolicieDetail(request):
@@ -82,6 +83,14 @@ def PoliciesAccountList(request):
                'upper_fiscal_period_month': request.GET.get('upper_fiscal_period_month'),
                'account': request.GET.get('account')}
     return HttpResponse(template.render(context, request))
+
+
+def GenerateTrialBalance(request):
+    title="Balanza"
+    template = loader.get_template('Accounting/generate_trial_balance.html')
+    context = {'title': str(title),}
+    return HttpResponse(template.render(context, request))
+
 
 
 # For Add Comercial Allie filter objects view
@@ -164,6 +173,7 @@ class AccountingPolicyDetailView(generic.DetailView):
         #    raise PermissionDenied
         return super(AccountingPolicyDetailView, self).dispatch(request, args, kwargs)
 
+
 class AccountDetailView(generic.DetailView):
     model = Account
     template_name = "Accounting/account-detail.html"
@@ -178,3 +188,40 @@ class AccountDetailView(generic.DetailView):
         #if not request.user.has_perm('ERP.view_list_accountingpolicy'):
         #    raise PermissionDenied
         return super(AccountDetailView, self).dispatch(request, args, kwargs)
+
+
+# Detail View for CommercialAlly
+class CommercialAllyDetailView(generic.DetailView):
+    model = CommercialAlly
+    template_name = "Accounting/commercialally-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CommercialAllyDetailView, self).get_context_data(**kwargs)
+        commercialally_id = self.kwargs['pk']
+        print "id_CA" + commercialally_id
+        context['commercialally'] = CommercialAlly.objects.filter(id=commercialally_id)
+        context['contacts'] = CommercialAllyContact.objects.filter(commercialally_id=commercialally_id)
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        #if not request.user.has_perm('Accounting.view_list_commercialally'):
+        #    raise PermissionDenied
+        return super(CommercialAllyDetailView, self).dispatch(request, args, kwargs)
+
+
+# Detail View for CommercialAlly Contact
+class CommercialAllyContactDetailView(generic.DetailView):
+    model = CommercialAllyContact
+    template_name = "Accounting/commercialallycontact-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(CommercialAllyContactDetailView, self).get_context_data(**kwargs)
+        contact_id = self.kwargs['pk']
+        context['contacts'] = CommercialAllyContact.objects.filter(id=contact_id)
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        #if not request.user.has_perm('Accounting.view_list_commercialally'):
+        #    raise PermissionDenied
+        return super(CommercialAllyContactDetailView, self).dispatch(request, args, kwargs)
+

@@ -84,3 +84,31 @@ class AccountForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = '__all__'
+
+
+class CommercialAllyContactForm(forms.ModelForm):
+    class Meta:
+        model = CommercialAllyContact
+        fields = '__all__'
+
+        widgets = {
+            "commercialally": forms.HiddenInput
+        }
+
+    def __init__(self, *args, **kwargs):
+
+        self.request = kwargs.pop('request', None)
+        self.commercialally_id = self.request.GET.get('commercialally_id', None)
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        # Selecting the current value for the commercialally if it exists, otherwise, None.
+        kwargs['initial'].update({'commercialally': self.commercialally_id})
+
+        # Calling super class to have acces to the fields.
+        super(CommercialAllyContactForm, self).__init__(*args, **kwargs)
+
+        # Filtering the values for the commercialally if it , otherwise, None.
+        if self.commercialally_id is not None:
+            self.fields['commercialally'].queryset = CommercialAlly.objects.filter(id=self.commercialally_id)
