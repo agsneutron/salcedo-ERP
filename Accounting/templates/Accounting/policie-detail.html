@@ -61,7 +61,7 @@
         </div>
         <div class="col-xs-3 text-center">
             <h4 class="text-normal text-center color-info">Periodo Fiscal</h4>
-            <p>{{policy.fiscal_period.account_period }} - {{policy.fiscal_period.accounting_year }}</p>
+            <p>{{policy.fiscal_period.get_account_period_display }} - {{policy.fiscal_period.accounting_year }}</p>
 
         </div>
         <div class="col-xs-3 text-center">
@@ -82,13 +82,13 @@
     </div>
     <div class="row">
 
-        <div class="col-xs-6 text-left">
+        <div class="col-xs-6 text-center">
             <h4 class="text-normal text-center color-info">Referencia</h4>
             <p>{{policy.reference }}</p>
 
         </div>
 
-        <div class="col-xs-6 text-left">
+        <div class="col-xs-6 text-center">
             <h4 class="text-normal text-center color-info">Concepto</h4>
             <p>{{policy.description }}</p>
 

@@ -246,6 +246,7 @@ class TypePolicyAdmin(admin.ModelAdmin):
     list_display = ('name', 'balanced_accounts')
     search_fields = ('name',)
     list_per_page = 25
+    actions = None
 
 
 @admin.register(CommercialAlly)
