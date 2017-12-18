@@ -168,13 +168,14 @@ function displayResults(data){
     $j('#divTable').html("<div></div>");
     sHtml ='<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
             + ' <colgroup>'
+                +' <col width="10%">'
+                +' <col width="10%">'
+                +' <col width="10%">'
                 +' <col width="15%">'
-                +' <col width="7%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="29%">'
+                +' <col width="40%">'
+                +' <col width="5%">'
+                +' <col width="5%">'
+                +' <col width="5%">'
                 +' </colgroup>';
 
     sTable= '<thead>'
@@ -184,7 +185,9 @@ function displayResults(data){
                             +'<th>Folio</th>'
                             +'<th>Registro</th>'
                             +'<th>Descripción</th>'
-                            +'<th>Referencia</th>'
+                            +'<th>Ver</th>'
+                            +'<th>Editar</th>'
+                            +'<th>Eliminar</th>'
 
                         +'</tr>'
                     +'</thead>'
@@ -197,7 +200,9 @@ function displayResults(data){
             + '<td class="result1 selectable">'+ data[i].folio + '</td>'
             + '<td class="result1 selectable">'+ data[i].registry_date + '</td>'
             + '<td class="result1 selectable">'+ data[i].description + '</td>'
-            + '<td class="result1 selectable">'+ data[i].reference + '</td>'
+            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-eye color-default eliminar" > </i></a></td>'
+            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/change" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-pencil color-default eliminar" > </i></a></td>'
+            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/delete" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-trash-o color-danger eliminar" > </i></a></td>'
             + '</tr>'
     }
 
