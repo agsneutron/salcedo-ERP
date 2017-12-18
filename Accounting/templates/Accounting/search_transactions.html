@@ -164,9 +164,8 @@
             <div class="col-xs-3 col-xs-offset-4">
                 <button type="button" id="searchtransactions" class="btn btn-raised btn-primary btn-block">Buscar</button>
             </div>
-        </div>
-
-        <div class="col-xs-12">
+          <div class="clearfix"></div>
+        <div class="col-xs-12 table-padding">
             <div class="table-responsive" id="divTable">
                     {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
                            id="tablaResultados">
@@ -278,6 +277,27 @@
                     </table>{% endcomment %}
                 </div>
         </div>
+        </div>
+
+{#    modal#}
+<div class="modal" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog animated zoomIn animated-3x" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true"><i class="zmdi zmdi-close"></i></span></button>
+                <h3 class="modal-title" id="myModalLabel">Reporte nombre</h3>
+            </div>
+            <div class="modal-body">
+                <p>Texto del modal</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn  btn-primary">Generar Reporte</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     </div>
      <div class="clearfix"></div>
     </div>

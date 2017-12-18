@@ -13,6 +13,9 @@ from django.views.generic.edit import DeleteView
 from django.shortcuts import render
 
 # Create your views here.
+def PolicieDetail(request):
+    template = loader.get_template('Accounting/policie-detail.html')
+    return HttpResponse(template.render(request))
 
 # For Search Account filter objects view
 def SearchAccount(request):

@@ -168,8 +168,8 @@ function displayResults(data,url_policieslist){
                 +' <col width="14%">'
                 +' <col width="14%">'
                 +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="29%">'
+                +' <col width="5%">'
+                +' <col width="5%">'
                 +' </colgroup>';
 
     sTable= '<thead>'
@@ -178,8 +178,8 @@ function displayResults(data,url_policieslist){
                             +'<th>Nombre</th>'
                             +'<th>Debe</th>'
                             +'<th>Haber</th>'
-                            +'<th>Exportar</th>'
-                            +'<th>Pólizas</th>'
+                            +'<th class="no-sorting">Exportar</th>'
+                            +'<th class="no-sorting">Pólizas</th>'
 
                         +'</tr>'
                     +'</thead>'
@@ -191,10 +191,10 @@ function displayResults(data,url_policieslist){
             + '<td class="result1 selectable">'+ data.accounts[i].account_name + '</td>'
             + '<td class="result1 selectable">'+ data.accounts[i].total_debit + '</td>'
             + '<td class="result1 selectable">'+ data.accounts[i].total_credit + '</td>'
-            + '<td class="result1 selectable"><a href="' + tar_url + url + '&account=' + data.accounts[i].account_number + '" class="btn btn-raised btn-default btn-xs">'
-            + '<i class="fa fa-file-excel-o color-default eliminar"></i></a>' + '</td>'
+            + '<td class="result1 selectable"><a data-toggle="modal" data-target="#myModal" href="" class="btn btn-raised btn-default btn-xs">'
+            + '<i class="fa fa-file-excel-o color-default eliminar" style="color: green;"></i></a>' + '</td>'
             + '<td class="result1 selectable"><a href="/accounting/policiesbyaccount?' + url_policieslist + data.accounts[i].account_number + '" class="btn btn-raised btn-default btn-xs">'
-            + '<i class="fa fa-bars color-default eliminar"></i></a>' + '</td>'
+            + '<i class="fa fa-pencil-square-o color-default eliminar"></i></a>' + '</td>'
             + '</tr>'
     }
     sTable +='</tbody>'
