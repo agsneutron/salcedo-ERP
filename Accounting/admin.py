@@ -8,10 +8,75 @@ from django.db.models.query_utils import Q
 
 from Accounting.models import *
 from Accounting.forms import *
+from django.conf.urls import url
+from Accounting import views
+from Accounting.views import AccountingPolicyDetailView
+
+
 
 # Shared Catalogs Imports.
 from SharedCatalogs.models import GroupingCode, Account
 
+
+class AccountingAdminUtilities():
+    @staticmethod
+    def get_detail_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+        if model_name == "AccountingPolicy":
+            button = "<i class ='fa fa-calendar-check-o color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_delete_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/delete"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-trash-o color-danger eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_change_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/change"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    # externas
+    @staticmethod
+    def get_detail_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/SharedCatalogs/" + model_name + "/" + str(obj.id) + "/"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+        if model_name == "Account":
+            button = "<i class ='fa fa-calendar-check-o color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_delete_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/SharedCatalogs/" + model_name + "/" + str(obj.id) + "/delete"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-trash-o color-danger eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_change_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/SharedCatalogs/" + model_name + "/" + str(obj.id) + "/change"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
 # Admin for the inline documents of the current education of an employee.
 class AccountingPolicyDetailInlineFormset(forms.models.BaseInlineFormSet):
@@ -68,7 +133,34 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('folio', 'type_policy', 'fiscal_period', 'description')
+    list_display = ('folio', 'type_policy', 'fiscal_period', 'description','get_detail_column','get_change_column','get_delete_column')
+    list_display_links = None
+
+    def get_urls(self):
+        urls = super(AccountingPolicyAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.AccountingPolicyDetailView.as_view(), name='contractor-detail'),
+        ]
+
+        return my_urls + urls
+
+    def get_detail_column(self, obj):
+        return AccountingAdminUtilities.get_detail_link(obj)
+
+    def get_change_column(self, obj):
+        return AccountingAdminUtilities.get_change_link(obj)
+
+    def get_delete_column(self, obj):
+        return AccountingAdminUtilities.get_delete_link(obj)
+
+    get_detail_column.short_description = 'Detalle'
+    get_detail_column.allow_tags = True
+
+    get_change_column.short_description = 'Editar'
+    get_change_column.allow_tags = True
+
+    get_delete_column.short_description = 'Eliminar'
+    get_delete_column.allow_tags = True
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = ('folio',)
@@ -217,6 +309,33 @@ class AccountAdmin(admin.ModelAdmin):
         }),
     )
 
+    list_display = ('number', 'name', 'nature_account','get_detail_column','get_change_column','get_delete_column')
+
+    def get_urls(self):
+        urls = super(AccountAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.AccountDetailView.as_view(), name='contractor-detail'),
+        ]
+
+        return my_urls + urls
+
+    def get_detail_column(self, obj):
+        return AccountingAdminUtilities.get_detail_link(obj)
+
+    def get_change_column(self, obj):
+        return AccountingAdminUtilities.get_change_link(obj)
+
+    def get_delete_column(self, obj):
+        return AccountingAdminUtilities.get_delete_link(obj)
+
+    get_detail_column.short_description = 'Ver'
+    get_detail_column.allow_tags = True
+
+    get_change_column.short_description = 'Editar'
+    get_change_column.allow_tags = True
+
+    get_delete_column.short_description = 'Eliminar'
+    get_delete_column.allow_tags = True
 
 admin.site.register(GroupingCode)
 admin.site.register(CommercialAllyContact)
