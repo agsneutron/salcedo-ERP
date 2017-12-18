@@ -55,6 +55,11 @@ class SearchPolicies(ListView):
 
         reference = request.GET.get('reference')
 
+        # If the account number is set, the range is ignored.
+        account_number_array = get_array_or_none(request.GET.get('account'))
+
+        internal_company = request.GET.get('internal_company')
+
         engine = PolicySearchEngine(
             lower_fiscal_period_year=lower_fiscal_period_year,
             upper_fiscal_period_year=upper_fiscal_period_year,
@@ -73,7 +78,9 @@ class SearchPolicies(ListView):
             lower_credit=lower_credit,
             upper_credit=upper_credit,
             reference=reference,
-            only_with_transactions= False
+            only_with_transactions= False,
+            account_array=account_number_array,
+            internal_company=internal_company
         )
 
         result = engine.search_policies()
