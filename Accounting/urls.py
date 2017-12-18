@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^searchtransactions', views.SearchTransactions, name='searchtransactions'),
     url(r'^policiesbyaccount', views.PoliciesAccountList, name='policiesbyaccount'),
     url(r'^generatetrialbalance', views.GenerateTrialBalance, name='generatetrialbalance'),
+    url(r'^generategeneralbalance', views.GenerateGeneralBalance, name='generategeneralbalance'),
 
 
     #catalogs

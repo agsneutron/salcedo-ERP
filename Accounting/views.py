@@ -91,6 +91,11 @@ def GenerateTrialBalance(request):
     context = {'title': str(title),}
     return HttpResponse(template.render(context, request))
 
+def GenerateGeneralBalance(request):
+    title="Balanza General"
+    template = loader.get_template('Accounting/generate_general_balance.html')
+    context = {'title': str(title),}
+    return HttpResponse(template.render(context, request))
 
 
 # For Add Comercial Allie filter objects view
