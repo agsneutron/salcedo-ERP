@@ -19,7 +19,6 @@ from django.shortcuts import redirect, render
 import requests
 
 
-
 def get_array_or_none(the_string):
     if the_string is None or the_string == "":
         return None
@@ -73,7 +72,7 @@ class SearchPolicies(ListView):
             lower_credit=lower_credit,
             upper_credit=upper_credit,
             reference=reference,
-            only_with_transactions= False
+            only_with_transactions=False
         )
 
         result = engine.search_policies()
@@ -133,12 +132,10 @@ class SearchProviders(ListView):
 
 
 class SearchTransactionsByAccount(ListView):
-
-
     def group_transactions_by_account(self, transactions):
-        grouped = transactions.values('account__id', 'account__name', 'account__number')\
+        grouped = transactions.values('account__id', 'account__name', 'account__number') \
             .annotate(Count('account__id'), Count('account__name'), Count('account__number'),
-                      total_credit=Sum('credit'),total_debit=Sum('debit'))
+                      total_credit=Sum('credit'), total_debit=Sum('debit'))
 
         return grouped
 
@@ -220,7 +217,6 @@ class SearchTransactionsByAccount(ListView):
         # Excluding the accounts that overpass the credit limits.
         grouped_transactions = self.exclude_credit_limits(lower_credit, upper_credit, grouped_transactions)
 
-
         response = {
             'accounts': []
         }
@@ -234,9 +230,7 @@ class SearchTransactionsByAccount(ListView):
                 'total_debit': account['total_debit']
             })
 
-
-
-        return HttpResponse(Utilities.json_to_dumps(response) , 'application/json; charset=utf-8', )
+        return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8', )
 
 
 #
@@ -244,7 +238,6 @@ class SearchTransactionsByAccount(ListView):
 #
 
 class GenerateTrialBalance(ListView):
-
     def get_details_for_policies(self, policies_set):
         policies_id_array = []
         for policiy in policies_set:
@@ -302,6 +295,8 @@ class GenerateBalance(ListView):
 
         title = request.GET.get('title')
 
+        internal_company = request.GET.get('internal_company')
+
         only_with_transactions = request.GET.get('only_with_transactions')
         only_with_balance = request.GET.get('only_with_balance')
 
@@ -312,7 +307,8 @@ class GenerateBalance(ListView):
             fiscal_period_year=fiscal_period_year,
             fiscal_period_month=fiscal_period_month,
             only_with_transactions=only_with_transactions,
-            only_with_balance=only_with_balance)
+            only_with_balance=only_with_balance,
+            internal_company=internal_company)
 
         result = engine.generate()
 
@@ -322,7 +318,6 @@ class GenerateBalance(ListView):
 
 
 class GenerateTransactionsByAccountReport(ListView):
-
     def create_general_structure(self, report_title, year, month, account):
 
         parent_account = account.subsidiary_account
@@ -356,7 +351,7 @@ class GenerateTransactionsByAccountReport(ListView):
     def create_transaction_structure(self, transaction_info):
 
         account_structure = {
-            'description' : transaction_info.description,
+            'description': transaction_info.description,
             'debit': transaction_info.debit,
             'credit': transaction_info.credit,
             'policy_folio': transaction_info.accounting_policy.folio,
@@ -364,7 +359,6 @@ class GenerateTransactionsByAccountReport(ListView):
         }
 
         return account_structure
-
 
     def get(self, request, *args, **kwargs):
         fiscal_period_year = request.GET.get('fiscal_period_year')
@@ -417,7 +411,6 @@ class GenerateTransactionsByAccountReport(ListView):
             account_array=account_number_array
         )
 
-
         transactions_set = engine.search_transactions()
 
         # Getting the account number.
@@ -425,7 +418,6 @@ class GenerateTransactionsByAccountReport(ListView):
 
         # Getting the account object.
         account_object = Account.objects.get(number=account_number)
-
 
         # Creating the general structure for the response.
         general_structure = self.create_general_structure(
@@ -447,20 +439,19 @@ class GenerateTransactionsByAccountReport(ListView):
             general_structure['transactions'].append(transaction_structure)
 
         # Assigning the accumulated amounts.
-        general_structure['total_debit'] =  total_debit
-        general_structure['total_credit'] =  total_credit
-
+        general_structure['total_debit'] = total_debit
+        general_structure['total_credit'] = total_credit
 
         return engine.generate_report(general_structure)
 
-        #return HttpResponse(Utilities.json_to_dumps(general_structure) , 'application/json; charset=utf-8', )
+        # return HttpResponse(Utilities.json_to_dumps(general_structure) , 'application/json; charset=utf-8', )
 
 
 class CommercialAllyEndpoint(ListView):
-    def get(self, request,name):
-        r=requests.post('http://127.0.0.1:8000/admin/Accounting/commercialally/add',data={'name':'alex'})
-        #r=redirect('/admin/Accounting/commercialally/add',params={'name':'alex'})
+    def get(self, request, name):
+        r = requests.post('http://127.0.0.1:8000/admin/Accounting/commercialally/add', data={'name': 'alex'})
+        # r=redirect('/admin/Accounting/commercialally/add',params={'name':'alex'})
 
         return r
-        #return render(request,'/admin/Accounting/commercialally/add/',{'name':'alex'})
-        #return redirect('/admin/Accounting/commercialally/add',id=name)
+        # return render(request,'/admin/Accounting/commercialally/add/',{'name':'alex'})
+        # return redirect('/admin/Accounting/commercialally/add',id=name)
