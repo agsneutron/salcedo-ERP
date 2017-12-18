@@ -16,7 +16,7 @@ from Logs.controller import Logs
 
 
 # Shared Catalogs Imports.
-from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account
+from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account, InternalCompany
 
 
 
@@ -116,6 +116,7 @@ class AccountingPolicy(models.Model):
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     reference = models.CharField(verbose_name="Referencia", max_length=1024, null=False, blank=False)
+    internal_company = models.ForeignKey(InternalCompany, verbose_name='Empresa Interna', null=True, blank=True)
 
     def __str__(self):
         return str(self.type_policy) + ": " + str(self.folio) + " del periodo fiscal " + str(self.fiscal_period)
@@ -134,7 +135,6 @@ class AccountingPolicy(models.Model):
         ans['fiscal_period_month'] = str(self.fiscal_period.get_account_period_display())
         ans['type_policy_name'] = str(self.type_policy.name)
         return ans
-
 
 
 # Model for accounting policy

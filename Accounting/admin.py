@@ -132,7 +132,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Póliza", {
             'fields': (
-            'fiscal_period', 'type_policy', 'folio', 'registry_date', 'reference', 'description',)
+            'internal_company','fiscal_period', 'type_policy', 'folio', 'registry_date', 'reference', 'description',)
         }),
     )
 
@@ -246,7 +246,6 @@ class TypePolicyAdmin(admin.ModelAdmin):
     list_display = ('name', 'balanced_accounts')
     search_fields = ('name',)
     list_per_page = 25
-    actions = None
 
 
 @admin.register(CommercialAlly)
@@ -348,7 +347,7 @@ class AccountAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Cuentas", {
             'fields': (
-            'number','name','status','nature_account','item','grouping_code','subsidiary_account')
+            'internal_company','number','name','status','nature_account','item','grouping_code','subsidiary_account')
         }),
     )
 
