@@ -85,6 +85,14 @@ def PoliciesAccountList(request):
     return HttpResponse(template.render(context, request))
 
 
+def GenerateTrialBalance(request):
+    title="Balanza"
+    template = loader.get_template('Accounting/generate_trial_balance.html')
+    context = {'title': str(title),}
+    return HttpResponse(template.render(context, request))
+
+
+
 # For Add Comercial Allie filter objects view
 def AddhProvider(request):
     title = "Proveedores"
@@ -164,6 +172,7 @@ class AccountingPolicyDetailView(generic.DetailView):
         #if not request.user.has_perm('ERP.view_list_accountingpolicy'):
         #    raise PermissionDenied
         return super(AccountingPolicyDetailView, self).dispatch(request, args, kwargs)
+
 
 class AccountDetailView(generic.DetailView):
     model = Account
