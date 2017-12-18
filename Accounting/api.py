@@ -193,6 +193,8 @@ class SearchTransactionsByAccount(ListView):
 
         reference = request.GET.get('reference')
 
+        internal_company = request.GET.get('internal_company')
+
         # If the account number is set, the range is ignored.
         account_number_array = get_array_or_none(request.GET.get('account'))
 
