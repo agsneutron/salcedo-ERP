@@ -132,6 +132,7 @@ class AccountingPolicy(models.Model):
         ans['registry_date'] = str(self.registry_date)
         ans['fiscal_period_year'] = str(self.fiscal_period.accounting_year)
         ans['fiscal_period_month'] = str(self.fiscal_period.account_period)
+        ans['type_policy_name'] = str(self.type_policy.name)
         return ans
 
 
