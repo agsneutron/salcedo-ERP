@@ -151,7 +151,7 @@ class AccountingPolicyDetailView(generic.DetailView):
 
 class AccountDetailView(generic.DetailView):
     model = Account
-    template_name = "SharedCatalogs/account-detail.html"
+    template_name = "SharedCatalogs /account-detail.html"
 
     def get_context_data(self, **kwargs):
         context = super(AccountDetailView, self).get_context_data(**kwargs)
