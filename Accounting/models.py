@@ -132,13 +132,17 @@ class AccountingPolicy(models.Model):
         ans['registry_date'] = str(self.registry_date)
         ans['fiscal_period_year'] = str(self.fiscal_period.accounting_year)
         ans['fiscal_period_month'] = str(self.fiscal_period.account_period)
+        ans['type_policy_name'] = str(self.type_policy.name)
         return ans
+
 
 
 # Model for accounting policy
 class AccountingPolicyDetail(models.Model):
     accounting_policy = models.ForeignKey(AccountingPolicy, verbose_name='Póliza', null=False, blank=False)
-    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False)
+    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False,limit_choices_to={
+                                               'type_account': 'D',
+                                           })
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit = models.FloatField(verbose_name="Debe", null=False, blank=False, default=0)
     credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
@@ -155,9 +159,12 @@ class AccountingPolicyDetail(models.Model):
         ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
         return ans
 
+
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
+
+
 
     def save(self, *args, **kwargs):
         self.registry_date = now()
@@ -219,7 +226,7 @@ class CommercialAlly(models.Model):
 
     accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
     bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
-    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
+    bank_account_name = models.CharField(verbose_name="Nombre del Titular", max_length=512, default="", null=True,
                                          blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
@@ -303,6 +310,7 @@ class CommercialAllyContact(models.Model):
                              verbose_name="Municipio")
 
     is_legal_representative = models.BooleanField(verbose_name="Es Representante Legal", default=False)
+    commercialally = models.ForeignKey(CommercialAlly, verbose_name="Aliado Comercial", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Contactos'

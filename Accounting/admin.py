@@ -2,16 +2,84 @@
 from __future__ import unicode_literals
 
 from django.contrib import admin
+from django.conf.urls import url
+
 
 # Register your models here.
 from django.db.models.query_utils import Q
-
+from Accounting import views
 from Accounting.models import *
 from Accounting.forms import *
+from Accounting.views import AccountingPolicyDetailView
+
+
+from Accounting.views import CommercialAllyDetailView, CommercialAllyContactDetailView
+from django.http.response import HttpResponseRedirect
+from django.core.exceptions import PermissionDenied
 
 # Shared Catalogs Imports.
 from SharedCatalogs.models import GroupingCode, Account
 
+
+class AccountingAdminUtilities():
+    @staticmethod
+    def get_detail_link_accounting(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+        if model_name == "AccountingPolicy":
+            button = "<i class ='fa fa-calendar-check-o color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_delete_link_accounting(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/delete"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-trash-o color-danger eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_change_link_accounting(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/Accounting/" + model_name + "/" + str(obj.id) + "/change"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    # externas
+    @staticmethod
+    def get_detail_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/SharedCatalogs/" + model_name + "/" + str(obj.id) + "/"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-eye color-default eliminar' > </i>"
+        if model_name == "Account":
+            button = "<i class ='fa fa-calendar-check-o color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_delete_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/SharedCatalogs/" + model_name + "/" + str(obj.id) + "/delete"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-trash-o color-danger eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
+    @staticmethod
+    def get_change_link(obj):
+        model_name = obj.__class__.__name__.lower()
+        link = "/admin/SharedCatalogs/" + model_name + "/" + str(obj.id) + "/change"
+        css = "btn btn-raised btn-default btn-xs"
+        button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
+
+        return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
 # Admin for the inline documents of the current education of an employee.
 class AccountingPolicyDetailInlineFormset(forms.models.BaseInlineFormSet):
@@ -68,7 +136,34 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('folio', 'type_policy', 'fiscal_period', 'description')
+    list_display = ('folio', 'type_policy', 'fiscal_period', 'description','get_detail_column','get_change_column','get_delete_column')
+    list_display_links = None
+
+    def get_urls(self):
+        urls = super(AccountingPolicyAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.AccountingPolicyDetailView.as_view(), name='contractor-detail'),
+        ]
+
+        return my_urls + urls
+
+    def get_detail_column(self, obj):
+        return AccountingAdminUtilities.get_detail_link_accounting(obj)
+
+    def get_change_column(self, obj):
+        return AccountingAdminUtilities.get_change_link_accounting(obj)
+
+    def get_delete_column(self, obj):
+        return AccountingAdminUtilities.get_delete_link_accounting(obj)
+
+    get_detail_column.short_description = 'Detalle'
+    get_detail_column.allow_tags = True
+
+    get_change_column.short_description = 'Editar'
+    get_change_column.allow_tags = True
+
+    get_delete_column.short_description = 'Eliminar'
+    get_delete_column.allow_tags = True
 
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = ('folio',)
@@ -163,8 +258,8 @@ class CommercialAllyAdmin(admin.ModelAdmin):
                 'name', 'curp', 'rfc', 'phone_number', 'cellphone_number', 'office_number', 'extension_number',
                 'street', 'outdoor_number',
                 'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town', 'accounting_account', 'bank',
-                'bank_account_name', 'bank_account', 'employer_registration_number', 'services', 'tax_person_type',
-                'status', 'type',)
+                'bank_account_name', 'bank_account', 'employer_registration_number', 'tax_person_type', 'status',
+                'services', 'type',)
         }),
     )
 
@@ -200,10 +295,49 @@ class CommercialAllyAdmin(admin.ModelAdmin):
             title = "Tercero"
 
         extra['title'] = str(title)
-        print "title" + title
-        print "type" + type
+        #print "title" + title
+        #print "type" + type
 
         return super(CommercialAllyAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+
+        type = request.GET.get('type')
+        title = ""
+        extra['type'] = type
+        if type == "0":
+            title = "Proveedor"
+        elif type == "1":
+            title = "Acreedor"
+        elif type == "2":
+            title = "Tercero"
+
+        commercialally_type = CommercialAlly.objects.values('type').filter(pk=object_id)
+        #print "ca_type" + str(commercialally_type[0]['type'])
+        #print "type" + type
+        if type != str(commercialally_type[0]['type']):
+            raise PermissionDenied
+
+        extra['type'] = type
+        extra['title'] = str(title)
+        return super(CommercialAllyAdmin, self).change_view(request, object_id, form_url, extra)
+
+    def get_urls(self):
+        urls = super(CommercialAllyAdmin, self).get_urls()
+        my_urls = [url(r'^(?P<pk>\d+)/$', views.CommercialAllyDetailView.as_view(), name='contact-detail'),
+
+        ]
+        return my_urls + urls
+
+    def response_add(self, request, obj, post_url_continue=None):
+        redirect_url = "/admin/Accounting/commercialally/" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
+
+    def response_change(self, request, obj):
+        #redirect_url = "/admin/Accounting/commercialally/" + str(obj.id) + "/change/?type=" + request.GET.get('type')
+        redirect_url = "/admin/Accounting/commercialally/" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
 
 
 @admin.register(Account)
@@ -217,6 +351,101 @@ class AccountAdmin(admin.ModelAdmin):
         }),
     )
 
+    list_display = ('number', 'name', 'nature_account','get_detail_column','get_change_column','get_delete_column')
+
+    def get_urls(self):
+        urls = super(AccountAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.AccountDetailView.as_view(), name='contractor-detail'),
+        ]
+
+        return my_urls + urls
+
+    def get_detail_column(self, obj):
+        return AccountingAdminUtilities.get_detail_link(obj)
+
+    def get_change_column(self, obj):
+        return AccountingAdminUtilities.get_change_link(obj)
+
+    def get_delete_column(self, obj):
+        return AccountingAdminUtilities.get_delete_link(obj)
+
+    get_detail_column.short_description = 'Ver'
+    get_detail_column.allow_tags = True
+
+    get_change_column.short_description = 'Editar'
+    get_change_column.allow_tags = True
+
+    get_delete_column.short_description = 'Eliminar'
+    get_delete_column.allow_tags = True
+
+
+@admin.register(CommercialAllyContact)
+class CommercialAllyContactAdmin(admin.ModelAdmin):
+    form = CommercialAllyContactForm
+
+    fieldsets = (
+        ("Contacto", {
+            'fields': (
+                'name', 'rfc', 'phone_number', 'secondary_number','email',
+                'street', 'outdoor_number',
+                'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town',
+                'is_legal_representative', 'commercialally')
+        }),
+    )
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(CommercialAllyContactAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        commercialally_id = request.GET.get('commercialally_id')
+
+        extra['commercialally_id'] = commercialally_id
+
+        return super(CommercialAllyContactAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+
+        commercialally_id = request.GET.get('commercialally_id')
+
+        ca_c = CommercialAllyContact.objects.values('commercialally').filter(pk=object_id)
+        print commercialally_id
+        print ca_c
+        if commercialally_id != str(ca_c[0]['commercialally']):
+            raise PermissionDenied
+
+        return super(CommercialAllyContactAdmin, self).change_view(request, object_id, form_url, extra)
+
+    def get_urls(self):
+        urls = super(CommercialAllyContactAdmin, self).get_urls()
+        my_urls = [url(r'^(?P<pk>\d+)/$', views.CommercialAllyContactDetailView.as_view(), name='contact-detail'),
+
+                   ]
+        return my_urls + urls
+
+    def response_add(self, request, obj, post_url_continue=None):
+        redirect_url = "/admin/Accounting/commercialallycontact/" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
+
+    def response_change(self, request, obj):
+        # redirect_url = "/admin/Accounting/commercialally/" + str(obj.id) + "/change/?type=" + request.GET.get('type')
+        redirect_url = "/admin/Accounting/commercialallycontact/" + str(obj.id)
+        return HttpResponseRedirect(redirect_url)
+
 
 admin.site.register(GroupingCode)
-admin.site.register(CommercialAllyContact)

@@ -155,14 +155,14 @@ class Account(models.Model):
         (CREDIT, "Acreedora"),
     )
 
-    LEDGER = 1
-    NO_LEDGER = 2
-    LG_ACCOUNT_CHOICES = (
-        (LEDGER, "Si"),
-        (NO_LEDGER, "No"),
+    ACCUMULATION = 'A'
+    DETAIL = 'D'
+    TYPE_ACCOUNT_CHOICES = (
+        (ACCUMULATION, "Acumulativa"),
+        (DETAIL, "Detalle"),
     )
 
-    number = models.IntegerField(verbose_name="Número de Cuenta", null=False, )
+    number = models.BigIntegerField(verbose_name="Número de Cuenta", null=False, )
     name = models.CharField(verbose_name="Nombre de la Cuenta", max_length=500, null=False, )
     status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
 
@@ -171,8 +171,10 @@ class Account(models.Model):
     #ledger_account = models.IntegerField(choices=LG_ACCOUNT_CHOICES, default=LEDGER, verbose_name='Cuenta de Mayor', null=True)
     #level = models.CharField(verbose_name="Nivel", max_length=500, null=True, )
 
+    type_account = models.CharField(choices=TYPE_ACCOUNT_CHOICES, verbose_name='Tipo de Cuenta',
+                                         null=False,max_length=1)
     # foreign
-    item = models.ForeignKey(ItemAccount, verbose_name="Rubro de la Cuenta", )
+    item = models.ForeignKey(ItemAccount, verbose_name="Rubro de la Cuenta")
     grouping_code = models.ForeignKey(GroupingCode, verbose_name="Código Agrupador SAT", )
     subsidiary_account = models.ForeignKey('self', verbose_name='Subcuenta de', null=True, blank=True)
 

@@ -2,7 +2,6 @@
 {% load i18n admin_static %}
 
 {% block extrastyle %}{{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
 
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
 
@@ -13,44 +12,27 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
     <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
-    <script type="text/javascript" src="{% static "Accounting/js/ajax_searchpolicy.js" %}"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/ajax_generatetrialbalance.js" %}"></script>
     <style>
-    #msTypePolicyArray{
-            display: none !important;
+
+        table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
+            position: absolute;
+            bottom: 8px;
+            right: 2px !important;
+            display: block;
+            font-family: 'Glyphicons Halflings';
+            opacity: 0.7;
         }
-    table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
-    position: absolute;
-    bottom: 8px;
-    right: 0px !important;
-    display: block;
-    font-family: 'Glyphicons Halflings';
-    opacity: 0.7;
-}
-    .form-inline {
-    display: block;
-}
-    .col-xs-4 {
-        height: 65px;
-    }
-    #msTypePolicyArray {
-            display: none !important;
+
+        .form-inline {
+            display: block;
         }
-    .policy>.form-group {
-        margin: 0px;
-    }
     </style>
 
     <script type="text/javascript">
-
         var $j = jQuery.noConflict();
         $j(function () {
-            $j("#msTypePolicyArray").multiselect({
-                header: true,
-                checkAllText: 'Marcar todos',
-                uncheckAllText: 'Desmarcar todos',
-                noneSelectedText: 'Tipo de Póliza',
-                selectedText: '# Tipo de Póliza'
-            });
+
             $j('.ui-widget-content').css('width', 'auto');
         });
     </script>
@@ -59,57 +41,31 @@
 
 {% block content %}
 
-    {% comment %}*
-    Parámetros:*
-
-        lower_fiscal_period_year (int)
-        upper_fiscal_period_year (int)
-
-        lower_fiscal_period_month (int)[1 - 12]
-        upper_fiscal_period_month (int)[1 - 12]
-
-        type_policy_array (int) [arreglo id’s de los tipos de póliza]
-
-        lower_folio (int)
-        upper_folio (int)
-
-        lower_registry_date (string) [m/d/YYYY]
-        upper_registry_date (string) [m/d/YYYY]
-
-        description (string)
-
-        lower_account_number (int)
-        upper_account_number (int)
-
-        lower_debit (int)
-        upper_debit (int)
-
-        lower_credit (int)
-        upper_credit (int)
-
-        reference (string)
-{% endcomment %}
+    {% comment %}
+lower_account_number = Entero
+upper_account_number = Entero
+fiscal_period_year = Entero
+fiscal_period_month = Entero
+title = String
+only_with_transactions = [ 1(True) or 0(False)]{% endcomment %}
     {% include "admin/Accounting/accounting-home.html" %}
     <div class="col-xs-9">
         <div class="">
             <div class="col-xs-12">
 
                 <div class="">
-                    <h3 class="section-title">Buscador de Pólizas</h3>
+                    <h3 class="section-title">Balanza de Comprobación</h3>
                     <hr>
                 </div>
             </div>
         </div>
         <div class="col-xs-12">
-            <div class="col-xs-3">
-                Periodo Fiscal (año) de:<input type="number" class="form-control" id="lower_fiscal_period_year">
-            </div>
-            <div class="col-xs-3">
-                a :<input type="number" class="form-control" id="upper_fiscal_period_year">
+            <div class="col-xs-4">
+                Periodo Fiscal (año):<input type="number" class="form-control" id="fiscal_period_year">
             </div>
 
-            <div class="col-xs-3">
-                Periodo Fiscal (mes) de:<select class="form-control" id="lower_fiscal_period_month">
+            <div class="col-xs-4">
+                Periodo Fiscal (mes):<select class="form-control" id="fiscal_period_month">
                 <option value="1" selected>Enero</option>
 
                   <option value="2">Febrero</option>
@@ -136,90 +92,33 @@
 
                 </select>
             </div>
-            <div  class="col-xs-3">
-                a:<select class="form-control" id="upper_fiscal_period_month">
-                <option value="1" selected>Enero</option>
-
-                  <option value="2">Febrero</option>
-
-                  <option value="3">Marzo</option>
-
-                  <option value="4">Abril</option>
-
-                  <option value="5">Mayo</option>
-
-                  <option value="6">Junio</option>
-
-                  <option value="7">Julio</option>
-
-                  <option value="8">Agosto</option>
-
-                  <option value="9">Septiembre</option>
-
-                  <option value="10">Octubre</option>
-
-                  <option value="11">Noviembre</option>
-
-                  <option value="12">Diciembre</option>
-
-                </select>
+            <div class="col-xs-4">
+                Sólo con transacciones:<input type="checkbox" class="form-control" name ="only_with_transactions" id="only_with_transactions">
             </div>
+            <div class="col-xs-4">
+                Cuenta de :<input type="text" class="form-control" id="lower_account_number">
+            </div>
+            <div class="col-xs-4">
+                a <input type="text" class="form-control" id="upper_account_number">
+            </div>
+            <div class="col-xs-4">
+                Título:<input type="text" class="form-control" id="title">
+            </div>
+
 
             <div class="col-xs-3">
-                Folio de:<input type="number" class="form-control" id="lower_folio">
-            </div>
-            <div class="col-xs-3">
-                 a:<input type="number" class="form-control" id="upper_folio">
-            </div>
-
-            <div class="col-xs-3">
-                Fecha de Registro de:<input type="date" class="vDateField form-control" id="lower_registry_date">
-            </div>
-            <div  class="col-xs-3">
-                 a:<input type="date" class=" vDateField form-control" id="upper_registry_date">
-            </div>
-            <div class="col-xs-3">
-                Número de Cuenta de:<input type="number" class="form-control" id="lower_account_number">
-            </div>
-            <div class="col-xs-3">
-                a:<input type="number" class="form-control" id="upper_account_number">
-            </div>
-            <div class="col-xs-3">
-                Debe de:<input type="number" class="form-control" id="lower_debit">
-            </div>
-            <div class="col-xs-3">
-                a:<input type="number" class="form-control" id="upper_debit">
-            </div>
-            <div class="col-xs-3">
-                Haber de:<input type="number" class="form-control" id="lower_credit">
-            </div>
-            <div class="col-xs-3">
-                 a:<input type="number" class="form-control" id="upper_credit">
-            </div>
-            <div class="col-xs-3 policy">
-                Tipo de Poliza:
-                <select class="selectpicker form-control" multiple="multiple" data-size="5"
-                        id="msTypePolicyArray">
-                    {% for obj in typepolicy %}
-                        <option value={{ obj.id }}>{{ obj.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="col-xs-3">
-                Concepto:<input type="text" class="form-control" id="description">
-            </div>
-            <div class="col-xs-3">
-                Referencia:<input type="text" class="form-control" id="reference">
+                &nbsp;
             </div>
             <div class="clearfix"></div>
             <hr>
             <div class="col-xs-3 col-xs-offset-4">
-                <button type="button" id="searchpolicy" class="btn btn-raised btn-primary btn-block">Buscar</button>
+                <button type="button" id="generatetrialbalance" class="btn btn-raised btn-primary btn-block">Generar</button>
             </div>
- <div class="clearfix"></div>
-        <div class="col-xs-12 table-padding">
-            <div class="table-responsive" id="divTable">
-                    {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
+        </div>
+
+        <div class="col-xs-12" style="margin-bottom: 30px">
+            <div class="table-responsive" id="divTable" style="padding: 0px 15px">
+                {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
                            id="tablaResultados">
 
                         <thead>
@@ -327,15 +226,9 @@
 
                         </tbody>
                     </table>{% endcomment %}
-                </div>
+            </div>
         </div>
-        </div>
-
-
     </div>
-     <div class="clearfix"></div>
-    </div>
-<script>
+    <div class="clearfix"></div>
 
-</script>
 {% endblock %}

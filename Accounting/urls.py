@@ -29,6 +29,9 @@ urlpatterns = [
     url(r'^searchthird', views.SearchThird, name='searchthird'),
     url(r'^searchtransactions', views.SearchTransactions, name='searchtransactions'),
     url(r'^policiesbyaccount', views.PoliciesAccountList, name='policiesbyaccount'),
+    url(r'^generatetrialbalance', views.GenerateTrialBalance, name='generatetrialbalance'),
+    url(r'^generategeneralbalance', views.GenerateGeneralBalance, name='generategeneralbalance'),
+
 
     #catalogs
     #url(r'^api/commercialally/$', api.CommercialAllyEndpoint.as_view(),{'name': 'provider'}),

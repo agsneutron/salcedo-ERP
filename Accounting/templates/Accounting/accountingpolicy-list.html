@@ -1,0 +1,91 @@
+{% extends "admin/base_site.html" %}
+
+
+{% block content %}
+    <div id="content-main">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="item-left">
+                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
+                        </div>
+                        <div class="item-right">
+
+                            <a href="add/"
+                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="card-block">
+
+                        {% include 'ERP/list-search-fields.html' %}
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="table-responsive">
+                                    {% if object_list %}
+                                        <table id="" class="table table-striped table_s">
+                                            <thead>
+                                            <tr>
+                                                <th>Folio</th>
+                                                <th>Poliza de</th>
+                                                <th>Fecha</th>
+                                                <th>Concepto</th>
+                                                <th>Referencia</th>
+                                                <th class="no-sorting">Ver</th>
+                                                <th class="no-sorting">Editar</th>
+                                                <th class="no-sorting">Eliminar</th>
+                                            </tr>
+                                            </thead>
+                                            {% for policy in object_list %}
+                                                <tr>
+
+                                                    {% comment %} <td><a href="{{ company.id }}">{{ company.nombreEmpresa }}</a></td>{% endcomment %}
+                                                    <td><span>{{ policy.folio }}</span></td>
+                                                    <td><span>{{ policy.type_policy.name }}</span></td>
+                                                    <td><span>{{ policy.registry_date }}</span></td>
+
+                                                    <td><span>{{ policy.description }}</span></td>
+                                                    <td><span>{{ policy.reference }}</span></td>
+                                                    {% comment %}<td><span>{{ contractor.last_edit_date }}</span></td>{% endcomment %}
+
+                                                    <td class="text-center" style="width: 5%"><a
+                                                            href="{{ policy.id }}"
+                                                            class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-eye color-default eliminar"></i></a></td>
+                                                    <td class="text-center" style="width: 5%"><a
+                                                            href="{{ policy.id }}/change"
+                                                            class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                    <td class="text-center" style="width: 2%"><a
+                                                            href="{{ policy.id }}/delete"
+                                                            class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-trash-o color-danger eliminar"></i></a>
+                                                    </td>
+
+                                                    {% empty %}
+                                                    <td>No existen {{ title_list }}</td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    {% else %}
+                                        No existen {{ title_list }}
+                                    {% endif %}
+                                </div>
+
+                                {% include 'ERP/list-pagination.html' %}
+
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
