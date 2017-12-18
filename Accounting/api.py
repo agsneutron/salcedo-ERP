@@ -96,9 +96,10 @@ class SearchAccounts(ListView):
         grouping_code_array = get_array_or_none(request.GET.get('grouping_code_array'))
         level = request.GET.get('level')
         item = request.GET.get('item')
+        internal_company = request.GET.get('internal_company')
 
         engine = AccountSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
-                                     level, item)
+                                     level, item, internal_company)
 
         results = engine.search()
 
@@ -214,7 +215,8 @@ class SearchTransactionsByAccount(ListView):
             upper_credit=upper_credit,
             reference=reference,
             only_with_transactions=False,
-            account_array=account_number_array
+            account_array=account_number_array,
+            internal_company=internal_company
         )
 
         transactions = engine.search_transactions()
@@ -267,6 +269,8 @@ class GenerateTrialBalance(ListView):
 
         title = request.GET.get('title')
 
+        internal_company = request.GET.get('internal_company')
+
         only_with_transactions = request.GET.get('only_with_transactions')
 
         engine = PolicySearchEngine(
@@ -276,7 +280,8 @@ class GenerateTrialBalance(ListView):
             upper_fiscal_period_month=fiscal_period_month,
             lower_account_number=lower_account_number,
             upper_account_number=upper_account_number,
-            only_with_transactions=only_with_transactions
+            only_with_transactions=only_with_transactions,
+            internal_company=internal_company
         )
 
         result = engine.search_policies()
@@ -397,6 +402,8 @@ class GenerateTransactionsByAccountReport(ListView):
 
         reference = request.GET.get('reference')
 
+        internal_company = request.GET.get('internal_company')
+
         report_title = request.GET.get('report_title')
 
         # If the account number is set, the range is ignored.
@@ -419,7 +426,8 @@ class GenerateTransactionsByAccountReport(ListView):
             upper_credit=upper_credit,
             reference=reference,
             only_with_transactions=False,
-            account_array=account_number_array
+            account_array=account_number_array,
+            internal_company=internal_company
         )
 
         transactions_set = engine.search_transactions()
