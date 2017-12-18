@@ -185,9 +185,9 @@ function displayResults(data){
                             +'<th>Folio</th>'
                             +'<th>Registro</th>'
                             +'<th>Descripción</th>'
-                            +'<th>Ver</th>'
-                            +'<th>Editar</th>'
-                            +'<th>Eliminar</th>'
+                            +'<th class="no-sorting">Ver</th>'
+                            +'<th class="no-sorting">Editar</th>'
+                            +'<th class="no-sorting">Eliminar</th>'
 
                         +'</tr>'
                     +'</thead>'
