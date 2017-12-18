@@ -47,8 +47,8 @@ function search() {
     var url = "/accounting/generate_general_balance?";
 
 
-    if (lower_account_number =="" || upper_account_number =="" || fiscal_period_year == "" || fiscal_period_month == "" ){
-        message = 'Favor de capturar todos los datos para generar la Balanza \n';
+    if ( fiscal_period_year == "" ){
+        message = 'Favor de capturar el Periodo Fiscal (año) para generar el Balance \n';
             $('#alertModal').find('.modal-body p').text(message);
             $('#alertModal').modal('show')
     }
