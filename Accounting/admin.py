@@ -189,7 +189,7 @@ class FiscalPeriodAdmin(admin.ModelAdmin):
     list_display = ('account_period', 'accounting_year', 'status')
     actions = None
     search_fields = ('account_period', 'accounting_year')
-    ordering = ('account_period', 'accounting_year', 'status')
+    #ordering = ('account_period', 'accounting_year', 'status')
     list_per_page = 25
 
     def get_search_results(self, request, queryset, search_term):
