@@ -125,6 +125,7 @@ class GroupingCode(models.Model):
         verbose_name_plural = 'Código Agrupador de Cuentas del SAT.'
         verbose_name = 'Código Agrupador de Cuentas del SAT.'
 
+
 class ItemAccount(models.Model):
     key = models.IntegerField(verbose_name="clave", null=False )
     name = models.CharField(verbose_name="Nombre del Rubro", max_length=100, )
@@ -138,6 +139,7 @@ class ItemAccount(models.Model):
     class Meta:
         verbose_name_plural = 'Rubros'
         verbose_name = 'Rubro'
+
 
 class Account(models.Model):
     ACTIVE = 1
@@ -177,6 +179,7 @@ class Account(models.Model):
     item = models.ForeignKey(ItemAccount, verbose_name="Rubro de la Cuenta")
     grouping_code = models.ForeignKey(GroupingCode, verbose_name="Código Agrupador SAT", )
     subsidiary_account = models.ForeignKey('self', verbose_name='Subcuenta de', null=True, blank=True)
+    internal_company = models.ForeignKey('InternalCompany', verbose_name='Empresa Interna', null=True, blank=True)
 
     def __str__(self):
         return str(self.number) + ": " + self.name
@@ -198,3 +201,17 @@ class Account(models.Model):
             dict['subsidiary_account'] = self.subsidiary_account.number
 
         return dict
+
+
+class InternalCompany(models.Model):
+    name = models.CharField(verbose_name="Nombre", max_length=256, null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Empresas Internas"
+        verbose_name = "Empresa Interna"
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
