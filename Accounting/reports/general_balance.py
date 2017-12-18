@@ -451,7 +451,7 @@ class GeneralBalanceEngine():
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=Balanza_de_Comprobación.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Balance_general.xlsx'
         response['Content-Length'] = output.tell()
 
         output.seek(0)
