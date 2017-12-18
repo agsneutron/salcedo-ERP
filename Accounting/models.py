@@ -44,7 +44,7 @@ class FiscalPeriod(models.Model):
         (6, 'Junio'),
         (7, 'Julio'),
         (8, 'Agosto'),
-        (9, 'Septiembre'),f
+        (9, 'Septiembre'),
         (10, 'Octubre'),
         (11, 'Noviembre'),
         (12, 'Diciembre'),
