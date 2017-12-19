@@ -15,9 +15,6 @@
     <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
     <script type="text/javascript" src="{% static "Accounting/js/ajax_searchpolicy.js" %}"></script>
     <style>
-    #msTypePolicyArray{
-            display: none !important;
-        }
     table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
     position: absolute;
     bottom: 8px;
@@ -54,6 +51,7 @@
             $j('.ui-widget-content').css('width', 'auto');
         });
     </script>
+
 {% endblock %}
 {% block breadcrumbs %}{% endblock %}
 
@@ -173,19 +171,34 @@
             </div>
 
             <div class="col-xs-3">
+                Empresa:
+                <select class="selectpicker form-control" id="msInternalCompany">
+                    {% for obj in internalcompany %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
 
+            <div class="col-xs-3" policy>
+                Tipo de Poliza:
+                <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msTypePolicyArray">
+                    {% for obj in typepolicy %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <div class="col-xs-3">
+                <div class="form-group">
                 Fecha de Registro de:<input type="text" class="datepicker2 vDateField form-control" id="lower_registry_date">
                <label for="datepicker2" class="datetimeshortcuts">&nbsp;<span class="date-icon" title="Choose a Date"></span></label>
-
                 </div>
-                <script>
-$(document).ready(function() {
-    $('.datepicker2').datepicker();
-});
-</script>
-
+            </div>
             <div  class="col-xs-3">
-                 a:<input type="date" class=" vDateField form-control" id="upper_registry_date">
+                <div class="form-group">
+                 a:<input type="text" class="datepicker2 vDateField form-control" id="upper_registry_date">
+                <label for="datepicker2" class="datetimeshortcuts">&nbsp;<span class="date-icon" title="Choose a Date"></span></label>
+                 </div>
             </div>
             <div class="col-xs-3">
                 Número de Cuenta de:<input type="number" class="form-control" id="lower_account_number">
@@ -204,15 +217,6 @@ $(document).ready(function() {
             </div>
             <div class="col-xs-3">
                  a:<input type="number" class="form-control" id="upper_credit">
-            </div>
-            <div class="col-xs-3 policy">
-                Tipo de Poliza:
-                <select class="selectpicker form-control" multiple="multiple" data-size="5"
-                        id="msTypePolicyArray">
-                    {% for obj in typepolicy %}
-                        <option value={{ obj.id }}>{{ obj.name }}</option>
-                    {% endfor %}
-                </select>
             </div>
             <div class="col-xs-3">
                 Concepto:<input type="text" class="form-control" id="description">
@@ -343,8 +347,9 @@ $(document).ready(function() {
 
     </div>
      <div class="clearfix"></div>
-    </div>
-<script>
-
-</script>
+ <script>
+      $(document).ready(function() {
+          $('.datepicker2').datepicker();
+      });
+ </script>
 {% endblock %}

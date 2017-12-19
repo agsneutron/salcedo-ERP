@@ -61,7 +61,8 @@ def SearchThird(request):
 
 def SearchPolicies(request):
     template = loader.get_template('Accounting/search_policy.html')
-    context = {'typepolicy': TypePolicy.objects.all(),}
+    context = {'typepolicy': TypePolicy.objects.all(),
+               'internalcompany': InternalCompany.objects.all(),}
 
     return HttpResponse(template.render(context,request))
 
