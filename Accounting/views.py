@@ -70,7 +70,8 @@ def SearchPolicies(request):
 # For  Transactions by account filter objects view
 def SearchTransactions(request):
     template = loader.get_template('Accounting/search_transactions.html')
-    context = {'typepolicy': TypePolicy.objects.all(),}
+    context = {'typepolicy': TypePolicy.objects.all(),
+               'internalcompany': InternalCompany.objects.all(), }
 
     return HttpResponse(template.render(context, request))
 
@@ -89,13 +90,15 @@ def PoliciesAccountList(request):
 def GenerateTrialBalance(request):
     title="Balanza"
     template = loader.get_template('Accounting/generate_trial_balance.html')
-    context = {'title': str(title),}
+    context = {'title': str(title),
+               'internalcompany': InternalCompany.objects.all(), }
     return HttpResponse(template.render(context, request))
 
 def GenerateGeneralBalance(request):
     title="Balanza General"
     template = loader.get_template('Accounting/generate_general_balance.html')
-    context = {'title': str(title),}
+    context = {'title': str(title),
+               'internalcompany': InternalCompany.objects.all(), }
     return HttpResponse(template.render(context, request))
 
 

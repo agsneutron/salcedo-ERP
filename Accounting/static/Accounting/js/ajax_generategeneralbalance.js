@@ -44,6 +44,7 @@ function search() {
     //var title = $j("#title").val();
     var only_with_transactions = $j("#only_with_transactions").val();
     var only_with_balance = $j("#only_with_balance").val();
+    var internal_company = $j("#internal_company").val();
     var url = "/accounting/generate_general_balance?";
 
 
@@ -69,6 +70,9 @@ function search() {
         //if (title.toString() != "") {
         //    url = url + "title=" + title.toString() + "&";
         //}
+        if (internal_company.toString() != "") {
+            url = url + "internal_company=" + internal_company.toString() + "&";
+        }
 
         if (only_with_transactions.toString() != "") {
             url = url + "only_with_transactions=" + chkt.toString() + "&";

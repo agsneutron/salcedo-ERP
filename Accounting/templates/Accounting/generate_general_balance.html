@@ -61,6 +61,14 @@ only_with_balance=0&only_with_transactions=0{% endcomment %}
         </div>
         <div class="col-xs-12">
             <div class="col-xs-4">
+                Empresa:
+                <select class="selectpicker form-control" id="internal_company">
+                    {% for obj in internalcompany %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-4">
                 Periodo Fiscal (año):<input type="number" class="form-control" id="fiscal_period_year">
             </div>
 
@@ -94,6 +102,12 @@ only_with_balance=0&only_with_transactions=0{% endcomment %}
             </select>
             </div>
             <div class="col-xs-4">
+                Cuenta de :<input type="text" class="form-control" id="lower_account_number">
+            </div>
+            <div class="col-xs-4">
+                a <input type="text" class="form-control" id="upper_account_number">
+            </div>
+            <div class="col-xs-4">
                 Sólo con transacciones:<input type="checkbox" class="form-control" name="only_with_transactions"
                                               id="only_with_transactions">
             </div>
@@ -101,12 +115,7 @@ only_with_balance=0&only_with_transactions=0{% endcomment %}
                 Sólo el Balance:<input type="checkbox" class="form-control" name="only_with_balance"
                                        id="only_with_balance">
             </div>
-            <div class="col-xs-4">
-                Cuenta de :<input type="text" class="form-control" id="lower_account_number">
-            </div>
-            <div class="col-xs-4">
-                a <input type="text" class="form-control" id="upper_account_number">
-            </div>
+
             {% comment %}<div class="col-xs-4">
                 Título:<input type="text" class="form-control" id="title">
             </div>{% endcomment %}
