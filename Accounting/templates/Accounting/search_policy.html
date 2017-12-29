@@ -119,6 +119,24 @@
             </div>
         </div>
         <div class="col-xs-12">
+         <div class="col-xs-3">
+
+                 Empresa:
+                <select class="selectpicker form-control" id="internal_company">
+                    {% for obj in internalcompany %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        <div class="col-xs-3 policy">
+                Tipo de Poliza:
+                <select class="selectpicker form-control" multiple="multiple" data-size="5"
+                        id="msTypePolicyArray">
+                    {% for obj in typepolicy %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="col-xs-3">
                 Periodo Fiscal (año) de:<input type="number" class="form-control" id="lower_fiscal_period_year">
             </div>
@@ -205,6 +223,7 @@
             <div class="col-xs-3">
                 a:<input type="number" class="form-control" id="upper_account_number">
             </div>
+        <div class="clearfix"></div>
             <div class="col-xs-3">
                 Debe de:<input type="number" class="form-control" id="lower_debit">
             </div>
@@ -217,15 +236,7 @@
             <div class="col-xs-3">
                 a:<input type="number" class="form-control" id="upper_credit">
             </div>
-            <div class="col-xs-3 policy">
-                Tipo de Poliza:
-                <select class="selectpicker form-control" multiple="multiple" data-size="5"
-                        id="msTypePolicyArray">
-                    {% for obj in typepolicy %}
-                        <option value={{ obj.id }}>{{ obj.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+
             <div class="col-xs-3">
                 Concepto:<input type="text" class="form-control" id="description">
             </div>
