@@ -164,12 +164,12 @@ function displayResults(data,url_policieslist){
     sHtml ='<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
             + ' <colgroup>'
                 +' <col width="15%">'
-                +' <col width="7%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="5%">'
-                +' <col width="5%">'
+                +' <col width="45%">'
+                +' <col width="17%">'
+                +' <col width="17%">'
+                +' <col width="3%">'
+                +' <col width="3%">'
+
                 +' </colgroup>';
 
     sTable= '<thead>'
@@ -196,7 +196,7 @@ function displayResults(data,url_policieslist){
             + '<td class="result1 selectable">'+ data.accounts[i].total_credit + '</td>'
             + '<td class="result1 selectable"><a href="'+ tar_url + url + '&account='+data.accounts[i].account_number+'" class="btn btn-raised btn-default btn-xs">'
             + '<i class="fa fa-file-excel-o color-default eliminar" style="color: green;"></i></a>' + '</td>'
-            + '<td class="result1 selectable"><a href="/accounting/policiesbyaccount?' + url_policieslist + data.accounts[i].account_number + '" class="btn btn-raised btn-default btn-xs">'
+            + '<td class="result1 selectable"><a href="/accounting/policiesbyaccount?' + url_policieslist + data.accounts[i].account_number + '&accountname='+ data.accounts[i].account_name + '" class="btn btn-raised btn-default btn-xs">'
             + '<i class="fa fa-pencil-square-o color-default eliminar"></i></a>' + '</td>'
             + '</tr>'
     }
