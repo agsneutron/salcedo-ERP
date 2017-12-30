@@ -1,6 +1,19 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static %}
+{% load i18n admin_static admin_modify %}
 
+
+{% block extrahead %}{{ block.super }}
+    <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
+  <script type="text/javascript" src="{% static "admin/js/core.js"%}"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+    <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+
+    <script type="text/javascript" src="{% static "admin/js/calendar.js"%}"></script>
+<script type="text/javascript" src="/static/admin/js/admin/DateTimeShortcuts.js"></script>
+
+
+    {{ media }}
+{% endblock %}
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
 
@@ -106,6 +119,24 @@
             </div>
         </div>
         <div class="col-xs-12">
+         <div class="col-xs-3">
+
+                 Empresa:
+                <select class="selectpicker form-control" id="internal_company">
+                    {% for obj in internalcompany %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        <div class="col-xs-3 policy">
+                Tipo de Poliza:
+                <select class="selectpicker form-control" multiple="multiple" data-size="5"
+                        id="msTypePolicyArray">
+                    {% for obj in typepolicy %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
             <div class="col-xs-3">
                 Periodo Fiscal (año) de:<input type="number" class="form-control" id="lower_fiscal_period_year">
             </div>
@@ -184,7 +215,7 @@
             </div>
 
             <div class="col-xs-3">
-                a:<input type="date" class=" vDateField form-control" id="upper_registry_date">
+                a:<input type="text" class=" vDateField form-control" id="upper_registry_date">
             </div>
             <div class="col-xs-3">
                 Número de Cuenta de:<input type="number" class="form-control" id="lower_account_number">
@@ -192,6 +223,7 @@
             <div class="col-xs-3">
                 a:<input type="number" class="form-control" id="upper_account_number">
             </div>
+        <div class="clearfix"></div>
             <div class="col-xs-3">
                 Debe de:<input type="number" class="form-control" id="lower_debit">
             </div>
@@ -204,15 +236,7 @@
             <div class="col-xs-3">
                 a:<input type="number" class="form-control" id="upper_credit">
             </div>
-            <div class="col-xs-3 policy">
-                Tipo de Poliza:
-                <select class="selectpicker form-control" multiple="multiple" data-size="5"
-                        id="msTypePolicyArray">
-                    {% for obj in typepolicy %}
-                        <option value={{ obj.id }}>{{ obj.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+
             <div class="col-xs-3">
                 Concepto:<input type="text" class="form-control" id="description">
             </div>

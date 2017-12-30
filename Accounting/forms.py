@@ -5,6 +5,8 @@ from Accounting.models import *
 from django.views.generic.edit import FormView
 from django.shortcuts import redirect
 from django.utils.timezone import now
+from django.contrib.admin.widgets import AdminDateWidget
+from django.forms.fields import DateField
 
 
 # Form to include the fields of the AccountingPolicy Form.
@@ -112,3 +114,12 @@ class CommercialAllyContactForm(forms.ModelForm):
         # Filtering the values for the commercialally if it , otherwise, None.
         if self.commercialally_id is not None:
             self.fields['commercialally'].queryset = CommercialAlly.objects.filter(id=self.commercialally_id)
+
+
+# Form to include the search account fields.
+class SearchAccountForm(forms.Form):
+
+    fecha_registro = DateField(label='Fecha de Registro',
+                                     widget=AdminDateWidget)
+
+
