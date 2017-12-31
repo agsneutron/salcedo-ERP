@@ -33,6 +33,7 @@ function search() {
     var fiscal_period_year = $j("#fiscal_period_year").val();
     var fiscal_period_month = $j("#fiscal_period_month").val();
     var title = $j("#title").val();
+    var internal_company = $j("#internal_company").val();
     var only_with_transactions = $j("#only_with_transactions").val();
     var url = "/accounting/generate_trial_balance?";
 
@@ -58,6 +59,9 @@ function search() {
         }
         if (title.toString() != "") {
             url = url + "title=" + title.toString() + "&";
+        }
+        if (internal_company.toString() != "") {
+            url = url + "internal_company=" + internal_company.toString() + "&";
         }
 
         if (only_with_transactions.toString() != "") {

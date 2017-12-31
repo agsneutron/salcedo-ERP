@@ -44,11 +44,12 @@ function search() {
     //var title = $j("#title").val();
     var only_with_transactions = $j("#only_with_transactions").val();
     var only_with_balance = $j("#only_with_balance").val();
+    var internal_company = $j("#internal_company").val();
     var url = "/accounting/generate_general_balance?";
 
 
-    if (lower_account_number =="" || upper_account_number =="" || fiscal_period_year == "" || fiscal_period_month == "" ){
-        message = 'Favor de capturar todos los datos para generar la Balanza \n';
+    if ( fiscal_period_year == "" ){
+        message = 'Favor de capturar el Periodo Fiscal (año) para generar el Balance \n';
             $('#alertModal').find('.modal-body p').text(message);
             $('#alertModal').modal('show')
     }
@@ -69,6 +70,9 @@ function search() {
         //if (title.toString() != "") {
         //    url = url + "title=" + title.toString() + "&";
         //}
+        if (internal_company.toString() != "") {
+            url = url + "internal_company=" + internal_company.toString() + "&";
+        }
 
         if (only_with_transactions.toString() != "") {
             url = url + "only_with_transactions=" + chkt.toString() + "&";

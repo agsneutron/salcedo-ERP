@@ -171,7 +171,7 @@
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_education_add" %}{{ "active_btn" }}{% endif %}"></div>
                                 </a>
                      <a class="btn btn-primary employee-menu" href="{% if request.GET.employee %}/admin/HumanResources/currenteducation/add/?employee={{request.GET.employee}}{% else %}#{% endif %}">Formación<br>
-                                    Académica Actual
+                                    Acad. Actual
                                     <div class="ripple-container {% if request.resolver_match.view_name == "admin:HumanResources_currenteducation_add" %}{{ "active_btn" }}{% endif %}"></div>
                                 </a>
                                 <a class="btn btn-primary employee-menu" href={% if request.GET.employee %}"/admin/HumanResources/emergencycontact/add/?employee={{request.GET.employee}}"{% else %}"#"{% endif %}>
@@ -237,7 +237,7 @@
                                             <strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                                     </ul>
                                     <a class="btn btn-block btn-raised btn-primary" href="{% if request.GET.employee %}/admin/HumanResources/employeehastag/add/?employee={{request.GET.employee}}{% else %}#{% endif %}">Etiquetas</a>
-                                    <a href="{% if request.GET.employee %}/admin/HumanResources/employeeearningsdeductions/add/?employee={{request.GET.employee}}{% else %}#{% endif %}" class="btn btn-block btn-raised btn-primary">Ver Info. de Nómina</a>
+                                    <a href="{% if request.GET.employee %}/admin/HumanResources/employeeearningsdeductions/add/?employee={{request.GET.employee}}{% else %}#{% endif %}" class="btn btn-block btn-raised btn-primary">Info. de Nómina</a>
 {#                                                                                                            <a href="/admin/HumanResources/employeehastag/add/?employee={{ employee.id }}" class="btn btn-block btn-raised btn-primary">Etiquetas</a>#}
                                 </div>
                             </div>

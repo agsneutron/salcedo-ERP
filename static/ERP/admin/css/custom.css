@@ -1246,6 +1246,14 @@ body .sb-site-container {
         padding: 0;
         height: 58px;
     }
+    .panel-menu {
+    display: block;
+}
+    .ms-collapse-nav li a {
+    display: block;
+    padding: 5px 5px;
+    font-size: 12px;
+}
 }
 
 /* Extra Small Devices, Phones */
@@ -1255,6 +1263,7 @@ body .sb-site-container {
 
 /* Small Devices, Tablets */
 @media only screen and (min-width: 768px) {
+
     .highcharts-no-data text {
         font-size: 12px !important;
     }
@@ -1338,7 +1347,7 @@ body .sb-site-container {
     }
 
     .ms-navbar .navbar-nav li a {
-        padding: 5px 17px;
+        padding: 5px 11px;
         font-size: 11px;
     }
 
@@ -1390,6 +1399,11 @@ body .sb-site-container {
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width: 992px) {
+     .ms-collapse-nav li a {
+    display: block;
+    padding: 10px 15px;
+    font-size: 15px;
+}
     .nav-tabs-ver-container .nav-tabs-ver li a {
         color: #424242;
         font-size: 15px;
@@ -1406,7 +1420,7 @@ body .sb-site-container {
     }
 
     .ms-navbar .navbar-nav li a {
-        padding: 5px 25px;
+        padding: 5px 20px;
         font-size: inherit;
     }
 
