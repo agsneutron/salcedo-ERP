@@ -5,17 +5,18 @@
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
-{% comment %}
+    {% comment %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 
 {% endcomment %}
-<style>
- .card .card-block, .card.card-block {
+    <style>
+        .card .card-block, .card.card-block {
 
-    padding: 0;
-}
-   .card .card-block, .card.card-block {
+            padding: 0;
+        }
+
+        .card .card-block, .card.card-block {
             padding: 20px;
             padding: 0rem;
         }
@@ -33,10 +34,20 @@
             margin-bottom: 20px;
             margin-bottom: 2rem;
         }
-.text a {
-    color: white;
-}
-</style>
+
+        .text a {
+            color: white;
+        }
+
+        .field-get_delete_link {
+            width: 5% !important;
+        }
+
+        .field-get_change_link {
+            width: 5% !important;
+        }
+
+    </style>
     {% if cl.formset %}
         <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
 
@@ -73,10 +84,11 @@
             .ui-selectmenu.ui-dialog .ui-header {
                 border-bottom-width: 1px;
             }
-        .card .card-block, .card.card-block {
 
-    padding: 0;
-}
+            .card .card-block, .card.card-block {
+
+                padding: 0;
+            }
 
         </style>
     {% endif %}
@@ -119,7 +131,7 @@
                 <div class="card">
                     <div class="">
 
-                    <h2 class=" text-center">{{ cl.opts.verbose_name|capfirst }}</h2>
+                        <h2 class=" text-center">{{ cl.opts.verbose_name|capfirst }}</h2>
                         {% block object-tools %}
                             {% if has_add_permission %}
                                 <ul class="object-tools">
@@ -135,7 +147,8 @@
                                         <div class="item-right">
                                             {% url cl.opts|admin_urlname:'add' as add_url %}
                                             <a href="{% add_preserved_filters add_url is_popup to_field %}"
-                                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
+                                                    class="zmdi zmdi-plus zmdi-hc-2x"></i>
                                             </a>
                                         </div>
                                     {% endblock %}
@@ -306,11 +319,11 @@
     </script>{% endcomment %}
 
     <script type="text/javascript">
-    {% comment %}    $(document).ready(function () {
-            $(".js-example-placeholder-single").select2({
-                placeholder: "Busqueda por nombre de empresa",
-                allowClear: true
-            });
-        });{% endcomment %}
+        {% comment %}    $(document).ready(function () {
+                $(".js-example-placeholder-single").select2({
+                    placeholder: "Busqueda por nombre de empresa",
+                    allowClear: true
+                });
+            });{% endcomment %}
     </script>
 {% endblock %}

@@ -16,7 +16,7 @@ from SharedCatalogs.models import Account
 # Language Conf.
 import locale
 
-locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
 
 
 class GeneralBalanceEngine():

@@ -8,15 +8,17 @@
     }
 
     .col-xs-4 {
-    min-height: 65px;
+        min-height: 65px;
     }
-    .col-xs-4 br {
-    display: none !important;
-}
-  .datetimeshortcuts {
 
-    top: -38px !important;
-}
+    .col-xs-4 br {
+        display: none !important;
+    }
+
+    .datetimeshortcuts {
+
+        top: -38px !important;
+    }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -77,6 +79,8 @@
         $('input').addClass('form-control');
         $('select').addClass('form-control');
 
+        $('.field-assistance_file>div').removeClass('col-xs-4');
+        $('.field-assistance_file>div').addClass('col-xs-8');
 
     });
 
