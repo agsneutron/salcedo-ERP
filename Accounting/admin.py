@@ -351,7 +351,7 @@ class AccountAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('number', 'name', 'nature_account','get_detail_column','get_change_column','get_delete_column')
+    list_display = ('number', 'name', 'internal_company', 'nature_account', 'get_detail_column','get_change_column','get_delete_column')
 
     def get_urls(self):
         urls = super(AccountAdmin, self).get_urls()

@@ -25,6 +25,7 @@ function search() {
     var number = $j("#number").val();
     var level = $j("#level").val();
     var rubro = $j("#rubro").val();
+    var internal_company = $j("#internal_company").val();
     var url = "/accounting/search_accounts?";
 
     if (account.toString() != "") {
@@ -47,6 +48,9 @@ function search() {
     }
     if (rubro.toString() != "") {
         url = url + "&rubro=" + rubro.toString();
+    }
+    if (internal_company.toString()!="") {
+        url=url+"&internal_company="+internal_company.toString();
     }
     //alert(url);
     searchengine(url);
