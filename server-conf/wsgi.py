@@ -11,8 +11,8 @@ os.environ['PYTHON_EGG_CACHE'] = '/eggCache'
 site.addsitedir('/home/dev_tools/salcedo_env/lib/python2.7/site-packages')
 
 # Add the app's directory to the PYTHONPATH
-sys.path.append('/home/erp')
-sys.path.append('/home/erp/SalcedoERP')
+sys.path.append('/var/www/html/erp')
+sys.path.append('/var/www/html/erp/SalcedoERP')
 
 sys.path.insert(0, '/home/erp')
 
