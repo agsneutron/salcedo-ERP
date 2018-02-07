@@ -145,3 +145,34 @@ dd, dt {
 .table-padding {
     padding-bottom: 35px;
 }
+.ms-timeline-left .ms-timeline-left-item:after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 100%;
+    background-color: #00a09b;
+    height: 9px;
+    width: 9px;
+    left: -6px;
+    top: 6px;
+    transition: all ease .2s;
+}
+.ms-timeline-left {
+    list-style-type: none;
+    margin-left: 300px;
+    border-left: solid 3px #00a09b;
+    position: relative;
+    padding-left: 0;
+}
+.ms-timeline-left .ms-timeline-left-item:before {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 100%;
+    border: solid 3px #00a09b;
+    background-color: #fff;
+    height: 21px;
+    width: 21px;
+    left: -12px;
+    top: 0;
+}
