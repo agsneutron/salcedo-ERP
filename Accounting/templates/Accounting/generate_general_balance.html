@@ -12,7 +12,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
     <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
-    <script type="text/javascript" src="{% static "Accounting/js/ajax_generatetrialbalance.js" %}"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/ajax_generategeneralbalance.js" %}"></script>
     <style>
 
         table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
@@ -42,19 +42,19 @@
 {% block content %}
 
     {% comment %}
-lower_account_number = Entero
-upper_account_number = Entero
-fiscal_period_year = Entero
-fiscal_period_month = Entero
-title = String
-only_with_transactions = [ 1(True) or 0(False)]{% endcomment %}
+
+lower_account_number=0&
+upper_account_number=99999&
+fiscal_period_year=2017&
+fiscal_period_month=5&
+only_with_balance=0&only_with_transactions=0{% endcomment %}
     {% include "admin/Accounting/accounting-home.html" %}
     <div class="col-xs-9">
         <div class="">
             <div class="col-xs-12">
 
                 <div class="">
-                    <h3 class="section-title">Balanza de Comprobación</h3>
+                    <h3 class="section-title">Balance General</h3>
                     <hr>
                 </div>
             </div>
@@ -74,34 +74,32 @@ only_with_transactions = [ 1(True) or 0(False)]{% endcomment %}
 
             <div class="col-xs-4">
                 Periodo Fiscal (mes):<select class="form-control" id="fiscal_period_month">
-                <option value="1" selected>Enero</option>
+                <option value="" selected>---</option>
+                <option value="1">Enero</option>
 
-                  <option value="2">Febrero</option>
+                <option value="2">Febrero</option>
 
-                  <option value="3">Marzo</option>
+                <option value="3">Marzo</option>
 
-                  <option value="4">Abril</option>
+                <option value="4">Abril</option>
 
-                  <option value="5">Mayo</option>
+                <option value="5">Mayo</option>
 
-                  <option value="6">Junio</option>
+                <option value="6">Junio</option>
 
-                  <option value="7">Julio</option>
+                <option value="7">Julio</option>
 
-                  <option value="8">Agosto</option>
+                <option value="8">Agosto</option>
 
-                  <option value="9">Septiembre</option>
+                <option value="9">Septiembre</option>
 
-                  <option value="10">Octubre</option>
+                <option value="10">Octubre</option>
 
-                  <option value="11">Noviembre</option>
+                <option value="11">Noviembre</option>
 
-                  <option value="12">Diciembre</option>
+                <option value="12">Diciembre</option>
 
-                </select>
-            </div>
-            <div class="col-xs-4">
-                Sólo con transacciones:<input type="checkbox" class="form-control" name ="only_with_transactions" id="only_with_transactions">
+            </select>
             </div>
             <div class="col-xs-4">
                 Cuenta de :<input type="text" class="form-control" id="lower_account_number">
@@ -110,8 +108,17 @@ only_with_transactions = [ 1(True) or 0(False)]{% endcomment %}
                 a <input type="text" class="form-control" id="upper_account_number">
             </div>
             <div class="col-xs-4">
-                Título:<input type="text" class="form-control" id="title">
+                Sólo con transacciones:<input type="checkbox" class="form-control" name="only_with_transactions"
+                                              id="only_with_transactions">
             </div>
+            <div class="col-xs-4">
+                Sólo el Balance:<input type="checkbox" class="form-control" name="only_with_balance"
+                                       id="only_with_balance">
+            </div>
+
+            {% comment %}<div class="col-xs-4">
+                Título:<input type="text" class="form-control" id="title">
+            </div>{% endcomment %}
 
 
             <div class="col-xs-3">
@@ -120,7 +127,8 @@ only_with_transactions = [ 1(True) or 0(False)]{% endcomment %}
             <div class="clearfix"></div>
             <hr>
             <div class="col-xs-3 col-xs-offset-4">
-                <button type="button" id="generatetrialbalance" class="btn btn-raised btn-primary btn-block">Generar</button>
+                <button type="button" id="generategeneralbalance" class="btn btn-raised btn-primary btn-block">Generar
+                </button>
             </div>
         </div>
 

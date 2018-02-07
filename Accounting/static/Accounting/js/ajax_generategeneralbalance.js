@@ -3,43 +3,53 @@
  */
 
 var $j = jQuery.noConflict();
-var chk = "0";
+var chkt = "0";
+var chkb = "0";
 
 $j(document).on('ready', main);
 
 function main(){
-     $j('#generatetrialbalance').on('click', search);
+     $j('#generategeneralbalance').on('click', search);
 
     $('input[name="only_with_transactions"]').on('click', function(){
         if ( $(this).is(':checked') ) {
-           chk = 1;
+           chkt = 1;
+
         }
         else {
-            chk= 0;
+            chkt= 0;
+        }
+    });
+    $('input[name="only_with_balance"]').on('click', function(){
+        if ( $(this).is(':checked') ) {
+           chkb = 1;
+
+        }
+        else {
+            chkb= 0;
         }
     });
 }
 
-//Balanza de Comprobación: /accounting/generate_trial_balance
-//lower_account_number = Entero
-//upper_account_number = Entero
-//fiscal_period_year = Entero
-//fiscal_period_month = Entero
-//title = String
-//only_with_transactions = [ 1(True) or 0(False)]
+//lower_account_number=0&
+//upper_account_number=99999&
+//fiscal_period_year=2017&
+//fiscal_period_month=5&
+//only_with_balance=0&only_with_transactions=0
 function search() {
      var lower_account_number = $j("#lower_account_number").val();
     var upper_account_number = $j("#upper_account_number").val();
     var fiscal_period_year = $j("#fiscal_period_year").val();
     var fiscal_period_month = $j("#fiscal_period_month").val();
-    var title = $j("#title").val();
-    var internal_company = $j("#internal_company").val();
+    //var title = $j("#title").val();
     var only_with_transactions = $j("#only_with_transactions").val();
-    var url = "/accounting/generate_trial_balance?";
+    var only_with_balance = $j("#only_with_balance").val();
+    var internal_company = $j("#internal_company").val();
+    var url = "/accounting/generate_general_balance?";
 
 
-    if (lower_account_number =="" || upper_account_number =="" || fiscal_period_year == "" || fiscal_period_month == "" ){
-        message = 'Favor de capturar todos los datos para generar la Balanza \n';
+    if ( fiscal_period_year == "" ){
+        message = 'Favor de capturar el Periodo Fiscal (año) para generar el Balance \n';
             $('#alertModal').find('.modal-body p').text(message);
             $('#alertModal').modal('show')
     }
@@ -57,15 +67,18 @@ function search() {
         if (fiscal_period_month.toString() != "") {
             url = url + "fiscal_period_month=" + fiscal_period_month.toString() + "&";
         }
-        if (title.toString() != "") {
-            url = url + "title=" + title.toString() + "&";
-        }
+        //if (title.toString() != "") {
+        //    url = url + "title=" + title.toString() + "&";
+        //}
         if (internal_company.toString() != "") {
             url = url + "internal_company=" + internal_company.toString() + "&";
         }
 
         if (only_with_transactions.toString() != "") {
-            url = url + "only_with_transactions=" + chk.toString() + "&";
+            url = url + "only_with_transactions=" + chkt.toString() + "&";
+        }
+        if (only_with_balance.toString() != "") {
+            url = url + "only_with_balance=" + chkb.toString() + "&";
         }
 
         //alert(url);
@@ -210,3 +223,6 @@ function displayResults(data){
     $j('#divTable').html(sHtml+sScript);
 
 }
+/**
+ * Created by ariaocho on 18/12/17.
+ */

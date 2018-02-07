@@ -140,5 +140,34 @@
             size: 4
         });
     }
+ if (document.getElementById("id_subsidiary_account")){
+        var e = document.getElementById("id_subsidiary_account");
+
+        e.setAttribute("data-live-search", "true");
+        e.setAttribute("data-width", "auto");
+
+
+        $("#id_subsidiary_account").addClass("selectpicker");
+        $('#id_subsidiary_account').selectpicker({
+            style: 'btn-info',
+            size: 4
+        });
+    }
+
+
+
+    if (document.getElementById("id_accounting_account")){
+        var f = document.getElementById("id_accounting_account");
+
+        f.setAttribute("data-live-search", "true");
+        f.setAttribute("data-width", "auto");
+
+
+        $("#id_accounting_account").addClass("selectpicker");
+        $('#id_accounting_account').selectpicker({
+            style: 'btn-info',
+            size: 4
+        });
+    }
 
 </script>

@@ -54,7 +54,7 @@ function search() {
     }
     if (type.toString()!="") {
         url = url + "type=" + type.toString();
-        searchengine(url);
+        searchengine(url,type);
     }
     else{
         console.log("No TYPE");
@@ -66,7 +66,7 @@ function search() {
 
 
 
-function searchengine(url) {
+function searchengine(url,type) {
     // Setup CSRF tokens and all that good stuff so we don't get hacked
     $.ajaxSetup(
         {
@@ -90,7 +90,7 @@ function searchengine(url) {
         type: 'get',
         success: function (data) {
             //console.log(data);
-            displayResults(data);
+            displayResults(data,type);
 
         },
         error: function (data) {
@@ -108,19 +108,22 @@ function searchengine(url) {
     /* });*/
 }
 
-function displayResults(data){
+function displayResults(data,type){
     var sHtml="";
     var sTable="";
 
     $j('#divTable').html("<div></div>");
     sHtml ='<table class="table-filtros table" cellspacing="0" width="100%" id="tablaResultados">'
             + ' <colgroup>'
-                +' <col width="17%">'
-                +' <col width="16%">'
-                +' <col width="17%">'
-                +' <col width="16%">'
-                +' <col width="17%">'
-                +' <col width="17%">'
+                +' <col width="25%">'
+                +' <col width="10%">'
+                +' <col width="10%">'
+                +' <col width="15%">'
+                +' <col width="10%">'
+                //+' <col width="5%">'
+                +' <col width="5%">'
+                +' <col width="5%">'
+                +' <col width="5%">'
                 +' </colgroup>';
 
     sTable= '<thead>'
@@ -130,19 +133,46 @@ function displayResults(data){
                             +'<th>E-mail</th>'
                             +'<th>Cuenta Contable</th>'
                             +'<th>Banco</th>'
-                            +'<th>Registro</th>'
+                           // +'<th>Registro</th>'
+                            +'<th>Ver</th>'
+                            +'<th>Editar</th>'
+                            +'<th>Eliminar</th>'
+
                         +'</tr>'
                     +'</thead>'
                     +'<tbody>';
 
     for (var i = 0; i < data.length; i++) {
+        var type_id = ""
+            if (type == "PROVIDER"){
+                type_id=0
+            }
+            else if (type == "CREDITOR"){
+                type_id = 1
+            }
+            else if (type == "THIRD_PARTY"){
+                type_id = 2
+            }
+
             sTable += '<tr>'
             + '<td class="result1 selectable">'+ data[i].name + '</td>'
             + '<td class="result1 selectable">'+ data[i].rfc + '</td>'
             + '<td class="result1 selectable">'+ data[i].email + '</td>'
             + '<td class="result1 selectable">'+ data[i].accounting_account + '</td>'
             + '<td class="result1 selectable">'+ data[i].bank_account_name + '</td>'
-            + '<td class="result1 selectable">'+ data[i].register_date + '</td>'
+            //+ '<td class="result1 selectable">'+ data[i].register_date + '</td>'
+            + '<td class="text-center" style="width: 3%"><a '
+            + 'href="/admin/Accounting/commercialally/' + data[i].id + '" '
+            + 'class="btn btn-raised btn-default btn-xs"><i '
+            + 'class="fa fa-eye color-default eliminar"></i></a></td> '
+            + '<td class="text-center" style="width: 3%"><a '
+            + 'href="/admin/Accounting/commercialally/' + data[i].id + '/change/?type=' + type_id + '"'
+            + 'class="btn btn-raised btn-default btn-xs"><i '
+            + 'class="fa fa-pencil color-default eliminar"></i></a></td> '
+            + '<td class="text-center" style="width: 3%"><a '
+            + 'href="/admin/Accounting/commercialally/' + data[i].id + '/delete" '
+            + 'class="btn btn-raised btn-default btn-xs"><i '
+            + 'class="fa fa-trash-o color-danger eliminar"></i></a> '
             + '</tr>'
     }
 

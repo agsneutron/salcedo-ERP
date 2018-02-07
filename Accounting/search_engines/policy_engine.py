@@ -28,7 +28,8 @@ class PolicySearchEngine():
                  upper_credit=None,
                  reference=None,
                  only_with_transactions=None,
-                 account_array = None
+                 account_array = None,
+                 internal_company=None
                  ):
 
         self.lower_fiscal_period_year = lower_fiscal_period_year
@@ -57,6 +58,8 @@ class PolicySearchEngine():
         self.upper_credit = upper_credit
 
         self.reference = reference
+
+        self.internal_company = internal_company
 
         self.only_with_transactions = only_with_transactions
 
@@ -148,7 +151,12 @@ class PolicySearchEngine():
             query &= Q(reference__icontains=self.reference)
 
 
+        if self.internal_company is not None:
+            query &= Q(internal_company__id=self.internal_company)
+
+
         if self.account_array is not None:
+
             policy_detail_array = []
             accounting_policy_detail_set = AccountingPolicyDetail.objects \
                 .filter(Q(account__number__in=self.account_array)) \

@@ -132,7 +132,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Póliza", {
             'fields': (
-            'fiscal_period', 'type_policy', 'folio', 'registry_date', 'reference', 'description',)
+            'internal_company','fiscal_period', 'type_policy', 'folio', 'registry_date', 'reference', 'description',)
         }),
     )
 
@@ -189,7 +189,7 @@ class FiscalPeriodAdmin(admin.ModelAdmin):
     list_display = ('account_period', 'accounting_year', 'status')
     actions = None
     search_fields = ('account_period', 'accounting_year')
-    ordering = ('account_period', 'accounting_year', 'status')
+    #ordering = ('account_period', 'accounting_year', 'status')
     list_per_page = 25
 
     def get_search_results(self, request, queryset, search_term):
@@ -347,7 +347,7 @@ class AccountAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Cuentas", {
             'fields': (
-            'number','name','status','nature_account','item','grouping_code','subsidiary_account')
+            'internal_company','number','name','status','nature_account','item','grouping_code','subsidiary_account')
         }),
     )
 

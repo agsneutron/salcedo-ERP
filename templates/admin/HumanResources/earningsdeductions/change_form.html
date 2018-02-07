@@ -73,33 +73,33 @@
                                 {% if earnings %}
                                 <hr>
                                 <div class="">
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-12 col-lg-6">
                                         {% comment %} <h4 class="section-title mt-4">Percepciones</h4>{% endcomment %}
 
                                         <div class="table-respponsive">
-                                            <table class="table table-striped">
+                                            <table class="table table-striped ">
                                                 <thead>
                                                 <tr>
-                                                    <td style="border:1px solid">Percepciones</td>
-                                                    <td style="border:1px solid">%Gravable</td>
-                                                    <td style="border:1px solid">Categoria</td>
-                                                    <td style="border:1px solid">Editar</td>
-                                                    <td style="border:1px solid">Eliminar</td>
+                                                    <td>Percepciones</td>
+                                                    <td >%Gravable</td>
+                                                    <td >Categoria</td>
+                                                    <td >Editar</td>
+                                                    <td >Eliminar</td>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 {% for record in earnings %}
                                                     <tr>
-                                                        <td style="border:1px solid">{{ record.name }}</td>
-                                                        <td style="border:1px solid">{{ record.percent_taxable }}</td>
-                                                        <td style="border:1px solid">{{ record.category }}</td>
-                                                        <td style="border:1px solid">
+                                                        <td >{{ record.name }}</td>
+                                                        <td >{{ record.percent_taxable }}</td>
+                                                        <td >{{ record.category }}</td>
+                                                        <td style="width: 5%">
                                                             <a href="/admin/HumanResources/earningsdeductions/{{ record.id }}/change/"
                                                                class="btn btn-raised btn-default btn-xs"><i
                                                                     class="fa fa-pencil color-default eliminar"></i>
                                                             </a>
                                                         </td>
-                                                        <td style="border:1px solid">
+                                                        <td style="width: 5%">
                                                             <a href="/admin/HumanResources/earningsdeductions/{{ record.id }}/delete/"
                                                                class="btn btn-raised btn-default btn-xs"><i
                                                                     class="fa fa-trash-o color-danger eliminar"></i>
@@ -111,33 +111,33 @@
                                             </table>
                                         </div>
                                     </div>
-                                    <div class="col-xs-6">
+                                    <div class="col-xs-12 col-sm-12 col-lg-6">
                                         {% comment %}<h4 class="section-title mt-4">Deducciones</h4>{% endcomment %}
 
                                         <div class="table-respponsive">
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <td style="border:1px solid">Deducciones</td>
-                                                    <td style="border:1px solid">%Gravable</td>
-                                                    <td style="border:1px solid">Categoria</td>
-                                                    <td style="border:1px solid">Editar</td>
-                                                    <td style="border:1px solid">Eliminar</td>
+                                                    <td >Deducciones</td>
+                                                    <td >%Gravable</td>
+                                                    <td >Categoria</td>
+                                                    <td >Editar</td>
+                                                    <td >Eliminar</td>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
                                                 {% for record in deductions %}
                                                     <tr>
-                                                        <td style="border:1px solid">{{ record.name }}</td>
-                                                        <td style="border:1px solid">{{ record.percent_taxable }}</td>
-                                                        <td style="border:1px solid">{{ record.category }}</td>
-                                                        <td style="border:1px solid">
+                                                        <td >{{ record.name }}</td>
+                                                        <td>{{ record.percent_taxable }}</td>
+                                                        <td >{{ record.category }}</td>
+                                                        <td style="width: 5%">
                                                             <a href="/admin/HumanResources/earningsdeductions/{{ record.id }}/change/"
                                                                class="btn btn-raised btn-default btn-xs"><i
                                                                     class="fa fa-pencil color-default eliminar"></i>
                                                             </a>
                                                         </td>
-                                                        <td style="border:1px solid">
+                                                        <td style="width: 5%">
                                                             <a href="/admin/HumanResources/earningsdeductions/{{ record.id }}/delete/"
                                                                class="btn btn-raised btn-default btn-xs"><i
                                                                     class="fa fa-trash-o color-danger eliminar"></i>
