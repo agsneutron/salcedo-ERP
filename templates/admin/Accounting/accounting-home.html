@@ -26,6 +26,11 @@
                                     <i class="fa fa-plus"></i> Agregar</a>
                             </li>
                             <li>
+                                <a class="withripple" href="/accounting/searchpolicies">
+                                    <i class="fa fa-search"></i> Buscar</a>
+                            </li>
+
+                            <li>
                                 <a class="withripple" href="/admin/Accounting/accountingpolicy/">
                                     <i class="fa fa-search"></i> Consultar</a>
                             </li>
@@ -37,7 +42,7 @@
                             Cuentas Contables</a>
                         <ul id="c1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e1">
                             <li>
-                                <a class="withripple" href="/admin/Accounting/account/add">
+                                <a class="withripple" href="/admin/SharedCatalogs/account/add">
                                     <i class="fa fa-plus"></i> Agregar</a>
                             </li>
                             <li>
@@ -45,7 +50,7 @@
                                     <i class="fa fa-search"></i> Buscar</a>
                             </li>
                             <li>
-                                <a class="withripple" href="/admin/Accounting/account/">
+                                <a class="withripple" href="/admin/SharedCatalogs/account/">
                                     <i class="fa fa-list"></i> Consultar</a>
                             </li>
                         </ul>
@@ -54,16 +59,62 @@
                     <li class="panel" role="tab" id="e3">
                         <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c3"
                            aria-expanded="true" aria-controls="c3" class="collapsed withripple">
-                            Aliados Comerciales</a>
+                            Proveedores</a>
                         <ul id="c3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e3">
                             <li>
-                                <a class="withripple" href="/admin/Accounting/commercialally/add">
+                                <a class="withripple" href="/admin/Accounting/commercialally/add?type=0">
                                     <i class="fa fa-plus"></i> Agregar</a>
                             </li>
                             <li>
+                                <a class="withripple" href="/accounting/searchprovider/">
+                                    <i class="fa fa-search"></i> Buscar</a>
+                            </li>
+                            {% comment %}<li>
                                 <a class="withripple" href="/admin/Accounting/commercialally/">
                                     <i class="fa fa-search"></i> Consultar</a>
+                            </li>{% endcomment %}
+                        </ul>
+                    </li>
+                     <li class="panel" role="tab" id="e4">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c4"
+                           aria-expanded="true" aria-controls="c4" class="collapsed withripple">
+                            Acreedores</a>
+                        <ul id="c4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e4">
+                            <li>
+                                <a class="withripple" href="/admin/Accounting/commercialally/add?type=1">
+                                    <i class="fa fa-plus"></i> Agregar</a>
                             </li>
+                            <li>
+                                <a class="withripple" href="/accounting/searchcreditors/">
+                                    <i class="fa fa-search"></i> Buscar</a>
+                            </li>
+                           {% comment %} <li>
+                                <a class="withripple" href="/admin/Accounting/commercialally/">
+                                    <i class="fa fa-search"></i> Consultar Registros</a>
+                            </li>{% endcomment %}
+                            {% comment %}<li>
+                                <a class="withripple" href="/admin/HumanResources/uploadedemployeeassistancehistory/">
+                                    <i class="fa fa-plus"></i> Cargar</a>
+                            </li>{% endcomment %}
+                        </ul>
+                    </li>
+                     <li class="panel" role="tab" id="e5">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c5"
+                           aria-expanded="true" aria-controls="c5" class="collapsed withripple">
+                            Terceros</a>
+                        <ul id="c5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e5">
+                            <li>
+                                <a class="withripple" href="/admin/Accounting/commercialally/add?type=2">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/accounting/searchthird/">
+                                    <i class="fa fa-search"></i> Buscar</a>
+                            </li>
+                           {% comment %} <li>
+                                <a class="withripple" href="/admin/Accounting/commercialally/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>{% endcomment %}
                         </ul>
                     </li>
                     <li class="panel" role="tab" id="e7">
@@ -97,60 +148,38 @@
                         </ul>
                     </li>
 
-                     <li class="panel" role="tab" id="e4">
-                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c4"
-                           aria-expanded="true" aria-controls="c4" class="collapsed withripple">
-                            Acreedores</a>
-                        <ul id="c4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e4">
-                            <li>
-                                <a class="withripple" href="/admin/Accounting/creditors/add">
-                                    <i class="fa fa-plus"></i> Registrar</a>
-                            </li>
-                            <li>
-                                <a class="withripple" href="/accounting/searchcreditors/">
-                                    <i class="fa fa-search"></i> Buscar</a>
-                            </li>
-                            <li>
-                                <a class="withripple" href="/admin/Accounting/creditors/">
-                                    <i class="fa fa-search"></i> Consultar Registros</a>
-                            </li>
-                            {% comment %}<li>
-                                <a class="withripple" href="/admin/HumanResources/uploadedemployeeassistancehistory/">
-                                    <i class="fa fa-plus"></i> Cargar</a>
-                            </li>{% endcomment %}
-                        </ul>
-                    </li>
-                     <li class="panel" role="tab" id="e5">
-                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c5"
-                           aria-expanded="true" aria-controls="c5" class="collapsed withripple">
-                            Terceros</a>
-                        <ul id="c5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e5">
-                            <li>
-                                <a class="withripple" href="/admin/Accounting//add/">
-                                    <i class="fa fa-plus"></i> Agregar</a>
-                            </li>
-                            <li>
-                                <a class="withripple" href="/accounting/searchthird/">
-                                    <i class="fa fa-search"></i> Buscar</a>
-                            </li>
-                            <li>
-                                <a class="withripple" href="/admin/Accounting//">
-                                    <i class="fa fa-search"></i> Consultar</a>
-                            </li>
-                        </ul>
-                    </li>
+
                      <li class="panel" role="tab" id="e6">
                         <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c6"
                            aria-expanded="true" aria-controls="c6" class="collapsed withripple">
                             Bancos</a>
                         <ul id="c6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e6">
                             <li>
-                                <a class="withripple" href="/admin/ERP/bank/add/">
+                                <a class="withripple" href="/admin/SharedCatalogs/bank/add/">
                                     <i class="fa fa-plus"></i> Agregar</a>
                             </li>
                             <li>
-                                <a class="withripple" href="/admin/ERP/bank/">
+                                <a class="withripple" href="/admin/SharedCatalogs/bank/">
                                     <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                     <li class="panel" role="tab" id="e10">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c10"
+                           aria-expanded="true" aria-controls="c10" class="collapsed withripple">
+                            Reportes</a>
+                        <ul id="c10" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e10">
+                            <li>
+                                <a class="withripple" href="/accounting/searchtransactions">
+                                    <i class="fa fa-search"></i> Movimientos por Cuenta</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="">
+                                    <i class="fa fa-search"></i> Balance General</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/accounting/generatetrialbalance">
+                                    <i class="fa fa-search"></i> Balanza de Comprobación</a>
                             </li>
                         </ul>
                     </li>

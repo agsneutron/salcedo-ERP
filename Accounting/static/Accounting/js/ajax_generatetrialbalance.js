@@ -1,49 +1,73 @@
 /**
- * Created by Ari_ on 13/12/17.
+ * Created by ariaocho on 18/12/17.
  */
+
 var $j = jQuery.noConflict();
+var chk = "0";
 
 $j(document).on('ready', main);
 
 function main(){
-     $j('#searchaccount').on('click', search);
+     $j('#generatetrialbalance').on('click', search);
+
+    $('input[name="only_with_transactions"]').on('click', function(){
+        if ( $(this).is(':checked') ) {
+           chk = 1;
+        }
+        else {
+            chk= 0;
+        }
+    });
 }
 
-//http://127.0.0.1:8000/accounting/search_accounts?name=Cuenta%202&number=2&subsidiary_account_array=1&
-// nature_account_array=2&grouping_code_array=2&level=2&item=2
+//Balanza de Comprobación: /accounting/generate_trial_balance
+//lower_account_number = Entero
+//upper_account_number = Entero
+//fiscal_period_year = Entero
+//fiscal_period_month = Entero
+//title = String
+//only_with_transactions = [ 1(True) or 0(False)]
 function search() {
-    var subsidiary_account_array = $j("#msSubsidiaryAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var nature_account_array = $j("#msNatureAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var grouping_code_array = $j("#msGroupingCodeArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var account = $j("#account").val();
-    var number = $j("#number").val();
-    var level = $j("#level").val();
-    var rubro = $j("#rubro").val();
-    var url = "/accounting/search_accounts?";
+     var lower_account_number = $j("#lower_account_number").val();
+    var upper_account_number = $j("#upper_account_number").val();
+    var fiscal_period_year = $j("#fiscal_period_year").val();
+    var fiscal_period_month = $j("#fiscal_period_month").val();
+    var title = $j("#title").val();
+    var only_with_transactions = $j("#only_with_transactions").val();
+    var url = "/accounting/generate_trial_balance?";
 
-    if (account.toString()!="") {
-        url = url + "&name=" + account.toString();
+
+    if (lower_account_number =="" || upper_account_number =="" || fiscal_period_year == "" || fiscal_period_month == "" ){
+        message = 'Favor de capturar todos los datos para generar la Balanza \n';
+            $('#alertModal').find('.modal-body p').text(message);
+            $('#alertModal').modal('show')
     }
-    if (number.toString()!="") {
-        url=url+"&number="+number.toString();
+    else {
+
+        if (lower_account_number.toString() != "") {
+            url = url + "lower_account_number=" + lower_account_number.toString() + "&";
+        }
+        if (upper_account_number.toString() != "") {
+            url = url + "upper_account_number=" + upper_account_number.toString() + "&";
+        }
+        if (fiscal_period_year.toString() != "") {
+            url = url + "fiscal_period_year=" + fiscal_period_year.toString() + "&";
+        }
+        if (fiscal_period_month.toString() != "") {
+            url = url + "fiscal_period_month=" + fiscal_period_month.toString() + "&";
+        }
+        if (title.toString() != "") {
+            url = url + "title=" + title.toString() + "&";
+        }
+
+        if (only_with_transactions.toString() != "") {
+            url = url + "only_with_transactions=" + chk.toString() + "&";
+        }
+
+        //alert(url);
+        window.location.href = url;
+        //searchengine(url);
     }
-    if (subsidiary_account_array.toString()!="") {
-        url=url+"&subsidiary_account_array="+subsidiary_account_array.toString();
-    }
-    if (nature_account_array.toString()!="") {
-        url=url+"&nature_account_array="+nature_account_array.toString();
-    }
-    if (grouping_code_array.toString()!="") {
-        url=url+"&grouping_code_array="+grouping_code_array.toString();
-    }
-    if (level.toString()!="") {
-        url=url+"&level="+level.toString();
-    }
-    if (rubro.toString()!="") {
-        url=url+"&rubro="+rubro.toString();
-    }
-    //alert(url);
-    searchengine(url);
 }
 
 
@@ -73,7 +97,7 @@ function searchengine(url) {
         type: 'get',
         success: function (data) {
             //console.log(data);
-            displayResults(data);
+           // displayResults(data);
 
         },
         error: function (data) {

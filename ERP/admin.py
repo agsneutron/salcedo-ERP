@@ -332,7 +332,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
                     accumulated / estimate.contract.monto_contrato * 100)
 
         amount_field = form.base_fields['amount']
-        amount_field.widget = forms.NumberInput(attrs={'step': .1})
+        amount_field.widget = form.NumberInput(attrs={'step': .1})
 
         if obj is None and estimate_id is not None:
             qs = Estimate.objects.filter(pk=estimate_id)

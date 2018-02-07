@@ -1,47 +1,71 @@
 /**
- * Created by Ari_ on 13/12/17.
+ * Created by ariaocho on 15/12/17.
  */
+
 var $j = jQuery.noConflict();
 
 $j(document).on('ready', main);
 
-function main(){
-     $j('#searchaccount').on('click', search);
+function main() {
+
+    list_policies();
 }
 
-//http://127.0.0.1:8000/accounting/search_accounts?name=Cuenta%202&number=2&subsidiary_account_array=1&
-// nature_account_array=2&grouping_code_array=2&level=2&item=2
-function search() {
-    var subsidiary_account_array = $j("#msSubsidiaryAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var nature_account_array = $j("#msNatureAccountArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var grouping_code_array = $j("#msGroupingCodeArray").multiselect("getChecked").map(function(){return this.value;}).get();
-    var account = $j("#account").val();
-    var number = $j("#number").val();
-    var level = $j("#level").val();
-    var rubro = $j("#rubro").val();
-    var url = "/accounting/search_accounts?";
+/*  Parámetros:*
 
+        lower_fiscal_period_year (int)
+        upper_fiscal_period_year (int)
+
+        lower_fiscal_period_month (int)[1 - 12]
+        upper_fiscal_period_month (int)[1 - 12]
+
+        type_policy_array (int) [arreglo id’s de los tipos de póliza]
+
+        lower_folio (int)
+        upper_folio (int)
+
+        lower_registry_date (string) [m/d/YYYY]
+        upper_registry_date (string) [m/d/YYYY]
+
+        description (string)
+
+        lower_account_number (int)
+        upper_account_number (int)
+
+        lower_debit (int)
+        upper_debit (int)
+
+        lower_credit (int)
+        upper_credit (int)
+
+        reference (string)*/
+
+function list_policies() {
+
+    var lower_fiscal_period_year = $j("#lower_fiscal_period_year").val();
+    var upper_fiscal_period_year = $j("#upper_fiscal_period_year").val();
+    var lower_fiscal_period_month = $j("#lower_fiscal_period_month").val();
+    var upper_fiscal_period_month = $j("#upper_fiscal_period_month").val();
+    var account = $j("#account").val();
+
+    var url = "/accounting/search_policies?";
+
+    if (lower_fiscal_period_year.toString()!="") {
+        url = url + "&lower_fiscal_period_year=" + lower_fiscal_period_year.toString();
+    }
+    if (upper_fiscal_period_year.toString()!="") {
+        url=url+"&upper_fiscal_period_year="+upper_fiscal_period_year.toString();
+    }
+    if (lower_fiscal_period_month.toString()!="") {
+        url=url+"&lower_fiscal_period_month="+lower_fiscal_period_month.toString();
+    }
+    if (upper_fiscal_period_month.toString()!="") {
+        url=url+"&upper_fiscal_period_month="+upper_fiscal_period_month.toString();
+    }
     if (account.toString()!="") {
-        url = url + "&name=" + account.toString();
+        url=url+"&account="+account.toString();
     }
-    if (number.toString()!="") {
-        url=url+"&number="+number.toString();
-    }
-    if (subsidiary_account_array.toString()!="") {
-        url=url+"&subsidiary_account_array="+subsidiary_account_array.toString();
-    }
-    if (nature_account_array.toString()!="") {
-        url=url+"&nature_account_array="+nature_account_array.toString();
-    }
-    if (grouping_code_array.toString()!="") {
-        url=url+"&grouping_code_array="+grouping_code_array.toString();
-    }
-    if (level.toString()!="") {
-        url=url+"&level="+level.toString();
-    }
-    if (rubro.toString()!="") {
-        url=url+"&rubro="+rubro.toString();
-    }
+
     //alert(url);
     searchengine(url);
 }
@@ -98,37 +122,41 @@ function displayResults(data){
     $j('#divTable').html("<div></div>");
     sHtml ='<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
             + ' <colgroup>'
+                +' <col width="10%">'
+                +' <col width="10%">'
+                +' <col width="10%">'
                 +' <col width="15%">'
-                +' <col width="7%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="14%">'
-                +' <col width="29%">'
+                +' <col width="40%">'
+                +' <col width="5%">'
+                +' <col width="5%">'
+                +' <col width="5%">'
                 +' </colgroup>';
 
     sTable= '<thead>'
                         +'<tr>'
-                            +'<th>Nombre</th>'
-                            +'<th>No.</th>'
-                            +'<th>Nivel</th>'
-                            +'<th>Rubro</th>'
-                            +'<th>Subcuenta</th>'
-                            +'<th>Naturaleza</th>'
-                            +'<th>Cód. Agrupador SAT</th>'
+                            +'<th>Periodo Fiscal</th>'
+                            +'<th>Póliza Tipo</th>'
+                            +'<th>Folio</th>'
+                            +'<th>Registro</th>'
+                            +'<th>Descripción</th>'
+                            +'<th>Ver</th>'
+                            +'<th>Editar</th>'
+                            +'<th>Eliminar</th>'
+
                         +'</tr>'
                     +'</thead>'
                     +'<tbody>';
 
     for (var i = 0; i < data.length; i++) {
             sTable += '<tr>'
-            + '<td class="result1 selectable">'+ data[i].name + '</td>'
-            + '<td class="result1 selectable">'+ data[i].number + '</td>'
-            + '<td class="result1 selectable">'+ data[i].level + '</td>'
-            + '<td class="result1 selectable">'+ data[i].item + '</td>'
-            + '<td class="result1 selectable">'+ data[i].subsidiary_account + '</td>'
-            + '<td class="result1 selectable">'+ data[i].nature_account + '</td>'
-            + '<td class="result1 selectable">'+ data[i].grouping_code + '</td>'
+            + '<td class="result1 selectable">'+ data[i].fiscal_period_month + '-' + data[i].fiscal_period_year + '</td>'
+            + '<td class="result1 selectable">'+ data[i].type_policy + '</td>'
+            + '<td class="result1 selectable">'+ data[i].folio + '</td>'
+            + '<td class="result1 selectable">'+ data[i].registry_date + '</td>'
+            + '<td class="result1 selectable">'+ data[i].description + '</td>'
+            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-eye color-default eliminar" > </i></a></td>'
+            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/change" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-pencil color-default eliminar" > </i></a></td>'
+            + '<td style="width: 2px"><a href="/admin/Accounting/accountingpolicy/' + data[i].id + '/delete" class="btn btn-raised btn-default btn-xs"><i class ="fa fa-trash-o color-danger eliminar" > </i></a></td>'
             + '</tr>'
     }
 

@@ -54,17 +54,41 @@ class FiscalPeriod(models.Model):
     status = models.IntegerField(choices=STATUS_CHOICES, default=OPENED, verbose_name='Estatus')
 
     def __str__(self):
-        return str(self.accounting_year) + " " + self.get_account_period_display()
+        return self.get_account_period_display() + " " + str(self.accounting_year)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.accounting_year) + " " + self.get_account_period_display()
+        return self.get_account_period_display() + " " + str(self.accounting_year)
 
     @staticmethod
     def get_month_name_from_number(number):
         return FiscalPeriod.MONTH_CHOICES[number - 1][1]
 
+    @staticmethod
+    def get_month_number_from_substring(substring):
+        months = {
+            "enero": 1,
+            "febrero": 2,
+            "marzo": 3,
+            "abril": 4,
+            "mayo": 5,
+            "junio": 6,
+            "julio": 7,
+            "agosto": 8,
+            "septiembre": 9,
+            "octubre": 10,
+            "noviembre": 11,
+            "diciembre": 12
+        }
+
+        months_numbers_array = []
+        for key, value in months.items():
+            if substring in key:
+                months_numbers_array.append(value)
+
+        return months_numbers_array
+
     class Meta:
-        verbose_name_plural = 'Año contable'
+        verbose_name_plural = 'Años contables'
         verbose_name = 'Año Contable'
 
 
@@ -94,10 +118,10 @@ class AccountingPolicy(models.Model):
     reference = models.CharField(verbose_name="Referencia", max_length=1024, null=False, blank=False)
 
     def __str__(self):
-        return str(self.type_policy) + ": " + str(self.folio)
+        return str(self.type_policy) + ": " + str(self.folio) + " del periodo fiscal " + str(self.fiscal_period)
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.type_policy) + ": " + str(self.folio)
+        return str(self.type_policy) + ": " + str(self.folio) + " del periodo fiscal " + str(self.fiscal_period)
 
     class Meta:
         verbose_name_plural = 'Pólizas Contables'
@@ -108,13 +132,17 @@ class AccountingPolicy(models.Model):
         ans['registry_date'] = str(self.registry_date)
         ans['fiscal_period_year'] = str(self.fiscal_period.accounting_year)
         ans['fiscal_period_month'] = str(self.fiscal_period.account_period)
+        ans['type_policy_name'] = str(self.type_policy.name)
         return ans
+
 
 
 # Model for accounting policy
 class AccountingPolicyDetail(models.Model):
     accounting_policy = models.ForeignKey(AccountingPolicy, verbose_name='Póliza', null=False, blank=False)
-    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False)
+    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False,limit_choices_to={
+                                               'type_account': 'D',
+                                           })
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit = models.FloatField(verbose_name="Debe", null=False, blank=False, default=0)
     credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
@@ -131,9 +159,12 @@ class AccountingPolicyDetail(models.Model):
         ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
         return ans
 
+
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
+
+
 
     def save(self, *args, **kwargs):
         self.registry_date = now()
@@ -195,7 +226,7 @@ class CommercialAlly(models.Model):
 
     accounting_account = models.ForeignKey(Account, verbose_name="Cuenta Contable", blank=False, null=False)
     bank = models.ForeignKey(Bank, verbose_name="Banco", null=True, blank=False)
-    bank_account_name = models.CharField(verbose_name="Nombre de la Persona", max_length=512, default="", null=True,
+    bank_account_name = models.CharField(verbose_name="Nombre del Titular", max_length=512, default="", null=True,
                                          blank=True)
     bank_account = models.CharField(verbose_name="Cuenta Bancaria", max_length=16, default="", null=True, blank=True)
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
@@ -217,6 +248,7 @@ class CommercialAlly(models.Model):
 
     class Meta:
         verbose_name_plural = 'Aliado Comercial'
+        verbose_name = 'Aliado Comercial'
 
     def to_serializable_dict(self):
         ans = model_to_dict(self)
@@ -278,6 +310,7 @@ class CommercialAllyContact(models.Model):
                              verbose_name="Municipio")
 
     is_legal_representative = models.BooleanField(verbose_name="Es Representante Legal", default=False)
+    commercialally = models.ForeignKey(CommercialAlly, verbose_name="Aliado Comercial", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Contactos'

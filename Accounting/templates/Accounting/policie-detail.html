@@ -1,0 +1,153 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}{{ block.super }}
+
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/jquery.multiselect.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/multi-custom.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css"/>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
+
+    <style>
+
+        table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
+            position: absolute;
+            bottom: 8px;
+            right: 0px !important;
+            display: block;
+            font-family: 'Glyphicons Halflings';
+            opacity: 0.7;
+        }
+
+        .form-inline {
+            display: block;
+        }
+
+        .col-xs-4 {
+            height: 65px;
+        }
+
+        #msTypePolicyArray {
+            display: none !important;
+        }
+
+        .policy > .form-group {
+            margin: 0px;
+        }
+    </style>
+
+    <script type="text/javascript" src="{% static "Accounting/js/ajax_policiesbyaccount.js" %}"></script>
+
+{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+    {% include "admin/Accounting/accounting-home.html" %}
+<div class="col-xs-9">
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="text-center">
+                <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i
+                        class="zmdi zmdi-border-color zmdi-hc-fw"></i></span>
+                <h3 class="section-title">Póliza</h3>
+                <hr>
+            </div>
+        </div>
+        <div class="col-xs-3 text-center">
+            <h4 class="text-normal text-center color-info">Periodo Fiscal</h4>
+            <p>{{policy.fiscal_period.account_period }} - {{policy.fiscal_period.accounting_year }}</p>
+
+        </div>
+        <div class="col-xs-3 text-center">
+            <h4 class="text-normal text-center color-info">Tipo de Poliza</h4>
+            <p>{{policy.type_policy.name }}</p>
+
+        </div>
+        <div class="col-xs-3 text-center">
+            <h4 class="text-normal text-center color-info">Folio</h4>
+            <p>{{policy.folio }}</p>
+
+        </div>
+        <div class="col-xs-3 text-center">
+            <h4 class="text-normal text-center color-info">Registro</h4>
+            <p>{{policy.registry_date }}</p>
+
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-xs-6 text-left">
+            <h4 class="text-normal text-center color-info">Referencia</h4>
+            <p>{{policy.reference }}</p>
+
+        </div>
+
+        <div class="col-xs-6 text-left">
+            <h4 class="text-normal text-center color-info">Concepto</h4>
+            <p>{{policy.description }}</p>
+
+        </div>
+    </div>
+    <div class="row" style="padding-top: 35px">
+        <div class="col-xs-12">
+            <div class="">
+                <h3 class="section-title">Detalle de Pólizas</h3>
+                <hr>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <div class="card  text-center" style="border-right: 1px solid #e2e2e2;">
+                <div class="card-block">
+                    <h2 class="color-primary"><span class="counter" id="debit-total">{{ totalDebit }}</span></h2>
+                    <h4 class="color-primary">Total Debe</h4>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <div class="card  text-center">
+                <div class="card-block">
+                    <h2 class="color-primary"><span class="counter" id="credit-total">{{ totalCredit }}</span></h2>
+                    <h4 class="color-primary">Total Haber</h4>
+                </div>
+            </div>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th class="original"></th>
+                <th class="required">Cuenta
+                </th>
+                <th class="required">Concepto
+                </th>
+                <th class="required">Debe
+                </th>
+                <th class="required">Haber
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in details %}
+            <tr>
+                <td></td>
+                <td>{{ obj.account.number }} - {{ obj.account.name }}</td>
+                <td>{{ obj.description }}</td>
+                <td style="text-align: right">{{ obj.debit }}</td>
+                <td style="text-align: right">{{ obj.credit }}</td>
+
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+    <div class="clearfix"></div>
+    </div>
+{% endblock %}

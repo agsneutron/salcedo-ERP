@@ -62,14 +62,8 @@
                     {{ adminform.form.non_field_errors }}
                 {% endif %}
              <div class="container">
-
-                {% if opts.model_name == "commercialallycontact" %}
-
-                    <div class="col-xs-12">
-                {% else %}
-                    {% include "admin/Accounting/accounting-home.html" %}
+                {% include "admin/Accounting/accounting-home.html" %}
                     <div class="col-xs-9">
-                {% endif %}
                         {% block field_sets %}
 
 
@@ -79,7 +73,7 @@
                             {% block after_related_objects %}
                                 {% if period %}
                                 <hr>
-                                <div class="table-responsive">
+                                <div class="table-respponsive">
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>

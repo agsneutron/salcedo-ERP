@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.forms.models import model_to_dict
 
 # Create your models here.
 from django.forms import model_to_dict
@@ -124,6 +125,19 @@ class GroupingCode(models.Model):
         verbose_name_plural = 'Código Agrupador de Cuentas del SAT.'
         verbose_name = 'Código Agrupador de Cuentas del SAT.'
 
+class ItemAccount(models.Model):
+    key = models.IntegerField(verbose_name="clave", null=False )
+    name = models.CharField(verbose_name="Nombre del Rubro", max_length=100, )
+
+    def __str__(self):
+        return str(self.grouping_code) + ": " + self.account_name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.key) + ": " + self.name
+
+    class Meta:
+        verbose_name_plural = 'Rubros'
+        verbose_name = 'Rubro'
 
 class Account(models.Model):
     ACTIVE = 1
@@ -141,24 +155,26 @@ class Account(models.Model):
         (CREDIT, "Acreedora"),
     )
 
-    LEDGER = 1
-    NO_LEDGER = 2
-    LG_ACCOUNT_CHOICES = (
-        (LEDGER, "Si"),
-        (NO_LEDGER, "No"),
+    ACCUMULATION = 'A'
+    DETAIL = 'D'
+    TYPE_ACCOUNT_CHOICES = (
+        (ACCUMULATION, "Acumulativa"),
+        (DETAIL, "Detalle"),
     )
 
-    number = models.IntegerField(verbose_name="Número de Cuenta", null=False, )
+    number = models.BigIntegerField(verbose_name="Número de Cuenta", null=False, )
     name = models.CharField(verbose_name="Nombre de la Cuenta", max_length=500, null=False, )
     status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
 
     nature_account = models.IntegerField(choices=DEBIT_CREDIT_CHOICES, default=DEBIT,
                                          verbose_name='Naturaleza de Cuenta')
-    ledger_account = models.IntegerField(choices=LG_ACCOUNT_CHOICES, default=LEDGER, verbose_name='Cuenta de Mayor')
-    level = models.CharField(verbose_name="Nivel", max_length=500, null=False, )
-    item = models.CharField(verbose_name="Rubro", max_length=500, null=False, )
+    #ledger_account = models.IntegerField(choices=LG_ACCOUNT_CHOICES, default=LEDGER, verbose_name='Cuenta de Mayor', null=True)
+    #level = models.CharField(verbose_name="Nivel", max_length=500, null=True, )
 
+    type_account = models.CharField(choices=TYPE_ACCOUNT_CHOICES, verbose_name='Tipo de Cuenta',
+                                         null=False,max_length=1)
     # foreign
+    item = models.ForeignKey(ItemAccount, verbose_name="Rubro de la Cuenta")
     grouping_code = models.ForeignKey(GroupingCode, verbose_name="Código Agrupador SAT", )
     subsidiary_account = models.ForeignKey('self', verbose_name='Subcuenta de', null=True, blank=True)
 
@@ -175,7 +191,7 @@ class Account(models.Model):
     def to_serializable_dict(self):
         dict = model_to_dict(self)
         dict['nature_account'] = self.get_nature_account_display()
-        dict['ledger_account'] = self.get_ledger_account_display()
+        #dict['ledger_account'] = self.get_ledger_account_display()
         dict['grouping_code'] = self.grouping_code.account_name
         dict['status'] = self.get_status_display()
         if self.subsidiary_account is not None:
