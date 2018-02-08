@@ -61,6 +61,14 @@ only_with_transactions = [ 1(True) or 0(False)]{% endcomment %}
         </div>
         <div class="col-xs-12">
             <div class="col-xs-4">
+                Empresa:
+                <select class="selectpicker form-control" id="internal_company">
+                    {% for obj in internalcompany %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-4">
                 Periodo Fiscal (año):<input type="number" class="form-control" id="fiscal_period_year">
             </div>
 

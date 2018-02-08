@@ -1,5 +1,6 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static %}
+{% load i18n app_filters admin_static %}
+
 
 {% block extrastyle %}{{ block.super }}
 
@@ -49,105 +50,100 @@
 {% block content %}
 
     {% include "admin/Accounting/accounting-home.html" %}
-<div class="col-xs-9">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="text-center">
+    <div class="col-xs-9">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="text-center">
                 <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i
                         class="zmdi zmdi-border-color zmdi-hc-fw"></i></span>
-                <h3 class="section-title">Póliza</h3>
-                <hr>
-            </div>
-        </div>
-        <div class="col-xs-3 text-center">
-            <h4 class="text-normal text-center color-info">Periodo Fiscal</h4>
-            <p>{{policy.fiscal_period.get_account_period_display }} - {{policy.fiscal_period.accounting_year }}</p>
-
-        </div>
-        <div class="col-xs-3 text-center">
-            <h4 class="text-normal text-center color-info">Tipo de Poliza</h4>
-            <p>{{policy.type_policy.name }}</p>
-
-        </div>
-        <div class="col-xs-3 text-center">
-            <h4 class="text-normal text-center color-info">Folio</h4>
-            <p>{{policy.folio }}</p>
-
-        </div>
-        <div class="col-xs-3 text-center">
-            <h4 class="text-normal text-center color-info">Registro</h4>
-            <p>{{policy.registry_date }}</p>
-
-        </div>
-    </div>
-    <div class="row">
-
-        <div class="col-xs-6 text-center">
-            <h4 class="text-normal text-center color-info">Referencia</h4>
-            <p>{{policy.reference }}</p>
-
-        </div>
-
-        <div class="col-xs-6 text-center">
-            <h4 class="text-normal text-center color-info">Concepto</h4>
-            <p>{{policy.description }}</p>
-
-        </div>
-    </div>
-    <div class="row" style="padding-top: 35px">
-        <div class="col-xs-12">
-            <div class="">
-                <h3 class="section-title">Detalle de Pólizas</h3>
-                <hr>
-            </div>
-        </div>
-
-        <div class="col-xs-6">
-            <div class="card  text-center" style="border-right: 1px solid #e2e2e2;">
-                <div class="card-block">
-                    <h2 class="color-primary"><span class="counter" id="debit-total">{{ totalDebit }}</span></h2>
-                    <h4 class="color-primary">Total Debe</h4>
+                    <h3 class="section-title">Póliza</h3>
+                    <hr>
                 </div>
             </div>
+            <div class="col-xs-6">
+                <ul class="list-group">
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Periodo Fiscal:</span> {{ policy.fiscal_period.account_period }}
+                        - {{ policy.fiscal_period.accounting_year }}</li>
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Tipo de Poliza:</span> {{ policy.type_policy.name }}
+                    </li>
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Concepto:</span> {{ policy.description }}
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-xs-6">
+                <ul class="list-group">
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Folio:</span> {{ policy.folio }}
+                    </li>
+
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Registro:</span> {{ policy.registry_date }}
+                    </li>
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Referencia:</span> {{ policy.reference }}
+                    </li>
+                </ul>
+            </div>
+
+
         </div>
 
-        <div class="col-xs-6">
-            <div class="card  text-center">
-                <div class="card-block">
-                    <h2 class="color-primary"><span class="counter" id="credit-total">{{ totalCredit }}</span></h2>
-                    <h4 class="color-primary">Total Haber</h4>
+        <div class="row" style="padding-top: 35px">
+            <div class="col-xs-12">
+                <div class="">
+                    <h3 class="section-title">Detalle de Pólizas</h3>
+                    <hr>
                 </div>
             </div>
-        </div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th class="original"></th>
-                <th class="required">Cuenta
-                </th>
-                <th class="required">Concepto
-                </th>
-                <th class="required">Debe
-                </th>
-                <th class="required">Haber
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for obj in details %}
-            <tr>
-                <td></td>
-                <td>{{ obj.account.number }} - {{ obj.account.name }}</td>
-                <td>{{ obj.description }}</td>
-                <td style="text-align: right">{{ obj.debit }}</td>
-                <td style="text-align: right">{{ obj.credit }}</td>
 
-            </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+            <div class="col-xs-6">
+                <div class="card  text-center" style="border-right: 1px solid #e2e2e2;">
+                    <div class="card-block">
+                        <h2 class="color-primary"><span class="" id="debit-total">{{ totalDebit|formatoNumero }}</span></h2>
+                        <h4 class="color-primary">Total Debe</h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-6">
+                <div class="card  text-center">
+                    <div class="card-block">
+                        <h2 class="color-primary"><span class="" id="credit-total">{{ totalCredit|formatoNumero }}</span></h2>
+                        <h4 class="color-primary">Total Haber</h4>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th class="original"></th>
+                    <th class="required">Cuenta
+                    </th>
+                    <th class="required">Concepto
+                    </th>
+                    <th class="required">Debe
+                    </th>
+                    <th class="required">Haber
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for obj in details %}
+                    <tr>
+                        <td></td>
+                        <td>{{ obj.account.number }} - {{ obj.account.name }}</td>
+                        <td>{{ obj.description }}</td>
+                        <td style="text-align: right">{{ obj.debit|formatoNumero }}</td>
+                        <td style="text-align: right">{{ obj.credit|formatoNumero }}</td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
-</div>
     <div class="clearfix"></div>
     </div>
 {% endblock %}

@@ -9,7 +9,7 @@ from django.http import HttpResponse
 from django.views import generic
 from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
-
+from forms import SearchAccountForm
 from django.shortcuts import render
 
 import operator
@@ -20,10 +20,14 @@ def PolicieDetail(request):
     template = loader.get_template('Accounting/policie-detail.html')
     return HttpResponse(template.render(request))
 
+
 # For Search Account filter objects view
 def SearchAccount(request):
+    form = SearchAccountForm()
     template = loader.get_template('Accounting/search_account.html')
-    context = {'account': Account.objects.all(),}
+    context = {'account': Account.objects.all(),
+               'internalcompany': InternalCompany.objects.all(),              # 'form': form,
+               }
 
     return HttpResponse(template.render(context,request))
 
@@ -61,7 +65,8 @@ def SearchThird(request):
 
 def SearchPolicies(request):
     template = loader.get_template('Accounting/search_policy.html')
-    context = {'typepolicy': TypePolicy.objects.all(),}
+    context = {'typepolicy': TypePolicy.objects.all(),
+               'internalcompany': InternalCompany.objects.all(),}
 
     return HttpResponse(template.render(context,request))
 
@@ -69,7 +74,8 @@ def SearchPolicies(request):
 # For  Transactions by account filter objects view
 def SearchTransactions(request):
     template = loader.get_template('Accounting/search_transactions.html')
-    context = {'typepolicy': TypePolicy.objects.all(),}
+    context = {'typepolicy': TypePolicy.objects.all(),
+               'internalcompany': InternalCompany.objects.all(), }
 
     return HttpResponse(template.render(context, request))
 
@@ -81,20 +87,24 @@ def PoliciesAccountList(request):
                'uppper_fiscal_period_year': request.GET.get('uppper_fiscal_period_year'),
                'lower_fiscal_period_month': request.GET.get('lower_fiscal_period_month'),
                'upper_fiscal_period_month': request.GET.get('upper_fiscal_period_month'),
-               'account': request.GET.get('account')}
+               'account': request.GET.get('account'),
+               'accountname': request.GET.get('accountname'), }
+
     return HttpResponse(template.render(context, request))
 
 
 def GenerateTrialBalance(request):
     title="Balanza"
     template = loader.get_template('Accounting/generate_trial_balance.html')
-    context = {'title': str(title),}
+    context = {'title': str(title),
+               'internalcompany': InternalCompany.objects.all(), }
     return HttpResponse(template.render(context, request))
 
 def GenerateGeneralBalance(request):
     title="Balanza General"
     template = loader.get_template('Accounting/generate_general_balance.html')
-    context = {'title': str(title),}
+    context = {'title': str(title),
+               'internalcompany': InternalCompany.objects.all(), }
     return HttpResponse(template.render(context, request))
 
 

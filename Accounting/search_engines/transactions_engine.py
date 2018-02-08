@@ -31,7 +31,8 @@ class TransactionsEngine():
                  upper_credit=None,
                  reference=None,
                  only_with_transactions=None,
-                 account_array=None
+                 account_array=None,
+                 internal_company=None
                  ):
 
         self.fiscal_period_year = fiscal_period_year
@@ -57,6 +58,8 @@ class TransactionsEngine():
         self.upper_credit = upper_credit
 
         self.reference = reference
+
+        self.internal_company = internal_company
 
         self.only_with_transactions = only_with_transactions
 
@@ -114,6 +117,9 @@ class TransactionsEngine():
 
         if self.account_array is not None:
             query &= Q(account__number__in=self.account_array)
+
+        if self.internal_company is not None:
+            query &= Q(accounting_policy__internal_company__id=self.internal_company)
 
         results = AccountingPolicyDetail.objects.filter(query)
 
