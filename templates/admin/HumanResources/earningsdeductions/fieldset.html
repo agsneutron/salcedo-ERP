@@ -17,6 +17,9 @@
 
     top: -38px !important;
 }
+    .vLargeTextField, .vXMLLargeTextField {
+    width: 100%;
+}
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -81,4 +84,7 @@ $('.field-comments>div').addClass('col-xs-12');
 
     });
 
+</script>
+<script>
+    document.getElementById("id_comments").rows = "5";
 </script>
