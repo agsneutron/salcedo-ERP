@@ -136,8 +136,8 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
-    @staticmethod
     def get_search_results(self, request, queryset, search_term):
+
         keywords = search_term.split(" ")
 
         if search_term is None or search_term == "" :

@@ -99,7 +99,7 @@ class Bank(models.Model):
 
 
 class GroupingCode(models.Model):
-    level = models.IntegerField(verbose_name="Nivel", null=True)
+    level = models.IntegerField(verbose_name="Nivel", null=True, default=0)
     grouping_code = models.DecimalField(verbose_name="Código Agrupador", max_digits=20, decimal_places=2, )
     account_name = models.CharField(verbose_name="Nombre de la Cuenta y/o subcuenta", max_length=500, )
 
@@ -164,7 +164,8 @@ class Account(models.Model):
         (DETAIL, "Detalle"),
     )
 
-    number = models.BigIntegerField(verbose_name="Número de Cuenta", null=False, )
+    number = models.DecimalField(verbose_name='Número de Cuenta', decimal_places=0, blank=False, null=False,
+                                         default=0, max_digits=25)
     name = models.CharField(verbose_name="Nombre de la Cuenta", max_length=500, null=False, )
     status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
 
