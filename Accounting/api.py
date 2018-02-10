@@ -238,7 +238,7 @@ class SearchTransactionsByAccount(ListView):
             response['accounts'].append({
                 'account_id': account['account__id'],
                 'account_name': account['account__name'],
-                'account_number': account['account__number'],
+                'account_number': str(account['account__number']),
                 'total_credit': account['total_credit'],
                 'total_debit': account['total_debit']
             })
