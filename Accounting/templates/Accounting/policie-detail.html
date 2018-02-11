@@ -1,5 +1,6 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static %}
+{% load i18n app_filters admin_static %}
+
 
 {% block extrastyle %}{{ block.super }}
 
@@ -100,7 +101,7 @@
             <div class="col-xs-6">
                 <div class="card  text-center" style="border-right: 1px solid #e2e2e2;">
                     <div class="card-block">
-                        <h2 class="color-primary"><span class="" id="debit-total">{{ totalDebit }}</span></h2>
+                        <h2 class="color-primary"><span class="" id="debit-total">{{ totalDebit|formatoNumero }}</span></h2>
                         <h4 class="color-primary">Total Debe</h4>
                     </div>
                 </div>
@@ -109,7 +110,7 @@
             <div class="col-xs-6">
                 <div class="card  text-center">
                     <div class="card-block">
-                        <h2 class="color-primary"><span class="" id="credit-total">{{ totalCredit }}</span></h2>
+                        <h2 class="color-primary"><span class="" id="credit-total">{{ totalCredit|formatoNumero }}</span></h2>
                         <h4 class="color-primary">Total Haber</h4>
                     </div>
                 </div>
@@ -134,8 +135,8 @@
                         <td></td>
                         <td>{{ obj.account.number }} - {{ obj.account.name }}</td>
                         <td>{{ obj.description }}</td>
-                        <td style="text-align: right">{{ obj.debit }}</td>
-                        <td style="text-align: right">{{ obj.credit }}</td>
+                        <td style="text-align: right">{{ obj.debit|formatoNumero }}</td>
+                        <td style="text-align: right">{{ obj.credit|formatoNumero }}</td>
 
                     </tr>
                 {% endfor %}
