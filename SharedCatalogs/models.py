@@ -104,10 +104,10 @@ class GroupingCode(models.Model):
     account_name = models.CharField(verbose_name="Nombre de la Cuenta y/o subcuenta", max_length=500, )
 
     def __str__(self):
-        return str(self.grouping_code) + ": " + self.account_name
+        return str(self.grouping_code) + " " + self.account_name
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.grouping_code) + ": " + self.account_name
+        return str(self.grouping_code) + " " + self.account_name
 
     def __hash__(self):
         return self.grouping_code
