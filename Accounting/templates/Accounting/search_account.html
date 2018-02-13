@@ -132,8 +132,8 @@ name=Cuenta%202
             <div class="col-xs-3">
                 Código Agrupador SAT:
                 <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msGroupingCodeArray">
-                    {% for obj in account %}
-                        <option value={{ obj.grouping_code }}>{{ obj.grouping_code }}</option>
+                    {% for obj in groupingcode %}
+                        <option value={{ obj.id }}>{{ obj.grouping_code}}  {{obj.account_name}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -143,16 +143,15 @@ name=Cuenta%202
                 <select class="selectpicker form-control" multiple="multiple" data-size="5"
                         id="msSubsidiaryAccountArray">
                     {% for obj in account %}
-                        <option value={{ obj.subsidiary_account }}>{{ obj.subsidiary_account }}</option>
+                        <option value={{ obj.subsidiary_account__id }}>{{ obj.subsidiary_account__number }} {{ obj.subsidiary_account__name }}</option>
                     {% endfor %}
                 </select>
             </div>
             <div class="col-xs-3">
                 Naturaleza de Cuenta:
                 <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msNatureAccountArray">
-                    {% for obj in account %}
-                        <option value={{ obj.nature_account }}>{{ obj.nature_account }}</option>
-                    {% endfor %}
+                    <option value="1">Acreedora</option>
+                    <option value="2">Deudora</option>
                 </select>
             </div>
             <div class="col-xs-3">

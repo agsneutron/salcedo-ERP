@@ -103,7 +103,30 @@ class SearchAccounts(ListView):
 
         results = engine.search()
 
-        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
+        response = {
+            'accounts': []
+        }
+
+        for account in results:
+            response['accounts'].append({
+                'id': account.id,
+                'number': str(account.number),
+                'name': account.name,
+                'status': account.status,
+                'nature_account': account.nature_account,
+                'item_id': account.item_id,
+                'item': str(account.item.name),
+                'internal_company_id': account.internal_company_id,
+                'internal_company': str(account.internal_company),
+                'grouping_code_id': account.grouping_code_id,
+                'grouping_code': str(account.grouping_code),
+                'subsidiary_account_id': account.subsidiary_account_id,
+                'subsidiary_account': str(account.subsidiary_account),
+                'type_account': account.type_account
+            })
+
+        return HttpResponse(Utilities.json_to_dumps(response['accounts']), 'application/json; charset=utf-8', )
+        #return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
 
 
 class SearchProviders(ListView):
@@ -238,7 +261,7 @@ class SearchTransactionsByAccount(ListView):
             response['accounts'].append({
                 'account_id': account['account__id'],
                 'account_name': account['account__name'],
-                'account_number': account['account__number'],
+                'account_number': str(account['account__number']),
                 'total_credit': account['total_credit'],
                 'total_debit': account['total_debit']
             })
@@ -353,7 +376,7 @@ class GenerateTransactionsByAccountReport(ListView):
             'report_title': title,
             'fiscal_period_year': year,
             'fiscal_period_month': month,
-            'account_number': account.number,
+            'account_number': str(account.number),
             'account_name': account.name,
             'parent_account_name': parent_account_name,
             'parent_account_number': parent_account_number,
