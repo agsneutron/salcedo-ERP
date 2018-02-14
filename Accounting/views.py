@@ -5,6 +5,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import Q
 from django.template import RequestContext,loader
 from Accounting.models import *
+from SharedCatalogs.models import *
 from django.http import HttpResponse
 from django.views import generic
 from django.views.generic import ListView
@@ -25,7 +26,8 @@ def PolicieDetail(request):
 def SearchAccount(request):
     form = SearchAccountForm()
     template = loader.get_template('Accounting/search_account.html')
-    context = {'account': Account.objects.all(),
+    context = {'account': Account.objects.values('subsidiary_account__number','subsidiary_account__id','subsidiary_account__name').distinct(),
+               'groupingcode': GroupingCode.objects.all(),
                'internalcompany': InternalCompany.objects.all(),              # 'form': form,
                }
 
