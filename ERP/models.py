@@ -336,7 +336,7 @@ class Contratista(models.Model):
     employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
                                                     default="", null=True, blank=True)
     infonavit = models.CharField(verbose_name="Infonavit", max_length=24, default="", null=True, blank=True)
-    services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
+    services = models.TextField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
 
     FISICA = "f"
     MORAL = "m"

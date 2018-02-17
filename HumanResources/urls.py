@@ -45,6 +45,7 @@ urlpatterns = [
 
     url(r'^employeehome$', views.employeehome, name='employeehome'),
     url(r'^payrollhome$', views.payrollhome, name='payrollhome'),
+url(r'^payrolltype$', views.payrolltype, name='payrolltype'),
     url(r'^employeebyperiod', views.EmployeeByPeriod, name='employeebyperiod'),
 
     # Calls to API

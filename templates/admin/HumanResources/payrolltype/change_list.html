@@ -6,14 +6,6 @@
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
      <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
-    <style>
-    .field-balanced_accounts {
-    text-align: center;
-}
-    .column-balanced_accounts{
-        width: 10%;
-    }
-    </style>
 {% comment %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
@@ -92,18 +84,17 @@
     <div id="content-main">
     <div id="container">
         <div class="row">
-         {% include "admin/Accounting/accounting-home.html" %}
+         {% include "admin/HumanResources/payroll-home.html" %}
             <div class="col-xs-9">
                 <div class="">
                     <div class="card-header">
                         <div class="item-left">
-                            <h3 class="section-title text">{{ cl.opts.verbose_name|capfirst }}</h3>
+                            <h3 class="card-title text">{{ cl.opts.verbose_name|capfirst }}</h3>
                         </div>
                         {% block object-tools %}
                             {% if has_add_permission %}
                                 <ul class="object-tools">
                                     {% block object-tools-items %}
-
 
                                         {% comment %} <li>
                             {% url cl.opts|admin_urlname:'add' as add_url %}
@@ -292,9 +283,5 @@
                 allowClear: true
             });
         });{% endcomment %}
-    </script>
-        <script>
-$('#e2>a').removeClass('collapsed');
-        $('#e2>a').addClass('active');
     </script>
 {% endblock %}
