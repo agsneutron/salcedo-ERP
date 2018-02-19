@@ -8,7 +8,7 @@
 
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
-    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+ <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
 {% endblock %}
 
 {% block coltype %}colM{% endblock %}
@@ -61,31 +61,68 @@
                     </p>
                     {{ adminform.form.non_field_errors }}
                 {% endif %}
-             <div class="container">
-                {% include "admin/Accounting/accounting-home.html" %}
-                    <div class="col-xs-9">
-                        {% block field_sets %}
+
+                {% block field_sets %}
+                    <div class="container">
+                    {% include "admin/HumanResources/payroll-home.html" %}
+                        <div class="col-xs-9">
                             {% for fieldset in adminform %}
-                                {% include "admin/Accounting/accountingpolicy/fieldset.html" %}
+                                {% include "admin/HumanResources/payrolltype/fieldset.html" %}
                             {% endfor %}
                             {% block after_related_objects %}
+                                {% if type %}
+                                <hr>
+                                <div class="table-respponsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                            <td>Clasificación</td>
+                                            <td>Proyecto</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in period %}
+                                            <tr>
+                                                <td>{{ record.name }}</td>
+                                                <td>{{ record.payroll_classification.name }}</td>
+                                                <td>{{ record.project.nombreProyecto }}</td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/payrolltype/{{ record.id }}/change/"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-pencil color-default eliminar"></i>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/payrolltype/{{ record.id }}/delete/"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-trash-o color-danger eliminar"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                              {% endif %}
+
 
                             {% endblock %}
+                        </div>
+                    </div>
                 {% endblock %}
-
 
                 {% block after_field_sets %}{% endblock %}
 
                 {% block inline_field_sets %}
-
                     {% for inline_admin_formset in inline_admin_formsets %}
-                        {% include "admin/Accounting/accountingpolicy/tabular.html" %}
+                        {% include inline_admin_formset.opts.template %}
                     {% endfor %}
-
                 {% endblock %}
 
-                </div>
-             </div>
+
 
                 {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 
@@ -105,8 +142,4 @@
             </div>
         </form>
     </div>
-    <script>
-    $('#e2>a').removeClass('collapsed');
-        $('#e2>a').addClass('active');
-    </script>
 {% endblock %}
