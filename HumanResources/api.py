@@ -1,6 +1,6 @@
 # coding=utf-8
 
-
+import json
 import django
 from django.db.models.query_utils import Q
 from django.forms.models import model_to_dict
@@ -9,10 +9,11 @@ from django.views.generic import View
 from ERP.lib.utilities import Utilities
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
     EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed, ISRTable, EarningsDeductions, \
-    EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions
+    EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag
 from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 from django.db import transaction
+from django.views.generic.list import ListView
 
 
 # Convierte a un string separado por comas en un arreglo o None
@@ -466,3 +467,21 @@ class DeletePayrollReceiptsForPeriod(View):
 class ErrorDataUpload(SystemException):
     def __init__(self, message, priority, user_id):
         SystemException.__init__(self, message, LoggingConstants.OPERATION_LOGIC, priority, user_id)
+
+
+class Get_Tags(ListView):
+	def get(self, request, *args, **kwargs):
+
+		consulta_tags = Tag.objects.all()
+
+		json_response = []
+		for tag in consulta_tags:
+			json_tags = {}
+			json_tags['id'] = tag.id
+			json_tags['nombre'] = tag.name
+			json_response.append(json_tags)
+
+		return HttpResponse(
+			json.dumps(json_response, indent=4, separators=(',', ': '), sort_keys=False,
+					   ensure_ascii=False),
+			'application/json; charset=utf-8')

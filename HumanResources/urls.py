@@ -45,7 +45,7 @@ urlpatterns = [
 
     url(r'^employeehome$', views.employeehome, name='employeehome'),
     url(r'^payrollhome$', views.payrollhome, name='payrollhome'),
-url(r'^payrolltype$', views.payrolltype, name='payrolltype'),
+    url(r'^payrolltype$', views.payrolltype, name='payrolltype'),
     url(r'^employeebyperiod', views.EmployeeByPeriod, name='employeebyperiod'),
 
     # Calls to API
@@ -54,6 +54,6 @@ url(r'^payrolltype$', views.payrolltype, name='payrolltype'),
     url(r'^api/generate_payroll_receipt$', api.GeneratePayrollReceipt.as_view(), name='generate_payroll_receipt'),
     url(r'^api/generate_payroll_receipt_for_employee$', api.GeneratePayrollReceiptForEmployee.as_view(), name='generate_payroll_receipt_for_employee'),
     url(r'^api/delete_payroll_receipts', api.DeletePayrollReceiptsForPeriod.as_view(), name='delete_payroll_receipts'),
-
+    url(r'^api/get_tags', api.Get_Tags.as_view(), name='get_tags'),
 
 ]

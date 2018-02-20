@@ -6,6 +6,8 @@
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
     <script src="{% static "admin/js/jquery.select-bootstrap.js" %}"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script src="{% static "HumanResources/js/ajax_Tags.js" %}"></script>
 {% comment %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
@@ -164,13 +166,10 @@
                                     {% if cl.search_fields %}
                                     <div id="toolbar">
                                         <form id="changelist-search" method="get">
-                                            <div class="col-xs-3 col-xs-offset-3" >
-                                                <select id="tags" name="tags" class="selectpicker" data-style="select-with-transition"
-                                                    title="Modalidad" multiple data-size="7" >
-                                                  <option value="1">Excel</option>
-                                                  <option value="2">PPt</option>
-                                                  <option value="3">PDF</option>
-                                                  <option value="4">Word</option>
+                                            <div class="col-xs-3 col-xs-offset-3" id="divTags">
+                                                <select id="mstags" name="tags" class="selectpicker" data-style="select-with-transition"
+                                                    title="Etiquetas" multiple data-size="7" >
+
                                                 </select>
                                             </div>
                                             <div class="col-xs-3 col-xs-offset-3"><!-- DIV needed for valid HTML -->
@@ -338,7 +337,7 @@
         });
 
     </script>{% endcomment %}
-
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script type="text/javascript">
     {% comment %}    $(document).ready(function () {
             $(".js-example-placeholder-single").select2({
