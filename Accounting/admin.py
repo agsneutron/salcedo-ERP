@@ -136,7 +136,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('folio', 'type_policy', 'fiscal_period', 'description','get_detail_column','get_change_column','get_delete_column')
+    list_display = ('folio','internal_company', 'type_policy', 'fiscal_period', 'description','get_detail_column','get_change_column','get_delete_column')
     list_display_links = None
 
     def get_urls(self):
@@ -364,7 +364,7 @@ class AccountAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('number', 'name', 'nature_account','get_detail_column','get_change_column','get_delete_column')
+    list_display = ('number', 'name', 'internal_company', 'nature_account', 'get_detail_column','get_change_column','get_delete_column')
 
     def get_urls(self):
         urls = super(AccountAdmin, self).get_urls()
