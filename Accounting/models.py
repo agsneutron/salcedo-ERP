@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from datetime import date
 
+import tinymce
 from django.db import models
 from django.utils.timezone import now
 
@@ -229,7 +230,8 @@ class CommercialAlly(models.Model):
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
     employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
                                                     default="", null=True, blank=True)
-    services = models.TextField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
+    services = tinymce.models.HTMLField(verbose_name='Servicios que presta', null=True, blank=True,max_length=4096)
+
 
     FISICA = "f"
     MORAL = "m"
