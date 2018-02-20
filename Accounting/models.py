@@ -19,9 +19,6 @@ from django.contrib import messages
 from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account, InternalCompany
 
 
-
-
-
 # Model for accounting policy
 class FiscalPeriod(models.Model):
     OPENED = 1
@@ -93,8 +90,6 @@ class FiscalPeriod(models.Model):
         verbose_name = 'Año Contable'
 
 
-
-
 # Model for accounting policy
 class TypePolicy(models.Model):
     name = models.CharField(verbose_name='Tipo de Póliza', null=False, blank=False, max_length=256)
@@ -143,9 +138,9 @@ class AccountingPolicy(models.Model):
 # Model for accounting policy
 class AccountingPolicyDetail(models.Model):
     accounting_policy = models.ForeignKey(AccountingPolicy, verbose_name='Póliza', null=False, blank=False)
-    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False,limit_choices_to={
-                                               'type_account': 'D',
-                                           })
+    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False, limit_choices_to={
+        'type_account': 'D',
+    })
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit = models.FloatField(verbose_name="Debe", null=False, blank=False, default=0)
     credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
@@ -162,12 +157,9 @@ class AccountingPolicyDetail(models.Model):
         ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
         return ans
 
-
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
-
-
 
     def save(self, *args, **kwargs):
         self.registry_date = now()
@@ -187,6 +179,7 @@ class CommercialAlly(models.Model):
     CREDITOR = 1
     THIRD_PARTY = 2
 
+    # If you edit this, modify method CommercialAlly.get_delete_redirect_page.
     COMMERCIAL_ALLY_TYPE_CHOICES = (
         (PROVIDER, 'Proveedor'),
         (CREDITOR, 'Acreedor'),
@@ -274,6 +267,14 @@ class CommercialAlly(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_delete_redirect_page(self):
+        if self.type == self.PROVIDER:
+            return 'searchprovider'
+        elif self.type == self.CREDITOR:
+            return 'searchcreditors'
+        else:
+            return 'searchthird'
 
     def save(self, *args, **kwargs):
         can_save = True

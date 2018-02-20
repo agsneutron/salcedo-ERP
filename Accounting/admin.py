@@ -309,6 +309,16 @@ class CommercialAllyAdmin(admin.ModelAdmin):
 
         return super(CommercialAllyAdmin, self).add_view(request, form_url, extra_context=extra)
 
+    def response_delete(self, request, obj_display, obj_id):
+
+        redirect_page = request.redirect_delete # this is set on CommercialAllyAdmin.delete_model
+
+        return HttpResponseRedirect("/accounting/" + request.redirect_delete)
+
+    def delete_model(self, request, obj):
+        request.redirect_delete = obj.get_delete_redirect_page()
+        return super(CommercialAllyAdmin, self).delete_model(request, obj);
+
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra = extra_context or {}
 
