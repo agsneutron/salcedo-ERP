@@ -143,7 +143,7 @@
                                 <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
                             </a>
                         </li>
-                        <li class="dropdown
+                        {% comment %}<li class="dropdown
 
 
                                 {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
@@ -155,82 +155,10 @@
                                 Catálogo
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                             </a>
-                            <ul id="op_contratista"
-                                class="dropdown-menu dropdown-menu-left">
-                                <li class="dropdown-submenu">
-                                    <a href="blog-sidebar.html" class="has_children">
-                                        <i class="zmdi zmdi-view-compact"></i> Contratistas</a>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/ERP/contratista/add/">Agregar</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/ERP/contratista/">Consultar</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="blog-sidebar.html" class="has_children">
-                                        <i class="zmdi zmdi-view-compact"></i> Clientes</a>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/ERP/empresa/add/">Agregar</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/ERP/empresa/">Consultar</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="blog-sidebar.html" class="has_children">
-                                        <i class="zmdi zmdi-view-compact"></i> Recursos Humanos</a>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/HumanResources/tag/">Etiquetas</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/test/">Pruebas</a>
-                                        </li>
 
-
-                                        <li>
-                                            <a href="/admin/HumanResources/documenttype/">Documentos</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/admin/HumanResources/direction/">Dirección</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/admin/HumanResources/subdirection/">Subdirección</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/admin/HumanResources/area/">Área</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/admin/HumanResources/department/">Departamento</a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="blog-sidebar.html" class="has_children">
-                                        <i class="zmdi zmdi-view-compact"></i> Contabilidad</a>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/Accounting/fiscalperiod/">Periodos Fiscales</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                            </ul>
-                        </li>
+                        </li>{% endcomment %}
                         <li class="dropdown
+
 
 
 
@@ -261,6 +189,30 @@
                                         </li>
                                     </ul>
                                 </li>
+                                <li class="dropdown-submenu">
+                                    <a href="blog-sidebar.html" class="has_children">
+                                        <i class="zmdi zmdi-view-compact"></i> Contratistas</a>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>
+                                            <a href="/admin/ERP/contratista/add/">Agregar</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/ERP/contratista/">Consultar</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li class="dropdown-submenu">
+                                    <a href="blog-sidebar.html" class="has_children">
+                                        <i class="zmdi zmdi-view-compact"></i> Clientes</a>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>
+                                            <a href="/admin/ERP/empresa/add/">Agregar</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/ERP/empresa/">Consultar</a>
+                                        </li>
+                                    </ul>
+                                </li>
                             </ul>
 
                         </li>
@@ -275,6 +227,7 @@
 
                     </li>{% endcomment %}
                         <li class="dropdown
+
 
 
 
@@ -357,6 +310,7 @@
                             </ul>
                         </li>
                         <li class="dropdown
+
 
 
 
@@ -477,16 +431,51 @@
 
                                 {% if perms.HumanResources.change_payrollperiod %}
 
-                                    <li class="dropdown-menu">
+                                    <li class="">
                                         <a href="/admin/HumanResources/jobprofile/">
                                             <i class="zmdi zmdi-view-compact"></i>Perfil de Puesto</a>
                                     </li>
                                 {% endif %}
+                                <li class="dropdown-submenu">
+                                    <a href="" class="has_children">
+                                        <i class="zmdi zmdi-view-compact"></i> Contratación</a>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>
+                                            <a href="/admin/HumanResources/tag/">Etiquetas</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/HumanResources/test/">Pruebas</a>
+                                        </li>
+
+
+                                        <li>
+                                            <a href="/admin/HumanResources/documenttype/">Documentos</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/admin/HumanResources/direction/">Dirección</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/admin/HumanResources/subdirection/">Subdirección</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/admin/HumanResources/area/">Área</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/admin/HumanResources/department/">Departamento</a>
+                                        </li>
+
+                                    </ul>
+                                </li>
                             </ul>
 
                         </li>
 
                         <li id="op_contabilidad" class="dropdown
+
 
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/admin/Accounting/accountingpolicy/" class="dropdown-toggle"
@@ -494,11 +483,23 @@
                                data-name="ecommerce">
                                 <i class="fa fa-calculator text-center"></i><br class="hidden-xs">
                                 Contabilidad
-                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
+                                <i class="zmdi zmdi-chevron-down hidden-xs"></i>
 
                             </a>
+                            <ul id="op_contratista"
+                                class="dropdown-menu dropdown-menu-left">
+
+
+                                <li>
+                                    <a href="/admin/Accounting/fiscalperiod/">Periodos Fiscales</a>
+                                </li>
+                                <li>
+                                    <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
+                                </li>
+                            </ul>
                         </li>
                         <li id="op_reportes" class="dropdown
+
 
 
 

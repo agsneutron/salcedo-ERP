@@ -1099,7 +1099,13 @@ body .sb-site-container {
 .timezonewarning {
     display: none !important;
 }
-
+.employee-menu {
+    font-size: 11px;
+    border-right: 1px solid rgba(255, 255, 255, .2);
+    /* padding: 8px 24px; */
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
 /*==========  Mobile First Method  ==========*/
 
 /* Custom, iPhone Retina */
@@ -1254,6 +1260,23 @@ body .sb-site-container {
     padding: 5px 5px;
     font-size: 12px;
 }
+    h3, .h3 {
+    font-size: 18px !important;
+}
+    .nav.nav-tabs li a {
+    font-weight: 400;
+    padding: 1.7rem 7px;
+    color: rgba(255, 255, 255, .5) !important;
+    text-align: center;
+    font-size: 12px;
+}
+    .employee-menu {
+    font-size: 10px;
+    border-right: 1px solid rgba(255, 255, 255, .2);
+    /* padding: 8px 24px; */
+    padding-right: 3px !important;
+    padding-left: 3px !important;
+}
 }
 
 /* Extra Small Devices, Phones */
@@ -1388,17 +1411,18 @@ body .sb-site-container {
 
     }
 
-    .nav.nav-tabs li a {
-        font-weight: 400;
-        padding: 1.7rem 5px;
-        color: rgba(255, 255, 255, .5) !important;
-        text-align: center;
-        font-size: 11px;
-    }
+
 }
 
 /* Medium Devices, Desktops */
 @media only screen and (min-width: 992px) {
+.employee-menu {
+    font-size: 11px;
+    border-right: 1px solid rgba(255, 255, 255, .2);
+    /* padding: 8px 24px; */
+    padding-right: 5px !important;
+    padding-left: 5px !important;
+}
      .ms-collapse-nav li a {
     display: block;
     padding: 10px 15px;
@@ -1468,18 +1492,22 @@ body .sb-site-container {
 
     }
 
-    .nav.nav-tabs li a {
-        font-weight: 400;
-        padding: 1.7rem 11px;
-        color: rgba(255, 255, 255, .5) !important;
-        text-align: center;
-        font-size: 13px;
-    }
+
 
 }
 
 /* Large Devices, Wide Screens */
 @media only screen and (min-width: 1200px) {
+    .nav.nav-tabs li a {
+    font-weight: 400;
+    padding: 1.7rem 7px;
+    color: rgba(255, 255, 255, .5) !important;
+    text-align: center;
+    font-size: 12px;
+}
+    h3 {
+    font-size: 24px !important;
+}
     .ms-navbar .navbar-nav li a {
         padding: 5px 20px;
     }
@@ -1499,10 +1527,10 @@ body .sb-site-container {
 
     .nav.nav-tabs li a {
            font-weight: 400;
-    padding: 1.7rem 11px;
+    padding: 1.7rem 9px;
     color: rgba(255, 255, 255, .5) !important;
     text-align: center;
-    font-size: 1.4rem;
+    font-size: 12px;
     }
 
     .btn, .input-group-btn .btn {
@@ -1627,13 +1655,7 @@ errors > input {
     border-right: solid 4px #4caf50;
 }
 
-.employee-menu {
-    font-size: 11px;
-    border-right: 1px solid rgba(255, 255, 255, .2);
-    /* padding: 8px 24px; */
-    padding-right: 5px !important;
-    padding-left: 5px !important;
-}
+
 
 .column-my_url_field {
     width: 5% !important;

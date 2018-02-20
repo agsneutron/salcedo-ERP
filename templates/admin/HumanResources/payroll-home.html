@@ -1,8 +1,7 @@
-
 {% block content %}
 
-<style>
-      #changelist table thead th div a{
+    <style>
+        #changelist table thead th div a {
             color: white;
         }
     </style>
@@ -46,7 +45,21 @@
                             </li>
                         </ul>
                     </li>
-
+                    <li class="panel" role="tab" id="e0">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c0"
+                           aria-expanded="true" aria-controls="c0" class="collapsed withripple">
+                            Tipos de Nómina</a>
+                        <ul id="c0" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e0">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/payrolltype/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/payrolltype/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
                     <li class="panel" role="tab" id="e3">
                         <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c3"
                            aria-expanded="true" aria-controls="c3" class="collapsed withripple">
@@ -62,13 +75,14 @@
                             </li>
                         </ul>
                     </li>
-                     <li class="panel" role="tab" id="e4">
+                    <li class="panel" role="tab" id="e4">
                         <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c4"
                            aria-expanded="true" aria-controls="c4" class="collapsed withripple">
                             Asistencias</a>
                         <ul id="c4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e4">
                             <li>
-                                <a class="withripple" href="/admin/HumanResources/uploadedemployeeassistancehistory/add">
+                                <a class="withripple"
+                                   href="/admin/HumanResources/uploadedemployeeassistancehistory/add">
                                     <i class="fa fa-plus"></i> Registrar</a>
                             </li>
                             <li>
@@ -81,7 +95,7 @@
                             </li>{% endcomment %}
                         </ul>
                     </li>
-                     <li class="panel" role="tab" id="e5">
+                    <li class="panel" role="tab" id="e5">
                         <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c5"
                            aria-expanded="true" aria-controls="c5" class="collapsed withripple">
                             Préstamos</a>
@@ -96,7 +110,7 @@
                             </li>
                         </ul>
                     </li>
-                     <li class="panel" role="tab" id="e6">
+                    <li class="panel" role="tab" id="e6">
                         <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c6"
                            aria-expanded="true" aria-controls="c6" class="collapsed withripple">
                             Bajas</a>

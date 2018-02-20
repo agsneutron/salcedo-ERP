@@ -176,3 +176,13 @@ dd, dt {
     left: -12px;
     top: 0;
 }
+.btn-group>.btn:first-child:not(:last-child):not(.dropdown-toggle) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 6px solid white;
+    /* margin-right: 6px; */
+}
+.btn-group>.btn:not(:first-child):not(:last-child):not(.dropdown-toggle) {
+    border-radius: 0;
+    border-right: 6px solid white;
+}

@@ -185,12 +185,13 @@
     if (document.getElementsByClassName("field-account")) {
 var b = document.querySelector(".field-account>div>select");
         $(".field-account>div>select").addClass("selectpicker");
-          b.setAttribute("data-live-search", "true")
+          b.setAttribute("data-live-search", "true");
         $(".field-account>div>select").selectpicker({
             style: "btn-info",
             size: 4,
             liveSearch:true
         });
     }
-
+$('#e2>a').removeClass('collapsed');
+        $('#e2>a').addClass('active');
 </script>

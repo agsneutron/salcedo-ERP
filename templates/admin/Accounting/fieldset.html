@@ -62,7 +62,9 @@
     #id_registry_date>.form-group{
             margin: 0px 0 0 !important;
     }
-
+.vLargeTextField, .vXMLLargeTextField {
+    width: 100%;
+}
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -170,4 +172,17 @@
         });
     }
 
+</script>
+<script>
+
+    $(document).ready(function () {
+
+        $('.field-services>div').removeClass('col-xs-4');
+$('.field-services>div').addClass('col-xs-12');
+
+    });
+
+</script>
+<script>
+    document.getElementById("id_services").rows = "5";
 </script>

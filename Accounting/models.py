@@ -13,7 +13,7 @@ from smart_selects.db_fields import ChainedForeignKey
 
 from ERP.models import Pais, Estado, Municipio
 from Logs.controller import Logs
-
+from django.contrib import messages
 
 # Shared Catalogs Imports.
 from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account, InternalCompany
@@ -91,6 +91,8 @@ class FiscalPeriod(models.Model):
     class Meta:
         verbose_name_plural = 'Años contables'
         verbose_name = 'Año Contable'
+
+
 
 
 # Model for accounting policy
@@ -233,7 +235,7 @@ class CommercialAlly(models.Model):
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
     employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
                                                     default="", null=True, blank=True)
-    services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
+    services = models.TextField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
 
     FISICA = "f"
     MORAL = "m"

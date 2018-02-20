@@ -30,6 +30,9 @@ def employeehome(request):
 def payrollhome(request):
     return render(request, 'admin/HumanResources/payroll-home.html')
 
+def payrolltype(request):
+    return render(request, 'admin/HumanResources/employee_payrolltype.html')
+
 
 class JobInstanceListView(generic.ListView):
     model = JobInstance

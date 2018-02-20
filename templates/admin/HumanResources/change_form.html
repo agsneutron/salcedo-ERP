@@ -94,13 +94,9 @@
             border-bottom: 3px solid white !important;
         }
     .errorlist {
-        position: absolute;
+       position: relative;
     top: -6px;
-    right: 15px;
     font-size: 10px;
-    /* width: 100%; */
-    /* text-align: right; */
-    /* list-style: none; */
     color: #ff0000;
     line-height: 16px;
 }
@@ -208,7 +204,7 @@
                                 </a>
                             </div>
                     <div class="row mb-4">
-                        <div class="col-md-2">
+                        <div class="col-md-2 col-sm-3">
                             <div class="card ">
                                 <div class="ms-hero-bg-info">
                                     <h3 class="color-white index-1 text-center no-m pt-2"> {{ employee.name }}  </h3>
@@ -243,7 +239,7 @@
                             </div>
                         </div>
 
-                        <div class="col-xs-10">
+                        <div class="col-xs-10 col-md-10 col-sm-9">
 
                             {% for fieldset in adminform %}
                                 {% include "admin/HumanResources/fieldset.html" %}

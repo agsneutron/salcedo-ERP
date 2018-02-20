@@ -231,6 +231,19 @@ class FiscalPeriodAdmin(admin.ModelAdmin):
 
         return queryset, use_distinct
 
+    def save_model(self, request, obj, form, change):
+        FiscalPeriodExist = FiscalPeriod.objects.filter(Q(accounting_year=obj.accounting_year),
+                                                        Q(account_period=obj.account_period))
+
+        if FiscalPeriodExist.count() == 0:
+            super(FiscalPeriodAdmin, self).save_model(request, obj, form, change)
+        else:
+            messages.error(request, 'Este periodo fiscal ya existe.',fail_silently=True)
+
+
+
+
+
 
 @admin.register(TypePolicy)
 class TypePolicyAdmin(admin.ModelAdmin):

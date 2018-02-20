@@ -1080,7 +1080,7 @@ class EarningsDeductions(models.Model):
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
                               default=ACTIVA)
     accounting_account = models.IntegerField("Cuenta Contable", blank=False, null=False)
-    comments = models.CharField(verbose_name="Observaciones", null=False, blank=False, max_length=500, )
+    comments = models.TextField(verbose_name="Observaciones", null=False, blank=False, max_length=500, )
     type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION, verbose_name="Tipo")
     taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Gravable")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA,

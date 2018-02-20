@@ -768,7 +768,7 @@ class ContractorModelAdmin(admin.ModelAdmin):
         fields = (
             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
             'calle',
-            'numero', 'colonia', 'employer_registration_number', 'infonavit', 'services', 'tax_person_type', 'version',
+            'numero', 'colonia', 'employer_registration_number', 'infonavit', 'tax_person_type', 'services', 'version',
             'bank', 'bank_account_name', 'bank_account') #'CLABE'
         return fields
 
