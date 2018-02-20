@@ -10,6 +10,7 @@ $j(document).on('ready', main);
 
 function main(){
      $j('#searchaccount').on('click', search);
+    search();
 }
 
  //http://127.0.0.1:8000/accounting/search_commercial_allies?
