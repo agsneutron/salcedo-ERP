@@ -714,6 +714,13 @@ class JobProfileForm(forms.ModelForm):
                    'competitions': forms.Textarea(attrs={'rows': 4}),
                    'scholarship': forms.Textarea(attrs={'rows': 4}),
                    'experience': forms.Textarea(attrs={'rows': 4}),
+                   'sunday': forms.HiddenInput,
+                   'saturday': forms.HiddenInput,
+                   'monday': forms.HiddenInput,
+                   'tuesday': forms.HiddenInput,
+                   'wednesday': forms.HiddenInput,
+                   'thursday': forms.HiddenInput,
+                   'friday': forms.HiddenInput,
                    }
 
 
