@@ -172,7 +172,7 @@ class SearchProviders(ListView):
         results = engine.search()
 
         if export_excel:
-            values = ['type', 'name', 'country', 'colony', 'street', 'outdoor_number', 'indoor_number', 'zip_code',
+            values = ['name', 'country', 'colony', 'street', 'outdoor_number', 'indoor_number', 'zip_code',
                       'rfc', 'curp',
                       'phone_number', 'phone_number_2', 'email', 'cellphone_number', 'office_number',
                       'extension_number']
