@@ -139,15 +139,16 @@ class EmployeeAdmin(admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
 
         keywords = search_term.split(" ")
-
+        tags = request.GET.get("tag")
         if search_term is None or search_term == "" :
             return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
 
         r = Employee.objects.none()
+        querysetFiltrado = Employee.objects.filter(tags__name='excel')
 
         for k in keywords:
             if k != "":
-                q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+                q, ud = super(EmployeeAdmin, self).get_search_results(request, querysetFiltrado, k)
                 r |= q
 
         return r, True
