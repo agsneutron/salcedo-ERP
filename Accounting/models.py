@@ -202,6 +202,7 @@ class CommercialAlly(models.Model):
     rfc = models.CharField(verbose_name='RFC', max_length=20, null=False, blank=False, editable=True)
     curp = models.CharField(verbose_name="CURP", max_length=18, null=False, blank=False, unique=True)
     phone_number = models.CharField(verbose_name="Teléfono", max_length=20, null=False, blank=False)
+    phone_number_2 = models.CharField(verbose_name="Teléfono 2", max_length=20, null=True, blank=True)
     email = models.CharField(verbose_name="Email", max_length=255, null=False, blank=False)
     cellphone_number = models.CharField(verbose_name="Celular", max_length=20, null=False, blank=True)
     office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=20, null=False, blank=True)
