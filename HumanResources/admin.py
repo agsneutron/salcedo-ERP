@@ -113,6 +113,7 @@ class HumanResourcesAdminUtilities():
         return '<a href="' + link + anchor + '" class="' + css + '" >' + button + '</a>'
 
 
+
 # Employee Admin.
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
@@ -136,10 +137,12 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
+
+
     def get_search_results(self, request, queryset, search_term):
 
         keywords = search_term.split(" ")
-        tags = request.GET.get("tag")
+        tags = views.get_array_or_none(request.GET.get("tags"))
         if search_term is None or search_term == "" :
             return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
 

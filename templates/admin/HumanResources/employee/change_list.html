@@ -5,6 +5,7 @@
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
+    <script src="{% static "admin/js/jquery.select-bootstrap.js" %}"></script>
 {% comment %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
@@ -160,7 +161,39 @@
                             <div class="form-group">
 
                                 <div class="input-group col-xs-12">
-                                    {% block search_2 %}{% search_form_2 cl %}{% endblock %}
+                                    {% if cl.search_fields %}
+                                    <div id="toolbar">
+                                        <form id="changelist-search" method="get">
+                                            <div class="col-xs-3 col-xs-offset-3" >
+                                                <select id="tags" name="tags" class="selectpicker" data-style="select-with-transition"
+                                                    title="Modalidad" multiple data-size="7" >
+                                                  <option value="1">Excel</option>
+                                                  <option value="2">PPt</option>
+                                                  <option value="3">PDF</option>
+                                                  <option value="4">Word</option>
+                                                </select>
+                                            </div>
+                                            <div class="col-xs-3 col-xs-offset-3"><!-- DIV needed for valid HTML -->
+                                                <input type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" class="form-control"/>
+                                                <span class="input-group-btn absolute-l button-buscar">
+                                                    <button type="submit" value="{% trans 'Search' %}" class="btn btn-fab btn-fab-mini">
+                                                        <i class="material-icons">search</i>
+                                                    </button>
+                                                </span>
+                                            </div>
+
+                                           {% comment %} <div class="col-xs-2">
+                                                {% if show_result_count %}
+                                                    <span class="small quiet">{% blocktrans count counter=cl.result_count %}{{ counter }} resultado{% plural %}{{ counter }} resultados{% endblocktrans %} (<a href="?{% if cl.is_popup %}_popup=1{% endif %}">{% if cl.show_full_result_count %}{% blocktrans with full_result_count=cl.full_result_count %}{{ full_result_count }} total{% endblocktrans %}{% else %}{% trans "Show all" %}{% endif %}</a>)</span>
+                                                {% endif %}
+                                                {% for pair in cl.params.items %}
+                                                    {% if pair.0 != search_var %}<input type="hidden" name="{{ pair.0 }}" value="{{ pair.1 }}"/>{% endif %}
+                                                {% endfor %}
+                                            </div>{% endcomment %}
+                                        </form>
+                                    </div>
+                                    <script type="text/javascript">document.getElementById("searchbar").focus();</script>
+                                {% endif %}
                                 </div>
 
                             </div>

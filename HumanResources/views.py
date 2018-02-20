@@ -23,6 +23,12 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 
 
+def get_array_or_none(the_string):
+    if the_string is None:
+        return None
+    else:
+        return map(int, the_string.split(','))
+
 def employeehome(request):
     return render(request, 'admin/HumanResources/employee-home.html')
 
