@@ -257,7 +257,7 @@ class CommercialAlly(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['register_date'] = self.register_date.strftime('%m/%d/%Y')
-        ans['accounting_account'] = self.accounting_account.number
+        ans['accounting_account'] = str(self.accounting_account.number)
         ans['type'] = self.get_type_display()
         # ans['id'] = str(self.id)
         # ans['name'] = str(self.name)

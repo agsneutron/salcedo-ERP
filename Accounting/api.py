@@ -159,6 +159,7 @@ class SearchProviders(ListView):
 
         results = engine.search()
 
+
         return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
 
 
