@@ -29,14 +29,25 @@ function main_consulta() {
 
     callGetTags();
 
-    $j('#msTags').on('click', valores_tags);
-
-
-
-
 
 
 }
+
+
+$(function() {
+
+  $('#msTags').on('change', function(){
+
+      /* var values=Array.from($("#msTags").find(':selected')).map(function(item){
+          return $(item).text();
+       });*/
+
+       var values=$("#Tags").val();
+        alert(values);
+       //$('#tags').val(values);
+  });
+
+});
 
 function valores_tags(){
 alert("Hola");
@@ -82,7 +93,7 @@ function populateTags(data){
      $tagsSelect.selectpicker();*/
 
    var $select = $('<select/>', {
-       'id':"mstags",
+       'id':"Tags",
        'data-selected-text-format':"count",
      'class':"selectpicker",
      'data-style':"select-with-transition",
@@ -135,7 +146,6 @@ function $_GET(param)
     while (x < url.length)
     {
         p = url[x].split("=");
-        alert(p);
         if (p[0] == param)
         {
             return decodeURIComponent(p[1]);
