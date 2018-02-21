@@ -5,7 +5,8 @@
 {% block extrastyle %}
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
-    <script src="{% static "admin/js/jquery.select-bootstrap.js" %}"></script>
+
+
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script src="{% static "HumanResources/js/ajax_Tags.js" %}"></script>
 {% comment %}
@@ -166,11 +167,9 @@
                                     {% if cl.search_fields %}
                                     <div id="toolbar">
                                         <form id="changelist-search" method="get">
+                                            <input type="text" name="tags" id="tags" hidden>
                                             <div class="col-xs-3 col-xs-offset-3" id="divTags">
-                                                <select id="mstags" name="tags" class="selectpicker" data-style="select-with-transition"
-                                                    title="Etiquetas" multiple data-size="7" >
 
-                                                </select>
                                             </div>
                                             <div class="col-xs-3 col-xs-offset-3"><!-- DIV needed for valid HTML -->
                                                 <input type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" class="form-control"/>
@@ -265,7 +264,7 @@
         </div>
 
     </div>
-
+    <script src="{% static "admin/js/jquery.select-bootstrap.js" %}"></script>
 
     {% comment %}   <script src="https://github.highcharts.com/gantt/highcharts-gantt.src.js"></script>
     <script src="{% static "admin/assets/Highcharts/code/modules/exporting.js" %}"></script>
@@ -337,8 +336,8 @@
         });
 
     </script>{% endcomment %}
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
     <script type="text/javascript">
+    $('.selectpicker').selectpicker();
     {% comment %}    $(document).ready(function () {
             $(".js-example-placeholder-single").select2({
                 placeholder: "Busqueda por nombre de empresa",
