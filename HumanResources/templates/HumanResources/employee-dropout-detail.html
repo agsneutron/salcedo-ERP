@@ -1,0 +1,35 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+{% endblock %}
+{% block content %}
+    {% include "admin/HumanResources/payroll-home.html" %}
+
+    <div class="col-xs-9">
+
+        <div class="card ">
+            <div>
+
+
+            </div>
+            <div class="card-block">
+                <div class="tab-content">
+                    <ul>
+                        <li>
+                            Empleado: {{ object.employee.name }} {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}.
+                        </li>
+                        <li>Fecha de baja: {{ object.date }}</li>
+                        <li>Tipo: {{ object.get_type_display }}</li>
+                        <li>Motivo: {{ object.reason }}</li>
+                        <li>Finiquito: {{ object.severance_pay | formatoNumero }}</li>
+                        <li>Observaciones (es html, tiene que tener suficiente espacio):<br>
+                            {{ object.observations }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

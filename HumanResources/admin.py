@@ -1742,6 +1742,14 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
         }),
     )
 
+
+    def get_urls(self):
+        urls = super(EmployeeDropOutAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.EmployeeDropOutDetail.as_view(), name='employeedropout-detail'),
+        ]
+        return my_urls + urls
+
     # To redirect after add
     def response_add(self, request, obj, post_url_continue=None):
         employee = obj.employee

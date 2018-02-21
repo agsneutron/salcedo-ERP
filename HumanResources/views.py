@@ -378,6 +378,29 @@ class PayrollPeriodEmployeeDetail(generic.DetailView):
 
 
 
+
+class EmployeeDropOutDetail(generic.DetailView):
+    model = EmployeeDropOut
+    template_name = "HumanResources/employee-dropout-detail.html"
+
+    def get_queryset(self):
+        result = super(EmployeeDropOutDetail, self).get_queryset()
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeDropOutDetail, self).get_context_data(**kwargs)
+
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(EmployeeDropOutDetail, self).dispatch(request, args, kwargs)
+
+
+
 class IncidencesByPayrollPeriod(ListView):
     model = EmployeeAssistance
     template_name = "HumanResources/inicidences-by-payroll-period.html"
