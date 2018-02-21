@@ -36,15 +36,13 @@ function main_consulta() {
 
 $(function() {
 
-  $('#msTags').on('change', function(){
+  $('#tags').on('change', function(){
 
-      /* var values=Array.from($("#msTags").find(':selected')).map(function(item){
-          return $(item).text();
-       });*/
 
-       var values=$("#Tags").val();
+       var values=$("#tags").val();
         alert(values);
-       //$('#tags').val(values);
+       //$('#inputtags').val(values.toString());
+       $('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
   });
 
 });
@@ -93,7 +91,8 @@ function populateTags(data){
      $tagsSelect.selectpicker();*/
 
    var $select = $('<select/>', {
-       'id':"Tags",
+       'id':"tags",
+       'name':"tags",
        'data-selected-text-format':"count",
      'class':"selectpicker",
      'data-style':"select-with-transition",
