@@ -1743,6 +1743,29 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
     )
 
 
+
+
+
+    def get_detail_column(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+    def get_change_column(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
+
+    def get_delete_column(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    list_display = ('employee', 'get_detail_column', 'get_change_column', 'get_delete_column')
+
+    get_detail_column.allow_tags = True
+    get_detail_column.short_description = 'Detalle'
+
+    get_change_column.allow_tags = True
+    get_change_column.short_description = 'Editar'
+
+    get_delete_column.allow_tags = True
+    get_delete_column.short_description = 'Eliminar'
+
     def get_urls(self):
         urls = super(EmployeeDropOutAdmin, self).get_urls()
         my_urls = [

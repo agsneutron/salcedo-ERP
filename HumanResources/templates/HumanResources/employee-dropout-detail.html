@@ -23,8 +23,8 @@
                         <li>Tipo: {{ object.get_type_display }}</li>
                         <li>Motivo: {{ object.reason }}</li>
                         <li>Finiquito: {{ object.severance_pay | formatoNumero }}</li>
-                        <li>Observaciones (es html, tiene que tener suficiente espacio):<br>
-                            {{ object.observations }}
+                        <li>Observaciones (es html, tiene que tener suficiente espacio y mostrar viñetas):<br>
+                            {{ object.observations | safe }}
                         </li>
                     </ul>
                 </div>
