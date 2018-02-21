@@ -257,6 +257,12 @@ class EducationAdmin(admin.ModelAdmin):
 
         return super(EducationAdmin, self).add_view(request, form_url, extra_context=extra)
 
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+        return super(EducationAdmin, self).delete_model(request, obj)
+
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
         employee_id = request.GET.get('employee')
@@ -300,6 +306,31 @@ class CurrentEducationAdmin(admin.ModelAdmin):
         }),
     )
 
+    # Adding extra context to the change view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        try:
+            current_education = CurrentEducation.objects.get(employee_id=employee_id)
+            redirect_url = "/admin/HumanResources/currenteducation/"+str(current_education.id)+"/change?employee=" + str(employee_id)
+            return HttpResponseRedirect(redirect_url)
+
+        except CurrentEducation.DoesNotExist:
+            employee = Employee.objects.get(pk=employee_id)
+            extra['employee'] = employee
+            return super(CurrentEducationAdmin, self).add_view(request, form_url, extra_context=extra)
+
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(CurrentEducationAdmin, self).change_view(request, object_id, form_url, extra)
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(CurrentEducationAdmin, self).get_form(request, obj, **kwargs)
@@ -312,6 +343,26 @@ class CurrentEducationAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/currenteducation/add/?employee" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        current_education_id = obj.id
+        redirect_url = "/admin/HumanResources/currenteducation/"+str(current_education_id)+"/change/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        current_education_id = obj.id
+        redirect_url = "/admin/HumanResources/currenteducation/"+str(current_education_id)+"/change/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 # Emergency Contact Admin.
@@ -327,6 +378,7 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         }),
     )
 
+
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmergencyContactAdmin, self).get_form(request, obj, **kwargs)
@@ -341,6 +393,14 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
         # Adding extra context to the change view.
 
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+
+        return super(EmergencyContactAdmin, self).delete_model(request, obj)
+
+
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
@@ -349,11 +409,25 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         employee = Employee.objects.get(pk=employee_id)
         emergencycontact_set = EmergencyContact.objects.filter(employee_id=employee_id)
 
+
         extra['template'] = "emergencycontact"
         extra['employee'] = employee
         extra['emergencycontact'] = emergencycontact_set
 
+
+
         return super(EmergencyContactAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+        extra['show_delete_link'] = False
+
+
+        return super(EmergencyContactAdmin, self).change_view(request, object_id, form_url, extra_context=extra)
+
 
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
@@ -398,6 +472,17 @@ class FamilyMemberAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+        # To redirect after object delete.
+
+
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+
+        return super(FamilyMemberAdmin, self).delete_model(request, obj)
+
 
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
@@ -457,6 +542,13 @@ class WorkReferenceAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+
+        return super(WorkReferenceAdmin, self).delete_model(request, obj)
 
     # Overriding the add_wiew method for the work reference admin.
     def add_view(self, request, form_url='', extra_context=None):
@@ -527,6 +619,14 @@ class TestApplicationAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+
+        return super(TestApplicationAdmin, self).delete_model(request, obj)
+
 
     # Overriding the add_wiew method for the tests admin.
     def add_view(self, request, form_url='', extra_context=None):
@@ -609,6 +709,13 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
 
         return super(EmployeeDocumentAdmin, self).add_view(request, form_url, extra_context=extra)
 
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+
+        return super(EmployeeDocumentAdmin, self).delete_model(request, obj)
+
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
         employee_id = request.GET.get('employee')
@@ -634,7 +741,7 @@ class CheckerDataAdmin(admin.ModelAdmin):
     form = CheckerDataForm
 
     fieldsets = (
-        ("Documentación", {
+        ("Datos del Checador", {
             'fields': ('checks_entry', 'checks_exit', 'employee',)
         }),
     )
@@ -671,6 +778,12 @@ class CheckerDataAdmin(admin.ModelAdmin):
                     employee_id) + "&checker=1")
 
         return super(CheckerDataAdmin, self).add_view(request, form_url, extra)
+
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+        return super(CheckerDataAdmin, self).delete_model(request, obj)
 
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
@@ -821,6 +934,13 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
                     employee_id) + "&position=1")
 
         return super(EmployeePositionDescriptionAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+        return super(EmployeePositionDescriptionAdmin, self).delete_model(request, obj)
+
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
 
@@ -1065,6 +1185,14 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+        return super(EmployeeFinancialDataAdmin, self).delete_model(request, obj)
+
+
     # Overriding the add_wiew method for the employee pfinancial data admin.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
@@ -1098,6 +1226,25 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
 
         return super(EmployeeFinancialDataAdmin, self).change_view(request, object_id, form_url,
                                                                    extra)
+
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+
+        return HttpResponseRedirect(
+            "/admin/HumanResources/employeefinancialdata/add/?employee=" + str(employee_id))
+
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+
+        redirect_url = "/admin/HumanResources/employeefinancialdata/" + str(obj.id) + "/change?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+        # To redirect after add
+
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeefinancialdata/"+str(obj.id)+"/change?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 # Earnings Deductions Admin.
