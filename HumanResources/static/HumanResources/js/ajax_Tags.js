@@ -29,14 +29,23 @@ function main_consulta() {
 
     callGetTags();
 
-    $j('#msTags').on('click', valores_tags);
-
-
-
-
 
 
 }
+
+
+$(function() {
+
+  $('#tags').on('change', function(){
+
+
+       var values=$("#tags").val();
+        alert(values);
+       //$('#inputtags').val(values.toString());
+       $('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
+  });
+
+});
 
 function valores_tags(){
 alert("Hola");
@@ -82,7 +91,8 @@ function populateTags(data){
      $tagsSelect.selectpicker();*/
 
    var $select = $('<select/>', {
-       'id':"mstags",
+       'id':"tags",
+       'name':"tags",
        'data-selected-text-format':"count",
      'class':"selectpicker",
      'data-style':"select-with-transition",
@@ -135,7 +145,6 @@ function $_GET(param)
     while (x < url.length)
     {
         p = url[x].split("=");
-        alert(p);
         if (p[0] == param)
         {
             return decodeURIComponent(p[1]);

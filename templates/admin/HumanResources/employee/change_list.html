@@ -167,7 +167,10 @@
                                     {% if cl.search_fields %}
                                     <div id="toolbar">
                                         <form id="changelist-search" method="get">
-                                            <input type="text" name="tags" id="tags" hidden>
+                                            <div class="row" id="divText">
+
+                                            </div>
+
                                             <div class="col-xs-3 col-xs-offset-3" id="divTags">
 
                                             </div>
@@ -337,7 +340,7 @@
 
     </script>{% endcomment %}
     <script type="text/javascript">
-    $('.selectpicker').selectpicker();
+
     {% comment %}    $(document).ready(function () {
             $(".js-example-placeholder-single").select2({
                 placeholder: "Busqueda por nombre de empresa",
