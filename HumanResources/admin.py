@@ -1733,6 +1733,9 @@ class JobInstanceAdmin(admin.ModelAdmin):
 class EmployeeDropOutAdmin(admin.ModelAdmin):
     form = EmployeeDropOutForm
 
+
+
+
     fieldsets = (
         ("Baja de Empleados", {
             'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')

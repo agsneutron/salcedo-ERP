@@ -2,6 +2,8 @@
 from __future__ import unicode_literals
 
 # Django Libraries.
+from tinymce import models as tinymce_models
+
 from django.core.checks import messages
 from django.db import models
 from django.db.models.query_utils import Q
@@ -704,7 +706,7 @@ class EmployeeDropOut(models.Model):
     type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Tipo de Baja')
     reason = models.CharField(verbose_name="Motivo", max_length=4096, null=False, blank=True)
     severance_pay = models.FloatField(verbose_name="Liquidación", null=True, blank=False)
-    observations = models.CharField(verbose_name="Observaciones", null=True, blank=False, max_length=4096)
+    observations = tinymce_models.HTMLField(verbose_name='Observaciones', null=True, blank=True, max_length=4096)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
