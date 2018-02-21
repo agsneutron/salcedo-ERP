@@ -400,6 +400,27 @@ class EmployeeDropOutDetail(generic.DetailView):
         return super(EmployeeDropOutDetail, self).dispatch(request, args, kwargs)
 
 
+class EmployeeLoanDetail(generic.DetailView):
+    model = EmployeeLoan
+    template_name = "HumanResources/employee-loan-detail.html"
+
+    def get_queryset(self):
+        result = super(EmployeeLoanDetail, self).get_queryset()
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeLoanDetail, self).get_context_data(**kwargs)
+
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(EmployeeLoanDetail, self).dispatch(request, args, kwargs)
+
+
 
 class IncidencesByPayrollPeriod(ListView):
     model = EmployeeAssistance
