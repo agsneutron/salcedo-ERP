@@ -29,8 +29,23 @@ function main_consulta() {
 
     callGetTags();
 
+    $j('#msTags').on('click', valores_tags);
+
+
+
+
+
 
 }
+
+function valores_tags(){
+alert("Hola");
+       var values=Array.from($("#msTags").find(':selected')).map(function(item){
+          return $(item).text();
+       });
+
+       $('#tags').val(values);
+    }
 
 function callGetTags(){
     //$j.get("/obras/register_by_token", function(respu) {
@@ -53,18 +68,40 @@ function callGetTags(){
 
 }
 
+
+
 //llenar el multiselect de Tags
 function populateTags(data){
-    //clearField('#tags');
+/*    var $tagsSelect =  $('#tags');
 
-    //fill with Productos
-    var sHtml = '<select id="mstags" name="tags" class="selectpicker" data-style="select-with-transition" title="Etiquetas" multiple data-size="7">';
     for (var i = 0; i < data.length; i++) {
-        sHtml = sHtml + '<option value=' + data[i].id + '>' + data[i].nombre + '</option>';
+        var $option = $('<option/>').attr('value', data[i].id).html(data[i].nombre);
+        $tagsSelect.append($option);
     }
-    sHtml = sHtml + '</select>';
+     $tagsSelect.selectpicker('refresh');
+     $tagsSelect.selectpicker();*/
 
-    $j('#divTags').html(sHtml);
+   var $select = $('<select/>', {
+       'id':"mstags",
+       'data-selected-text-format':"count",
+     'class':"selectpicker",
+     'data-style':"select-with-transition",
+     'multiple':true,
+     'title':"Etiquetas"
+
+    });
+    var tagsSplit;
+    tagsString = $_GET("tags");
+    if (tagsString!=null) {
+        tagsSplit = tagsString.split(",")
+    }
+    for (var idx in data) {
+        $select.append('<option value=' + data[idx].id + '>' + data[idx].nombre + '</option>');
+    }
+
+    $select.appendTo('#divTags').selectpicker('refresh');
+
+
 
 }
 
@@ -72,8 +109,8 @@ function populateTags(data){
 function clearField(field){
     // Clean the field
 
-    $j(field).html('');
-    //$j(field).multiselect('destroy');
+    //$j(field).html('');
+    $(field).selectpicker('destroy');
 }
 //obtener el parametro de la URL
 function $_GET(param)
@@ -98,6 +135,7 @@ function $_GET(param)
     while (x < url.length)
     {
         p = url[x].split("=");
+        alert(p);
         if (p[0] == param)
         {
             return decodeURIComponent(p[1]);
