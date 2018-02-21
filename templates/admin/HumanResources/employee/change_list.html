@@ -167,9 +167,9 @@
                                     {% if cl.search_fields %}
                                     <div id="toolbar">
                                         <form id="changelist-search" method="get">
-                                            <div class="row" id="divText">
 
-                                            </div>
+
+                                            <input type="checkbox" name="cbTags" id="cbTags" value="" hidden />
 
                                             <div class="col-xs-3 col-xs-offset-3" id="divTags">
 
@@ -182,6 +182,7 @@
                                                     </button>
                                                 </span>
                                             </div>
+
 
                                            {% comment %} <div class="col-xs-2">
                                                 {% if show_result_count %}

@@ -33,7 +33,6 @@ function main_consulta() {
 
 }
 
-
 $(function() {
 
   $('#tags').on('change', function(){
@@ -41,8 +40,9 @@ $(function() {
 
        var values=$("#tags").val();
         alert(values);
-       //$('#inputtags').val(values.toString());
-       $('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
+
+       $('#cbTags').val(values.toString());
+       //$('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
   });
 
 });
@@ -97,6 +97,8 @@ function populateTags(data){
      'class':"selectpicker",
      'data-style':"select-with-transition",
      'multiple':true,
+     'multipleSeparator':', ',
+       'selectedTextFormat':'values',
      'title':"Etiquetas"
 
     });
