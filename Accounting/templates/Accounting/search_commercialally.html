@@ -52,7 +52,10 @@
                 selectedText: 'Seleccione'
             });
             $j('.ui-widget-content').css('width', 'auto');
+
+
         });
+
     </script>
 {% endblock %}
 {% block breadcrumbs %}{% endblock %}
@@ -101,18 +104,21 @@
             </div>
 
             <div class="col-xs-3">
-                &nbsp;
+                &nbsp;Servicios que presta:<input type="text" class="form-control" id="services">
             </div>
             <div class="clearfix"></div>
             <hr>
             <div class="col-xs-3 col-xs-offset-4">
                 <button type="button" id="searchaccount" class="btn btn-raised btn-primary btn-block">Buscar</button>
             </div>
+            <div class="col-xs-3 col-xs-offset-4">
+                <button type="button" id="excelexport" class="btn btn-raised btn-primary btn-block">Exportar a excel</button>
+            </div>
         </div>
 
         <div class="col-xs-12" style="margin-bottom: 30px">
             <div class="table-responsive" id="divTable" style="padding: 0px 15px">
-                    {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
+                {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
                            id="tablaResultados">
 
                         <thead>
@@ -137,7 +143,7 @@
                         </tr>
                         </tbody>
                     </table>{% endcomment %}
-                </div>
+            </div>
         </div>
     </div>
 

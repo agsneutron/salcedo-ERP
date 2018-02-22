@@ -4,6 +4,7 @@
 {% block extrahead %}{{ block.super }}
     <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
     {{ media }}
+    {{ form.media }}
 {% endblock %}
 
 {% block extrastyle %}{{ block.super }}

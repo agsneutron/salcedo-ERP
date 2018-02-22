@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from datetime import date
 
+import tinymce
 from django.db import models
 from django.utils.timezone import now
 
@@ -17,9 +18,6 @@ from django.contrib import messages
 
 # Shared Catalogs Imports.
 from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account, InternalCompany
-
-
-
 
 
 # Model for accounting policy
@@ -93,8 +91,6 @@ class FiscalPeriod(models.Model):
         verbose_name = 'Año Contable'
 
 
-
-
 # Model for accounting policy
 class TypePolicy(models.Model):
     name = models.CharField(verbose_name='Tipo de Póliza', null=False, blank=False, max_length=256)
@@ -143,9 +139,9 @@ class AccountingPolicy(models.Model):
 # Model for accounting policy
 class AccountingPolicyDetail(models.Model):
     accounting_policy = models.ForeignKey(AccountingPolicy, verbose_name='Póliza', null=False, blank=False)
-    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False,limit_choices_to={
-                                               'type_account': 'D',
-                                           })
+    account = models.ForeignKey(Account, verbose_name='Cuenta', null=False, blank=False, limit_choices_to={
+        'type_account': 'D',
+    })
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit = models.FloatField(verbose_name="Debe", null=False, blank=False, default=0)
     credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
@@ -162,12 +158,9 @@ class AccountingPolicyDetail(models.Model):
         ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
         return ans
 
-
     class Meta:
         verbose_name_plural = 'Detalle de Pólizas'
         verbose_name = 'Detalle de Póliza'
-
-
 
     def save(self, *args, **kwargs):
         self.registry_date = now()
@@ -187,6 +180,7 @@ class CommercialAlly(models.Model):
     CREDITOR = 1
     THIRD_PARTY = 2
 
+    # If you edit this, modify method CommercialAlly.get_delete_redirect_page.
     COMMERCIAL_ALLY_TYPE_CHOICES = (
         (PROVIDER, 'Proveedor'),
         (CREDITOR, 'Acreedor'),
@@ -236,7 +230,8 @@ class CommercialAlly(models.Model):
     # CLABE = models.CharField(verbose_name="CLABE Interbancaria", max_length=18, default="", null=True, blank=True)
     employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
                                                     default="", null=True, blank=True)
-    services = models.TextField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
+    services = tinymce.models.HTMLField(verbose_name='Servicios que presta', null=True, blank=True,max_length=4096)
+
 
     FISICA = "f"
     MORAL = "m"
@@ -257,7 +252,7 @@ class CommercialAlly(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['register_date'] = self.register_date.strftime('%m/%d/%Y')
-        ans['accounting_account'] = self.accounting_account.number
+        ans['accounting_account'] = str(self.accounting_account.number)
         ans['type'] = self.get_type_display()
         # ans['id'] = str(self.id)
         # ans['name'] = str(self.name)
@@ -274,6 +269,14 @@ class CommercialAlly(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_delete_redirect_page(self):
+        if self.type == self.PROVIDER:
+            return 'searchprovider'
+        elif self.type == self.CREDITOR:
+            return 'searchcreditors'
+        else:
+            return 'searchthird'
 
     def save(self, *args, **kwargs):
         can_save = True
