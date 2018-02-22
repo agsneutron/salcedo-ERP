@@ -672,6 +672,7 @@
                                         {% comment %} <h4 class="section-title mt-4">Percepciones</h4>
                                     <hr>{% endcomment %}
                                         <div class="table-responsive">
+                                        {% if earnings %}
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
@@ -692,7 +693,7 @@
                                                             </a>
                                                         </td>
                                                         <td style="width: 5%">
-                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                             </a>
                                                         </td>
@@ -700,12 +701,15 @@
                                                 {% endfor %}
                                                 </tbody>
                                             </table>
+                                            {% endif %}
                                         </div>
                                     </div>
                                     <div class="col-xs-6" style="    padding-right: 0;">
                                         {% comment %}<h4 class="section-title mt-4">Deducciones</h4>
                                     <hr>{% endcomment %}
+
                                         <div class="table-responsive">
+                                        {% if deductions %}
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
@@ -726,7 +730,7 @@
                                                             </a>
                                                         </td>
                                                         <td style="width: 5%">
-                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                             </a>
                                                         </td>
@@ -734,6 +738,7 @@
                                                 {% endfor %}
                                                 </tbody>
                                             </table>
+                                            {% endif %}
                                         </div>
                                     </div>
                                 </div>

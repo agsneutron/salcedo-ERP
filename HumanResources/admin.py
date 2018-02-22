@@ -1648,7 +1648,7 @@ class JobProfileAdmin(admin.ModelAdmin):
             'fields': (
                 'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience', 'entry_time',
                 'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
-                'subdirection', 'area', 'department')
+                'subdirection', 'area', 'department', 'minimumsalary', 'maximumsalary')
         }),
     )
 
