@@ -131,17 +131,7 @@ dd, dt {
     display: none;
 }
 
-.errorlist {
-    position: absolute;
-    top: -6px;
-    right: 15px;
-    font-size: 10px;
-    /* width: 100%; */
-    /* text-align: right; */
-    /* list-style: none; */
-    color: #ff0000;
-    line-height: 16px;
-}
+
 .table-padding {
     padding-bottom: 35px;
 }
