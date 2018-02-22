@@ -38,10 +38,10 @@ $(function() {
   $('#tags').on('change', function(){
 
 
-       var values=$("#tags").val();
+       //var values=$("#tags").val();
         alert(values);
 
-       $('#cbTags').val(values.toString());
+       //$('#cbTags').val(values.toString());
        //$('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
   });
 
@@ -97,8 +97,6 @@ function populateTags(data){
      'class':"selectpicker",
      'data-style':"select-with-transition",
      'multiple':true,
-     'multipleSeparator':', ',
-       'selectedTextFormat':'values',
      'title':"Etiquetas"
 
     });

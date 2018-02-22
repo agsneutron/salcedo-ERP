@@ -142,7 +142,8 @@ class EmployeeAdmin(admin.ModelAdmin):
     def get_search_results(self, request, queryset, search_term):
 
         keywords = search_term.split(" ")
-        tags = views.get_array_or_none(request.GET.get("inputtags"))
+        #tags = views.get_array_or_none(request.GET.get("tags"))
+        tags = request.GET.get("tags")
         if search_term is None or search_term == "" :
             return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
 
