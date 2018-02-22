@@ -722,17 +722,7 @@ dt {
     line-height: 1;
 }
 
-.errorlist {
-        position: relative;
-    top: 0px;
-    right: 2px;
-    font-size: 10px;
-    /* width: 100%; */
-    /* text-align: right; */
-    /* list-style: none; */
-    color: #ff0000;
-    line-height: 16px;
-}
+
 
 @media (min-width: 768px) {
 
@@ -1741,4 +1731,12 @@ display: -webkit-inline-box;
     left: inherit !important;
     z-index: 9;
     top: 3px !important;
+}
+
+.errorlist {
+    position: absolute !important;
+    bottom: -19px !important;
+    right: 0px !important;
+    font-size: 10px; !important;
+    color: #ff0000 !important;
 }
