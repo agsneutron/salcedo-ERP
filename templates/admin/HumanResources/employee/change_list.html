@@ -169,13 +169,13 @@
                                         <form id="changelist-search" method="get">
 
 
-                                            <input type="checkbox" name="cbTags" id="cbTags" value="" hidden />
+                                            <input type="checkbox" name="cbTagsName" id="cbTags" value="" hidden />
 
                                             <div class="col-xs-3 col-xs-offset-3" id="divTags">
 
                                             </div>
                                             <div class="col-xs-3 col-xs-offset-3"><!-- DIV needed for valid HTML -->
-                                                <input type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" class="form-control"/>
+                                                <input type="text" name="q" value="{{ cl.query }}" id="searchbar" class="form-control"/>
                                                 <span class="input-group-btn absolute-l button-buscar">
                                                     <button type="submit" value="{% trans 'Search' %}" class="btn btn-fab btn-fab-mini">
                                                         <i class="material-icons">search</i>
