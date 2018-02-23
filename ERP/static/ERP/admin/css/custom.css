@@ -1740,3 +1740,18 @@ position: absolute !important;
     font-size: 10px;
     color: #ff0000 !important;
 }
+
+.btn-excel {
+    background-color: #207245 !important;
+    color: white !important;
+}
+.file-upload a {
+    max-width: 248px;
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: #337ab7;
+    display: block;
+}
