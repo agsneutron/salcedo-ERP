@@ -1745,3 +1745,13 @@ position: absolute !important;
     background-color: #207245 !important;
     color: white !important;
 }
+.file-upload a {
+    max-width: 248px;
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: #337ab7;
+    display: block;
+}
