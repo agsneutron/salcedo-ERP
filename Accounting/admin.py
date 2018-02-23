@@ -4,14 +4,12 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django.conf.urls import url
 
-
 # Register your models here.
 from django.db.models.query_utils import Q
 from Accounting import views
 from Accounting.models import *
 from Accounting.forms import *
 from Accounting.views import AccountDetailView
-
 
 from Accounting.views import CommercialAllyDetailView, CommercialAllyContactDetailView
 from django.http.response import HttpResponseRedirect
@@ -82,6 +80,7 @@ class AccountingAdminUtilities():
 
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
 
+
 # Admin for the inline documents of the current education of an employee.
 class AccountingPolicyDetailInlineFormset(forms.models.BaseInlineFormSet):
     def clean(self):
@@ -133,11 +132,13 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Póliza", {
             'fields': (
-            'internal_company','fiscal_period', 'type_policy', 'folio', 'registry_date', 'reference', 'description',)
+                'internal_company', 'fiscal_period', 'type_policy', 'folio', 'registry_date', 'reference',
+                'description',)
         }),
     )
 
-    list_display = ('folio','internal_company', 'type_policy', 'fiscal_period', 'description','get_detail_column','get_change_column','get_delete_column')
+    list_display = ('folio', 'type_policy', 'fiscal_period', 'description', 'get_detail_column', 'get_change_column',
+                    'get_delete_column')
     list_display_links = None
 
     def get_urls(self):
@@ -171,9 +172,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
         return readonly_fields
 
     def save_model(self, request, obj, form, change):
-
         super(AccountingPolicyAdmin, self).save_model(request, obj, form, change)
-
 
 
 @admin.register(FiscalPeriod)
@@ -190,7 +189,7 @@ class FiscalPeriodAdmin(admin.ModelAdmin):
     list_display = ('account_period', 'accounting_year', 'status')
     actions = None
     search_fields = ('account_period', 'accounting_year')
-    #ordering = ('account_period', 'accounting_year', 'status')
+    # ordering = ('account_period', 'accounting_year', 'status')
     list_per_page = 25
 
     def get_search_results(self, request, queryset, search_term):
@@ -239,11 +238,7 @@ class FiscalPeriodAdmin(admin.ModelAdmin):
         if FiscalPeriodExist.count() == 0:
             super(FiscalPeriodAdmin, self).save_model(request, obj, form, change)
         else:
-            messages.error(request, 'Este periodo fiscal ya existe.',fail_silently=True)
-
-
-
-
+            messages.error(request, 'Este periodo fiscal ya existe.', fail_silently=True)
 
 
 @admin.register(TypePolicy)
@@ -266,17 +261,7 @@ class TypePolicyAdmin(admin.ModelAdmin):
 class CommercialAllyAdmin(admin.ModelAdmin):
     form = CommercialAllyForm
 
-    fieldsets = (
-        ("", {
-            'fields': (
-                'name', 'curp', 'rfc', 'phone_number', 'cellphone_number', 'office_number', 'extension_number',
-                'street', 'outdoor_number',
-                'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town', 'accounting_account', 'bank',
-                'bank_account_name', 'bank_account', 'employer_registration_number', 'tax_person_type', 'status',
-                'services', 'type',)
-        }),
-    )
-
+    
     list_display = ('name', 'rfc', 'phone_number', 'type', 'status')
     actions = None
 
@@ -309,10 +294,20 @@ class CommercialAllyAdmin(admin.ModelAdmin):
             title = "Tercero"
 
         extra['title'] = str(title)
-        #print "title" + title
-        #print "type" + type
+        # print "title" + title
+        # print "type" + type
 
         return super(CommercialAllyAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def response_delete(self, request, obj_display, obj_id):
+
+        redirect_page = request.redirect_delete # this is set on CommercialAllyAdmin.delete_model
+
+        return HttpResponseRedirect("/accounting/" + request.redirect_delete)
+
+    def delete_model(self, request, obj):
+        request.redirect_delete = obj.get_delete_redirect_page()
+        return super(CommercialAllyAdmin, self).delete_model(request, obj);
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra = extra_context or {}
@@ -328,8 +323,8 @@ class CommercialAllyAdmin(admin.ModelAdmin):
             title = "Tercero"
 
         commercialally_type = CommercialAlly.objects.values('type').filter(pk=object_id)
-        #print "ca_type" + str(commercialally_type[0]['type'])
-        #print "type" + type
+        # print "ca_type" + str(commercialally_type[0]['type'])
+        # print "type" + type
         if type != str(commercialally_type[0]['type']):
             raise PermissionDenied
 
@@ -341,7 +336,7 @@ class CommercialAllyAdmin(admin.ModelAdmin):
         urls = super(CommercialAllyAdmin, self).get_urls()
         my_urls = [url(r'^(?P<pk>\d+)/$', views.CommercialAllyDetailView.as_view(), name='contact-detail'),
 
-        ]
+                   ]
         return my_urls + urls
 
     def response_add(self, request, obj, post_url_continue=None):
@@ -349,7 +344,7 @@ class CommercialAllyAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(redirect_url)
 
     def response_change(self, request, obj):
-        #redirect_url = "/admin/Accounting/commercialally/" + str(obj.id) + "/change/?type=" + request.GET.get('type')
+        # redirect_url = "/admin/Accounting/commercialally/" + str(obj.id) + "/change/?type=" + request.GET.get('type')
         redirect_url = "/admin/Accounting/commercialally/" + str(obj.id)
         return HttpResponseRedirect(redirect_url)
 
@@ -361,11 +356,12 @@ class AccountAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Cuentas", {
             'fields': (
-            'internal_company','number','name','status','nature_account','item','grouping_code','subsidiary_account')
+                'internal_company', 'number', 'name', 'status', 'nature_account', 'item', 'grouping_code',
+                'subsidiary_account')
         }),
     )
 
-    list_display = ('number', 'name', 'internal_company', 'nature_account', 'get_detail_column','get_change_column','get_delete_column')
+    list_display = ('number', 'name', 'nature_account', 'get_detail_column', 'get_change_column', 'get_delete_column')
 
     def get_urls(self):
         urls = super(AccountAdmin, self).get_urls()
@@ -401,7 +397,7 @@ class CommercialAllyContactAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Contacto", {
             'fields': (
-                'name', 'rfc', 'phone_number', 'secondary_number','email',
+                'name', 'rfc', 'phone_number', 'secondary_number', 'email',
                 'street', 'outdoor_number',
                 'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town',
                 'is_legal_representative', 'commercialally')
