@@ -94,14 +94,14 @@
             border-bottom: 3px solid white !important;
         }
 
-        .errorlist {
+      {% comment %}  .errorlist {
             position: relative;
             top: -6px;
             font-size: 10px;
             color: #ff0000;
             line-height: 16px;
         }
-
+{% endcomment %}
     </style>
 {% endblock %}
 
@@ -161,12 +161,13 @@
                     <hr>
                     <div class="btn-group btn-group-justified btn-group-raised">
                         <a class="btn btn-primary employee-menu"
-                           href="{% if request.GET.employee %}/admin/HumanResources/employee/{{ request.GET.employee }}/change/?employee={{ request.GET.employee }}{% else %}{% endif %}">Datos<br>
+                           href="{% if request.GET.employee %}/admin/HumanResources/employee/{{ request.GET.employee }}/change/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Datos<br>
                             Personales
                             <div class="ripple-container
                                     {% if request.resolver_match.view_name in "admin:HumanResources_employee_add,admin:HumanResources_employee_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
-                        <a class="btn btn-primary employee-menu"
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}/admin/HumanResources/education/add/?employee=
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
                            href="{% if request.GET.employee %}/admin/HumanResources/education/add/?employee=
                                {{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
                             Académica
