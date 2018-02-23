@@ -4,14 +4,12 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django.conf.urls import url
 
-
 # Register your models here.
 from django.db.models.query_utils import Q
 from Accounting import views
 from Accounting.models import *
 from Accounting.forms import *
 from Accounting.views import AccountDetailView
-
 
 from Accounting.views import CommercialAllyDetailView, CommercialAllyContactDetailView
 from django.http.response import HttpResponseRedirect
@@ -81,6 +79,7 @@ class AccountingAdminUtilities():
         button = "<i class ='fa fa-pencil color-default eliminar' > </i>"
 
         return '<a href="' + link + '" class="' + css + '" >' + button + '</a>'
+
 
 # Admin for the inline documents of the current education of an employee.
 class AccountingPolicyDetailInlineFormset(forms.models.BaseInlineFormSet):
@@ -263,7 +262,8 @@ class CommercialAllyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("", {
             'fields': (
-                'name', 'curp', 'rfc', 'phone_number', 'cellphone_number', 'office_number', 'extension_number',
+                'name', 'curp', 'rfc', 'phone_number', 'phone_number_2', 'email', 'cellphone_number', 'office_number',
+                'extension_number',
                 'street', 'outdoor_number',
                 'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town', 'accounting_account', 'bank',
                 'bank_account_name', 'bank_account', 'employer_registration_number', 'tax_person_type', 'status',
