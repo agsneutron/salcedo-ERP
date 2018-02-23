@@ -768,6 +768,4 @@ class EmployeeDropOutForm(forms.ModelForm):
     class Meta:
         model = EmployeeDropOut
         fields = '__all__'
-        widgets = {
-            'observations': forms.Textarea(attrs={'rows': 3})
-        }
+       

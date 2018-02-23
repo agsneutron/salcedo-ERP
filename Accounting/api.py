@@ -1,4 +1,6 @@
 # coding=utf-8
+import csv
+
 from django.db.models.aggregates import Sum, Count
 from django.db.models.query_utils import Q
 from django.http.response import HttpResponse
@@ -17,6 +19,8 @@ from SharedCatalogs.models import Account
 from datetime import datetime
 from django.shortcuts import redirect, render
 import requests
+
+from reporting.api import createCSVResponseFromQueryset
 
 
 def get_array_or_none(the_string):
@@ -77,7 +81,7 @@ class SearchPolicies(ListView):
             lower_credit=lower_credit,
             upper_credit=upper_credit,
             reference=reference,
-            only_with_transactions= False,
+            only_with_transactions=False,
             account_array=account_number_array,
             internal_company=internal_company
         )
@@ -126,12 +130,20 @@ class SearchAccounts(ListView):
             })
 
         return HttpResponse(Utilities.json_to_dumps(response['accounts']), 'application/json; charset=utf-8', )
-        #return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
+        # return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
 
 
 class SearchProviders(ListView):
     def get(self, request):
+
+        if request.GET.get('export_excel') is not None:
+            export_excel = True
+        else:
+            print(' not excel');
+            export_excel = False
+
         type = request.GET.get('type')
+
         if type is None:
             return HttpResponse(Utilities.json_to_dumps({"error": {"message": "The parameter 'type' is required."}}),
                                 'application/json; charset=utf-8', )
@@ -159,16 +171,21 @@ class SearchProviders(ListView):
 
         results = engine.search()
 
-        return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
+        if export_excel:
+            values = ['name', 'country', 'colony', 'street', 'outdoor_number', 'indoor_number', 'zip_code',
+                      'rfc', 'curp',
+                      'phone_number', 'phone_number_2', 'email', 'cellphone_number', 'office_number',
+                      'extension_number']
+            return createCSVResponseFromQueryset(results, values)
+        else:
+            return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
 
 
 class SearchTransactionsByAccount(ListView):
-
-
     def group_transactions_by_account(self, transactions):
-        grouped = transactions.values('account__id', 'account__name', 'account__number')\
+        grouped = transactions.values('account__id', 'account__name', 'account__number') \
             .annotate(Count('account__id'), Count('account__name'), Count('account__number'),
-                      total_credit=Sum('credit'),total_debit=Sum('debit'))
+                      total_credit=Sum('credit'), total_debit=Sum('debit'))
 
         return grouped
 
