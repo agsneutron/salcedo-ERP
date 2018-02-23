@@ -166,7 +166,8 @@
                             <div class="ripple-container
                                     {% if request.resolver_match.view_name in "admin:HumanResources_employee_add,admin:HumanResources_employee_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
-                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}/admin/HumanResources/education/add/?employee=
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
                            href="{% if request.GET.employee %}/admin/HumanResources/education/add/?employee=
                                {{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
@@ -174,65 +175,81 @@
                             <div class="ripple-container
                                     {% if request.resolver_match.view_name == "admin:HumanResources_education_add" %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href="{% if request.GET.employee %}/admin/HumanResources/currenteducation/add/?employee=
-                               {{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/currenteducation/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
                             Acad. Actual
                             <div class="ripple-container
                                     {% if request.resolver_match.view_name == "admin:HumanResources_currenteducation_add" %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href={% if request.GET.employee %}"/admin/HumanResources/emergencycontact/add/?employee={{ request.GET.employee }}"{% else %}
-                               "#"{% endif %}>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/emergencycontact/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">
                         <div class="ripple-container
                                 {% if request.resolver_match.view_name == "admin:HumanResources_emergencycontact_add" %}{{ "active_btn" }}{% endif %}"></div>
                         Contactos de<br> Emergencia
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href={% if request.GET.employee %}"/admin/HumanResources/familymember/add/?employee={{ request.GET.employee }}"{% else %}
-                               "#"{% endif %}>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/familymember/add/?employee={{ request.GET.employee }}{% else %}
+                               #{% endif %}">
                         <div class="ripple-container
                                 {% if request.resolver_match.view_name == "admin:HumanResources_familymember_add" %}{{ "active_btn" }}{% endif %}"></div>
                         Familiares
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href={% if request.GET.employee %}"/admin/HumanResources/workreference/add/?employee={{ request.GET.employee }}"{% else %}
-                               "#"{% endif %}>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/workreference/add/?employee={{ request.GET.employee }}{% else %}
+                               #{% endif %}">
                         <div class="ripple-container
                                 {% if request.resolver_match.view_name == "admin:HumanResources_workreference_add" %}{{ "active_btn" }}{% endif %}"></div>
                         Referencias
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href={% if request.GET.employee %}"/admin/HumanResources/testapplication/add/?employee={{ request.GET.employee }}"{% else %}
-                               "#"{% endif %}>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/testapplication/add/?employee={{ request.GET.employee }}{% else %}
+                               #{% endif %}">
                         <div class="ripple-container
                                 {% if request.resolver_match.view_name == "admin:HumanResources_testapplication_add" %}{{ "active_btn" }}{% endif %}"></div>
                         Pruebas
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href={% if request.GET.employee %}"/admin/HumanResources/employeedocument/add/?employee={{ request.GET.employee }}"{% else %}
-                               "#"{% endif %}>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/employeedocument/add/?employee={{ request.GET.employee }}{% else %}
+                               #{% endif %}">
                         <div class="ripple-container
                                 {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
                         Documentación
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href={% if request.GET.employee %}"/admin/HumanResources/checkerdata/add/?employee={{ request.GET.employee }}"{% else %}
-                               "#"{% endif %}>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/checkerdata/add/?employee={{ request.GET.employee }}{% else %}
+                               #{% endif %}">
                         <div class="ripple-container
                                 {% if request.resolver_match.view_name == "admin:HumanResources_employeeassistance_add" %}{{ "active_btn" }}{% endif %}"></div>
                         Checador
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href={% if request.GET.employee %}"/admin/HumanResources/employeepositiondescription/add/?employee={{ request.GET.employee }}"{% else %}
-                               "#"{% endif %}>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/employeepositiondescription/add/?employee={{ request.GET.employee }}{% else %}
+                               #{% endif %}">
                         <div class="ripple-container
                                 {% if request.resolver_match.view_name == "admin:HumanResources_employeepositiondescription_add" %}{{ "active_btn" }}{% endif %}"></div>
                         Puesto
                         </a>
-                        <a class="btn btn-primary employee-menu"
-                           href={% if request.GET.employee %}"/admin/HumanResources/employeefinancialdata/add/?employee={{ request.GET.employee }}"{% else %}
-                               "#"{% endif %}>
+
+                        <a class="btn btn-primary employee-menu{% if request.GET.employee %}
+                               {{ request.GET.employee }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.employee %}/admin/HumanResources/employeefinancialdata/add/?employee={{ request.GET.employee }}{% else %}
+                               #{% endif %}">
                         <div class="ripple-container
                                 {% if request.resolver_match.view_name == "admin:HumanResources_employeefinancialdata_add" %}{{ "active_btn" }}{% endif %}"></div>
                         Datos<br> Financieros
