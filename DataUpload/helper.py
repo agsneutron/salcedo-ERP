@@ -22,7 +22,7 @@ import locale
 
 # locale.currency(1000, grouping=True)
 # español para windows
-locale.setlocale(locale.LC_ALL, "esp")
+#locale.setlocale(locale.LC_ALL, "")
 
 
 

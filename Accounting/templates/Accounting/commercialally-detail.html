@@ -2,6 +2,15 @@
 {% load i18n admin_static %}
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+    <style>
+                                #DataTables_Table_0_wrapper {
+
+                                    width: 100%;
+                                }
+    .card .card-block, .card.card-block {
+    padding: 20px 0px;
+}
+                            </style>
 {% endblock %}
 {% block content %}
     {% comment %}<h1>Nombre: {{ empresa.nombreEmpresa }}  <a href="change">Editar</a></h1>{% endcomment %}
@@ -161,10 +170,11 @@
             <div class="card-block text-center">
                 <div class="table-responsive">
                     <table id="" class="table table-striped table_s" width="100%">
-                        {% if owners.count == 0 %}
+                        {% if owner.count == 0 %}
                             <style>
                                 #DataTables_Table_0_wrapper {
                                     display: none !important;
+                                    width: 100%;
                                 }
                             </style>
                             <thead>
