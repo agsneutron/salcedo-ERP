@@ -261,7 +261,7 @@ class TypePolicyAdmin(admin.ModelAdmin):
 class CommercialAllyAdmin(admin.ModelAdmin):
     form = CommercialAllyForm
 
-    
+
     list_display = ('name', 'rfc', 'phone_number', 'type', 'status')
     actions = None
 
