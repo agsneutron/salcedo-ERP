@@ -1539,6 +1539,7 @@ class TestAdmin(admin.ModelAdmin):
     def get_delete_link(self, obj):
         return HumanResourcesAdminUtilities.get_delete_link(obj)
 
+
     get_change_link.short_description = 'Editar'
     get_change_link.allow_tags = True
 
