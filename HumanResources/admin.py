@@ -1909,7 +1909,6 @@ class JobInstanceAdmin(admin.ModelAdmin):
 
         return super(JobInstanceAdmin, self).response_delete(request, obj_display, obj_id)
 
-
 # EmployeeDropOut Administrator
 @admin.register(EmployeeDropOut)
 class EmployeeDropOutAdmin(admin.ModelAdmin):
