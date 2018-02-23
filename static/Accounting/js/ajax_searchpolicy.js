@@ -40,6 +40,8 @@ function main(){
         reference (string)*/
 
 function search() {
+    var internal_company = $j("#internal_company").val();
+   // alert(internal_company);
     var lower_fiscal_period_year = $j("#lower_fiscal_period_year").val();
     var upper_fiscal_period_year = $j("#upper_fiscal_period_year").val();
     var lower_fiscal_period_month = $j("#lower_fiscal_period_month").val();
@@ -110,6 +112,9 @@ function search() {
     }
     if (reference.toString()!="") {
         url=url+"&reference="+reference.toString();
+    }
+    if (internal_company.toString()!="") {
+        url=url+"&internal_company="+internal_company.toString();
     }
 
     //alert(url);

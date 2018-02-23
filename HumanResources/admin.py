@@ -113,6 +113,7 @@ class HumanResourcesAdminUtilities():
         return '<a href="' + link + anchor + '" class="' + css + '" >' + button + '</a>'
 
 
+
 # Employee Admin.
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
@@ -129,26 +130,29 @@ class EmployeeAdmin(admin.ModelAdmin):
         ("Datos Personales", {
             'fields': (
                 'name', 'first_last_name', 'second_last_name', 'birthdate', 'birthplace', 'gender', 'marital_status',
-                'curp', 'rfc', 'tax_regime', 'social_security_number', 'blood_type', 'street', 'outdoor_number',
-                'indoor_number', 'colony',
+                'curp', 'rfc', 'tax_regime', 'social_security_number', 'blood_type','street', 'outdoor_number', 'indoor_number', 'colony',
                 'country', 'state', 'town', 'zip_code', 'phone_number', 'cellphone_number', 'office_number',
                 'extension_number', 'personal_email', 'work_email', 'driving_license_number',
                 'driving_license_expiry_date')
         }),
     )
 
+
+
     def get_search_results(self, request, queryset, search_term):
 
         keywords = search_term.split(" ")
-
-        if search_term is None or search_term == "":
+        #tags = views.get_array_or_none(request.GET.get("tags"))
+        tags = request.GET.get("tags")
+        if search_term is None or search_term == "" :
             return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
 
         r = Employee.objects.none()
+        querysetFiltrado = Employee.objects.filter(tags__name='excel')
 
         for k in keywords:
             if k != "":
-                q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+                q, ud = super(EmployeeAdmin, self).get_search_results(request, querysetFiltrado, k)
                 r |= q
 
         return r, True
@@ -284,7 +288,7 @@ class CurrentEducationDocumentInline(admin.TabularInline):
 
     fieldsets = (
         ("Documento", {
-            'fields': ('file', 'comments',)
+            'fields': ('file','comments',)
         }),
     )
 
@@ -297,10 +301,7 @@ class CurrentEducationAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Formación Académica Actual", {
-            'fields': (
-                'type', 'name', 'institution', 'employee', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday',
-                'friday',
-                'saturday',)
+            'fields': ('type', 'name', 'institution', 'employee', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday',)
         }),
     )
 
@@ -327,7 +328,7 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         ("Contactos de Emergencia", {
             'fields': (
                 'name', 'first_last_name', 'second_last_name', 'phone_number', 'cellphone_number', 'email', 'employee',
-                'street', 'colony', 'outdoor_number', 'indoor_number', 'zip_code', 'country', 'state', 'town')
+                'street','colony','outdoor_number','indoor_number','zip_code','country','state','town')
         }),
     )
 
@@ -386,8 +387,7 @@ class FamilyMemberAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Familiares", {
             'fields': (
-                'name', 'first_last_name', 'second_last_name', 'relationship', 'employee', 'career', 'age',
-                'phone_number')
+                'name', 'first_last_name', 'second_last_name', 'relationship', 'employee','career','age','phone_number')
         }),
     )
 
@@ -787,9 +787,8 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         ("Descripción de Puesto", {
             # contract
             'fields': (
-                'employee', 'contract', 'start_date', 'end_date', 'direction', 'subdirection', 'area', 'department',
-                'job_profile',
-                'physical_location', 'payroll_group', 'entry_time', 'departure_time', 'monday',
+                'employee',  'contract','start_date', 'end_date', 'direction', 'subdirection', 'area', 'department', 'job_profile',
+                'physical_location',  'payroll_group', 'entry_time', 'departure_time', 'monday',
                 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday',
                 'observations',)
         }),
@@ -899,7 +898,7 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('payroll_period', 'employee', 'concept', 'ammount',)
+    list_display = ('payroll_period','employee', 'concept', 'ammount',)
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -959,12 +958,10 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
             "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
 
         # To redirect after add
-
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
         payroll_period_id = request.GET.get('payrollperiod')
-        redirect_url = "/humanresources/employeebyperiod?&payrollperiod=" + str(
-            payroll_period_id) + "&payrollgroup=" + request.GET.get('payrollgroup')
+        redirect_url = "/humanresources/employeebyperiod?&payrollperiod=" + str(payroll_period_id) + "&payrollgroup=" +request.GET.get('payrollgroup')
         return HttpResponseRedirect(redirect_url)
 
 
@@ -1019,6 +1016,7 @@ class EmployeeEarningsDeductionsAdmin(admin.ModelAdmin):
 
         extra['template'] = "employee_earnings_deductions"
         extra['employee'] = employee_set
+
 
         return super(EmployeeEarningsDeductionsAdmin, self).change_view(request, object_id, form_url, extra)
 
@@ -1461,6 +1459,7 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         if obj.entry_time is None or obj.exit_time is None:
             return True
 
+
         # Obtaining the position to know the entry time.
         employee_position = EmployeePositionDescription.objects.get(employee_id=obj.employee.id)
 
@@ -1473,6 +1472,8 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         except CheckerData.DoesNotExist as e:
             checks_entry = False
             checks_exit = False
+
+
 
         position_entry_time = employee_position.entry_time
         position_exit_time = employee_position.departure_time
@@ -1488,13 +1489,13 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         absent = False
         allowed_minutes = 15
 
-        if (arrived_minutes_late > allowed_minutes and checks_entry == True) or (
-                        left_minutes_early > allowed_minutes and checks_exit == True):
+        if (arrived_minutes_late > allowed_minutes and checks_entry==True) or (left_minutes_early > allowed_minutes and checks_exit==True):
             absent = True
 
         obj.absence = absent
 
         super(EmployeeAssistanceAdmin, self).save_model(request, obj, form, change)
+
 
     def get_urls(self):
         urls = super(EmployeeAssistanceAdmin, self).get_urls()
@@ -1518,7 +1519,7 @@ class AbsenceProofAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Documentos Justificantes", {
-            'fields': ('employee', 'payroll_period', 'document', 'description')
+            'fields': ('employee','payroll_period','document','description')
         }),
     )
 
@@ -1574,8 +1575,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     list_display = ('payroll_period', 'assistance_file', 'get_UploadedEmployeeAssistanceHistory_link')
 
     def get_UploadedEmployeeAssistanceHistory_link(self, obj):
-        return HumanResourcesAdminUtilities.get_UploadedEmployeeAssistanceHistory_link(
-            "UploadedEmployeeAssistanceHistory", obj.payroll_period.id, "")
+        return HumanResourcesAdminUtilities.get_UploadedEmployeeAssistanceHistory_link("UploadedEmployeeAssistanceHistory", obj.payroll_period.id, "")
 
     get_UploadedEmployeeAssistanceHistory_link.short_description = 'Justificar Asistencias'
     get_UploadedEmployeeAssistanceHistory_link.allow_tags = True
@@ -1613,8 +1613,9 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         except django.db.utils.IntegrityError as e:
             django.contrib.messages.error(request, "Error de integridad de datos.")
 
+
     def response_add(self, request, obj, post_url_continue=None):
-        # return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
+        #return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
         return HttpResponseRedirect("/admin/HumanResources/uploadedemployeeassistancehistory/")
 
 
@@ -1636,33 +1637,6 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
         }),
     )
 
-    def get_detail_column(self, obj):
-        return HumanResourcesAdminUtilities.get_detail_link(obj)
-
-    def get_change_column(self, obj):
-        return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
-
-    def get_delete_column(self, obj):
-        return HumanResourcesAdminUtilities.get_delete_link(obj)
-
-    get_detail_column.allow_tags = True
-    get_detail_column.short_description = 'Detalle'
-
-    get_change_column.allow_tags = True
-    get_change_column.short_description = 'Editar'
-
-    get_delete_column.allow_tags = True
-    get_delete_column.short_description = 'Eliminar'
-
-    list_display = ('employee', 'amount', 'get_detail_column', 'get_change_column', 'get_delete_column')
-
-    def get_urls(self):
-        urls = super(EmployeeLoanAdmin, self).get_urls()
-        my_urls = [
-            url(r'^(?P<pk>\d+)/$', views.EmployeeLoanDetail.as_view(), name='employeeloan-detail'),
-        ]
-        return my_urls + urls
-
 
 # JobProfile Admin.
 @admin.register(JobProfile)
@@ -1674,7 +1648,7 @@ class JobProfileAdmin(admin.ModelAdmin):
             'fields': (
                 'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience', 'entry_time',
                 'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
-                'subdirection', 'area', 'department')
+                'subdirection', 'area', 'department', 'minimumsalary', 'maximumsalary')
         }),
     )
 
@@ -1738,7 +1712,7 @@ class JobInstanceAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Puesto", {
             'fields': (
-                'job_profile', 'employee', 'parent_job_instance')
+                'job_profile', 'employee','parent_job_instance')
         }),
     )
 
@@ -1769,33 +1743,6 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
             'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
         }),
     )
-
-    def get_detail_column(self, obj):
-        return HumanResourcesAdminUtilities.get_detail_link(obj)
-
-    def get_change_column(self, obj):
-        return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
-
-    def get_delete_column(self, obj):
-        return HumanResourcesAdminUtilities.get_delete_link(obj)
-
-    list_display = ('employee', 'get_detail_column', 'get_change_column', 'get_delete_column')
-
-    get_detail_column.allow_tags = True
-    get_detail_column.short_description = 'Detalle'
-
-    get_change_column.allow_tags = True
-    get_change_column.short_description = 'Editar'
-
-    get_delete_column.allow_tags = True
-    get_delete_column.short_description = 'Eliminar'
-
-    def get_urls(self):
-        urls = super(EmployeeDropOutAdmin, self).get_urls()
-        my_urls = [
-            url(r'^(?P<pk>\d+)/$', views.EmployeeDropOutDetail.as_view(), name='employeedropout-detail'),
-        ]
-        return my_urls + urls
 
     # To redirect after add
     def response_add(self, request, obj, post_url_continue=None):

@@ -29,7 +29,13 @@ function main_consulta() {
 
     callGetTags();
 
-  $j('#tags').on('change', function(){
+
+
+}
+
+$(function() {
+
+  $('#tags').on('change', function(){
 
 
        //var values=$("#tags").val();
@@ -39,13 +45,7 @@ function main_consulta() {
        //$('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
   });
 
-}
-
-
-
-
-
-
+});
 
 function valores_tags(){
 alert("Hola");

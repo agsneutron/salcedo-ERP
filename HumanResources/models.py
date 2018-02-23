@@ -1117,6 +1117,7 @@ class EmployeeEarningsDeductions(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
         verbose_name = "Deducciones y Percepciones por Empleado"
+        unique_together = (('concept', 'employee'),)
 
 
 class PayrollType(models.Model):

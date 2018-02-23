@@ -49,6 +49,8 @@ function search() {
     var lower_credit = $j("#lower_credit").val();
     var upper_credit = $j("#upper_credit").val();
     var reference = $j("#reference").val();
+    var internal_company = $j("#internal_company").val();
+
 
     var sta_url = "/accounting/search_transactions_by_account?";
 
@@ -100,6 +102,9 @@ function search() {
     }
     if (reference.toString()!="") {
         url=url+"&reference="+reference.toString();
+    }
+    if (internal_company.toString()!="") {
+        url=url+"&internal_company="+internal_company.toString();
     }
 
 
