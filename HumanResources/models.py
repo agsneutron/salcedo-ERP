@@ -535,8 +535,9 @@ class Education(models.Model):
 
 # Test model to define the structure of it.
 class Test(models.Model):
+    key = models.CharField(verbose_name="Clave de la Prueba", max_length=512, null=False, blank=False)
     name = models.CharField(verbose_name="Nombre de la Prueba", max_length=512, null=False, blank=False)
-
+    notes = models.CharField(verbose_name="Notas", max_length=1024, null=False, blank=False)
     class Meta:
         verbose_name_plural = "Pruebas"
         verbose_name = "Prueba"
