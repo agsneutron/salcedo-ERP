@@ -1,0 +1,47 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+{% endblock %}
+{% block content %}
+    {% include "admin/HumanResources/payroll-home.html" %}
+
+    <div class="col-xs-9">
+
+        <div class="card ">
+            <div>
+
+
+            </div>
+            <div class="card-block">
+                <div class="tab-content">
+                    <ul>
+                        <li>
+                            Empleado: {{ object.employee.name }} {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}.
+                        </li>
+                        <li>Monto total: {{ object.amount | formatoNumero }}</li>
+                        <li>Tipo: {{ object.get_type_display }}</li>
+                        <li>Plan de pago: {{ object.get_payment_plan_display }}</li>
+                        <li>Fecha de Solicitud: {{ object.request_date }}</li>
+                    </ul>
+
+
+                    <div>Pagos</div>
+                    <table border="1">
+                        <tr>
+                            <th>Periodo de Pago</th>
+                            <th>Cantidad</th>
+                        </tr>
+                        {% for record in object.employeeloandetail_set.all %}
+                            <tr>
+                                <td>{{ record.period }}</td>
+                                <td>{{ record.amount | formatoNumero }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

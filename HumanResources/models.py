@@ -1202,6 +1202,8 @@ class PayrollPeriod(models.Model):
 class EmployeeLoanDetail(models.Model):
     employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
     # period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
+
+    # The group is here to use chained keys
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
     period = ChainedForeignKey(PayrollPeriod,
                                chained_field="payroll_group",
