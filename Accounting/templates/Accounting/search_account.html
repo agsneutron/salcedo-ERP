@@ -168,8 +168,9 @@ name=Cuenta%202
             </div>
         </div>
 
-        <div class="col-xs-12" style="margin-bottom: 30px">
+        <div class="" style="margin-bottom: 30px">
             <div class="table-responsive" id="divTable" style="padding: 0px 15px">
+
                 {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
                            id="tablaResultados">
 
@@ -282,5 +283,12 @@ name=Cuenta%202
         </div>
     </div>
     <div class="clearfix"></div>
-
+<script>
+function sEmptyTable(index)
+{
+    return $("tbody td").filter(function(){
+        return $(this).index() == index && $.trim($(this).text()).length;
+    }).length == 0;
+}
+</script>
 {% endblock %}

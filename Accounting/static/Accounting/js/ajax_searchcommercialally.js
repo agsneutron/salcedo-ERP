@@ -139,11 +139,11 @@ function displayResults(data, type) {
     $j('#divTable').html("<div></div>");
     sHtml = '<table class="table-filtros table" cellspacing="0" width="100%" id="tablaResultados">'
         + ' <colgroup>'
-        + ' <col width="25%">'
-        + ' <col width="10%">'
-        + ' <col width="10%">'
-        + ' <col width="15%">'
-        + ' <col width="10%">'
+        + ' <col width="">'
+        + ' <col width="">'
+        + ' <col width="">'
+        + ' <col width="">'
+        + ' <col width="">'
         //+' <col width="5%">'
         + ' <col width="5%">'
         + ' <col width="5%">'
@@ -158,9 +158,9 @@ function displayResults(data, type) {
         + '<th>Cuenta Contable</th>'
         + '<th>Banco</th>'
         // +'<th>Registro</th>'
-        + '<th>Ver</th>'
-        + '<th>Editar</th>'
-        + '<th>Eliminar</th>'
+        + '<th class="no-sorting">Ver</th>'
+        + '<th class="no-sorting">Editar</th>'
+        + '<th class="no-sorting">Eliminar</th>'
 
         + '</tr>'
         + '</thead>'
@@ -207,7 +207,7 @@ function displayResults(data, type) {
 
     sScript = '<script id="js" type="text/javascript"  class="init">'
         + '$("#tablaResultados").DataTable( {'
-        + 'destroy: true,';
+
 
     sTable = 'columnDefs: ['
         + '       {'
@@ -243,6 +243,8 @@ function displayResults(data, type) {
         + '}'
         + '},'
         + '} );'
+        + ''
+
         + '</script>';
 
     sScript += sTable;
