@@ -67,9 +67,9 @@
                                     class="fa fa-chevron-right color-active"></i> <span
                                     class="color-active">Número de Registro Patronal:</span> {{ obj.employer_registration_number }}</span>
 
-                            <span href="" class="list-group-item withripple "><i
+                           {% comment %} <span href="" class="list-group-item withripple "><i
                                     class="fa fa-chevron-right color-active"></i> <span
-                                    class="color-active">Servicios:</span> {{ obj.services }}</span>
+                                    class="color-active">Servicios:</span> {{ obj.services }}</span>{% endcomment %}
                             <span href="" class="list-group-item withripple "><i
                                     class="fa fa-chevron-right color-active"></i> <span
                                     class="color-active">Cuenta Contable:</span> {{ obj.accounting_account }}</span>
@@ -132,13 +132,19 @@
 
 
                         </div>
+                <div class="clearfix"></div>
+                         <div class="col-xs-12 col-sm-12 text-left">
 
+                           <span href="" class="list-group-item withripple "><i
+                                   class="fa fa-chevron-right color-active"></i> <span
+                                   class="color-active">Servicios:</span> {{ obj.services |safe }}</span>
+                         </div>
 
 
                 <div>
 
                 </div>
-                {{ obj.services |safe }}
+
                 </div>
 
 
