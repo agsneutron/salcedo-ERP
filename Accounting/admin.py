@@ -21,6 +21,7 @@ from django.core.exceptions import PermissionDenied
 from SharedCatalogs.models import GroupingCode, Account
 
 
+
 class AccountingAdminUtilities():
     @staticmethod
     def get_detail_link_accounting(obj):
