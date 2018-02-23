@@ -113,6 +113,7 @@ class HumanResourcesAdminUtilities():
         return '<a href="' + link + anchor + '" class="' + css + '" >' + button + '</a>'
 
 
+
 # Employee Admin.
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
@@ -136,18 +137,21 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
+
+
     def get_search_results(self, request, queryset, search_term):
 
         keywords = search_term.split(" ")
-
+        tags = views.get_array_or_none(request.GET.get("msTags"))
         if search_term is None or search_term == "" :
             return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
 
         r = Employee.objects.none()
+        querysetFiltrado = Employee.objects.filter(tags__name='excel')
 
         for k in keywords:
             if k != "":
-                q, ud = super(EmployeeAdmin, self).get_search_results(request, queryset, k)
+                q, ud = super(EmployeeAdmin, self).get_search_results(request, querysetFiltrado, k)
                 r |= q
 
         return r, True
@@ -1790,7 +1794,7 @@ class JobProfileAdmin(admin.ModelAdmin):
             'fields': (
                 'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience', 'entry_time',
                 'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
-                'subdirection', 'area', 'department')
+                'subdirection', 'area', 'department', 'minimumsalary', 'maximumsalary')
         }),
     )
 
