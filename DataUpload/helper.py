@@ -22,7 +22,7 @@ locale.setlocale(locale.LC_ALL, 'en_CA.UTF-8')
 
 # locale.currency(1000, grouping=True)
 # español para windows
-#locale.setlocale(locale.LC_ALL, "esp")
+#locale.setlocale(locale.LC_ALL, "")
 
 
 
