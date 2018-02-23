@@ -261,6 +261,17 @@ class TypePolicyAdmin(admin.ModelAdmin):
 class CommercialAllyAdmin(admin.ModelAdmin):
     form = CommercialAllyForm
 
+    fieldsets = (
+        ("", {
+            'fields': (
+                'name', 'curp', 'rfc', 'phone_number', 'phone_number_2', 'email', 'cellphone_number', 'office_number',
+                'extension_number',
+                'street', 'outdoor_number',
+                'indoor_number', 'colony', 'zip_code', 'country', 'state', 'town', 'accounting_account', 'bank',
+                'bank_account_name', 'bank_account', 'employer_registration_number', 'tax_person_type', 'status',
+                'services', 'type',)
+        }),
+    )
 
     list_display = ('name', 'rfc', 'phone_number', 'type', 'status')
     actions = None
