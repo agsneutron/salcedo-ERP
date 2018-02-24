@@ -633,6 +633,7 @@ class TestForm(forms.ModelForm):
     class Meta:
         model = Test
         fields = '__all__'
+        widgets = {'notes': forms.Textarea(attrs={'rows': 4})}
 
 
 # Form to include the fields of the Document Type Form.

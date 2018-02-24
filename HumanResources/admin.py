@@ -597,14 +597,14 @@ class TestApplicationAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Pruebas Aplicadas", {
             'fields': (
-                'application_date', 'result', 'test', 'comments', 'employee',)
+                'application_date', 'test','result', 'comments', 'employee',)
         }),
     )
 
     list_display = ('test', 'employee', 'application_date', 'result', 'get_EmployeeModelDetail_link')
     list_display_links = None
     search_fields = (
-        'employee__name', '^test__name', 'result')
+        'employee__name', 'test__name', 'result')
 
     def get_EmployeeModelDetail_link(self, obj):
         return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("testapplication", obj.id, "")
@@ -707,6 +707,8 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
         employee_id = request.GET.get('employee')
         employee = Employee.objects.get(pk=employee_id)
         documents_set = EmployeeDocument.objects.filter(employee_id=employee_id)
+
+
 
         extra['template'] = "documentation"
         extra['employee'] = employee
@@ -1523,8 +1525,8 @@ class TestAdmin(admin.ModelAdmin):
     form = TestForm
 
     fieldsets = (
-        ("Pruebas", {
-            'fields': ('name',)
+        ("Pruebas a Empleados", {
+            'fields': ('key','name','notes')
         }),
     )
 
@@ -1557,6 +1559,23 @@ class DocumentTypeAdmin(admin.ModelAdmin):
                 'name',)
         }),
     )
+
+    list_display = ('name', 'get_change_link', 'get_delete_link')
+    list_display_links = None
+
+    search_fields = ('name',)
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_change_link.short_description = 'Editar'
+    get_change_link.allow_tags = True
+
+    get_delete_link.short_description = 'Eliminar'
+    get_delete_link.allow_tags = True
 
 
 # Tag Admin.

@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_modify %}
+{% load i18n admin_urls admin_static admin_modify app_filters %}
 
 {% block extrahead %}{{ block.super }}
     <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -495,9 +495,10 @@
                                         <thead>
                                         <tr>
                                             <td>Fecha de Aplicacion</td>
+                                             <td>Prueba</td>
                                             <td>Resultado</td>
                                             <td>Comentarios</td>
-                                            <td>Prueba</td>
+
 
                                             <td>Editar</td>
                                             <td>Eliminar</td>
@@ -507,9 +508,10 @@
                                         {% for record in applications %}
                                             <tr>
                                                 <td>{{ record.application_date }}</td>
+                                                <td>{{ record.test }}</td>
                                                 <td>{{ record.result }}</td>
                                                 <td>{{ record.comments }}</td>
-                                                <td>{{ record.test }}</td>
+
 
                                                 <td style="width: 5%">
                                                     <a href="/admin/HumanResources/testapplication/{{ record.id }}/change/?employee={{ request.GET.employee }}"
@@ -536,8 +538,9 @@
                                         <thead>
                                         <tr>
                                             <td>Archivo</td>
+                                             <td>Tipo de Doc.</td>
                                             <td>Comentarios</td>
-                                            <td>Tipo de Doc.</td>
+
 
                                             <td>Editar</td>
                                             <td>Eliminar</td>
@@ -548,12 +551,13 @@
                                             <tr>
                                                 <td>
                                                     <a href="/media/{{ record.file.name }}" target="_blank">
-                                                        Archivo
+                                                        {{ record.file|filename}}
                                                     </a>
 
                                                 </td>
-                                                <td>{{ record.comments }}</td>
                                                 <td>{{ record.document_type }}</td>
+                                                <td>{{ record.comments }}</td>
+
 
                                                 <td style="width: 5%">
                                                     <a href="/admin/HumanResources/employeedocument/{{ record.id }}/change/?employee={{ request.GET.employee }}"

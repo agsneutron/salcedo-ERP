@@ -6,7 +6,7 @@ from django.contrib.humanize.templatetags.humanize import intcomma
 import locale
 
 from django.utils.safestring import mark_safe
-
+import os
 import json
 
 import re
@@ -98,3 +98,8 @@ def intcomma(value, use_l10n=True):
         return new
     else:
         return intcomma(new, use_l10n)
+
+
+@register.filter
+def filename(value):
+    return os.path.basename(value.file.name)
