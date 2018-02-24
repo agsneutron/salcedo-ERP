@@ -1113,7 +1113,9 @@ class EmployeeEarningsDeductions(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False, limit_choices_to={
+        'category': 'F', 'status':'A',
+    })
 
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
