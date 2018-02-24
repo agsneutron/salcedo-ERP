@@ -40,7 +40,7 @@ hr {
 }
 
 .list-group .list-group-item, .list-group a.list-group-item {
-    font-size: 13px !important;
+
     line-height: 26px;
 }
 
@@ -176,4 +176,7 @@ dd, dt {
     border-radius: 0;
     border-right: 6px solid white;
 }
-
+ul {
+    padding-left: 20px;
+    list-style: disc;
+}
