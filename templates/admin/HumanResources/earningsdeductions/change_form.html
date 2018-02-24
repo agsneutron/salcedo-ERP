@@ -92,7 +92,7 @@
                                                     <tr>
                                                         <td >{{ record.name }}</td>
                                                         <td >{{ record.percent_taxable }}</td>
-                                                        <td >{{ record.category }}</td>
+                                                        <td >{{ record.get_category_display }}</td>
                                                         <td style="width: 5%">
                                                             <a href="/admin/HumanResources/earningsdeductions/{{ record.id }}/change/"
                                                                class="btn btn-raised btn-default btn-xs"><i
@@ -130,7 +130,7 @@
                                                     <tr>
                                                         <td >{{ record.name }}</td>
                                                         <td>{{ record.percent_taxable }}</td>
-                                                        <td >{{ record.category }}</td>
+                                                        <td >{{ record.get_category_display }}</td>
                                                         <td style="width: 5%">
                                                             <a href="/admin/HumanResources/earningsdeductions/{{ record.id }}/change/"
                                                                class="btn btn-raised btn-default btn-xs"><i

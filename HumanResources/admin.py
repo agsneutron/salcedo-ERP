@@ -1304,6 +1304,8 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         earnings_set = EarningsDeductions.objects.filter(type='P')
         deductions_set = EarningsDeductions.objects.filter(type='D')
 
+
+
         extra['template'] = "earnings_deductions"
         extra['earnings'] = earnings_set
         extra['deductions'] = deductions_set
