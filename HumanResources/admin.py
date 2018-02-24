@@ -604,7 +604,7 @@ class TestApplicationAdmin(admin.ModelAdmin):
     list_display = ('test', 'employee', 'application_date', 'result', 'get_EmployeeModelDetail_link')
     list_display_links = None
     search_fields = (
-        'employee__name', 'test__name', 'result')
+        'employee__name', 'employee__first_last_name', 'employee__second_last_name', 'employee__employee_key', 'test__name', 'result')
 
     def get_EmployeeModelDetail_link(self, obj):
         return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("testapplication", obj.id, "")
