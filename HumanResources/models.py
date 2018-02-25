@@ -540,8 +540,8 @@ class Test(models.Model):
     name = models.CharField(verbose_name="Nombre de la Prueba", max_length=512, null=False, blank=False)
     notes = models.CharField(verbose_name="Notas", max_length=1024, null=False, blank=False)
     class Meta:
-        verbose_name_plural = "Pruebas"
-        verbose_name = "Prueba"
+        verbose_name_plural = "Pruebas a Empleados"
+        verbose_name = "Pruebas a Empleados"
 
     def __str__(self):
         return self.name

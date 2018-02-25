@@ -1532,10 +1532,10 @@ class TestAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('name', 'get_change_link', 'get_delete_link')
+    list_display = ('key','name', 'get_change_link', 'get_delete_link')
     list_display_links = None
 
-    search_fields = ('name',)
+    search_fields = ('key','name',)
 
     def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
