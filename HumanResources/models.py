@@ -18,6 +18,7 @@ from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
 from ERP.models import Pais, Estado, Municipio, Project, Bank
+from SharedCatalogs.models import Account
 from utilities import getParameters
 
 # Create your models here.
@@ -1084,7 +1085,8 @@ class EarningsDeductions(models.Model):
     law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
                               default=ACTIVA)
-    accounting_account = models.IntegerField("Cuenta Contable", blank=False, null=False)
+    account = models.ForeignKey(Account, verbose_name='Cuenta', null=True, blank=True,)
+        #models.IntegerField("Cuenta Contable", blank=False, null=False)
     comments = models.TextField(verbose_name="Observaciones", null=False, blank=False, max_length=500, )
     type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION, verbose_name="Tipo")
     taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Gravable")
