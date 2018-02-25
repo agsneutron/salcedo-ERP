@@ -1768,3 +1768,6 @@ position: absolute !important;
 .errorlist.nonfield li {
     text-align: center;
 }
+.hide {
+    display: none;
+}
