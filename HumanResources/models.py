@@ -845,6 +845,8 @@ class JobProfile(models.Model):
     subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección', null=False, blank=False)
     area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
     department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
+    minimumsalary = models.DecimalField(verbose_name='Salario Mínimo', max_digits=20, decimal_places=2, null=True,default=0.0)
+    maximumsalary = models.DecimalField(verbose_name='Salario Máximo', max_digits=20, decimal_places=2, null=True,default=0.0)
 
     class Meta:
         verbose_name_plural = "Perfiles de Puesto"
@@ -1115,6 +1117,7 @@ class EmployeeEarningsDeductions(models.Model):
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
         verbose_name = "Deducciones y Percepciones por Empleado"
+        unique_together = (('concept', 'employee'),)
 
 
 class PayrollType(models.Model):
