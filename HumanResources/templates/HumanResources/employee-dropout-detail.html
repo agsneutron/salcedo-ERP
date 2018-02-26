@@ -5,14 +5,58 @@
 {% endblock %}
 {% block content %}
     {% include "admin/HumanResources/payroll-home.html" %}
-
-    <div class="col-xs-9">
-
-        <div class="card ">
-            <div>
-
-
+    <div class="col-xs-9" style="padding-bottom: 25px;">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="text-center">
+                <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i class="material-icons" style="    font-size: 39px;
+    padding-top: 20px;">folder_shared</i></span>
+                    <h3 class="section-title">Baja de Empleado</h3>
+                    <hr>
+                </div>
             </div>
+            <div class="">
+                <div class="col-xs-6">
+                    <ul class="list-group">
+                        <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Nombre::</span> {{ object.employee.name }}
+                        </li>
+                        <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Apellidos:</span> {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}
+                        </li>
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Fecha de baja:</span> {{ object.date }}
+                        </li>
+
+                    </ul>
+                </div>
+                <div class="col-xs-6">
+                    <ul class="list-group">
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Tipo:</span> {{ object.get_type_display }}
+                        </li>
+
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Motivo:</span> {{ object.reason }}
+                        </li>
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Finiquito:</span> {{ object.severance_pay | formatoNumero }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="">
+                <div class="col-xs-12">
+                    <ul class="list-group">
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Observaciones:</span> {{ object.observations | safe }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% comment %}<div class="col-xs-9">
+        <div class="card ">
             <div class="card-block">
                 <div class="tab-content">
                     <ul>
@@ -30,6 +74,6 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>{% endcomment %}
 {% endblock %}
 

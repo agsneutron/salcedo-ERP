@@ -208,7 +208,6 @@ function displayResults(data, type) {
     sScript = '<script id="js" type="text/javascript"  class="init">'
         + '$("#tablaResultados").DataTable( {'
 
-
     sTable = 'columnDefs: ['
         + '       {'
         + '           className: "mdl-data-table__cell--non-numeric"'
@@ -225,8 +224,14 @@ function displayResults(data, type) {
         + '   "language": {'
         + '       "sProcessing": "Procesando...",'
         + '       "sLengthMenu": "Mostrar _MENU_ registros",'
-        + '       "sZeroRecords": "No se encontraron resultados",'
-        + '       "sEmptyTable": "La consulta no generó resultados a mostrar",'
+       /* + '       "sZeroRecords": "No se encontraron resultados",'*/
+    +' "sEmptyTable": function(){\n' +
+        '\n' +
+        ' \t $(\'.dataTables_paginate\').addClass(\'hide\');\n' +
+        ' \t $(\'.sorting\').addClass(\'no-sorting\');\n' +
+        '\n' +
+        ' \treturn "La consulta no generó resultados a mostrar"; }\n' +
+        '\t\t\t,'
         + '       "sInfo": "",'
         + '       "sInfoEmpty": "",'
         + '       "sInfoFiltered": "(filtrado de un total de _MAX_ registros)",'
@@ -242,8 +247,10 @@ function displayResults(data, type) {
         + '           "sPrevious": "<"'
         + '}'
         + '},'
+
         + '} );'
         + ''
+
 
         + '</script>';
 
