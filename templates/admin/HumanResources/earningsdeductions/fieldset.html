@@ -80,7 +80,28 @@
         $('input').addClass('form-control');
         $('select').addClass('form-control');
         $('.field-comments>div').removeClass('col-xs-4');
-$('.field-comments>div').addClass('col-xs-12');
+        $('.field-comments>div').addClass('col-xs-12');
+
+          var d = document.getElementById("id_account");
+
+        d.attr("data-live-search", "true");
+        d.attr("data-width", "auto");
+
+
+        $("#id_account").addClass("selectpicker");
+        $('#id_account').selectpicker({
+            style: 'btn-info',
+            size: 4
+        });
+
+         var b = document.querySelector("id_account>div>select");
+        $(".field-account>div>select").addClass("selectpicker");
+        b.setAttribute("data-live-search", "true");
+        $(".field-account>div>select").selectpicker({
+            style: "btn-info",
+            size: 4,
+            liveSearch:true
+        });
 
     });
 

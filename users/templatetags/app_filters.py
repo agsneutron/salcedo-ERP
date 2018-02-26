@@ -103,3 +103,7 @@ def intcomma(value, use_l10n=True):
 @register.filter
 def filename(value):
     return os.path.basename(value.file.name)
+
+@register.assignment_tag
+def define(val=None):
+  return val

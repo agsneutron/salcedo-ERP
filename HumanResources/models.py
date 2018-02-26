@@ -1264,7 +1264,9 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False, limit_choices_to={
+        'category': 'V', 'status':'A',
+    })
     payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
 
     class Meta:
