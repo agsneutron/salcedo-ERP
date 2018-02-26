@@ -29,22 +29,48 @@ function main_consulta() {
 
     callGetTags();
 
-  $j('#tags').on('change', function(){
 
 
-       //var values=$("#tags").val();
-        alert(values);
+    $(function() {
 
-       //$('#cbTags').val(values.toString());
-       //$('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
-  });
+      $('#tags').on('change', function(){
+
+
+           var values=$("#tags").val();
+           // alert(values);
+
+      });
+
+    });
 
 }
 
 
 
 
+function setSelectedTags(){
+    var $selectTags = $('select[name=tags]');
+    selectedTags=$_GET("tags");
+    /*selectedTagsSplit = selectedTags.split(",")
 
+    x = 0;
+    $('#tags').attr('multiple', true);
+    while (x < selectedTagsSplit.length-1){
+        alert(selectedTagsSplit[x]);
+        $('#tags').val(selectedTagsSplit[x]).prop('selected', true);
+        //$selectTags.filter('[value=1]').prop('selected', true);
+        $selectTags.selectpicker('refresh');
+        x++;
+    }*/
+
+
+    $.each(selectedTags.split(","), function(i,e){
+        $("#tags option[value='" + e + "']").prop("selected", true);
+    });
+    $selectTags.selectpicker('refresh');
+
+
+}
 
 
 function valores_tags(){
@@ -65,6 +91,7 @@ function callGetTags(){
             success: function(data) {
                 datosJson=data;
                 populateTags(data);
+                setSelectedTags();
 
             },
             error: function(data) {
@@ -133,6 +160,7 @@ function $_GET(param)
     url = url.replace("?", "");
     /* Crear un array con parametro=valor */
     url = url.split("&");
+    response="";
 
     /*
     Recorrer el array url
@@ -147,8 +175,9 @@ function $_GET(param)
         p = url[x].split("=");
         if (p[0] == param)
         {
-            return decodeURIComponent(p[1]);
+            response+= decodeURIComponent(p[1])+',';
         }
         x++;
     }
+    return response;
 }

@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from _mysql import IntegrityError
 
 import django
+import json
 
 import datetime
 from datetime import date
@@ -28,6 +29,7 @@ from django.db import transaction
 from django.contrib.admin.views.main import ChangeList
 from django.core.exceptions import PermissionDenied
 from django.http.response import HttpResponseRedirect
+from django.http import  QueryDict
 
 from HumanResources import views
 
@@ -137,23 +139,34 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
+    def queryset(self, request):
+        qs = super(EmployeeAdmin, self).queryset(request)
+        # modify queryset here, eg. only user-assigned tasks
+        qs.filter(assigned__exact=request.user)
+        return qs
 
 
     def get_search_results(self, request, queryset, search_term):
 
         keywords = search_term.split(" ")
         #tags = views.get_array_or_none(request.GET.get("tags"))
-        tags = request.GET.get("tags")
-        if search_term is None or search_term == "" :
+        tags = request.GET.getlist("tags")
+
+        if search_term is None or search_term == "" and len(tags)==0:
             return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
 
         r = Employee.objects.none()
-        querysetFiltrado = Employee.objects.filter(tags__name='excel')
+        querysetFiltrado = Employee.objects.filter(tags__id__in=tags)
+
+        if len(querysetFiltrado) ==0:
+            querysetFiltrado = queryset
 
         for k in keywords:
             if k != "":
                 q, ud = super(EmployeeAdmin, self).get_search_results(request, querysetFiltrado, k)
                 r |= q
+            else:
+                r = querysetFiltrado
 
         return r, True
 
