@@ -31,7 +31,7 @@
 
 
     <style>
-        #msSubsidiaryAccountArray, #msNatureAccountArray, #msGroupingCodeArray {
+        #msSubsidiaryAccountArray, #msNatureAccountArray, #msGroupingCodeArray, #msItemAccountArray {
             display: none !important;
         }
 
@@ -75,6 +75,13 @@
                 selectedText: 'Seleccione'
             });
             $j("#msGroupingCodeArray").multiselect({
+                header: true,
+                checkAllText: 'Marcar todos',
+                uncheckAllText: 'Desmarcar todos',
+                noneSelectedText: 'Seleccione',
+                selectedText: 'Seleccione'
+            });
+            $j("#msItemAccountArray").multiselect({
                 header: true,
                 checkAllText: 'Marcar todos',
                 uncheckAllText: 'Desmarcar todos',
@@ -155,7 +162,12 @@ name=Cuenta%202
                 </select>
             </div>
             <div class="col-xs-3">
-                Rubro:<input type="text" class="form-control" id="rubro">
+                Rubro:
+                <select class="selectpicker form-control" multiple="multiple" data-size="5" id="msItemAccountArray">
+                    {% for obj in itemaccount %}
+                        <option value={{ obj.id }}>{{ obj.key}}  {{obj.name}}</option>
+                    {% endfor %}
+                </select>
             </div>
 
              <div class="col-xs-3">
@@ -171,114 +183,6 @@ name=Cuenta%202
         <div class="" style="margin-bottom: 30px">
             <div class="table-responsive" id="divTable" style="padding: 0px 15px">
 
-                {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
-                           id="tablaResultados">
-
-                        <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Número</th>
-                            <th>Nivel</th>
-                            <th>Rubro</th>
-                            <th>Subcuenta</th>
-                            <th>Naturaleza de Cuenta</th>
-                            <th>Código Agrupador SAT</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                        </tr>
-
-                        </tbody>
-                    </table>{% endcomment %}
             </div>
         </div>
     </div>

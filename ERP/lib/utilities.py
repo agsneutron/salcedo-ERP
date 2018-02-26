@@ -94,5 +94,5 @@ class Utilities():
     def string_to_date(str):
         if str is None:
             return None
-        return datetime.strptime(str, '%m/%d/%Y')
+        return datetime.strptime(str, '%d/%m/%Y')
 

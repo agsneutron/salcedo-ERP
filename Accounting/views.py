@@ -28,6 +28,7 @@ def SearchAccount(request):
     template = loader.get_template('Accounting/search_account.html')
     context = {'account': Account.objects.values('subsidiary_account__number','subsidiary_account__id','subsidiary_account__name').distinct(),
                'groupingcode': GroupingCode.objects.all(),
+               'itemaccount': ItemAccount.objects.all(),
                'internalcompany': InternalCompany.objects.all(),              # 'form': form,
                }
 
