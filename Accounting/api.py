@@ -99,11 +99,12 @@ class SearchAccounts(ListView):
         nature_account_array = get_array_or_none(request.GET.get('nature_account_array'))
         grouping_code_array = get_array_or_none(request.GET.get('grouping_code_array'))
         level = request.GET.get('level')
-        item = request.GET.get('item')
+        #item = request.GET.get('item')
+        item_account_array = get_array_or_none(request.GET.get('item_account_array'))
         internal_company = request.GET.get('internal_company')
 
         engine = AccountSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
-                                     level, item, internal_company)
+                                     level, item_account_array, internal_company)
 
         results = engine.search()
 

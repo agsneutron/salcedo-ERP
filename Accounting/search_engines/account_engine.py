@@ -9,14 +9,15 @@ class AccountSearchEngine(object):
     """
 
     def __init__(self, number, name, subsidiary_account_array, nature_account_array, grouping_code_array, level,
-                 item, internal_company):
+                 item_account_array, internal_company):
         self.number = number
         self.name = name
         self.subsidiary_account_array = subsidiary_account_array
         self.nature_account_array = nature_account_array
         self.grouping_code_array = grouping_code_array
         self.level = level
-        self.item = item
+        #self.item = item
+        self.item_account_array = item_account_array
         self.internal_company = internal_company
 
     def search(self):
@@ -44,8 +45,11 @@ class AccountSearchEngine(object):
         if self.level is not None:
             q = q & Q(level__icontains=str(self.level))
 
-        if self.item is not None:
-            q = q & Q(item__icontains=str(self.item))
+        #if self.item is not None:
+        #    q = q & Q(item__icontains=str(self.item))
+
+        if self.item_account_array is not None:
+            q = q & Q(item__in=self.item_account_array)
 
         if self.internal_company is not None:
             q = q & Q(internal_company=self.internal_company)
