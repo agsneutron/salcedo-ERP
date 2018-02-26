@@ -480,7 +480,7 @@
                         <li id="op_contabilidad" class="dropdown
 
 
-                                {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
+                                {% if request.resolver_match.view_name in "admin:Accounting_accountingpolicy_changelist,admin:Accounting_fiscalperiod_changelist,admin:Accounting_typepolicy_changelist,admin:Accounting_accountingpolicy_add,DataUpload:searchpolicies,admin:Accounting_accountingpolicy_changelist,admin:SharedCatalogs_account_add,DataUpload:searchaccount,admin:SharedCatalogs_account_changelist,admin:Accounting_commercialally_add,DataUpload:searchprovider,DataUpload:searchcreditors,DataUpload:searchthird,admin:Accounting_fiscalperiod_add,admin:Accounting_fiscalperiod_changelist,admin:Accounting_typepolicy_add,admin:Accounting_typepolicy_changelist,admin:SharedCatalogs_bank_add,admin:SharedCatalogs_bank_changelist,DataUpload:searchtransactions,DataUpload:generategeneralbalance,DataUpload:generatetrialbalance,"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/admin/Accounting/accountingpolicy/" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
@@ -499,16 +499,12 @@
                                 <li>
                                     <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
                                 </li>
+                                <li>
+                                    <a href="/admin/SharedCatalogs/itemaccount/">Rubro de la Cuenta</a>
+                                </li>
                             </ul>
                         </li>
                         <li id="op_reportes" class="dropdown
-
-
-
-
-
-
-
                                 {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"

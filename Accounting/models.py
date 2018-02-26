@@ -17,7 +17,7 @@ from Logs.controller import Logs
 from django.contrib import messages
 
 # Shared Catalogs Imports.
-from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account, InternalCompany
+from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank, GroupingCode, Account, InternalCompany,ItemAccount
 
 
 # Model for accounting policy

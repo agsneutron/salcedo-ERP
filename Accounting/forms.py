@@ -88,6 +88,13 @@ class AccountForm(forms.ModelForm):
         fields = '__all__'
 
 
+# Form to include the fields of the Account Form.
+class ItemAccountForm(forms.ModelForm):
+    class Meta:
+        model = ItemAccount
+        fields = '__all__'
+
+
 class CommercialAllyContactForm(forms.ModelForm):
     class Meta:
         model = CommercialAllyContact
