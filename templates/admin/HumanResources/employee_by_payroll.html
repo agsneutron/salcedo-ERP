@@ -1,5 +1,8 @@
-    {% extends "admin/base_site.html" %}
+{% extends "admin/base_site.html" %}
 {% load i18n admin_static %}
+
+{% load human_resources %}
+
 {% block coltype %}colMS{% endblock %}
 
 {% block bodyclass %}{{ block.super }} dashboard{% endblock %}
@@ -171,7 +174,10 @@
                                                     </td>
                                                     <td>
 
-                                                        <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}">
+
+                                                        <input type="checkbox" name="employees" id="employees" value="{{ record.employee.id }}" {{ record | employee_is_active:payrollperiod }}>
+
+
                                                     </td>
                                                 </tr>
                                             {% endfor %}

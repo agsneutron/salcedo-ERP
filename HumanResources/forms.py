@@ -608,8 +608,17 @@ class PayrollToProcessForm(forms.ModelForm):
 
 # Form to include the fields of the Payroll Type Form.
 class PayrollTypeForm(forms.ModelForm):
+
+
     class Meta:
         model = PayrollType
+        fields = '__all__'
+
+
+# Form to include the fields of the Payroll Type Form.
+class EmployeePayrollPeriodExclusionForm(forms.ModelForm):
+    class Meta:
+        model = EmployeePayrollPeriodExclusion
         fields = '__all__'
 
 

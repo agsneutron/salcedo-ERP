@@ -255,16 +255,18 @@ def EmployeeByPeriod(request):
     payrollgroup = request.GET.get('payrollgroup')
     payrollperiod = request.GET.get('payrollperiod')
 
-
     # Check if the payroll has been processed.
     payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period__id=payrollperiod)
-    print str(len(payroll_receipt_processed))
+
+    # The payroll has already been processed. Show the processed payroll.
     if len(payroll_receipt_processed) > 0:
         return HttpResponseRedirect("/admin/HumanResources/payrollreceiptprocessed/receipts_by_period/"+payrollperiod)
+
 
     template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
     employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup)
     period_data = PayrollPeriod.objects.filter(id=payrollperiod)
+
     # context = RequestContext.request
     context = {'employees': employees,
                'payrollperiod': payrollperiod,
@@ -404,6 +406,26 @@ class EmployeeRequisitionDetailView(generic.DetailView):
         # if not request.user.has_perm('ERP.view_list_empresa'):
         #     raise PermissionDenied
         return super(EmployeeRequisitionDetailView, self).dispatch(request, args, kwargs)
+
+class PayrollTypeDetailView(generic.DetailView):
+    model = PayrollType
+    template_name = "HumanResources/payroll-type-detail.html"
+
+    def get_queryset(self):
+        result = super(PayrollTypeDetailView, self).get_queryset()
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(PayrollTypeDetailView, self).get_context_data(**kwargs)
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(PayrollTypeDetailView, self).dispatch(request, args, kwargs)
+
 
 
 

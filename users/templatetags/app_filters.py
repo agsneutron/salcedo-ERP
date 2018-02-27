@@ -98,3 +98,4 @@ def intcomma(value, use_l10n=True):
         return new
     else:
         return intcomma(new, use_l10n)
+

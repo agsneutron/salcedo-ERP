@@ -1244,10 +1244,58 @@ class PayrollToProcessAdmin(admin.ModelAdmin):
     form = PayrollToProcessForm
 
 
+
+# Employee Exclusion from Period Admin.
+@admin.register(EmployeePayrollPeriodExclusion)
+class EmployeePayrollPeriodExclusionAdmin(admin.ModelAdmin):
+    form = EmployeePayrollPeriodExclusionForm
+
+
 # Payroll Type Admin.
 @admin.register(PayrollType)
 class PayrollTypeAdmin(admin.ModelAdmin):
     form = PayrollTypeForm
+
+    fieldsets = (
+            ("Tipos de Nómina", {
+                'fields': ('name',)
+            }),
+        )
+
+    list_display = (
+        'name', 'get_detail_button', 'get_change_link', 'get_delete_link',)
+
+    def get_detail_button(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_detail_button.allow_tags = True
+    get_detail_button.short_description = 'Detalle'
+
+    get_change_link.allow_tags = True
+    get_change_link.short_description = 'Editar'
+
+    get_delete_link.allow_tags = True
+    get_delete_link.short_description = 'Eliminar'
+
+
+    def get_urls(self):
+        urls = super(PayrollTypeAdmin, self).get_urls()
+
+        my_urls = [
+            # url(r'^$',
+            #    self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
+            #    name='progressestimatelog-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.PayrollTypeDetailView.as_view(), name='employee-requisition-detail'),
+
+        ]
+        return my_urls + urls
+
 
 
 # Payroll Type Admin.

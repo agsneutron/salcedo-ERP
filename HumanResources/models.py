@@ -211,6 +211,7 @@ class Employee(models.Model):
     def get_full_name(self):
         return self.name + " " + self.first_last_name + " " + self.second_last_name
 
+
     def __str__(self):
         return self.employee_key + ": " + self.name + " " + self.first_last_name + " " + self.second_last_name
 
@@ -1163,7 +1164,7 @@ class EmployeeEarningsDeductions(models.Model):
 
 
 class PayrollType(models.Model):
-    name = models.CharField(verbose_name="Tipo de Nómina", null=False, blank=False, max_length=30, )
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
 
     class Meta:
         verbose_name_plural = "Tipo de Nómina"
@@ -1231,6 +1232,10 @@ class PayrollPeriod(models.Model):
     start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
 
+
+    exclusions = models.ManyToManyField('Employee', through='EmployeePayrollPeriodExclusion',through_fields=('payroll_period', 'employee',),)
+
+
     class Meta:
         verbose_name_plural = "Periodos de Nómina"
         verbose_name = "Periodos de Nómina"
@@ -1240,6 +1245,16 @@ class PayrollPeriod(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
+
+
+
+class EmployeePayrollPeriodExclusion(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
+
+    class Meta:
+        unique_together = (("employee", "payroll_period"),)
+
 
 
 class EmployeeLoanDetail(models.Model):
