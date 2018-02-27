@@ -336,7 +336,6 @@ class InfonavitDataForm(forms.ModelForm):
         model = InfonavitData
         fields = '__all__'
 
-
     def __init__(self, *args, **kwargs):
 
         self.request = kwargs.pop('request', None)
@@ -704,6 +703,13 @@ class EmployeeLoanForm(forms.ModelForm):
 
 
 # Form to include the fields of Tag Form.
+class EmployeeRequisitionForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeRequisition
+        fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
 class JobProfileForm(forms.ModelForm):
     class Meta:
         model = JobProfile
@@ -768,4 +774,3 @@ class EmployeeDropOutForm(forms.ModelForm):
     class Meta:
         model = EmployeeDropOut
         fields = '__all__'
-       

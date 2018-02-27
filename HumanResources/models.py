@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 # Django Libraries.
 from tinymce import models as tinymce_models
 
+from django.contrib.auth.models import User
+
 from django.core.checks import messages
 from django.db import models
 from django.db.models.query_utils import Q
@@ -24,6 +26,7 @@ from utilities import getParameters
 from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
 from django.db.models import Sum
+
 
 # To represent ISRTable.
 class ISRTable(models.Model):
@@ -148,7 +151,7 @@ class Employee(models.Model):
 
     social_security_number = models.CharField(verbose_name="Número de Seguro Social", max_length=20, null=False,
                                               blank=False)
-    #social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
+    # social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
 
     colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
@@ -773,7 +776,6 @@ class UploadedEmployeeAssistanceHistory(models.Model):
                                sort=True,
                                unique=True)'''
 
-
     payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
     assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
                                        verbose_name="Archivo de Asistencias")
@@ -814,6 +816,43 @@ class EmployeeLoan(models.Model):
         return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 
+class EmployeeRequisition(models.Model):
+    direction = models.ForeignKey('Direction', verbose_name='Dirección', null=False, blank=False)
+    subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección', null=False, blank=False)
+    area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
+    department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
+
+
+
+    description = models.CharField(verbose_name="Descripción", max_length=256, null=False, blank=False,
+                           unique=False)
+
+    vacancy_number = models.IntegerField(verbose_name='Número de Vacantes', null=False, default=1,
+                                         validators={MinValueValidator(1)})
+
+    minimum_requirements = tinymce_models.HTMLField(verbose_name='Requisitos Mínimos', null=True, blank=True,
+                                                    max_length=4096)
+    characteristics = tinymce_models.HTMLField(verbose_name='Características del Puesto', null=True, blank=True,
+                                               max_length=4096)
+
+
+    user = models.ForeignKey(User, verbose_name="Solicitado por:", null=True, blank=True)
+
+
+
+    def __str__(self):
+        return self.description
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.description
+
+
+    class Meta:
+        verbose_name = "Requisición de Personal"
+        verbose_name_plural = "Requisiciones de Personal"
+
+
+
 # To represent a Job Profile.
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
@@ -845,8 +884,10 @@ class JobProfile(models.Model):
     subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección', null=False, blank=False)
     area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
     department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
-    minimumsalary = models.DecimalField(verbose_name='Salario Mínimo', max_digits=20, decimal_places=2, null=True,default=0.0)
-    maximumsalary = models.DecimalField(verbose_name='Salario Máximo', max_digits=20, decimal_places=2, null=True,default=0.0)
+    minimumsalary = models.DecimalField(verbose_name='Salario Mínimo', max_digits=20, decimal_places=2, null=True,
+                                        default=0.0)
+    maximumsalary = models.DecimalField(verbose_name='Salario Máximo', max_digits=20, decimal_places=2, null=True,
+                                        default=0.0)
 
     class Meta:
         verbose_name_plural = "Perfiles de Puesto"
@@ -976,6 +1017,7 @@ class EmployeePositionDescription(models.Model):
 
     job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
     contract = models.CharField(verbose_name="Contrato", null=False, blank=False, max_length=45)
+
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
 
 
@@ -1217,27 +1259,29 @@ class EmployeeLoanDetail(models.Model):
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
-        unique_together = ('employeeloan','period',)
+        unique_together = ('employeeloan', 'period',)
 
     def delete(self):
         payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
                                                               payroll_period_id=self.period.id)
-        existReceipt=0
+        existReceipt = 0
         for pE in payrollExist:
-            existReceipt=1
+            existReceipt = 1
         if existReceipt == 0:
             delModel = EmployeeEarningsDeductionsbyPeriod()
             delModel.deleteFromEmployeeLoanDetail(self)
             super(EmployeeLoanDetail, self).delete()
 
     def save(self, *args, **kwargs):
-        total=EmployeeLoanDetail.objects.values('employeeloan__id').filter(employeeloan_id=self.employeeloan.id).annotate(total=Sum('amount')).exclude(id=self.id)
-        sumTotal =0
+        total = EmployeeLoanDetail.objects.values('employeeloan__id').filter(
+            employeeloan_id=self.employeeloan.id).annotate(total=Sum('amount')).exclude(id=self.id)
+        sumTotal = 0
         for tot in total:
             sumTotal += tot['total']
 
-        payrollExist=PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,payroll_period_id=self.period.id)
-        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count()==0:
+        payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
+                                                              payroll_period_id=self.period.id)
+        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count() == 0:
             modelo = EmployeeEarningsDeductionsbyPeriod()
             modelo.create(self)
             super(EmployeeLoanDetail, self).save(*args, **kwargs)
@@ -1333,7 +1377,7 @@ class PayrollReceiptProcessed(models.Model):
     taxed = models.DecimalField(verbose_name="Grabado", null=True, blank=True, max_digits=20, decimal_places=2)
     exempt = models.DecimalField(verbose_name="Excento", null=True, blank=True, max_digits=20, decimal_places=2)
     daily_salary = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
-                                      decimal_places=2)
+                                       decimal_places=2)
     total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=True, blank=True,
                                              max_digits=20, decimal_places=2)
     total_discounts = models.DecimalField(verbose_name="Total de Descuentos", null=True, blank=True, max_digits=20,
