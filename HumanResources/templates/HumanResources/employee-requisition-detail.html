@@ -1,0 +1,36 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block extrastyle %}{{ block.super }}
+
+{% endblock %}
+{% block content %}
+
+
+   <div>Dirección: {{ object.direction }}</div>
+    <div>Subdirección: {{ object.subdirection }}</div>
+    <div>Area: {{ object.area }}</div>
+    <div>Departamento: {{ object.department }}</div>
+    <div>Descripción: {{ object.description }}</div>
+
+
+    <div>Número de Vacantes: {{ object.vacancy_number }}</div>
+
+    <div>Requerimientos mínimos: <strong>Esto se tiene que ver con viñetas y listas numeradas</strong> <br></div>
+    <div>{{ object.minimum_requirements | safe }}</div>
+    <div>Características del Puesto: <strong>Esto se tiene que ver con viñetas y listas numeradas</strong>  <br>
+    {{ object.characteristics | safe }}</div>
+
+
+
+    <div>Solicitado por: {{ object.user.first_name }} {{ object.user.last_name }}</div>
+
+{% endblock %}
+
+
+
+
