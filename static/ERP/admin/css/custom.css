@@ -722,17 +722,7 @@ dt {
     line-height: 1;
 }
 
-.errorlist {
-        position: relative;
-    top: 0px;
-    right: 2px;
-    font-size: 10px;
-    /* width: 100%; */
-    /* text-align: right; */
-    /* list-style: none; */
-    color: #ff0000;
-    line-height: 16px;
-}
+
 
 @media (min-width: 768px) {
 
@@ -1687,6 +1677,20 @@ errors > input {
     text-align: center;
 }
 
+.field-get_detail_button {
+    width: 5% !important;
+    text-align: center;
+}
+
+.field-get_change_link {
+    width: 5% !important;
+    text-align: center;
+}
+
+.field-get_delete_link {
+    width: 5% !important;
+    text-align: center;
+}
 .dias-fields {
 
     text-align: center;
@@ -1741,4 +1745,43 @@ display: -webkit-inline-box;
     left: inherit !important;
     z-index: 9;
     top: 3px !important;
+}
+
+.errorlist {
+position: absolute !important;
+    bottom: -25px !important;
+    right: 15px !important;
+    font-size: 10px;
+    color: #ff0000 !important;
+}
+
+.btn-excel {
+    background-color: #207245 !important;
+    color: white !important;
+}
+.file-upload a {
+    max-width: 248px;
+    word-wrap: break-word;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    color: #337ab7;
+    display: block;
+}
+.errorlist.nonfield{
+        position: inherit !important;
+    /* bottom: 0; */
+    /* right: 15px !important; */
+    font-size: 12px;
+    color: #ff0000 !important;
+    top: 0;
+    text-align: center;
+    border: 0px solid;
+}
+.errorlist.nonfield li {
+    text-align: center;
+}
+.hide {
+    display: none;
 }
