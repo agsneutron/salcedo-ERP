@@ -113,7 +113,8 @@
         </div>
     </header>
     <!-- End Header -->
-    <!-- begins navigation -- request.resolver_match.view_name }}---->
+
+{% comment %}{{ request.resolver_match.view_name }}{% endcomment %}
 
     {% if user.is_active and user.is_staff %}
         <nav class="navbar  yamm ms-navbar ms-navbar-primary">
@@ -317,7 +318,7 @@
 
 
 
-                                {% if request.resolver_match.view_name in "admin:HumanResources_jobprofile_add,admin:HumanResources_jobprofile_change,admin:HumanResources_jobprofile_changelist,admin:HumanResources_employee_add,admin:HumanResources_payrollgroup_add,admin:HumanResources_employee_changelist,admin:HumanResources_payrollperiod_add,admin:HumanResources_earningsdeductions_add,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_employeeloan_add,admin:HumanResources_employeedropout_add,admin:HumanResources_employeehastag_changelist,admin:HumanResources_testapplication_changelist,admin:employee-detail,admin:HumanResources_jobprofile_add,admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
+                                {% if request.resolver_match.view_name in "admin:HumanResources_jobprofile_add,admin:HumanResources_jobprofile_change,admin:HumanResources_jobprofile_changelist,admin:HumanResources_employee_add,admin:HumanResources_payrollgroup_add,admin:HumanResources_employee_changelist,admin:HumanResources_payrollperiod_add,admin:HumanResources_earningsdeductions_add,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_employeeloan_add,admin:HumanResources_employeedropout_add,admin:HumanResources_employeehastag_changelist,admin:HumanResources_testapplication_changelist,admin:employee-detail,admin:HumanResources_jobprofile_add,admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete,admin:HumanResources_payrollgroup_changelist,admin:HumanResources_payrollgroup_add,admin:HumanResources_payrollperiod_add,admin:HumanResources_payrollperiod_changelist,admin:HumanResources_payrolltype_add,admin:HumanResources_payrolltype_changelist,admin:HumanResources_earningsdeductions_add,admin:HumanResources_earningsdeductions_changelist,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_uploadedemployeeassistancehistory_changelist,admin:HumanResources_employeeloan_add,admin:HumanResources_employeeloan_changelist,admin:HumanResources_employeedropout_add,admin:HumanResources_employeedropout_changelist"|slice:"," %}{{ "active" }}{% endif %}">
 
                             {% if perms.auth.change_user or  perms.HumanResources.change_payrollperiod or perms.HumanResources.change_employee %}
                                 <a href="#" class="dropdown-toggle "

@@ -65,6 +65,8 @@ $(function () {
     if (/fiscalperiod/.test(window.location.href)) {
         $('#e7>a').addClass('active');
         $('#e7>a').removeClass('collapsed');
+          $('#e2>a').removeClass('active');
+ $('#e2>a').addClass('collapsed withripple');
     }
 });
 
