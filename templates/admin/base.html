@@ -116,7 +116,7 @@
 
 
 
-{{ request.resolver_match.view_name }}
+{% comment %}{{ request.resolver_match.view_name }}{% endcomment %}
 
 
 
@@ -498,27 +498,19 @@
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
 
                             </a>
-                            <ul id="op_contratista"
-                                class="dropdown-menu dropdown-menu-left">
-
-
-                                <li>
-                                    <a href="/admin/Accounting/fiscalperiod/">Periodos Fiscales</a>
-                                </li>
-                                <li>
-                                    <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
-                                </li>
+                            <ul id="op_contratista" class="dropdown-menu dropdown-menu-left">
+                                 <li><a href="/admin/Accounting/accountingpolicy/">Pólizas</a></li>
+                                <li><a href="/admin/SharedCatalogs/account/">Cuentas Contables</a></li>
+                                <li><a href="/accounting/searchprovider/">Proveedores</a></li>
+                                <li><a href="/accounting/searchcreditors/">Acreedores</a></li>
+                                <li><a href="/accounting/searchthird/">Terceros</a></li>
+                                <li><a href="/admin/Accounting/fiscalperiod/">Periodo Fiscal</a></li>
+                                <li><a href="/admin/Accounting/typepolicy/">Tipo de Póliza</a></li>
+                                <li><a href="/admin/SharedCatalogs/bank/">Bancos</a></li>
+                                <li><a href="/accounting/searchtransactions/">Reportes</a></li>
                             </ul>
                         </li>
-                        <li id="op_reportes" class="dropdown
-
-
-
-
-
-
-
-                                {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li id="op_reportes" class="dropdown {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
