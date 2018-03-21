@@ -70,6 +70,7 @@ class AssistanceDBObject:
 
     # Function to process the given records one at a time.
     def process_records(self):
+        self.records.pop(0)
         for record in self.records:
             self.save_assistance_record(record)
 
