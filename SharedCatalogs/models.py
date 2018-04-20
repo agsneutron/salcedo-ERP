@@ -131,14 +131,14 @@ class ItemAccount(models.Model):
     name = models.CharField(verbose_name="Nombre del Rubro", max_length=100, )
 
     def __str__(self):
-        return str(self.grouping_code) + ": " + self.account_name
+        return str(self.key) + ": " + self.name
 
     def __unicode__(self):  # __unicode__ on Python 2
         return str(self.key) + ": " + self.name
 
     class Meta:
-        verbose_name_plural = 'Rubros'
-        verbose_name = 'Rubro'
+        verbose_name_plural = 'Rubros de Cuentas'
+        verbose_name = 'Rubro de Cuenta'
 
 
 class Account(models.Model):

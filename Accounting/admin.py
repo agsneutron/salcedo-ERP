@@ -16,7 +16,7 @@ from django.http.response import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 
 # Shared Catalogs Imports.
-from SharedCatalogs.models import GroupingCode, Account
+from SharedCatalogs.models import GroupingCode, Account,ItemAccount
 
 
 
@@ -356,6 +356,32 @@ class CommercialAllyAdmin(admin.ModelAdmin):
         # redirect_url = "/admin/Accounting/commercialally/" + str(obj.id) + "/change/?type=" + request.GET.get('type')
         redirect_url = "/admin/Accounting/commercialally/" + str(obj.id)
         return HttpResponseRedirect(redirect_url)
+
+
+@admin.register(ItemAccount)
+class ItemAccountAdmin(admin.ModelAdmin):
+
+    fieldsets = (
+        ("Rubro de Cuenta", {
+            'fields': (
+                'key', 'name',)
+        }),
+    )
+
+    list_display = ('key', 'name', 'get_change_column', 'get_delete_column')
+    search_fields = ('name',)
+
+    def get_change_column(self, obj):
+        return AccountingAdminUtilities.get_change_link(obj)
+
+    def get_delete_column(self, obj):
+        return AccountingAdminUtilities.get_delete_link(obj)
+
+    get_change_column.short_description = 'Editar'
+    get_change_column.allow_tags = True
+
+    get_delete_column.short_description = 'Eliminar'
+    get_delete_column.allow_tags = True
 
 
 @admin.register(Account)
