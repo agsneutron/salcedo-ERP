@@ -2106,7 +2106,7 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
             'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
         }),
     )
-    '''
+
     def get_detail_column(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
