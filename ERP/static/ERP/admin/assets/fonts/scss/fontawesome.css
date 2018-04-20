@@ -1,0 +1,61 @@
+/*
+Error: File to import not found or unreadable: bordered-pulled.
+        on line 11 of fontawesome.scss
+
+6: @import 'mixins';
+7: @import 'core';
+8: @import 'larger';
+9: @import 'fixed-width';
+10: @import 'list';
+11: @import 'bordered-pulled';
+12: @import 'animated';
+13: @import 'rotated-flipped';
+14: @import 'stacked';
+15: @import 'icons';
+16: @import 'screen-reader';
+
+Backtrace:
+fontawesome.scss:11
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/import_node.rb:67:in `rescue in import'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/import_node.rb:45:in `import'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/import_node.rb:28:in `imported_file'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/import_node.rb:37:in `css_import?'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:313:in `visit_import'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/base.rb:36:in `visit'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:160:in `block in visit'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/stack.rb:79:in `block in with_base'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/stack.rb:115:in `with_frame'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/stack.rb:79:in `with_base'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:160:in `visit'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/base.rb:52:in `map'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/base.rb:52:in `visit_children'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:169:in `block in visit_children'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:181:in `with_environment'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:168:in `visit_children'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/base.rb:36:in `block in visit'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:188:in `visit_root'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/base.rb:36:in `visit'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:159:in `visit'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/visitors/perform.rb:8:in `visit'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/root_node.rb:36:in `css_tree'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/engine.rb:381:in `_render_with_sourcemap'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/engine.rb:298:in `render_with_sourcemap'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/plugin/compiler.rb:492:in `update_stylesheet'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/plugin/compiler.rb:209:in `each'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/plugin.rb:82:in `update_stylesheets'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/exec/sass_scss.rb:340:in `watch_or_update'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/exec/base.rb:52:in `parse'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/lib/sass/exec/base.rb:19:in `parse!'
+/usr/local/lib/ruby/gems/2.3.0/gems/sass-3.4.24/bin/scss:13:in `<top (required)>'
+/usr/local/bin/scss:23:in `load'
+/usr/local/bin/scss:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: File to import not found or unreadable: bordered-pulled.\A         on line 11 of fontawesome.scss\A \A 6: @import 'mixins';\A 7: @import 'core';\A 8: @import 'larger';\A 9: @import 'fixed-width';\A 10: @import 'list';\A 11: @import 'bordered-pulled';\A 12: @import 'animated';\A 13: @import 'rotated-flipped';\A 14: @import 'stacked';\A 15: @import 'icons';\A 16: @import 'screen-reader';"; }
