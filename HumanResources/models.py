@@ -150,9 +150,9 @@ class Employee(models.Model):
                                       blank=False)
     work_email = models.CharField(verbose_name="Correo Electrónico Laboral", max_length=255, null=False, blank=False)
 
-    social_security_number = models.CharField(verbose_name="Número de Seguro Social", max_length=20, null=False,
+    social_security_number = models.CharField(verbose_name="Número de Póliza de Seguro", max_length=20, null=False,
                                               blank=False)
-    # social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
+    social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
 
     colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
