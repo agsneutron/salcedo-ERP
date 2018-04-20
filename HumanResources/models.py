@@ -872,6 +872,13 @@ class JobProfile(models.Model):
                                    unique=False)
     experience = models.TextField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
                                   unique=False)
+
+    jobdescription = models.TextField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
+                                   unique=False)
+    minimumrequirements = models.TextField(verbose_name="Requisitos mínimos", max_length=2048, null=False, blank=True,
+                                  unique=False)
+
+
     entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
     exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
     sunday = models.BooleanField(verbose_name="Domingo", default=False)

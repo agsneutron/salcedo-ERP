@@ -1932,7 +1932,7 @@ class JobProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Perfil de Puesto", {
             'fields': (
-                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience', 'entry_time',
+                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience','jobdescription','minimumrequirements', 'entry_time',
                 'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
                 'subdirection', 'area', 'department', 'minimumsalary', 'maximumsalary')
         }),
