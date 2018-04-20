@@ -167,21 +167,22 @@
                                     {% if cl.search_fields %}
                                     <div id="toolbar">
                                         <form id="changelist-search" method="get">
-                                            <div class="row" id="divText">
 
-                                            </div>
+
+                                            <input type="checkbox" name="cbTagsName" id="cbTags" value="" hidden />
 
                                             <div class="col-xs-3 col-xs-offset-3" id="divTags">
 
                                             </div>
                                             <div class="col-xs-3 col-xs-offset-3"><!-- DIV needed for valid HTML -->
-                                                <input type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" class="form-control"/>
+                                                <input type="text" name="q" value="{{ cl.query }}" id="searchbar" class="form-control"/>
                                                 <span class="input-group-btn absolute-l button-buscar">
                                                     <button type="submit" value="{% trans 'Search' %}" class="btn btn-fab btn-fab-mini">
                                                         <i class="material-icons">search</i>
                                                     </button>
                                                 </span>
                                             </div>
+
 
                                            {% comment %} <div class="col-xs-2">
                                                 {% if show_result_count %}

@@ -33,16 +33,16 @@ function main_consulta() {
 
 }
 
-
 $(function() {
 
   $('#tags').on('change', function(){
 
 
-       var values=$("#tags").val();
+       //var values=$("#tags").val();
         alert(values);
-       //$('#inputtags').val(values.toString());
-       $('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
+
+       //$('#cbTags').val(values.toString());
+       //$('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
   });
 
 });

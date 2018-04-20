@@ -34,7 +34,7 @@
     <script src="{% static "ERP/admin/js/jquery.min.js" %}"></script>
 
 
-    <link href="/static/admin/img/favicon_.ico" type="image/x-icon" rel="shortcut icon"/>
+    <link href="{% static "ERP/admin/img/favicon.ico" %}" type="image/x-icon" rel="shortcut icon"/>
 
     <!-- Bootstrap Library css -->
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/assets/fonts/css/font-awesome.css" %}"/>
@@ -352,7 +352,7 @@
                                 {% endif %}
 
 
-                                {% if perms.HumanResources.change_employee %}
+                                {% comment %}{% if perms.HumanResources.change_employee %}
                                     <li class="dropdown-submenu">
                                         <a href="#" class="has_children">
                                             <i class="zmdi zmdi-view-dashboard"></i>Empleados</a>
@@ -366,7 +366,7 @@
                                             </li>
                                         </ul>
                                     </li>
-                                {% endif %}
+                                {% endif %}{% endcomment %}
 
 
                                 {% if perms.HumanResources.change_payrollperiod %}
@@ -377,23 +377,26 @@
 
                                         <ul class="dropdown-menu dropdown-menu-left">
                                             <li>
-                                                <a href="/admin/HumanResources/payrollgroup/add/">Generar Grupo</a>
+                                                <a href="/admin/HumanResources/payrollgroup/">Grupos de Nómina</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/payrollperiod/add/">Generar Periodo</a>
+                                                <a href="/admin/HumanResources/payrollperiod/">Periodos de Nómina</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/earningsdeductions/add/">Percepciones y
+                                                <a href="/admin/HumanResources/employee/">Empleados</a>
+                                            </li>
+                                            <li>
+                                                <a href="/admin/HumanResources/earningsdeductions/">Percepciones y
                                                     Deducciones</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/uploadedemployeeassistancehistory/add/">Asistencias</a>
+                                                <a href="/admin/HumanResources/uploadedemployeeassistancehistory/">Asistencias</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/employeeloan/add/">Préstamos</a>
+                                                <a href="/admin/HumanResources/employeeloan/">Préstamos</a>
                                             </li>
                                             <li>
-                                                <a href="/admin/HumanResources/employeedropout/add/">Bajas</a>
+                                                <a href="/admin/HumanResources/employeedropout/">Bajas</a>
                                             </li>
                                             {% comment %}<li>
                                                 <a href="/admin/HumanResources/employee/">Consultar</a>

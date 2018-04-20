@@ -29,23 +29,23 @@ function main_consulta() {
 
     callGetTags();
 
+  $j('#tags').on('change', function(){
 
+
+       //var values=$("#tags").val();
+        alert(values);
+
+       //$('#cbTags').val(values.toString());
+       //$('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
+  });
 
 }
 
 
-$(function() {
-
-  $('#tags').on('change', function(){
 
 
-       var values=$("#tags").val();
-        alert(values);
-       //$('#inputtags').val(values.toString());
-       $('#divText').html('<input type="text" name="inputtags" id="inputtags" hidden values="' + values.toString() + '">');
-  });
 
-});
+
 
 function valores_tags(){
 alert("Hola");

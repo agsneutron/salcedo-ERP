@@ -113,7 +113,6 @@ class HumanResourcesAdminUtilities():
         return '<a href="' + link + anchor + '" class="' + css + '" >' + button + '</a>'
 
 
-
 # Employee Admin.
 @admin.register(Employee)
 class EmployeeAdmin(admin.ModelAdmin):
@@ -138,13 +137,12 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
-
-
     def get_search_results(self, request, queryset, search_term):
 
         keywords = search_term.split(" ")
-        tags = views.get_array_or_none(request.GET.get("msTags"))
-        if search_term is None or search_term == "" :
+        # tags = views.get_array_or_none(request.GET.get("tags"))
+        tags = request.GET.get("tags")
+        if search_term is None or search_term == "":
             return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
 
         r = Employee.objects.none()
@@ -308,9 +306,8 @@ class CurrentEducationAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Formación Académica Actual", {
             'fields': (
-                'type', 'name', 'institution', 'employee', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday',
-                'friday',
-                'saturday',)
+            'type', 'name', 'institution', 'employee', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday',
+            'saturday',)
         }),
     )
 
@@ -1394,10 +1391,58 @@ class PayrollToProcessAdmin(admin.ModelAdmin):
     form = PayrollToProcessForm
 
 
+
+# Employee Exclusion from Period Admin.
+@admin.register(EmployeePayrollPeriodExclusion)
+class EmployeePayrollPeriodExclusionAdmin(admin.ModelAdmin):
+    form = EmployeePayrollPeriodExclusionForm
+
+
 # Payroll Type Admin.
 @admin.register(PayrollType)
 class PayrollTypeAdmin(admin.ModelAdmin):
     form = PayrollTypeForm
+
+    fieldsets = (
+            ("Tipos de Nómina", {
+                'fields': ('name',)
+            }),
+        )
+
+    list_display = (
+        'name', 'get_detail_button', 'get_change_link', 'get_delete_link',)
+
+    def get_detail_button(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_detail_button.allow_tags = True
+    get_detail_button.short_description = 'Detalle'
+
+    get_change_link.allow_tags = True
+    get_change_link.short_description = 'Editar'
+
+    get_delete_link.allow_tags = True
+    get_delete_link.short_description = 'Eliminar'
+
+
+    def get_urls(self):
+        urls = super(PayrollTypeAdmin, self).get_urls()
+
+        my_urls = [
+            # url(r'^$',
+            #    self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
+            #    name='progressestimatelog-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.PayrollTypeDetailView.as_view(), name='employee-requisition-detail'),
+
+        ]
+        return my_urls + urls
+
 
 
 # Payroll Type Admin.
@@ -1640,7 +1685,7 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         allowed_minutes = 15
 
         if (arrived_minutes_late > allowed_minutes and checks_entry == True) or (
-                        left_minutes_early > allowed_minutes and checks_exit == True):
+                left_minutes_early > allowed_minutes and checks_exit == True):
             absent = True
 
         obj.absence = absent
@@ -1786,7 +1831,7 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
             'fields': ('employee', 'amount', 'payment_plan', 'request_date')
         }),
     )
-
+    '''
     def get_detail_column(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
@@ -1813,6 +1858,7 @@ class EmployeeLoanAdmin(admin.ModelAdmin):
             url(r'^(?P<pk>\d+)/$', views.EmployeeLoanDetail.as_view(), name='employeeloan-detail'),
         ]
         return my_urls + urls
+    '''
 
 
 # JobProfile Admin.
@@ -1854,6 +1900,65 @@ class SubdirectionAdmin(admin.ModelAdmin):
                 'name',)
         }),
     )
+
+
+# Loan Admin.
+@admin.register(EmployeeRequisition)
+class EmployeeRequisitionAdmin(admin.ModelAdmin):
+    form = EmployeeRequisitionForm
+
+    fieldsets = (
+        ("Requisición", {
+            'fields': (
+                'direction', 'subdirection', 'area', 'department', 'description', 'vacancy_number',
+                'minimum_requirements', 'characteristics',)
+        }),
+    )
+
+    search_fields = ('description','subdirection__name','area__name','department__name',)
+    #'name', 'direction', 'subdirection', 'area', 'department', 'description',
+                #'minimum_requirements', 'characteristics',)
+
+    list_display = (
+        'description', 'area', 'department', 'get_detail_button', 'get_change_link', 'get_delete_link',)
+
+    def get_detail_button(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+    def get_change_link(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link(obj)
+
+    def get_delete_link(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+    get_detail_button.allow_tags = True
+    get_detail_button.short_description = 'Detalle'
+
+    get_change_link.allow_tags = True
+    get_change_link.short_description = 'Editar'
+
+    get_delete_link.allow_tags = True
+    get_delete_link.short_description = 'Eliminar'
+
+
+    def get_urls(self):
+        urls = super(EmployeeRequisitionAdmin, self).get_urls()
+
+        my_urls = [
+            # url(r'^$',
+            #    self.admin_site.admin_view(ProgressEstimateLogListView.as_view()),
+            #    name='progressestimatelog-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.EmployeeRequisitionDetailView.as_view(), name='employee-requisition-detail'),
+
+        ]
+        return my_urls + urls
+
+
+    def save_model(self, request, obj, form, change):
+
+        obj.user = request.user
+
+        return super(EmployeeRequisitionAdmin, self).save_model(request, obj, form, change);
 
 
 # Loan Admin.
@@ -1909,6 +2014,7 @@ class JobInstanceAdmin(admin.ModelAdmin):
 
         return super(JobInstanceAdmin, self).response_delete(request, obj_display, obj_id)
 
+
 # EmployeeDropOut Administrator
 @admin.register(EmployeeDropOut)
 class EmployeeDropOutAdmin(admin.ModelAdmin):
@@ -1919,7 +2025,7 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
             'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
         }),
     )
-
+    '''
     def get_detail_column(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
@@ -1946,7 +2052,7 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
             url(r'^(?P<pk>\d+)/$', views.EmployeeDropOutDetail.as_view(), name='employeedropout-detail'),
         ]
         return my_urls + urls
-
+    '''
     # To redirect after add
     def response_add(self, request, obj, post_url_continue=None):
         employee = obj.employee
