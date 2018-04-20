@@ -1677,6 +1677,20 @@ errors > input {
     text-align: center;
 }
 
+.field-get_detail_button {
+    width: 5% !important;
+    text-align: center;
+}
+
+.field-get_change_link {
+    width: 5% !important;
+    text-align: center;
+}
+
+.field-get_delete_link {
+    width: 5% !important;
+    text-align: center;
+}
 .dias-fields {
 
     text-align: center;

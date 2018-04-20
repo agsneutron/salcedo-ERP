@@ -1,7 +1,42 @@
 $(function () {
+    if (/accountingpolicy\/+add/.test(window.location.href)) {
+         $('#e1>a').removeClass('active');
+        $('#e1>a').addClass('collapsed withripple');
+
+        $('#e2>a').addClass('active');
+        $('#e2>a').removeClass('collapsed');
+
+
+    }
+
+});
+$(function () {
+    if (/searchpolicies/.test(window.location.href)) {
+        $('#e2>a').addClass('active');
+        $('#e2>a').removeClass('collapsed');
+
+        $('#e1>a').removeClass('active');
+        $('#e1>a').addClass('collapsed withripple');
+    }
+
+});
+$(function () {
+    if (/accountingpolicy/.test(window.location.href)) {
+        $('#e2>a').addClass('active');
+        $('#e2>a').removeClass('collapsed');
+
+        $('#e1>a').removeClass('active');
+        $('#e1>a').addClass('collapsed withripple');
+    }
+
+});
+
+$(function () {
     if (/searchthird/.test(window.location.href)) {
         $('#e5>a').addClass('active');
         $('#e5>a').removeClass('collapsed');
+
+
     }
 
 });
@@ -10,6 +45,8 @@ $(function () {
     if (/\?+type=2/.test(window.location.href)) {
         $('#e5>a').addClass('active');
         $('#e5>a').removeClass('collapsed');
+
+
     }
 });
 
@@ -21,6 +58,12 @@ $(function () {
     }
 });
 
+$(function () {
+    if (/SharedCatalogs\/+account/.test(window.location.href)) {
+        $('#e1>a').removeClass('collapsed');
+        $('#e1>a').addClass('active');
+    }
+});
 $(function () {
     if (/account\/+add/.test(window.location.href)) {
         $('#e1>a').removeClass('collapsed');
@@ -65,6 +108,9 @@ $(function () {
     if (/fiscalperiod/.test(window.location.href)) {
         $('#e7>a').addClass('active');
         $('#e7>a').removeClass('collapsed');
+
+        $('#e2>a').removeClass('active');
+        $('#e2>a').addClass('collapsed withripple');
     }
 });
 

@@ -1,4 +1,9 @@
 {% load app_filters %}
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 
 <style>
     .header {
@@ -20,6 +25,43 @@
     .vLargeTextField, .vXMLLargeTextField {
     width: 100%;
 }
+
+   .bootstrap-select {
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+    line-height: 1.42857;
+    border: 1px solid #e2e2e2;
+    width: 100% !important;
+    color: black;
+    }
+    .bootstrap-select>button {
+        color: black !important;
+    position: inherit !important;
+    padding: 0px 5px !important;
+    margin: 0 !important;
+    }
+    .bootstrap-select.btn-group .dropdown-toggle .caret {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -2px;
+    vertical-align: middle;
+}
+    .bootstrap-select.btn-group .dropdown-menu {
+    height: 200px !important;
+}
+    .bootstrap-select.btn-group .dropdown-menu li a {
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    /* word-break: keep-all; */
+    word-wrap: break-word;
+    white-space: normal;
+}
+
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -82,10 +124,15 @@
         $('.field-comments>div').removeClass('col-xs-4');
         $('.field-comments>div').addClass('col-xs-12');
 
-          var d = document.getElementById("id_account");
+    });
 
-        d.attr("data-live-search", "true");
-        d.attr("data-width", "auto");
+</script>
+<script>
+    if (document.getElementById("id_account")){
+        var d = document.getElementById("id_account");
+
+        d.setAttribute("data-live-search", "true");
+        d.setAttribute("data-width", "auto");
 
 
         $("#id_account").addClass("selectpicker");
@@ -93,17 +140,7 @@
             style: 'btn-info',
             size: 4
         });
-
-         var b = document.querySelector("id_account>div>select");
-        $(".field-account>div>select").addClass("selectpicker");
-        b.setAttribute("data-live-search", "true");
-        $(".field-account>div>select").selectpicker({
-            style: "btn-info",
-            size: 4,
-            liveSearch:true
-        });
-
-    });
+    }
 
 </script>
 <script>

@@ -7,7 +7,9 @@
 {% endblock %}
 
 {% block extrastyle %}{{ block.super }}
-    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>{% endblock %}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
+ <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+{% endblock %}
 
 {% block coltype %}colM{% endblock %}
 
@@ -22,29 +24,30 @@
             &rsaquo; {% if has_change_permission %}
             <a href="{% url opts|admin_urlname:'changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>{% else %}
             {{ opts.verbose_name_plural|capfirst }}{% endif %}
-            &rsaquo;
-            {% if add %}{% trans 'Add' %} {{ opts.verbose_name }}{% else %}{{ original|truncatewords:"18" }}{% endif %}
+            &rsaquo; {% if add %}{% blocktrans with name=opts.verbose_name %}Add {{ name }}{% endblocktrans %}{% else %}
+            {{ original|truncatewords:"18" }}{% endif %}
         </div>
     {% endblock %}
 {% endif %}
 
 {% block content %}
-
     <div id="content-main">
         {% block object-tools %}
             {% if change %}{% if not is_popup %}
-                <ul class="object-tools">
+               {% comment %} <ul class="object-tools">
                     {% block object-tools-items %}
-                        {% comment %}<li>
-        {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
-        <a href="{% add_preserved_filters history_url %}" class="historylink">{% trans "History" %}</a>
-    </li>
-    {% if has_absolute_url %}<li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>{% endif %}
-{% endcomment %}    {% endblock %}
-                </ul>
+                        <li>
+                            {% url opts|admin_urlname:'history' original.pk|admin_urlquote as history_url %}
+                            <a href="{% add_preserved_filters history_url %}"
+                               class="historylink">{% trans "History" %}</a>
+                        </li>
+                        {% if has_absolute_url %}
+                            <li><a href="{{ absolute_url }}" class="viewsitelink">{% trans "View on site" %}</a></li>
+                        {% endif %}
+                    {% endblock %}
+                </ul>{% endcomment %}
             {% endif %}{% endif %}
         {% endblock %}
-
         <form {% if has_file_field %}enctype="multipart/form-data" {% endif %}action="{{ form_url }}" method="post"
               id="{{ opts.model_name }}_form" novalidate>{% csrf_token %}{% block form_top %}{% endblock %}
             <div>
@@ -60,12 +63,55 @@
                 {% endif %}
 
                 {% block field_sets %}
-                    {% for fieldset in adminform %}
-                        <div style="">
-                            {% include "admin/HumanResources/jobprofile/fieldset.html" %}
-                        </div>
+                    <div class="container">
+                    {% include "admin/HumanResources/employeerequisition-home.html" %}
+                        <div class="col-xs-9">
+                            {% for fieldset in adminform %}
+                                {% include "admin/HumanResources/tag/fieldset.html" %}
+                            {% endfor %}
+                            {% block after_related_objects %}
+                                {% if period %}
+                                <hr>
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Nombre</td>
+                                            <td>Clasificación</td>
+                                            <td>Proyecto</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in period %}
+                                            <tr>
+                                                <td>{{ record.name }}</td>
+                                                <td>{{ record.payroll_classification.name }}</td>
+                                                <td>{{ record.project.nombreProyecto }}</td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/payrollgroup/{{ record.id }}/change/"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-pencil color-default eliminar"></i>
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    <a href="/admin/HumanResources/payrollgroup/{{ record.id }}/delete/"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-trash-o color-danger eliminar"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                              {% endif %}
 
-                    {% endfor %}
+
+                            {% endblock %}
+                        </div>
+                    </div>
                 {% endblock %}
 
                 {% block after_field_sets %}{% endblock %}
@@ -76,28 +122,17 @@
                     {% endfor %}
                 {% endblock %}
 
-                {% block after_related_objects %}{% endblock %}
+
 
                 {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 
                 {% block admin_change_form_document_ready %}
-                    <script type="text/javascript">
-                        (function ($) {
-                            $(document).ready(function () {
-                                $('.add-another').click(function (e) {
-                                    e.preventDefault();
-                                    var event = $.Event('django:add-another-related');
-                                    $(this).trigger(event);
-                                    if (!event.isDefaultPrevented()) {
-                                        showAddAnotherPopup(this);
-                                    }
-                                });
-
-                                {% if adminform and add %}
-                                    $('form#{{ opts.model_name }}_form :input:visible:enabled:first').focus()
-                                {% endif %}
-                            });
-                        })(django.jQuery);
+                    <script type="text/javascript"
+                            id="django-admin-form-add-constants"
+                            src="{% static 'admin/js/change_form.js' %}"
+                            {% if adminform and add %}
+                            data-model-name="{{ opts.model_name }}"
+                            {% endif %}>
                     </script>
                 {% endblock %}
 

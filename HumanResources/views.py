@@ -32,6 +32,8 @@ def get_array_or_none(the_string):
 def employeehome(request):
     return render(request, 'admin/HumanResources/employee-home.html')
 
+def employeerequisitionhome(request):
+    return render(request, 'admin/HumanResources/employeerequisition-home.html')
 
 def payrollhome(request):
     return render(request, 'admin/HumanResources/payroll-home.html')
