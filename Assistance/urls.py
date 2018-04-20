@@ -4,7 +4,7 @@ from Assistance import api
 from DataUpload.dataUpload import *
 import views
 
-app_name = 'DataUpload'
+app_name = 'Assistance'
 
 urlpatterns = [
 

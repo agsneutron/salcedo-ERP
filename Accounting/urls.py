@@ -5,7 +5,7 @@ from Accounting import views
 from django.core.urlresolvers import reverse
 from django.utils.functional import lazy
 
-app_name = 'DataUpload'
+app_name = 'Accounting'
 reverse_lazy = lazy(reverse,str)
 
 urlpatterns = [
