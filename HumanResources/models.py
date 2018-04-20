@@ -875,7 +875,7 @@ class JobProfile(models.Model):
 
     jobdescription = models.TextField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    minimumrequirements = models.TextField(verbose_name="Requisitos mínimos", max_length=2048, null=False, blank=True,
+    minimumrequirements = models.TextField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
                                   unique=False)
 
 
