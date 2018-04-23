@@ -131,7 +131,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         ("Datos Personales", {
             'fields': (
                 'name', 'first_last_name', 'second_last_name', 'birthdate', 'birthplace', 'gender', 'marital_status',
-                'curp', 'rfc', 'tax_regime', 'social_security_number', 'blood_type','street', 'outdoor_number', 'indoor_number', 'colony',
+                'curp', 'rfc', 'tax_regime','social_security_type', 'social_security_number', 'blood_type','street', 'outdoor_number', 'indoor_number', 'colony',
                 'country', 'state', 'town', 'zip_code', 'phone_number', 'cellphone_number', 'office_number',
                 'extension_number', 'personal_email', 'work_email', 'driving_license_number',
                 'driving_license_expiry_date')
@@ -1932,7 +1932,7 @@ class JobProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Perfil de Puesto", {
             'fields': (
-                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience', 'entry_time',
+                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience','jobdescription','minimumrequirements', 'entry_time',
                 'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
                 'subdirection', 'area', 'department', 'minimumsalary', 'maximumsalary')
         }),
@@ -2094,6 +2094,58 @@ class JobInstanceAdmin(admin.ModelAdmin):
             django.contrib.messages.error(request, 'No se puede eliminar la raíz del organigrama.')
 
         return super(JobInstanceAdmin, self).response_delete(request, obj_display, obj_id)
+
+
+
+
+@admin.register(EmployeeContract)
+class EmployeeContractAdmin(admin.ModelAdmin):
+    form = EmployeeContractForm
+
+    fieldsets = (
+        ('Contrato', {
+            'fields': (
+                'employee','contract_key','contract_type',
+                      'start_date','end_date', 'contract_file',
+                'description',)
+        }),
+    )
+
+
+    def get_detail_column(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+
+    def get_detail_column(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+
+    def get_change_column(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
+
+
+    def get_delete_column(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+
+    list_display = ('contract_key', 'employee', 'get_detail_column', 'get_change_column', 'get_delete_column')
+
+    get_detail_column.allow_tags = True
+    get_detail_column.short_description = 'Detalle'
+
+    get_change_column.allow_tags = True
+    get_change_column.short_description = 'Editar'
+
+    get_delete_column.allow_tags = True
+    get_delete_column.short_description = 'Eliminar'
+
+
+    def get_urls(self):
+        urls = super(EmployeeContractAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.EmployeeContractDetail.as_view(), name='employecontract-detail'),
+        ]
+        return my_urls + urls
 
 
 # EmployeeDropOut Administrator

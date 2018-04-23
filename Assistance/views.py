@@ -35,8 +35,5 @@ def assistance_upload_view(request):
         e.save()
         raise e
 
-
-
-
     return HttpResponse('Done')
 
