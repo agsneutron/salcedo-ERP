@@ -119,7 +119,9 @@ dd, dt {
     padding: 0;
     padding-left: 0px !important;
 }
-
+.mceLayout {
+    width: 100% !important;
+}
 .datetimeshortcuts {
     /* text-align: center; */
     position: relative;
