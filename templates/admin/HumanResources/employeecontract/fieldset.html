@@ -8,15 +8,20 @@
     }
 
     .col-xs-4 {
-    min-height: 65px;
+        height: 65px;
     }
-    .col-xs-4 br {
-    display: none !important;
-}
-  .datetimeshortcuts {
 
-    top: -38px !important;
-}
+    .col-xs-4 br {
+        display: none !important;
+    }
+
+    .datetimeshortcuts {
+
+        top: -34px !important;
+    }
+    .mceLayout {
+        width: 100% !important;
+    }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -80,10 +85,10 @@
 <script>
 
     $(document).ready(function () {
-        $('input').addClass('form-control');
-        $('select').addClass('form-control');
+        {#        $('input').addClass('form-control');#}
+        {#        $('select').addClass('form-control');#}
 
-        $('.field-job>div').removeClass('col-xs-6');
-        $('.field-job>div').addClass('col-xs-12');
+        $('.field-description>div').removeClass('col-xs-4');
+        $('.field-description>div').addClass('col-xs-12');
     });
 </script>
