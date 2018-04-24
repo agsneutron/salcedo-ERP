@@ -73,7 +73,11 @@
         <div class="col-xs-12">
 
             <div class="">
-                <h3 class="section-title">{{ fieldset.name }}</h3>
+                {% if tipo == 0 %}
+                    <h3 class="section-title">{{ fieldset.name }}</h3>
+                {% else %}
+                    <h3 class="section-title">Penalizaciones</h3>
+                {% endif %}
                 <hr>
             </div>
         </div>
@@ -88,7 +92,7 @@
 
                 {% for field in line %}
 
-
+                    {% if tipo == 0 %}
                     <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
                          class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
                          class=“checkbox-row”{% endif %}>
@@ -108,6 +112,29 @@
                         {% endif %}
                         {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
                     </div>
+                    {% else %}
+                        {% if field.field.name != "type" %}
+                        <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
+                             class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
+                             class=“checkbox-row”{% endif %}>
+                            {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                            {% if field.is_checkbox %}
+                                {{ field.field }}{{ field.label_tag }}
+                            {% else %}
+                                {{ field.label_tag }}
+                                {% if field.is_readonly %}
+                                    <div class=“readonly”>{{ field.contents }}</div>
+                                {% else %}
+                                    {{ field.field }}
+                                {% endif %}
+                            {% endif %}
+                            {% if field.field.help_text %}
+                                <div class=“help”>{{ field.field.help_text|safe }}</div>
+                            {% endif %}
+                            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+                        </div>
+                        {% endif %}
+                    {% endif %}
                 {% endfor %}
 
             </div>

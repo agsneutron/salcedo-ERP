@@ -1320,12 +1320,15 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         # employee_id = request.GET.get('employee')
         earnings_set = EarningsDeductions.objects.filter(type='P')
         deductions_set = EarningsDeductions.objects.filter(type='D')
-
+        tipo = request.GET.get('tipo', None)
+        if tipo is None:
+            tipo=0
 
 
         extra['template'] = "earnings_deductions"
         extra['earnings'] = earnings_set
         extra['deductions'] = deductions_set
+        extra['tipo'] = tipo
 
         return super(EarningsDeductionsAdmin, self).add_view(request, form_url, extra_context=extra)
 
