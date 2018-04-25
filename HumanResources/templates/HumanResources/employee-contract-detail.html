@@ -1,0 +1,94 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+{% endblock %}
+{% block content %}
+    {% include "admin/HumanResources/employeerequisition-home.html" %}
+    <div class="col-xs-9" style="padding-bottom: 25px;">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="text-center">
+                <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i class="material-icons" style="    font-size: 39px;
+    padding-top: 20px;">folder_shared</i></span>
+                    <h3 class="section-title">Contrato</h3>
+                    <hr>
+                </div>
+            </div>
+            <div class="">
+                <div class="col-xs-6">
+                    <ul class="list-group">
+                        <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Clave:</span> {{ object.contract_key }}
+                        </li>
+                        <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Empleado:</span> {{ object.employee.employee_key }}: {{ object.employee.name }} {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}
+                        </li>
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Tipo de Contrato:</span> {{ object.get_contract_type_display }}</li>
+
+                    </ul>
+                </div>
+                <div class="col-xs-6">
+                    <ul class="list-group">
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Fecha de Inicio:</span> {{ object.start_date}}
+                        </li>
+
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Fecha de Término:</span> {{ object.end_date }}
+                        </li>
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Contrato Escaneado:</span> <a href="/{{ object.contract_file }}">Descargar</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="clearfix"></div>
+            <div class="">
+                <div class="col-xs-12">
+                    <ul class="list-group">
+                        <li class="list-group-item withripple "><span class="color-info"
+                                                                      style="font-size: 18px">Descripción:</span> {{ object.description | safe }}
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% comment %}{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block extrastyle %}{{ block.super }}
+
+{% endblock %}
+{% block content %}
+
+
+   <div>Dirección: {{ object.direction }}</div>
+    <div>Subdirección: {{ object.subdirection }}</div>
+    <div>Area: {{ object.area }}</div>
+    <div>Departamento: {{ object.department }}</div>
+    <div>Descripción: {{ object.description }}</div>
+
+
+    <div>Número de Vacantes: {{ object.vacancy_number }}</div>
+
+    <div>Requerimientos mínimos: <strong>Esto se tiene que ver con viñetas y listas numeradas</strong> <br></div>
+    <div>{{ object.minimum_requirements | safe }}</div>
+    <div>Características del Puesto: <strong>Esto se tiene que ver con viñetas y listas numeradas</strong>  <br>
+    {{ object.characteristics | safe }}</div>
+
+
+
+    <div>Solicitado por: {{ object.user.first_name }} {{ object.user.last_name }}</div>
+
+{% endblock %}{% endcomment %}
+
+
+
+

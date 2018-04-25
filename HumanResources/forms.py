@@ -787,3 +787,9 @@ class EmployeeDropOutForm(forms.ModelForm):
     class Meta:
         model = EmployeeDropOut
         fields = '__all__'
+
+
+class EmployeeContractForm(forms.ModelForm):
+    class Meta:
+        mode = EmployeeContract
+        fields = '__all__'

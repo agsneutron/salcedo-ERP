@@ -319,6 +319,15 @@ class EmployeeContract(models.Model):
 
     contract_file = models.FileField(upload_to=upload_employee_contract, null=True, verbose_name="Contrato Escaneado")
 
+
+    def __str__(self):
+        return self.contract_key+ ": " + self.employee.name+ " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
+
+    class Meta:
+        verbose_name = 'Contrato'
+        verbose_name_plural = 'Contratos'
+
 # Employee Checker Data.
 class CheckerData(models.Model):
     CHECKER_TYPE_A = 1
