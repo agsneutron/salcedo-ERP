@@ -150,9 +150,9 @@ class Employee(models.Model):
                                       blank=False)
     work_email = models.CharField(verbose_name="Correo Electrónico Laboral", max_length=255, null=False, blank=False)
 
-    social_security_number = models.CharField(verbose_name="Número de Seguro Social", max_length=20, null=False,
+    social_security_number = models.CharField(verbose_name="Número de Póliza de Seguro", max_length=20, null=False,
                                               blank=False)
-    # social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
+    social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
 
     colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
@@ -285,6 +285,48 @@ class Employee(models.Model):
 
         return absences
 
+
+
+
+# Method to save the employee document file.
+def upload_employee_contract(instance, filename):
+    return '/'.join(['human_resources', 'employee_documents', instance.employee.employee_key, 'contracts', filename])
+
+
+class EmployeeContract(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+
+    contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=64, null=False, blank=False, unique=True)
+
+
+    CONTRACT_TYPE_PERMANENT = 'P'
+    CONTRACT_TYPE_TEMPORAL = 'T'
+
+    CONTRACT_TYPE_CHOICES = (
+        (CONTRACT_TYPE_PERMANENT, 'Permanente'),
+        (CONTRACT_TYPE_TEMPORAL, 'Temporal'),
+    )
+
+    contract_type = models.CharField(max_length=1, choices=CONTRACT_TYPE_CHOICES, default=CONTRACT_TYPE_PERMANENT,
+                                      verbose_name='Tipo de Contrato')
+
+
+    description = tinymce_models.HTMLField(verbose_name='Descripción', null=True, blank=True, max_length=4096)
+
+    start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
+    end_date = models.DateField(verbose_name="Fecha de Término", null=True, blank=True)
+
+
+    contract_file = models.FileField(upload_to=upload_employee_contract, null=True, verbose_name="Contrato Escaneado")
+
+
+    def __str__(self):
+        return self.contract_key+ ": " + self.employee.name+ " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
+
+    class Meta:
+        verbose_name = 'Contrato'
+        verbose_name_plural = 'Contratos'
 
 # Employee Checker Data.
 class CheckerData(models.Model):
@@ -576,7 +618,7 @@ class TestApplication(models.Model):
 
 
 # To represent the structure of an employee's contract.
-class EmployeeContract(models.Model):
+'''class EmployeeContract(models.Model):
     contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=128, null=False, blank=False)
     description = models.CharField(verbose_name="Descripción del Contrato", max_length=4096, null=False, blank=False)
     specifications = models.CharField(verbose_name="Especificaciones del Contrato", max_length=4096, null=False,
@@ -596,7 +638,7 @@ class EmployeeContract(models.Model):
         return self.contract_key
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.contract_key
+        return self.contract_key'''
 
 
 # To represent an employee's family member.
@@ -872,6 +914,13 @@ class JobProfile(models.Model):
                                    unique=False)
     experience = models.TextField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
                                   unique=False)
+
+    jobdescription = models.TextField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
+                                   unique=False)
+    minimumrequirements = models.TextField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
+                                  unique=False)
+
+
     entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
     exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
     sunday = models.BooleanField(verbose_name="Domingo", default=False)
