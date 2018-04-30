@@ -493,11 +493,11 @@ class EstimatesReport():
             print "Is:" + str(estimate.id)
             concepts_array = []
             contract_obj = ContratoContratista.objects.get(pk=estimate.contract.id)
-            contactor = Contact.objects.filter(contractor_id=estimate.contract.contratista_id)
+            contractor = Contact.objects.filter(contractor_id=estimate.contract.contratista_id)
             contract_name = "Sin contacto"
-            if contactor:
+            if len(contractor) > 0:
                 contact = Contact.objects.get(contractor_id=estimate.contract.contratista_id)
-                if contact:
+                if contact is not None:
                     contract_name = contact.name
 
             for concept in contract_obj.concepts.all():
@@ -512,6 +512,11 @@ class EstimatesReport():
                 'contract_amount_with_tax': float(estimate.contract.monto_contrato) * 1.16,
                 'concepts': concepts_array,
                 'project': estimate.contract.project.nombreProyecto,
+                'general_director': estimate.contract.project.general_director.get_full_name(),
+                'construction_director': estimate.contract.project.construction_director.get_full_name(),
+                'business_president': estimate.contract.project.business_president.get_full_name(),
+                'business_vice_president': estimate.contract.project.business_vice_president.get_full_name(),
+                'administration_head': estimate.contract.project.administration_head.get_full_name(),
                 'line_item': estimate.contract.line_item.description,
                 'start_date': str(estimate.start_date.strftime('%m/%d/%Y')),
                 'end_date': str(estimate.end_date.strftime('%m/%d/%Y')),
