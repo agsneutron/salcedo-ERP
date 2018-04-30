@@ -101,11 +101,11 @@
 
 
                 {% endfor %}
-                        <li role="presentation">
-                            <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
-                                <span class="">Tipo de Construcción</span>
-                            </a>
-                        </li>
+                <li role="presentation">
+                    <a class="withoutripple" href="#otro8" aria-controls="otro8" role="tab" data-toggle="tab">
+                        <span class="">Tipo de Construcción</span>
+                    </a>
+                </li>
 
                 <li role="presentation">
                     <a class="withoutripple" href="#otro10" aria-controls="otro10" role="tab" data-toggle="tab">
@@ -251,6 +251,65 @@
                             </div>
                         </div>
                     {% endif %}
+
+
+
+                    {% if field.field.name == "general_director" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Director General</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if field.field.name == "construction_director" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Director de Obras</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "business_president" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Presidente Empresarial</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "business_vice_president" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Viceresidente Empresarial</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "administration_head" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Jefe de Administración</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
+
                     {% comment %}{% if field.field.name == "contrato" %}
                                 <div class="col-sm-4 col-md-3">
                                     <div class="form-group field-contrato">
@@ -654,100 +713,100 @@
 
                             <script type="text/javascript">
                                 html = ' <h2 class="text-center">Restricciones</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-4">'
-                                    + '    <div class="form-group field-restriccion_vial">'
-                                    + '        <div>'
-                                    + '            <label class="control-label required" for="id_restriccion_vial">Vial:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-4">'
+                                        + '    <div class="form-group field-restriccion_vial">'
+                                        + '        <div>'
+                                        + '            <label class="control-label required" for="id_restriccion_vial">Vial:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro31').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "restriccion_cna" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-restriccion_cna">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_restriccion_cna">CNA:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-restriccion_cna">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_restriccion_cna">CNA:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro31').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "restriccion_cfe" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-restriccion_cfe">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_restriccion_cfe">CFE:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-restriccion_cfe">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_restriccion_cfe">CFE:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro31').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "restriccion_pemex" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-restriccion_pemex">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_restriccion_pemex">PEMEX:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-restriccion_pemex">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_restriccion_pemex">PEMEX:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro32').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "restriccion_inha" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-restriccion_inha">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_restriccion_inha">INHA:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-restriccion_inha">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_restriccion_inha">INHA:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro32').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "restriccion_otros" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-restriccion_otros">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_restriccion_otros">Otros:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-restriccion_otros">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_restriccion_otros">Otros:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro32').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "restriccion_observaciones" %}
                             <script type="text/javascript">
                                 html = ' <div class="col-sm-6 col-sm-offset-3">'
-                                    + '<div class="form-group field-restriccion_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_restriccion_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-restriccion_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_restriccion_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro33').append(html);
                             </script>
 
@@ -759,104 +818,104 @@
 
                             <script>
                                 html = '<h2 class="text-center">Uso del Suelo</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-usosuelo_pmdu">'
-                                    + '        <div>'
-                                    + '            <label class="control-label required" for="id_usosuelo_pmdu">PMDU:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-usosuelo_pmdu">'
+                                        + '        <div>'
+                                        + '            <label class="control-label required" for="id_usosuelo_pmdu">PMDU:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro41').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "usosuelo_densidad" %}
                             <script>
                                 html = '<div class="col-sm-6">'
-                                    + '<div class="form-group field-usosuelo_densidad">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_usosuelo_densidad">Densidad:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-usosuelo_densidad">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_usosuelo_densidad">Densidad:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro41').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "usosuelo_loteminimo" %}
                             <script>
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-usosuelo_loteminimo">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_usosuelo_loteminimo">Lote'
-                                    + '            Mínimo:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-usosuelo_loteminimo">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_usosuelo_loteminimo">Lote'
+                                        + '            Mínimo:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro41').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "usosuelo_m2construccion" %}
                             <script>
                                 html = '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-usosuelo_m2construccion">'
-                                    + '        <div>'
-                                    + '            <label class="control-label required" for="id_usosuelo_m2construccion">M2 de'
-                                    + '                Construcción:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '    <div class="form-group field-usosuelo_m2construccion">'
+                                        + '        <div>'
+                                        + '            <label class="control-label required" for="id_usosuelo_m2construccion">M2 de'
+                                        + '                Construcción:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro42').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "usosuelo_arealibre" %}
                             <script>
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-usosuelo_arealibre">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_usosuelo_arealibre">Área'
-                                    + '            Libre:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-usosuelo_arealibre">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_usosuelo_arealibre">Área'
+                                        + '            Libre:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro42').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "usosuelo_altura" %}
                             <script>
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-usosuelo_altura">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_usosuelo_altura">Altura:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-usosuelo_altura">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_usosuelo_altura">Altura:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro42').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "usosuelo_densidadrequerida" %}
                             <script>
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-usosuelo_densidadrequerida">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_usosuelo_densidadrequerida">Densidad'
-                                    + '            Requerida:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-usosuelo_densidadrequerida">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_usosuelo_densidadrequerida">Densidad'
+                                        + '            Requerida:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro42').append(html);
                             </script>
                         {% endif %}
@@ -865,67 +924,67 @@
                         {% if field.field.name == "hidraulica_fuente" %}
                             <script>
                                 html = '<h2 class="text-center">Hidráulica</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-hidraulica_fuente">'
-                                    + '        <div>'
-                                    + '            <label class="control-label required" for="id_hidraulica_fuente">Fuente:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-hidraulica_fuente">'
+                                        + '        <div>'
+                                        + '            <label class="control-label required" for="id_hidraulica_fuente">Fuente:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro43').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "hidraulica_distancia" %}
                             <script>
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-hidraulica_distancia">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_hidraulica_distancia">Distacia:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-hidraulica_distancia">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_hidraulica_distancia">Distacia:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro43').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "hidraulica_observaciones" %}
                             <script>
                                 html = ' <div class="col-sm-3">'
-                                    + '<div class="form-group field-hidraulica_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label required" for="id_hidraulica_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-hidraulica_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label required" for="id_hidraulica_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro43').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "hidraulica_documento" %}
                             <script>
                                 html = ' <div class="col-sm-3">'
-                                    + '<div class="form-group field-{{ field.field.name }}">'
-                                    + '    {{ field.field|addcss:"form-control" }}'
-                                    + '    {{ field.errors }}'
-                                    + '    <div class="input-group">'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_{{ field.field.name }}">Documento Hidráulica:</label>'
-                                    + '        <input type="text" readonly="" class="form-control"'
-                                    + '               placeholder="Seleccionar archivo...">'
-                                    + '                            <span class="input-group-btn input-group-sm">'
-                                    + '                             <button type="button" class="btn btn-fab btn-fab-mini">'
-                                    + '                                  <i class="material-icons">attach_file</i>'
-                                    + '                                  </button>'
-                                    + '                                  </span>'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-{{ field.field.name }}">'
+                                        + '    {{ field.field|addcss:"form-control" }}'
+                                        + '    {{ field.errors }}'
+                                        + '    <div class="input-group">'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_{{ field.field.name }}">Documento Hidráulica:</label>'
+                                        + '        <input type="text" readonly="" class="form-control"'
+                                        + '               placeholder="Seleccionar archivo...">'
+                                        + '                            <span class="input-group-btn input-group-sm">'
+                                        + '                             <button type="button" class="btn btn-fab btn-fab-mini">'
+                                        + '                                  <i class="material-icons">attach_file</i>'
+                                        + '                                  </button>'
+                                        + '                                  </span>'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro43').append(html);
                             </script>
                         {% endif %}
@@ -933,66 +992,66 @@
                         {% if field.field.name == "sanitaria_tipo" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Sanitaria</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-sanitaria_tipo">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_sanitaria_tipo">Tipo:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-sanitaria_tipo">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_sanitaria_tipo">Tipo:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro44').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "sanitaria_responsable" %}
                             <script type="text/javascript">
                                 html = ' <div class="col-sm-3">'
-                                    + '<div class="form-group field-sanitaria_responsable">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_sanitaria_responsable">Responsable:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-sanitaria_responsable">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_sanitaria_responsable">Responsable:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro44').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "sanitaria_observaciones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-sanitaria_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_sanitaria_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-sanitaria_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_sanitaria_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro44').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "sanitaria_documento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-{{ field.field.name }}">'
-                                    + '    {{ field.field|addcss:"form-control" }}'
-                                    + '    {{ field.errors }}'
-                                    + '    <div class="input-group">'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_{{ field.field.name }}">Documento Sanitaria:</label>'
-                                    + '        <input type="text" readonly="" class="form-control"'
-                                    + '               placeholder="Seleccionar archivo...">'
-                                    + '                            <span class="input-group-btn input-group-sm">'
-                                    + '                            <button type="button" class="btn btn-fab btn-fab-mini">'
-                                    + '                            <i class="material-icons">attach_file</i>'
-                                    + '                            </button>'
-                                    + '                            </span>'
-                                    + '   </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-{{ field.field.name }}">'
+                                        + '    {{ field.field|addcss:"form-control" }}'
+                                        + '    {{ field.errors }}'
+                                        + '    <div class="input-group">'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_{{ field.field.name }}">Documento Sanitaria:</label>'
+                                        + '        <input type="text" readonly="" class="form-control"'
+                                        + '               placeholder="Seleccionar archivo...">'
+                                        + '                            <span class="input-group-btn input-group-sm">'
+                                        + '                            <button type="button" class="btn btn-fab btn-fab-mini">'
+                                        + '                            <i class="material-icons">attach_file</i>'
+                                        + '                            </button>'
+                                        + '                            </span>'
+                                        + '   </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro44').append(html);
                             </script>
                         {% endif %}
@@ -1000,66 +1059,66 @@
                         {% if field.field.name == "pluvial_tipo" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Pluvial</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-pluvial_tipo">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_pluvial_tipo">Tipo:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-pluvial_tipo">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_pluvial_tipo">Tipo:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro45').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "pluvial_responsable" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-pluvial_responsable">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_pluvial_responsable">Responsable:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-pluvial_responsable">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_pluvial_responsable">Responsable:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro45').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "pluvial_observaciones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-pluvial_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_pluvial_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-pluvial_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_pluvial_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro45').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "pluvial_documento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-{{ field.field.name }}">'
-                                    + '    {{ field.field|addcss:"form-control" }}'
-                                    + '    {{ field.errors }}'
-                                    + '    <div class="input-group">'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_{{ field.field.name }}">Documento Pluvial:</label>'
-                                    + '        <input type="text" readonly="" class="form-control"'
-                                    + '               placeholder="Seleccionar archivo...">'
-                                    + '                            <span class="input-group-btn input-group-sm">'
-                                    + '                            <button type="button" class="btn btn-fab btn-fab-mini">'
-                                    + '                            <i class="material-icons">attach_file</i>'
-                                    + '                            </button>'
-                                    + '                            </span>'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-{{ field.field.name }}">'
+                                        + '    {{ field.field|addcss:"form-control" }}'
+                                        + '    {{ field.errors }}'
+                                        + '    <div class="input-group">'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_{{ field.field.name }}">Documento Pluvial:</label>'
+                                        + '        <input type="text" readonly="" class="form-control"'
+                                        + '               placeholder="Seleccionar archivo...">'
+                                        + '                            <span class="input-group-btn input-group-sm">'
+                                        + '                            <button type="button" class="btn btn-fab btn-fab-mini">'
+                                        + '                            <i class="material-icons">attach_file</i>'
+                                        + '                            </button>'
+                                        + '                            </span>'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 //+'</div>';
                                 $('#otro45').append(html);
                             </script>
@@ -1070,16 +1129,16 @@
                         {% if field.field.name == "vial_viaacceso" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Vial</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-vial_viaacceso">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_vial_viaacceso">Vías de acceso:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-vial_viaacceso">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_vial_viaacceso">Vías de acceso:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro51').append(html);
                             </script>
                         {% endif %}
@@ -1087,42 +1146,42 @@
                         {% if field.field.name == "vial_distancia" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-vial_distancia">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_vial_distancia">Distancia:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-vial_distancia">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_vial_distancia">Distancia:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro51').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "vial_carriles" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-vial_carriles">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_vial_carriles">Carriles:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-vial_carriles">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_vial_carriles">Carriles:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro51').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "vial_seccion" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-vial_seccion">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_vial_seccion">Sección:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-vial_seccion">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_vial_seccion">Sección:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro51').append(html);
                             </script>
                         {% endif %}
@@ -1130,65 +1189,65 @@
                         {% if field.field.name == "vial_tipopavimento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-vial_tipopavimento">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_vial_tipopavimento">Tipo de Pavimento:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '    <div class="form-group field-vial_tipopavimento">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_vial_tipopavimento">Tipo de Pavimento:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro52').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "vial_estadoconstruccion" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-vial_estadoconstruccion">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_vial_estadoconstruccion">Estado de'
-                                    + '            Construcción:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-vial_estadoconstruccion">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_vial_estadoconstruccion">Estado de'
+                                        + '            Construcción:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro52').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "vial_observaciones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-vial_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_vial_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-vial_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_vial_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro52').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "vial_documento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-{{ field.field.name }}">'
-                                    + '    {{ field.field|addcss:"form-control" }}'
-                                    + '    {{ field.errors }}'
-                                    + '    <div class="input-group">'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_{{ field.field.name }}">Documento Vial:</label>'
-                                    + '        <input type="text" readonly="" class="form-control"'
-                                    + '               placeholder="Seleccionar archivo...">'
-                                    + '                            <span class="input-group-btn input-group-sm">'
-                                    + '                            <button type="button" class="btn btn-fab btn-fab-mini">'
-                                    + '                            <i class="material-icons">attach_file</i>'
-                                    + '                            </button>'
-                                    + '                            </span>'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-{{ field.field.name }}">'
+                                        + '    {{ field.field|addcss:"form-control" }}'
+                                        + '    {{ field.errors }}'
+                                        + '    <div class="input-group">'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_{{ field.field.name }}">Documento Vial:</label>'
+                                        + '        <input type="text" readonly="" class="form-control"'
+                                        + '               placeholder="Seleccionar archivo...">'
+                                        + '                            <span class="input-group-btn input-group-sm">'
+                                        + '                            <button type="button" class="btn btn-fab btn-fab-mini">'
+                                        + '                            <i class="material-icons">attach_file</i>'
+                                        + '                            </button>'
+                                        + '                            </span>'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro52').append(html);
                             </script>
                         {% endif %}
@@ -1196,67 +1255,67 @@
                         {% if field.field.name == "electricidad_tipo" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Electricidad</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-electricidad_tipo">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_electricidad_tipo">Tipo:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-electricidad_tipo">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_electricidad_tipo">Tipo:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro53').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "electricidad_distancia" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-electricidad_distancia">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_electricidad_distancia">Distancia:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-electricidad_distancia">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_electricidad_distancia">Distancia:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro53').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "electricidad_observaciones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-electricidad_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label"'
-                                    + '               for="id_electricidad_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-electricidad_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label"'
+                                        + '               for="id_electricidad_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro53').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "electricidad_documento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-{{ field.field.name }}">'
-                                    + '    {{ field.field|addcss:"form-control" }}'
-                                    + '    {{ field.errors }}'
-                                    + '    <div class="input-group">'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_{{ field.field.name }}">Documento Electricidad:</label>'
-                                    + '        <input type="text" readonly="" class="form-control"'
-                                    + '               placeholder="Seleccionar archivo...">'
-                                    + '                            <span class="input-group-btn input-group-sm">'
-                                    + '                            <button type="button" class="btn btn-fab btn-fab-mini">'
-                                    + '                            <i class="material-icons">attach_file</i>'
-                                    + '                            </button>'
-                                    + '                            </span>'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-{{ field.field.name }}">'
+                                        + '    {{ field.field|addcss:"form-control" }}'
+                                        + '    {{ field.errors }}'
+                                        + '    <div class="input-group">'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_{{ field.field.name }}">Documento Electricidad:</label>'
+                                        + '        <input type="text" readonly="" class="form-control"'
+                                        + '               placeholder="Seleccionar archivo...">'
+                                        + '                            <span class="input-group-btn input-group-sm">'
+                                        + '                            <button type="button" class="btn btn-fab btn-fab-mini">'
+                                        + '                            <i class="material-icons">attach_file</i>'
+                                        + '                            </button>'
+                                        + '                            </span>'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro53').append(html);
                             </script>
                         {% endif %}
@@ -1264,67 +1323,67 @@
                         {% if field.field.name == "alumbradopublico_tipo" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Alumbrado Público</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-alumbradopublico_tipo">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_alumbradopublico_tipo">Tipo:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-alumbradopublico_tipo">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_alumbradopublico_tipo">Tipo:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro54').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "alumbradopublico_distancia" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-alumbradopublico_distancia">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_alumbradopublico_distancia">Distancia:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-alumbradopublico_distancia">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_alumbradopublico_distancia">Distancia:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro54').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "alumbradopublico_observaciones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-alumbradopublico_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label"'
-                                    + '               for="id_alumbradopublico_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-alumbradopublico_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label"'
+                                        + '               for="id_alumbradopublico_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro54').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "alumbradopublico_documento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-{{ field.field.name }}">'
-                                    + '    {{ field.field|addcss:"form-control" }}'
-                                    + '    {{ field.errors }}'
-                                    + '    <div class="input-group">'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_{{ field.field.name }}">Documento Alumbrado Público:</label>'
-                                    + '        <input type="text" readonly="" class="form-control"'
-                                    + '               placeholder="Seleccionar archivo...">'
-                                    + '                            <span class="input-group-btn input-group-sm">'
-                                    + '                                <button type="button" class="btn btn-fab btn-fab-mini">'
-                                    + '                                    <i class="material-icons">attach_file</i>'
-                                    + '                                </button>'
-                                    + '                            </span>'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-{{ field.field.name }}">'
+                                        + '    {{ field.field|addcss:"form-control" }}'
+                                        + '    {{ field.errors }}'
+                                        + '    <div class="input-group">'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_{{ field.field.name }}">Documento Alumbrado Público:</label>'
+                                        + '        <input type="text" readonly="" class="form-control"'
+                                        + '               placeholder="Seleccionar archivo...">'
+                                        + '                            <span class="input-group-btn input-group-sm">'
+                                        + '                                <button type="button" class="btn btn-fab btn-fab-mini">'
+                                        + '                                    <i class="material-icons">attach_file</i>'
+                                        + '                                </button>'
+                                        + '                            </span>'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro54').append(html);
                             </script>
                         {% endif %}
@@ -1332,53 +1391,53 @@
                         {% if field.field.name == "telefonia_distancia" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Telefonía</h2>'
-                                    + '<hr>'
-                                    //+'<div class="row">'
-                                    + '<div class="col-sm-4">'
-                                    + '    <div class="form-group field-telefonia_distancia">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_telefonia_distancia">Distancia:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        //+'<div class="row">'
+                                        + '<div class="col-sm-4">'
+                                        + '    <div class="form-group field-telefonia_distancia">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_telefonia_distancia">Distancia:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro55').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "telefonia_observaciones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-telefonia_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_telefonia_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-telefonia_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_telefonia_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro55').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "telefonia_documento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-{{ field.field.name }}">'
-                                    + '    {{ field.field|addcss:"form-control" }}'
-                                    + '    {{ field.errors }}'
-                                    + '    <div class="input-group">'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_{{ field.field.name }}">Documento Telefonía:</label>'
-                                    + '        <input type="text" readonly="" class="form-control"'
-                                    + '               placeholder="Seleccionar archivo...">'
-                                    + '                            <span class="input-group-btn input-group-sm">'
-                                    + '                                <button type="button" class="btn btn-fab btn-fab-mini">'
-                                    + '                                    <i class="material-icons">attach_file</i>'
-                                    + '                                </button>'
-                                    + '                            </span>'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-{{ field.field.name }}">'
+                                        + '    {{ field.field|addcss:"form-control" }}'
+                                        + '    {{ field.errors }}'
+                                        + '    <div class="input-group">'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_{{ field.field.name }}">Documento Telefonía:</label>'
+                                        + '        <input type="text" readonly="" class="form-control"'
+                                        + '               placeholder="Seleccionar archivo...">'
+                                        + '                            <span class="input-group-btn input-group-sm">'
+                                        + '                                <button type="button" class="btn btn-fab btn-fab-mini">'
+                                        + '                                    <i class="material-icons">attach_file</i>'
+                                        + '                                </button>'
+                                        + '                            </span>'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro55').append(html);
                             </script>
                         {% endif %}
@@ -1386,46 +1445,46 @@
                         {% if field.field.name == "tvcable_distancia" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">TV Cable</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-6">'
-                                    + '    <div class="form-group field-tvcable_distancia">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_tvcable_distancia">Distancia:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-6">'
+                                        + '    <div class="form-group field-tvcable_distancia">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_tvcable_distancia">Distancia:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro56').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "tvcable_observaciones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-6">'
-                                    + '<div class="form-group field-tvcable_observaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_tvcable_observaciones">Observaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-tvcable_observaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_tvcable_observaciones">Observaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro56').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "equipamiento_a100" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Equipamiento</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '<div class="form-group field-equipamiento_a100">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_equipamiento_a100">A 100:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '<div class="form-group field-equipamiento_a100">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_equipamiento_a100">A 100:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro57').append(html);
                             </script>
                         {% endif %}
@@ -1433,42 +1492,42 @@
                         {% if field.field.name == "equipamiento_a200" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-equipamiento_a200">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_equipamiento_a200">A 200:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-equipamiento_a200">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_equipamiento_a200">A 200:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro57').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "equipamiento_a500" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-equipamiento_a500">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_equipamiento_a500">A 500:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-equipamiento_a500">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_equipamiento_a500">A 500:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro57').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "equipamiento_a500" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-equipamiento_regional">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_equipamiento_regional">Regional:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-equipamiento_regional">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_equipamiento_regional">Regional:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 //+'</div>'
                                 //+'</div>';
                                 $('#otro57').append(html);
@@ -1478,16 +1537,16 @@
                         {% if field.field.name == "costo_predio" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Costo</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-costo_predio"'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_costo_predio">Costo del Predio:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-costo_predio"'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_costo_predio">Costo del Predio:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro61').append(html);
                             </script>
                         {% endif %}
@@ -1496,42 +1555,42 @@
                         {% if field.field.name == "costo_m2" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-costo_m2">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_costo_m2">M2:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-costo_m2">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_costo_m2">M2:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro61').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "costo_escrituras" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-costo_escrituras">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_costo_escrituras">Escrituras m2:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-costo_escrituras">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_costo_escrituras">Escrituras m2:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro61').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "costo_levantamiento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-costo_levantamiento">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_costo_levantamiento">Levantamiento m2:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-costo_levantamiento">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_costo_levantamiento">Levantamiento m2:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro61').append(html);
                             </script>
                         {% endif %}
@@ -1539,59 +1598,59 @@
                         {% if field.field.name == "estudiomercado_demanda" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Estudio de Mercado</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3">'
-                                    + '    <div class="form-group field-estudiomercado_demanda">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_estudiomercado_demanda">Demanda:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3">'
+                                        + '    <div class="form-group field-estudiomercado_demanda">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_estudiomercado_demanda">Demanda:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro62').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "estudiomercado_oferta" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-estudiomercado_oferta">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_estudiomercado_oferta">Oferta:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-estudiomercado_oferta">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_estudiomercado_oferta">Oferta:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro62').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "estudiomercado_conclusiones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-estudiomercado_conclusiones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label"'
-                                    + '               for="id_estudiomercado_conclusiones">Conclusiones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-estudiomercado_conclusiones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label"'
+                                        + '               for="id_estudiomercado_conclusiones">Conclusiones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro62').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "estudiomercado_recomendaciones" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3">'
-                                    + '<div class="form-group field-estudiomercado_recomendaciones">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_estudiomercado_recomendaciones">Recomendaciones:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-estudiomercado_recomendaciones">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_estudiomercado_recomendaciones">Recomendaciones:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro62').append(html);
                             </script>
                         {% endif %}
@@ -1599,45 +1658,45 @@
                         {% if field.field.name == "definicionproyecto_alternativa" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Definición del Proyecto</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-4">'
-                                    + '    <div class="form-group field-definicionproyecto_alternativa">'
-                                    + '        <div>'
-                                    + '            <label class="control-label"'
-                                    + '                   for="id_definicionproyecto_alternativa">Alernativa:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-4">'
+                                        + '    <div class="form-group field-definicionproyecto_alternativa">'
+                                        + '        <div>'
+                                        + '            <label class="control-label"'
+                                        + '                   for="id_definicionproyecto_alternativa">Alernativa:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro63').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "definicionproyecto_tamano" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-definicionproyecto_tamano">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_definicionproyecto_tamano">Tamaño:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-definicionproyecto_tamano">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_definicionproyecto_tamano">Tamaño:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro63').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "definicionproyecto_programa" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-4">'
-                                    + '<div class="form-group field-definicionproyecto_programa">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_definicionproyecto_programa">Programa:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-definicionproyecto_programa">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_definicionproyecto_programa">Programa:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro63').append(html);
                             </script>
                         {% endif %}
@@ -1645,17 +1704,17 @@
                         {% if field.field.name == "programayarea_areaprivativa" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Programas y Áreas</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-2">'
-                                    + '    <div class="form-group field-programayarea_areaprivativa">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_programayarea_areaprivativa">Área'
-                                    + '                Privada:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-2">'
+                                        + '    <div class="form-group field-programayarea_areaprivativa">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_programayarea_areaprivativa">Área'
+                                        + '                Privada:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro71').append(html);
                             </script>
                         {% endif %}
@@ -1664,71 +1723,71 @@
                         {% if field.field.name == "programayarea_caseta" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-2">'
-                                    + '<div class="form-group field-programayarea_caseta">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_programayarea_caseta">Caseta:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-programayarea_caseta">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_programayarea_caseta">Caseta:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro71').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "programayarea_jardin" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-2">'
-                                    + '<div class="form-group field-programayarea_jardin">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_programayarea_jardin">Jardín:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-programayarea_jardin">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_programayarea_jardin">Jardín:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro71').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "programayarea_vialidad" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-2">'
-                                    + '<div class="form-group field-programayarea_vialidad">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_programayarea_vialidad">Vialidad:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-programayarea_vialidad">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_programayarea_vialidad">Vialidad:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro71').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "programayarea_areaverde" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-2">'
-                                    + '<div class="form-group field-programayarea_areaverde">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_programayarea_areaverde">Área Verde:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-programayarea_areaverde">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_programayarea_areaverde">Área Verde:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro71').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "programayarea_estacionamientovisita" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-2">'
-                                    + '<div class="form-group field-programayarea_estacionamientovisita">'
-                                    + '    <div>'
-                                    + '        <label class="control-label" for="id_programayarea_estacionamientovisita">Estacionamiento'
-                                    + '            visita:</label>'
-                                    + '        {{ field.field|addcss:"form-control" }}'
-                                    + '        {{ field.errors }}'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-programayarea_estacionamientovisita">'
+                                        + '    <div>'
+                                        + '        <label class="control-label" for="id_programayarea_estacionamientovisita">Estacionamiento'
+                                        + '            visita:</label>'
+                                        + '        {{ field.field|addcss:"form-control" }}'
+                                        + '        {{ field.errors }}'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro71').append(html);
                             </script>
                         {% endif %}
@@ -1736,38 +1795,38 @@
                         {% if field.field.name == "programayarea_afectacion" %}
                             <script type="text/javascript">
                                 html = '<h2 class="text-center">Afectación</h2>'
-                                    + '<hr>'
-                                    + '<div class="col-sm-3 col-sm-offset-3">'
-                                    + '    <div class="form-group field-programayarea_afectacion">'
-                                    + '        <div>'
-                                    + '            <label class="control-label" for="id_programayarea_afectacion">Afectación:</label>'
-                                    + '            {{ field.field|addcss:"form-control" }}'
-                                    + '            {{ field.errors }}'
-                                    + '        </div>'
-                                    + '    </div>'
-                                    + '</div>';
+                                        + '<hr>'
+                                        + '<div class="col-sm-3 col-sm-offset-3">'
+                                        + '    <div class="form-group field-programayarea_afectacion">'
+                                        + '        <div>'
+                                        + '            <label class="control-label" for="id_programayarea_afectacion">Afectación:</label>'
+                                        + '            {{ field.field|addcss:"form-control" }}'
+                                        + '            {{ field.errors }}'
+                                        + '        </div>'
+                                        + '    </div>'
+                                        + '</div>';
                                 $('#otro72').append(html);
                             </script>
                         {% endif %}
                         {% if field.field.name == "programayarea_documento" %}
                             <script type="text/javascript">
                                 html = '<div class="col-sm-3  ">'
-                                    + '<div class="form-group field-{{ field.field.name }}">'
-                                    + '    {{ field.field|addcss:"form-control" }}'
-                                    + '    {{ field.errors }}'
-                                    + '    <div class="input-group">'
-                                    + '        <label class="control-label required"'
-                                    + '               for="id_{{ field.field.name }}">Documento Programa y Área:</label>'
-                                    + '        <input type="text" readonly="" class="form-control"'
-                                    + '               placeholder="Seleccionar archivo...">'
-                                    + '                            <span class="input-group-btn input-group-sm">'
-                                    + '                                <button type="button" class="btn btn-fab btn-fab-mini">'
-                                    + '                                    <i class="material-icons">attach_file</i>'
-                                    + '                                </button>'
-                                    + '                            </span>'
-                                    + '    </div>'
-                                    + '</div>'
-                                    + '</div>';
+                                        + '<div class="form-group field-{{ field.field.name }}">'
+                                        + '    {{ field.field|addcss:"form-control" }}'
+                                        + '    {{ field.errors }}'
+                                        + '    <div class="input-group">'
+                                        + '        <label class="control-label required"'
+                                        + '               for="id_{{ field.field.name }}">Documento Programa y Área:</label>'
+                                        + '        <input type="text" readonly="" class="form-control"'
+                                        + '               placeholder="Seleccionar archivo...">'
+                                        + '                            <span class="input-group-btn input-group-sm">'
+                                        + '                                <button type="button" class="btn btn-fab btn-fab-mini">'
+                                        + '                                    <i class="material-icons">attach_file</i>'
+                                        + '                                </button>'
+                                        + '                            </span>'
+                                        + '    </div>'
+                                        + '</div>'
+                                        + '</div>';
                                 $('#otro72').append(html);
                             </script>
                         {% endif %}
@@ -1791,7 +1850,7 @@
                         </div>
                     {% endif %}
                     <!-- Ends block for the payment schedule -->
-                     <!-- Added block for the payment schedule -->
+                    <!-- Added block for the payment schedule -->
                     {% if inline_admin_formset.formset.prefix == "blueprint_set" %}
                         <!-- proyecto programa-->
                         <div role="tabpanel" class="tab-pane fade" id="otro10">

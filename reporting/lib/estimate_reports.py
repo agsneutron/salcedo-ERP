@@ -23,7 +23,6 @@ class EstimateReports(object):
             worksheet.set_column('A:A', 20)
             worksheet.write('A1', 'Aún no se ha agregado el catálogo de conceptos.')
         else:
-
             EstimateReports.show_concepts = show_concepts
 
             output = StringIO.StringIO()
@@ -270,7 +269,7 @@ class EstimateReports(object):
         range3 = 'C' + str(renglon + 17) + ':D' + str(renglon + 17)
         range4 = 'C' + str(renglon + 18) + ':D' + str(renglon + 18)
         worksheet.merge_range(range1, '', fondo_blanco_border_gray_center)
-        worksheet.merge_range(range2, 'ARQ. EDGARDO SÁNCHEZ JUÁREZ', merge_format_blanco_CENTER)
+        worksheet.merge_range(range2, info['general_director'], merge_format_blanco_CENTER)
         worksheet.merge_range(range3, 'DIRECTOR GENERAL', merge_format_blanco_CENTER)
         worksheet.merge_range(range4, '', merge_format_blanco_CENTER)
 
@@ -279,7 +278,7 @@ class EstimateReports(object):
         range3 = 'E' + str(renglon + 17) + ':G' + str(renglon + 17)
         range4 = 'E' + str(renglon + 18) + ':G' + str(renglon + 18)
         worksheet.merge_range(range1, '', fondo_blanco_border_gray_center)
-        worksheet.merge_range(range2, '', merge_format_blanco_CENTER)
+        worksheet.merge_range(range2, info['construction_director'], merge_format_blanco_CENTER)
         worksheet.merge_range(range3, 'DIRECTOR DE OBRAS', merge_format_blanco_CENTER)
         worksheet.merge_range(range4, '', merge_format_blanco_CENTER)
 
@@ -288,7 +287,7 @@ class EstimateReports(object):
         range3 = 'H' + str(renglon + 17) + ':I' + str(renglon + 17)
         range4 = 'H' + str(renglon + 18) + ':I' + str(renglon + 18)
         worksheet.merge_range(range1, '', fondo_blanco_border_gray_center)
-        worksheet.merge_range(range2, '', merge_format_blanco_CENTER)
+        worksheet.merge_range(range2, info['business_vice_president'], merge_format_blanco_CENTER)
         worksheet.merge_range(range3, 'VICEPRESIDENTE EMPRESARIAL', merge_format_blanco_CENTER)
         worksheet.merge_range(range4, '', merge_format_blanco_CENTER)
 
@@ -297,8 +296,8 @@ class EstimateReports(object):
         range3 = 'J' + str(renglon + 17) + ':K' + str(renglon + 17)
         range4 = 'J' + str(renglon + 18) + ':K' + str(renglon + 18)
         worksheet.merge_range(range1, '', fondo_blanco_border_gray_center)
-        worksheet.merge_range(range2, '', merge_format_blanco_CENTER)
-        worksheet.merge_range(range3, 'JEFE DE ADMON.', merge_format_blanco_CENTER)
+        worksheet.merge_range(range2, info['administration_head'], merge_format_blanco_CENTER)
+        worksheet.merge_range(range3, 'JEFE DE ADMINISTRACIÓN', merge_format_blanco_CENTER)
         worksheet.merge_range(range4, '', merge_format_blanco_CENTER)
 
 
@@ -346,13 +345,14 @@ class EstimateReports(object):
         #range1 = 'G' + str(renglon + 10)
         #worksheet.write(range1, sEstimate, fondo_verde_center)
 
+
         #firma del presidente
         range1 = 'I' + str(renglon + 8) + ':K' + str(renglon + 8)
         range2 = 'I' + str(renglon + 9) + ':K' + str(renglon + 9)
         range3 = 'I' + str(renglon + 10) + ':K' + str(renglon + 10)
         range4 = 'I' + str(renglon + 11) + ':K' + str(renglon + 11)
         worksheet.merge_range(range1, '', fondo_blanco_border_gray_center)
-        worksheet.merge_range(range2, 'ING. ÓSCAR GERARDO SALCEDO GONZÁLEZ', merge_format_blanco_CENTER)
+        worksheet.merge_range(range2, info['business_president'], merge_format_blanco_CENTER)
         worksheet.merge_range(range3, 'PRESIDENTE EMPRESARIAL', merge_format_blanco_CENTER)
         worksheet.merge_range(range4, 'SALCEDO CONST. Y SUP. S.A. DE C.V.', merge_format_blanco_CENTER)
 
