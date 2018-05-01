@@ -42,6 +42,15 @@
 
 
                         <div class="table-responsive mt-15">
+                            <div class="col-md-3">
+                                <div class="text-right" style="display: flex;text-align: right;float: right;">
+                                    <a href="/humanresources/api/export_payroll_list?payroll_period={{ payroll_period.id }}"
+                                       class="btn btn-raised btn-info">
+                                        <i class="fa fa-file-excel-o"></i> Exportar Lista Nominal
+                                    </a>
+                                </div>
+
+                            </div>
                             {% if receipts %}
                                 <table class="table table-striped">
                                     <thead>
