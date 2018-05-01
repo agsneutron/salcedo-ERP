@@ -2,6 +2,7 @@
 
 import json
 import django
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.query_utils import Q
 from django.forms.models import model_to_dict
 from django.http.response import HttpResponse, HttpResponseRedirect
@@ -9,7 +10,8 @@ from django.views.generic import View
 from ERP.lib.utilities import Utilities
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
     EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed, ISRTable, EarningsDeductions, \
-    EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag, EmployeePayrollPeriodExclusion, JobInstance
+    EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag, EmployeePayrollPeriodExclusion, JobInstance, \
+    PayrollGroup
 from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 from reporting.lib.payroll_list import PayrollListFile
@@ -39,6 +41,82 @@ class ChangeAbsenceJustifiedStatus(View):
 
         return HttpResponseRedirect(redirect_url)
 
+
+
+class GenerateEarningsDeductionsReport(View):
+    def get(self, request):
+        payroll_period_id = request.GET.get('payroll_period_id')
+
+        #Check that the parameter is provided
+        if payroll_period_id is None:
+            raise Exception('Se necesita enviar el parámetro payroll_period_id')
+
+        try:
+            payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+        except ValueError as e:
+            # The parameter is not an integer
+            raise Exception('El parámetro payroll_period_id debe de ser de tipo entero.')
+        except ObjectDoesNotExist as e:
+            # The specified Payroll Group does not exist.
+            raise Exception('No existe un periodo de nómina con el id ' + str(payroll_period_id))
+
+        response = {
+            'payroll_period_name': payroll_period.name,
+            'payroll_group_name': payroll_period.payroll_group.name,
+
+        }
+
+        perception_total_fixed = 0
+        perception_total_variable = 0
+        # Get all the perceptions
+        perceptions = EarningsDeductions.objects.filter(type=EarningsDeductions.PERCEPCION)
+        perceptions_array = []
+        for perception in perceptions:
+            total_fixed, total_variable = perception.get_accumulated_for_period(payroll_period_id)
+            total = total_fixed + total_variable
+            perception_total_fixed += total_fixed
+            perception_total_variable += total_variable
+            total_fixed
+            perception_dict = {
+                "name": perception.name,
+                "sat_key": perception.sat_key,
+                "total_fixed": str(total_fixed),
+                "total_variable": str(total_variable),
+                "total": str(total),
+            }
+            perceptions_array.append(perception_dict)
+        response['perceptions'] = perceptions_array
+
+        # Get all the deductions
+        deduction_total_fixed = 0
+        deduction_total_variable = 0
+
+        deductions = EarningsDeductions.objects.filter(type=EarningsDeductions.DEDUCCION)
+        deductions_array = []
+        for deduction in deductions:
+            total_fixed, total_variable = deduction.get_accumulated_for_period(payroll_period_id)
+            total = total_fixed + total_variable
+            deduction_total_fixed += total_fixed
+            deduction_total_variable += total_variable
+            deduction_dict = {
+                "name": deduction.name,
+                "sat_key": deduction.sat_key,
+                "total_fixed": str(total_fixed),
+                "total_variable": str(total_variable),
+                "total": str(total),
+            }
+            deductions_array.append(deduction_dict)
+        response['deductions'] = deductions_array
+
+
+        # Overall totals
+        response['perception_total_fixed'] = str(perception_total_fixed)
+        response['perception_total_variable'] = str(perception_total_variable)
+        response['deduction_total_fixed'] = str(deduction_total_fixed)
+        response['deduction_total_variable'] = str(deduction_total_variable)
+
+        #return HttpResponseRedirect('/admin/')
+        return HttpResponse(Utilities.json_to_dumps(response),'application/json; charset=utf-8')
 
 
 
