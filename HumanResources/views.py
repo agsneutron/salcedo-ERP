@@ -258,8 +258,8 @@ def TestApplicationDetail(request, pk):
 
 @login_required()
 def EmployeeByPeriod(request):
-    payrollgroup = request.GET.get('payrollgroup')
     payrollperiod = request.GET.get('payrollperiod')
+    payrollgroup = PayrollPeriod.objects.get(pk=payrollperiod).payroll_group_id
 
     # Check if the payroll has been processed.
     payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period__id=payrollperiod)

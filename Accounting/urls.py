@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^generate_trial_balance', api.GenerateTrialBalance.as_view(), name='trial-balance'),
     url(r'^generate_general_balance', api.GenerateBalance.as_view(), name='general-balance'),
     url(r'^transactions_by_account_report', api.GenerateTransactionsByAccountReport.as_view(), name='general-balance'),
+    url(r'^export_accounts', api.ExportAccounts.as_view(), name='export_accounts'),
 
     # F/E
     url(r'^searchaccount', views.SearchAccount, name='searchaccount'),

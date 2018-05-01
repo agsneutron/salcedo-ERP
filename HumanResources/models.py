@@ -902,22 +902,22 @@ class EmployeeRequisition(models.Model):
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
                            unique=False)
-    abilities = models.TextField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
+    abilities =tinymce_models.HTMLField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
                                  unique=False)
-    aptitudes = models.TextField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
+    aptitudes = tinymce_models.HTMLField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
                                  unique=False)
-    knowledge = models.TextField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
+    knowledge = tinymce_models.HTMLField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
                                  unique=False)
-    competitions = models.TextField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
+    competitions = tinymce_models.HTMLField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
                                     unique=False)
-    scholarship = models.TextField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
+    scholarship = tinymce_models.HTMLField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    experience = models.TextField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
+    experience = tinymce_models.HTMLField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
                                   unique=False)
 
-    jobdescription = models.TextField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
+    jobdescription = tinymce_models.HTMLField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    minimumrequirements = models.TextField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
+    minimumrequirements = tinymce_models.HTMLField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
                                   unique=False)
 
 
@@ -1190,10 +1190,24 @@ class EarningsDeductions(models.Model):
         verbose_name = "Percepciones y Deducciones"
 
     def __str__(self):
-        return self.type + "-" + self.name
+        return self.type + "-" + self.name + " - " + str(self.account.id)
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.type + "-" + self.name
+
+
+    def get_accumulated_for_period(self, payroll_period_id):
+        total_fixed = 0
+        records = EmployeeEarningsDeductions.objects.filter(concept_id=self.id)
+        for record in records:
+            total_fixed += record.ammount
+
+        total_variable = 0
+        records = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(concept_id=self.id) & Q(payroll_period_id=payroll_period_id))
+        for record in records:
+            total_variable += record.ammount
+
+        return total_fixed, total_variable
 
 
 class EmployeeEarningsDeductions(models.Model):
@@ -1372,7 +1386,7 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False, limit_choices_to={
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Conceptos", null=False, blank=False, limit_choices_to={
         'category': 'V', 'status':'A',
     })
     payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
