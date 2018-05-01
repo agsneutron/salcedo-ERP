@@ -902,22 +902,22 @@ class EmployeeRequisition(models.Model):
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
                            unique=False)
-    abilities = models.TextField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
+    abilities =tinymce_models.HTMLField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
                                  unique=False)
-    aptitudes = models.TextField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
+    aptitudes = tinymce_models.HTMLField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
                                  unique=False)
-    knowledge = models.TextField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
+    knowledge = tinymce_models.HTMLField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
                                  unique=False)
-    competitions = models.TextField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
+    competitions = tinymce_models.HTMLField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
                                     unique=False)
-    scholarship = models.TextField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
+    scholarship = tinymce_models.HTMLField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    experience = models.TextField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
+    experience = tinymce_models.HTMLField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
                                   unique=False)
 
-    jobdescription = models.TextField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
+    jobdescription = tinymce_models.HTMLField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    minimumrequirements = models.TextField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
+    minimumrequirements = tinymce_models.HTMLField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
                                   unique=False)
 
 
