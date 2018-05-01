@@ -561,3 +561,48 @@ class PayrollReceiptProcessedListView(ListView):
         context['payroll_period'] = payroll_period
 
         return context
+
+
+class EarningsDeductionsListView(ListView):
+    model = EarningsDeductions
+    template_name = "HumanResources/penalties-list.html"
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+    title_list = 'Penalizaciones'
+
+    def get_queryset(self):
+        result = super(EarningsDeductionsListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        if query:
+            EarningsDeductionsListView.query = query
+            query_list = query.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(name__icontains=q) for q in query_list))
+                #|
+                #reduce(operator.and_,
+                #       (Q(account____icontains=q) for q in query_list))
+            )
+        else:
+            EarningsDeductionsListView.title_list='Percepciones y Deducciones'
+            EarningsDeductionsListView.query = ''
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EarningsDeductionsListView, self).get_context_data(**kwargs)
+        context['title_list'] = EarningsDeductionsListView.title_list
+        context['query'] = EarningsDeductionsListView.query
+        context['query_string'] = '&q=' + EarningsDeductionsListView.query
+        context['has_query'] = (EarningsDeductionsListView.query is not None) and (EarningsDeductionsListView.query != "")
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_empresa'):
+            raise PermissionDenied
+        return super(EarningsDeductionsListView, self).dispatch(request, args, kwargs)
