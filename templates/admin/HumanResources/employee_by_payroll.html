@@ -130,6 +130,7 @@
                     <div class="col-md-3"><strong>Inicio de Periodo : </strong><br>{{ record_period.start_period }}
                     </div>
                     <div class="col-md-3"><strong>Fin de Periodo :</strong><br> {{ record_period.end_period }}</div>
+                    <div class="col-md-3"><strong>Tipo de Carga de Asistencias:</strong><br> {{ record_period.payroll_group.get_checker_type_display }}</div>
 
                 {% endfor %}
 
