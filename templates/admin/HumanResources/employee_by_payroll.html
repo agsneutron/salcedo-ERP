@@ -184,17 +184,23 @@
                         <tr>
                             <td>Clave</td>
                             <td>Nombre</td>
-                            <td>Puesto Asignado</td>
+                            <td>Puesto Asignado</td>d
+                            <td>Sueldo Base</td>d
+                            <td>Sueldo Neto</td>d
                             <td>P/D por Periodo</td>
                             <td>Excluir</td>
                         </tr>
                         </thead>
                         <tbody>
-                        {% for record in employees %}
+                        {% for record in employees_data_set %}
                             <tr>
-                                <td>{{ record.employee.employee_key }}</td>
-                                <td>{{ record.employee.name }} {{ record.employee.first_last_name }} {{ record.employee.second_last_name }}</td>
-                                <td>{{ record.job_profile.job }}</td>
+
+                                <td>{{ record.employee_key }}</td>
+                                <td>{{ record.employee_fullname }}</td>
+                                <td>{{ record.employee_job }}</td>
+                                <td>{{ record.employee_payroll.base_salary }}</td>
+
+                                <td>{{ record.employee_payroll.total_earnings|subtract:record.employee_payroll.total_deductions}}</td>
                                 <td>
                                     <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee.id }}&payrollperiod={{ payrollperiod }}&payrollgroup={{ request.GET.payrollgroup }}"
                                        class="btn btn-raised btn-default btn-xs"><i
@@ -205,8 +211,8 @@
 
 
                                     <input type="checkbox" class="employee_exclusion_checkbox"
-                                           name="employee_exclusion_checkbox_{{ record.id }}" id="employees"
-                                           value="{{ record.employee.id }}" {{ record | employee_is_active:payrollperiod }}>
+                                           name="employee_exclusion_checkbox_{{ record.employee_position_description }}" id="employees"
+                                           value="{{ record.employee_id }}" {{ record | employee_is_active:payrollperiod }}>
 
 
                                 </td>
