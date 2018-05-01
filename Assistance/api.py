@@ -67,8 +67,6 @@ class AutomaticAbsences(ListView):
 
         control_date = start_date
         while control_date <= end_date:
-
-            control_date = control_date + timedelta(days=1)
             day_of_the_week = control_date.weekday()
 
 
@@ -98,6 +96,8 @@ class AutomaticAbsences(ListView):
 
                     employee_assistance.save()
 
+            control_date = control_date + timedelta(days=1)
+
 
     def generate_automatic_absences_for_period(self, payroll_period):
         # Getting the employee object for batch generation.
@@ -110,7 +110,7 @@ class AutomaticAbsences(ListView):
         for position_description in position_description_set:
             employee_array.append(position_description.employee.id)
 
-        # Getting all the employees realted to the found payroll groups.
+        # Getting all the employees related to the found payroll groups.
         employee_set = Employee.objects.filter(id__in=employee_array)
 
         for employee in employee_set:

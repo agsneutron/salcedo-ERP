@@ -40,6 +40,19 @@ class ChangeAbsenceJustifiedStatus(View):
         return HttpResponseRedirect(redirect_url)
 
 
+
+
+class DeleteAssistances(View):
+    def get(self, request):
+        payroll_period_id = request.GET.get('payroll_period')
+        assistances_to_delete = EmployeeAssistance.objects.filter(payroll_period=payroll_period_id)
+
+        for assistance in assistances_to_delete:
+            assistance.delete()
+
+
+        return HttpResponseRedirect('/humanresources/employeebyperiod/?payrollperiod='+str(payroll_period_id))
+
 class GeneratePayrollReceipt(View):
     def get_ISR_from_taxable(self, earnings):
         """

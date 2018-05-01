@@ -1821,13 +1821,13 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         try:
             with transaction.atomic():
                 assistance_file = request.FILES['assistance_file']
-                file_interface_obj = AssistanceFileInterface(assistance_file)
+                file_interface_obj = AssistanceFileInterface(assistance_file, request.user)
 
                 # Getting the elements from the file.
-                elements = file_interface_obj.get_element_list()
+                elements = file_interface_obj.get_element_list(obj.payroll_period.payroll_group.checker_type)
 
                 # Processing the results.
-                assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
+                assitance_db_object = AssistanceDBObject(current_user, elements, payroll_period_id)
                 assitance_db_object.process_records()
 
                 # If everything went ok, generatethe automatic absences
@@ -2110,6 +2110,33 @@ class EmployeeContractAdmin(admin.ModelAdmin):
                 'description',)
         }),
     )
+
+    search_fields = ('contract_key',)
+
+    def get_search_results(self, request, queryset, search_term):
+
+        return super(EmployeeContractAdmin,self).get_search_results(request, queryset, search_term);
+        # keywords = search_term.split(" ")
+        # # tags = views.get_array_or_none(request.GET.get("tags"))
+        # tags = request.GET.getlist("tags")
+        #
+        # if search_term is None or search_term == "" and len(tags) == 0:
+        #     return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
+        #
+        # r = EmployeeContract.objects.none()
+        # querysetFiltrado = Employee.objects.filter(tags__id__in=tags)
+        #
+        # if len(querysetFiltrado) == 0:
+        #     querysetFiltrado = queryset
+        #
+        # for k in keywords:
+        #     if k != "":
+        #         q, ud = super(EmployeeAdmin, self).get_search_results(request, querysetFiltrado, k)
+        #         r |= q
+        #     else:
+        #         r = querysetFiltrado
+        #
+        # return r, True
 
 
     def get_detail_column(self, obj):
