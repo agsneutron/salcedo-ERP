@@ -1821,13 +1821,13 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         try:
             with transaction.atomic():
                 assistance_file = request.FILES['assistance_file']
-                file_interface_obj = AssistanceFileInterface(assistance_file)
+                file_interface_obj = AssistanceFileInterface(assistance_file, request.user)
 
                 # Getting the elements from the file.
-                elements = file_interface_obj.get_element_list()
+                elements = file_interface_obj.get_element_list(obj.payroll_period.payroll_group.checker_type)
 
                 # Processing the results.
-                assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
+                assitance_db_object = AssistanceDBObject(current_user, elements, payroll_period_id)
                 assitance_db_object.process_records()
 
                 # If everything went ok, generatethe automatic absences
