@@ -9,7 +9,7 @@ from django.views.generic import View
 from ERP.lib.utilities import Utilities
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
     EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed, ISRTable, EarningsDeductions, \
-    EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag, EmployeePayrollPeriodExclusion
+    EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag, EmployeePayrollPeriodExclusion, JobInstance
 from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 from reporting.lib.payroll_list import PayrollListFile
@@ -270,6 +270,9 @@ class GeneratePayrollReceipt(View):
         receipt["total_earnings"] = str(total_earnings)
         receipt["total_deductions"] = str(total_deductions)
 
+
+
+
         return receipt
 
     def get(self, request):
@@ -489,7 +492,6 @@ class ExportPayrollList(View):
         receipt = {}
 
         receipt['base_salary'] = 0.0
-        receipt['position'] = "(pendiente) Nombre del puesto"
 
         # Fixed earnings.
         fixed_earnigs = employee.get_fixed_earnings()
@@ -586,6 +588,19 @@ class ExportPayrollList(View):
         receipt['deductions'] = deductions_array
         receipt['total_taxable'] = float(total_taxable)
         receipt['isr'] = isr
+
+        # Getting the info. for the employee position.
+        position_array = []
+        job_instance_set = JobInstance.objects.filter(employee_id=employee.id)
+        for each in job_instance_set:
+            position_array.append(each.job_profile.job)
+
+        if len(position_array) > 0:
+            position_string = ', '.join(position_array)
+        else:
+            position_string = 'Sin asignar'
+        receipt['position'] = position_string
+
 
         # Adding the general data to the receipt (employee and totals).
         receipt["employee_id"] = str(employee.id)
