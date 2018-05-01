@@ -176,13 +176,24 @@ name=Cuenta%202
             <div class="clearfix"></div>
             <hr>
             <div class="col-xs-3 col-xs-offset-4">
-                <button type="button" id="searchaccount" class="btn btn-raised btn-primary btn-block">Buscar</button>
+                <button type="button" id="searchaccount" class="btn btn-raised btn-primary btn-block" onclick="search('search_button')">Buscar</button>
             </div>
         </div>
 
         <div class="" style="margin-bottom: 30px">
-            <div class="table-responsive" id="divTable" style="padding: 0px 15px">
 
+            <div class="col-md-12">
+                <div class="text-right" style="display: flex;text-align: right;float: right;">
+                    <a href=#
+                       onclick="exportAccounts()"
+                       class="btn btn-raised btn-info">
+                        <i class="fa fa-file-excel-o"></i> Exportar Cuentas
+                    </a>
+                </div>
+
+            </div>
+
+            <div class="table-responsive" id="divTable" style="padding: 0px 15px">
             </div>
         </div>
     </div>

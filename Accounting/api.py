@@ -21,6 +21,7 @@ from django.shortcuts import redirect, render
 import requests
 
 from reporting.api import createCSVResponseFromQueryset
+from reporting.lib.accounts_list import AccountsListFile
 
 
 def get_array_or_none(the_string):
@@ -127,10 +128,59 @@ class SearchAccounts(ListView):
                 'grouping_code': str(account.grouping_code),
                 'subsidiary_account_id': account.subsidiary_account_id,
                 'subsidiary_account': str(account.subsidiary_account),
-                'type_account': account.type_account
+                'type_account': account.type_account,
+                'nature_account_display': account.get_nature_account_display()
             })
 
         return HttpResponse(Utilities.json_to_dumps(response['accounts']), 'application/json; charset=utf-8', )
+        # return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
+
+
+class ExportAccounts(ListView):
+    def get(self, request):
+        number = request.GET.get('number')
+        name = request.GET.get('name')
+        subsidiary_account_array = get_array_or_none(request.GET.get('subsidiary_account_array'))
+        nature_account_array = get_array_or_none(request.GET.get('nature_account_array'))
+        grouping_code_array = get_array_or_none(request.GET.get('grouping_code_array'))
+        level = request.GET.get('level')
+        #item = request.GET.get('item')
+        item_account_array = get_array_or_none(request.GET.get('item_account_array'))
+        internal_company = request.GET.get('internal_company')
+
+        engine = AccountSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
+                                     level, item_account_array, internal_company)
+
+        results = engine.search()
+
+        response = {
+            'accounts': []
+        }
+
+        for account in results:
+            response['accounts'].append({
+                'id': account.id,
+                'number': str(account.number),
+                'name': account.name,
+                'status': account.status,
+                'nature_account': account.get_nature_account_display(),
+                'nature_account_id': account.nature_account,
+                'item_id': account.item_id,
+                'item': str(account.item.name),
+                'internal_company_id': account.internal_company_id,
+                'internal_company': str(account.internal_company),
+                'grouping_code_id': account.grouping_code_id,
+                'grouping_code': str(account.grouping_code),
+                'subsidiary_account_id': account.subsidiary_account_id,
+                'subsidiary_account': str(account.subsidiary_account),
+                'type_account': account.get_type_account_display(),
+                'type_account_id': account.type_account,
+                'nature_account_display': account.get_nature_account_display()
+            })
+
+        accounts_file = AccountsListFile.generate_accounts_list(response['accounts'])
+
+        return accounts_file
         # return HttpResponse(Utilities.query_set_to_dumps(results), 'application/json; charset=utf-8', )
 
 
