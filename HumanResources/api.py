@@ -630,19 +630,33 @@ class ExportPayrollList(View):
 
         payroll_period_id = request.GET.get('payroll_period')
 
+        '''
         excluded_employees_csv = request.GET.get('employeesSelected')
         if excluded_employees_csv == "":
             excluded_employees = []
         else:
             excluded_employees = get_array_or_none(excluded_employees_csv)
+        '''
+
 
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+
 
         # Getting the employee object for batch generation.
         payroll_group = payroll_period.payroll_group
 
         # Getting all the position descriptions related to the payroll group.
         position_description_set = EmployeePositionDescription.objects.filter(payroll_group_id=payroll_group.id)
+
+
+        # Employees to be excluded.
+        excluded_employees = []
+        exclusion_set = EmployeePayrollPeriodExclusion.objects.filter(payroll_period=payroll_period)
+        for exclusion in exclusion_set:
+            excluded_employees.append(exclusion.employee.id)
+
+        # Array to control employees data set.
         employee_array = []
 
         for position_description in position_description_set:
