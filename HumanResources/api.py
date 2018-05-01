@@ -12,6 +12,7 @@ from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, E
     EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag, EmployeePayrollPeriodExclusion
 from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
+from reporting.lib.payroll_list import PayrollListFile
 from django.db import transaction
 from django.views.generic.list import ListView
 
@@ -41,7 +42,11 @@ class ChangeAbsenceJustifiedStatus(View):
 
 class GeneratePayrollReceipt(View):
     def get_ISR_from_taxable(self, earnings):
-
+        """
+            Takes the total for the employee earnings and calculates its ISR taxes using the formula that SAT provides.
+            :param earnings: total of earnings
+            :return: total of taxes
+        """
         isr_rules = ISRTable.objects.all()
         for rule in isr_rules:
             # Finding the range the earnings belong to.
@@ -72,6 +77,8 @@ class GeneratePayrollReceipt(View):
                 concept_id = None
 
             concept = EarningsDeductions.objects.get(pk=concept_id)
+            print "Concept:"
+            print concept
 
             new_obj = PayrollProcessedDetail(
                 name=concept.name,
@@ -401,6 +408,7 @@ class DeletePayrollReceiptsForPeriod(View):
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 
         payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period_id=payroll_period_id)
+        print "Length " + str(len(payroll_receipt_processed))
         '''
         if len(payroll_receipt_processed) > 0:
             payroll_processed_detail = PayrollProcessedDetail.objects.filter(payroll_receip_processed = payroll_receipt_processed)
@@ -416,6 +424,240 @@ class DeletePayrollReceiptsForPeriod(View):
         return HttpResponseRedirect(
             "/humanresources/employeebyperiod?payrollperiod=" + str(payroll_period.id) + "&payrollgroup=" + str(
                 payroll_period.payroll_group.id))
+
+
+class ExportPayrollList(View):
+    """
+        Exports the payroll list as an excel file for a given payroll group. This method does not save data
+        in a historic way as the GeneratePayrollReceipt methods do. This means that the user will be able to
+        export the list to see the information, before creating the final receipts.
+    """
+    def get_ISR_from_taxable(self, earnings):
+        """
+        Takes the total for the employee earnings and calculates its ISR taxes using the formula that SAT provides.
+        :param earnings: total of earnings
+        :return: total of taxes
+        """
+
+        isr_rules = ISRTable.objects.all()
+        for rule in isr_rules:
+            # Finding the range the earnings belong to.
+            if (earnings >= rule.lower_limit and earnings <= rule.upper_limit) or (
+                            earnings >= rule.lower_limit and rule.upper_limit == 0):
+                # Subtracting the lower limit to the earnings.
+                tax_minus_lower_limit = earnings - rule.lower_limit
+
+                # Multiplying by the rate.
+                value_per_rate = tax_minus_lower_limit * rule.rate
+
+                # Adding the fixed fee to the result.
+                result = value_per_rate + rule.fixed_fee
+
+                # Rounding the result to two decimals.
+                result = round(result, 2)
+
+                return result
+
+        return 0
+
+    def validate_employee_financial_data(self, employee):
+        """
+            Validates that the employee has Financial Data created in the system.
+            :param employee: employee whose financial data we will look for.
+            :return:
+        """
+        try:
+            employee_financial_data = EmployeeFinancialData.objects.get(employee__id=employee.id)
+            return True
+
+        except EmployeeFinancialData.DoesNotExist as e:
+            return False
+
+    def generate_single_payroll(self, employee, payroll_period):
+        """
+        Generates the payroll (total earnings, total deductions, etc) for the given employee.
+        :param employee: employee to work with.
+        :param payroll_period: specific payroll to look for.
+        :return:
+        """
+        total_earnings = 0
+        total_deductions = 0
+        total_taxable = 0
+        earnings_array = []
+        deductions_array = []
+
+        receipt = {}
+
+        receipt['base_salary'] = 0.0
+        receipt['position'] = "(pendiente) Nombre del puesto"
+
+        # Fixed earnings.
+        fixed_earnigs = employee.get_fixed_earnings()
+        fixed_earnings_array = []
+        for fixed_earning in fixed_earnigs:
+            fixed_earning_json = {
+                "id": str(fixed_earning.concept.id),
+                "name": fixed_earning.concept.name,
+                "amount": str(fixed_earning.ammount)
+            }
+            fixed_earnings_array.append(fixed_earning_json)
+            earnings_array.append(fixed_earning_json)
+            total_earnings += fixed_earning.ammount
+            total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
+
+            if(fixed_earning.concept.name == "Salario"):
+                receipt['base_salary'] = float(fixed_earning.ammount)
+
+        receipt['fixed_earnings'] = fixed_earnings_array
+
+        # Fixed deductions.
+        fixed_deductions = employee.get_fixed_deductions()
+        fixed_deductions_array = []
+        for fixed_deduction in fixed_deductions:
+            fixed_deduction_json = {
+                "id": str(fixed_deduction.concept.id),
+                "name": fixed_deduction.concept.name,
+                "amount": str(fixed_deduction.ammount)
+            }
+            fixed_deductions_array.append(fixed_deduction_json)
+            deductions_array.append(fixed_deduction_json)
+            total_deductions += fixed_deduction.ammount
+
+        receipt['fixed_deductions'] = fixed_deductions_array
+
+        # Variable Earnings.
+        variable_earnings = employee.get_variable_earnings_for_period(payroll_period)
+        variable_earnings_array = []
+        for variable_earning in variable_earnings:
+            variable_earning_json = {
+                "id": str(variable_earning.concept.id),
+                "name": variable_earning.concept.name,
+                "amount": str(variable_earning.ammount)
+            }
+            variable_earnings_array.append(variable_earning_json)
+            earnings_array.append(variable_earning_json)
+            total_earnings += variable_earning.ammount
+            total_taxable += variable_earning.ammount * variable_earning.concept.percent_taxable / 100
+
+        receipt['variable_earnings'] = variable_earnings_array
+
+        # Variable Deductions.
+        variable_deductions = employee.get_variable_deductions_for_period(payroll_period)
+        variable_deductions_array = []
+        for variable_deduction in variable_deductions:
+            variable_deduction_json = {
+                "id": str(variable_deduction.concept.id),
+                "name": variable_deduction.concept.name,
+                "amount": str(variable_deduction.ammount)
+            }
+            variable_deductions_array.append(variable_deduction_json)
+            deductions_array.append(variable_deduction_json)
+            total_deductions += variable_deduction.ammount
+
+        receipt['variable_deductions'] = variable_deductions_array
+
+        # Absences.
+        employee_financial_data = EmployeeFinancialData.objects.get(employee_id=employee.id)
+        absences = employee.get_unjustified_employee_absences_for_period(payroll_period)
+        absences_array = []
+        for absence in absences:
+            absence_json = {
+                "id": absence.id,
+                "name": "Falta del " + str(absence.record_date),
+                "amount": str(employee_financial_data.daily_salary)
+            }
+            absences_array.append(absence_json)
+            deductions_array.append(absence_json)
+            total_deductions += employee_financial_data.daily_salary
+
+        receipt['absences'] = absences_array
+
+        # ISR.
+        isr = self.get_ISR_from_taxable(float(total_taxable))
+        deductions_array.append({
+            "id": "",
+            "name": "ISR",
+            "amount": isr
+        })
+        total_deductions = float(total_deductions) + isr
+
+        # General array.
+        receipt['earnings'] = earnings_array
+        receipt['deductions'] = deductions_array
+        receipt['total_taxable'] = float(total_taxable)
+        receipt['isr'] = isr
+
+        # Adding the general data to the receipt (employee and totals).
+        receipt["employee_id"] = str(employee.id)
+        receipt["employee_key"] = str(employee.employee_key)
+        receipt["rfc"] = str(employee.rfc)
+        receipt["ssn"] = str(employee.social_security_number)
+        receipt["employee_fullname"] = employee.get_full_name()
+        receipt["total_earnings"] = str(total_earnings)
+        receipt["total_deductions"] = str(total_deductions)
+
+        return receipt
+
+    def get(self, request):
+
+        payroll_period_id = request.GET.get('payroll_period')
+
+        excluded_employees_csv = request.GET.get('employeesSelected')
+        if excluded_employees_csv == "":
+            excluded_employees = []
+        else:
+            excluded_employees = get_array_or_none(excluded_employees_csv)
+
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        # Getting the employee object for batch generation.
+        payroll_group = payroll_period.payroll_group
+
+        # Getting all the position descriptions related to the payroll group.
+        position_description_set = EmployeePositionDescription.objects.filter(payroll_group_id=payroll_group.id)
+        employee_array = []
+
+        for position_description in position_description_set:
+            employee_array.append(position_description.employee.id)
+
+        # Getting all the employees realted to the found payroll groups.
+        employee_set = Employee.objects.filter(Q(id__in=employee_array)).exclude(id__in=excluded_employees)
+
+        # Generating the payroll for every single employee.
+        payroll_array = []
+
+        try:
+
+            for employee in employee_set:
+                financial_data_exists = self.validate_employee_financial_data(employee)
+
+                # If any of the employees lacks of financial data, return an error.
+                if not financial_data_exists:
+                    raise Exception(
+                        'Ha habido un problema exportando el listado nominal. El empleado ' + employee.employee_key +
+                        " no cuenta con datos financieros cargados en el sistema")
+
+                single_payroll = self.generate_single_payroll(employee, payroll_period)
+                payroll_array.append(single_payroll)
+
+            payroll_list_file = PayrollListFile.generate_payroll_list(payroll_array)
+
+            '''
+            return HttpResponse(
+                json.dumps(payroll_array, indent=4, separators=(',', ': '), sort_keys=False,
+                           ensure_ascii=False),
+                'application/json; charset=utf-8')
+            '''
+            return payroll_list_file
+
+
+        except Exception as e:
+            print "Exception was: " + str(e)
+            django.contrib.messages.error(request, "Hubo un error al exportar la Lista Nominal.")
+            return HttpResponseRedirect(
+                "/humanresources/employeebyperiod?payrollperiod=" + str(payroll_period.id) + "&payrollgroup=" + str(
+                    payroll_period.payroll_group.id))
+
 
 
 class ErrorDataUpload(SystemException):

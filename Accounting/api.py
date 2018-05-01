@@ -302,6 +302,8 @@ class GenerateTrialBalance(ListView):
         return policy_details_set
 
     def get(self, request):
+        print "Period"
+        print request.GET.get('fiscal_period_month')
         lower_account_number = request.GET.get('lower_account_number')
         upper_account_number = request.GET.get('upper_account_number')
 

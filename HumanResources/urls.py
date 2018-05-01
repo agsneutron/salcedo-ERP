@@ -45,7 +45,7 @@ urlpatterns = [
 
     url(r'^employeehome$', views.employeehome, name='employeehome'),
     url(r'^payrollhome$', views.payrollhome, name='payrollhome'),
-url(r'^employeerequisitionhome$', views.payrollhome, name='employeerequisitionhome'),
+    url(r'^employeerequisitionhome$', views.payrollhome, name='employeerequisitionhome'),
     url(r'^payrolltype$', views.payrolltype, name='payrolltype'),
     url(r'^employeebyperiod', views.EmployeeByPeriod, name='employeebyperiod'),
 
@@ -54,6 +54,7 @@ url(r'^employeerequisitionhome$', views.payrollhome, name='employeerequisitionho
     url(r'^api/generate_payroll_receipt$', api.GeneratePayrollReceipt.as_view(), name='generate_payroll_receipt'),
     url(r'^api/generate_payroll_receipt_for_employee$', api.GeneratePayrollReceiptForEmployee.as_view(), name='generate_payroll_receipt_for_employee'),
     url(r'^api/delete_payroll_receipts', api.DeletePayrollReceiptsForPeriod.as_view(), name='delete_payroll_receipts'),
+    url(r'^api/export_payroll_list', api.ExportPayrollList.as_view(), name='export_payroll_list'),
     url(r'^api/get_tags', api.Get_Tags.as_view(), name='get_tags'),
     url(r'^api/save_excluded_employees_for_period', api.SaveExcludedEmployeesForPeriod.as_view(), name='save_excluded_employees_for_period'),
 

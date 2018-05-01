@@ -1190,7 +1190,7 @@ class EarningsDeductions(models.Model):
         verbose_name = "Percepciones y Deducciones"
 
     def __str__(self):
-        return self.type + "-" + self.name
+        return self.type + "-" + self.name + " - " + str(self.account.id)
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.type + "-" + self.name
@@ -1372,7 +1372,7 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False, limit_choices_to={
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Conceptos", null=False, blank=False, limit_choices_to={
         'category': 'V', 'status':'A',
     })
     payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
