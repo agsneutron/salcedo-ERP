@@ -79,7 +79,7 @@ class GeneratePayrollReceipt(View):
                 sat_key=concept.sat_key,
                 law_type=concept.law_type,
                 status=concept.status,
-                accounting_account=concept.accounting_account,
+                accounting_account=concept.account.id,
                 comments=concept.comments,
                 type=concept.type,
                 taxable=concept.get_taxable_display(),
@@ -323,7 +323,7 @@ class GeneratePayrollReceipt(View):
 
 
         except Exception as e:
-            print e
+            print "Exception was: " + str(e)
             django.contrib.messages.error(request, "Ya se han generado los recibos de nómina anteriormente.")
             return HttpResponseRedirect(
                 "/humanresources/employeebyperiod?payrollperiod=" + str(payroll_period.id) + "&payrollgroup=" + str(
