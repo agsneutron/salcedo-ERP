@@ -1196,6 +1196,20 @@ class EarningsDeductions(models.Model):
         return self.type + "-" + self.name
 
 
+    def get_accumulated_for_period(self, payroll_period_id):
+        total_fixed = 0
+        records = EmployeeEarningsDeductions.objects.filter(concept_id=self.id)
+        for record in records:
+            total_fixed += record.ammount
+
+        total_variable = 0
+        records = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(concept_id=self.id) & Q(payroll_period_id=payroll_period_id))
+        for record in records:
+            total_variable += record.ammount
+
+        return total_fixed, total_variable
+
+
 class EmployeeEarningsDeductions(models.Model):
     '''
         To keep a history of the applied employee earnings and deductions.
