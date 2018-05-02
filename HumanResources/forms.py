@@ -724,12 +724,7 @@ class JobProfileForm(forms.ModelForm):
     class Meta:
         model = JobProfile
         fields = '__all__'
-        widgets = {'abilities': forms.Textarea(attrs={'rows': 4}),
-                   'aptitudes': forms.Textarea(attrs={'rows': 4}),
-                   'knowledge': forms.Textarea(attrs={'rows': 4}),
-                   'competitions': forms.Textarea(attrs={'rows': 4}),
-                   'scholarship': forms.Textarea(attrs={'rows': 4}),
-                   'experience': forms.Textarea(attrs={'rows': 4}),
+        widgets = {
                    'sunday': forms.HiddenInput,
                    'saturday': forms.HiddenInput,
                    'monday': forms.HiddenInput,
@@ -783,4 +778,10 @@ class JobInstanceForm(forms.ModelForm):
 class EmployeeDropOutForm(forms.ModelForm):
     class Meta:
         model = EmployeeDropOut
+        fields = '__all__'
+
+
+class EmployeeContractForm(forms.ModelForm):
+    class Meta:
+        mode = EmployeeContract
         fields = '__all__'

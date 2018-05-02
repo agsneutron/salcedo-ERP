@@ -921,6 +921,19 @@ class Project(models.Model):
     # Many to many to create the project / section relation.
     sections = models.ManyToManyField('Section', through='ProjectSections', name='Secciones')
 
+
+
+
+    # Roles on projects:
+    general_director = models.ForeignKey(User, verbose_name="Director General", null=False, related_name='+')
+    construction_director = models.ForeignKey(User, verbose_name="Director de Construcción", null=False, related_name='+')
+    business_president = models.ForeignKey(User, verbose_name="Presidente Empresarial", null=False, related_name='+')
+    business_vice_president = models.ForeignKey(User, verbose_name="Vicepresidente Empresarial", null=False,
+                                                related_name='+')
+    administration_head = models.ForeignKey(User, verbose_name="Jefe de Administración", null=False, related_name='+')
+
+
+
     class Meta:
         verbose_name_plural = 'Proyectos'
 

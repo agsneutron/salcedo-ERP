@@ -383,6 +383,31 @@ class ItemAccountAdmin(admin.ModelAdmin):
     get_delete_column.short_description = 'Eliminar'
     get_delete_column.allow_tags = True
 
+@admin.register(GroupingCode)
+class GroupingCode(admin.ModelAdmin):
+
+    fieldsets = (
+        ("Código Agrupador", {
+            'fields': (
+                'level', 'grouping_code','account_name')
+        }),
+    )
+
+    list_display = ('level', 'grouping_code', 'account_name', 'get_change_column', 'get_delete_column')
+    search_fields = ('account_name','grouping_code',)
+
+    def get_change_column(self, obj):
+        return AccountingAdminUtilities.get_change_link(obj)
+
+    def get_delete_column(self, obj):
+        return AccountingAdminUtilities.get_delete_link(obj)
+
+    get_change_column.short_description = 'Editar'
+    get_change_column.allow_tags = True
+
+    get_delete_column.short_description = 'Eliminar'
+    get_delete_column.allow_tags = True
+
 
 @admin.register(Account)
 class AccountAdmin(admin.ModelAdmin):
@@ -492,5 +517,3 @@ class CommercialAllyContactAdmin(admin.ModelAdmin):
         redirect_url = "/admin/Accounting/commercialallycontact/" + str(obj.id)
         return HttpResponseRedirect(redirect_url)
 
-
-admin.site.register(GroupingCode)

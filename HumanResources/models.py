@@ -286,6 +286,48 @@ class Employee(models.Model):
         return absences
 
 
+
+
+# Method to save the employee document file.
+def upload_employee_contract(instance, filename):
+    return '/'.join(['human_resources', 'employee_documents', instance.employee.employee_key, 'contracts', filename])
+
+
+class EmployeeContract(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+
+    contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=64, null=False, blank=False, unique=True)
+
+
+    CONTRACT_TYPE_PERMANENT = 'P'
+    CONTRACT_TYPE_TEMPORAL = 'T'
+
+    CONTRACT_TYPE_CHOICES = (
+        (CONTRACT_TYPE_PERMANENT, 'Permanente'),
+        (CONTRACT_TYPE_TEMPORAL, 'Temporal'),
+    )
+
+    contract_type = models.CharField(max_length=1, choices=CONTRACT_TYPE_CHOICES, default=CONTRACT_TYPE_PERMANENT,
+                                      verbose_name='Tipo de Contrato')
+
+
+    description = tinymce_models.HTMLField(verbose_name='Descripción', null=True, blank=True, max_length=4096)
+
+    start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
+    end_date = models.DateField(verbose_name="Fecha de Término", null=True, blank=True)
+
+
+    contract_file = models.FileField(upload_to=upload_employee_contract, null=True, verbose_name="Contrato Escaneado")
+
+
+    def __str__(self):
+        return self.contract_key+ ": " + self.employee.name+ " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
+
+    class Meta:
+        verbose_name = 'Contrato'
+        verbose_name_plural = 'Contratos'
+
 # Employee Checker Data.
 class CheckerData(models.Model):
     CHECKER_TYPE_A = 1
@@ -576,7 +618,7 @@ class TestApplication(models.Model):
 
 
 # To represent the structure of an employee's contract.
-class EmployeeContract(models.Model):
+'''class EmployeeContract(models.Model):
     contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=128, null=False, blank=False)
     description = models.CharField(verbose_name="Descripción del Contrato", max_length=4096, null=False, blank=False)
     specifications = models.CharField(verbose_name="Especificaciones del Contrato", max_length=4096, null=False,
@@ -596,7 +638,7 @@ class EmployeeContract(models.Model):
         return self.contract_key
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.contract_key
+        return self.contract_key'''
 
 
 # To represent an employee's family member.
@@ -860,18 +902,25 @@ class EmployeeRequisition(models.Model):
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
                            unique=False)
-    abilities = models.TextField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
+    abilities =tinymce_models.HTMLField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
                                  unique=False)
-    aptitudes = models.TextField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
+    aptitudes = tinymce_models.HTMLField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
                                  unique=False)
-    knowledge = models.TextField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
+    knowledge = tinymce_models.HTMLField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
                                  unique=False)
-    competitions = models.TextField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
+    competitions = tinymce_models.HTMLField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
                                     unique=False)
-    scholarship = models.TextField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
+    scholarship = tinymce_models.HTMLField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    experience = models.TextField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
+    experience = tinymce_models.HTMLField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
                                   unique=False)
+
+    jobdescription = tinymce_models.HTMLField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
+                                   unique=False)
+    minimumrequirements = tinymce_models.HTMLField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
+                                  unique=False)
+
+
     entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
     exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
     sunday = models.BooleanField(verbose_name="Domingo", default=False)
@@ -1141,10 +1190,24 @@ class EarningsDeductions(models.Model):
         verbose_name = "Percepciones y Deducciones"
 
     def __str__(self):
-        return self.type + "-" + self.name
+        return self.type + "-" + self.name + " - " + str(self.account.id)
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.type + "-" + self.name
+
+
+    def get_accumulated_for_period(self, payroll_period_id):
+        total_fixed = 0
+        records = EmployeeEarningsDeductions.objects.filter(concept_id=self.id)
+        for record in records:
+            total_fixed += record.ammount
+
+        total_variable = 0
+        records = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(concept_id=self.id) & Q(payroll_period_id=payroll_period_id))
+        for record in records:
+            total_variable += record.ammount
+
+        return total_fixed, total_variable
 
 
 class EmployeeEarningsDeductions(models.Model):
@@ -1323,7 +1386,7 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False, limit_choices_to={
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Conceptos", null=False, blank=False, limit_choices_to={
         'category': 'V', 'status':'A',
     })
     payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)

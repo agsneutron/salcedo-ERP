@@ -1812,6 +1812,9 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     get_UploadedEmployeeAssistanceHistory_link.short_description = 'Justificar Asistencias'
     get_UploadedEmployeeAssistanceHistory_link.allow_tags = True
 
+
+
+
     def save_model(self, request, obj, form, change):
         current_user = request.user
         # payroll_group_id = int(request.POST.get('payroll_group'))
@@ -1821,13 +1824,13 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         try:
             with transaction.atomic():
                 assistance_file = request.FILES['assistance_file']
-                file_interface_obj = AssistanceFileInterface(assistance_file)
+                file_interface_obj = AssistanceFileInterface(assistance_file, request.user)
 
                 # Getting the elements from the file.
-                elements = file_interface_obj.get_element_list()
+                elements = file_interface_obj.get_element_list(obj.payroll_period.payroll_group.checker_type)
 
                 # Processing the results.
-                assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
+                assitance_db_object = AssistanceDBObject(current_user, elements, payroll_period_id)
                 assitance_db_object.process_records()
 
                 # If everything went ok, generatethe automatic absences
@@ -1932,7 +1935,7 @@ class JobProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Perfil de Puesto", {
             'fields': (
-                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience', 'entry_time',
+                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience','jobdescription','minimumrequirements', 'entry_time',
                 'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
                 'subdirection', 'area', 'department', 'minimumsalary', 'maximumsalary')
         }),
@@ -2094,6 +2097,85 @@ class JobInstanceAdmin(admin.ModelAdmin):
             django.contrib.messages.error(request, 'No se puede eliminar la raíz del organigrama.')
 
         return super(JobInstanceAdmin, self).response_delete(request, obj_display, obj_id)
+
+
+
+
+@admin.register(EmployeeContract)
+class EmployeeContractAdmin(admin.ModelAdmin):
+    form = EmployeeContractForm
+
+    fieldsets = (
+        ('Contrato', {
+            'fields': (
+                'employee','contract_key','contract_type',
+                      'start_date','end_date', 'contract_file',
+                'description',)
+        }),
+    )
+
+    search_fields = ('contract_key',)
+
+    def get_search_results(self, request, queryset, search_term):
+
+        return super(EmployeeContractAdmin,self).get_search_results(request, queryset, search_term);
+        # keywords = search_term.split(" ")
+        # # tags = views.get_array_or_none(request.GET.get("tags"))
+        # tags = request.GET.getlist("tags")
+        #
+        # if search_term is None or search_term == "" and len(tags) == 0:
+        #     return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
+        #
+        # r = EmployeeContract.objects.none()
+        # querysetFiltrado = Employee.objects.filter(tags__id__in=tags)
+        #
+        # if len(querysetFiltrado) == 0:
+        #     querysetFiltrado = queryset
+        #
+        # for k in keywords:
+        #     if k != "":
+        #         q, ud = super(EmployeeAdmin, self).get_search_results(request, querysetFiltrado, k)
+        #         r |= q
+        #     else:
+        #         r = querysetFiltrado
+        #
+        # return r, True
+
+
+    def get_detail_column(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+
+    def get_detail_column(self, obj):
+        return HumanResourcesAdminUtilities.get_detail_link(obj)
+
+
+    def get_change_column(self, obj):
+        return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
+
+
+    def get_delete_column(self, obj):
+        return HumanResourcesAdminUtilities.get_delete_link(obj)
+
+
+    list_display = ('contract_key', 'employee', 'get_detail_column', 'get_change_column', 'get_delete_column')
+
+    get_detail_column.allow_tags = True
+    get_detail_column.short_description = 'Detalle'
+
+    get_change_column.allow_tags = True
+    get_change_column.short_description = 'Editar'
+
+    get_delete_column.allow_tags = True
+    get_delete_column.short_description = 'Eliminar'
+
+
+    def get_urls(self):
+        urls = super(EmployeeContractAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.EmployeeContractDetail.as_view(), name='employecontract-detail'),
+        ]
+        return my_urls + urls
 
 
 # EmployeeDropOut Administrator

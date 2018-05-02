@@ -20,15 +20,17 @@ class AssistanceFileInterface(object):
 
     # The book from which the data will be read
     book = None
+    current_user = None
 
-    def __init__(self, file_path):
+    def __init__(self, file_path, user):
         """ Inits the FileInterface object with a file.
         :param file_path: the path of the file with which the object will be initialized.
         """
         self.book = xlrd.open_workbook(file_contents=file_path.read())
+        self.current_user = user
         #self.book = xlrd.open_workbook(file_path)
 
-    def get_element_list(self):
+    def get_element_list(self, file_type):
         """ Obtains an list containing all the records of the first sheet of the object's file.
         :return: A list containing all the records of the first sheet of the object's file.
         """
@@ -39,12 +41,62 @@ class AssistanceFileInterface(object):
         # Get the first sheet
         sheet = self.book.sheet_by_index(0)
 
+
+
+        # If the type of assistance check is automatic, check that there are at least 11 columns..
+        if file_type == PayrollGroup.CHECKER_TYPE_AUTOMATIC and len(sheet.row_values(0)) < 11:
+            error_message = "El formato del archivo cargado es incorrecto para el tipo de carga automática."
+            raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
+        elif file_type == PayrollGroup.CHECKER_TYPE_MANUAL and len(sheet.row_values(0)) != 4:
+            error_message = "El formato del archivo cargado es incorrecto para el tipo de carga manual."
+            raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
+
+
+
+
+
         # We start on row 1, because the established format does not include a header.
-        i = 0
+        i = 1
         while True:
             try:
                 # Read the whole row at once
-                elements = sheet.row_values(i);
+                elements = sheet.row_values(i)
+                try:
+                    if file_type == PayrollGroup.CHECKER_TYPE_AUTOMATIC:
+                        # automatic
+                        date_as_datetime = datetime.datetime(*xlrd.xldate_as_tuple(elements[5], self.book.datemode))
+                        elements[5] = date_as_datetime
+
+
+                    else: # Manual
+                        try:
+                            date_as_datetime = datetime.datetime(*xlrd.xldate_as_tuple(elements[1], self.book.datemode))
+                            elements[1] = date_as_datetime
+
+                            # Enter time
+                            time_record_obj = datetime.time(*xlrd.xldate_as_tuple(elements[2], self.book.datemode)[3:])
+                            elements[2] = time_record_obj
+
+                            # Exit time
+                            time_record_obj = datetime.time(*xlrd.xldate_as_tuple(elements[3], self.book.datemode)[3:])
+                            elements[3] = time_record_obj
+                        except ValueError as e:
+                            if file_type == PayrollGroup.CHECKER_TYPE_AUTOMATIC:
+                                error_message = "El formato del archivo cargado es incorrecto para el tipo de carga automática. Los valores para fechas y horas no son válidos."
+                            else:
+                                error_message = "El formato del archivo cargado es incorrecto para el tipo de carga manual. Los valores para fechas y horas no son válidos."
+                            raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
+
+
+                        #strptime(time_record, "%H:%M").time()
+
+
+                except TypeError as e:
+                    if file_type == PayrollGroup.CHECKER_TYPE_AUTOMATIC:
+                        error_message = "El formato del archivo cargado es incorrecto para el tipo de carga automática."
+                    else:
+                        error_message = "El formato del archivo cargado es incorrecto para el tipo de carga manual."
+                    raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
                 # Add the row to the list
                 element_list.append(elements)
                 i += 1
@@ -70,7 +122,7 @@ class AssistanceDBObject:
 
     # Function to process the given records one at a time.
     def process_records(self):
-        self.records.pop(0)
+        #self.records.pop(0)
         for record in self.records:
             self.save_assistance_record(record)
 
@@ -129,8 +181,15 @@ class AssistanceDBObject:
 
 
         if len(assistance_existed) > 0:
-            error_message = "La asistencia del empleado con la clave " + str(employee_key) + " el día " + str(record_date) + " ha sido registrada anteriormente."
-            raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
+            # If the assistance already existed, lets update the information.
+            assistance_obj = assistance_existed[0]
+            assistance_obj.entry_time = entry_time_to_save
+            assistance_obj.exit_time = exit_time_to_save
+            assistance_obj.absence = employee_was_absent
+
+            # Maybe add a message that says that some records where updated.
+
+            assistance_obj.save()
 
         else:
             assistance_obj = EmployeeAssistance(
@@ -175,16 +234,24 @@ class AssistanceDBObject:
         """
 
         # Obtaining the date object from the obtained record date.
-        try:
-            date_to_save = datetime.datetime.strptime(record_date, "%d/%m/%Y").date()
-        except ValueError:
-            error_message = "Ha habido un error con el formato de la fecha " + str(record_date) + " para el registro del" + \
-                            " empleado con la clave " + str(employee_key)
-            raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
+        error_message = "Ha habido un error con el formato de la fecha " + str(record_date) + " para el registro del" + \
+                        " empleado con la clave " + str(employee_key)
+        date_to_save = record_date
+
+        '''if type(record_date) is float:
+            try:
+                date_to_save = datetime.datetime.fromtimestamp(record_date)
+            except ValueError:
+                raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
+        else:
+            try:
+                date_to_save = datetime.datetime.strptime(record_date, "%d/%m/%Y").date()
+            except ValueError:
+                raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)'''
 
         # Obtaining the date object from the Payroll Period object.
-        start_period = self.payroll_period.start_period
-        end_period = self.payroll_period.end_period
+        start_period = datetime.datetime.combine(self.payroll_period.start_period, datetime.datetime.min.time())
+        end_period = datetime.datetime.combine(self.payroll_period.end_period, datetime.datetime.min.time())
 
         # Checking if the file contains information for the correct Payroll Period date.
         if date_to_save < start_period or date_to_save > end_period:
@@ -196,10 +263,12 @@ class AssistanceDBObject:
 
 
     def validate_entry_and_exit_time(self, time_record, employee_key):
-
         if time_record is '' or time_record is None:
             return None
 
+        time_record_obj = time_record
+
+        '''
         try:
             time_record_obj = datetime.datetime.strptime(time_record, "%H:%M").time()
 
@@ -207,7 +276,7 @@ class AssistanceDBObject:
             error_message = "Ha habido un error con el formato de la hora " + str(time_record) + " para el registro del" + \
                             " empleado con la clave " + str(employee_key)
             raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
-
+        '''
         return time_record_obj
 
 
