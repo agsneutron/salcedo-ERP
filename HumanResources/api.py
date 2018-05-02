@@ -15,6 +15,7 @@ from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, E
 from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 from reporting.lib.payroll_list import PayrollListFile
+from reporting.lib.earnings_deductions_totals_report import EarningsDeductionsTotalEarnings
 from django.db import transaction
 from django.views.generic.list import ListView
 
@@ -115,8 +116,9 @@ class GenerateEarningsDeductionsReport(View):
         response['deduction_total_fixed'] = str(deduction_total_fixed)
         response['deduction_total_variable'] = str(deduction_total_variable)
 
-        #return HttpResponseRedirect('/admin/')
-        return HttpResponse(Utilities.json_to_dumps(response),'application/json; charset=utf-8')
+        report = EarningsDeductionsTotalEarnings.generate_report(response)
+        #return HttpResponse(Utilities.json_to_dumps(response),'application/json; charset=utf-8')
+        return report
 
 
 
