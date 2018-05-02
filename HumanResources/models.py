@@ -1174,7 +1174,7 @@ class EarningsDeductions(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
     percent_taxable = models.IntegerField("Porcentaje Gravable", blank=False, null=False)
     sat_key = models.CharField(verbose_name="Clave SAT", null=False, blank=False, max_length=30, )
-    law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
+    #law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
                               default=ACTIVA)
     account = models.ForeignKey(Account, verbose_name='Cuenta', null=True, blank=True,)

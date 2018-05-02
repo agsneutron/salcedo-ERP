@@ -1296,7 +1296,7 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         ("Catálogo de Percepciones y Deducciones", {
             'fields': (
                 'name', 'type', 'category', 'taxable', 'percent_taxable', 'account', 'sat_key',
-                'law_type', 'status', 'comments',)
+                'status', 'comments',)
         }),
     )
 
