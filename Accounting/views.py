@@ -38,9 +38,11 @@ def SearchAccount(request):
 # For Search Comercial Allie filter objects view
 def SearchProvider(request):
     title = "Proveedores"
+    url='/admin/Accounting/commercialally/add/?type=0'
     template = loader.get_template('Accounting/search_commercialally.html')
     context = {'commercialally': CommercialAlly.objects.filter(type=0),
                's_type': str(title),
+               's_url': url,
                'type': str("PROVIDER"), }
 
     return HttpResponse(template.render(context,request))
@@ -48,9 +50,11 @@ def SearchProvider(request):
 
 def SearchCreditors(request):
     title = "Acreedores"
+    url = '/admin/Accounting/commercialally/add/?type=1'
     template = loader.get_template('Accounting/search_commercialally.html')
     context = {'commercialally': CommercialAlly.objects.filter(type=1),
                's_type': str(title),
+               's_url': url,
                'type': str("CREDITOR"), }
 
     return HttpResponse(template.render(context,request))
@@ -58,9 +62,11 @@ def SearchCreditors(request):
 
 def SearchThird(request):
     title = "Terceros"
+    url = '/admin/Accounting/commercialally/add/?type=2'
     template = loader.get_template('Accounting/search_commercialally.html')
     context = {'commercialally': CommercialAlly.objects.filter(type=2),
                's_type': str(title),
+               's_url': url,
                'type': str("THIRD_PARTY"), }
 
     return HttpResponse(template.render(context,request))

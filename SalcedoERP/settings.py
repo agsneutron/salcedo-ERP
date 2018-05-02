@@ -78,6 +78,7 @@ TEMPLATETAGS_DIRS = (
     os.path.join(BASE_DIR, 'users/templatetags/'),
     os.path.join(BASE_DIR, 'HumanResources/templatetags/'),
 )
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',

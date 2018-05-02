@@ -394,6 +394,7 @@ class EmployeeEarningsDeductionsForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         self.employee_id = self.request.GET.get('employee', None)
 
+
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
 
@@ -710,6 +711,8 @@ class EmployeeLoanForm(forms.ModelForm):
     class Meta:
         model = EmployeeLoan
         fields = '__all__'
+
+
 
 
 # Form to include the fields of Tag Form.

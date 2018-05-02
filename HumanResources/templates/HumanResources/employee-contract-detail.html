@@ -15,44 +15,55 @@
                     <hr>
                 </div>
             </div>
-            <div class="">
-                <div class="col-xs-6">
-                    <ul class="list-group">
-                        <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Clave:</span> {{ object.contract_key }}
-                        </li>
-                        <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Empleado:</span> {{ object.employee.employee_key }}: {{ object.employee.name }} {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}
-                        </li>
-                        <li class="list-group-item withripple "><span class="color-info"
-                                                                      style="font-size: 18px">Tipo de Contrato:</span> {{ object.get_contract_type_display }}</li>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
 
-                    </ul>
-                </div>
-                <div class="col-xs-6">
-                    <ul class="list-group">
-                        <li class="list-group-item withripple "><span class="color-info"
-                                                                      style="font-size: 18px">Fecha de Inicio:</span> {{ object.start_date}}
-                        </li>
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                             class="color-active">Clave:</span> {{ object.contract_key }}
+                        </span>
+                <span href="" class="list-group-item withripple "><i
+                        class="fa fa-chevron-right color-active"></i> <span
+                             class="color-active">Empleado:</span> {{ object.employee.employee_key }}: {{ object.employee.name }} {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}
+                        </span>
+                <span href="" class="list-group-item withripple "><i
+                        class="fa fa-chevron-right color-active"></i> <span
+                             class="color-active">Tipo de Contrato:</span> {{ object.get_contract_type_display }}</span>
 
-                        <li class="list-group-item withripple "><span class="color-info"
-                                                                      style="font-size: 18px">Fecha de Término:</span> {{ object.end_date }}
-                        </li>
-                        <li class="list-group-item withripple "><span class="color-info"
-                                                                      style="font-size: 18px">Contrato Escaneado:</span> <a href="/{{ object.contract_file }}">Descargar</a>
-                        </li>
-                    </ul>
-                </div>
+
             </div>
-            <div class="clearfix"></div>
-            <div class="">
-                <div class="col-xs-12">
-                    <ul class="list-group">
-                        <li class="list-group-item withripple "><span class="color-info"
-                                                                      style="font-size: 18px">Descripción:</span> {{ object.description | safe }}
-                        </li>
-                    </ul>
-                </div>
+            <div class="col-xs-6">
+
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                             class="color-active">Fecha de Inicio:</span> {{ object.start_date }}
+                        </span>
+
+                <span href="" class="list-group-item withripple "><i
+                        class="fa fa-chevron-right color-active"></i> <span
+                             class="color-active">Fecha de Término:</span> {{ object.end_date }}
+                        </span>
+                <span href="" class="list-group-item withripple "><i
+                        class="fa fa-chevron-right color-active"></i> <span
+                             class="color-active">Contrato Escaneado:</span> <a
+                        href="/{{ object.contract_file }}">Descargar</a>
+                        </span>
+
             </div>
         </div>
+        <div class="row">
+<br>
+            <div class="col-xs-12">
+
+                     <span href="" class="list-group-item withripple "><i
+                             class="fa fa-chevron-right color-active"></i> <span
+                             class="color-active">Descripción:</span> {{ object.description | safe }}
+                        </span>
+
+            </div>
+        </div>
+
     </div>
 
 {% endblock %}
