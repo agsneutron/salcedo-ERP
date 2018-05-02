@@ -394,6 +394,7 @@ class EmployeeEarningsDeductionsForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         self.employee_id = self.request.GET.get('employee', None)
 
+
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
 

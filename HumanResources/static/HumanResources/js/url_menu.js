@@ -120,6 +120,20 @@ $(function () {
     }
 
 });
+$(function () {
+    if (/employeecontract/.test(window.location.href)) {
+        $('#e7>a').addClass('active');
+        $('#e7>a').removeClass('collapsed');
+    }
+
+});
+$(function () {
+    if (/employeecontract\/+add/.test(window.location.href)) {
+        $('#e7>a').addClass('active');
+        $('#e7>a').removeClass('collapsed');
+    }
+
+});
 /*
 $(function () {
     if (/\?+type=1/.test(window.location.href)) {

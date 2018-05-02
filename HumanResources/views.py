@@ -578,3 +578,58 @@ class PayrollReceiptProcessedListView(ListView):
         context['payroll_period'] = payroll_period
 
         return context
+
+
+class EarningsDeductionsListView(ListView):
+    model = EarningsDeductions
+    template_name = "HumanResources/penalties-list.html"
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+    title_list = 'Penalizaciones'
+    penalty = ''
+
+    def get_queryset(self):
+        result = super(EarningsDeductionsListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        query_penalty = self.request.GET.get('penalty')
+        if query_penalty:
+            EarningsDeductionsListView.title_list = 'Penalizaciones'
+            EarningsDeductionsListView.penalty = '?tipo=2'
+            EarningsDeductionsListView.query = query_penalty
+            query_list = query_penalty.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(penalty__icontains=q) for q in query_list))
+                #|
+                #reduce(operator.and_,
+                #       (Q(account____icontains=q) for q in query_list))
+            )
+        else:
+            EarningsDeductionsListView.title_list='Percepciones y Deducciones'
+            EarningsDeductionsListView.penalty = ''
+            EarningsDeductionsListView.query = ''
+            query_list = ['N']
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(penalty__icontains=q) for q in query_list)))
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EarningsDeductionsListView, self).get_context_data(**kwargs)
+        context['title_list'] = EarningsDeductionsListView.title_list
+        context['penalty'] = EarningsDeductionsListView.penalty
+        context['query'] = EarningsDeductionsListView.query
+        context['query_string'] = '&q=' + EarningsDeductionsListView.query
+        context['has_query'] = (EarningsDeductionsListView.query is not None) and (EarningsDeductionsListView.query != "")
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_empresa'):
+            raise PermissionDenied
+        return super(EarningsDeductionsListView, self).dispatch(request, args, kwargs)

@@ -1,5 +1,5 @@
 {% block content %}
-<script type="text/javascript" src="/static/HumanResources/js/url_menu.js"></script>
+    <script type="text/javascript" src="/static/HumanResources/js/url_menu.js"></script>
     <style>
         #changelist table thead th div a {
             color: white;
@@ -140,7 +140,21 @@
                             </li>
                         </ul>
                     </li>
-
+                    <li class="panel" role="tab" id="e7">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#c7"
+                           aria-expanded="true" aria-controls="c7" class="collapsed withripple">
+                            Contratos</a>
+                        <ul id="c7" class="panel-collapse collapse" role="tabpanel" aria-labelledby="e7">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/employeecontract/add/">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/employeecontract/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
 
                 </ul>
                 <!-- ms-collapse-nav -->

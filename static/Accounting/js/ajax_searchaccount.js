@@ -6,12 +6,13 @@ var $j = jQuery.noConflict();
 $j(document).on('ready', main);
 
 function main() {
-    $j('#searchaccount').on('click', search);
+    //$j('#searchaccount').on('click', search);
+    $j('#searchaccount').trigger("click");
 }
 
 //http://127.0.0.1:8000/accounting/search_accounts?name=Cuenta%202&number=2&subsidiary_account_array=1&
 // nature_account_array=2&grouping_code_array=2&level=2&item=2
-function search() {
+function search(originButton) {
     var subsidiary_account_array = $j("#msSubsidiaryAccountArray").multiselect("getChecked").map(function () {
         return this.value;
     }).get();
@@ -21,12 +22,20 @@ function search() {
     var grouping_code_array = $j("#msGroupingCodeArray").multiselect("getChecked").map(function () {
         return this.value;
     }).get();
+    var item_account_array = $j("#msItemAccountArray").multiselect("getChecked").map(function () {
+        return this.value;
+    }).get();
     var account = $j("#account").val();
     var number = $j("#number").val();
     var level = $j("#level").val();
     var rubro = $j("#rubro").val();
     var internal_company = $j("#internal_company").val();
-    var url = "/accounting/search_accounts?";
+
+    if(originButton == 'search_button'){
+        var url = "/accounting/search_accounts?";
+    }else{
+        var url = "/accounting/export_accounts?";
+    }
 
     if (account.toString() != "") {
         url = url + "&name=" + account.toString();
@@ -46,14 +55,23 @@ function search() {
     if (level.toString() != "") {
         url = url + "&level=" + level.toString();
     }
-    if (rubro.toString() != "") {
-        url = url + "&rubro=" + rubro.toString();
+    if (item_account_array.toString() != "") {
+        url = url + "&item_account_array=" + item_account_array.toString();
     }
+    /*if (rubro.toString() != "") {
+        url = url + "&rubro=" + rubro.toString();
+    }*/
     if (internal_company.toString()!="") {
         url=url+"&internal_company="+internal_company.toString();
     }
     //alert(url);
-    searchengine(url);
+    if(originButton == 'search_button'){
+        searchengine(url);
+
+    }else{
+        return url;
+
+    }
 }
 
 
@@ -106,37 +124,52 @@ function displayResults(data) {
     $j('#divTable').html("<div></div>");
     sHtml = '<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
         + ' <colgroup>'
-        + ' <col width="15%">'
+        + ' <col width="40%">'
+        + ' <col width="30%">'
         + ' <col width="7%">'
-        //+ ' <col width="14%">'
-        //+ ' <col width="14%">'
-        + ' <col width="14%">'
-        + ' <col width="14%">'
-        + ' <col width="29%">'
+        + ' <col width="8%">'
+        + ' <col width="5%">'
+        + ' <col width="5%">'
+        + ' <col width="5%">'
         + ' </colgroup>';
+
 
     sTable = '<thead>'
         + '<tr>'
-        + '<th>Nombre</th>'
         + '<th>No.</th>'
+        + '<th>Nombre</th>'
         //+ '<th>Nivel</th>'
         //+ '<th>Rubro</th>'
-        + '<th>Subcuenta</th>'
+        //+ '<th>Subcuenta De</th>'
         + '<th>Naturaleza</th>'
         + '<th>Cód. Agrupador SAT</th>'
+        + '<th style="width: 5%;">Ver</th>'
+        + '<th style="width: 5%;">Editar</th>'
+        + '<th style="width: 5%;">Eliminar</th>'
         + '</tr>'
         + '</thead>'
         + '<tbody>';
 
     for (var i = 0; i < data.length; i++) {
+        var css = "btn btn-raised btn-default btn-xs";
+        var detailButton = "<i class ='fa fa-eye color-default eliminar' > </i>";
+        var deleteButton = "<i class ='fa fa-trash-o color-danger eliminar' > </i>";
+        var changeButton = "<i class ='fa fa-pencil color-default eliminar' > </i>";
+
         sTable += '<tr>'
-            + '<td class="result1 selectable">' + data[i].name + '</td>'
-            + '<td class="result1 selectable">' + data[i].number + '</td>'
+            + '<td class="result1 selectable" >' + data[i].number.replace(/(?!^)(?=(?:\d{3})+(?:\.|$))/gm, ' ') + '</td>'
+            + '<td class="result1 selectable" >' + data[i].name + '</td>'
             //+ '<td class="result1 selectable">' + checkIfNone(data[i].level) + '</td>'
             //+ '<td class="result1 selectable">' + checkIfNone(data[i].item) + '</td>'
-            + '<td class="result1 selectable">' + checkIfNone(data[i].subsidiary_account) + '</td>'
-            + '<td class="result1 selectable">' + data[i].nature_account + '</td>'
-            + '<td class="result1 selectable">' + data[i].grouping_code + '</td>'
+            //+ '<td class="result1 selectable">' + checkIfNone(data[i].subsidiary_account) + '</td>'
+            + '<td class="result1 selectable" >' + data[i].nature_account_display + '</td>'
+            + '<td class="result1 selectable" >' + data[i].grouping_code + '</td>'
+            + '<td class="result1 selectable" ><a href="/admin/SharedCatalogs/account/' + data[i].id + '" target="_blank" class="'+css+'">'
+            + detailButton + '</a></td>'
+            + '<td class="result1 selectable"><a href="/admin/SharedCatalogs/account/' + data[i].id + '/change"  class="'+css+'">'
+            + changeButton + '</a></td>'
+            + '<td class="result1 selectable" ><a href="/admin/SharedCatalogs/account/' + data[i].id + '/delete" class="'+css+'">'
+            + deleteButton + '</a></td>'
             + '</tr>'
     }
 
@@ -193,8 +226,23 @@ function displayResults(data) {
 
 
 function checkIfNone(val) {
-    if (val == 'undefined' || val == null || val == undefined) {
+    console.log("Val is: " + val);
+    if (val == 'undefined' || val == null || val == undefined || val == "None") {
         return '-';
     }
     return val;
+}
+
+
+
+
+// Function to export the accounts into an excel file.
+function requestFile(url){
+    location.href = url;
+}
+
+function exportAccounts(){
+    url = search('export_button');
+    requestFile(url);
+
 }

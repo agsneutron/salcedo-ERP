@@ -32,6 +32,7 @@ from django.http.response import HttpResponseRedirect
 from django.http import QueryDict
 
 from HumanResources import views
+from HumanResources.views import EarningsDeductionsListView
 
 # Importing the forms.
 from HumanResources.forms import *
@@ -732,6 +733,8 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
         employee = Employee.objects.get(pk=employee_id)
         documents_set = EmployeeDocument.objects.filter(employee_id=employee_id)
 
+
+
         extra['template'] = "documentation"
         extra['employee'] = employee
         extra['documentation'] = documents_set
@@ -1286,12 +1289,62 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         ("Catálogo de Percepciones y Deducciones", {
             'fields': (
                 'name', 'type', 'category', 'taxable', 'percent_taxable', 'account', 'sat_key',
-                'law_type', 'status', 'comments',)
+                'status', 'comments',)
         }),
     )
 
     list_display = ('name', 'type', 'account', 'percent_taxable', 'get_change_link', 'get_delete_link')
     list_display_links = None
+
+    def response_delete(self, request, obj_display, obj_id):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def response_add(self, request, obj, post_url_continue=None):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def response_change(self, request, obj):
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def save_model(self, request, obj, form, change):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            obj.penalty = 'N'
+            #obj.save('N')
+        else:
+            obj.penalty = 'S'
+            obj.type = 'D'
+            #obj.save('S')
+
+        super(EarningsDeductionsAdmin, self).save_model(request, obj, form, change)
+
+    def get_urls(self):
+        urls = super(EarningsDeductionsAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(EarningsDeductionsListView.as_view()), name='EarningsDeductions-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.EarningsDeductionsListView.as_view(), name='EarningsDeductions-detail'),
+
+        ]
+        return my_urls + urls
 
     def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
@@ -1326,12 +1379,49 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         # employee_id = request.GET.get('employee')
         earnings_set = EarningsDeductions.objects.filter(type='P')
         deductions_set = EarningsDeductions.objects.filter(type='D')
+        tipo = request.GET.get('tipo', None)
+        if tipo is None:
+            tipo=0
+            EarningsDeductionsAdmin.form.penalty = 'N'
+            deductions_set = deductions_set.filter(penalty='N')
+        else:
+            earnings_set=''
+            EarningsDeductionsAdmin.form.penalty = 'S'
+            EarningsDeductionsAdmin.form.type='D'
+            deductions_set = deductions_set.filter(penalty='S')
+
+
 
         extra['template'] = "earnings_deductions"
         extra['earnings'] = earnings_set
         extra['deductions'] = deductions_set
+        extra['tipo'] = tipo
+
 
         return super(EarningsDeductionsAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, form_url='', extra_context=None):
+        extra = extra_context or {}
+
+        # employee_id = request.GET.get('employee')
+        earnings_set = EarningsDeductions.objects.filter(type='P')
+        deductions_set = EarningsDeductions.objects.filter(type='D')
+        tipo = request.GET.get('tipo', None)
+        if tipo is None:
+            tipo = 0
+            deductions_set = deductions_set.filter(penalty='N')
+        else:
+            earnings_set=''
+            deductions_set = deductions_set.filter(penalty='S')
+
+        extra['template'] = "earnings_deductions"
+        extra['earnings'] = earnings_set
+        extra['deductions'] = deductions_set
+        extra['tipo'] = tipo
+
+        return super(EarningsDeductionsAdmin, self).change_view(request, form_url, extra_context=extra)
+
+
 
 
 # Payroll Receipt Processed Admin.
