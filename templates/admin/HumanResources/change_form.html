@@ -169,8 +169,7 @@
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/education/add/?employee=
-                               {{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
+                           href="{% if request.GET.employee %}/admin/HumanResources/education/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
                             Académica
                             <div class="ripple-container
                                     {% if request.resolver_match.view_name == "admin:HumanResources_education_add" %}{{ "active_btn" }}{% endif %}"></div>
@@ -333,12 +332,17 @@
                                                 <td>{{ record.institution }}</td>
                                                 <td>{{ record.license_code }}</td>
                                                 <td>
-                                                    <a href="/media/{{ record.evidence.name }}">
-                                                        Archivo
-                                                    </a>
+                                                    {% if record.evidence.name == None or record.evidence.name == "" %}
+                                                        <div>No proporcionó</div>
+                                                    {% else %}
+                                                        <a href="/media/{{ record.evidence.name }}">
+                                                            Archivo
+                                                        </a>
+                                                    {% endif %}
+
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }} class="
+                                                    <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="
                                                        btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-pencil color-default eliminar"></i>
                                                     </a>

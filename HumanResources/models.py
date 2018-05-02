@@ -109,7 +109,7 @@ class Employee(models.Model):
         (TYPE_A, 'Empleado Tipo A'),
         (TYPE_B, 'Empleado Tipo B'),
     )
-    type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleando')
+    type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleado')
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
 
     STATUS_ACTIVE = 1
