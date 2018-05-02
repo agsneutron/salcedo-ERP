@@ -175,3 +175,12 @@ try:
     from .local_settings import *
 except ImportError as e:
     pass
+
+
+# Email config password reset
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = ''
+EMAIL_HOST_USER = 'salcedocys@orion.studio'
+EMAIL_HOST_PASSWORD = ''
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
