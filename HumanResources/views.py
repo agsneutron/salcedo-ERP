@@ -22,6 +22,8 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 
+from HumanResources.api import PayrollUtilities
+
 
 def get_array_or_none(the_string):
     if the_string is None:
@@ -258,8 +260,8 @@ def TestApplicationDetail(request, pk):
 
 @login_required()
 def EmployeeByPeriod(request):
-    payrollgroup = request.GET.get('payrollgroup')
     payrollperiod = request.GET.get('payrollperiod')
+    payrollgroup = PayrollPeriod.objects.get(pk=payrollperiod).payroll_group_id
 
     # Check if the payroll has been processed.
     payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period__id=payrollperiod)
@@ -273,8 +275,23 @@ def EmployeeByPeriod(request):
     employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup)
     period_data = PayrollPeriod.objects.filter(id=payrollperiod)
 
+
+    # Payroll information by employee to know base salary and final salary.
+    employee_data_set = []
+    for record in employees:
+        employee_data_set.append({
+            "employee_position_description.id": record.id,
+            "employee_id": record.employee.id,
+            "employee_key" : record.employee.employee_key,
+            "employee_fullname" : record.employee.get_full_name(),
+            "employee_job" : record.job_profile.job,
+            "employee_payroll" : PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+        })
+
+        print PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+
     # context = RequestContext.request
-    context = {'employees': employees,
+    context = {'employees_data_set': employee_data_set,
                'payrollperiod': payrollperiod,
                'payrolldata': period_data}
     return HttpResponse(template.render(context, request))

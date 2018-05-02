@@ -1,45 +1,60 @@
-{% load i18n admin_urls static admin_modify app_filters%}
+{% load i18n admin_urls static admin_modify app_filters %}
 <style>
-   related-widget-wrapper > .btn-group.bootstrap-select {
+    related-widget-wrapper > .btn-group.bootstrap-select {
         height: 30px;
-    padding: 5px 1px;
-    font-size: 16px;
-    line-height: 1.42857;
-    border: 0px solid #e2e2e2!important;
-    width: 100% !important;
-    color: black;
-        }
+        padding: 5px 1px;
+        font-size: 16px;
+        line-height: 1.42857;
+        border: 0px solid #e2e2e2 !important;
+        width: 100% !important;
+        color: black;
+    }
+
     [data-id="id_accountingpolicydetail_set-__prefix__-account"] {
-        display: none ;
+        display: none;
+    }
+
+    .positive {
+        color: green !important;
+    }
+
+    .negative {
+        color: red !important;
     }
 </style>
 <div class="js-inline-admin-formset inline-group" id="{{ inline_admin_formset.formset.prefix }}-group"
      data-inline-type="tabular"
      data-inline-formset="{{ inline_admin_formset.inline_formset_data }}">
-  <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
-{{ inline_admin_formset.formset.management_form }}
-<fieldset class="module {{ inline_admin_formset.classes }}">
-<div class="row">
-        <div class="col-xs-12">
-            <div class="">
-                <h2 class="section-title">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
-                <hr>
+    <div class="tabular inline-related {% if forloop.last %}last-related{% endif %}">
+        {{ inline_admin_formset.formset.management_form }}
+        <fieldset class="module {{ inline_admin_formset.classes }}">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="">
+                        <h2 class="section-title">{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>
+                        <hr>
+                    </div>
+                </div>
             </div>
-        </div>
-</div>
-   {{ inline_admin_formset.formset.non_form_errors }}
-   <table class="table">
-     <thead><tr>
-       <th class="original"></th>
-     {% for field in inline_admin_formset.fields %}
-       {% if not field.widget.is_hidden %}
-         <th{% if field.required %} class="required"{% endif %}>{{ field.label|capfirst }}
-         {% if field.help_text %}&nbsp;<img src="{% static "admin/img/icon-unknown.svg" %}" class="help help-tooltip" width="10" height="10" alt="({{ field.help_text|striptags }})" title="{{ field.help_text|striptags }}" />{% endif %}
-         </th>
-       {% endif %}
-     {% endfor %}
-     {% if inline_admin_formset.formset.can_delete %}<th>{% trans "Delete?" %}</th>{% endif %}
-     </tr></thead>
+            {{ inline_admin_formset.formset.non_form_errors }}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th class="original"></th>
+                    {% for field in inline_admin_formset.fields %}
+                        {% if not field.widget.is_hidden %}
+                            <th{% if field.required %} class="required"{% endif %}>{{ field.label|capfirst }}
+                                {% if field.help_text %}&nbsp;
+                                    <img src="{% static "admin/img/icon-unknown.svg" %}" class="help help-tooltip"
+                                         width="10" height="10" alt="({{ field.help_text|striptags }})"
+                                         title="{{ field.help_text|striptags }}"/>{% endif %}
+                            </th>
+                        {% endif %}
+                    {% endfor %}
+                    {% if inline_admin_formset.formset.can_delete %}
+                        <th>{% trans "Delete?" %}</th>{% endif %}
+                </tr>
+                </thead>
                 <style>
                     .inline-info {
                         display: inline-block;
@@ -89,31 +104,67 @@
                             $("input[name*='credit']").change(function () {
                                 calculateCredit();
                             });
+
+
                             $("select[name*='accountingpolicydetail_set']").attr("data-live-search", "true");
                             $("select[name*='accountingpolicydetail_set']").attr("data-width", "auto");
                             $("select[name*='accountingpolicydetail_set']").addClass("selectpicker");
-                            $("select[name*='accountingpolicydetail_set']").selectpicker({
-
-                            });
+                            $("select[name*='accountingpolicydetail_set']").selectpicker({});
                         }
 
 
-
-                        function calculateDebit() {
+                        function getDebitTotal() {
                             var total = 0;
                             $("input[name*='debit']").each(function () {
                                 total += parseFloat($(this).val());
                             });
-                            $('#debit-total').html(toCurrency(total));
+                            return total;
+                        }
+
+                        function calculateDifferences() {
+                            var diffDebit = getDebitTotal() - getCreditTotal();
+                            var diffCredit = getCreditTotal() - getDebitTotal();
+                            $('#difference-debit').html(toCurrency(diffDebit));
+                            $('#difference-credit').html(toCurrency(diffCredit));
+
+                            if (diffDebit >= 0) {
+                                $('#difference-debit').addClass('positive');
+                                $('#difference-debit').removeClass('negative');
+                            } else {
+                                $('#difference-debit').addClass('negative');
+                                $('#difference-debit').removeClass('positive');
+                            }
+
+                            if (diffCredit >= 0) {
+                                $('#difference-credit').addClass('positive');
+                                $('#difference-credit').removeClass('negative');
+                            } else {
+                                $('#difference-credit').addClass('negative');
+                                $('#difference-credit').removeClass('positive');
+                            }
+
 
                         }
 
-                        function calculateCredit() {
+                        function calculateDebit() {
+                            var total = getDebitTotal();
+                            $('#debit-total').html(toCurrency(total));
+                            calculateDifferences();
+
+                        }
+
+                        function getCreditTotal() {
                             var total = 0
                             $("input[name*='credit']").each(function (el) {
                                 total += parseFloat($(this).val());
                             });
+                            return total;
+                        }
+
+                        function calculateCredit() {
+                            var total = getCreditTotal()
                             $('#credit-total').html(toCurrency(total));
+                            calculateDifferences();
                         }
 
                         function toCurrency(val) {
@@ -137,6 +188,7 @@
                         <div class="card-block">
                             <h2 class="color-primary"><span class="counter" id="debit-total">$ 5,000</span></h2>
                             <h4 class="color-primary">Total Debe</h4>
+                            <div class="difference" id="difference-debit"></div>
                         </div>
                     </div>
                 </div>
@@ -146,72 +198,81 @@
                         <div class="card-block">
                             <h2 class="color-primary"><span class="counter" id="credit-total">$ 5,000</span></h2>
                             <h4 class="color-primary">Total Haber</h4>
+                            <div class="difference" id="difference-credit"></div>
                         </div>
                     </div>
                 </div>
-     <tbody>
-     {% for inline_admin_form in inline_admin_formset %}
-        {% if inline_admin_form.form.non_field_errors %}
-        <tr><td colspan="{{ inline_admin_form|cell_count }}">{{ inline_admin_form.form.non_field_errors }}</td></tr>
-        {% endif %}
-        <tr class="form-row {% cycle "row1" "row2" %} {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last %} empty-form{% endif %}"
-             id="{{ inline_admin_formset.formset.prefix }}-{% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
-        <td class="original">
-          {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
-          {% if inline_admin_form.original %}
-          {{ inline_admin_form.original }}
-          {% if inline_admin_form.model_admin.show_change_link and inline_admin_form.model_admin.has_registered_model %}<a href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}" class="inlinechangelink">{% trans "Change" %}</a>{% endif %}
-          {% endif %}
-          {% if inline_admin_form.show_url %}<a href="{{ inline_admin_form.absolute_url }}">{% trans "View on site" %}</a>{% endif %}
-            </p>{% endif %}
-          {% if inline_admin_form.needs_explicit_pk_field %}{{ inline_admin_form.pk_field.field }}{% endif %}
-          {{ inline_admin_form.fk_field.field }}
-          {% spaceless %}
-          {% for fieldset in inline_admin_form %}
-            {% for line in fieldset %}
-              {% for field in line %}
-                {% if field.field.is_hidden %} {{ field.field }} {% endif %}
-              {% endfor %}
-            {% endfor %}
-          {% endfor %}
-          {% endspaceless %}
-        </td>
-        {% for fieldset in inline_admin_form %}
-          {% for line in fieldset %}
-            {% for field in line %}
-              {% if not field.field.is_hidden %}
-              <td{% if field.field.name %} class="field-{{ field.field.name }}"{% endif %}>
-              {% if field.is_readonly %}
-                  <p>{{ field.contents }}</p>
-              {% else %}
-                  {{ field.field.errors.as_ul }}
-                  {{ field.field }}
-              {% endif %}
-              </td>
-              {% endif %}
-            {% endfor %}
-          {% endfor %}
-        {% endfor %}
-        {% if inline_admin_formset.formset.can_delete %}
-          <td class="delete">{% if inline_admin_form.original %}{{ inline_admin_form.deletion_field.field }}{% endif %}</td>
-        {% endif %}
-        </tr>
-     {% endfor %}
-     </tbody>
-   </table>
-</fieldset>
-  </div>
+                <tbody>
+                {% for inline_admin_form in inline_admin_formset %}
+                    {% if inline_admin_form.form.non_field_errors %}
+                        <tr>
+                            <td colspan="{{ inline_admin_form|cell_count }}">{{ inline_admin_form.form.non_field_errors }}</td>
+                        </tr>
+                    {% endif %}
+                    <tr class="form-row {% cycle "row1" "row2" %} {% if inline_admin_form.original or inline_admin_form.show_url %}has_original{% endif %}{% if forloop.last %} empty-form{% endif %}"
+                        id="{{ inline_admin_formset.formset.prefix }}-
+                                {% if not forloop.last %}{{ forloop.counter0 }}{% else %}empty{% endif %}">
+                        <td class="original">
+                            {% if inline_admin_form.original or inline_admin_form.show_url %}<p>
+                                {% if inline_admin_form.original %}
+                                    {{ inline_admin_form.original }}
+                                    {% if inline_admin_form.model_admin.show_change_link and inline_admin_form.model_admin.has_registered_model %}
+                                        <a href="{% url inline_admin_form.model_admin.opts|admin_urlname:'change' inline_admin_form.original.pk|admin_urlquote %}"
+                                           class="inlinechangelink">{% trans "Change" %}</a>{% endif %}
+                                {% endif %}
+                                {% if inline_admin_form.show_url %}
+                                    <a href="{{ inline_admin_form.absolute_url }}">{% trans "View on site" %}</a>{% endif %}
+                            </p>{% endif %}
+                            {% if inline_admin_form.needs_explicit_pk_field %}
+                                {{ inline_admin_form.pk_field.field }}{% endif %}
+                            {{ inline_admin_form.fk_field.field }}
+                            {% spaceless %}
+                                {% for fieldset in inline_admin_form %}
+                                    {% for line in fieldset %}
+                                        {% for field in line %}
+                                            {% if field.field.is_hidden %} {{ field.field }} {% endif %}
+                                        {% endfor %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endspaceless %}
+                        </td>
+                        {% for fieldset in inline_admin_form %}
+                            {% for line in fieldset %}
+                                {% for field in line %}
+                                    {% if not field.field.is_hidden %}
+                                        <td{% if field.field.name %} class="field-{{ field.field.name }}"{% endif %}>
+                                            {% if field.is_readonly %}
+                                                <p>{{ field.contents }}</p>
+                                            {% else %}
+                                                {{ field.field.errors.as_ul }}
+                                                {{ field.field }}
+                                            {% endif %}
+                                        </td>
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+                        {% endfor %}
+                        {% if inline_admin_formset.formset.can_delete %}
+                            <td class="delete">{% if inline_admin_form.original %}
+                                {{ inline_admin_form.deletion_field.field }}{% endif %}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </fieldset>
+    </div>
 </div>
 
 <script>
     if (document.getElementsByClassName("field-account")) {
-var b = document.querySelector(".field-account>div>select");
+        var b = document.querySelector(".field-account>div>select");
         $(".field-account>div>select").addClass("selectpicker");
-          b.setAttribute("data-live-search", "true");
+        b.setAttribute("data-live-search", "true");
         $(".field-account>div>select").selectpicker({
             style: "btn-info",
             size: 4,
-            liveSearch:true
+            liveSearch: true
         });
     }
 

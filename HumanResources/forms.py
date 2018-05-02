@@ -724,14 +724,7 @@ class JobProfileForm(forms.ModelForm):
     class Meta:
         model = JobProfile
         fields = '__all__'
-        widgets = {'abilities': forms.Textarea(attrs={'rows': 4}),
-                   'aptitudes': forms.Textarea(attrs={'rows': 4}),
-                   'knowledge': forms.Textarea(attrs={'rows': 4}),
-                   'competitions': forms.Textarea(attrs={'rows': 4}),
-                   'scholarship': forms.Textarea(attrs={'rows': 4}),
-                   'experience': forms.Textarea(attrs={'rows': 4}),
-                   'jobdescription': forms.Textarea(attrs={'rows': 4}),
-                   'minimumrequirements': forms.Textarea(attrs={'rows': 4}),
+        widgets = {
                    'sunday': forms.HiddenInput,
                    'saturday': forms.HiddenInput,
                    'monday': forms.HiddenInput,

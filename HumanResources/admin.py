@@ -260,6 +260,21 @@ class EducationAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
     # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        employee = Employee.objects.get(pk=employee_id)
+
+
+        extra['template'] = "education"
+        extra['employee'] = employee
+
+        return super(EducationAdmin, self).change_view(request, object_id, form_url, extra)
+
+
+    # Adding extra context to the add view.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
@@ -1812,6 +1827,9 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     get_UploadedEmployeeAssistanceHistory_link.short_description = 'Justificar Asistencias'
     get_UploadedEmployeeAssistanceHistory_link.allow_tags = True
 
+
+
+
     def save_model(self, request, obj, form, change):
         current_user = request.user
         # payroll_group_id = int(request.POST.get('payroll_group'))
@@ -1821,13 +1839,13 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         try:
             with transaction.atomic():
                 assistance_file = request.FILES['assistance_file']
-                file_interface_obj = AssistanceFileInterface(assistance_file)
+                file_interface_obj = AssistanceFileInterface(assistance_file, request.user)
 
                 # Getting the elements from the file.
-                elements = file_interface_obj.get_element_list()
+                elements = file_interface_obj.get_element_list(obj.payroll_period.payroll_group.checker_type)
 
                 # Processing the results.
-                assitance_db_object = AssistanceDBObject(current_user, elements[1:], payroll_period_id)
+                assitance_db_object = AssistanceDBObject(current_user, elements, payroll_period_id)
                 assitance_db_object.process_records()
 
                 # If everything went ok, generatethe automatic absences

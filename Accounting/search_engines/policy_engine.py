@@ -114,6 +114,7 @@ class PolicySearchEngine():
 
         if self.upper_account_number is not None and self.account_array is None:
             policy_detail_array = []
+            print self.upper_account_number
             accounting_policy_detail_set = AccountingPolicyDetail.objects \
                 .filter(Q(account__number__lte=self.upper_account_number)) \
                 .values('accounting_policy__id').annotate(Count('accounting_policy__id'))
