@@ -549,6 +549,7 @@ form .aligned ul {
     position: relative;
     background-color: #204280;
     border: 0;
+    padding-left: inherit !important;
 }
 
 .nav.nav-tabs li a {
