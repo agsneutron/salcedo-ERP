@@ -11,7 +11,7 @@ from django.db import models
 from django.db.models.query_utils import Q
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
-
+from Logs.controller import Logs
 from decimal import Decimal
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -1184,6 +1184,7 @@ class EarningsDeductions(models.Model):
     taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Gravable")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA,
                                 verbose_name="Categoria")
+    penalty = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Penalización")
 
     class Meta:
         verbose_name_plural = "Percepciones y Deducciones"
@@ -1208,6 +1209,15 @@ class EarningsDeductions(models.Model):
             total_variable += record.ammount
 
         return total_fixed, total_variable
+
+    def save(self, *args, **kwargs):
+        can_save = True
+
+        if can_save:
+            Logs.log("Saving new EarningsDeductions", "Te")
+            super(EarningsDeductions, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 
 class EmployeeEarningsDeductions(models.Model):

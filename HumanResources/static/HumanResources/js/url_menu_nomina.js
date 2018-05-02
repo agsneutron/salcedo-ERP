@@ -44,16 +44,49 @@ $(function () {
 });
 
 $(function () {
-    if (/earningsdeductions/.test(window.location.href)) {
-        $('#e3>a').addClass('active');
-        $('#e3>a').removeClass('collapsed');
+    url = window.location.href.toString();
+    if (/penalty=S/.test(window.location.href)) {
+        $('#e4>a').addClass('active');
+        $('#e4>a').removeClass('collapsed');
+    }else{
+        if (/tipo=2/.test(window.location.href)){
+            $('#e4>a').addClass('active');
+            $('#e4>a').removeClass('collapsed');
+        }
+        else {
+            if (/earningsdeductions\/+add/.test(window.location.href)) {
+                $('#e3>a').addClass('active');
+                $('#e3>a').removeClass('collapsed');
+            }
+            else{
+                if (/earningsdeductions/.test(window.location.href)) {
+                    $('#e3>a').addClass('active');
+                    $('#e3>a').removeClass('collapsed');
+                }
+            }
+        }
     }
 
 });
 $(function () {
-    if (/earningsdeductions\/+add/.test(window.location.href)) {
-        $('#e3>a').addClass('active');
-        $('#e3>a').removeClass('collapsed');
+    if (/tipo=2/.test(window.location.href)){
+        $('#e4>a').addClass('active');
+        $('#e4>a').removeClass('collapsed');
+    }
+    else {
+        if (/earningsdeductions\/+add/.test(window.location.href)) {
+            alert("DyP-Add");
+            $('#e3>a').addClass('active');
+            $('#e3>a').removeClass('collapsed');
+        }
+    }
+});
+
+$(function () {
+    if (/earningsdeductions\/+?penalty=S/.test(window.location.href)) {
+        alert("Penalizaciones");
+        $('#e4>a').addClass('active');
+        $('#e4>a').removeClass('collapsed');
     }
 
 });

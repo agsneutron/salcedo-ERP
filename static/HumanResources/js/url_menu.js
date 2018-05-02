@@ -1,115 +1,145 @@
 $(function () {
-    if (/searchthird/.test(window.location.href)) {
-        $('#e5>a').addClass('active');
-        $('#e5>a').removeClass('collapsed');
+    if (/tag/.test(window.location.href)) {
+        $('#Conte2>a').addClass('active');
+        $('#Conte2>a').removeClass('collapsed');
+    }
+
+});
+$(function () {
+    if (/tag\/+add/.test(window.location.href)) {
+        $('#Conte2>a').addClass('active');
+        $('#Conte2>a').removeClass('collapsed');
     }
 
 });
 
 $(function () {
-    if (/\?+type=2/.test(window.location.href)) {
-        $('#e5>a').addClass('active');
-        $('#e5>a').removeClass('collapsed');
+    if (/test/.test(window.location.href)) {
+        $('#Conte1>a').addClass('active');
+        $('#Conte1>a').removeClass('collapsed');
     }
-});
 
-
-$(function () {
-    if (/searchaccount/.test(window.location.href)) {
-        $('#e1>a').removeClass('collapsed');
-        $('#e1>a').addClass('active');
-    }
-});
-
-$(function () {
-    if (/account\/+add/.test(window.location.href)) {
-        $('#e1>a').removeClass('collapsed');
-        $('#e1>a').addClass('active');
-    }
 });
 $(function () {
-    if (/\?+type=0/.test(window.location.href)) {
-        $('#e3>a').addClass('active');
-        $('#e3>a').removeClass('collapsed');
+    if (/test\/+add/.test(window.location.href)) {
+        $('#Conte1>a').addClass('active');
+        $('#Conte1>a').removeClass('collapsed');
     }
+
 });
 
 $(function () {
-    if (/searchprovider/.test(window.location.href)) {
-        $('#e3>a').addClass('active');
-        $('#e3>a').removeClass('collapsed');
+    if (/documenttype/.test(window.location.href)) {
+        $('#Conte0>a').addClass('active');
+        $('#Conte0>a').removeClass('collapsed');
     }
+
+});
+$(function () {
+    if (/documenttype\/+add/.test(window.location.href)) {
+        $('#Conte0>a').addClass('active');
+        $('#Conte0>a').removeClass('collapsed');
+    }
+
 });
 
+$(function () {
+    if (/direction/.test(window.location.href)) {
+        $('#Conte3>a').addClass('active');
+        $('#Conte3>a').removeClass('collapsed');
+    }
+
+});
+$(function () {
+    if (/direction\/+add/.test(window.location.href)) {
+        $('#Conte3>a').addClass('active');
+        $('#Conte3>a').removeClass('collapsed');
+    }
+
+});
+
+$(function () {
+    if (/subdirection/.test(window.location.href)) {
+        $('#Conte4>a').addClass('active');
+        $('#Conte4>a').removeClass('collapsed');
+
+         $('#Conte3>a').removeClass('active');
+ $('#Conte3>a').addClass('collapsed withripple');
+    }
+
+});
+$(function () {
+    if (/subdirection\/+add/.test(window.location.href)) {
+        $('#Conte4>a').addClass('active');
+        $('#Conte4>a').removeClass('collapsed');
+    }
+
+});
+
+$(function () {
+    if (/area/.test(window.location.href)) {
+        $('#Conte5>a').addClass('active');
+        $('#Conte5>a').removeClass('collapsed');
+    }
+
+});
+$(function () {
+    if (/area\/+add/.test(window.location.href)) {
+        $('#Conte5>a').addClass('active');
+        $('#Conte5>a').removeClass('collapsed');
+    }
+
+});
+
+$(function () {
+    if (/department/.test(window.location.href)) {
+        $('#Conte6>a').addClass('active');
+        $('#Conte6>a').removeClass('collapsed');
+    }
+
+});
+$(function () {
+    if (/department\/+add/.test(window.location.href)) {
+        $('#Conte6>a').addClass('active');
+        $('#Conte6>a').removeClass('collapsed');
+    }
+
+});
+
+$(function () {
+    if (/employeerequisition/.test(window.location.href)) {
+        $('#Conte7>a').addClass('active');
+        $('#Conte7>a').removeClass('collapsed');
+    }
+
+});
+$(function () {
+    if (/employeerequisition\/+add/.test(window.location.href)) {
+        $('#Conte7>a').addClass('active');
+        $('#Conte7>a').removeClass('collapsed');
+    }
+
+});
+$(function () {
+    if (/employeecontract/.test(window.location.href)) {
+        $('#e7>a').addClass('active');
+        $('#e7>a').removeClass('collapsed');
+    }
+
+});
+$(function () {
+    if (/employeecontract\/+add/.test(window.location.href)) {
+        $('#e7>a').addClass('active');
+        $('#e7>a').removeClass('collapsed');
+    }
+
+});
+/*
 $(function () {
     if (/\?+type=1/.test(window.location.href)) {
         $('#e4>a').addClass('active');
         $('#e4>a').removeClass('collapsed');
     }
 });
+*/
 
-$(function () {
-    if (/searchcreditors/.test(window.location.href)) {
-        $('#e4>a').addClass('active');
-        $('#e4>a').removeClass('collapsed');
-    }
-});
-
-$(function () {
-    if (/fiscalperiod\/+add/.test(window.location.href)) {
-        $('#e7>a').addClass('active');
-        $('#e7>a').removeClass('collapsed');
-    }
-});
-$(function () {
-    if (/fiscalperiod/.test(window.location.href)) {
-        $('#e7>a').addClass('active');
-        $('#e7>a').removeClass('collapsed');
-    }
-});
-
-$(function () {
-    if (/typepolicy\/+add/.test(window.location.href)) {
-        $('#e8>a').addClass('active');
-        $('#e8>a').removeClass('collapsed');
-    }
-});
-$(function () {
-    if (/typepolicy/.test(window.location.href)) {
-        $('#e8>a').addClass('active');
-        $('#e8>a').removeClass('collapsed');
-    }
-});
-
-$(function () {
-    if (/bank\/+add/.test(window.location.href)) {
-        $('#e9>a').addClass('active');
-        $('#e9>a').removeClass('collapsed');
-    }
-});
-$(function () {
-    if (/bank/.test(window.location.href)) {
-        $('#e9>a').addClass('active');
-        $('#e9>a').removeClass('collapsed');
-    }
-});
-
-$(function () {
-    if (/searchtransactions/.test(window.location.href)) {
-        $('#e10>a').addClass('active');
-        $('#e10>a').removeClass('collapsed');
-    }
-});
-
-$(function () {
-    if (/generategeneralbalance/.test(window.location.href)) {
-        $('#e10>a').addClass('active');
-        $('#e10>a').removeClass('collapsed');
-    }
-});
-$(function () {
-    if (/generatetrialbalance/.test(window.location.href)) {
-        $('#e10>a').addClass('active');
-        $('#e10>a').removeClass('collapsed');
-    }
-});

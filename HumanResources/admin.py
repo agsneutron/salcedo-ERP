@@ -1288,6 +1288,46 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
     list_display = ('name', 'type', 'account', 'percent_taxable', 'get_change_link', 'get_delete_link')
     list_display_links = None
 
+    def response_delete(self, request, obj_display, obj_id):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def response_add(self, request, obj, post_url_continue=None):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def response_change(self, request, obj):
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def save_model(self, request, obj, form, change):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            obj.penalty = 'N'
+            #obj.save('N')
+        else:
+            obj.penalty = 'S'
+            obj.type = 'D'
+            #obj.save('S')
+
+        super(EarningsDeductionsAdmin, self).save_model(request, obj, form, change)
+
     def get_urls(self):
         urls = super(EarningsDeductionsAdmin, self).get_urls()
         my_urls = [
@@ -1334,14 +1374,20 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         tipo = request.GET.get('tipo', None)
         if tipo is None:
             tipo=0
+            EarningsDeductionsAdmin.form.penalty = 'N'
+            deductions_set = deductions_set.filter(penalty='N')
         else:
             earnings_set=''
+            EarningsDeductionsAdmin.form.penalty = 'S'
+            EarningsDeductionsAdmin.form.type='D'
+            deductions_set = deductions_set.filter(penalty='S')
 
 
         extra['template'] = "earnings_deductions"
         extra['earnings'] = earnings_set
         extra['deductions'] = deductions_set
         extra['tipo'] = tipo
+
 
         return super(EarningsDeductionsAdmin, self).add_view(request, form_url, extra_context=extra)
 
@@ -1354,8 +1400,10 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         tipo = request.GET.get('tipo', None)
         if tipo is None:
             tipo = 0
+            deductions_set = deductions_set.filter(penalty='N')
         else:
             earnings_set=''
+            deductions_set = deductions_set.filter(penalty='S')
 
         extra['template'] = "earnings_deductions"
         extra['earnings'] = earnings_set
@@ -1363,6 +1411,7 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         extra['tipo'] = tipo
 
         return super(EarningsDeductionsAdmin, self).change_view(request, form_url, extra_context=extra)
+
 
 
 
