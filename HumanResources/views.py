@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 # Django Imports.
 import operator
 
+import django
+
 from django.core.exceptions import PermissionDenied
 from django.db.models.aggregates import Count
 from django.http.response import HttpResponseRedirect
@@ -279,13 +281,24 @@ def EmployeeByPeriod(request):
     # Payroll information by employee to know base salary and final salary.
     employee_data_set = []
     for record in employees:
+        try:
+            employee_payroll = PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+
+        except EmployeeFinancialData.DoesNotExist as e:
+            print "Exception was: " + str(e)
+            django.contrib.messages.error(request, "No existen datos financieros para el empleado: " + record.employee.employee_key +
+                                          " - "+record.employee.get_full_name()+".")
+            return HttpResponseRedirect("/admin/HumanResources/payrollperiod/")
+
+
+
         employee_data_set.append({
             "employee_position_description.id": record.id,
             "employee_id": record.employee.id,
             "employee_key" : record.employee.employee_key,
             "employee_fullname" : record.employee.get_full_name(),
             "employee_job" : record.job_profile.job,
-            "employee_payroll" : PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+            "employee_payroll" : employee_payroll
         })
 
         print PayrollUtilities.generate_single_payroll(record.employee, period_data.first())

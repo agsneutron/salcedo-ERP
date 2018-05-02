@@ -172,12 +172,9 @@ class PayrollUtilities:
             :param employee: employee whose financial data we will look for.
             :return:
         """
-        try:
-            employee_financial_data = EmployeeFinancialData.objects.get(employee__id=employee.id)
-            return True
 
-        except EmployeeFinancialData.DoesNotExist as e:
-            return False
+        employee_financial_data = EmployeeFinancialData.objects.get(employee__id=employee.id)
+        return True
 
     @staticmethod
     def generate_single_payroll(employee, payroll_period):
@@ -406,6 +403,7 @@ class GeneratePayrollReceipt(View):
         payroll_period_id = request.GET.get('payroll_period')
         employee_id = request.GET.get('employee')
 
+
         excluded_employees_csv = request.GET.get('employeesSelected')
         if excluded_employees_csv == "":
             excluded_employees = []
@@ -454,8 +452,6 @@ class GeneratePayrollReceipt(View):
                 result = self.create_receipt_historic_record(payroll_period, receipts_array)
                 response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
                 return response
-
-
 
 
         except Exception as e:
@@ -532,7 +528,7 @@ class GeneratePayrollReceiptForEmployee(View):
 
 
 class DeletePayrollReceiptsForPeriod(View):
-    def get(selfself, request):
+    def get(self, request):
         payroll_period_id = request.GET.get('payroll_period')
         payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
 

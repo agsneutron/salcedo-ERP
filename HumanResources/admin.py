@@ -510,6 +510,14 @@ class FamilyMemberAdmin(admin.ModelAdmin):
 
         # To redirect after object delete.
 
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(FamilyMemberAdmin, self).change_view(request, object_id, form_url, extra)
+
 
     def delete_model(self, request, obj):
         employee = obj.employee.id
@@ -577,6 +585,15 @@ class WorkReferenceAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(WorkReferenceAdmin, self).change_view(request, object_id, form_url, extra)
 
     def delete_model(self, request, obj):
         employee = obj.employee.id
@@ -661,6 +678,15 @@ class TestApplicationAdmin(admin.ModelAdmin):
         request.GET['employee'] = employee
 
         return super(TestApplicationAdmin, self).delete_model(request, obj)
+
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(TestApplicationAdmin, self).change_view(request, object_id, form_url, extra)
 
 
     # Overriding the add_wiew method for the tests admin.
@@ -752,6 +778,14 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
         request.GET['employee'] = employee
 
         return super(EmployeeDocumentAdmin, self).delete_model(request, obj)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(EmployeeDocumentAdmin, self).change_view(request, object_id, form_url, extra)
 
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
