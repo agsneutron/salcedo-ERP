@@ -1796,3 +1796,9 @@ position: absolute !important;
 .hide {
     display: none;
 }
+input[type=checkbox], input[type=radio] {
+    margin: 4px 0 0;
+    margin-top: 1px\9;
+    line-height: normal;
+    height: 20px;
+}
