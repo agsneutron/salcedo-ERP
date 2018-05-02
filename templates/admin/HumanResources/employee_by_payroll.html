@@ -104,30 +104,14 @@
         <div class="col-xs-9">
             <div class="col-md-6">
                 <h3 class="section-title">Listado de Nómina</h3>
-
-                   <div class="text-right" style="display: flex;text-align: right;float: right;">
-                        <a href=#
-                           onclick="sendSelected('/humanresources/api/delete_assistances?payroll_period={{ payrollperiod }}')"
-                           class="btn btn-raised btn-success">
-                            <i class="fa fa-file-pdf-o"></i> Eliminar asistencias
-                        </a>
-                    </div>
-
-                    <div class="text-right" style="display: flex;text-align: right;float: right;">
-                        <a href=#
-                           onclick="sendSelected('/humanresources/api/generate_earnings_deductions_report?payroll_period_id={{ payrollperiod }}')"
-                           class="btn btn-raised btn-info">
-                            <i class="fa fa-file-pdf-o"></i> Exportar Reporte P/D
-                        </a>
-                    </div>
-
             </div>
             <div class="col-md-6">
                 {% comment %}  <div class="text-right" style="display: flex;text-align: right;float: right;">
                          <a href=# onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"  class="btn btn-raised btn-success">
                             <i class="fa fa-file-pdf-o"></i> Generar Recibos
                          </a> {% endcomment %}
-                &nbsp;   </div>
+                &nbsp;
+            </div>
 
 
             <div class="col-md-12">
@@ -138,52 +122,35 @@
                     <div class="col-md-3"><strong>Inicio de Periodo : </strong><br>{{ record_period.start_period }}
                     </div>
                     <div class="col-md-3"><strong>Fin de Periodo :</strong><br> {{ record_period.end_period }}</div>
-                    <div class="col-md-3"><strong>Tipo de Carga de Asistencias:</strong><br> {{ record_period.payroll_group.get_checker_type_display }}</div>
+                    <div class="col-md-6"><strong>Tipo de Carga de
+                        Asistencias:</strong><br> {{ record_period.payroll_group.get_checker_type_display }}</div>
 
                 {% endfor %}
 
             </div>
+            <div class="row">
+                <div class="col-md-12 text-right">
 
-            <div class="col-md-12">
-                <hr>
-                <div class="col-md-3">
-                    <div class="text-right" style="display: flex;text-align: right;float: right;">
-                        <a href="/admin/HumanResources/uploadedemployeeassistancehistory/add?payroll_period={{ payrollperiod }}"
-                           class="btn btn-raised btn-primary">
-                            <i class="fa fa-users"></i> Cargar Asistencias
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="text-right" style="display: flex;text-align: right; float: right;">
-                        <a href=" /admin/HumanResources/employeeassistance/incidences_by_period/{{ payrollperiod }}/"
-                           class="btn btn-raised btn-warning">
-                            <i class="fa fa-user-times"></i> Justificar Asistencias
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3" >
-                    <div class="text-right" style="display: flex;text-align: right;">
-                        <a href=#
-                           onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"
-                           class="btn btn-raised btn-success">
-                            <i class="fa fa-file-pdf-o"></i> Generar Recibos
-                        </a>
-                    </div>
+                    <a href="/admin/HumanResources/uploadedemployeeassistancehistory/add?payroll_period={{ payrollperiod }}"
+                       class="btn btn-raised btn-primary">
+                        <i class="fa fa-users"></i> Cargar Asistencias
+                    </a>
+
+                    <a href=" /admin/HumanResources/employeeassistance/incidences_by_period/{{ payrollperiod }}/"
+                       class="btn btn-raised btn-warning">
+                        <i class="fa fa-user-times"></i> Justificar Asistencias
+                    </a>
+
+                    <a href=#
+                       onclick="sendSelected('/humanresources/api/delete_assistances?payroll_period={{ payrollperiod }}')"
+                       class="btn btn-raised btn-danger">
+                        <i class="fa fa-file-pdf-o"></i> Eliminar asistencias
+                    </a>
+
 
                 </div>
-                <div class="col-md-3">
-                    <div class="text-right" style="display: flex;text-align: right;float: right;">
-                        <a href=#
-                           onclick="sendSelected('/humanresources/api/export_payroll_list?payroll_period={{ payrollperiod }}')"
-                           class="btn btn-raised btn-info">
-                            <i class="fa fa-file-excel-o"></i> Exportar Lista Nominal
-                        </a>
-                    </div>
-
-                </div>
-                <hr>
             </div>
+
             <div class="col-md-12">
                 <hr>
                 <div class="table-respponsive">
@@ -192,9 +159,12 @@
                         <tr>
                             <td>Clave</td>
                             <td>Nombre</td>
-                            <td>Puesto Asignado</td>d
-                            <td>Sueldo Base</td>d
-                            <td>Sueldo Neto</td>d
+                            <td>Puesto Asignado</td>
+
+                            <td>Sueldo Base</td>
+
+                            <td>Sueldo Neto</td>
+
                             <td>P/D por Periodo</td>
                             <td>Excluir</td>
                         </tr>
@@ -208,7 +178,7 @@
                                 <td>{{ record.employee_job }}</td>
                                 <td>{{ record.employee_payroll.base_salary }}</td>
 
-                                <td>{{ record.employee_payroll.total_earnings|subtract:record.employee_payroll.total_deductions}}</td>
+                                <td>{{ record.employee_payroll.total_earnings|subtract:record.employee_payroll.total_deductions }}</td>
                                 <td>
                                     <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee={{ record.employee_id }}&payrollperiod={{ payrollperiod }}&payrollgroup={{ request.GET.payrollgroup }}"
                                        class="btn btn-raised btn-default btn-xs"><i
@@ -219,7 +189,8 @@
 
 
                                     <input type="checkbox" class="employee_exclusion_checkbox"
-                                           name="employee_exclusion_checkbox_{{ record.employee_position_description }}" id="employees"
+                                           name="employee_exclusion_checkbox_{{ record.employee_position_description }}"
+                                           id="employees"
                                            value="{{ record.employee_id }}" {{ record | employee_is_active:payrollperiod }}>
 
 
@@ -239,6 +210,29 @@
                             <span id="save_changes_button_label">Guardar Cambios</span>
                         </a>
                     </div>
+                </div>
+            </div>
+         <div class="row">
+                <div class="col-xs-12 text-right">
+
+                    <a href=#
+                       onclick="sendSelected('/humanresources/api/generate_payroll_receipt?payroll_period={{ payrollperiod }}')"
+                       class="btn btn-raised btn-success">
+                        <i class="fa fa-file-pdf-o"></i> Generar Recibos
+                    </a>
+
+                    <a href=#
+                       onclick="sendSelected('/humanresources/api/export_payroll_list?payroll_period={{ payrollperiod }}')"
+                       class="btn btn-raised btn-info">
+                        <i class="fa fa-file-excel-o"></i> Exportar Lista Nominal
+                    </a>
+
+                    <a href=#
+                       onclick="sendSelected('/humanresources/api/generate_earnings_deductions_report?payroll_period_id={{ payrollperiod }}')"
+                       class="btn btn-raised btn-info">
+                        <i class="fa fa-file-pdf-o"></i> Exportar Reporte P/D
+                    </a>
+
                 </div>
             </div>
             <script>
