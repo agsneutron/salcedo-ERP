@@ -713,6 +713,8 @@ class EmployeeLoanForm(forms.ModelForm):
         fields = '__all__'
 
 
+
+
 # Form to include the fields of Tag Form.
 class EmployeeRequisitionForm(forms.ModelForm):
     class Meta:
