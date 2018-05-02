@@ -14,6 +14,7 @@ from django.db.models import Q
 
 # Model Imports.
 from HumanResources.models import *
+from Accounting.models import *
 from django.template import Context
 
 # Create your views here.
@@ -633,3 +634,12 @@ class EarningsDeductionsListView(ListView):
         if not request.user.has_perm('ERP.view_list_empresa'):
             raise PermissionDenied
         return super(EarningsDeductionsListView, self).dispatch(request, args, kwargs)
+
+
+# For  Transactions by account filter objects view
+def SearchTransactions(request):
+    template = loader.get_template('HumanResources/search_transactions.html')
+    context = {
+               'internalcompany': InternalCompany.objects.all(), }
+
+    return HttpResponse(template.render(context, request))
