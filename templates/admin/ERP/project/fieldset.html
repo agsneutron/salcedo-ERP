@@ -254,59 +254,7 @@
 
 
 
-                    {% if field.field.name == "general_director" %}
-                        <div class="col-sm-4 col-md-3">
-                            <div class="form-group field-key">
-                                <div>
-                                    <label class="control-label required" for="id_key">Director General</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-                    {% if field.field.name == "construction_director" %}
-                        <div class="col-sm-4 col-md-3">
-                            <div class="form-group field-key">
-                                <div>
-                                    <label class="control-label required" for="id_key">Director de Obras</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
 
-                    {% if field.field.name == "business_president" %}
-                        <div class="col-sm-4 col-md-3">
-                            <div class="form-group field-key">
-                                <div>
-                                    <label class="control-label required" for="id_key">Presidente Empresarial</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    {% if field.field.name == "business_vice_president" %}
-                        <div class="col-sm-4 col-md-3">
-                            <div class="form-group field-key">
-                                <div>
-                                    <label class="control-label required" for="id_key">Viceresidente Empresarial</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
-
-                    {% if field.field.name == "administration_head" %}
-                        <div class="col-sm-4 col-md-3">
-                            <div class="form-group field-key">
-                                <div>
-                                    <label class="control-label required" for="id_key">Jefe de Administración</label>
-                                    {{ field.field|addcss:"form-control" }}
-                                </div>
-                            </div>
-                        </div>
-                    {% endif %}
 
 
 
@@ -411,9 +359,69 @@
                             </div>
                         </div>
                         </div>
-                        </div>
+                        {% endif %}
 
+                         {% if field.field.name == "general_director" %}
+                              <div class="row">
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Director General</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
                     {% endif %}
+                    {% if field.field.name == "construction_director" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Director de Obras</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "business_president" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Presidente Empresarial</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "business_vice_president" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Viceresidente Empresarial</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if field.field.name == "administration_head" %}
+                        <div class="col-sm-4 col-md-3">
+                            <div class="form-group field-key">
+                                <div>
+                                    <label class="control-label required" for="id_key">Jefe de Administración</label>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                         </div>
+                    {% endif %}
+
+
+
+
+
 
                         {% if field.field.name == "ubicacion_calle" %}
                             <div role="tabpanel" class="tab-pane fade" id="otro1">
