@@ -1943,6 +1943,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
     def clean(self):
         # get forms that actually have valid data
+        record_is_new = self.instance.pk is None
         count = 0
         total = 0
         periods = []
@@ -1956,7 +1957,19 @@ class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
                     if form.cleaned_data['period'] in periods:
                         raise forms.ValidationError('No pueden haber periodos duplicados en los pagos.')
                     else:
-                        periods.append(form.cleaned_data['period'])
+                        period = form.cleaned_data['period']
+
+                        old_amount = form.initial['amount']
+                        new_amount = form.cleaned_data['amount']
+
+                        if old_amount != new_amount:
+                            receipts = PayrollReceiptProcessed.objects.filter(payroll_period_id=period.id)
+                            if(len(receipts) > 0):
+                                raise forms.ValidationError('No se puede modificar el pago de un periodo cerrado. ')
+
+
+                        periods.append(period)
+
 
 
             except AttributeError:
