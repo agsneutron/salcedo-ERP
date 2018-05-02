@@ -260,6 +260,21 @@ class EducationAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
     # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        employee = Employee.objects.get(pk=employee_id)
+
+
+        extra['template'] = "education"
+        extra['employee'] = employee
+
+        return super(EducationAdmin, self).change_view(request, object_id, form_url, extra)
+
+
+    # Adding extra context to the add view.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
