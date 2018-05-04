@@ -179,8 +179,9 @@ except ImportError as e:
 
 # Email config password reset
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST = 'mail.orion.studio'
 EMAIL_HOST = 'a2plcpnl0290.prod.iad2.secureserver.net'
 EMAIL_HOST_USER = 'salcedocys@orion.studio'
 EMAIL_HOST_PASSWORD = 'Salc3d0Mail!'
 EMAIL_PORT = 465
-EMAIL_USE_TLS = True
+EMAIL_USE_TLS = False
