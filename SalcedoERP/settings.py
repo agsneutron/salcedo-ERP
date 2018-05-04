@@ -16,7 +16,7 @@ import os
 
 import locale
 
-#locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
 # locale.currency(1000, grouping=True)
 # español para windows
 #locale.setlocale(locale.LC_ALL, "")
@@ -176,13 +176,3 @@ try:
     from .local_settings import *
 except ImportError as e:
     pass
-
-
-# Email config password reset
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-#EMAIL_HOST = 'mail.orion.studio'
-EMAIL_HOST = 'a2plcpnl0290.prod.iad2.secureserver.net'
-EMAIL_HOST_USER = 'salcedocys@orion.studio'
-EMAIL_HOST_PASSWORD = 'Salc3d0Mail!'
-EMAIL_PORT = 465
-EMAIL_USE_TLS = False
