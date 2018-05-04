@@ -105,13 +105,12 @@
                                     {% comment %}<td >{{ owner.telefono2 }}</td>{% endcomment %}
                                     <td class="text-center" style="width: 3%"><a
                                             href="/admin/ERP/propietario/{{ owner.id }}"
-                                            target="_blank"
                                             class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-eye color-default eliminar"></i></a></td>
-                                    <td class="text-center" style="width: 3%"><a href="/admin/ERP/propietario/{{ owner.id }}/change" class="btn btn-raised btn-default btn-xs"><i
+                                    <td class="text-center" style="width: 3%"><a href="/admin/ERP/propietario/{{ owner.id }}/change?empresa_id={{ empresa.id }}" class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-pencil color-default eliminar"></i></a></td>
                                     <td class="text-center" style="width: 3%"><a
-                                            href="/admin/ERP/propietario/{{ owner.id }}/delete"
+                                            href="/admin/ERP/propietario/{{ owner.id }}/delete?empresa_id={{ empresa.id }}"
                                             class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-trash-o color-danger eliminar"></i></a>
                                     </td>

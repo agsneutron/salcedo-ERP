@@ -974,6 +974,10 @@ class OwnerModelAdmin(admin.ModelAdmin):
         else:
             return super(OwnerModelAdmin, self).response_add(request, obj, post_url_continue)
 
+    def response_delete(self, request, obj_display, obj_id):
+        empresa_id = request.GET.get('empresa_id')
+        return HttpResponseRedirect("/admin/ERP/empresa/" + str(empresa_id))
+
 
 @admin.register(LineItem)
 class LineItemAdmin(admin.ModelAdmin):
