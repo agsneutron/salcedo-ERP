@@ -833,9 +833,9 @@ class ProgressEstimateLogDetailView(generic.DetailView):
             split_name = file_name.split('/')
 
             if len(split_name) <= 1:
-                record.file.name = "Archivo sin nombre"
+                record.version = "Archivo sin nombre"
             else:
-                record.file.name = split_name[len(split_name) - 1]
+                record.version = split_name[len(split_name) - 1]
 
         context['logfiles'] = log_files
 
