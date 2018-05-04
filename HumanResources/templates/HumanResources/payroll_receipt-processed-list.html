@@ -5,7 +5,7 @@
 {% endblock %}
 {% block content %}
 
-   {% include "admin/HumanResources/payroll-home.html" %}
+    {% include "admin/HumanResources/payroll-home.html" %}
 
     <div class="col-xs-9">
 
@@ -26,77 +26,83 @@
                     </div>
                 </div>
 
-                    <div class="item-right">
 
-                    <a href="/humanresources/api/delete_payroll_receipts?payroll_period={{ payroll_period.id }}"
-               class="btn btn-raised">
-                <i class="fa fa-trash"></i> Eliminar Recibos de Nómina
-            </a>
-                </div>
             </ul>
 
 
+            <div class="card-block">
+                <div class="tab-content">
+                    <div class="table-responsive mt-15">
 
-                <div class="card-block">
-                    <div class="tab-content">
 
+                        {% if receipts %}
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Clave</th>
+                                    <th>Empleado</th>
+                                    <th>Descargar</th>
+                                </tr>
+                                </thead>
 
-                        <div class="table-responsive mt-15">
-                            <div class="col-md-3">
-                                <div class="text-right" style="display: flex;text-align: right;float: right;">
-                                    <a href="/humanresources/api/export_payroll_list?payroll_period={{ payroll_period.id }}"
-                                       class="btn btn-raised btn-info">
-                                        <i class="fa fa-file-excel-o"></i> Exportar Lista Nominal
-                                    </a>
-                                </div>
-
-                            </div>
-
-                            <div class="col-md-3">
-                                <div class="text-right" style="display: flex;text-align: right;float: right;">
-                                    <a href="/humanresources/api/generate_earnings_deductions_report?payroll_period_id={{ payroll_period.id }}"
-                                       class="btn btn-raised btn-info">
-                                        <i class="fa fa-file-excel-o"></i> Exportar Reporte P/D
-                                    </a>
-                                </div>
-
-                            </div>
-
-                            {% if receipts %}
-                                <table class="table table-striped">
-                                    <thead>
+                                <tbody>
+                                {% for record in receipts %}
                                     <tr>
-                                        <th>Clave</th>
-                                        <th>Empleado</th>
-                                        <th>Descargar</th>
+                                        <td>{{ record.employee.employee_key }}</td>
+                                        <td>{{ record.employee.get_full_name }}</td>
+                                        <td>
+                                            <a href="/humanresources/api/generate_payroll_receipt_for_employee?employee={{ record.employee.id }}&payroll_period={{ payroll_period.id }}"
+                                               class="btn btn-raised btn-default btn-xs">
+                                                <i class="fa fa-download color-default eliminar"></i>
+                                                <div class="ripple-container"></div>
+                                            </a>
+                                        </td>
                                     </tr>
-                                    </thead>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            No hay recibos de nómina generados en este periodo.
+                        {% endif %}
+                    </div>
 
-                                    <tbody>
-                                    {% for record in receipts %}
-                                        <tr>
-                                            <td>{{ record.employee.employee_key }}</td>
-                                            <td>{{ record.employee.get_full_name }}</td>
-                                            <td>
-                                                <a href="/humanresources/api/generate_payroll_receipt_for_employee?employee={{ record.employee.id }}&payroll_period={{ payroll_period.id }}"
-                                                   class="btn btn-raised btn-default btn-xs">
-                                                    <i class="fa fa-download color-default eliminar"></i>
-                                                    <div class="ripple-container"></div>
-                                                </a>
-                                            </td>
-                                        </tr>
-                                    {% endfor %}
-                                    </tbody>
-                                </table>
-                            {% else %}
-                                No hay recibos de nómina generados en este periodo.
-                            {% endif %}
+
+
+                <div class="col-md-12">
+                            <div class="text-right" style="display: flex;text-align: right;float: right;">
+                                <a href="/humanresources/api/export_payroll_list?payroll_period={{ payroll_period.id }}"
+                                   class="btn btn-raised btn-info">
+                                    <i class="fa fa-file-excel-o"></i> Exportar Lista Nominal
+                                </a>
+                                 <a href="/humanresources/api/generate_earnings_deductions_report?payroll_period_id={{ payroll_period.id }}"
+                                   class="btn btn-raised btn-info">
+                                    <i class="fa fa-file-excel-o"></i> Exportar Reporte P/D
+                                </a>
+                                 <a href="/humanresources/api/delete_payroll_receipts?payroll_period={{ payroll_period.id }}"
+                               class="btn btn-raised btn-danger">
+                                <i class="fa fa-trash"></i> Eliminar Recibos de Nómina
+                            </a>
+                            </div>
                         </div>
 
-                    </div>
+                        <div class="col-md-3">
+                            <div class="text-right" style="display: flex;text-align: right;float: right;">
+
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+
+
+                        </div>
+
+
+
+
                 </div>
             </div>
         </div>
+    </div>
 
 
 {% endblock %}

@@ -123,10 +123,15 @@ function displayResults(data) {
 
     $j('#divTable').html("<div></div>");
     sHtml = '<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
+        + ' <a  style="margin: 0;float: right;" href=#\n' +
+        '                       onclick="exportAccounts()"\n' +
+        '                       class="btn btn-raised btn-info btn-sm">\n' +
+        '                        <i class="fa fa-file-excel-o"></i> Exportar Cuentas\n' +
+        '                    </a>'
         + ' <colgroup>'
-        + ' <col width="40%">'
         + ' <col width="30%">'
-        + ' <col width="7%">'
+        + ' <col width="30%">'
+        + ' <col width="15%">'
         + ' <col width="8%">'
         + ' <col width="5%">'
         + ' <col width="5%">'
@@ -143,9 +148,9 @@ function displayResults(data) {
         //+ '<th>Subcuenta De</th>'
         + '<th>Naturaleza</th>'
         + '<th>Cód. Agrupador SAT</th>'
-        + '<th style="width: 5%;">Ver</th>'
-        + '<th style="width: 5%;">Editar</th>'
-        + '<th style="width: 5%;">Eliminar</th>'
+        + '<th style="width: 5%;" class="no-sorting">Ver</th>'
+        + '<th style="width: 5%;" class="no-sorting">Editar</th>'
+        + '<th style="width: 5%;" class="no-sorting">Eliminar</th>'
         + '</tr>'
         + '</thead>'
         + '<tbody>';
