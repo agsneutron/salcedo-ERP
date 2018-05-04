@@ -179,10 +179,10 @@
 
                             {% for section in sections_result %}
                                 {% if section.section_name == "Proyecto" and section.total_inner_sections > 0 %}
-                                    <li role="presentation" class="active"><a href="#general" aria-controls="home"
+                                    <li role="presentation" class="active"><a href="#general"
+                                                                              aria-controls="home"
                                                                               role="tab"
-                                                                              data-toggle="tab"><i
-                                            class="zmdi zmdi-settings"></i>
+                                                                              data-toggle="tab"><i class="zmdi zmdi-settings"></i>
                                         Proyecto</a>
                                     </li>
                                 {% endif %}
@@ -254,6 +254,17 @@
                                                                 <li class="list-group-item">
                                                                     Tipo de
                                                                     Contrucción: {{ project.tipo_construccion }}</li>
+
+                                                                <li class="list-group-item">
+                                                                    Director General: {{ project.general_director }}</li>
+                                                                <li class="list-group-item">
+                                                                    Director de Obras: {{ project.construction_director }}</li>
+                                                                <li class="list-group-item">
+                                                                    Presidente Empresarial: {{ project.business_president }}</li>
+                                                                <li class="list-group-item">
+                                                                    Viceresidente Empresarial: {{ project.business_vice_president }}</li>
+                                                                <li class="list-group-item">
+                                                                    Jefe de Administración: {{ project.administration_head }}</li>
                                                             </ul>
                                                         </div>
                                                     {% endif %}

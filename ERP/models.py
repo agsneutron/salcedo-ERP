@@ -753,6 +753,16 @@ class Project(models.Model):
     portada = models.FileField(blank=True, null=True, upload_to=cover_file_document_destination,
                                verbose_name="Foto de Portada")
 
+    # Roles on projects:
+    general_director = models.ForeignKey(User, verbose_name="Director General", null=False, related_name='+')
+    construction_director = models.ForeignKey(User, verbose_name="Director de Construcción", null=False,
+                                              related_name='+')
+    business_president = models.ForeignKey(User, verbose_name="Presidente Empresarial", null=False, related_name='+')
+    business_vice_president = models.ForeignKey(User, verbose_name="Vicepresidente Empresarial", null=False,
+                                                related_name='+')
+    administration_head = models.ForeignKey(User, verbose_name="Jefe de Administración", null=False, related_name='+')
+    # Roles on projects:
+
     ubicacion_calle = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
     ubicacion_numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
@@ -924,13 +934,7 @@ class Project(models.Model):
 
 
 
-    # Roles on projects:
-    general_director = models.ForeignKey(User, verbose_name="Director General", null=False, related_name='+')
-    construction_director = models.ForeignKey(User, verbose_name="Director de Construcción", null=False, related_name='+')
-    business_president = models.ForeignKey(User, verbose_name="Presidente Empresarial", null=False, related_name='+')
-    business_vice_president = models.ForeignKey(User, verbose_name="Vicepresidente Empresarial", null=False,
-                                                related_name='+')
-    administration_head = models.ForeignKey(User, verbose_name="Jefe de Administración", null=False, related_name='+')
+
 
 
 

@@ -549,6 +549,7 @@ form .aligned ul {
     position: relative;
     background-color: #204280;
     border: 0;
+    padding-left: inherit !important;
 }
 
 .nav.nav-tabs li a {
@@ -860,9 +861,9 @@ ul {
 
 .ms-slidebar .ms-slidebar-header .ms-slidebar-title h3 {
     color: #fff;
-    font-size: 20px;
+    font-size: 14px !important;
     margin: 0;
-    word-spacing: -4px;
+    word-spacing: inherit;
     display: inline-block;
     vertical-align: middle;
     margin-left: 10px;
@@ -1795,4 +1796,10 @@ position: absolute !important;
 }
 .hide {
     display: none;
+}
+input[type=checkbox], input[type=radio] {
+    margin: 4px 0 0;
+    margin-top: 1px\9;
+    line-height: normal;
+    height: 20px;
 }

@@ -369,6 +369,7 @@
                                             <li>
                                                 <a href="/admin/HumanResources/employeedropout/">Bajas</a>
                                             </li>
+                                            <li><a href="/humanresources/searchtransactions/">Reportes</a></li>
                                             {% comment %}<li>
                                                 <a href="/admin/HumanResources/employee/">Consultar</a>
                                             </li>{% endcomment %}
@@ -541,7 +542,7 @@
                         {% endif %}
                         <h3 style="margin-top: 0 !important">
                             {% block welcome-msg %}
-                                &nbsp;{% trans 'Bienvenido, &nbsp;' %}
+                                &nbsp;{% trans 'Bienvenido,' %}
                                 <span class="">{% firstof user.get_short_name user.get_username %} </span>&nbsp;
                                 &nbsp;<span class="orange-circle"> <span class="xcontainer"> <span
                                     class="xicon"></span></span></span></a>
