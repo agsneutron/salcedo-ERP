@@ -60,5 +60,6 @@ urlpatterns = [
     url(r'^api/get_tags', api.Get_Tags.as_view(), name='get_tags'),
     url(r'^api/save_excluded_employees_for_period', api.SaveExcludedEmployeesForPeriod.as_view(), name='save_excluded_employees_for_period'),
     url(r'^searchtransactions', views.SearchTransactions, name='searchtransactions'),
+    url(r'^search_transactions_by_employee', api.SearchTransactionsByEmployee.as_view(), name='search-transactions'),
 
 ]

@@ -123,7 +123,7 @@ class TransactionsEngine():
         worksheet.merge_range(header_start_row + 2, 2 + offset, header_start_row + 2, 5 + offset,
                               'Salcedo Construcción y Supervision SA de CV', formats['report_header'])
         worksheet.merge_range(header_start_row + 3, 2 + offset, header_start_row + 3, 5 + offset,
-                              'Movimientos de Cuenta', formats['report_header'])
+                              'Movimientos de empleado', formats['report_header'])
 
         date_label = time.strftime("%d de %B de %Y")
 
@@ -144,14 +144,14 @@ class TransactionsEngine():
 
         # Account Number
         worksheet.merge_range(current_row, offset, current_row, 1 + offset,
-                              "Número de Cuenta", formats['info_label'])
+                              "Clave de Empleado", formats['info_label'])
 
-        worksheet.write(current_row, 2 + offset, data['account_number'], formats['number_1'])
+        worksheet.write(current_row, 2 + offset, data['employee_key'], formats['number_1'])
 
         # Account Name
         worksheet.merge_range(current_row, 3 + offset, current_row, 4 + offset,
-                              "Nombre de Cuenta", formats['info_label'])
-        worksheet.write(current_row, 5 + offset, data['account_name'], formats['number_1'])
+                              "Nombre de Empleado", formats['info_label'])
+        worksheet.write(current_row, 5 + offset, data['employee_name'], formats['number_1'])
 
         current_row += 1
 

@@ -39,7 +39,7 @@ function search() {
     var name = $j("#name").val();
     var rfc = $j("#rfc").val();
 
-    var sta_url = "/humanresources/search_transactions_by_account?";
+    var sta_url = "/humanresources/search_transactions_by_employee?";
 
     url="";
 
@@ -51,13 +51,13 @@ function search() {
         url=url+"&fiscal_period_month="+fiscal_period_month.toString();
     }
 
-    if (reference.toString()!="") {
+    if (employee_key.toString()!="") {
         url=url+"&employee_key="+employee_key.toString();
     }
-    if (reference.toString()!="") {
+    if (name.toString()!="") {
         url=url+"&name="+name.toString();
     }
-    if (reference.toString()!="") {
+    if (rfc.toString()!="") {
         url=url+"&rfc="+rfc.toString();
     }
 
@@ -127,18 +127,18 @@ function displayResults(data,url_policieslist){
                 +' <col width="17%">'
                 +' <col width="17%">'
                 +' <col width="3%">'
-                +' <col width="3%">'
+
 
                 +' </colgroup>';
 
     sTable= '<thead>'
                         +'<tr>'
-                            +'<th>Número</th>'
+                            +'<th>Año Fiscal</th>'
+                            +'<th>Mes Fiscal</th>'
                             +'<th>Nombre</th>'
-                            +'<th>Debe</th>'
-                            +'<th>Haber</th>'
+                            +'<th>Clave Empleado</th>'
                             +'<th class="no-sorting">Exportar</th>'
-                            +'<th class="no-sorting">Pólizas</th>'
+
 
                         +'</tr>'
                     +'</thead>'
@@ -149,14 +149,12 @@ function displayResults(data,url_policieslist){
 
     for (var i = 0; i < data.accounts.length; i++) {
             sTable += '<tr>'
-            + '<td class="result1 selectable">'+ data.accounts[i].account_number +  '</td>'
-            + '<td class="result1 selectable">'+ data.accounts[i].account_name + '</td>'
-            + '<td class="result1 selectable">'+ data.accounts[i].total_debit + '</td>'
-            + '<td class="result1 selectable">'+ data.accounts[i].total_credit + '</td>'
-            + '<td class="result1 selectable"><a href="'+ tar_url + url + '&account='+data.accounts[i].account_number+'" class="btn btn-raised btn-default btn-xs">'
+            + '<td class="result1 selectable">'+ data.accounts[i].payroll_period_year +  '</td>'
+            + '<td class="result1 selectable">'+ data.accounts[i].payroll_period_month + '</td>'
+            + '<td class="result1 selectable">'+ data.accounts[i].payroll_period_name + '</td>'
+            + '<td class="result1 selectable">'+ data.accounts[i].employee_key + '</td>'
+            + '<td class="result1 selectable"><a href="'+ tar_url + url + '&employee_key='+data.accounts[i].employee_key+'" class="btn btn-raised btn-default btn-xs">'
             + '<i class="fa fa-file-excel-o color-default eliminar" style="color: green;"></i></a>' + '</td>'
-            + '<td class="result1 selectable"><a href="/accounting/policiesbyaccount?' + url_policieslist + data.accounts[i].account_number + '&accountname='+ data.accounts[i].account_name + '" class="btn btn-raised btn-default btn-xs">'
-            + '<i class="fa fa-pencil-square-o color-default eliminar"></i></a>' + '</td>'
             + '</tr>'
     }
     sTable +='</tbody>'

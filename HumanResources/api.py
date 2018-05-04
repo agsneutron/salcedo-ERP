@@ -685,7 +685,7 @@ class SaveExcludedEmployeesForPeriod(View):
                                        ensure_ascii=False), 'application/json; charset=utf-8')
 
 
-class SearchTransactionsByAccount(ListView):
+class SearchTransactionsByEmployee(ListView):
     def get_values_PayrollProcessedDetail(self, transactions):
         grouped = transactions.values('payroll_receip_processed__payroll_period__year', 'payroll_receip_processed__payroll_period__month', 'payroll_receip_processed__payroll_period__name',
                                       'payroll_receip_processed__employee__employee_key','payroll_receip_processed__employee__name','payroll_receip_processed__employee__rfc',
@@ -726,7 +726,7 @@ class SearchTransactionsByAccount(ListView):
         engine = TransactionsEngine(
             fiscal_period_year=fiscal_period_year,
             fiscal_period_month=fiscal_period_month,
-            reference=employee_key,
+            employee_key=employee_key,
             name=name,
             rfc=rfc,
             only_with_transactions=False,
@@ -760,3 +760,88 @@ class SearchTransactionsByAccount(ListView):
             })
 
         return HttpResponse(Utilities.json_to_dumps(response), 'application/json; charset=utf-8', )
+
+class GenerateTransactionsByAccountReport(ListView):
+    def create_general_structure(self, report_title, year, month, employee):
+
+
+        if report_title is None or report_title is "":
+            title = "Transacciones del empleado " + str(employee.employee_key) + " " + employee.name
+        else:
+            title = report_title
+
+        general_structure = {
+            'report_title': title,
+            'fiscal_period_year': year,
+            'fiscal_period_month': month,
+            'employee_key': str(employee.employee_key),
+            'account_name': employee.name,
+            'rfc': employee.rfc,
+            'transactions': []
+        }
+
+        return general_structure
+
+    def create_transaction_structure(self, transaction_info):
+
+        account_structure = {
+            'name': transaction_info.name,
+            'amount': transaction_info.amount,
+            'type': transaction_info.type
+        }
+
+        return account_structure
+
+    def get(self, request, *args, **kwargs):
+        fiscal_period_year = request.GET.get('fiscal_period_year')
+        fiscal_period_month = request.GET.get('fiscal_period_month')
+        employee_key = request.GET.get('employee_key')
+        name = request.GET.get('name')
+        rfc = request.GET.get('rfc')
+        report_title = request.GET.get('report_title')
+
+        # If the account number is set, the range is ignored.
+        employee_key_array = get_array_or_none(request.GET.get('employee_key'))
+
+        engine = TransactionsEngine(
+            fiscal_period_year=fiscal_period_year,
+            fiscal_period_month=fiscal_period_month,
+            employee_key=employee_key,
+            name = name,
+            rfc = rfc,
+            only_with_transactions=False,
+            employee_array=employee_key_array
+        )
+
+        transactions_set = engine.search_transactions()
+
+        # Getting the account number.
+        employee = employee_key_array[0]
+
+        # Getting the account object.
+        employee_object = Employee.objects.get(employee_key=employee)
+
+        # Creating the general structure for the response.
+        general_structure = self.create_general_structure(
+            report_title,
+            fiscal_period_year,
+            fiscal_period_month,
+            employee_object
+        )
+
+        # Accumulated amounts.
+        total_amount = 0
+
+        # Creating the structure for each of the accounts.
+        for transaction in transactions_set:
+            total_amount += transaction.amount
+            transaction_structure = self.create_transaction_structure(transaction)
+            general_structure['transactions'].append(transaction_structure)
+
+        # Assigning the accumulated amounts.
+        general_structure['total_amount'] = total_amount
+
+
+        return engine.generate_report(general_structure)
+
+        # return HttpResponse(Utilities.json_to_dumps(general_structure) , 'application/json; charset=utf-8', )
