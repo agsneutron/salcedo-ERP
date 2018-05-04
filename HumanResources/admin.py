@@ -29,9 +29,10 @@ from django.db import transaction
 from django.contrib.admin.views.main import ChangeList
 from django.core.exceptions import PermissionDenied
 from django.http.response import HttpResponseRedirect
-from django.http import  QueryDict
+from django.http import QueryDict
 
 from HumanResources import views
+from HumanResources.views import EarningsDeductionsListView
 
 # Importing the forms.
 from HumanResources.forms import *
@@ -131,7 +132,8 @@ class EmployeeAdmin(admin.ModelAdmin):
         ("Datos Personales", {
             'fields': (
                 'name', 'first_last_name', 'second_last_name', 'birthdate', 'birthplace', 'gender', 'marital_status',
-                'curp', 'rfc', 'tax_regime','social_security_type', 'social_security_number', 'blood_type','street', 'outdoor_number', 'indoor_number', 'colony',
+                'curp', 'rfc', 'tax_regime', 'social_security_type', 'social_security_number', 'blood_type', 'street',
+                'outdoor_number', 'indoor_number', 'colony',
                 'country', 'state', 'town', 'zip_code', 'phone_number', 'cellphone_number', 'office_number',
                 'extension_number', 'personal_email', 'work_email', 'driving_license_number',
                 'driving_license_expiry_date')
@@ -144,20 +146,19 @@ class EmployeeAdmin(admin.ModelAdmin):
         qs.filter(assigned__exact=request.user)
         return qs
 
-
     def get_search_results(self, request, queryset, search_term):
 
         keywords = search_term.split(" ")
-        #tags = views.get_array_or_none(request.GET.get("tags"))
+        # tags = views.get_array_or_none(request.GET.get("tags"))
         tags = request.GET.getlist("tags")
 
-        if search_term is None or search_term == "" and len(tags)==0:
+        if search_term is None or search_term == "" and len(tags) == 0:
             return super(EmployeeAdmin, self).get_search_results(request, queryset, search_term)
 
         r = Employee.objects.none()
         querysetFiltrado = Employee.objects.filter(tags__id__in=tags)
 
-        if len(querysetFiltrado) ==0:
+        if len(querysetFiltrado) == 0:
             querysetFiltrado = queryset
 
         for k in keywords:
@@ -260,6 +261,21 @@ class EducationAdmin(admin.ModelAdmin):
         return ModelFormMetaClass
 
     # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        employee = Employee.objects.get(pk=employee_id)
+
+
+        extra['template'] = "education"
+        extra['employee'] = employee
+
+        return super(EducationAdmin, self).change_view(request, object_id, form_url, extra)
+
+
+    # Adding extra context to the add view.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
@@ -320,8 +336,9 @@ class CurrentEducationAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Formación Académica Actual", {
             'fields': (
-            'type', 'name', 'institution', 'employee', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday',
-            'saturday',)
+                'type', 'name', 'institution', 'employee', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday',
+                'friday',
+                'saturday',)
         }),
     )
 
@@ -333,14 +350,14 @@ class CurrentEducationAdmin(admin.ModelAdmin):
         employee_id = request.GET.get('employee')
         try:
             current_education = CurrentEducation.objects.get(employee_id=employee_id)
-            redirect_url = "/admin/HumanResources/currenteducation/"+str(current_education.id)+"/change?employee=" + str(employee_id)
+            redirect_url = "/admin/HumanResources/currenteducation/" + str(
+                current_education.id) + "/change?employee=" + str(employee_id)
             return HttpResponseRedirect(redirect_url)
 
         except CurrentEducation.DoesNotExist:
             employee = Employee.objects.get(pk=employee_id)
             extra['employee'] = employee
             return super(CurrentEducationAdmin, self).add_view(request, form_url, extra_context=extra)
-
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
         extra = extra_context or {}
@@ -373,14 +390,16 @@ class CurrentEducationAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
         current_education_id = obj.id
-        redirect_url = "/admin/HumanResources/currenteducation/"+str(current_education_id)+"/change/?employee=" + str(employee_id)
+        redirect_url = "/admin/HumanResources/currenteducation/" + str(
+            current_education_id) + "/change/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
     # To redirect after object change
     def response_change(self, request, obj):
         employee_id = request.GET.get('employee')
         current_education_id = obj.id
-        redirect_url = "/admin/HumanResources/currenteducation/"+str(current_education_id)+"/change/?employee=" + str(employee_id)
+        redirect_url = "/admin/HumanResources/currenteducation/" + str(
+            current_education_id) + "/change/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
 
@@ -396,7 +415,6 @@ class EmergencyContactAdmin(admin.ModelAdmin):
                 'street', 'colony', 'outdoor_number', 'indoor_number', 'zip_code', 'country', 'state', 'town')
         }),
     )
-
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -419,7 +437,6 @@ class EmergencyContactAdmin(admin.ModelAdmin):
 
         return super(EmergencyContactAdmin, self).delete_model(request, obj)
 
-
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
@@ -428,12 +445,9 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         employee = Employee.objects.get(pk=employee_id)
         emergencycontact_set = EmergencyContact.objects.filter(employee_id=employee_id)
 
-
         extra['template'] = "emergencycontact"
         extra['employee'] = employee
         extra['emergencycontact'] = emergencycontact_set
-
-
 
         return super(EmergencyContactAdmin, self).add_view(request, form_url, extra_context=extra)
 
@@ -444,9 +458,7 @@ class EmergencyContactAdmin(admin.ModelAdmin):
         extra['employee'] = Employee.objects.get(pk=employee_id)
         extra['show_delete_link'] = False
 
-
         return super(EmergencyContactAdmin, self).change_view(request, object_id, form_url, extra_context=extra)
-
 
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
@@ -495,6 +507,14 @@ class FamilyMemberAdmin(admin.ModelAdmin):
 
         # To redirect after object delete.
 
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(FamilyMemberAdmin, self).change_view(request, object_id, form_url, extra)
+
 
     def delete_model(self, request, obj):
         employee = obj.employee.id
@@ -502,7 +522,6 @@ class FamilyMemberAdmin(admin.ModelAdmin):
         request.GET['employee'] = employee
 
         return super(FamilyMemberAdmin, self).delete_model(request, obj)
-
 
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
@@ -563,6 +582,15 @@ class WorkReferenceAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(WorkReferenceAdmin, self).change_view(request, object_id, form_url, extra)
+
     def delete_model(self, request, obj):
         employee = obj.employee.id
         request.GET = request.GET.copy()
@@ -612,14 +640,15 @@ class TestApplicationAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Pruebas Aplicadas", {
             'fields': (
-                'application_date', 'test','result', 'comments', 'employee',)
+                'application_date', 'test', 'result', 'comments', 'employee',)
         }),
     )
 
     list_display = ('test', 'employee', 'application_date', 'result', 'get_EmployeeModelDetail_link')
     list_display_links = None
     search_fields = (
-        'employee__name', 'employee__first_last_name', 'employee__second_last_name', 'employee__employee_key', 'test__name', 'result')
+        'employee__name', 'employee__first_last_name', 'employee__second_last_name', 'employee__employee_key',
+        'test__name', 'result')
 
     def get_EmployeeModelDetail_link(self, obj):
         return HumanResourcesAdminUtilities.get_EmployeeModelDetail_link("testapplication", obj.id, "")
@@ -646,6 +675,15 @@ class TestApplicationAdmin(admin.ModelAdmin):
         request.GET['employee'] = employee
 
         return super(TestApplicationAdmin, self).delete_model(request, obj)
+
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(TestApplicationAdmin, self).change_view(request, object_id, form_url, extra)
 
 
     # Overriding the add_wiew method for the tests admin.
@@ -737,6 +775,14 @@ class EmployeeDocumentAdmin(admin.ModelAdmin):
         request.GET['employee'] = employee
 
         return super(EmployeeDocumentAdmin, self).delete_model(request, obj)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(EmployeeDocumentAdmin, self).change_view(request, object_id, form_url, extra)
 
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
@@ -963,7 +1009,6 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         request.GET = request.GET.copy()
         request.GET['employee'] = employee
         return super(EmployeePositionDescriptionAdmin, self).delete_model(request, obj)
-
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
 
@@ -1209,13 +1254,11 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
 
         return ModelFormMetaClass
 
-
     def delete_model(self, request, obj):
         employee = obj.employee.id
         request.GET = request.GET.copy()
         request.GET['employee'] = employee
         return super(EmployeeFinancialDataAdmin, self).delete_model(request, obj)
-
 
     # Overriding the add_wiew method for the employee pfinancial data admin.
     def add_view(self, request, form_url='', extra_context=None):
@@ -1260,14 +1303,16 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
     def response_change(self, request, obj):
         employee_id = request.GET.get('employee')
 
-        redirect_url = "/admin/HumanResources/employeefinancialdata/" + str(obj.id) + "/change?employee=" + str(employee_id)
+        redirect_url = "/admin/HumanResources/employeefinancialdata/" + str(obj.id) + "/change?employee=" + str(
+            employee_id)
         return HttpResponseRedirect(redirect_url)
 
         # To redirect after add
 
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
-        redirect_url = "/admin/HumanResources/employeefinancialdata/"+str(obj.id)+"/change?employee=" + str(employee_id)
+        redirect_url = "/admin/HumanResources/employeefinancialdata/" + str(obj.id) + "/change?employee=" + str(
+            employee_id)
         return HttpResponseRedirect(redirect_url)
 
 
@@ -1280,12 +1325,62 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         ("Catálogo de Percepciones y Deducciones", {
             'fields': (
                 'name', 'type', 'category', 'taxable', 'percent_taxable', 'account', 'sat_key',
-                'law_type', 'status', 'comments',)
+                'status', 'comments',)
         }),
     )
 
     list_display = ('name', 'type', 'account', 'percent_taxable', 'get_change_link', 'get_delete_link')
     list_display_links = None
+
+    def response_delete(self, request, obj_display, obj_id):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def response_add(self, request, obj, post_url_continue=None):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def response_change(self, request, obj):
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions")
+        else:
+            return HttpResponseRedirect("/admin/HumanResources/earningsdeductions/?penalty=S")
+
+    def save_model(self, request, obj, form, change):
+
+        tipo = request.GET.get('tipo', None)
+
+        if tipo is None:
+            obj.penalty = 'N'
+            #obj.save('N')
+        else:
+            obj.penalty = 'S'
+            obj.type = 'D'
+            #obj.save('S')
+
+        super(EarningsDeductionsAdmin, self).save_model(request, obj, form, change)
+
+    def get_urls(self):
+        urls = super(EarningsDeductionsAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$',
+                self.admin_site.admin_view(EarningsDeductionsListView.as_view()), name='EarningsDeductions-list-view'),
+            url(r'^(?P<pk>\d+)/$', views.EarningsDeductionsListView.as_view(), name='EarningsDeductions-detail'),
+
+        ]
+        return my_urls + urls
 
     def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
@@ -1320,14 +1415,49 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         # employee_id = request.GET.get('employee')
         earnings_set = EarningsDeductions.objects.filter(type='P')
         deductions_set = EarningsDeductions.objects.filter(type='D')
+        tipo = request.GET.get('tipo', None)
+        if tipo is None:
+            tipo=0
+            EarningsDeductionsAdmin.form.penalty = 'N'
+            deductions_set = deductions_set.filter(penalty='N')
+        else:
+            earnings_set=''
+            EarningsDeductionsAdmin.form.penalty = 'S'
+            EarningsDeductionsAdmin.form.type='D'
+            deductions_set = deductions_set.filter(penalty='S')
 
 
 
         extra['template'] = "earnings_deductions"
         extra['earnings'] = earnings_set
         extra['deductions'] = deductions_set
+        extra['tipo'] = tipo
+
 
         return super(EarningsDeductionsAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, form_url='', extra_context=None):
+        extra = extra_context or {}
+
+        # employee_id = request.GET.get('employee')
+        earnings_set = EarningsDeductions.objects.filter(type='P')
+        deductions_set = EarningsDeductions.objects.filter(type='D')
+        tipo = request.GET.get('tipo', None)
+        if tipo is None:
+            tipo = 0
+            deductions_set = deductions_set.filter(penalty='N')
+        else:
+            earnings_set=''
+            deductions_set = deductions_set.filter(penalty='S')
+
+        extra['template'] = "earnings_deductions"
+        extra['earnings'] = earnings_set
+        extra['deductions'] = deductions_set
+        extra['tipo'] = tipo
+
+        return super(EarningsDeductionsAdmin, self).change_view(request, form_url, extra_context=extra)
+
+
 
 
 # Payroll Receipt Processed Admin.
@@ -1409,7 +1539,6 @@ class PayrollToProcessAdmin(admin.ModelAdmin):
     form = PayrollToProcessForm
 
 
-
 # Employee Exclusion from Period Admin.
 @admin.register(EmployeePayrollPeriodExclusion)
 class EmployeePayrollPeriodExclusionAdmin(admin.ModelAdmin):
@@ -1422,10 +1551,10 @@ class PayrollTypeAdmin(admin.ModelAdmin):
     form = PayrollTypeForm
 
     fieldsets = (
-            ("Tipos de Nómina", {
-                'fields': ('name',)
-            }),
-        )
+        ("Tipos de Nómina", {
+            'fields': ('name',)
+        }),
+    )
 
     list_display = (
         'name', 'get_detail_button', 'get_change_link', 'get_delete_link',)
@@ -1448,7 +1577,6 @@ class PayrollTypeAdmin(admin.ModelAdmin):
     get_delete_link.allow_tags = True
     get_delete_link.short_description = 'Eliminar'
 
-
     def get_urls(self):
         urls = super(PayrollTypeAdmin, self).get_urls()
 
@@ -1460,7 +1588,6 @@ class PayrollTypeAdmin(admin.ModelAdmin):
 
         ]
         return my_urls + urls
-
 
 
 # Payroll Type Admin.
@@ -1593,14 +1720,14 @@ class TestAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Pruebas a Empleados", {
-            'fields': ('key','name','notes')
+            'fields': ('key', 'name', 'notes')
         }),
     )
 
-    list_display = ('key','name', 'get_change_link', 'get_delete_link')
+    list_display = ('key', 'name', 'get_change_link', 'get_delete_link')
     list_display_links = None
 
-    search_fields = ('key','name',)
+    search_fields = ('key', 'name',)
 
     def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
@@ -1720,13 +1847,12 @@ class EmployeeAssistanceAdmin(admin.ModelAdmin):
         allowed_minutes = 15
 
         if (arrived_minutes_late > allowed_minutes and checks_entry == True) or (
-                left_minutes_early > allowed_minutes and checks_exit == True):
+                        left_minutes_early > allowed_minutes and checks_exit == True):
             absent = True
 
         obj.absence = absent
 
         super(EmployeeAssistanceAdmin, self).save_model(request, obj, form, change)
-
 
     def get_urls(self):
         urls = super(EmployeeAssistanceAdmin, self).get_urls()
@@ -1812,9 +1938,6 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     get_UploadedEmployeeAssistanceHistory_link.short_description = 'Justificar Asistencias'
     get_UploadedEmployeeAssistanceHistory_link.allow_tags = True
 
-
-
-
     def save_model(self, request, obj, form, change):
         current_user = request.user
         # payroll_group_id = int(request.POST.get('payroll_group'))
@@ -1853,10 +1976,70 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
         return HttpResponseRedirect("/admin/HumanResources/uploadedemployeeassistancehistory/")
 
 
+class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
+    def clean(self):
+        # get forms that actually have valid data
+        record_is_new = self.instance.pk is None
+        count = 0
+        total = 0
+        periods = []
+        for form in self.forms:
+            try:
+                if form.cleaned_data:
+                    if form.cleaned_data['DELETE']:
+                        continue
+                    count += 1
+                    total += form.cleaned_data['amount']
+                    if form.cleaned_data['period'] in periods:
+                        raise forms.ValidationError('No pueden haber periodos duplicados en los pagos.')
+                    else:
+                        period = form.cleaned_data['period']
+
+                        old_amount = form.initial['amount']
+                        new_amount = form.cleaned_data['amount']
+
+                        if old_amount != new_amount:
+                            receipts = PayrollReceiptProcessed.objects.filter(payroll_period_id=period.id)
+                            if(len(receipts) > 0):
+                                raise forms.ValidationError('No se puede modificar el pago de un periodo cerrado. ')
+
+
+                        periods.append(period)
+
+
+
+            except AttributeError:
+                # annoyingly, if a subform is invalid Django explicity raises
+                # an AttributeError for cleaned_data
+                pass
+            except KeyError:
+                pass
+
+
+        loan_instance = self.instance
+        if loan_instance.payment_plan == EmployeeLoan.PLAN_A:
+            expected_records = 12
+        else:
+            expected_records = 14
+
+        if count != expected_records:
+            raise forms.ValidationError('Necesitas definir exactamente ' + str(expected_records) + ' pagos.')
+
+        if total != loan_instance.amount:
+            raise forms.ValidationError('Los pagos deben de sumar $' + str(loan_instance.amount) + '.')
+
+
+
+
+        return super(EmployeeLoanDetailInLineFormset, self).clean()
+
+
 class EmployeeLoanDetailInLine(admin.TabularInline):
     model = EmployeeLoanDetail
     form = EmployeeLoanDetailForm
-    extra = 1
+    formset = EmployeeLoanDetailInLineFormset
+    extra = 0
+    max_num = 14
 
 
 # Loan Admin.
@@ -1935,20 +2118,18 @@ class JobProfileAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Perfil de Puesto", {
             'fields': (
-                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience','jobdescription','minimumrequirements', 'entry_time',
+                'job', 'abilities', 'aptitudes', 'knowledge', 'competitions', 'scholarship', 'experience',
+                'jobdescription', 'minimumrequirements', 'entry_time',
                 'exit_time', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'direction',
                 'subdirection', 'area', 'department', 'minimumsalary', 'maximumsalary')
         }),
     )
 
-
     def get_change_column(self, obj):
         return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
 
-
     def get_delete_column(self, obj):
         return HumanResourcesAdminUtilities.get_delete_link(obj)
-
 
     get_change_column.allow_tags = True
     get_change_column.short_description = 'Editar'
@@ -1956,8 +2137,8 @@ class JobProfileAdmin(admin.ModelAdmin):
     get_delete_column.allow_tags = True
     get_delete_column.short_description = 'Eliminar'
 
-    list_display = ('job', 'direction','subdirection', 'area', 'department', 'get_change_column', 'get_delete_column')
-    search_fields = ('job', 'direction__name','subdirection__name', 'area__name', 'department__name',)
+    list_display = ('job', 'direction', 'subdirection', 'area', 'department', 'get_change_column', 'get_delete_column')
+    search_fields = ('job', 'direction__name', 'subdirection__name', 'area__name', 'department__name',)
 
 
 # Loan Admin.
@@ -1999,9 +2180,9 @@ class EmployeeRequisitionAdmin(admin.ModelAdmin):
         }),
     )
 
-    search_fields = ('description','subdirection__name','area__name','department__name',)
-    #'name', 'direction', 'subdirection', 'area', 'department', 'description',
-                #'minimum_requirements', 'characteristics',)
+    search_fields = ('description', 'subdirection__name', 'area__name', 'department__name',)
+    # 'name', 'direction', 'subdirection', 'area', 'department', 'description',
+    # 'minimum_requirements', 'characteristics',)
 
     list_display = (
         'description', 'area', 'department', 'get_detail_button', 'get_change_link', 'get_delete_link',)
@@ -2024,7 +2205,6 @@ class EmployeeRequisitionAdmin(admin.ModelAdmin):
     get_delete_link.allow_tags = True
     get_delete_link.short_description = 'Eliminar'
 
-
     def get_urls(self):
         urls = super(EmployeeRequisitionAdmin, self).get_urls()
 
@@ -2037,9 +2217,7 @@ class EmployeeRequisitionAdmin(admin.ModelAdmin):
         ]
         return my_urls + urls
 
-
     def save_model(self, request, obj, form, change):
-
         obj.user = request.user
 
         return super(EmployeeRequisitionAdmin, self).save_model(request, obj, form, change);
@@ -2099,8 +2277,6 @@ class JobInstanceAdmin(admin.ModelAdmin):
         return super(JobInstanceAdmin, self).response_delete(request, obj_display, obj_id)
 
 
-
-
 @admin.register(EmployeeContract)
 class EmployeeContractAdmin(admin.ModelAdmin):
     form = EmployeeContractForm
@@ -2108,8 +2284,8 @@ class EmployeeContractAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Contrato', {
             'fields': (
-                'employee','contract_key','contract_type',
-                      'start_date','end_date', 'contract_file',
+                'employee', 'contract_key', 'contract_type',
+                'start_date', 'end_date', 'contract_file',
                 'description',)
         }),
     )
@@ -2117,8 +2293,7 @@ class EmployeeContractAdmin(admin.ModelAdmin):
     search_fields = ('contract_key',)
 
     def get_search_results(self, request, queryset, search_term):
-
-        return super(EmployeeContractAdmin,self).get_search_results(request, queryset, search_term);
+        return super(EmployeeContractAdmin, self).get_search_results(request, queryset, search_term);
         # keywords = search_term.split(" ")
         # # tags = views.get_array_or_none(request.GET.get("tags"))
         # tags = request.GET.getlist("tags")
@@ -2141,22 +2316,17 @@ class EmployeeContractAdmin(admin.ModelAdmin):
         #
         # return r, True
 
-
     def get_detail_column(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
-
     def get_detail_column(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
-
 
     def get_change_column(self, obj):
         return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
 
-
     def get_delete_column(self, obj):
         return HumanResourcesAdminUtilities.get_delete_link(obj)
-
 
     list_display = ('contract_key', 'employee', 'get_detail_column', 'get_change_column', 'get_delete_column')
 
@@ -2168,7 +2338,6 @@ class EmployeeContractAdmin(admin.ModelAdmin):
 
     get_delete_column.allow_tags = True
     get_delete_column.short_description = 'Eliminar'
-
 
     def get_urls(self):
         urls = super(EmployeeContractAdmin, self).get_urls()

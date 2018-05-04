@@ -17,11 +17,8 @@
         .calendarbox.module {
             z-index: 99999999;
         }
-
         .sb-site-container {
-
         }
-
         .fixed {
             position: fixed;
             top: 0;
@@ -113,7 +110,12 @@
         </div>
     </header>
     <!-- End Header -->
-    <!-- begins navigation -- request.resolver_match.view_name }}---->
+
+
+
+{% comment %}{{ request.resolver_match.view_name }}{% endcomment %}
+
+
 
     {% if user.is_active and user.is_staff %}
         <nav class="navbar  yamm ms-navbar ms-navbar-primary">
@@ -144,8 +146,6 @@
                             </a>
                         </li>
                         {% comment %}<li class="dropdown
-
-
                                 {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle fadeIn"
                                data-toggle="dropdown"
@@ -158,13 +158,6 @@
 
                         </li>{% endcomment %}
                         <li class="dropdown
-
-
-
-
-
-
-
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown"
@@ -227,13 +220,6 @@
 
                     </li>{% endcomment %}
                         <li class="dropdown
-
-
-
-
-
-
-
                                 {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/admin/ERP/project/" class="dropdown-toggle"
                                data-toggle="dropdown"
@@ -310,15 +296,7 @@
                             </ul>
                         </li>
                         <li class="dropdown
-
-
-
-
-
-
-
-                                {% if request.resolver_match.view_name in "admin:HumanResources_jobprofile_add,admin:HumanResources_jobprofile_change,admin:HumanResources_jobprofile_changelist,admin:HumanResources_employee_add,admin:HumanResources_payrollgroup_add,admin:HumanResources_employee_changelist,admin:HumanResources_payrollperiod_add,admin:HumanResources_earningsdeductions_add,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_employeeloan_add,admin:HumanResources_employeedropout_add,admin:HumanResources_employeehastag_changelist,admin:HumanResources_testapplication_changelist,admin:employee-detail,admin:HumanResources_jobprofile_add,admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete"|slice:"," %}{{ "active" }}{% endif %}">
-
+                                {% if request.resolver_match.view_name in "admin:HumanResources_jobprofile_add,admin:HumanResources_jobprofile_change,admin:HumanResources_jobprofile_changelist,admin:HumanResources_employee_add,admin:HumanResources_payrollgroup_add,admin:HumanResources_employee_changelist,admin:HumanResources_payrollperiod_add,admin:HumanResources_earningsdeductions_add,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_employeeloan_add,admin:HumanResources_employeedropout_add,admin:HumanResources_employeehastag_changelist,admin:HumanResources_testapplication_changelist,admin:employee-detail,admin:HumanResources_jobprofile_add,admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete,admin:HumanResources_payrollgroup_changelist,admin:HumanResources_payrollgroup_add,admin:HumanResources_payrollperiod_add,admin:HumanResources_payrollperiod_changelist,admin:HumanResources_payrolltype_add,admin:HumanResources_payrolltype_changelist,admin:HumanResources_earningsdeductions_add,admin:HumanResources_earningsdeductions_changelist,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_uploadedemployeeassistancehistory_changelist,admin:HumanResources_employeeloan_add,admin:HumanResources_employeeloan_changelist,admin:HumanResources_employeedropout_add,admin:HumanResources_employeedropout_changelist"|slice:"," %}{{ "active" }}{% endif %}">
                             {% if perms.auth.change_user or  perms.HumanResources.change_payrollperiod or perms.HumanResources.change_employee %}
                                 <a href="#" class="dropdown-toggle "
                                    data-toggle="dropdown"
@@ -330,13 +308,10 @@
                                 </a>
                             {% endif %}
                             <ul id="op_usuarios" class="dropdown-menu dropdown-menu-left">
-
-
                                 {% if perms.auth.change_user %}
                                     <li class="dropdown-submenu">
                                         <a href="#" class="has_children">
                                             <i class="zmdi zmdi-view-dashboard"></i>Usuarios</a>
-
                                         <ul class="dropdown-menu dropdown-menu-left">
                                             <li>
                                                 <a href="/admin/auth/user/add">Agregar</a>
@@ -350,13 +325,10 @@
                                         </ul>
                                     </li>
                                 {% endif %}
-
-
                                 {% comment %}{% if perms.HumanResources.change_employee %}
                                     <li class="dropdown-submenu">
                                         <a href="#" class="has_children">
                                             <i class="zmdi zmdi-view-dashboard"></i>Empleados</a>
-
                                         <ul class="dropdown-menu dropdown-menu-left">
                                             <li>
                                                 <a href="/admin/HumanResources/employee/add/">Agregar</a>
@@ -367,14 +339,10 @@
                                         </ul>
                                     </li>
                                 {% endif %}{% endcomment %}
-
-
                                 {% if perms.HumanResources.change_payrollperiod %}
-
                                     <li class="dropdown-submenu">
                                         <a href="">
                                             <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
-
                                         <ul class="dropdown-menu dropdown-menu-left">
                                             <li>
                                                 <a href="/admin/HumanResources/payrollgroup/">Grupos de Nómina</a>
@@ -390,6 +358,9 @@
                                                     Deducciones</a>
                                             </li>
                                             <li>
+                                                <a href="/admin/HumanResources/earningsdeductions/?penalty=S">Penalizaciones</a>
+                                            </li>
+                                            <li>
                                                 <a href="/admin/HumanResources/uploadedemployeeassistancehistory/">Asistencias</a>
                                             </li>
                                             <li>
@@ -398,18 +369,17 @@
                                             <li>
                                                 <a href="/admin/HumanResources/employeedropout/">Bajas</a>
                                             </li>
+                                            <li><a href="/humanresources/searchtransactions/">Reportes</a></li>
                                             {% comment %}<li>
                                                 <a href="/admin/HumanResources/employee/">Consultar</a>
                                             </li>{% endcomment %}
                                         </ul>
                                     </li>
                                 {% endif %}
-
                                 {% if perms.HumanResources.change_employee %}
                                     <li class="dropdown-submenu">
                                         <a href="#" class="has_children">
                                             <i class="zmdi zmdi-view-dashboard"></i>Buscador</a>
-
                                         <ul class="dropdown-menu dropdown-menu-left">
                                             <li>
                                                 <a href="/admin/HumanResources/employeehastag/">Etiquetas de
@@ -421,19 +391,14 @@
                                             </li>
                                         </ul>
                                     </li>
-
                                 {% endif %}
-
                                 {% if perms.HumanResources.change_payrollperiod %}
-
                                     <li class="">
                                         <a href="/admin/HumanResources/jobinstance/">
                                             <i class="zmdi zmdi-view-compact"></i>Organigrama</a>
                                     </li>
                                 {% endif %}
-
                                 {% if perms.HumanResources.change_payrollperiod %}
-
                                     <li class="">
                                         <a href="/admin/HumanResources/jobprofile/">
                                             <i class="zmdi zmdi-view-compact"></i>Perfil de Puesto</a>
@@ -449,87 +414,73 @@
                                         <li>
                                             <a href="/admin/HumanResources/test/">Pruebas</a>
                                         </li>
-
-
                                         <li>
                                             <a href="/admin/HumanResources/documenttype/">Documentos</a>
                                         </li>
-
                                         <li>
                                             <a href="/admin/HumanResources/direction/">Dirección</a>
                                         </li>
-
                                         <li>
                                             <a href="/admin/HumanResources/subdirection/">Subdirección</a>
                                         </li>
-
                                         <li>
                                             <a href="/admin/HumanResources/area/">Área</a>
                                         </li>
-
                                         <li>
                                             <a href="/admin/HumanResources/department/">Departamento</a>
                                         </li>
-
+                                         <li>
+                                            <a href="/admin/HumanResources/employeerequisition/">Requisición de Personal</a>
+                                        </li>
+                                         <li>
+                                            <a href="/admin/HumanResources/employeecontract/">Contratos</a>
+                                        </li>
                                     </ul>
                                 </li>
                             </ul>
-
                         </li>
-
                         <li id="op_contabilidad" class="dropdown
 
 
-                                {% if request.resolver_match.view_name in "admin:SharedCatalogs_itemaccount_changelist,admin:SharedCatalogs_itemaccount_add,admin:SharedCatalogs_itemaccount_change,admin:SharedCatalogs_itemaccount_delete,admin:Accounting_accountingpolicy_changelist,admin:Accounting_fiscalperiod_changelist,admin:Accounting_typepolicy_changelist,admin:Accounting_accountingpolicy_add,DataUpload:searchpolicies,admin:Accounting_accountingpolicy_changelist,admin:SharedCatalogs_account_add,DataUpload:searchaccount,admin:SharedCatalogs_account_changelist,admin:Accounting_commercialally_add,DataUpload:searchprovider,DataUpload:searchcreditors,DataUpload:searchthird,admin:Accounting_fiscalperiod_add,admin:Accounting_fiscalperiod_changelist,admin:Accounting_typepolicy_add,admin:Accounting_typepolicy_changelist,admin:SharedCatalogs_bank_add,admin:SharedCatalogs_bank_changelist,DataUpload:searchtransactions,DataUpload:generategeneralbalance,DataUpload:generatetrialbalance,"|slice:"," %}{{ "active" }}{% endif %}">
+                                {% if request.resolver_match.view_name in "Reporting:report,admin:Accounting_accountingpolicy_add,DataUpload:searchpolicies,admin:Accounting_accountingpolicy_changelist,admin:SharedCatalogs_account_add,DataUpload:searchaccount,admin:SharedCatalogs_account_changelist,admin:Accounting_commercialally_add,DataUpload:searchprovider,admin:Accounting_commercialally_add,DataUpload:searchcreditors,admin:Accounting_commercialally_add,DataUpload:searchthird,admin:Accounting_fiscalperiod_add,admin:Accounting_fiscalperiod_changelist,admin:Accounting_typepolicy_add,admin:Accounting_typepolicy_changelist,admin:SharedCatalogs_bank_add,admin:SharedCatalogs_bank_changelist,DataUpload:searchtransactions,DataUpload:generategeneralbalance,DataUpload:generatetrialbalance"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/admin/Accounting/accountingpolicy/" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
                                 <i class="fa fa-calculator text-center"></i><br class="hidden-xs">
                                 Contabilidad
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
-
                             </a>
-                            <ul id="op_contratista"
-                                class="dropdown-menu dropdown-menu-left">
-
-
-                                <li>
-                                    <a href="/admin/Accounting/fiscalperiod/">Periodos Fiscales</a>
-                                </li>
-                                <li>
-                                    <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
-                                </li>
-                                <li>
-                                    <a href="/admin/SharedCatalogs/itemaccount/">Rubro de la Cuenta</a>
-                                </li>
-                                <li>
-                                    <a href="/admin/SharedCatalogs/groupingcode/">Código Agrupador</a>
-                                </li>
+                            <ul id="op_contratista" class="dropdown-menu dropdown-menu-left">
+                                 <li><a href="/admin/Accounting/accountingpolicy/">Pólizas</a></li>
+                                <li><a href="/admin/SharedCatalogs/account/">Cuentas Contables</a></li>
+                                <li><a href="/accounting/searchprovider/">Proveedores</a></li>
+                                <li><a href="/accounting/searchcreditors/">Acreedores</a></li>
+                                <li><a href="/accounting/searchthird/">Terceros</a></li>
+                                <li><a href="/admin/Accounting/fiscalperiod/">Periodo Fiscal</a></li>
+                                <li><a href="/admin/Accounting/typepolicy/">Tipo de Póliza</a></li>
+                                <li><a href="/admin/SharedCatalogs/bank/">Bancos</a></li>
+                                <li><a href="/admin/SharedCatalogs/groupingcode/">Código Agrupador</a></li>
+                                <li><a href="/admin/SharedCatalogs/itemaccount/">Rubros</a></li>
+                                <li><a href="/accounting/searchtransactions/">Reportes</a></li>
                             </ul>
                         </li>
-                        <li id="op_reportes" class="dropdown
-                                {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
+                        <li id="op_reportes" class="dropdown {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/reporting/report" class="dropdown-toggle"
                                data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                data-name="ecommerce">
                                 <i class="fa fa-line-chart text-center"></i><br class="hidden-xs">
                                 Reportes
                                 <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
-
                             </a>
                         </li>
-
                     </ul>
                 </div>
                 <!-- navbar-collapse collapse -->
-
                 <a href="" class="sb-toggle-left btn-navbar-menu user-btn visible-xs">
                     <i class="fa fa-user-circle-o" aria-hidden="true"></i>
                 </a>
-
             </div>
             <!-- container -->
-
             {% block messages %}
                 {% if messages %}
                     <ul class="messagelist">
@@ -539,15 +490,12 @@
                         {% endfor %}
                     </ul>
                 {% endif %}
-
             {% endblock messages %}
             <a onclick="goBack()" class="btn-circle btn-circle-default go-back-btn"><i
                     class="fa fa-arrow-left"></i></a>
         </nav>
     {% endif %}
-
     <!-- ends navigation -->
-
     {% comment %}{% block breadcrumbs %}
     <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% trans 'Home' %}</a>
@@ -555,17 +503,12 @@
     </div>
 {% endblock %}
 {% endcomment %}
-
     <!-- Begins MainContainer -->
     <div id="particles-js">
         <div id="content" class=" container">
-
             {% block pretitle %}{% endblock %}
-
             {% block content %}
-
                 {% block object-tools %}{% endblock %}
-
                 {{ content }}
             {% endblock %}
             {% block sidebar %}{% endblock %}
@@ -573,7 +516,6 @@
         </div>
         <!-- END mainContainer -->
     </div>
-
 </div>
 <div class="ms-slidebar sb-slidebar sb-left sb-style-overlay" id="ms-slidebar">
     <div class="sb-slidebar-container">
@@ -622,14 +564,12 @@
                         </li>
                     {% endif %}
                 {% endif %}
-
                 {% if user.has_usable_password %}
                     <li class="panel" role="tab" id="sch2">
                         <a class="collapsed" role="button" href="{% url 'admin:password_change' %}">
                             <i class="fa fa-key" aria-hidden="true"></i> Cambiar contraseña </a>
                     </li>
                 {% endif %}
-
                 <li class="panel" role="tab" id="sch4">
                     <a class="collapsed" role="button" href="{% url 'admin:logout' %}">
                         <i class="fa fa-sign-out" aria-hidden="true"></i> Cerrar
@@ -640,7 +580,6 @@
         {% block nav-global %}{% endblock %}
     </div>
 </div>
-
 <!-- Begins Footer -->
 {% block footer %}
     <footer class="ms-footer" id="footer">
@@ -649,13 +588,9 @@
         </div>
     </footer>
 {% endblock %}
-
-
-
 {% comment %}
 <button type="button" class="btn btn-warning btn-raised" data-toggle="modal" data-target="#alertModal"> mensaje alertas <div class="ripple-container"></div></button>
 {% endcomment %}
-
 {% comment %}Ventana de errores{% endcomment %}
 <div class="modal modal-primary" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel6">
     <div class="modal-dialog animated zoomIn animated-3x" role="document">
@@ -674,7 +609,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal modal-primary" id="alertModalSuccess" tabindex="-1" role="dialog" aria-labelledby="myModalLabel6">
     <div class="modal-dialog animated zoomIn animated-3x" role="document">
         <div class="modal-content">
@@ -692,9 +626,7 @@
         </div>
     </div>
 </div>
-
 <script>
-
 </script>
 {% comment %}Ventana de errores{% endcomment %}
 <script>
@@ -732,20 +664,16 @@
         (jQuery)
         })
         ;{% endcomment %}
-
 </script>
 <script>
-
     $(document).ready(function () {
         if (document.getElementsByClassName("table_s")) {
             $('table.table_s').DataTable({
-
                 columnDefs: [
                     {
                         className: 'mdl-data-table__cell--non-numeric'
                     }
                 ],
-
                 responsive: true,
                 "bInfo": false,
                 "pageLength": 10,
@@ -763,9 +691,7 @@
                     "sUrl": "",
                     "sInfoThousands": ",",
                     "sLoadingRecords": "Cargando...",
-
                     "sEmptyTable": "No hay contactos registrados para el Cliente",
-
                     "oPaginate": {
                         "sFirst": "Primero",
                         "sLast": "Ãšltimo",
@@ -778,12 +704,8 @@
             document.getElementById('DataTables_Table_0_wrapper').style.width = "100%";
         }
     });
-
-
     $('.vDateField').addClass('form-control');
-
 </script>
-
 {% comment %}<script>
    $(document).ready(function(){
 	   $(window).bind('scroll', function() {
@@ -798,6 +720,5 @@
 	});
 </script>{% endcomment %}
 <!-- Latest compiled and minified JavaScript -->
-
 </body>
 </html>

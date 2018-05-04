@@ -11,7 +11,7 @@ from django.db import models
 from django.db.models.query_utils import Q
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
-
+from Logs.controller import Logs
 from decimal import Decimal
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -109,7 +109,7 @@ class Employee(models.Model):
         (TYPE_A, 'Empleado Tipo A'),
         (TYPE_B, 'Empleado Tipo B'),
     )
-    type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleando')
+    type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleado')
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
 
     STATUS_ACTIVE = 1
@@ -1174,7 +1174,7 @@ class EarningsDeductions(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
     percent_taxable = models.IntegerField("Porcentaje Gravable", blank=False, null=False)
     sat_key = models.CharField(verbose_name="Clave SAT", null=False, blank=False, max_length=30, )
-    law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
+    #law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
                               default=ACTIVA)
     account = models.ForeignKey(Account, verbose_name='Cuenta', null=True, blank=True,)
@@ -1184,6 +1184,7 @@ class EarningsDeductions(models.Model):
     taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Gravable")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA,
                                 verbose_name="Categoria")
+    penalty = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Penalización")
 
     class Meta:
         verbose_name_plural = "Percepciones y Deducciones"
@@ -1208,6 +1209,15 @@ class EarningsDeductions(models.Model):
             total_variable += record.ammount
 
         return total_fixed, total_variable
+
+    def save(self, *args, **kwargs):
+        can_save = True
+
+        if can_save:
+            Logs.log("Saving new EarningsDeductions", "Te")
+            super(EarningsDeductions, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 
 class EmployeeEarningsDeductions(models.Model):
@@ -1325,57 +1335,7 @@ class EmployeePayrollPeriodExclusion(models.Model):
 
 
 
-class EmployeeLoanDetail(models.Model):
-    employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
-    # period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
 
-    # The group is here to use chained keys
-    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
-    period = ChainedForeignKey(PayrollPeriod,
-                               chained_field="payroll_group",
-                               chained_model_field="payroll_group",
-                               show_all=False,
-                               auto_choose=True,
-                               sort=True)
-    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
-
-    class Meta:
-        verbose_name_plural = "Préstamos Detalle"
-        verbose_name = "Préstamo Detalle"
-        unique_together = ('employeeloan', 'period',)
-
-    def delete(self):
-        payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
-                                                              payroll_period_id=self.period.id)
-        existReceipt = 0
-        for pE in payrollExist:
-            existReceipt = 1
-        if existReceipt == 0:
-            delModel = EmployeeEarningsDeductionsbyPeriod()
-            delModel.deleteFromEmployeeLoanDetail(self)
-            super(EmployeeLoanDetail, self).delete()
-
-    def save(self, *args, **kwargs):
-        total = EmployeeLoanDetail.objects.values('employeeloan__id').filter(
-            employeeloan_id=self.employeeloan.id).annotate(total=Sum('amount')).exclude(id=self.id)
-        sumTotal = 0
-        for tot in total:
-            sumTotal += tot['total']
-
-        payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
-                                                              payroll_period_id=self.period.id)
-        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count() == 0:
-            modelo = EmployeeEarningsDeductionsbyPeriod()
-            modelo.create(self)
-            super(EmployeeLoanDetail, self).save(*args, **kwargs)
-        else:
-            return 'la suma de los pagos no puede exceder al total del préstamo'
-
-    def unique_error_message(self, model_class, unique_check):
-        if model_class == type(self) and unique_check == ('employeeloan', 'period'):
-            return 'la amortización del préstamo para este periodo ya existe'
-        else:
-            return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
 
 
 class EmployeeEarningsDeductionsbyPeriod(models.Model):
@@ -1409,6 +1369,7 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
             if obj.id > 0:
                 obj.ammount = data.amount
                 obj.payroll_period_id = data.period.id
+                obj.save()
                 super(EmployeeEarningsDeductionsbyPeriod, obj).save()
         else:
             self.ammount = data.amount
@@ -1422,6 +1383,68 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
     def save(self, *args, **kwargs):
         super(EmployeeEarningsDeductionsbyPeriod, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return "Amount: " + str(self.ammount)
+
+
+class EmployeeLoanDetail(models.Model):
+    employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
+    # period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
+
+    # The group is here to use chained keys
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
+    period = ChainedForeignKey(PayrollPeriod,
+                               chained_field="payroll_group",
+                               chained_model_field="payroll_group",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True)
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+    deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
+
+
+    class Meta:
+        verbose_name_plural = "Préstamos Detalle"
+        verbose_name = "Préstamo Detalle"
+        unique_together = ('employeeloan', 'period')
+
+    def delete(self):
+        payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
+                                                              payroll_period_id=self.period.id)
+        existReceipt = 0
+        for pE in payrollExist:
+            existReceipt = 1
+        if existReceipt == 0:
+            delModel = EmployeeEarningsDeductionsbyPeriod()
+            delModel.deleteFromEmployeeLoanDetail(self)
+            super(EmployeeLoanDetail, self).delete()
+
+    def save(self, *args, **kwargs):
+        if self.deduction is None:
+            deduction = EmployeeEarningsDeductionsbyPeriod()
+            deduction.ammount = self.amount
+            deduction.date = now()
+            deduction.employee_id = self.employeeloan.employee.id
+            deduction.concept_id = 1
+            deduction.payroll_period_id = self.period.id
+            deduction.save()
+            self.deduction_id = deduction.id
+            super(EmployeeLoanDetail, self).save(*args, **kwargs)
+        else:
+            self.deduction.ammount = self.amount
+            self.deduction.date = now()
+            self.deduction.employee_id = self.employeeloan.employee.id
+            self.deduction.concept_id = 1
+            self.deduction.payroll_period_id = self.period.id
+            self.deduction.save()
+            super(EmployeeLoanDetail, self).save(*args, **kwargs)
+
+
+    def unique_error_message(self, model_class, unique_check):
+        if model_class == type(self) and unique_check == ('employeeloan', 'period'):
+            return 'la amortización del préstamo para este periodo ya existe'
+        else:
+            return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
 
 class EarningDeductionPeriod(models.Model):
     '''

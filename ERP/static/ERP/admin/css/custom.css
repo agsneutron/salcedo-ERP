@@ -7,7 +7,18 @@ body {
     background-color: #fff;
     margin-bottom: -48px;
 }
-
+ul {
+    padding-left: 30px !important;
+    list-style: disc;
+}
+.ms-collapse-nav {
+    margin: 0;
+    padding: 0;
+    padding-left: 0px !important;
+}
+.ms-navbar .navbar-nav li.dropdown .dropdown-menu {
+    padding-left: 0px !important;
+}
 .errornote {
     z-index: 9;
     color: white;

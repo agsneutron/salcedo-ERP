@@ -169,11 +169,10 @@
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/education/add/?employee=
-                               {{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
+                           href="{% if request.GET.employee %}/admin/HumanResources/education/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
                             Académica
                             <div class="ripple-container
-                                    {% if request.resolver_match.view_name == "admin:HumanResources_education_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                    {% if request.resolver_match.view_name in "admin:HumanResources_education_add,admin:HumanResources_education_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
@@ -181,14 +180,14 @@
                            href="{% if request.GET.employee %}/admin/HumanResources/currenteducation/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
                             Acad. Actual
                             <div class="ripple-container
-                                    {% if request.resolver_match.view_name == "admin:HumanResources_currenteducation_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                    {% if request.resolver_match.view_name in "admin:HumanResources_currenteducation_add,admin:HumanResources_currenteducation_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
                            href="{% if request.GET.employee %}/admin/HumanResources/emergencycontact/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">
                         <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_emergencycontact_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                {% if request.resolver_match.view_name in "admin:HumanResources_emergencycontact_add,admin:HumanResources_emergencycontact_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         Contactos de<br> Emergencia
                         </a>
 
@@ -197,7 +196,7 @@
                            href="{% if request.GET.employee %}/admin/HumanResources/familymember/add/?employee={{ request.GET.employee }}{% else %}
                                #{% endif %}">
                         <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_familymember_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                {% if request.resolver_match.view_name in "admin:HumanResources_familymember_add,admin:HumanResources_familymember_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         Familiares
                         </a>
 
@@ -206,7 +205,7 @@
                            href="{% if request.GET.employee %}/admin/HumanResources/workreference/add/?employee={{ request.GET.employee }}{% else %}
                                #{% endif %}">
                         <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_workreference_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                {% if request.resolver_match.view_name in "admin:HumanResources_workreference_add,admin:HumanResources_workreference_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         Referencias
                         </a>
 
@@ -215,7 +214,7 @@
                            href="{% if request.GET.employee %}/admin/HumanResources/testapplication/add/?employee={{ request.GET.employee }}{% else %}
                                #{% endif %}">
                         <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_testapplication_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                {% if request.resolver_match.view_name in "admin:HumanResources_testapplication_add,admin:HumanResources_testapplication_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         Pruebas
                         </a>
 
@@ -224,7 +223,7 @@
                            href="{% if request.GET.employee %}/admin/HumanResources/employeedocument/add/?employee={{ request.GET.employee }}{% else %}
                                #{% endif %}">
                         <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                {% if request.resolver_match.view_name in "admin:HumanResources_employeedocument_add:admin:HumanResources_employeedocument_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         Documentación
                         </a>
 
@@ -232,8 +231,9 @@
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
                            href="{% if request.GET.employee %}/admin/HumanResources/checkerdata/add/?employee={{ request.GET.employee }}{% else %}
                                #{% endif %}">
+
                         <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_employeeassistance_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                {% if request.resolver_match.view_name in "admin:HumanResources_employeeassistance_add,admin:HumanResources_employeeassistance_change,admin:HumanResources_checkerdata_change,admin:HumanResources_checkerdata_add"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         Checador
                         </a>
 
@@ -242,7 +242,7 @@
                            href="{% if request.GET.employee %}/admin/HumanResources/employeepositiondescription/add/?employee={{ request.GET.employee }}{% else %}
                                #{% endif %}">
                         <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_employeepositiondescription_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                {% if request.resolver_match.view_name in "admin:HumanResources_employeepositiondescription_add,admin:HumanResources_employeepositiondescription_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         Puesto
                         </a>
 
@@ -251,7 +251,7 @@
                            href="{% if request.GET.employee %}/admin/HumanResources/employeefinancialdata/add/?employee={{ request.GET.employee }}{% else %}
                                #{% endif %}">
                         <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_employeefinancialdata_add" %}{{ "active_btn" }}{% endif %}"></div>
+                                {% if request.resolver_match.view_name in "admin:HumanResources_employeefinancialdata_add,admin:HumanResources_employeefinancialdata_add"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         Datos<br> Financieros
                         </a>
                     </div>
@@ -285,10 +285,8 @@
                                             <strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                                     </ul>
                                     <a class="btn btn-block btn-raised btn-primary"
-                                       href="{% if request.GET.employee %}/admin/HumanResources/employeehastag/add/?employee=
-                                           {{ request.GET.employee }}{% else %}#{% endif %}">Etiquetas</a>
-                                    <a href="{% if request.GET.employee %}/admin/HumanResources/employeeearningsdeductions/add/?employee=
-                                        {{ request.GET.employee }}{% else %}#{% endif %}"
+                                       href="{% if request.GET.employee %}/admin/HumanResources/employeehastag/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Etiquetas</a>
+                                    <a href="{% if request.GET.employee %}/admin/HumanResources/employeeearningsdeductions/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}"
                                        class="btn btn-block btn-raised btn-primary">Info. de Nómina</a>
                                     {#                                                                                                            <a href="/admin/HumanResources/employeehastag/add/?employee={{ employee.id }}" class="btn btn-block btn-raised btn-primary">Etiquetas</a>#}
                                 </div>
@@ -333,12 +331,17 @@
                                                 <td>{{ record.institution }}</td>
                                                 <td>{{ record.license_code }}</td>
                                                 <td>
-                                                    <a href="/media/{{ record.evidence.name }}">
-                                                        Archivo
-                                                    </a>
+                                                    {% if record.evidence.name == None or record.evidence.name == "" %}
+                                                        <div>No proporcionó</div>
+                                                    {% else %}
+                                                        <a href="/media/{{ record.evidence.name }}">
+                                                            Archivo
+                                                        </a>
+                                                    {% endif %}
+
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }} class="
+                                                    <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="
                                                        btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-pencil color-default eliminar"></i>
                                                     </a>
