@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Progress Estimate Log</title>
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+        <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
+        <link href='//fonts.googleapis.com/css?family=Lobster&subset=latin,latin-ext' rel='stylesheet' type='text/css'>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+    </head>
+    <body>
+        <div class="page-header">
+            <a href="/erp/progress_estimate_log" class="top-menu"><span class="glyphicon glyphicon-plus"></span></a>
+            <h1><a href="/">Progress Estimate Log Form</a></h1>
+        </div>
+        <div class="content container">
+            
+    <style>
+        table, th, td {
+            border: 1px solid black;
+        }
+        td{
+            padding: 0 20px;
+        }
+
+        .left-container, .right-container{
+            position: relative;
+            display: inline-block !important;
+            width:49%;
+        }
+    </style>
+
+    <script type="text/javascript">
+
+        function create_log_files_table(json_log_files){
+            var table_string = "<table>"                            +
+                                    "<thead>"                       +
+                                        "<tr>"                      +
+                                            "<td>Id</td>"           +
+                                            "<td>Archivo</td>"      +
+                                            "<td>Mime</td>"         +
+                                            "<td>Acci—n</td>"       +
+                                    "</tr>"                         +
+                                    "</thead>"                      +
+                                    ""                              +
+                                    "<tbody>";
+            for(var count in json_log_files){
+                table_string +=         "<tr>"                      +
+                                            "<td>"+json_log_files[count].id+"</td>"        +
+                                            "<td>"+json_log_files[count].file+"</td>"      +
+                                            "<td>"+json_log_files[count].mime+"</td>"      +
+                                            "<td>"+
+                                                "<a href='/admin/ERP/logfile/"+json_log_files[count].id+"/delete/'>"+
+                                                    "Eliminar"                             +
+                                                "</a>"                                     +
+                                            "</td>"                                        +
+                                        "</tr>";
+            }
+
+            table_string +=        "</tbody>"                       +
+                                "</table>";
+
+
+            return table_string;
+
+        }
+
+        var json_log_files = [];
+        $(document).ready(function () {
+
+            // Set the files of the first 'pel' as default.
+           if(json_log_files.length > 0){
+               files_table = create_log_files_table(json_log_files);
+               $("#log-files-table").html(files_table);
+           }
+
+           // Setting the value for the select.
+            $("#id_progress_estimate_log").val('1');
+
+
+           $(".pel_row").click(function(){
+
+               var log_id = $(this).attr('id');
+               // Setting the value for the select.
+               $("#id_progress_estimate_log").val(log_id);
+
+               var url = "/erp/api/log_files_for_progress_estimate_log";
+               var data = {
+                   'csrfmiddlewaretoken':"NMfju9tsLoxNwocT2L1cjUUnV77OveEjs1anbC1Nqqmp9jEjXhuOcJDmBi6dhEPe",
+                   'pel_id' : log_id
+               };
+               $.ajax({
+                    type: "POST",
+                    url: url,
+                    data: data,
+                    success: function(response){
+                        console.log("Response: "+JSON.stringify(response));
+                        var to_render = "";
+                        if(response.length > 0){
+                            to_render = create_log_files_table(response);
+
+                        }else{
+                            to_render = "<span>Aœn no has cargado evidencias</span>";
+
+                        }
+
+                        $("#log-files-table").html(to_render);
+                    },
+                    dataType: "json"
+               });
+           });
+        });
+    </script>
+
+    
+
+    <div class="pel-list-container left-container">
+        <h1>Bit‡cora de estimaci—n</h1>
+
+        <table>
+            <thead>
+                <tr>
+                    <td>Id</td>
+                    <td>Descripci—n</td>
+                    <td>Fecha</td>
+                    <td>Usuario</td>
+                    <td>Acci—n</td>
+                </tr>
+            </thead>
+
+            <tbody>
+                
+                    <tr class="pel_row" id="1">
+                        <td>1</td>
+                        <td>primera bitacora</td>
+                        <td>26 de Julio de 2017 a las 06:14</td>
+                        <td>alex</td>
+                        <td>
+                            <a href="/admin/ERP/progressestimatelog/1/change/">Editar</a>
+                        </td>
+                    </tr>
+                
+                    <tr class="pel_row" id="2">
+                        <td>2</td>
+                        <td>bitacora 2</td>
+                        <td>26 de Julio de 2017 a las 06:17</td>
+                        <td>alex</td>
+                        <td>
+                            <a href="/admin/ERP/progressestimatelog/2/change/">Editar</a>
+                        </td>
+                    </tr>
+                
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <div class="log-files-list-container right-container">
+        <h1>Evidencias</h1>
+
+        <div id="log-files-table">
+
+        </div>
+    </div>
+
+
+
+
+    <div class="pel-add-container left-container">
+        <h1>Nueva Bit‡cora de Estimaci—n</h1>
+
+        <form method="POST" class="post-form"><input type='hidden' name='csrfmiddlewaretoken' value='NMfju9tsLoxNwocT2L1cjUUnV77OveEjs1anbC1Nqqmp9jEjXhuOcJDmBi6dhEPe' />
+            <p><label for="id_progress_estimate">Estimaci—n:</label> <select name="progress_estimate" required id="id_progress_estimate">
+  <option value="" selected>---------</option>
+
+  <option value="1">partida uno - 2017-07-26 06:07:30+00:00 - est1</option>
+
+</select></p>
+<p><label for="id_user">Usuario:</label> <select name="user" required id="id_user">
+  <option value="" selected>---------</option>
+
+  <option value="1">puebla</option>
+
+</select></p>
+<p><label for="id_description">Descripci—n:</label> <input type="text" name="description" required id="id_description" maxlength="512" /></p>
+<p><label for="id_date">Date:</label> <input type="text" name="date" required id="id_date" /></p>
+            <button type="submit" class="save btn btn-default">A–adir</button>
+        </form>
+    </div>
+
+
+    <div class="log-files-add-container right-container">
+        <h1>Nuevos Archivos para la Bit‡cora</h1>
+
+        <form method="POST" class="post-form"><input type='hidden' name='csrfmiddlewaretoken' value='NMfju9tsLoxNwocT2L1cjUUnV77OveEjs1anbC1Nqqmp9jEjXhuOcJDmBi6dhEPe' />
+            <p><label for="id_progress_estimate_log">Bit‡cora de Estimaci—n:</label> <select name="progress_estimate_log" required id="id_progress_estimate_log">
+  <option value="" selected>---------</option>
+
+  <option value="1">primera bitacora</option>
+
+  <option value="2">bitacora 2</option>
+
+</select></p>
+<p><label for="id_file">Archivo:</label> <input type="file" name="file" id="id_file" /></p>
+<p><label for="id_mime">MIME:</label> <input type="text" name="mime" required id="id_mime" maxlength="128" /></p>
+            <button type="submit" class="save btn btn-default">A–adir</button>
+        </form>
+    </div>
+
+        </div>
+    </body>
+</html>
