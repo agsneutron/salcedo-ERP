@@ -10,10 +10,11 @@
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
     <style>
-    .field-CLABE .errorlist {
+        .field-CLABE .errorlist {
             width: 100%;
-    bottom: -18px !important;
-    }
+            bottom: -18px !important;
+        }
+
         p {
             margin: 0;
         }
@@ -98,14 +99,14 @@
             border-bottom: 3px solid white !important;
         }
 
-      {% comment %}  .errorlist {
-            position: relative;
-            top: -6px;
-            font-size: 10px;
-            color: #ff0000;
-            line-height: 16px;
-        }
-{% endcomment %}
+        {% comment %}  .errorlist {
+              position: relative;
+              top: -6px;
+              font-size: 10px;
+              color: #ff0000;
+              line-height: 16px;
+          }
+  {% endcomment %}
     </style>
 {% endblock %}
 
@@ -165,97 +166,119 @@
                     <hr>
                     <div class="btn-group btn-group-justified btn-group-raised">
                         <a class="btn btn-primary employee-menu"
-                           href="{% if request.GET.employee %}/admin/HumanResources/employee/{{ request.GET.employee }}/change/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Datos<br>
+                           href="{% if request.GET.employee %}/admin/HumanResources/employee/{{ request.GET.employee }}/change/?employee=
+                               {{ request.GET.employee }}{% else %}#{% endif %}">Datos<br>
                             Personales
                             <div class="ripple-container
+
                                     {% if request.resolver_match.view_name in "admin:HumanResources_employee_add,admin:HumanResources_employee_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/education/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
+                           href="{% if request.GET.employee %}/admin/HumanResources/education/add/?employee=
+                               {{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
                             Académica
                             <div class="ripple-container
+
                                     {% if request.resolver_match.view_name == "admin:HumanResources_education_add" %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/currenteducation/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
+                           href="{% if request.GET.employee %}/admin/HumanResources/currenteducation/add/?employee=
+                               {{ request.GET.employee }}{% else %}#{% endif %}">Formación<br>
                             Acad. Actual
                             <div class="ripple-container
+
                                     {% if request.resolver_match.view_name == "admin:HumanResources_currenteducation_add" %}{{ "active_btn" }}{% endif %}"></div>
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/emergencycontact/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">
-                        <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_emergencycontact_add" %}{{ "active_btn" }}{% endif %}"></div>
-                        Contactos de<br> Emergencia
+                           href="{% if request.GET.employee %}/admin/HumanResources/emergencycontact/add/?employee=
+                               {{ request.GET.employee }}{% else %}#{% endif %}">
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:HumanResources_emergencycontact_add" %}{{ "active_btn" }}{% endif %}"></div>
+                            Contactos de<br> Emergencia
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/familymember/add/?employee={{ request.GET.employee }}{% else %}
+                           href="{% if request.GET.employee %}/admin/HumanResources/familymember/add/?employee=
+                               {{ request.GET.employee }}{% else %}
                                #{% endif %}">
-                        <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_familymember_add" %}{{ "active_btn" }}{% endif %}"></div>
-                        Familiares
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:HumanResources_familymember_add" %}{{ "active_btn" }}{% endif %}"></div>
+                            Familiares
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/workreference/add/?employee={{ request.GET.employee }}{% else %}
+                           href="{% if request.GET.employee %}/admin/HumanResources/workreference/add/?employee=
+                               {{ request.GET.employee }}{% else %}
                                #{% endif %}">
-                        <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_workreference_add" %}{{ "active_btn" }}{% endif %}"></div>
-                        Referencias
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:HumanResources_workreference_add" %}{{ "active_btn" }}{% endif %}"></div>
+                            Referencias
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/testapplication/add/?employee={{ request.GET.employee }}{% else %}
+                           href="{% if request.GET.employee %}/admin/HumanResources/testapplication/add/?employee=
+                               {{ request.GET.employee }}{% else %}
                                #{% endif %}">
-                        <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_testapplication_add" %}{{ "active_btn" }}{% endif %}"></div>
-                        Pruebas
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:HumanResources_testapplication_add" %}{{ "active_btn" }}{% endif %}"></div>
+                            Pruebas
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/employeedocument/add/?employee={{ request.GET.employee }}{% else %}
+                           href="{% if request.GET.employee %}/admin/HumanResources/employeedocument/add/?employee=
+                               {{ request.GET.employee }}{% else %}
                                #{% endif %}">
-                        <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
-                        Documentación
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:HumanResources_employeedocument_add" %}{{ "active_btn" }}{% endif %}"></div>
+                            Documentación
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/checkerdata/add/?employee={{ request.GET.employee }}{% else %}
+                           href="{% if request.GET.employee %}/admin/HumanResources/checkerdata/add/?employee=
+                               {{ request.GET.employee }}{% else %}
                                #{% endif %}">
-                        <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_employeeassistance_add" %}{{ "active_btn" }}{% endif %}"></div>
-                        Checador
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:HumanResources_employeeassistance_add" %}{{ "active_btn" }}{% endif %}"></div>
+                            Checador
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/employeepositiondescription/add/?employee={{ request.GET.employee }}{% else %}
+                           href="{% if request.GET.employee %}/admin/HumanResources/employeepositiondescription/add/?employee=
+                               {{ request.GET.employee }}{% else %}
                                #{% endif %}">
-                        <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_employeepositiondescription_add" %}{{ "active_btn" }}{% endif %}"></div>
-                        Puesto
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:HumanResources_employeepositiondescription_add" %}{{ "active_btn" }}{% endif %}"></div>
+                            Puesto
                         </a>
 
                         <a class="btn btn-primary employee-menu{% if request.GET.employee %}
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
-                           href="{% if request.GET.employee %}/admin/HumanResources/employeefinancialdata/add/?employee={{ request.GET.employee }}{% else %}
+                           href="{% if request.GET.employee %}/admin/HumanResources/employeefinancialdata/add/?employee=
+                               {{ request.GET.employee }}{% else %}
                                #{% endif %}">
-                        <div class="ripple-container
-                                {% if request.resolver_match.view_name == "admin:HumanResources_employeefinancialdata_add" %}{{ "active_btn" }}{% endif %}"></div>
-                        Datos<br> Financieros
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:HumanResources_employeefinancialdata_add" %}{{ "active_btn" }}{% endif %}"></div>
+                            Datos<br> Financieros
                         </a>
                     </div>
                     <div class="row mb-4">
@@ -346,9 +369,10 @@
 
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="
+                                                    <a href="/admin/HumanResources/education/{{ record.id }}/change/?employee={{ request.GET.employee }}"
+                                                       class="
                                                        btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-pencil color-default eliminar"></i>
+                                                            class="fa fa-pencil color-default eliminar"></i>
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
@@ -503,7 +527,7 @@
                                         <thead>
                                         <tr>
                                             <td>Fecha de Aplicacion</td>
-                                             <td>Prueba</td>
+                                            <td>Prueba</td>
                                             <td>Resultado</td>
                                             <td>Comentarios</td>
 
@@ -546,7 +570,7 @@
                                         <thead>
                                         <tr>
                                             <td>Archivo</td>
-                                             <td>Tipo de Doc.</td>
+                                            <td>Tipo de Doc.</td>
                                             <td>Comentarios</td>
 
 
@@ -559,7 +583,7 @@
                                             <tr>
                                                 <td>
                                                     <a href="/media/{{ record.file.name }}" target="_blank">
-                                                        {{ record.file|filename}}
+                                                        {{ record.file|filename }}
                                                     </a>
 
                                                 </td>
@@ -741,8 +765,8 @@
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-pencil color-default eliminar"></i>
                                                     </a>
-                                                </td style="width: 5%">
-                                                <td>
+                                                </td>
+                                                <td style="width: 5%">
                                                     <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/delete/"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
@@ -760,36 +784,37 @@
                                         {% comment %} <h4 class="section-title mt-4">Percepciones</h4>
                                     <hr>{% endcomment %}
                                         <div class="table-responsive">
-                                        {% if earnings %}
-                                            <table class="table table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <td>Percepción</td>
-                                                    <td>Monto</td>
-                                                    <td>Editar</td>
-                                                    <td>Eliminar</td>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for record in earnings %}
+                                            {% if earnings %}
+                                                <table class="table table-striped">
+                                                    <thead>
                                                     <tr>
-                                                        <td>{{ record.concept }}</td>
-                                                        <td>{{ record.ammount }}</td>
-                                                        <td style="width: 5%">
-                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/change/?employee={{ request.GET.employee }}"
-                                                               class="btn btn-raised btn-default btn-xs"><i
-                                                                    class="fa fa-pencil color-default eliminar"></i>
-                                                            </a>
-                                                        </td>
-                                                        <td style="width: 5%">
-                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-trash-o color-danger eliminar"></i>
-                                                            </a>
-                                                        </td>
+                                                        <td>Percepción</td>
+                                                        <td>Monto</td>
+                                                        <td>Editar</td>
+                                                        <td>Eliminar</td>
                                                     </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for record in earnings %}
+                                                        <tr>
+                                                            <td>{{ record.concept }}</td>
+                                                            <td>{{ record.ammount }}</td>
+                                                            <td style="width: 5%">
+                                                                <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/change/?employee={{ request.GET.employee }}"
+                                                                   class="btn btn-raised btn-default btn-xs"><i
+                                                                        class="fa fa-pencil color-default eliminar"></i>
+                                                                </a>
+                                                            </td>
+                                                            <td style="width: 5%">
+                                                                <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/?employee={{ request.GET.employee }}"
+                                                                   class="btn btn-raised btn-default btn-xs"><i
+                                                                        class="fa fa-trash-o color-danger eliminar"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
 
                                             {% endif %}
                                         </div>
@@ -799,35 +824,37 @@
                                     <hr>{% endcomment %}
 
                                         <div class="table-responsive">
-                                        {% if deductions %}
-                                            <table class="table table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <td>Deducción</td>
-                                                    <td>Monto</td>
-                                                    <td>Editar</td>
-                                                    <td>Eliminar</td>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                {% for record in deductions %}
+                                            {% if deductions %}
+                                                <table class="table table-striped">
+                                                    <thead>
                                                     <tr>
-                                                        <td>{{ record.concept }}</td>
-                                                        <td>{{ record.ammount }}</td>
-                                                        <td style="width: 5%">
-                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/change/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
-                                            class="fa fa-pencil color-default eliminar"></i>
-                                                            </a>
-                                                        </td>
-                                                        <td style="width: 5%">
-                                                            <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/?employee={{ request.GET.employee }}" class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-trash-o color-danger eliminar"></i>
-                                                            </a>
-                                                        </td>
+                                                        <td>Deducción</td>
+                                                        <td>Monto</td>
+                                                        <td>Editar</td>
+                                                        <td>Eliminar</td>
                                                     </tr>
-                                                {% endfor %}
-                                                </tbody>
-                                            </table>
+                                                    </thead>
+                                                    <tbody>
+                                                    {% for record in deductions %}
+                                                        <tr>
+                                                            <td>{{ record.concept }}</td>
+                                                            <td>{{ record.ammount }}</td>
+                                                            <td style="width: 5%">
+                                                                <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/change/?employee={{ request.GET.employee }}"
+                                                                   class="btn btn-raised btn-default btn-xs"><i
+                                                                        class="fa fa-pencil color-default eliminar"></i>
+                                                                </a>
+                                                            </td>
+                                                            <td style="width: 5%">
+                                                                <a href="/admin/HumanResources/employeeearningsdeductions/{{ record.id }}/delete/?employee={{ request.GET.employee }}"
+                                                                   class="btn btn-raised btn-default btn-xs"><i
+                                                                        class="fa fa-trash-o color-danger eliminar"></i>
+                                                                </a>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                    </tbody>
+                                                </table>
                                             {% endif %}
                                         </div>
                                     </div>
@@ -904,8 +931,6 @@
                     </script>
 
                     <script>
-
-
 
 
                     </script>
