@@ -761,6 +761,9 @@ class ContactModelAdmin(admin.ModelAdmin):
         else:
             return super(ContactModelAdmin, self).response_change(request, obj)
 
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        return HttpResponseRedirect("/admin/ERP/contratista/" + str(obj.contractor.id))
+
 
 @admin.register(Contratista)
 class ContractorModelAdmin(admin.ModelAdmin):
@@ -919,7 +922,6 @@ class ContractConceptsAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(
                 "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
 
-
 @admin.register(Propietario)
 class OwnerModelAdmin(admin.ModelAdmin):
     form = OwnerForm
@@ -973,6 +975,10 @@ class OwnerModelAdmin(admin.ModelAdmin):
             return HttpResponseRedirect("/admin/ERP/empresa/" + str(obj.empresa.id))
         else:
             return super(OwnerModelAdmin, self).response_add(request, obj, post_url_continue)
+
+    def response_delete(self, request, obj_display, obj_id):
+        empresa_id = request.GET.get('empresa_id')
+        return HttpResponseRedirect("/admin/ERP/empresa/" + str(empresa_id))
 
 
 @admin.register(LineItem)
