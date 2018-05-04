@@ -833,9 +833,9 @@ class ProgressEstimateLogDetailView(generic.DetailView):
             split_name = file_name.split('/')
 
             if len(split_name) <= 1:
-                record.file.name = "Archivo sin nombre"
+                record.version = "Archivo sin nombre"
             else:
-                record.file.name = split_name[len(split_name) - 1]
+                record.version = split_name[len(split_name) - 1]
 
         context['logfiles'] = log_files
 
@@ -981,7 +981,8 @@ class EstimateDetailView(generic.DetailView):
         total = estimate.advance_payment_amount
         context['advance_percentage'] = "{0:.0f}%".format(total / contract_amount * 100)
 
-        estimate.advance_payment_amount = locale.currency(estimate.advance_payment_amount, grouping=True)
+        #estimate.advance_payment_amount = locale.currency(estimate.advance_payment_amount, grouping=True)
+        estimate.advance_payment_amount = Utilities.number_to_currency(estimate.advance_payment_amount)
 
         current_user_can_approve = estimate.user_can_approve(self.request.user.id)
         context['current_user_can_approve'] = current_user_can_approve
@@ -990,7 +991,7 @@ class EstimateDetailView(generic.DetailView):
 
         for record in progress_estimates:
             total += record.amount
-            record.amount = locale.currency(record.amount, grouping=True)
+            record.amount = Utilities.number_to_currency(record.amount)
             percentage = total / contract_amount
             record.progress = "{0:.0f}%".format(percentage * 100)
 
