@@ -1403,6 +1403,7 @@ class EmployeeLoanDetail(models.Model):
     deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
 
 
+
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
@@ -1445,7 +1446,7 @@ class EmployeeLoanDetail(models.Model):
             return 'la amortización del préstamo para este periodo ya existe'
         else:
             return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
-
+    
 class EarningDeductionPeriod(models.Model):
     '''
         Earnings and deductions to be applied to the employee.
