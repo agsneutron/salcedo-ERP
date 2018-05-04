@@ -79,7 +79,7 @@
                 </div>
                 <div class="item-right">
 
-                    <a onclick="myFunction()" href=""
+                    <a href="/admin/ERP/contact/add/?contratista_id={{ contratista.id }}"
                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
                     </a>
 
@@ -118,7 +118,7 @@
                                         class="fa fa-eye color-default eliminar"></i></a></td>
 
 
-                                <td class="text-center" style="width: 5%"><a onclick="change_contacto({{ contact.contractor_id }})" href="" class="btn btn-raised btn-default btn-xs"><i
+                                <td class="text-center" style="width: 5%"><a  href="/admin/ERP/contact/{{ contact.id }}/change?contratista_id='+contractor_id" class="btn btn-raised btn-default btn-xs"><i
                                         class="fa fa-pencil color-default eliminar"></i></a></td>
 
 
@@ -368,16 +368,16 @@ return datepicker.regional.es;
         }
     </script>
     <script>
-        function myFunction() {
-            PopupCenter('/admin/ERP/contact/add/?contratista_id={{ contratista.id }}','xtf','1024','500');
-
-        }
-        {% for contact in contacts %}
-        function change_contacto(contractor_id) {
-            PopupCenter('/admin/ERP/contact/{{ contact.id }}/change?contratista_id='+contractor_id,'xtf','1024','500');
-
-        }
-        {% endfor %}
+{#        function myFunction() {#}
+{#            PopupCenter('/admin/ERP/contact/add/?contratista_id={{ contratista.id }}','xtf','1024','500');#}
+{##}
+{#        }#}
+{#        {% for contact in contacts %}#}
+{#        function change_contacto(contractor_id) {#}
+{#            PopupCenter('/admin/ERP/contact/{{ contact.id }}/change?contratista_id='+contractor_id,'xtf','1024','500');#}
+{##}
+{#        }#}
+{#        {% endfor %}#}
     </script>
     <script>
 
