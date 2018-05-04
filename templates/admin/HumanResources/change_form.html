@@ -311,10 +311,8 @@
                                             <strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                                     </ul>
                                     <a class="btn btn-block btn-raised btn-primary"
-                                       href="{% if request.GET.employee %}/admin/HumanResources/employeehastag/add/?employee=
-                                           {{ request.GET.employee }}{% else %}#{% endif %}">Etiquetas</a>
-                                    <a href="{% if request.GET.employee %}/admin/HumanResources/employeeearningsdeductions/add/?employee=
-                                        {{ request.GET.employee }}{% else %}#{% endif %}"
+                                       href="{% if request.GET.employee %}/admin/HumanResources/employeehastag/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">Etiquetas</a>
+                                    <a href="{% if request.GET.employee %}/admin/HumanResources/employeeearningsdeductions/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}"
                                        class="btn btn-block btn-raised btn-primary">Info. de Nómina</a>
                                     {#                                                                                                            <a href="/admin/HumanResources/employeehastag/add/?employee={{ employee.id }}" class="btn btn-block btn-raised btn-primary">Etiquetas</a>#}
                                 </div>

@@ -141,6 +141,40 @@ $(function () {
 });
 
 $(function () {
+    if (/groupingcode\/+add/.test(window.location.href)) {
+        $('#e11>a').removeClass('collapsed');
+        $('#e11>a').addClass('active');
+        $('#e11>a').attr("aria-expanded","true");
+        $('#c11>a').innerHTML = "aria-expanded = true";
+    }
+});
+$(function () {
+    if (/groupingcode/.test(window.location.href)) {
+        $('#e11>a').removeClass('collapsed');
+        $('#e11>a').addClass('active');
+        $('#e11>a').attr("aria-expanded","true");
+        $('#c11>a').innerHTML = "aria-expanded = true";
+    }
+
+});
+
+$(function () {
+    if (/itemaccount\/+add/.test(window.location.href)) {
+        $('#e12>a').removeClass('collapsed');
+        $('#e12>a').addClass('active');
+        $('#c12>a').attr("aria-expanded","true");
+    }
+});
+$(function () {
+    if (/itemaccount/.test(window.location.href)) {
+        $('#e12>a').removeClass('collapsed');
+        $('#e12>a').addClass('active');
+        $('#c12>a').attr("aria-expanded","true");
+    }
+});
+
+
+$(function () {
     if (/searchtransactions/.test(window.location.href)) {
         $('#e10>a').addClass('active');
         $('#e10>a').removeClass('collapsed');

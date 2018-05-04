@@ -70,9 +70,10 @@
                                 {% include "admin/HumanResources/earningsdeductions/fieldset.html" %}
                             {% endfor %}
                             {% block after_related_objects %}
-                                {% if earnings %}
+
                                 <hr>
                                 <div class="">
+                                    {% if earnings %}
                                     <div class="col-xs-12 col-sm-12 col-lg-6">
                                         {% comment %} <h4 class="section-title mt-4">Percepciones</h4>{% endcomment %}
 
@@ -111,6 +112,8 @@
                                             </table>
                                         </div>
                                     </div>
+                                {% endif %}
+                                {% if deductions %}
                                     <div class="col-xs-12 col-sm-12 col-lg-6">
                                         {% comment %}<h4 class="section-title mt-4">Deducciones</h4>{% endcomment %}
 
@@ -118,7 +121,11 @@
                                             <table class="table table-striped">
                                                 <thead>
                                                 <tr>
-                                                    <td >Deducciones</td>
+                                                    {% if tipo == 0 %}
+                                                        <td >Deducciones</td>
+                                                    {% else %}
+                                                        <td >Penalizaciones</td>
+                                                    {% endif %}
                                                     <td >%Gravable</td>
                                                     <td >Categoria</td>
                                                     <td >Editar</td>

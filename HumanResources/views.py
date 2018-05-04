@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 # Django Imports.
 import operator
 
+import django
+
 from django.core.exceptions import PermissionDenied
 from django.db.models.aggregates import Count
 from django.http.response import HttpResponseRedirect
@@ -14,6 +16,7 @@ from django.db.models import Q
 
 # Model Imports.
 from HumanResources.models import *
+from Accounting.models import *
 from django.template import Context
 
 # Create your views here.
@@ -279,13 +282,24 @@ def EmployeeByPeriod(request):
     # Payroll information by employee to know base salary and final salary.
     employee_data_set = []
     for record in employees:
+        try:
+            employee_payroll = PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+
+        except EmployeeFinancialData.DoesNotExist as e:
+            print "Exception was: " + str(e)
+            django.contrib.messages.error(request, "No existen datos financieros para el empleado: " + record.employee.employee_key +
+                                          " - "+record.employee.get_full_name()+".")
+            return HttpResponseRedirect("/admin/HumanResources/payrollperiod/")
+
+
+
         employee_data_set.append({
             "employee_position_description.id": record.id,
             "employee_id": record.employee.id,
             "employee_key" : record.employee.employee_key,
             "employee_fullname" : record.employee.get_full_name(),
             "employee_job" : record.job_profile.job,
-            "employee_payroll" : PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+            "employee_payroll" : employee_payroll
         })
 
         print PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
@@ -578,3 +592,67 @@ class PayrollReceiptProcessedListView(ListView):
         context['payroll_period'] = payroll_period
 
         return context
+
+
+class EarningsDeductionsListView(ListView):
+    model = EarningsDeductions
+    template_name = "HumanResources/penalties-list.html"
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+    title_list = 'Penalizaciones'
+    penalty = ''
+
+    def get_queryset(self):
+        result = super(EarningsDeductionsListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        query_penalty = self.request.GET.get('penalty')
+        if query_penalty:
+            EarningsDeductionsListView.title_list = 'Penalizaciones'
+            EarningsDeductionsListView.penalty = '?tipo=2'
+            EarningsDeductionsListView.query = query_penalty
+            query_list = query_penalty.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(penalty__icontains=q) for q in query_list))
+                #|
+                #reduce(operator.and_,
+                #       (Q(account____icontains=q) for q in query_list))
+            )
+        else:
+            EarningsDeductionsListView.title_list='Percepciones y Deducciones'
+            EarningsDeductionsListView.penalty = ''
+            EarningsDeductionsListView.query = ''
+            query_list = ['N']
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(penalty__icontains=q) for q in query_list)))
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EarningsDeductionsListView, self).get_context_data(**kwargs)
+        context['title_list'] = EarningsDeductionsListView.title_list
+        context['penalty'] = EarningsDeductionsListView.penalty
+        context['query'] = EarningsDeductionsListView.query
+        context['query_string'] = '&q=' + EarningsDeductionsListView.query
+        context['has_query'] = (EarningsDeductionsListView.query is not None) and (EarningsDeductionsListView.query != "")
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_empresa'):
+            raise PermissionDenied
+        return super(EarningsDeductionsListView, self).dispatch(request, args, kwargs)
+
+
+# For  Transactions by account filter objects view
+def SearchTransactions(request):
+    template = loader.get_template('HumanResources/search_transactions.html')
+    context = {
+               'internalcompany': InternalCompany.objects.all(), }
+
+    return HttpResponse(template.render(context, request))
