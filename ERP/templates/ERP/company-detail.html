@@ -64,7 +64,7 @@
                     <h3 class="card-title text">Contactos</h3>
                 </div>
                 <div class="item-right">
-                    <a onclick="myFunction()" href=""
+                    <a  href="/admin/ERP/propietario/add/?empresa_id={{ empresa.id }}"
                        class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
                             class="zmdi zmdi-plus zmdi-hc-2x"></i>
                     </a>
@@ -108,9 +108,7 @@
                                             target="_blank"
                                             class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-eye color-default eliminar"></i></a></td>
-                                    <td class="text-center" style="width: 3%"><a onclick="popupedit()"
-                                                                                 href="{% comment %}/admin/ERP/propietario/{{ owner.id }}/change{% endcomment %}"
-                                                                                 class="btn btn-raised btn-default btn-xs"><i
+                                    <td class="text-center" style="width: 3%"><a href="/admin/ERP/propietario/{{ owner.id }}/change" class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-pencil color-default eliminar"></i></a></td>
                                     <td class="text-center" style="width: 3%"><a
                                             href="/admin/ERP/propietario/{{ owner.id }}/delete"
