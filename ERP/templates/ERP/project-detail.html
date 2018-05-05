@@ -1,7 +1,16 @@
 {% extends "admin/base_site.html" %}
 {% load app_filters %}
 {% block content %}
+<style>
+        #DataTables_Table_0, #DataTables_Table_1, #DataTables_Table_2 {
 
+            width: 100% !important;
+        }
+#DataTables_Table_2_wrapper.form-inline {
+    display: inherit;
+}
+
+    </style>
     {% comment %}
 
     <h1> Nombre de Proyecto: {{ project.nombreProyecto }} <a href="change">Editar</a></h1>
@@ -817,7 +826,7 @@
                                                 {% if inner.inner_section_name == "Tipo de Construcción" %}
                                                     <div class="col-xs-12 col-md-12">
                                                         <div class="card">
-                                                            <div class="clearfix"></div>
+
                                                             <h3 class="color-info text-center">Tipo de Construcción</h3>
                                                             <table id="" class="table table-striped table_s">
                                                                 <thead>
@@ -880,9 +889,9 @@
                                         <div role="tabpanel" class="tab-pane" id="programacion">
                                             {% for inner in section.inner_sections %}
                                                 {% if inner.inner_section_name == "Programación" %}
-                                                    <div class="col-xs-12 col-md-8">
+                                                    <div class="col-xs-12 ">
                                                         <div class="card">
-                                                            <div class="clearfix"></div>
+
                                                             <h3 class="color-info text-center">Programación</h3>
                                                              <table id="" class="table table-striped table_s">
                                                                     <thead>
