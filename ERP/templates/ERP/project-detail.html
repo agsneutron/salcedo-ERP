@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-
+{% load app_filters %}
 {% block content %}
 
     {% comment %}
@@ -223,6 +223,21 @@
                                     <li role="presentation"><a href="#program" aria-controls="settings" role="tab"
                                                                data-toggle="tab"><i
                                             class="zmdi zmdi-settings"></i> Programa</a></li>
+                                {% endif %}
+                                {% if section.section_name == "Tipo de Construcción" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#tipoconstruccion" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i>T.Construcción</a></li>
+                                {% endif %}
+                                {% if section.section_name == "Planos" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#planos" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i>Planos</a></li>
+                                {% endif %}
+                                {% if section.section_name == "Programación" and section.total_inner_sections > 0 %}
+                                    <li role="presentation"><a href="#programacion" aria-controls="settings" role="tab"
+                                                               data-toggle="tab"><i
+                                            class="zmdi zmdi-settings"></i>Programación</a></li>
                                 {% endif %}
 
                             {% endfor %}
@@ -790,6 +805,102 @@
                                                                 <li class="list-group-item">
                                                                     Longitud: {{ project.longitud }}</li>
                                                             </ul>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+                                    {% if section.section_name == "Tipo de Construcción" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="tipoconstruccion">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Tipo de Construcción" %}
+                                                    <div class="col-xs-12 col-md-12">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Tipo de Construcción</h3>
+                                                            <table id="" class="table table-striped table_s">
+                                                                <thead>
+                                                                     <th>Tipo de Construcción</th>
+                                                                     <th>Número</th>
+                                                                     <th>m2 de Terreno</th>
+                                                                     <th>Documento</th>
+
+                                                                </thead>
+                                                                <tbody>
+                                                                 {% for tc in tipoconstruccion %}
+                                                                     <tr>
+                                                                         <td>{{ tc.nombreTipoProyecto }}</td>
+                                                                         <td>{{ tc.numero }}</td>
+                                                                         <td>{{ tc.m2terreno }}</td>
+                                                                         <td><a href="/media/{{ tc.documento }}">{{ tc.documento|filename }}</a></td>
+                                                                     </tr>
+                                                                 {% endfor %}
+                                                                </tbody>
+                                                             </table>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if section.section_name == "Planos" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="planos">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Planos" %}
+                                                    <div class="col-xs-12 col-md-12">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Planos</h3>
+
+                                                                <table id="" class="table table-striped table_s">
+                                                                    <thead>
+                                                                         <th>Plano</th>
+                                                                         <th>Descripción</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                     {% for bp in blueprint %}
+                                                                         <tr>
+                                                                             <td><a href="/media/{{ bp.file }}">{{ bp.file|filename }}</a></td>
+                                                                             <td>{{ bp.description }}</td>
+
+                                                                         </tr>
+                                                                     {% endfor %}
+                                                                    </tbody>
+                                                                 </table>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    {% endif %}
+
+                                    {% if section.section_name == "Programación" and section.total_inner_sections > 0 %}
+                                        <div role="tabpanel" class="tab-pane" id="programacion">
+                                            {% for inner in section.inner_sections %}
+                                                {% if inner.inner_section_name == "Programación" %}
+                                                    <div class="col-xs-12 col-md-8">
+                                                        <div class="card">
+                                                            <div class="clearfix"></div>
+                                                            <h3 class="color-info text-center">Programación</h3>
+                                                             <table id="" class="table table-striped table_s">
+                                                                    <thead>
+                                                                         <th>Año</th>
+                                                                         <th>Mes</th>
+                                                                         <th>Monto</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                     {% for ps in paymentschedule %}
+                                                                         <tr>
+                                                                             <td>{{ ps.year }}</td>
+                                                                             <td>{{ ps.month }}</td>
+                                                                             <td>{{ ps.amount }}</td>
+
+                                                                         </tr>
+                                                                     {% endfor %}
+                                                                    </tbody>
+                                                                 </table>
                                                         </div>
                                                     </div>
                                                 {% endif %}
