@@ -1760,11 +1760,14 @@ display: -webkit-inline-box;
 }
 
 .errorlist {
-position: absolute !important;
-    bottom: -25px !important;
-    right: 15px !important;
+    position: absolute !important;
+    /* top: 5px !important; */
+    right: 5px !important;
     font-size: 10px;
     color: #ff0000 !important;
+    width: 100%;
+    line-height: 11px;
+    padding-left: 0px !important;
 }
 
 .btn-excel {
