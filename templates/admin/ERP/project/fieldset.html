@@ -1980,49 +1980,7 @@
             });
         }
     </script>
-    <script>
 
-        var d = document.getElementById("id_ubicacion_pais");
-
-        d.setAttribute("data-live-search", "true");
-
-
-        $('#id_ubicacion_pais').selectpicker({
-            style: 'btn-info',
-            size: 4,
-        });
-
-
-    </script>
-    <script>
-
-
-        var d = document.getElementById("id_ubicacion_estado");
-        d.setAttribute("data-live-search", "true");
-        $('#id_ubicacion_estado').selectpicker({
-            style: 'btn-info',
-            size: 4
-        });
-
-
-        $(document).on('change', '.selectpicker', function () {
-            $('.chained-fk').selectpicker('refresh');
-        });
-
-    </script>
-    <script>
-        if (document.getElementById("id_ubicacion_municipio")) {
-            var d = document.getElementById("id_ubicacion_municipio");
-
-            d.setAttribute("data-live-search", "true");
-
-
-            $('#id_ubicacion_municipio').selectpicker({
-                style: 'btn-info',
-                size: 4
-            });
-        }
-    </script>
     <script>
         $(document).ready(function () {
             $('select').addClass('form-control');
