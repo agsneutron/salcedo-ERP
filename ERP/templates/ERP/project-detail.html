@@ -842,8 +842,7 @@
                                                                          <td>{{ tc.nombreTipoProyecto }}</td>
                                                                          <td>{{ tc.numero }}</td>
                                                                          <td>{{ tc.m2terreno }}</td>
-
-                                                                         <td><a href=“/media/{{ bp.file }}“>{{ bp.file|filename }}</a></td>
+                                                                         <td><a href="/media/{{ tc.documento }}">{{ tc.documento|filename }}</a></td>
                                                                      </tr>
                                                                  {% endfor %}
                                                                 </tbody>
@@ -872,8 +871,7 @@
                                                                     <tbody>
                                                                      {% for bp in blueprint %}
                                                                          <tr>
-                                                                         <td><a href=“/media/{{ bp.file }}“>{{ bp.file|filename }}</a></td>
-{#                                                                             <td><a href="/media/{{ bp.file }}">{{ bp.file|filename }}</a></td>#}
+                                                                             <td><a href="/media/{{ bp.file }}">{{ bp.file|filename }}</a></td>
                                                                              <td>{{ bp.description }}</td>
 
                                                                          </tr>
