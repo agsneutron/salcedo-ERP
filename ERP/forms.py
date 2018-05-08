@@ -322,6 +322,8 @@ class ContractConceptsForm(forms.ModelForm):
         self.request = kwargs.pop('request', None)
         self.contract_id = kwargs.pop('contract_id', None)
 
+        change=self.find_words();
+
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
 
@@ -332,18 +334,64 @@ class ContractConceptsForm(forms.ModelForm):
 
             self.fields['contract'].queryset = ContratoContratista.objects.filter(pk=self.contract_id)
 
-            contract_concepts = ContractConcepts.objects.filter(contract__id=self.contract_id).values('concept_id')
-            exclude = []
-            for c in contract_concepts:
-                exclude.append(c['concept_id'])
+            if change==False:
+                contract_concepts = ContractConcepts.objects.filter(contract__id=self.contract_id).values('concept_id')
+                exclude = []
+                for c in contract_concepts:
+                    exclude.append(c['concept_id'])
 
-            self.fields['concept'].queryset = Concept_Input.objects.filter(
-                line_item__id=contract_obj.line_item.id).exclude(id__in=exclude)
+                self.fields['concept'].queryset = Concept_Input.objects.filter(
+                    line_item__id=contract_obj.line_item.id).exclude(id__in=exclude)
 
-            if len(self.fields['concept'].queryset) == 0:
-                messages.error(self.request,
-                               "Ya no hay más conceptos que se puedan agregar al contrato.")
+                if len(self.fields['concept'].queryset) == 0:
+                    messages.error(self.request,
+                                   "Ya no hay más conceptos que se puedan agregar al contrato.")
+            else:
+                contract_concepts = ContractConcepts.objects.filter(contract__id=self.contract_id).filter(id=self.find_param())\
+                    .values('concept_id')
+                include = []
+                for c in contract_concepts:
+                    include.append(c['concept_id'])
 
+                self.fields['concept'].queryset = Concept_Input.objects.filter(
+                    line_item__id=contract_obj.line_item.id).filter(id__in=include)
+
+    def find_words(self):
+        """Find exact words"""
+        dText = self.request.path.split('/')
+        dSearch = 'change'
+
+        found_word = 0
+
+        for text_word in dText:
+            if 'change' == text_word:
+                found_word += 1
+
+        if found_word >0:
+            return True
+        else:
+            return False
+
+    def find_param(self):
+        """Find exact words"""
+        dText = self.request.path.split('/')
+        dSearch = 'change'
+        sparam=''
+
+        found_word = 0
+
+        for text_word in dText:
+            if 'change' == text_word:
+                found_word += 1
+                break
+            else:
+                sparam=text_word
+
+
+        if found_word >0:
+            return int(sparam)
+        else:
+            return 0
 
 class EstimateSearchForm(forms.Form):
     current_project_id = 0
