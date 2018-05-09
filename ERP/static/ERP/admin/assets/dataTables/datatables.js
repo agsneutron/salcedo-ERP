@@ -15307,7 +15307,7 @@ $.extend( true, DataTable.defaults, {
 	dom:
 		"<'row'<'col-sm-6'f><'col-sm-6'l>>" +
 		"<'row'<'col-sm-12'tr>>" +
-		"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+		"<'row'<'col-sm-1'i><'col-sm-11'p>>",
 	renderer: 'bootstrap'
 } );
 

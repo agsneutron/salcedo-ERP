@@ -66,10 +66,10 @@ def currency(field):
     if field == '-' or field == "None": field = 0
 
     print 'The field is: ' + str(field)
-    return locale.currency(field, grouping=True)
-    # moneda = round(float(field), 2)
-    # return "$%s%s" % (intcomma(int(moneda)), ("%0.2f" % moneda)[-3:])
-    # return field
+    #return locale.currency(field, grouping=True)
+    moneda = round(float(field), 2)
+    return "$%s%s" % (intcomma(int(moneda)), ("%0.2f" % moneda)[-3:])
+    #return field
 
 
 @register.filter(is_safe=True)

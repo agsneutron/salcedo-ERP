@@ -16,7 +16,7 @@ import os
 
 import locale
 
-locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
 # locale.currency(1000, grouping=True)
 # español para windows
 #locale.setlocale(locale.LC_ALL, "")
@@ -37,7 +37,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LANGUAGE_CODE = 'es'
+#LANGUAGE_CODE = 'es'
 
 # Application definition
 
@@ -131,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'es-mx'
+LANGUAGE_CODE = 'es-MX'
 
 TIME_ZONE = 'UTC'
 
@@ -169,10 +169,20 @@ STATIC_FILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
 USE_L10N = True
-USE_THOUSAND_SEPARATOR = True
+#USE_THOUSAND_SEPARATOR = True
 print os.path.join(PROJECT_ROOT, '../static')
 # Loading local settings to the project.
 try:
     from .local_settings import *
 except ImportError as e:
     pass
+
+
+# Email config password reset
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST = 'mail.orion.studio'
+EMAIL_HOST = 'a2plcpnl0290.prod.iad2.secureserver.net'
+EMAIL_HOST_USER = 'salcedocys@orion.studio'
+EMAIL_HOST_PASSWORD = 'Salc3d0Mail!'
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
