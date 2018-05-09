@@ -1921,7 +1921,8 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 assitance_db_object.process_records()
 
                 # If everything went ok, generatethe automatic absences
-                atm_mgr = AutomaticAbsences()
+                atm_mgr = AutomaticAb
+                sences()
                 atm_mgr.generate_automatic_absences_for_period(payroll_period)
 
                 super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
