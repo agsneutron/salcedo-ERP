@@ -151,6 +151,7 @@ class AssistanceDBObject:
             exit_time_record = record[self.ElementPosition.ATM_EXIT_COL]
             print "Automatic Assistance Upload"
 
+
         else:
             employee_key = record[self.ElementPosition.MANUAL_EMPLOYEE_KEY_COL]
             record_date = record[self.ElementPosition.MANUAL_DATE_COL]
@@ -158,6 +159,8 @@ class AssistanceDBObject:
             exit_time_record = record[self.ElementPosition.MANUAL_EXIT_COL]
             print "Manual Assistance Upload"
 
+        entry_time_record = datetime.datetime.strptime(entry_time_record.encode('ascii','ignore'), '%H:%M:%S').time()
+        exit_time_record = datetime.datetime.strptime(exit_time_record.encode('ascii','ignore'), '%H:%M:%S').time()
 
 
         # Obtaining the related employee by theit key number. If the given employeee does not exist,
