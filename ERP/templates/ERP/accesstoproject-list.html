@@ -60,7 +60,7 @@
                                                 <th>Cliente</th>
                                                 <th>Fecha Inicio</th>
                                                 <th>Fecha Término</th>
-
+                                                <th class="no-sorting">Dashboard</th>
                                                 <th class="no-sorting">Eliminar</th>
                                             </tr>
                                             </thead>
@@ -75,10 +75,16 @@
                                                     <td><span>{{ project.project.fecha_inicial }}</span></td>
                                                     <td><span>{{ project.project.fecha_final }}</span></td>
                                                     <td class="text-center" style="width: 2%"><a
+                                                            href="/admin/ERP/project/dashboard/{{ project.project.id }}"
+                                                            class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-tachometer color-danger eliminar"></i></a>
+                                                    </td>
+                                                    <td class="text-center" style="width: 2%"><a
                                                             href="{{ project.id }}/delete?user={{ project.user.id }}"
                                                             class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i></a>
                                                     </td>
+
 
                                                     {% empty %}
                                                     <td colspan="4">No hay {{ title_list }}</td>

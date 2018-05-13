@@ -826,8 +826,8 @@
                                                 {% if inner.inner_section_name == "Tipo de Construcción" %}
                                                     <div class="col-xs-12 col-md-12">
                                                         <div class="card">
-
-                                                            <h3 class="color-info text-center">Tipo de Construcción</h3>
+                                                        <h3 class="color-info text-center">Tipo de Construcción</h3>
+                                                        {% if tipoconstruccion %}
                                                             <table id="" class="table table-striped table_s">
                                                                 <thead>
                                                                      <th>Tipo de Construcción</th>
@@ -842,12 +842,14 @@
                                                                          <td>{{ tc.nombreTipoProyecto }}</td>
                                                                          <td>{{ tc.numero }}</td>
                                                                          <td>{{ tc.m2terreno }}</td>
-
-                                                                         <td><a href=“/media/{{ bp.file }}“>{{ bp.file|filename }}</a></td>
+                                                                         <td><a href="/media/{{ tc.documento }}">{{ tc.documento|filename }}</a></td>
                                                                      </tr>
                                                                  {% endfor %}
                                                                 </tbody>
                                                              </table>
+                                                        {% else %}
+                                                                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No hay Tipos de Construcción registrados para el proyecto</div>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 {% endif %}
@@ -863,7 +865,7 @@
                                                         <div class="card">
                                                             <div class="clearfix"></div>
                                                             <h3 class="color-info text-center">Planos</h3>
-
+                                                            {% if blueprint %}
                                                                 <table id="" class="table table-striped table_s">
                                                                     <thead>
                                                                          <th>Plano</th>
@@ -872,14 +874,16 @@
                                                                     <tbody>
                                                                      {% for bp in blueprint %}
                                                                          <tr>
-                                                                         <td><a href=“/media/{{ bp.file }}“>{{ bp.file|filename }}</a></td>
-{#                                                                             <td><a href="/media/{{ bp.file }}">{{ bp.file|filename }}</a></td>#}
+                                                                             <td><a href="/media/{{ bp.file }}">{{ bp.file|filename }}</a></td>
                                                                              <td>{{ bp.description }}</td>
 
                                                                          </tr>
                                                                      {% endfor %}
                                                                     </tbody>
                                                                  </table>
+                                                            {% else %}
+                                                                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No hay Planos registrados para el proyecto</div>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 {% endif %}
@@ -893,9 +897,9 @@
                                                 {% if inner.inner_section_name == "Programación" %}
                                                     <div class="col-xs-12 ">
                                                         <div class="card">
-
                                                             <h3 class="color-info text-center">Programación</h3>
-                                                             <table id="" class="table table-striped table_s">
+                                                            {% if paymentschedule %}
+                                                                <table id="" class="table table-striped table_s">
                                                                     <thead>
                                                                          <th>Año</th>
                                                                          <th>Mes</th>
@@ -912,6 +916,9 @@
                                                                      {% endfor %}
                                                                     </tbody>
                                                                  </table>
+                                                            {% else %}
+                                                                <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No hay Programación registrada para el proyecto</div>
+                                                            {% endif %}
                                                         </div>
                                                     </div>
                                                 {% endif %}

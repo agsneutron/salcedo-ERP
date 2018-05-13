@@ -126,6 +126,22 @@
 
 
             });
+
+            {% if change %}
+                var amount = amounts['' + $('#id_concept').val()];  // Cantidad total del catálogo de conceptos
+                var resting = resting_amounts['' + $('#id_concept').val()]; // Cantidad restante
+
+                // Actualizar la página con las cantidades de arriba
+
+                var html = '<span class="color-active">Cantidad Total:</span><br>' + amount ;
+                var html2 = '<span class="color-active">Cantidad Restante:</span><br> ' + resting;
+                $('#concept_amount').html(html);
+                $('#rest_amount').html(html2);
+                $('#amount_section').show(true);
+
+            {% endif %}
+
+
         });
     </script>
 {% endblock %}
