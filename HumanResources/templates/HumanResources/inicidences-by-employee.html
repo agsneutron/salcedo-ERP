@@ -4,7 +4,7 @@
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
 {% endblock %}
 {% block content %}
-     {% include "admin/HumanResources/payroll-home.html" %}
+    {% include "admin/HumanResources/payroll-home.html" %}
 
     <div class="col-xs-9">
 
@@ -14,7 +14,8 @@
             <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
                 <li role="presentation" class="active">
                     <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                        Incidencias del empleado <strong>{{ employee.employee_key }} - {{ employee.get_full_name }}</strong>
+                        Incidencias del empleado <strong>{{ employee.employee_key }}
+                        - {{ employee.get_full_name }}</strong>
                         del periodo <strong>{{ payroll_period }}</strong>
                     </a>
                 </li>
@@ -42,46 +43,50 @@
                                     <tr>
                                         <td>{{ record.record_date }}</td>
                                         <td>
-                                            {{ record.entry_time}}
+                                            {{ record.entry_time }}
                                         </td>
                                         <td>
-                                            {{ record.exit_time}}
+                                            {{ record.exit_time }}
                                         </td>
                                         <td style="text-align: center">
 
-                                            <form method="POST" action="/humanresources/api/change_justified_status" style="display: inline-block">
+                                            <form method="POST"
+                                                  action="/humanresources/api/change_justified_status"
+                                                  style="display: inline-block">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="redirect_url" value="{{ request.path }}">
                                                 <input type="hidden" name="employee_assistance" value="{{ record.id }}">
                                                 <input type="hidden" name="status" value="1">
                                                 <button type="submit" class="btn btn-raised btn-default btn-sm"
-                                                    {% if record.justified == False %}
+                                                        {% if record.justified == False %}
                                                         style="opacity: .4"
-                                                    {% endif %}
+                                                        {% endif %}
                                                 >
                                                     <i class="fa fa-check color-default"
-                                                       {% if record.justified == True %}
-                                                            style="color: #3FA43F"
-                                                       {% endif %}
+                                                            {% if record.justified == True %}
+                                                       style="color: #3FA43F"
+                                                            {% endif %}
                                                     >
                                                     </i>
                                                 </button>
                                             </form>
 
-                                            <form method="POST" action="/humanresources/api/change_justified_status" style="display: inline-block">
+                                            <form method="POST"
+                                                  action="/humanresources/api/change_justified_status"
+                                                  style="display: inline-block">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="redirect_url" value="{{ request.path }}">
                                                 <input type="hidden" name="employee_assistance" value="{{ record.id }}">
                                                 <input type="hidden" name="status" value="0">
                                                 <button type="submit" class="btn btn-raised btn-default btn-sm"
-                                                    {% if record.justified == True %}
+                                                        {% if record.justified == True %}
                                                         style="opacity: .4"
-                                                    {% endif %}
+                                                        {% endif %}
                                                 >
                                                     <i class="fa fa-close color-default"
-                                                       {% if record.justified == False %}
-                                                            style="color: #EE2A2A"
-                                                       {% endif %}
+                                                            {% if record.justified == False %}
+                                                       style="color: #EE2A2A"
+                                                            {% endif %}
                                                     >
                                                     </i>
                                                 </button>
@@ -102,21 +107,27 @@
 
         </div>
 
-        <h2>Documentos Justificantes</h2>
+
+        <div class=" ">
+            <div class="card-header" style="background-color: inherit">
+                <div class="item-left">
+                    <h3 class="card-title text">Documentos Justificantes</h3>
+                </div>
+
+                <ul class="object-tools" style="position: relative">
 
 
-        <div class="card ">
+                    <div class="item-right" style="top: -43px !important;">
 
-            <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
-
-                <div class="item-right">
-
-                    <a href="/admin/HumanResources/absenceproof/add/?payroll_period={{ payroll_period.id }}&employee={{ employee.id }}"
+                        <a href="/admin/HumanResources/absenceproof/add/?payroll_period={{ payroll_period.id }}&employee={{ employee.id }}"
                        class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
                             class="zmdi zmdi-plus zmdi-hc-2x"></i>
                     </a>
-                </div>
-            </ul>
+                    </div>
+
+                </ul>
+
+            </div>
 
 
             <div class="card-block">
@@ -146,31 +157,31 @@
                                         <td class="text-center" style="width: 8%">
                                             <a href="/media/{{ record.document.name }}"
                                                class="btn btn-raised btn-default btn-sm" target="_blank">
-                                                <i class="fa fa-eye" >
+                                                <i class="fa fa-eye">
                                                 </i>
                                             </a>
                                         </td>
 
                                         <td class="text-center" style="width: 8%">
                                             <a href="/media/{{ record.document.name }}" download
-                                               class="btn btn-raised btn-default btn-sm" >
+                                               class="btn btn-raised btn-default btn-sm">
                                                 <i class="fa fa-cloud-download color-info">
                                                 </i>
                                             </a>
                                         </td>
 
                                         <td class="text-center" style="width: 8%">
-                                            <a href="/admin/HumanResources/absenceproof/{{ record.id }}/change/?payroll_period={{ record.payroll_period.id }}&employee={{ record.employee.id  }}"
-                                               class="btn btn-raised btn-default btn-sm" >
-                                                <i class="fa fa-pencil color-black" >
+                                            <a href="/admin/HumanResources/absenceproof/{{ record.id }}/change/?payroll_period={{ record.payroll_period.id }}&employee={{ record.employee.id }}"
+                                               class="btn btn-raised btn-default btn-sm">
+                                                <i class="fa fa-pencil color-black">
                                                 </i>
                                             </a>
                                         </td>
 
 
                                         <td class="text-center" style="width: 8%">
-                                            <a href="/admin/HumanResources/absenceproof/{{ record.id }}/delete/?payroll_period={{ record.payroll_period.id }}&employee={{ record.employee.id  }}"
-                                               class="btn btn-raised btn-default btn-sm" >
+                                            <a href="/admin/HumanResources/absenceproof/{{ record.id }}/delete/?payroll_period={{ record.payroll_period.id }}&employee={{ record.employee.id }}"
+                                               class="btn btn-raised btn-default btn-sm">
                                                 <i class="fa fa-trash color-danger">
                                                 </i>
                                             </a>

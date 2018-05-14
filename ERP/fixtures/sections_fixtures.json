@@ -250,5 +250,23 @@
          "shortSectionName":"Afectaci\u00f3n",
          "parent_section":26
       }
+   },
+   {
+      "model":"ERP.section",
+      "pk":29,
+      "fields":{
+         "sectionName":"Tipo de Construcci\u00f3n",
+         "shortSectionName":"Tipo de Construcci\u00f3n",
+         "parent_section":null
+      }
+   },
+   {
+      "model":"ERP.section",
+      "pk":30,
+      "fields":{
+         "sectionName":"Tipo de Construcci\u00f3n",
+         "shortSectionName":"Tipo de Construcci\u00f3n",
+         "parent_section":29
+      }
    }
 ]
