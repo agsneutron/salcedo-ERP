@@ -529,17 +529,17 @@ class ContratoContratista(models.Model):
                                      editable=True)
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino = models.DateField(verbose_name='Fecha de Termino', editable=True)
-    lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False,
+    lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=True,
                                        editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
     porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,
                                          null=False, default=0, max_digits=5)
-    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
+    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True,
                                      editable=True)
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,
                                      editable=True)
-    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
+    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=True,
                                        editable=True)
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
