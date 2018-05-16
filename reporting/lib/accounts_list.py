@@ -92,7 +92,6 @@ class AccountsListFile(object):
             worksheet.write(STATUS_COL+str(row), account['status'], formats['left_bold'])
             worksheet.write(NATURE_COL+str(row), account['nature_account'], formats['left_bold'])
             worksheet.write(TYPE_COL+str(row), account['type_account'], formats['left_bold'])
-            worksheet.write(ITEM_COL+str(row), account['item'], formats['left_bold'])
             worksheet.write(GROUPING_COL+str(row), account['grouping_code'], formats['left_bold'])
             if(account['subsidiary_account_id'] == None):
                 account['subsidiary_account'] = "-"
