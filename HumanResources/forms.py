@@ -576,7 +576,7 @@ class RegisterView(FormView):
 class EmployeeLoanDetailForm(forms.ModelForm):
     class Meta:
         model = EmployeeLoanDetail
-        fields = '__all__'
+        fields = ('payroll_group', 'period', 'amount')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
