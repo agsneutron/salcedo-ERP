@@ -111,7 +111,7 @@ class AccountingPolicyDetailInlineFormset(forms.models.BaseInlineFormSet):
 
 class AccountingPolicyDetailInline(admin.TabularInline):
     model = AccountingPolicyDetail
-    extra = 1
+    extra = 0
     formset = AccountingPolicyDetailInlineFormset
 
     fieldsets = (

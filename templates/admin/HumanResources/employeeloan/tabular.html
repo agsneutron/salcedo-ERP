@@ -13,7 +13,11 @@
                     <fieldset class="module {{ inline_admin_formset.classes }}">
                       {% comment %} <h2>{{ inline_admin_formset.opts.verbose_name_plural|capfirst }}</h2>{% endcomment %}
                        {{ inline_admin_formset.formset.non_form_errors }}
-                       <table class="table">
+
+
+
+
+                        <table class="table">
                          <thead><tr>
                            <th class="original"></th>
                          {% for field in inline_admin_formset.fields %}
