@@ -24,7 +24,7 @@ from django.views.generic.edit import CreateView
 from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm, EstimateDedutionsForm
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
-    Contact, AccessToProject, \
+    Contact, AccessToProject, TipoProyectoDetalle, Blueprint, PaymentSchedule, \
     ProjectSections, ContractConcepts, ProgressEstimateAuthorization, EstimateAdvanceAuthorization
 from django.db.models import Q
 import json
@@ -710,6 +710,12 @@ class ProjectDetailView(generic.DetailView):
 
         # Getting the info for the contractors relates to a project.
         context['contracts'] = ContratoContratista.objects.filter(Q(project__id=project_obj.id))
+        # Getting the info for the tipoConstruccion relates to a project.
+        context['tipoconstruccion'] = TipoProyectoDetalle.objects.filter(Q(proyecto__id=project_obj.id))
+        # Getting the info for the PaymentSchedule relates to a project.
+        context['paymentschedule'] = PaymentSchedule.objects.filter(Q(project__id=project_obj.id))
+        # Getting the info for the Blueplint relates to a project.
+        context['blueprint'] = Blueprint.objects.filter(Q(project__id=project_obj.id))
 
         # Getting the settings for the current project, to know which card details to show.
         project_sections = ProjectSections.objects.filter(

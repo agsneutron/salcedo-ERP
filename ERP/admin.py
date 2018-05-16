@@ -81,7 +81,6 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
-
         project_id = request.GET.get('project')
 
         if project_id is None:

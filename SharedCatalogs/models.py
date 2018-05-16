@@ -127,7 +127,7 @@ class GroupingCode(models.Model):
 
 
 class ItemAccount(models.Model):
-    key = models.IntegerField(verbose_name="clave", null=False )
+    key = models.IntegerField(verbose_name="clave", null=False, unique=True)
     name = models.CharField(verbose_name="Nombre del Rubro", max_length=100, )
 
     def __str__(self):
