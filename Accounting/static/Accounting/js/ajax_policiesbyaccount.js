@@ -97,6 +97,7 @@ function searchengine(url) {
         type: 'get',
         success: function (data) {
             //console.log(data);
+
             displayResults(data);
 
         },
@@ -119,6 +120,8 @@ function displayResults(data){
     var sHtml="";
     var sTable="";
     var sScript="";
+
+
 
     $j('#divTable').html("<div></div>");
     sHtml ='<table class="table-filtros table table-striped table_s" cellspacing="0" width="100%" id="tablaResultados">'
@@ -168,7 +171,10 @@ function displayResults(data){
 
     sScript='<script id="js" type="text/javascript"  class="init">'
 	        +'$("#tablaResultados").DataTable( {'
-            + 'destroy: true,';
+            + 'paging: true,'
+            + 'retrieve: true,'
+            + 'destroy: true,'
+            + 'searching: true,';
 
     sTable ='columnDefs: ['
              +'       {'
