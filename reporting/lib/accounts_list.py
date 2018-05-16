@@ -67,9 +67,8 @@ class AccountsListFile(object):
         worksheet.write('D6', 'Estatus ', formats['blue_bg_white_font'])
         worksheet.write('E6', 'Naturaleza', formats['blue_bg_white_font'])
         worksheet.write('F6', 'Tipo', formats['blue_bg_white_font'])
-        worksheet.write('G6', 'Rubro de la Cuenta', formats['blue_bg_white_font'])
-        worksheet.write('H6', 'Código Agrupador', formats['blue_bg_white_font'])
-        worksheet.write('I6', 'Es subcuenta de', formats['blue_bg_white_font'])
+        worksheet.write('G6', 'Código Agrupador', formats['blue_bg_white_font'])
+        worksheet.write('H6', 'Es subcuenta de', formats['blue_bg_white_font'])
 
 
 
@@ -80,9 +79,8 @@ class AccountsListFile(object):
         STATUS_COL = 'D'
         NATURE_COL = 'E'
         TYPE_COL = 'F'
-        ITEM_COL = 'G'
-        GROUPING_COL = 'H'
-        SUBSIDIARY_COL = 'I'
+        GROUPING_COL = 'G'
+        SUBSIDIARY_COL = 'H'
 
 
         for account in accounts_array:
