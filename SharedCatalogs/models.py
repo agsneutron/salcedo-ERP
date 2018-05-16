@@ -177,7 +177,6 @@ class Account(models.Model):
     type_account = models.CharField(choices=TYPE_ACCOUNT_CHOICES, verbose_name='Tipo de Cuenta',
                                          null=False,max_length=1)
     # foreign
-    item = models.ForeignKey(ItemAccount, verbose_name="Rubro de la Cuenta")
     grouping_code = models.ForeignKey(GroupingCode, verbose_name="Código Agrupador SAT", )
     subsidiary_account = models.ForeignKey('self', verbose_name='Subcuenta de', null=True, blank=True)
     internal_company = models.ForeignKey('InternalCompany', verbose_name='Empresa Interna', null=True, blank=True)

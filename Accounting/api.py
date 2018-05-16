@@ -101,11 +101,10 @@ class SearchAccounts(ListView):
         grouping_code_array = get_array_or_none(request.GET.get('grouping_code_array'))
         level = request.GET.get('level')
         #item = request.GET.get('item')
-        item_account_array = get_array_or_none(request.GET.get('item_account_array'))
         internal_company = request.GET.get('internal_company')
 
         engine = AccountSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
-                                     level, item_account_array, internal_company)
+                                     level, internal_company)
 
         results = engine.search()
 
@@ -120,8 +119,6 @@ class SearchAccounts(ListView):
                 'name': account.name,
                 'status': account.status,
                 'nature_account': account.nature_account,
-                'item_id': account.item_id,
-                'item': str(account.item.name),
                 'internal_company_id': account.internal_company_id,
                 'internal_company': str(account.internal_company),
                 'grouping_code_id': account.grouping_code_id,
@@ -145,11 +142,10 @@ class ExportAccounts(ListView):
         grouping_code_array = get_array_or_none(request.GET.get('grouping_code_array'))
         level = request.GET.get('level')
         #item = request.GET.get('item')
-        item_account_array = get_array_or_none(request.GET.get('item_account_array'))
         internal_company = request.GET.get('internal_company')
 
         engine = AccountSearchEngine(number, name, subsidiary_account_array, nature_account_array, grouping_code_array,
-                                     level, item_account_array, internal_company)
+                                     level, internal_company)
 
         results = engine.search()
 
@@ -166,8 +162,6 @@ class ExportAccounts(ListView):
                 'status_id': account.status,
                 'nature_account': account.get_nature_account_display(),
                 'nature_account_id': account.nature_account,
-                'item_id': account.item_id,
-                'item': str(account.item.name),
                 'internal_company_id': account.internal_company_id,
                 'internal_company': str(account.internal_company),
                 'grouping_code_id': account.grouping_code_id,
