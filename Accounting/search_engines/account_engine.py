@@ -26,10 +26,10 @@ class AccountSearchEngine(object):
         q = Q()
 
         if self.number is not None:
-            q = q & Q(number=self.number)
+            q = q & Q(number__icontains=self.number.replace(" ", ""))
 
         if self.name is not None:
-            q = q & Q(name=self.name)
+            q = q & Q(name__icontains=self.name)
 
         if self.subsidiary_account_array is not None:
             q = q & Q(subsidiary_account__in=self.subsidiary_account_array)
