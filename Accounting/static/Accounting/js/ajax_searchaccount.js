@@ -22,13 +22,10 @@ function search(originButton) {
     var grouping_code_array = $j("#msGroupingCodeArray").multiselect("getChecked").map(function () {
         return this.value;
     }).get();
-    var item_account_array = $j("#msItemAccountArray").multiselect("getChecked").map(function () {
-        return this.value;
-    }).get();
+
     var account = $j("#account").val();
     var number = $j("#number").val();
     var level = $j("#level").val();
-    var rubro = $j("#rubro").val();
     var internal_company = $j("#internal_company").val();
 
     if(originButton == 'search_button'){
@@ -55,9 +52,7 @@ function search(originButton) {
     if (level.toString() != "") {
         url = url + "&level=" + level.toString();
     }
-    if (item_account_array.toString() != "") {
-        url = url + "&item_account_array=" + item_account_array.toString();
-    }
+
     /*if (rubro.toString() != "") {
         url = url + "&rubro=" + rubro.toString();
     }*/
