@@ -84,7 +84,8 @@ def SearchPolicies(request):
 def SearchTransactions(request):
     template = loader.get_template('Accounting/search_transactions.html')
     context = {'typepolicy': TypePolicy.objects.all(),
-               'internalcompany': InternalCompany.objects.all(), }
+               'internalcompany': InternalCompany.objects.all(),
+               'accounts': Account.objects.all(),}
 
     return HttpResponse(template.render(context, request))
 

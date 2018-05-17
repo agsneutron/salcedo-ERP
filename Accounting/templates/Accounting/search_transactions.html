@@ -3,6 +3,13 @@
 
 
 {% block extrahead %}{{ block.super }}
+                <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
     <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
   <script type="text/javascript" src="{% static "admin/js/core.js"%}"></script>
 <script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
@@ -42,6 +49,10 @@
     .form-inline {
     display: block;
 }
+
+        .btn, .input-group-btn .btn {
+            border: 1px solid;
+        }
              input[type=number].form-control::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -141,7 +152,7 @@
             </div>
             <div class="col-xs-3">
                 Tipo de Poliza:
-                <select class="selectpicker form-control" multiple="multiple" data-size="5"
+                <select class= "form-control" multiple="multiple" data-size="5"
                         id="msTypePolicyArray">
                     {% for obj in typepolicy %}
                         <option value={{ obj.id }}>{{ obj.name }}</option>
@@ -163,10 +174,20 @@
                 Fecha de Registro a:<input type="text" class=" vDateField form-control" id="upper_registry_date">
             </div>
             <div class="col-xs-3">
-                Número de Cuenta de:<input type="number" class="form-control" id="lower_account_number">
+                Número de Cuenta de:<select class="selectpicker form-control" id="lower_account_number" data-live-search="true">
+                    <option value="">Todas</option>
+                    {% for obj in accounts %}
+                        <option value={{ obj.number }}>{{ obj.number }} {{ obj.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-xs-3">
-                Número de Cuenta a:<input type="number" class="form-control" id="upper_account_number">
+                Número de Cuenta a:<select class="selectpicker form-control" id="upper_account_number" data-live-search="true">
+                    <option value="">Todas</option>
+                    {% for obj in accounts %}
+                        <option value={{ obj.number }}>{{ obj.number }} {{ obj.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-xs-3">
                 Debe de:<input type="number" class="form-control" id="lower_debit">
@@ -329,5 +350,21 @@
     </div>
      <div class="clearfix"></div>
     </div>
+
+
+    <script>
+        $("#lower_account_number").selectpicker({
+            style: "btn-info",
+            size: 4,
+            liveSearch: true
+        });
+        $("#upper_account_number").selectpicker({
+            style: "btn-info",
+            size: 4,
+            liveSearch: true
+        });
+
+
+</script>
 
 {% endblock %}

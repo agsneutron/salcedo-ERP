@@ -34,6 +34,10 @@
         .form-inline {
             display: block;
         }
+        .btn, .input-group-btn .btn {
+            border: 1px solid;
+        }
+
                  input[type=number].form-control::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
     -webkit-appearance: none;
@@ -115,7 +119,7 @@ only_with_balance=0&only_with_transactions=0{% endcomment %}
             </div>
             <div class="col-xs-4">
                 Cuenta de :
-                <select class="selectpicker form-control" id="lower_account_number" data-live-search="true">
+                <select class="selectpicker form-control" id="lower_account_number" data-live-search="true" style="border: solid;">
                     <option value="">Todas</option>
                     {% for obj in accounts %}
                         <option value={{ obj.number }}>{{ obj.number }} {{ obj.name }}</option>
@@ -124,7 +128,7 @@ only_with_balance=0&only_with_transactions=0{% endcomment %}
             </div>
             <div class="col-xs-4">
                 a
-                <select class="selectpicker form-control" id="upper_account_number" data-live-search="true">
+                <select class="selectpicker form-control" id="upper_account_number" data-live-search="true" style="border: solid;">
                     <option value="">Todas</option>
                     {% for obj in accounts %}
                         <option value={{ obj.number }}>{{ obj.number }} {{ obj.name }}</option>
