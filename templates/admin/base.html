@@ -631,8 +631,8 @@
 {% comment %}Ventana de errores{% endcomment %}
 <script>
     function goBack() {
-        //window.history.go(-1);
-        location.href = document.referrer;
+        window.history.back();
+        //location.href = document.referrer;
         return false;
     }
 </script>

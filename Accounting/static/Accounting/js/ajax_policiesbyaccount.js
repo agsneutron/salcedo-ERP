@@ -7,13 +7,6 @@ var $j = jQuery.noConflict();
 $j(document).on('ready', main);
 
 function main() {
-    /*$("#tablaResultados").DataTable( {
-            paging: true,
-            retrieve: true,
-            destroy: true,
-            searching: true
-    });*/
-
 
     list_policies();
 }
@@ -131,7 +124,7 @@ function displayResults(data){
 
 
     $j('#divTable').html("<div></div>");
-    sHtml ='<table class="table-filtros table table_s table-condensed table-hover" cellspacing="0" width="100%" id="tablaResultados">'
+    sHtml ='<table class="table-filtros table table-striped " cellspacing="0" width="100%" id="tablaResultados">'
             + ' <colgroup>'
                 +' <col width="15%">'
                 +' <col width="20%">'
@@ -177,12 +170,11 @@ function displayResults(data){
     sHtml +=sTable;
 
     sScript='<script id="js" type="text/javascript"  class="init">'
-	        +'$j("#tablaResultados").DataTable( {'
-            //+ 'paging: true,'
-            //+ 'retrieve: true,'
-            + 'destroy: true,';
-            //+ 'searching: true,';
-
+	        +'$("#tablaResultados").DataTable( {'
+            /*+ 'paging: true,'
+            + 'retrieve: true,'*/
+            + 'destroy: true,'
+            + 'searching: true,';
     sTable ='columnDefs: ['
              +'       {'
              +'           className: "mdl-data-table__cell--non-numeric"'
