@@ -1818,3 +1818,6 @@ input[type=checkbox], input[type=radio] {
 ul.messagelist {
     padding-left: 0px !important;
 }
+.w-150 {
+    width: 150px !important;
+}
