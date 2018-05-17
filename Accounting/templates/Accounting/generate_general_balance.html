@@ -3,6 +3,13 @@
 
 {% block extrastyle %}{{ block.super }}
 
+        <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
 
     <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/jquery.multiselect.css" %}"/>
@@ -107,10 +114,22 @@ only_with_balance=0&only_with_transactions=0{% endcomment %}
             </select>
             </div>
             <div class="col-xs-4">
-                Cuenta de :<input type="text" class="form-control" id="lower_account_number">
+                Cuenta de :
+                <select class="selectpicker form-control" id="lower_account_number" data-live-search="true">
+                    <option value="">Todas</option>
+                    {% for obj in accounts %}
+                        <option value={{ obj.number }}>{{ obj.number }} {{ obj.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-xs-4">
-                a <input type="text" class="form-control" id="upper_account_number">
+                a
+                <select class="selectpicker form-control" id="upper_account_number" data-live-search="true">
+                    <option value="">Todos</option>
+                    {% for obj in accounts %}
+                        <option value={{ obj.number }}>{{ obj.number }} {{ obj.name }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div class="col-xs-4">
                 Sólo con transacciones:<input type="checkbox" class="form-control" name="only_with_transactions"
@@ -251,5 +270,20 @@ only_with_balance=0&only_with_transactions=0{% endcomment %}
         </div>
     </div>
     <div class="clearfix"></div>
+
+    <script>
+        $("#lower_account_number").selectpicker({
+            style: "btn-info",
+            size: 4,
+            liveSearch: true
+        });
+        $("#upper_account_number").selectpicker({
+            style: "btn-info",
+            size: 4,
+            liveSearch: true
+        });
+
+
+</script>
 
 {% endblock %}

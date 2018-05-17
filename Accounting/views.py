@@ -106,14 +106,16 @@ def GenerateTrialBalance(request):
     title="Balanza"
     template = loader.get_template('Accounting/generate_trial_balance.html')
     context = {'title': str(title),
-               'internalcompany': InternalCompany.objects.all(), }
+               'internalcompany': InternalCompany.objects.all(),
+               'accounts': Account.objects.all(),}
     return HttpResponse(template.render(context, request))
 
 def GenerateGeneralBalance(request):
     title="Balanza General"
     template = loader.get_template('Accounting/generate_general_balance.html')
     context = {'title': str(title),
-               'internalcompany': InternalCompany.objects.all(), }
+               'internalcompany': InternalCompany.objects.all(),
+               'accounts': Account.objects.all(),}
     return HttpResponse(template.render(context, request))
 
 
