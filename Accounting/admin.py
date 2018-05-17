@@ -416,7 +416,7 @@ class AccountAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Cuentas", {
             'fields': (
-                'internal_company', 'number', 'name', 'status', 'nature_account', 'item', 'grouping_code',
+                'internal_company', 'number', 'name', 'status', 'nature_account', 'grouping_code',
                 'subsidiary_account')
         }),
     )
