@@ -80,6 +80,9 @@
         padding-left: 0;
         padding-right: 0;
     }
+    .campo.field-description {
+        width: 100%;
+    }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
@@ -140,11 +143,13 @@
         $('input').addClass('form-control');
         $('select').addClass('form-control');
 
-        $('.field-reference>div').removeClass('col-xs-4');
-        $('.field-reference>div').addClass('col-xs-8');
+       {% comment %} $('.field-reference>div').removeClass('col-xs-4');
+        $('.field-reference>div').addClass('col-xs-8');{% endcomment %}
 
         $('.field-description>div').removeClass('col-xs-4');
         $('.field-description>div').addClass('col-xs-12');
+
+
 
     });
 
