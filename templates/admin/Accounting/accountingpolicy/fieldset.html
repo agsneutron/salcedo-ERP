@@ -55,7 +55,7 @@
     .bootstrap-select.btn-group .dropdown-toggle .caret {
     position: absolute;
     top: 50%;
-    right: 0;
+    right: -6px;
     margin-top: -2px;
     vertical-align: middle;
 }
@@ -72,6 +72,14 @@
     word-wrap: break-word;
     white-space: normal;
 }
+    .form-group.field-description.col-xs-12 {
+        padding-left: 0;
+        padding-right: 0;
+    }
+        .form-group.field-description.col-xs-12 .col-xs-12 {
+        padding-left: 0;
+        padding-right: 0;
+    }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}
