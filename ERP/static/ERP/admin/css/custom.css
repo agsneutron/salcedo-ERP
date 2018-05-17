@@ -1806,3 +1806,15 @@ input[type=checkbox], input[type=radio] {
     line-height: normal;
     height: 20px;
 }
+.ms-collapse-nav li.panel a:after {
+    content: '\f2fb';
+}
+.ms-collapse-nav li a:after {
+    font-family: Material-Design-Iconic-Font;
+    font-size: 1.2em;
+    float: right;
+    content: '\f2fb';
+}
+ul.messagelist {
+    padding-left: 0px !important;
+}

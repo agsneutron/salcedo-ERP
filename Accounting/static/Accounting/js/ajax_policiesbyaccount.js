@@ -7,12 +7,12 @@ var $j = jQuery.noConflict();
 $j(document).on('ready', main);
 
 function main() {
-    $("#tablaResultados").DataTable( {
+   /* $("#tablaResultados").DataTable( {
             paging: true,
             retrieve: true,
             destroy: true,
             searching: true
-    });
+    });*/
 
     list_policies();
 }
@@ -175,12 +175,12 @@ function displayResults(data){
 
     sHtml +=sTable;
 
-    sScript='<script id="js" type="text/javascript"  class="init">'
-	        +'$("#tablaResultados").DataTable( {'
-            + 'paging: true,'
-            + 'retrieve: true,'
-            + 'destroy: true,'
-            + 'searching: true,';
+    sScript='<script id="" type="text/javascript"  class="">'
+	        +'jQuery.noConflict()("#tablaResultados").DataTable( {'
+            //+ 'paging: true,'
+            + 'bRetrieve: true,'
+           // + 'destroy: true,';
+            //+ 'searching: true,';
 
     sTable ='columnDefs: ['
              +'       {'
@@ -216,7 +216,9 @@ function displayResults(data){
           +'}'
           +'},'
 	      +'} );'
+
           +'</script>';
+
 
     sScript += sTable;
 
