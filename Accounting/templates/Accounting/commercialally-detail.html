@@ -45,7 +45,8 @@
                                         class="color-active">Número externo:</span> {{ obj.outdoor_number }}</span>
                                 <span href="" class="list-group-item withripple "><i
                                         class="fa fa-chevron-right color-active"></i> <span
-                                        class="color-active">Número interno:</span> {{ obj.indoor_number }}</span>
+                                        class="color-active">Número interno:</span> {% if obj.indoor_number is not None %} {{ obj.indoor_number}} {% else %} -  {% endif %}
+                                </span>
                                 <span href="" class="list-group-item withripple "><i
                                         class="fa fa-chevron-right color-active"></i> <span
                                         class="color-active">Colonia:</span> {{ obj.colony }}</span>
@@ -95,7 +96,7 @@
 
                                 <span href="" class="list-group-item withripple "><i
                                         class="fa fa-chevron-right color-active"></i> <span
-                                        class="color-active">Teléfono 2:</span> {{ obj.phone_number_2 }}
+                                        class="color-active">Teléfono 2:</span> {% if obj.phone_number_2 is not None %} {{ obj.phone_number_2}} {% else %} -  {% endif %}
                             </span>
 
 
