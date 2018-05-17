@@ -98,7 +98,7 @@ class TransactionsEngine():
             query &= Q(account__number__gte=self.lower_account_number)
 
         if self.upper_account_number is not None and self.account_array is None:
-            query &= Q(account__number__lte=self.lower_account_number)
+            query &= Q(account__number__lte=self.upper_account_number)
 
         if self.lower_debit is not None:
             query &= Q(debit__gte=self.lower_debit)
