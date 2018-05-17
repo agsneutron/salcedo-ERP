@@ -7,10 +7,13 @@ var $j = jQuery.noConflict();
 $j(document).on('ready', main);
 
 function main() {
-    //$('#tablaResultados').dataTable().fnDestroy();
-    $('#tablaResultados').dataTable({
-            "destroy": true
-        }).fnDestroy();
+    $("#tablaResultados").DataTable( {
+            paging: true,
+            retrieve: true,
+            destroy: true,
+            searching: true
+    });
+
     list_policies();
 }
 
