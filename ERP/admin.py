@@ -921,6 +921,15 @@ class ContractConceptsAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(
                 "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
 
+    def response_delete(self, request, obj_display, obj_id):
+        contract_id = request.contract_id
+
+        return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(contract_id))
+
+    def delete_model(self, request, obj):
+        request.contract_id = obj.contract_id
+        return super(ContractConceptsAdmin, self).delete_model(request,obj)
+
 @admin.register(Propietario)
 class OwnerModelAdmin(admin.ModelAdmin):
     form = OwnerForm
