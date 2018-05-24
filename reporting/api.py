@@ -773,9 +773,11 @@ class GetBudgetByContractorReport():
 
 
 def createCSVResponseFromQueryset(queryset, columns, name="results.csv"):
-    response = HttpResponse('', 'content_type=text/csv')
+    response = HttpResponse('', 'Content-type: text/csv; charset=UTF-8')
     response['Content-Disposition'] = 'attachment; filename="' + name + '"'
+    response['Content-Encoding'] = 'UTF-8'
     writer = csv.writer(response)
+
 
     headers = []
 
