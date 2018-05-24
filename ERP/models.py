@@ -379,6 +379,10 @@ class Contratista(models.Model):
         if can_save:
             self.last_edit_date = now()
             Logs.log("Saving new Contratista", "Te")
+
+
+
+
             super(Contratista, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
