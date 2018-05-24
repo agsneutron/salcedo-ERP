@@ -45,19 +45,19 @@
                     </div>
 
                     <div class="col-xs-3">
-                         <span href="" class="list-group-item withripple "><span class="color-active">Banco:</span><br> {{ contratista.bank }}</span>
+                         <span href="" class="list-group-item withripple "><span class="color-active">Banco:</span><br> {% if contratista.bank is not None %}{{ contratista.bank }} {% else  %} - {% endif %}</span>
                     </div>
 
                     <div class="col-xs-3">
-                         <span href="" class="list-group-item withripple "><span class="color-active">Nombre de la Persona:</span><br> {{ contratista.bank_account_name }}</span>
+                         <span href="" class="list-group-item withripple "><span class="color-active">Nombre de la Persona:</span><br> {% if contratista.bank_account_name is not None %}{{ contratista.bank_account_name }} {% else  %} - {% endif %}</span>
                     </div>
 
                      <div class="col-xs-3">
-                         <span href="" class="list-group-item withripple "><span class="color-active">Cuenta Bancaria:</span><br> {{ contratista.bank_account }}</span>
+                         <span href="" class="list-group-item withripple "><span class="color-active">Cuenta Bancaria:</span><br> {% if contratista.bank_account is not None %}{{ contratista.bank_account }} {% else  %} - {% endif %}</span>
                     </div>
 
                     <div class="col-xs-3">
-                         <span href="" class="list-group-item withripple "><span class="color-active">CLABE Interbancaria:</span><br> {{ contratista.CLABE }}</span>
+                         <span href="" class="list-group-item withripple "><span class="color-active">CLABE Interbancaria:</span><br> {% if contratista.CLABE is not None %}{{ contratista.CLABE }} {% else  %} - {% endif %}</span>
                     </div>
 
                 </div>
