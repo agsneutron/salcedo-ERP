@@ -2177,7 +2177,7 @@ class EmployeeRequisitionAdmin(admin.ModelAdmin):
         ("Requisición", {
             'fields': (
                 'direction', 'subdirection', 'area', 'department', 'description', 'vacancy_number',
-                'minimum_requirements', 'characteristics',)
+                'minimum_requirements', 'characteristics','reason',)
         }),
     )
 

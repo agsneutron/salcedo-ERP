@@ -880,6 +880,8 @@ class EmployeeRequisition(models.Model):
     characteristics = tinymce_models.HTMLField(verbose_name='Características del Puesto', null=True, blank=True,
                                                max_length=4096)
 
+    reason = tinymce_models.HTMLField(verbose_name='Razón', null=True, blank=True,
+                                               max_length=4096)
 
     user = models.ForeignKey(User, verbose_name="Solicitado por:", null=True, blank=True)
 
