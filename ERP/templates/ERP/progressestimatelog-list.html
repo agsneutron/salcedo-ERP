@@ -14,8 +14,9 @@
                         <tr>
                             <th>Nombre Proyecto</th>
                             <th>Notas</th>
-                            <th>Fecha</th>
+                            <th>Fecha de Creación</th>
                             <th>Fecha de Última Edición</th>
+                            <th>Estatus</th>
                             <th class="no-sorting">Ver</th>
                             <th class="no-sorting">Editar</th>
                         </tr>
@@ -29,6 +30,7 @@
                                 <td><span>{{ bitacora.description }}</span></td>
                                 <td><span>{{ bitacora.date }}</span></td>
                                 <td><span>{{ bitacora.last_edit_date }}</span></td>
+                                <td><span>{{ bitacora.get_status_display }}</span></td>
 
                                 {% comment %} <td style="width: 7%"><a href="{{ bitacora.id}}"
                                                        class="btn btn-raised btn-default btn-xs"><i

@@ -6,6 +6,14 @@
     {{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/changelists.css" %}"/>
      <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+    <style>
+    .field-balanced_accounts {
+    text-align: center;
+}
+    .column-balanced_accounts{
+        width: 10%;
+    }
+    </style>
 {% comment %}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/css/select2.min.css" rel="stylesheet"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
@@ -89,12 +97,13 @@
                 <div class="">
                     <div class="card-header">
                         <div class="item-left">
-                            <h3 class="card-title text">{{ cl.opts.verbose_name|capfirst }}</h3>
+                            <h3 class="section-title text">{{ cl.opts.verbose_name|capfirst }}</h3>
                         </div>
                         {% block object-tools %}
                             {% if has_add_permission %}
                                 <ul class="object-tools">
                                     {% block object-tools-items %}
+
 
                                         {% comment %} <li>
                             {% url cl.opts|admin_urlname:'add' as add_url %}
@@ -113,6 +122,7 @@
                                 </ul>
                             {% endif %}
                         {% endblock %}
+
                         {% if cl.formset.errors %}
                             <p class="errornote">
                                 {% if cl.formset.total_error_count == 1 %}
@@ -283,5 +293,7 @@
                 allowClear: true
             });
         });{% endcomment %}
+     $(".field-account>div>.related-widget-wrapper").addClass("w-150");
     </script>
+
 {% endblock %}

@@ -336,7 +336,7 @@ class Contratista(models.Model):
     employer_registration_number = models.CharField(verbose_name="Número de Registro Patronal", max_length=24,
                                                     default="", null=True, blank=True)
     infonavit = models.CharField(verbose_name="Infonavit", max_length=24, default="", null=True, blank=True)
-    services = models.CharField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
+    services = models.TextField(verbose_name="Servicios que presta", max_length=4096, default="", null=True, blank=True)
 
     FISICA = "f"
     MORAL = "m"
@@ -379,6 +379,10 @@ class Contratista(models.Model):
         if can_save:
             self.last_edit_date = now()
             Logs.log("Saving new Contratista", "Te")
+
+
+
+
             super(Contratista, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
@@ -529,17 +533,17 @@ class ContratoContratista(models.Model):
                                      editable=True)
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino = models.DateField(verbose_name='Fecha de Termino', editable=True)
-    lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=False,
+    lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=True,
                                        editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
                                          default=0, max_digits=20)
     porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,
                                          null=False, default=0, max_digits=5)
-    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=False,
+    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True,
                                      editable=True)
     no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,
                                      editable=True)
-    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=False,
+    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=True,
                                        editable=True)
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
@@ -753,6 +757,16 @@ class Project(models.Model):
     portada = models.FileField(blank=True, null=True, upload_to=cover_file_document_destination,
                                verbose_name="Foto de Portada")
 
+    # Roles on projects:
+    general_director = models.ForeignKey(User, verbose_name="Director General", null=False, related_name='+')
+    construction_director = models.ForeignKey(User, verbose_name="Director de Construcción", null=False,
+                                              related_name='+')
+    business_president = models.ForeignKey(User, verbose_name="Presidente Empresarial", null=False, related_name='+')
+    business_vice_president = models.ForeignKey(User, verbose_name="Vicepresidente Empresarial", null=False,
+                                                related_name='+')
+    administration_head = models.ForeignKey(User, verbose_name="Jefe de Administración", null=False, related_name='+')
+    # Roles on projects:
+
     ubicacion_calle = models.CharField(verbose_name="Colonia", max_length=200, null=False, blank=False)
     ubicacion_numero = models.CharField(verbose_name="numero", max_length=8, null=False, blank=False)
     ubicacion_colonia = models.CharField(verbose_name="numero", max_length=200, null=False, blank=False)
@@ -920,6 +934,13 @@ class Project(models.Model):
 
     # Many to many to create the project / section relation.
     sections = models.ManyToManyField('Section', through='ProjectSections', name='Secciones')
+
+
+
+
+
+
+
 
     class Meta:
         verbose_name_plural = 'Proyectos'

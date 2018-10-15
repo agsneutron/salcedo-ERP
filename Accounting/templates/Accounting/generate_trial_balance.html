@@ -1,0 +1,283 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+{% block extrastyle %}{{ block.super }}
+
+            <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/jquery.multiselect.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/multi-custom.css" %}"/>
+    <link rel="stylesheet" type="text/css"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/smoothness/jquery-ui.css"/>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1/jquery-ui.js"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/jquery.multiselect.js" %}"></script>
+    <script type="text/javascript" src="{% static "Accounting/js/ajax_generatetrialbalance.js" %}"></script>
+    <style>
+
+        table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after, table.dataTable thead .sorting_asc_disabled:after, table.dataTable thead .sorting_desc_disabled:after {
+            position: absolute;
+            bottom: 8px;
+            right: 2px !important;
+            display: block;
+            font-family: 'Glyphicons Halflings';
+            opacity: 0.7;
+        }
+
+        .form-inline {
+            display: block;
+        }
+        .btn, .input-group-btn .btn {
+            border: 1px solid;
+        }
+
+                 input[type=number].form-control::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+     margin: 0;
+}
+    </style>
+
+    <script type="text/javascript">
+        var $j = jQuery.noConflict();
+        $j(function () {
+
+            $j('.ui-widget-content').css('width', 'auto');
+        });
+    </script>
+{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+
+{% block content %}
+
+    {% comment %}
+lower_account_number = Entero
+upper_account_number = Entero
+fiscal_period_year = Entero
+fiscal_period_month = Entero
+title = String
+only_with_transactions = [ 1(True) or 0(False)]{% endcomment %}
+    {% include "admin/Accounting/accounting-home.html" %}
+    <div class="col-xs-9">
+        <div class="">
+            <div class="col-xs-12">
+
+                <div class="">
+                    <h3 class="section-title">Balanza de Comprobación</h3>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12">
+            <div class="col-xs-4">
+                Empresa:
+                <select class="selectpicker form-control" id="internal_company">
+                    {% for obj in internalcompany %}
+                        <option value={{ obj.id }}>{{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-4">
+                Periodo Fiscal (año):<input type="number" class="form-control" id="fiscal_period_year">
+            </div>
+
+            <div class="col-xs-4">
+                Periodo Fiscal (mes):<select class="form-control" id="fiscal_period_month">
+                <option value="1" selected>Enero</option>
+
+                  <option value="2">Febrero</option>
+
+                  <option value="3">Marzo</option>
+
+                  <option value="4">Abril</option>
+
+                  <option value="5">Mayo</option>
+
+                  <option value="6">Junio</option>
+
+                  <option value="7">Julio</option>
+
+                  <option value="8">Agosto</option>
+
+                  <option value="9">Septiembre</option>
+
+                  <option value="10">Octubre</option>
+
+                  <option value="11">Noviembre</option>
+
+                  <option value="12">Diciembre</option>
+
+                </select>
+            </div>
+            <div class="col-xs-4">
+                Sólo con transacciones:<input type="checkbox" class="form-control" name ="only_with_transactions" id="only_with_transactions">
+            </div>
+            <div class="col-xs-4">
+                Cuenta de :<select class="selectpicker form-control" id="lower_account_number" data-live-search="true">
+                    <option value="">Todas</option>
+                    {% for obj in accounts %}
+                        <option value={{ obj.number }}>{{ obj.number }} {{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-4">
+                a <select class="selectpicker form-control" id="upper_account_number" data-live-search="true">
+                    <option value="">Todas</option>
+                    {% for obj in accounts %}
+                        <option value={{ obj.number }}>{{ obj.number }} {{ obj.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-xs-4">
+                Título:<input type="text" class="form-control" id="title">
+            </div>
+
+
+            <div class="col-xs-3">
+                &nbsp;
+            </div>
+            <div class="clearfix"></div>
+            <hr>
+            <div class="col-xs-3 col-xs-offset-4">
+                <button type="button" id="generatetrialbalance" class="btn btn-raised btn-primary btn-block">Generar</button>
+            </div>
+        </div>
+
+        <div class="col-xs-12" style="margin-bottom: 30px">
+            <div class="table-responsive" id="divTable" style="padding: 0px 15px">
+                {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
+                           id="tablaResultados">
+
+                        <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Número</th>
+                            <th>Nivel</th>
+                            <th>Rubro</th>
+                            <th>Subcuenta</th>
+                            <th>Naturaleza de Cuenta</th>
+                            <th>Código Agrupador SAT</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+
+                        </tbody>
+                    </table>{% endcomment %}
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    <script>
+        $("#lower_account_number").selectpicker({
+            style: "btn-info",
+            size: 4,
+            liveSearch: true
+        });
+        $("#upper_account_number").selectpicker({
+            style: "btn-info",
+            size: 4,
+            liveSearch: true
+        });
+
+
+</script>
+
+{% endblock %}

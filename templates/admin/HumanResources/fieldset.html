@@ -17,11 +17,16 @@
         height: 65px;
     }
 
+     .field-file .col-xs-4 {
+        height: 100%;
+    }
     .col-xs-4 br {
         display: none !important;
 
     }
-
+.col-xs-4 .file-upload br {
+    display: block !important;
+}
     .datetimeshortcuts {
 
         top: -32px !important;
@@ -67,6 +72,7 @@
     .bootstrap-select.btn-group .dropdown-menu {
     height: 200px !important;
 }
+
 </style>
 <fieldset class=" {{ fieldset.classes }}">
     {% comment %} {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}{% endcomment %}

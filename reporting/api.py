@@ -2,6 +2,7 @@
 
 from __future__ import unicode_literals
 
+import csv
 from decimal import Decimal
 from django.db.models import F
 from django.db.models import Q, Count, Sum
@@ -9,12 +10,14 @@ from django.views.generic import View
 from django.db.models.functions import TruncMonth
 
 from ERP.models import LineItem, Concept_Input, ProgressEstimate, PaymentSchedule, Project, Estimate, \
-    ContratoContratista, Contact,Contratista
+    ContratoContratista, Contact, Contratista
 import os, sys
+
 sys.setdefaultencoding('utf-8')
 from xlsxwriter.workbook import Workbook
 
 import datetime
+
 try:
     import cStringIO as StringIO
 except ImportError:
@@ -57,7 +60,7 @@ class ReportingUtilities():
         elif concept_input.line_item.parent_line_item is not None:
             parents_array = [parent_id]
             result = ReportingUtilities.get_parent_from_array(concept_input.line_item,
-                                                            parents_array)
+                                                              parents_array)
             if result is not None:
                 return True
 
@@ -80,8 +83,6 @@ class ReportingUtilities():
 
         return sub_line_items_array
 
-
-
     @staticmethod
     def get_first_two_line_item_levels(project_id):
         top_line_items = LineItem.objects.filter(Q(project_id=project_id) & Q(parent_line_item=None))
@@ -98,16 +99,13 @@ class ReportingUtilities():
         return second_level_array
 
 
-
 class FinancialHistoricalProgressReport(View):
-
-
     @staticmethod
     def get_report(project_id, selected_line_items):
 
         # Final structure to response.
         structured_response = {
-            "line_items" : []
+            "line_items": []
         }
 
         # Defining a dictionary to be populated by the selected line item info, including the estimated amounts.
@@ -134,15 +132,16 @@ class FinancialHistoricalProgressReport(View):
             estimate_belongs_to = ReportingUtilities.get_parent_from_array(
                 estimate.contract.line_item, selected_line_items)
 
-
             # If the estimate belongs to one of the selected line items.
             if estimate_belongs_to is not None and len(progress_estimate_set) > 0:
                 current_estimate = selected_line_items_dictionary[str(estimate_belongs_to)]['total_estimated']
                 # Assigning th values.
-                selected_line_items_dictionary[str(estimate_belongs_to)]['total_estimated'] = float(current_estimate) + float(
+                selected_line_items_dictionary[str(estimate_belongs_to)]['total_estimated'] = float(
+                    current_estimate) + float(
                     progress_estimate_set[0]['total_estimated'])
 
-                selected_line_items_dictionary[str(estimate_belongs_to)]['total_programmed'] = float(estimate.contract.monto_contrato)
+                selected_line_items_dictionary[str(estimate_belongs_to)]['total_programmed'] = float(
+                    estimate.contract.monto_contrato)
 
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_pending'] = float(
                     estimate.contract.monto_contrato) - selected_line_items_dictionary[str(estimate_belongs_to)][
@@ -180,7 +179,8 @@ class PhysicalFinancialAdvanceReport(View):
     def get_report(project_id, selected_line_items_array, type='C'):
         structured_response = {}
 
-        structured_response['physical_financial_advance'] = PhysicalFinancialAdvanceReport.get_physical_financial_advance(project_id,
+        structured_response[
+            'physical_financial_advance'] = PhysicalFinancialAdvanceReport.get_physical_financial_advance(project_id,
                                                                                                           selected_line_items_array,
                                                                                                           type)
 
@@ -207,7 +207,6 @@ class PhysicalFinancialAdvanceReport(View):
             for concept in concept_input_set:
                 concepts_amount += (concept.quantity * concept.unit_price)
 
-
             selected_line_items_dictionary[str(item)] = {
                 'name': current_line_item.description,
                 'line_item_key': current_line_item.key,
@@ -230,20 +229,18 @@ class PhysicalFinancialAdvanceReport(View):
             estimate_belongs_to = ReportingUtilities.get_parent_from_array(
                 estimate.contract.line_item, selected_line_items)
 
-
             # Getting all the progresses for the physical report which means it doesn't matter if the estimate has
             # been paid or not
-            physical_progress_estimate_set = ProgressEstimate.objects.filter(estimate__id=estimate.id).values('estimate__id') \
+            physical_progress_estimate_set = ProgressEstimate.objects.filter(estimate__id=estimate.id).values(
+                'estimate__id') \
                 .annotate(Count('estimate__id'), physical_advance_amount=Sum('amount'),
                           contracted_amount=Sum('estimate__contract__monto_contrato'))
 
             # Getting all the progresses for the financial report: paid progress estimates.
-            financial_progress_estimate_set = ProgressEstimate.objects\
+            financial_progress_estimate_set = ProgressEstimate.objects \
                 .filter(Q(estimate__id=estimate.id) & Q(payment_status=ProgressEstimate.PAID)) \
                 .values('estimate__id') \
                 .annotate(Count('estimate__id'), total_financial=Sum('amount'))
-
-
 
             # If the estimate belongs to one of the selected line items.
             if estimate_belongs_to is not None and len(physical_progress_estimate_set) > 0:
@@ -251,11 +248,12 @@ class PhysicalFinancialAdvanceReport(View):
                 physical_advance = selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance']
                 financial_advance = selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance']
 
-
                 # With taxes.
                 contracted_tax = selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted_tax']
-                physical_advance_tax = selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance_tax']
-                financial_advance_tax = selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance_tax']
+                physical_advance_tax = selected_line_items_dictionary[str(estimate_belongs_to)][
+                    'total_physical_advance_tax']
+                financial_advance_tax = selected_line_items_dictionary[str(estimate_belongs_to)][
+                    'total_financial_advance_tax']
 
                 # Getting the retrieved amounts.
                 if len(physical_progress_estimate_set) > 0:
@@ -263,12 +261,10 @@ class PhysicalFinancialAdvanceReport(View):
                 else:
                     extra_contracted = 0
 
-
                 if len(physical_progress_estimate_set) > 0:
                     extra_physical_amount = float(physical_progress_estimate_set[0]['physical_advance_amount'])
                 else:
                     extra_physical_amount = 0
-
 
                 if len(financial_progress_estimate_set) > 0:
                     extra_financial_amount = float(financial_progress_estimate_set[0]['total_financial'])
@@ -277,20 +273,22 @@ class PhysicalFinancialAdvanceReport(View):
 
                 # Contracted Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted'] = float(contracted) \
-                                                                                              + extra_contracted
+                                                                                               + extra_contracted
                 # Physical Advance Amount.
-                selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance'] = float(physical_advance) \
-                                                                                               + extra_physical_amount
+                selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance'] = float(
+                    physical_advance) \
+                                                                                                     + extra_physical_amount
                 # Financial Advance Amount.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance'] = float(
                     financial_advance) + extra_financial_amount
 
-                #------ Amounts with taxes included. ------
+                # ------ Amounts with taxes included. ------
                 estimate_tax = float(estimate.contract.porcentaje_iva) / 100
 
                 # Contracted Amount with taxes.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_contracted_tax'] = float(contracted_tax) \
-                                      + (extra_contracted * estimate_tax)
+                                                                                                   + (
+                                                                                                       extra_contracted * estimate_tax)
                 # Physical Advance Amount with taxes.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_physical_advance_tax'] = float(
                     physical_advance_tax) + (extra_physical_amount * estimate_tax)
@@ -298,7 +296,6 @@ class PhysicalFinancialAdvanceReport(View):
                 # Financial Advance Amount with taxes.
                 selected_line_items_dictionary[str(estimate_belongs_to)]['total_financial_advance_tax'] = float(
                     financial_advance_tax) + (extra_financial_amount * estimate_tax)
-
 
         # Getting the top line items for the project
         top_line_items = LineItem.objects.filter(Q(project__id=project_id) & Q(parent_line_item=None))
@@ -328,7 +325,6 @@ class PhysicalFinancialAdvanceReport(View):
         schedule_years = PaymentSchedule.objects.filter(project_id=project_id).values('year').annotate(Count('year')) \
             .order_by('year')
 
-
         # Years JSON.
 
         accumulated_paid_estimate = 0
@@ -351,8 +347,8 @@ class PhysicalFinancialAdvanceReport(View):
                 # Obtaining all the estimates for the current month and year.
                 progress_estimate_set = ProgressEstimate.objects.filter(Q(estimate__contract__project__id=project_id)
                                                                         & Q(estimate__period__month=record.month)
-                                                                        & Q(estimate__period__year=temp_year)).values('estimate__id').annotate(Count('estimate__id'), total=Sum('amount'))
-
+                                                                        & Q(estimate__period__year=temp_year)).values(
+                    'estimate__id').annotate(Count('estimate__id'), total=Sum('amount'))
 
                 paid_progress_estimate_set = progress_estimate_set.filter(Q(payment_status='P'))
 
@@ -491,17 +487,17 @@ class EstimatesReport():
         if estimate_id is None:
             estimate_set = Estimate.objects.filter(contract__project__id=project_id)
         else:
-            estimate_set = Estimate.objects.filter(Q(contract__project__id=project_id)&Q(id=estimate_id))
+            estimate_set = Estimate.objects.filter(Q(contract__project__id=project_id) & Q(id=estimate_id))
 
         for estimate in estimate_set:
             print "Is:" + str(estimate.id)
             concepts_array = []
             contract_obj = ContratoContratista.objects.get(pk=estimate.contract.id)
-            contactor = Contact.objects.filter(contractor_id=estimate.contract.contratista_id)
+            contractor = Contact.objects.filter(contractor_id=estimate.contract.contratista_id)
             contract_name = "Sin contacto"
-            if contactor:
+            if len(contractor) > 0:
                 contact = Contact.objects.get(contractor_id=estimate.contract.contratista_id)
-                if contact:
+                if contact is not None:
                     contract_name = contact.name
 
             for concept in contract_obj.concepts.all():
@@ -512,10 +508,15 @@ class EstimatesReport():
 
             estimate_json = {
                 'contractor_name': estimate.contract.contratista.nombreContratista,
-                'contract_name': contract_name ,
+                'contract_name': contract_name,
                 'contract_amount_with_tax': float(estimate.contract.monto_contrato) * 1.16,
                 'concepts': concepts_array,
                 'project': estimate.contract.project.nombreProyecto,
+                'general_director': estimate.contract.project.general_director.get_full_name(),
+                'construction_director': estimate.contract.project.construction_director.get_full_name(),
+                'business_president': estimate.contract.project.business_president.get_full_name(),
+                'business_vice_president': estimate.contract.project.business_vice_president.get_full_name(),
+                'administration_head': estimate.contract.project.administration_head.get_full_name(),
                 'line_item': estimate.contract.line_item.description,
                 'start_date': str(estimate.start_date.strftime('%m/%d/%Y')),
                 'end_date': str(estimate.end_date.strftime('%m/%d/%Y')),
@@ -524,9 +525,9 @@ class EstimatesReport():
                 'total_financial_estimate_amount': 0,
                 'financial_advance': {
                     'advance_payment': float(estimate.advance_payment_amount),
-                    'progress_estimate':[]
+                    'progress_estimate': []
                 },
-                'physical_advance':{
+                'physical_advance': {
                     'progress_estimate': []
                 }
 
@@ -539,15 +540,16 @@ class EstimatesReport():
                 progress_estimate_json = {
                     'progress_estimate_amount': float(progress_estimate.amount),
                     'progress_estimate_key': progress_estimate.key,
-                    'percentage': round(float(progress_estimate.amount) * 100 / estimate_json['contract_amount_with_tax'], 2)
+                    'percentage': round(
+                        float(progress_estimate.amount) * 100 / estimate_json['contract_amount_with_tax'], 2)
                 }
                 estimate_json['physical_advance']['progress_estimate'].append(progress_estimate_json)
                 # Adding to the general amount
                 estimate_json['total_physical_estimate_amount'] += float(progress_estimate.amount)
 
-
             # Financial Advance:
-            not_paid_progress_estimate_set = ProgressEstimate.objects.filter(Q(estimate__id=estimate.id)&Q(payment_status=ProgressEstimate.PAID))
+            not_paid_progress_estimate_set = ProgressEstimate.objects.filter(
+                Q(estimate__id=estimate.id) & Q(payment_status=ProgressEstimate.PAID))
 
             # Physical Adavance:
             for progress_estimate in not_paid_progress_estimate_set:
@@ -561,10 +563,7 @@ class EstimatesReport():
 
             response.append(estimate_json)
 
-
-
         return response
-
 
 
 class EstimateReportForContractors():
@@ -580,7 +579,8 @@ class EstimateReportForContractors():
         response['project_end_date'] = str(project_obj.fecha_final)
 
         # Getting all the contracts in a project grouped by contractor.
-        contracts_set = ContratoContratista.objects.filter(project_id=project_id).values('contratista_id').annotate(Count('contratista_id'))
+        contracts_set = ContratoContratista.objects.filter(project_id=project_id).values('contratista_id').annotate(
+            Count('contratista_id'))
 
         for contract in contracts_set:
             contractor_id = contract['contratista_id']
@@ -593,7 +593,8 @@ class EstimateReportForContractors():
             response['data'].append(contractor_json)
 
             # Getting all the estimates for a contractor in a .
-            estimates_set = Estimate.objects.filter(Q(contract__contratista__id=contractor_obj.id)&Q(contract__project_id=project_id))
+            estimates_set = Estimate.objects.filter(
+                Q(contract__contratista__id=contractor_obj.id) & Q(contract__project_id=project_id))
             for estimate in estimates_set:
                 estimate_json = {
                     'estimate_start_date': str(estimate.start_date),
@@ -607,7 +608,7 @@ class EstimateReportForContractors():
                 }
                 contractor_json['estimates'].append(estimate_json)
 
-                progress_estimate_set = ProgressEstimate.objects.filter(estimate__id = estimate.id)
+                progress_estimate_set = ProgressEstimate.objects.filter(estimate__id=estimate.id)
                 for progress_estimate in progress_estimate_set:
                     pe_json = {
                         'key': progress_estimate.key,
@@ -617,10 +618,8 @@ class EstimateReportForContractors():
 
                     estimate_json['progress_estimates'].append(pe_json)
 
-
-
-
         return response
+
 
 class EstimateReportBySingleContractor():
     @staticmethod
@@ -635,7 +634,8 @@ class EstimateReportBySingleContractor():
         response['project_end_date'] = str(project_obj.fecha_final)
 
         # Getting all the contracts in a project grouped by contractor.
-        contracts_set = ContratoContratista.objects.filter(Q(project_id=project_id)&Q(contratista__id=contractor_id)).values('contratista_id').annotate(
+        contracts_set = ContratoContratista.objects.filter(
+            Q(project_id=project_id) & Q(contratista__id=contractor_id)).values('contratista_id').annotate(
             Count('contratista_id'))
 
         for contract in contracts_set:
@@ -656,11 +656,11 @@ class EstimateReportBySingleContractor():
                 concepts_set = estimate.contract.concepts.all()
                 for concept in concepts_set:
                     concepts_array.append({
-                        'concept_key':concept.key,
-                        'concept_description':concept.description,
-                        'concept_price':float(concept.unit_price),
-                        'concept_quantity':float(concept.quantity),
-                        'concept_unit':concept.unit.name,
+                        'concept_key': concept.key,
+                        'concept_description': concept.description,
+                        'concept_price': float(concept.unit_price),
+                        'concept_quantity': float(concept.quantity),
+                        'concept_unit': concept.unit.name,
                     })
 
                 estimate_json = {
@@ -690,7 +690,6 @@ class EstimateReportBySingleContractor():
         return response
 
 
-
 class GetBudgetByContractorReport():
     @staticmethod
     def get_report(project_id, contractor_id):
@@ -718,7 +717,8 @@ class GetBudgetByContractorReport():
 
             # Getting all the estimates for a contractor in a .
             estimates_set = Estimate.objects.filter(
-                Q(contract__contratista__id=contractor_id) & Q(contract__project_id=project_id)&Q(contract_id=contract.id))
+                Q(contract__contratista__id=contractor_id) & Q(contract__project_id=project_id) & Q(
+                    contract_id=contract.id))
             for estimate in estimates_set:
                 concepts_array = []
                 concepts_set = estimate.contract.concepts.all()
@@ -751,7 +751,6 @@ class GetBudgetByContractorReport():
                 if estimate.advance_payment_status == Estimate.PAID:
                     estimate_json['estimate_financial_advance'] += float(estimate.advance_payment_amount)
 
-
                 progress_estimate_set = ProgressEstimate.objects.filter(estimate__id=estimate.id)
                 for progress_estimate in progress_estimate_set:
                     pe_json = {
@@ -769,6 +768,32 @@ class GetBudgetByContractorReport():
                     # Adding to the physical advance.
                     estimate_json['estimate_physical_advance'] += float(progress_estimate.amount)
 
-
                 contractor_json['estimates'].append(estimate_json)
         return response
+
+
+def createCSVResponseFromQueryset(queryset, columns, name="results.csv"):
+    response = HttpResponse('', 'Content-type: text/csv; charset=UTF-8')
+    response['Content-Disposition'] = 'attachment; filename="' + name + '"'
+    response['Content-Encoding'] = 'UTF-8'
+    writer = csv.writer(response)
+
+
+    headers = []
+
+    for column in columns:
+        headers.append(queryset.model._meta.get_field(column).verbose_name)
+
+    writer.writerow(headers)
+
+    for record in queryset:
+        values = []
+        for column in columns:
+            method_name = 'get_' + column + '_display';
+            try:
+                values.append(getattr(record, method_name)())
+            except AttributeError:
+                values.append(getattr(record, column))
+        writer.writerow(values)
+
+    return response

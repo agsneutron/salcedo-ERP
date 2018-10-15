@@ -10,6 +10,8 @@ from django.db.models import Count, Sum
 from django.http import Http404
 from django.shortcuts import redirect
 
+from django import forms
+
 from DataUpload.helper import DBObject, ErrorDataUpload
 from ERP import views
 from ERP.models import *
@@ -79,7 +81,6 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
 
     def get_form(self, request, obj=None, **kwargs):
         ModelFormE = super(ProgressEstimateLogAdmin, self).get_form(request, obj, **kwargs)
-
         project_id = request.GET.get('project')
 
         if project_id is None:
@@ -759,6 +760,9 @@ class ContactModelAdmin(admin.ModelAdmin):
         else:
             return super(ContactModelAdmin, self).response_change(request, obj)
 
+    def response_add(self, request, obj, post_url_continue="../%s/"):
+        return HttpResponseRedirect("/admin/ERP/contratista/" + str(obj.contractor.id))
+
 
 @admin.register(Contratista)
 class ContractorModelAdmin(admin.ModelAdmin):
@@ -768,7 +772,7 @@ class ContractorModelAdmin(admin.ModelAdmin):
         fields = (
             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
             'calle',
-            'numero', 'colonia', 'employer_registration_number', 'infonavit', 'services', 'tax_person_type', 'version',
+            'numero', 'colonia', 'employer_registration_number', 'infonavit', 'tax_person_type', 'services', 'version',
             'bank', 'bank_account_name', 'bank_account') #'CLABE'
         return fields
 
@@ -917,6 +921,14 @@ class ContractConceptsAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(
                 "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
 
+    def response_delete(self, request, obj_display, obj_id):
+        contract_id = request.contract_id
+
+        return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(contract_id))
+
+    def delete_model(self, request, obj):
+        request.contract_id = obj.contract_id
+        return super(ContractConceptsAdmin, self).delete_model(request,obj)
 
 @admin.register(Propietario)
 class OwnerModelAdmin(admin.ModelAdmin):
@@ -971,6 +983,10 @@ class OwnerModelAdmin(admin.ModelAdmin):
             return HttpResponseRedirect("/admin/ERP/empresa/" + str(obj.empresa.id))
         else:
             return super(OwnerModelAdmin, self).response_add(request, obj, post_url_continue)
+
+    def response_delete(self, request, obj_display, obj_id):
+        empresa_id = request.GET.get('empresa_id')
+        return HttpResponseRedirect("/admin/ERP/empresa/" + str(empresa_id))
 
 
 @admin.register(LineItem)
@@ -1191,8 +1207,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
-                    if inner_section['inner_section_status'] == 0 and inner_section[
-                        'inner_section_short_name'] in sections_dictionary:
+                    if inner_section['inner_section_status'] == 0 and inner_section['inner_section_short_name'] in sections_dictionary:
                         fields_to_exclude += sections_dictionary[inner_section['inner_section_short_name']]
 
             if len(fields_to_exclude) > 0:

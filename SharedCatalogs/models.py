@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.forms.models import model_to_dict
 
 # Create your models here.
 from django.forms import model_to_dict
@@ -98,15 +99,15 @@ class Bank(models.Model):
 
 
 class GroupingCode(models.Model):
-    level = models.IntegerField(verbose_name="Nivel", null=True)
+    level = models.IntegerField(verbose_name="Nivel", null=True, default=0)
     grouping_code = models.DecimalField(verbose_name="Código Agrupador", max_digits=20, decimal_places=2, )
     account_name = models.CharField(verbose_name="Nombre de la Cuenta y/o subcuenta", max_length=500, )
 
     def __str__(self):
-        return str(self.grouping_code) + ": " + self.account_name
+        return str(self.grouping_code) + " " + self.account_name
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return str(self.grouping_code) + ": " + self.account_name
+        return str(self.grouping_code) + " " + self.account_name
 
     def __hash__(self):
         return self.grouping_code
@@ -125,6 +126,21 @@ class GroupingCode(models.Model):
         verbose_name = 'Código Agrupador de Cuentas del SAT.'
 
 
+class ItemAccount(models.Model):
+    key = models.IntegerField(verbose_name="clave", null=False, unique=True)
+    name = models.CharField(verbose_name="Nombre del Rubro", max_length=100, )
+
+    def __str__(self):
+        return str(self.key) + ": " + self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.key) + ": " + self.name
+
+    class Meta:
+        verbose_name_plural = 'Rubros de Cuentas'
+        verbose_name = 'Rubro de Cuenta'
+
+
 class Account(models.Model):
     ACTIVE = 1
     NON_ACTIVE = 2
@@ -141,26 +157,29 @@ class Account(models.Model):
         (CREDIT, "Acreedora"),
     )
 
-    LEDGER = 1
-    NO_LEDGER = 2
-    LG_ACCOUNT_CHOICES = (
-        (LEDGER, "Si"),
-        (NO_LEDGER, "No"),
+    ACCUMULATION = 'A'
+    DETAIL = 'D'
+    TYPE_ACCOUNT_CHOICES = (
+        (ACCUMULATION, "Acumulativa"),
+        (DETAIL, "Detalle"),
     )
 
-    number = models.IntegerField(verbose_name="Número de Cuenta", null=False, )
+    number = models.DecimalField(verbose_name='Número de Cuenta', decimal_places=0, blank=False, null=False,
+                                         default=0, max_digits=25)
     name = models.CharField(verbose_name="Nombre de la Cuenta", max_length=500, null=False, )
     status = models.IntegerField(choices=STATUS_CHOICES, default=ACTIVE, verbose_name='Estatus')
 
     nature_account = models.IntegerField(choices=DEBIT_CREDIT_CHOICES, default=DEBIT,
                                          verbose_name='Naturaleza de Cuenta')
-    ledger_account = models.IntegerField(choices=LG_ACCOUNT_CHOICES, default=LEDGER, verbose_name='Cuenta de Mayor')
-    level = models.CharField(verbose_name="Nivel", max_length=500, null=False, )
-    item = models.CharField(verbose_name="Rubro", max_length=500, null=False, )
+    #ledger_account = models.IntegerField(choices=LG_ACCOUNT_CHOICES, default=LEDGER, verbose_name='Cuenta de Mayor', null=True)
+    #level = models.CharField(verbose_name="Nivel", max_length=500, null=True, )
 
+    type_account = models.CharField(choices=TYPE_ACCOUNT_CHOICES, verbose_name='Tipo de Cuenta',
+                                         null=False,max_length=1)
     # foreign
     grouping_code = models.ForeignKey(GroupingCode, verbose_name="Código Agrupador SAT", )
     subsidiary_account = models.ForeignKey('self', verbose_name='Subcuenta de', null=True, blank=True)
+    internal_company = models.ForeignKey('InternalCompany', verbose_name='Empresa Interna', null=True, blank=True)
 
     def __str__(self):
         return str(self.number) + ": " + self.name
@@ -175,10 +194,24 @@ class Account(models.Model):
     def to_serializable_dict(self):
         dict = model_to_dict(self)
         dict['nature_account'] = self.get_nature_account_display()
-        dict['ledger_account'] = self.get_ledger_account_display()
+        #dict['ledger_account'] = self.get_ledger_account_display()
         dict['grouping_code'] = self.grouping_code.account_name
         dict['status'] = self.get_status_display()
         if self.subsidiary_account is not None:
             dict['subsidiary_account'] = self.subsidiary_account.number
 
         return dict
+
+
+class InternalCompany(models.Model):
+    name = models.CharField(verbose_name="Nombre", max_length=256, null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = "Empresas Internas"
+        verbose_name = "Empresa Interna"
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name

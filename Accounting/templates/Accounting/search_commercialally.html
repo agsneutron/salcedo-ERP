@@ -4,7 +4,7 @@
 {% block extrastyle %}{{ block.super }}
 
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
-
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/js/../../../HumanResources/static/admin/js/../../../HumanResources/static/HumanResources/js/url_menu.js" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/jquery.multiselect.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "Accounting/css/multi-custom.css" %}"/>
     <link rel="stylesheet" type="text/css"
@@ -52,7 +52,10 @@
                 selectedText: 'Seleccione'
             });
             $j('.ui-widget-content').css('width', 'auto');
+
+
         });
+
     </script>
 {% endblock %}
 {% block breadcrumbs %}{% endblock %}
@@ -74,44 +77,63 @@
                 </div>
             </div>
         </div>
-        <div class="col-xs-12">
-            <div class="col-xs-3"><input type="hidden" id="type" value="{{ type }}">
-                Nombre:<input type="text" class="form-control" id="name">
-            </div>
-            <div class="col-xs-3">
-                RFC:<input type="text" class="form-control" id="rfc">
-            </div>
-            <div class="col-xs-3">
-                Correo Electrónico:<input type="text" class="form-control" id="email">
-            </div>
-            <div class="col-xs-3">
-                Teléfono:<input type="text" class="form-control" id="phone_number">
-            </div>
-            <div class="col-xs-3">
-                Cuenta Contable:<input type="text" class="form-control" id="accounting_account_number">
-            </div>
-            <div class="col-xs-3">
-                Banco:<input type="text" class="form-control" id="bank_account">
-            </div>
-            <div class="col-xs-3">
-                Fecha de Registro de:<input type="text" class="form-control" id="register_date_lower">
-            </div>
-            <div class="col-xs-3">
-                Fecha de Registro a:<input type="text" class="form-control" id="register_date_upper">
-            </div>
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="col-xs-3"><input type="hidden" id="type" value="{{ type }}">
+                    Nombre:<input type="text" class="form-control" id="name">
+                </div>
+                <div class="col-xs-3">
+                    RFC:<input type="text" class="form-control" id="rfc">
+                </div>
+                <div class="col-xs-3">
+                    Correo Electrónico:<input type="text" class="form-control" id="email">
+                </div>
+                <div class="col-xs-3">
+                    Teléfono:<input type="text" class="form-control" id="phone_number">
+                </div>
+                <div class="col-xs-3">
+                    Cuenta Contable:<input type="text" class="form-control" id="accounting_account_number">
+                </div>
+                <div class="col-xs-3">
+                    Banco:<input type="text" class="form-control" id="bank_account">
+                </div>
+                <div class="col-xs-3">
+                    Fecha de Registro de:<input type="text" class="form-control" id="register_date_lower">
+                </div>
+                <div class="col-xs-3">
+                    Fecha de Registro a:<input type="text" class="form-control" id="register_date_upper">
+                </div>
 
-            <div class="col-xs-3">
-                &nbsp;
-            </div>
-            <div class="clearfix"></div>
-            <hr>
-            <div class="col-xs-3 col-xs-offset-4">
-                <button type="button" id="searchaccount" class="btn btn-raised btn-primary btn-block">Buscar</button>
+                <div class="col-xs-3">
+                    &nbsp;Servicios que presta:<input type="text" class="form-control" id="services">
+                </div>
+                <div class="clearfix"></div>
+                <hr>
+                <div class="col-xs-3 col-xs-offset-4">
+                    <button type="button" id="searchaccount" class="btn btn-raised btn-primary btn-block">Buscar
+                    </button>
+                </div>
+                <div class="col-xs-3 col-xs-offset-4">
+                    <button type="button" id="excelexport" class="btn btn-raised btn- btn-block btn-excel"><i
+                            class="fa fa-file-excel-o" style="color: white"></i> Exportar a excel
+                    </button>
+                </div>
             </div>
         </div>
+        <div class="row">
+            <div class="" style="margin-bottom: 30px">
+                <div class="">
+                    <div class="item-right" style="top: inherit;">
+                        <a href="{{ s_url }}"
+                           class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i
+                                class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                        </a>
 
-        <div class="col-xs-12">
-            <div class="table-responsive" id="divTable">
+                    </div>
+                </div>
+
+                <div class="" id="divTable">
+
                     {% comment %}<table class="table-filtros   " cellspacing="0" width="100%"
                            id="tablaResultados">
 
@@ -138,7 +160,10 @@
                         </tbody>
                     </table>{% endcomment %}
                 </div>
+            </div>
         </div>
     </div>
+    <script>
 
+    </script>
 {% endblock %}

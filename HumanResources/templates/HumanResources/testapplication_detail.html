@@ -5,11 +5,31 @@
 {% endblock %}
 {% block content %}
 
-    <div>Prueba: {{ object.test.name }}</div>
-    <div>Empleado: {{ object.employee.get_full_name }}</div>
-    <div>Resultado: {{ object.result }}</div>
-    <div>Fecha de aplicación: {{ object.application_date }}</div>
-    <div>Comentarios: <br>{{ object.comments}}</div>
+{#    <div>Prueba: {{ object.test.name }}</div>#}
+{#    <div>Empleado: {{ object.employee.get_full_name }}</div>#}
+{#    <div>Resultado: {{ object.result }}</div>#}
+{#    <div>Fecha de aplicación: {{ object.application_date }}</div>#}
+{#    <div>Comentarios: <br>{{ object.comments}}</div>#}
+
+    <div class="col-xs-8 col-xs-offset-2">
+          <h3 class="text-center fw-500 mb-6">Prueba del Empleado</h3>
+          <ul class="ms-timeline-left">
+            <li class="ms-timeline-left-item wow fadeInUp">
+              <p><strong>Prueba: </strong>{{ object.test.name }}</p>
+              <div class="ms-timeline-left-left">
+                <h4 class="color-primary">{{ object.employee.get_full_name }}</h4>
+{#                <time class="ms-timeline-left-time">{{ object.application_date }}</time>#}
+              </div>
+                 <p><strong>Fecha de aplicación: </strong>{{ object.application_date }}</p>
+                <p><strong>Resultado: </strong>{{ object.result }}</p>
+                <p><strong>Comentarios: </strong>{{ object.comments}}</p>
+
+            </li>
+
+          </ul>
+        </div>
+
+
 
 {% endblock %}
 

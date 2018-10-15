@@ -4,6 +4,8 @@ from __future__ import unicode_literals
 # Django Imports.
 import operator
 
+import django
+
 from django.core.exceptions import PermissionDenied
 from django.db.models.aggregates import Count
 from django.http.response import HttpResponseRedirect
@@ -14,6 +16,7 @@ from django.db.models import Q
 
 # Model Imports.
 from HumanResources.models import *
+from Accounting.models import *
 from django.template import Context
 
 # Create your views here.
@@ -22,13 +25,26 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import RequestContext, loader
 
+from HumanResources.api import PayrollUtilities
+
+
+def get_array_or_none(the_string):
+    if the_string is None:
+        return None
+    else:
+        return map(int, the_string.split(','))
 
 def employeehome(request):
     return render(request, 'admin/HumanResources/employee-home.html')
 
+def employeerequisitionhome(request):
+    return render(request, 'admin/HumanResources/employeerequisition-home.html')
 
 def payrollhome(request):
     return render(request, 'admin/HumanResources/payroll-home.html')
+
+def payrolltype(request):
+    return render(request, 'admin/HumanResources/employee_payrolltype.html')
 
 
 class JobInstanceListView(generic.ListView):
@@ -129,6 +145,10 @@ class JobInstanceListView(generic.ListView):
 
         return html
 
+
+class EmployeeContractDetail(generic.DetailView):
+    model = EmployeeContract
+    template_name = "HumanResources/employee-contract-detail.html"
 
 class EmployeeDetailView(generic.DetailView):
     model = Employee
@@ -243,21 +263,49 @@ def TestApplicationDetail(request, pk):
 
 @login_required()
 def EmployeeByPeriod(request):
-    payrollgroup = request.GET.get('payrollgroup')
     payrollperiod = request.GET.get('payrollperiod')
-
+    payrollgroup = PayrollPeriod.objects.get(pk=payrollperiod).payroll_group_id
 
     # Check if the payroll has been processed.
     payroll_receipt_processed = PayrollReceiptProcessed.objects.filter(payroll_period__id=payrollperiod)
-    print str(len(payroll_receipt_processed))
+
+    # The payroll has already been processed. Show the processed payroll.
     if len(payroll_receipt_processed) > 0:
         return HttpResponseRedirect("/admin/HumanResources/payrollreceiptprocessed/receipts_by_period/"+payrollperiod)
+
 
     template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
     employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup)
     period_data = PayrollPeriod.objects.filter(id=payrollperiod)
+
+
+    # Payroll information by employee to know base salary and final salary.
+    employee_data_set = []
+    for record in employees:
+        try:
+            employee_payroll = PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+
+        except EmployeeFinancialData.DoesNotExist as e:
+            print "Exception was: " + str(e)
+            django.contrib.messages.error(request, "No existen datos financieros para el empleado: " + record.employee.employee_key +
+                                          " - "+record.employee.get_full_name()+".")
+            return HttpResponseRedirect("/admin/HumanResources/payrollperiod/")
+
+
+
+        employee_data_set.append({
+            "employee_position_description.id": record.id,
+            "employee_id": record.employee.id,
+            "employee_key" : record.employee.employee_key,
+            "employee_fullname" : record.employee.get_full_name(),
+            "employee_job" : record.job_profile.job,
+            "employee_payroll" : employee_payroll
+        })
+
+        print PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+
     # context = RequestContext.request
-    context = {'employees': employees,
+    context = {'employees_data_set': employee_data_set,
                'payrollperiod': payrollperiod,
                'payrolldata': period_data}
     return HttpResponse(template.render(context, request))
@@ -375,6 +423,93 @@ class PayrollPeriodEmployeeDetail(generic.DetailView):
 
 
 
+class EmployeeRequisitionDetailView(generic.DetailView):
+    model = EmployeeRequisition
+    template_name = "HumanResources/employee-requisition-detail.html"
+
+    def get_queryset(self):
+        result = super(EmployeeRequisitionDetailView, self).get_queryset()
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeRequisitionDetailView, self).get_context_data(**kwargs)
+
+        employee_id = self.kwargs['pk']
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(EmployeeRequisitionDetailView, self).dispatch(request, args, kwargs)
+
+class PayrollTypeDetailView(generic.DetailView):
+    model = PayrollType
+    template_name = "HumanResources/payroll-type-detail.html"
+
+    def get_queryset(self):
+        result = super(PayrollTypeDetailView, self).get_queryset()
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(PayrollTypeDetailView, self).get_context_data(**kwargs)
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(PayrollTypeDetailView, self).dispatch(request, args, kwargs)
+
+
+
+
+
+class EmployeeDropOutDetail(generic.DetailView):
+    model = EmployeeDropOut
+    template_name = "HumanResources/employee-dropout-detail.html"
+
+    def get_queryset(self):
+        result = super(EmployeeDropOutDetail, self).get_queryset()
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeDropOutDetail, self).get_context_data(**kwargs)
+
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(EmployeeDropOutDetail, self).dispatch(request, args, kwargs)
+
+
+class EmployeeLoanDetail(generic.DetailView):
+    model = EmployeeLoan
+    template_name = "HumanResources/employee-loan-detail.html"
+
+    def get_queryset(self):
+        result = super(EmployeeLoanDetail, self).get_queryset()
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EmployeeLoanDetail, self).get_context_data(**kwargs)
+
+
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        # if not request.user.has_perm('ERP.view_list_empresa'):
+        #     raise PermissionDenied
+        return super(EmployeeLoanDetail, self).dispatch(request, args, kwargs)
+
+
+
 class IncidencesByPayrollPeriod(ListView):
     model = EmployeeAssistance
     template_name = "HumanResources/inicidences-by-payroll-period.html"
@@ -457,3 +592,67 @@ class PayrollReceiptProcessedListView(ListView):
         context['payroll_period'] = payroll_period
 
         return context
+
+
+class EarningsDeductionsListView(ListView):
+    model = EarningsDeductions
+    template_name = "HumanResources/penalties-list.html"
+    query = None
+
+    """
+       Display a Blog List page filtered by the search query.
+    """
+    paginate_by = 10
+    title_list = 'Penalizaciones'
+    penalty = ''
+
+    def get_queryset(self):
+        result = super(EarningsDeductionsListView, self).get_queryset()
+
+        query = self.request.GET.get('q')
+        query_penalty = self.request.GET.get('penalty')
+        if query_penalty:
+            EarningsDeductionsListView.title_list = 'Penalizaciones'
+            EarningsDeductionsListView.penalty = '?tipo=2'
+            EarningsDeductionsListView.query = query_penalty
+            query_list = query_penalty.split()
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(penalty__icontains=q) for q in query_list))
+                #|
+                #reduce(operator.and_,
+                #       (Q(account____icontains=q) for q in query_list))
+            )
+        else:
+            EarningsDeductionsListView.title_list='Percepciones y Deducciones'
+            EarningsDeductionsListView.penalty = ''
+            EarningsDeductionsListView.query = ''
+            query_list = ['N']
+            result = result.filter(
+                reduce(operator.and_,
+                       (Q(penalty__icontains=q) for q in query_list)))
+
+        return result
+
+    def get_context_data(self, **kwargs):
+        context = super(EarningsDeductionsListView, self).get_context_data(**kwargs)
+        context['title_list'] = EarningsDeductionsListView.title_list
+        context['penalty'] = EarningsDeductionsListView.penalty
+        context['query'] = EarningsDeductionsListView.query
+        context['query_string'] = '&q=' + EarningsDeductionsListView.query
+        context['has_query'] = (EarningsDeductionsListView.query is not None) and (EarningsDeductionsListView.query != "")
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.has_perm('ERP.view_list_empresa'):
+            raise PermissionDenied
+        return super(EarningsDeductionsListView, self).dispatch(request, args, kwargs)
+
+
+# For  Transactions by account filter objects view
+def SearchTransactions(request):
+    template = loader.get_template('HumanResources/search_transactions.html')
+    context = {
+               'internalcompany': InternalCompany.objects.all(), }
+
+    return HttpResponse(template.render(context, request))

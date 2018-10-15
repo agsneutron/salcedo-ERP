@@ -9,6 +9,14 @@
 {% block extrastyle %}{{ block.super }}
     <link rel="stylesheet" type="text/css" href="{% static "admin/css/forms.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+    <style>
+        .field-account .related-widget-wrapper {
+    width: 180px;
+}
+     .field-description {
+        width: 230px;
+}
+    </style>
 {% endblock %}
 
 {% block coltype %}colM{% endblock %}
@@ -105,4 +113,7 @@
             </div>
         </form>
     </div>
+    <script>
+
+    </script>
 {% endblock %}

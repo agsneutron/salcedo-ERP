@@ -16,12 +16,12 @@ import os
 
 import locale
 
-locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
+#locale.setlocale(locale.LC_ALL, 'es_ES.UTF-8')
 # locale.currency(1000, grouping=True)
 # español para windows
-#locale.setlocale(locale.LC_ALL, "esp")
+#locale.setlocale(locale.LC_ALL, "")
 # español para linux
-#locale.setlocale(locale.LC_ALL, "es_MX.utf8")
+#locale.setlocale(locale.LC_ALL, "es_MX.UTF-8")
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -37,7 +37,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LANGUAGE_CODE = 'es'
+#LANGUAGE_CODE = 'es'
 
 # Application definition
 
@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'Accounting',
     'multiselectfield',
     'tinymce',
+'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -75,7 +76,9 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'SalcedoERP.urls'
 TEMPLATETAGS_DIRS = (
     os.path.join(BASE_DIR, 'users/templatetags/'),
+    os.path.join(BASE_DIR, 'HumanResources/templatetags/'),
 )
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -128,7 +131,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/1.11/topics/i18n/
 
-LANGUAGE_CODE = 'es-mx'
+LANGUAGE_CODE = 'es-MX'
 
 TIME_ZONE = 'UTC'
 
@@ -165,7 +168,8 @@ STATIC_FILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 ]
-
+USE_L10N = True
+#USE_THOUSAND_SEPARATOR = True
 print os.path.join(PROJECT_ROOT, '../static')
 # Loading local settings to the project.
 try:

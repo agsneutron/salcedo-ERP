@@ -1,0 +1,107 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static app_filters %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "HumanResources/css/custom_hr.css" %}"/>
+{% endblock %}
+{% block content %}
+    {% include "admin/HumanResources/payroll-home.html" %}
+    <div class="col-xs-9">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="text-center">
+                    <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i class="fa fa-dollar fa2x"></i></span>
+                    <h3 class="section-title">Préstamo</h3>
+                    <hr>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <ul class="list-group">
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Nombre:</span> {{ object.employee.name }}
+                        - {{ policy.fiscal_period.accounting_year }}</li>
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Apellido:</span> {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}
+                    </li>
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Monto total:</span> {{ object.amount | formatoNumero }}
+                    </li>
+                </ul>
+            </div>
+            <div class="col-xs-6">
+                <ul class="list-group">
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Tipo:</span> {{ object.get_type_display }}
+                    </li>
+
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Plan de pago:</span> {{ object.get_payment_plan_display }}
+                    </li>
+                    <li class="list-group-item withripple "><span class="color-info"
+                                                                  style="font-size: 18px">Fecha de Solicitud:</span> {{ object.request_date }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="row" style="padding-top: 35px">
+            <div class="col-xs-12">
+                <div class="">
+                    <h3 class="section-title">Detalle de Pagos</h3>
+                    <hr>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Periodo de Pago</th>
+                        <th>Cantidad</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for record in object.employeeloandetail_set.all %}
+                        <tr>
+                            <td>{{ record.period }}</td>
+                            <td>{{ record.amount | formatoNumero }}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+
+    {% comment %} <div class="col-xs-9">
+        <div class="card ">
+            <div>
+            </div>
+            <div class="card-block">
+                <div class="tab-content">
+                    <ul>
+                        <li>Empleado: {{ object.employee.name }} {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}. </li>
+                        <li>Monto total: {{ object.amount | formatoNumero }}</li>
+                        <li>Tipo: {{ object.get_type_display }}</li>
+                        <li>Plan de pago: {{ object.get_payment_plan_display }}</li>
+                        <li>Fecha de Solicitud: {{ object.request_date }}</li>
+                    </ul>
+                    <div>Pagos</div>
+                    <table border="1">
+                        <tr>
+                            <th>Periodo de Pago</th>
+                            <th>Cantidad</th>
+                        </tr>
+                        {% for record in object.employeeloandetail_set.all %}
+                            <tr>
+                                <td>{{ record.period }}</td>
+                                <td>{{ record.amount | formatoNumero }}</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>{% endcomment %}
+{% endblock %}
+

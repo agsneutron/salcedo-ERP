@@ -2,6 +2,7 @@
 {% if cl.search_fields %}
     <div id="toolbar">
         <form id="changelist-search" method="get">
+
             <div class="col-xs-3 col-xs-offset-9"><!-- DIV needed for valid HTML -->
 
                 <input type="text" name="{{ search_var }}" value="{{ cl.query }}" id="searchbar" class="form-control"/>
@@ -11,6 +12,7 @@
                     </button>
                 </span>
             </div>
+
            {% comment %} <div class="col-xs-2">
                 {% if show_result_count %}
                     <span class="small quiet">{% blocktrans count counter=cl.result_count %}{{ counter }} resultado{% plural %}{{ counter }} resultados{% endblocktrans %} (<a href="?{% if cl.is_popup %}_popup=1{% endif %}">{% if cl.show_full_result_count %}{% blocktrans with full_result_count=cl.full_result_count %}{{ full_result_count }} total{% endblocktrans %}{% else %}{% trans "Show all" %}{% endif %}</a>)</span>

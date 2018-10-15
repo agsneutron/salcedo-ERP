@@ -6,10 +6,10 @@ SalcedoERP/local_settings.py
 
 
 
-# migrations
-ERP/migrations
-ERP/migrations
-HumanResources/migrations
-users/migrations
-DataUpload/migrations
-Accounting/migrations
+#migrations
+#ERP/migrations
+#ERP/migrations
+#HumanResources/migrations
+#users/migrations
+#DataUpload/migrations
+#Accounting/migrations

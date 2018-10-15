@@ -2,12 +2,16 @@
 from __future__ import unicode_literals
 
 # Django Libraries.
+from tinymce import models as tinymce_models
+
+from django.contrib.auth.models import User
+
 from django.core.checks import messages
 from django.db import models
 from django.db.models.query_utils import Q
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
-
+from Logs.controller import Logs
 from decimal import Decimal
 from django.core.validators import MinValueValidator, MaxValueValidator
 
@@ -16,12 +20,14 @@ from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
 from ERP.models import Pais, Estado, Municipio, Project, Bank
+from SharedCatalogs.models import Account
 from utilities import getParameters
 
 # Create your models here.
 from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
 from django.db.models import Sum
+
 
 # To represent ISRTable.
 class ISRTable(models.Model):
@@ -103,7 +109,7 @@ class Employee(models.Model):
         (TYPE_A, 'Empleado Tipo A'),
         (TYPE_B, 'Empleado Tipo B'),
     )
-    type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleando')
+    type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleado')
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
 
     STATUS_ACTIVE = 1
@@ -144,9 +150,9 @@ class Employee(models.Model):
                                       blank=False)
     work_email = models.CharField(verbose_name="Correo Electrónico Laboral", max_length=255, null=False, blank=False)
 
-    social_security_number = models.CharField(verbose_name="Número de Seguro Social", max_length=20, null=False,
+    social_security_number = models.CharField(verbose_name="Número de Póliza de Seguro", max_length=20, null=False,
                                               blank=False)
-    #social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
+    social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
 
     colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
@@ -205,6 +211,7 @@ class Employee(models.Model):
 
     def get_full_name(self):
         return self.name + " " + self.first_last_name + " " + self.second_last_name
+
 
     def __str__(self):
         return self.employee_key + ": " + self.name + " " + self.first_last_name + " " + self.second_last_name
@@ -278,6 +285,48 @@ class Employee(models.Model):
 
         return absences
 
+
+
+
+# Method to save the employee document file.
+def upload_employee_contract(instance, filename):
+    return '/'.join(['human_resources', 'employee_documents', instance.employee.employee_key, 'contracts', filename])
+
+
+class EmployeeContract(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+
+    contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=64, null=False, blank=False, unique=True)
+
+
+    CONTRACT_TYPE_PERMANENT = 'P'
+    CONTRACT_TYPE_TEMPORAL = 'T'
+
+    CONTRACT_TYPE_CHOICES = (
+        (CONTRACT_TYPE_PERMANENT, 'Permanente'),
+        (CONTRACT_TYPE_TEMPORAL, 'Temporal'),
+    )
+
+    contract_type = models.CharField(max_length=1, choices=CONTRACT_TYPE_CHOICES, default=CONTRACT_TYPE_PERMANENT,
+                                      verbose_name='Tipo de Contrato')
+
+
+    description = tinymce_models.HTMLField(verbose_name='Descripción', null=True, blank=True, max_length=4096)
+
+    start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
+    end_date = models.DateField(verbose_name="Fecha de Término", null=True, blank=True)
+
+
+    contract_file = models.FileField(upload_to=upload_employee_contract, null=True, verbose_name="Contrato Escaneado")
+
+
+    def __str__(self):
+        return self.contract_key+ ": " + self.employee.name+ " " + self.employee.first_last_name + " " + self.employee.second_last_name
+
+
+    class Meta:
+        verbose_name = 'Contrato'
+        verbose_name_plural = 'Contratos'
 
 # Employee Checker Data.
 class CheckerData(models.Model):
@@ -533,11 +582,12 @@ class Education(models.Model):
 
 # Test model to define the structure of it.
 class Test(models.Model):
+    key = models.CharField(verbose_name="Clave de la Prueba", max_length=512, null=False, blank=False)
     name = models.CharField(verbose_name="Nombre de la Prueba", max_length=512, null=False, blank=False)
-
+    notes = models.CharField(verbose_name="Notas", max_length=1024, null=False, blank=False)
     class Meta:
-        verbose_name_plural = "Pruebas"
-        verbose_name = "Prueba"
+        verbose_name_plural = "Pruebas a Empleados"
+        verbose_name = "Pruebas a Empleados"
 
     def __str__(self):
         return self.name
@@ -568,7 +618,7 @@ class TestApplication(models.Model):
 
 
 # To represent the structure of an employee's contract.
-class EmployeeContract(models.Model):
+'''class EmployeeContract(models.Model):
     contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=128, null=False, blank=False)
     description = models.CharField(verbose_name="Descripción del Contrato", max_length=4096, null=False, blank=False)
     specifications = models.CharField(verbose_name="Especificaciones del Contrato", max_length=4096, null=False,
@@ -588,7 +638,7 @@ class EmployeeContract(models.Model):
         return self.contract_key
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.contract_key
+        return self.contract_key'''
 
 
 # To represent an employee's family member.
@@ -704,7 +754,7 @@ class EmployeeDropOut(models.Model):
     type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Tipo de Baja')
     reason = models.CharField(verbose_name="Motivo", max_length=4096, null=False, blank=True)
     severance_pay = models.FloatField(verbose_name="Liquidación", null=True, blank=False)
-    observations = models.CharField(verbose_name="Observaciones", null=True, blank=False, max_length=4096)
+    observations = tinymce_models.HTMLField(verbose_name='Observaciones', null=True, blank=True, max_length=4096)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
@@ -771,7 +821,6 @@ class UploadedEmployeeAssistanceHistory(models.Model):
                                sort=True,
                                unique=True)'''
 
-
     payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
     assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
                                        verbose_name="Archivo de Asistencias")
@@ -812,22 +861,68 @@ class EmployeeLoan(models.Model):
         return self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
 
+class EmployeeRequisition(models.Model):
+    direction = models.ForeignKey('Direction', verbose_name='Dirección', null=False, blank=False)
+    subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección', null=False, blank=False)
+    area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
+    department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
+
+
+
+    description = models.CharField(verbose_name="Descripción", max_length=256, null=False, blank=False,
+                           unique=False)
+
+    vacancy_number = models.IntegerField(verbose_name='Número de Vacantes', null=False, default=1,
+                                         validators={MinValueValidator(1)})
+
+    minimum_requirements = tinymce_models.HTMLField(verbose_name='Requisitos Mínimos', null=True, blank=True,
+                                                    max_length=4096)
+    characteristics = tinymce_models.HTMLField(verbose_name='Características del Puesto', null=True, blank=True,
+                                               max_length=4096)
+
+    reason = tinymce_models.HTMLField(verbose_name='Razón', null=True, blank=True,
+                                               max_length=4096)
+
+    user = models.ForeignKey(User, verbose_name="Solicitado por:", null=True, blank=True)
+
+
+
+    def __str__(self):
+        return self.description
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.description
+
+
+    class Meta:
+        verbose_name = "Requisición de Personal"
+        verbose_name_plural = "Requisiciones de Personal"
+
+
+
 # To represent a Job Profile.
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
                            unique=False)
-    abilities = models.TextField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
+    abilities =tinymce_models.HTMLField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
                                  unique=False)
-    aptitudes = models.TextField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
+    aptitudes = tinymce_models.HTMLField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
                                  unique=False)
-    knowledge = models.TextField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
+    knowledge = tinymce_models.HTMLField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
                                  unique=False)
-    competitions = models.TextField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
+    competitions = tinymce_models.HTMLField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
                                     unique=False)
-    scholarship = models.TextField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
+    scholarship = tinymce_models.HTMLField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
                                    unique=False)
-    experience = models.TextField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
+    experience = tinymce_models.HTMLField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
                                   unique=False)
+
+    jobdescription = tinymce_models.HTMLField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
+                                   unique=False)
+    minimumrequirements = tinymce_models.HTMLField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
+                                  unique=False)
+
+
     entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
     exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
     sunday = models.BooleanField(verbose_name="Domingo", default=False)
@@ -843,6 +938,10 @@ class JobProfile(models.Model):
     subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección', null=False, blank=False)
     area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
     department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
+    minimumsalary = models.DecimalField(verbose_name='Salario Mínimo', max_digits=20, decimal_places=2, null=True,
+                                        default=0.0)
+    maximumsalary = models.DecimalField(verbose_name='Salario Máximo', max_digits=20, decimal_places=2, null=True,
+                                        default=0.0)
 
     class Meta:
         verbose_name_plural = "Perfiles de Puesto"
@@ -972,6 +1071,7 @@ class EmployeePositionDescription(models.Model):
 
     job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
     contract = models.CharField(verbose_name="Contrato", null=False, blank=False, max_length=45)
+
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
 
 
@@ -1076,25 +1176,50 @@ class EarningsDeductions(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
     percent_taxable = models.IntegerField("Porcentaje Gravable", blank=False, null=False)
     sat_key = models.CharField(verbose_name="Clave SAT", null=False, blank=False, max_length=30, )
-    law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
+    #law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
     status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
                               default=ACTIVA)
-    accounting_account = models.IntegerField("Cuenta Contable", blank=False, null=False)
-    comments = models.CharField(verbose_name="Observaciones", null=False, blank=False, max_length=500, )
+    account = models.ForeignKey(Account, verbose_name='Cuenta', null=True, blank=True,)
+        #models.IntegerField("Cuenta Contable", blank=False, null=False)
+    comments = models.TextField(verbose_name="Observaciones", null=False, blank=False, max_length=500, )
     type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION, verbose_name="Tipo")
     taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Gravable")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA,
                                 verbose_name="Categoria")
+    penalty = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Penalización")
 
     class Meta:
         verbose_name_plural = "Percepciones y Deducciones"
         verbose_name = "Percepciones y Deducciones"
 
     def __str__(self):
-        return self.type + "-" + self.name
+        return self.type + "-" + self.name + " - " + str(self.account.id)
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.type + "-" + self.name
+
+
+    def get_accumulated_for_period(self, payroll_period_id):
+        total_fixed = 0
+        records = EmployeeEarningsDeductions.objects.filter(concept_id=self.id)
+        for record in records:
+            total_fixed += record.ammount
+
+        total_variable = 0
+        records = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(concept_id=self.id) & Q(payroll_period_id=payroll_period_id))
+        for record in records:
+            total_variable += record.ammount
+
+        return total_fixed, total_variable
+
+    def save(self, *args, **kwargs):
+        can_save = True
+
+        if can_save:
+            Logs.log("Saving new EarningsDeductions", "Te")
+            super(EarningsDeductions, self).save(*args, **kwargs)
+        else:
+            Logs.log("Couldn't save")
 
 
 class EmployeeEarningsDeductions(models.Model):
@@ -1108,15 +1233,18 @@ class EmployeeEarningsDeductions(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False, limit_choices_to={
+        'category': 'F', 'status':'A',
+    })
 
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
         verbose_name = "Deducciones y Percepciones por Empleado"
+        unique_together = (('concept', 'employee'),)
 
 
 class PayrollType(models.Model):
-    name = models.CharField(verbose_name="Tipo de Nómina", null=False, blank=False, max_length=30, )
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
 
     class Meta:
         verbose_name_plural = "Tipo de Nómina"
@@ -1184,6 +1312,10 @@ class PayrollPeriod(models.Model):
     start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
 
+
+    exclusions = models.ManyToManyField('Employee', through='EmployeePayrollPeriodExclusion',through_fields=('payroll_period', 'employee',),)
+
+
     class Meta:
         verbose_name_plural = "Periodos de Nómina"
         verbose_name = "Periodos de Nómina"
@@ -1195,53 +1327,17 @@ class PayrollPeriod(models.Model):
         return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
 
 
-class EmployeeLoanDetail(models.Model):
-    employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
-    # period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
-    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
-    period = ChainedForeignKey(PayrollPeriod,
-                               chained_field="payroll_group",
-                               chained_model_field="payroll_group",
-                               show_all=False,
-                               auto_choose=True,
-                               sort=True)
-    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+
+class EmployeePayrollPeriodExclusion(models.Model):
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
 
     class Meta:
-        verbose_name_plural = "Préstamos Detalle"
-        verbose_name = "Préstamo Detalle"
-        unique_together = ('employeeloan','period',)
+        unique_together = (("employee", "payroll_period"),)
 
-    def delete(self):
-        payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
-                                                              payroll_period_id=self.period.id)
-        existReceipt=0
-        for pE in payrollExist:
-            existReceipt=1
-        if existReceipt == 0:
-            delModel = EmployeeEarningsDeductionsbyPeriod()
-            delModel.deleteFromEmployeeLoanDetail(self)
-            super(EmployeeLoanDetail, self).delete()
 
-    def save(self, *args, **kwargs):
-        total=EmployeeLoanDetail.objects.values('employeeloan__id').filter(employeeloan_id=self.employeeloan.id).annotate(total=Sum('amount')).exclude(id=self.id)
-        sumTotal =0
-        for tot in total:
-            sumTotal += tot['total']
 
-        payrollExist=PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,payroll_period_id=self.period.id)
-        if (sumTotal + self.amount) <= self.employeeloan.amount and payrollExist.count()==0:
-            modelo = EmployeeEarningsDeductionsbyPeriod()
-            modelo.create(self)
-            super(EmployeeLoanDetail, self).save(*args, **kwargs)
-        else:
-            return 'la suma de los pagos no puede exceder al total del préstamo'
 
-    def unique_error_message(self, model_class, unique_check):
-        if model_class == type(self) and unique_check == ('employeeloan', 'period'):
-            return 'la amortización del préstamo para este periodo ya existe'
-        else:
-            return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
 
 
 class EmployeeEarningsDeductionsbyPeriod(models.Model):
@@ -1252,7 +1348,9 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False)
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Conceptos", null=False, blank=False, limit_choices_to={
+        'category': 'V', 'status':'A',
+    })
     payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
 
     class Meta:
@@ -1273,6 +1371,7 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
             if obj.id > 0:
                 obj.ammount = data.amount
                 obj.payroll_period_id = data.period.id
+                obj.save()
                 super(EmployeeEarningsDeductionsbyPeriod, obj).save()
         else:
             self.ammount = data.amount
@@ -1286,7 +1385,70 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
     def save(self, *args, **kwargs):
         super(EmployeeEarningsDeductionsbyPeriod, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return "Amount: " + str(self.ammount)
 
+
+class EmployeeLoanDetail(models.Model):
+    employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
+    # period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
+
+    # The group is here to use chained keys
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
+    period = ChainedForeignKey(PayrollPeriod,
+                               chained_field="payroll_group",
+                               chained_model_field="payroll_group",
+                               show_all=False,
+                               auto_choose=True,
+                               sort=True)
+    amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
+    deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
+
+
+
+    class Meta:
+        verbose_name_plural = "Préstamos Detalle"
+        verbose_name = "Préstamo Detalle"
+        unique_together = ('employeeloan', 'period')
+
+    def delete(self):
+        payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
+                                                              payroll_period_id=self.period.id)
+        existReceipt = 0
+        for pE in payrollExist:
+            existReceipt = 1
+        if existReceipt == 0:
+            delModel = EmployeeEarningsDeductionsbyPeriod()
+            delModel.deleteFromEmployeeLoanDetail(self)
+            super(EmployeeLoanDetail, self).delete()
+
+    def save(self, *args, **kwargs):
+        if self.deduction is None:
+            deduction = EmployeeEarningsDeductionsbyPeriod()
+            deduction.ammount = self.amount
+            deduction.date = now()
+            deduction.employee_id = self.employeeloan.employee.id
+            deduction.concept_id = 1
+            deduction.payroll_period_id = self.period.id
+            deduction.save()
+            self.deduction_id = deduction.id
+            super(EmployeeLoanDetail, self).save(*args, **kwargs)
+        else:
+            self.deduction.ammount = self.amount
+            self.deduction.date = now()
+            self.deduction.employee_id = self.employeeloan.employee.id
+            self.deduction.concept_id = 1
+            self.deduction.payroll_period_id = self.period.id
+            self.deduction.save()
+            super(EmployeeLoanDetail, self).save(*args, **kwargs)
+
+
+    def unique_error_message(self, model_class, unique_check):
+        if model_class == type(self) and unique_check == ('employeeloan', 'period'):
+            return 'la amortización del préstamo para este periodo ya existe'
+        else:
+            return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
+    
 class EarningDeductionPeriod(models.Model):
     '''
         Earnings and deductions to be applied to the employee.
@@ -1326,7 +1488,7 @@ class PayrollReceiptProcessed(models.Model):
     taxed = models.DecimalField(verbose_name="Grabado", null=True, blank=True, max_digits=20, decimal_places=2)
     exempt = models.DecimalField(verbose_name="Excento", null=True, blank=True, max_digits=20, decimal_places=2)
     daily_salary = models.DecimalField(verbose_name="Salario Diario", null=True, blank=True, max_digits=20,
-                                      decimal_places=2)
+                                       decimal_places=2)
     total_withholdings = models.DecimalField(verbose_name="Total de Deducciones", null=True, blank=True,
                                              max_digits=20, decimal_places=2)
     total_discounts = models.DecimalField(verbose_name="Total de Descuentos", null=True, blank=True, max_digits=20,

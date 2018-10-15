@@ -336,7 +336,6 @@ class InfonavitDataForm(forms.ModelForm):
         model = InfonavitData
         fields = '__all__'
 
-
     def __init__(self, *args, **kwargs):
 
         self.request = kwargs.pop('request', None)
@@ -394,6 +393,7 @@ class EmployeeEarningsDeductionsForm(forms.ModelForm):
 
         self.request = kwargs.pop('request', None)
         self.employee_id = self.request.GET.get('employee', None)
+
 
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
@@ -576,7 +576,7 @@ class RegisterView(FormView):
 class EmployeeLoanDetailForm(forms.ModelForm):
     class Meta:
         model = EmployeeLoanDetail
-        fields = '__all__'
+        fields = ('payroll_group', 'period', 'amount')
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
@@ -609,8 +609,17 @@ class PayrollToProcessForm(forms.ModelForm):
 
 # Form to include the fields of the Payroll Type Form.
 class PayrollTypeForm(forms.ModelForm):
+
+
     class Meta:
         model = PayrollType
+        fields = '__all__'
+
+
+# Form to include the fields of the Payroll Type Form.
+class EmployeePayrollPeriodExclusionForm(forms.ModelForm):
+    class Meta:
+        model = EmployeePayrollPeriodExclusion
         fields = '__all__'
 
 
@@ -633,6 +642,7 @@ class TestForm(forms.ModelForm):
     class Meta:
         model = Test
         fields = '__all__'
+        widgets = {'notes': forms.Textarea(attrs={'rows': 4})}
 
 
 # Form to include the fields of the Document Type Form.
@@ -703,17 +713,28 @@ class EmployeeLoanForm(forms.ModelForm):
         fields = '__all__'
 
 
+
+
+# Form to include the fields of Tag Form.
+class EmployeeRequisitionForm(forms.ModelForm):
+    class Meta:
+        model = EmployeeRequisition
+        fields = '__all__'
+
+
 # Form to include the fields of Tag Form.
 class JobProfileForm(forms.ModelForm):
     class Meta:
         model = JobProfile
         fields = '__all__'
-        widgets = {'abilities': forms.Textarea(attrs={'rows': 4}),
-                   'aptitudes': forms.Textarea(attrs={'rows': 4}),
-                   'knowledge': forms.Textarea(attrs={'rows': 4}),
-                   'competitions': forms.Textarea(attrs={'rows': 4}),
-                   'scholarship': forms.Textarea(attrs={'rows': 4}),
-                   'experience': forms.Textarea(attrs={'rows': 4}),
+        widgets = {
+                   'sunday': forms.HiddenInput,
+                   'saturday': forms.HiddenInput,
+                   'monday': forms.HiddenInput,
+                   'tuesday': forms.HiddenInput,
+                   'wednesday': forms.HiddenInput,
+                   'thursday': forms.HiddenInput,
+                   'friday': forms.HiddenInput,
                    }
 
 
@@ -761,6 +782,9 @@ class EmployeeDropOutForm(forms.ModelForm):
     class Meta:
         model = EmployeeDropOut
         fields = '__all__'
-        widgets = {
-            'observations': forms.Textarea(attrs={'rows': 3})
-        }
+
+
+class EmployeeContractForm(forms.ModelForm):
+    class Meta:
+        mode = EmployeeContract
+        fields = '__all__'
