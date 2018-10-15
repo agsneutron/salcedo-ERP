@@ -181,53 +181,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                <li class="dropdown-submenu">
-                                    <a href="blog-sidebar.html" class="has_children">
-                                        <i class="zmdi zmdi-view-compact"></i> Recursos Humanos</a>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/HumanResources/tag/">Etiquetas</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/test/">Pruebas</a>
-                                        </li>
 
-
-                                        <li>
-                                            <a href="/admin/HumanResources/documenttype/">Documentos</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/admin/HumanResources/direction/">Dirección</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/admin/HumanResources/subdirection/">Subdirección</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/admin/HumanResources/area/">Área</a>
-                                        </li>
-
-                                        <li>
-                                            <a href="/admin/HumanResources/department/">Departamento</a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-                                <li class="dropdown-submenu">
-                                    <a href="blog-sidebar.html" class="has_children">
-                                        <i class="zmdi zmdi-view-compact"></i> Contabilidad</a>
-                                    <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/Accounting/fiscalperiod/">Periodos Fiscales</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
-                                        </li>
-
-                                    </ul>
-                                </li>
                             </ul>
                         </li>
                         <li class="dropdown
@@ -371,7 +325,7 @@
                                    data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                    data-name="portfolio">
                                     <i class="fa fa-user-circle-o text-center"></i><br class="hidden-xs">
-                                    Recursos Humanos
+                                    Usuarios
                                     <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                                 </a>
                             {% endif %}
@@ -398,106 +352,11 @@
                                 {% endif %}
 
 
-                                {% if perms.HumanResources.change_employee %}
-                                    <li class="dropdown-submenu">
-                                        <a href="#" class="has_children">
-                                            <i class="zmdi zmdi-view-dashboard"></i>Empleados</a>
-
-                                        <ul class="dropdown-menu dropdown-menu-left">
-                                            <li>
-                                                <a href="/admin/HumanResources/employee/add/">Agregar</a>
-                                            </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/employee/">Consultar</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                {% endif %}
-
-
-                                {% if perms.HumanResources.change_payrollperiod %}
-
-                                    <li class="dropdown-submenu">
-                                        <a href="">
-                                            <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
-
-                                        <ul class="dropdown-menu dropdown-menu-left">
-                                            <li>
-                                                <a href="/admin/HumanResources/payrollgroup/add/">Generar Grupo</a>
-                                            </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/payrollperiod/add/">Generar Periodo</a>
-                                            </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/earningsdeductions/add/">Percepciones y
-                                                    Deducciones</a>
-                                            </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/uploadedemployeeassistancehistory/add/">Asistencias</a>
-                                            </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/employeeloan/add/">Préstamos</a>
-                                            </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/employeedropout/add/">Bajas</a>
-                                            </li>
-                                            {% comment %}<li>
-                                                <a href="/admin/HumanResources/employee/">Consultar</a>
-                                            </li>{% endcomment %}
-                                        </ul>
-                                    </li>
-                                {% endif %}
-
-                                {% if perms.HumanResources.change_employee %}
-                                    <li class="dropdown-submenu">
-                                        <a href="#" class="has_children">
-                                            <i class="zmdi zmdi-view-dashboard"></i>Buscador</a>
-
-                                        <ul class="dropdown-menu dropdown-menu-left">
-                                            <li>
-                                                <a href="/admin/HumanResources/employeehastag/">Etiquetas de
-                                                    Empleados</a>
-                                            </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/testapplication/">Aplicaciones de
-                                                    Prueba</a>
-                                            </li>
-                                        </ul>
-                                    </li>
-
-                                {% endif %}
-
-                                {% if perms.HumanResources.change_payrollperiod %}
-
-                                    <li class="">
-                                        <a href="/admin/HumanResources/jobinstance/">
-                                            <i class="zmdi zmdi-view-compact"></i>Organigrama</a>
-                                    </li>
-                                {% endif %}
-
-                                {% if perms.HumanResources.change_payrollperiod %}
-
-                                    <li class="dropdown-menu">
-                                        <a href="/admin/HumanResources/jobprofile/">
-                                            <i class="zmdi zmdi-view-compact"></i>Perfil de Puesto</a>
-                                    </li>
-                                {% endif %}
                             </ul>
 
                         </li>
 
-                        <li id="op_contabilidad" class="dropdown
 
-                                {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
-                            <a href="/admin/Accounting/accountingpolicy/" class="dropdown-toggle"
-                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
-                               data-name="ecommerce">
-                                <i class="fa fa-calculator text-center"></i><br class="hidden-xs">
-                                Contabilidad
-                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
-
-                            </a>
-                        </li>
                         <li id="op_reportes" class="dropdown
 
 
