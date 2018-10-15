@@ -182,6 +182,19 @@
                                     </ul>
                                 </li>
 
+                                <li class="dropdown-submenu">
+                                    <a href="blog-sidebar.html" class="has_children">
+                                        <i class="zmdi zmdi-view-compact"></i> Contabilidad</a>
+                                    <ul class="dropdown-menu dropdown-menu-left">
+                                        <li>
+                                            <a href="/admin/Accounting/fiscalperiod/">Periodos Fiscales</a>
+                                        </li>
+                                        <li>
+                                            <a href="/admin/Accounting/typepolicy/">Tipos de Póliza</a>
+                                        </li>
+
+                                    </ul>
+                                </li>
                             </ul>
                         </li>
                         <li class="dropdown
@@ -325,7 +338,7 @@
                                    data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
                                    data-name="portfolio">
                                     <i class="fa fa-user-circle-o text-center"></i><br class="hidden-xs">
-                                    Usuarios
+                                    Recursos Humanos
                                     <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                                 </a>
                             {% endif %}
@@ -356,7 +369,18 @@
 
                         </li>
 
+                        <li id="op_contabilidad" class="dropdown
 
+                                {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">
+                            <a href="/admin/Accounting/accountingpolicy/" class="dropdown-toggle"
+                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                               data-name="ecommerce">
+                                <i class="fa fa-calculator text-center"></i><br class="hidden-xs">
+                                Contabilidad
+                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
+
+                            </a>
+                        </li>
                         <li id="op_reportes" class="dropdown
 
 
