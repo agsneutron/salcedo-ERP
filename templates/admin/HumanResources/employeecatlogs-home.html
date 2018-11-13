@@ -1,0 +1,136 @@
+{% block content %}
+    <script type="text/javascript" src="/static/HumanResources/js/url_menu.js"></script>
+    <style>
+        #changelist table thead th div a {
+            color: white;
+        }
+    </style>
+
+    <div class="col-xs-3 ms-paper-menu-left-container" style="padding-bottom: 50px">
+        <div class="ms-paper-menu-left">
+            <h3 class="ms-paper-menu-title">
+                Catálogos
+
+            </h3>
+            <div class="panel-menu collapse" id="collapseMenu">
+                <ul class="panel-group ms-collapse-nav" id="components-nav" role="tablist"
+                    aria-multiselectable="true">
+                    <li class="panel" role="tab" id="Conte2">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#Contc2"
+                           aria-expanded="true" aria-controls="Contc2" class="collapsed withripple">
+                            Etiquetas</a>
+                        <ul id="Contc2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="Conte2">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/tag/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/tag/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="panel" role="tab" id="Conte1">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#Contc1"
+                           aria-expanded="true" aria-controls="Contc1" class="collapsed withripple">
+                            Pruebas</a>
+                        <ul id="Contc1" class="panel-collapse collapse" role="tabpanel" aria-labelledby="Conte1">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/test/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/test/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="panel" role="tab" id="Conte0">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#Contc0"
+                           aria-expanded="true" aria-controls="Contc0" class="collapsed withripple">
+                            Documentos</a>
+                        <ul id="Contc0" class="panel-collapse collapse" role="tabpanel" aria-labelledby="Conte0">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/documenttype/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/documenttype/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="panel" role="tab" id="Conte3">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#Contc3"
+                           aria-expanded="true" aria-controls="Contc3" class="collapsed withripple">
+                            Dirección</a>
+                        <ul id="Contc3" class="panel-collapse collapse" role="tabpanel" aria-labelledby="Conte3">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/direction/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/direction/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="panel" role="tab" id="Conte4">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#Contc4"
+                           aria-expanded="true" aria-controls="Contc4" class="collapsed withripple">
+                            Sub Dirección</a>
+                        <ul id="Contc4" class="panel-collapse collapse" role="tabpanel" aria-labelledby="Conte4">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/subdirection/add">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/subdirection/">
+                                    <i class="fa fa-search"></i> Consultar Registros</a>
+                            </li>
+                            {% comment %}<li>
+                                <a class="withripple" href="/admin/HumanResources/uploadedemployeeassistancehistory/">
+                                    <i class="fa fa-plus"></i> Cargar</a>
+                            </li>{% endcomment %}
+                        </ul>
+                    </li>
+                    <li class="panel" role="tab" id="Conte5">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#Contc5"
+                           aria-expanded="true" aria-controls="Contc5" class="collapsed withripple">
+                            Área</a>
+                        <ul id="Contc5" class="panel-collapse collapse" role="tabpanel" aria-labelledby="Conte5">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/area/add/">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/area/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="panel" role="tab" id="Conte6">
+                        <a role="button" data-toggle="collapse" data-parent="#components-nav" href="#Contc6"
+                           aria-expanded="true" aria-controls="Contc6" class="collapsed withripple">
+                            Departamento</a>
+                        <ul id="Contc6" class="panel-collapse collapse" role="tabpanel" aria-labelledby="Conte6">
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/department/add/">
+                                    <i class="fa fa-plus"></i> Agregar</a>
+                            </li>
+                            <li>
+                                <a class="withripple" href="/admin/HumanResources/department/">
+                                    <i class="fa fa-search"></i> Consultar</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+                <!-- ms-collapse-nav -->
+            </div>
+        </div>
+    </div>
+    <!-- col-md-3 -->
+
+{% endblock %}
+
