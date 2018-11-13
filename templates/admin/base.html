@@ -157,6 +157,7 @@
                             </a>
 
                         </li>{% endcomment %}
+                     {% if perms.ERP  %}
                         <li class="dropdown
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle"
@@ -209,6 +210,7 @@
                             </ul>
 
                         </li>
+                          {% endif %}
                         {% comment %}<li class="dropdown">
                         <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-8"
                            data-toggle="dropdown"
