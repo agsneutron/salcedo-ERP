@@ -325,24 +325,34 @@
                                             </li>
                                         </ul>
                                     </li>
-                                {% endif %}
-                                {% comment %}{% if perms.HumanResources.change_employee %}
-                                    <li class="dropdown-submenu">
-                                        <a href="#" class="has_children">
-                                            <i class="zmdi zmdi-view-dashboard"></i>Empleados</a>
-                                        <ul class="dropdown-menu dropdown-menu-left">
-                                            <li>
-                                                <a href="/admin/HumanResources/employee/add/">Agregar</a>
-                                            </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/employee/">Consultar</a>
-                                            </li>
-                                        </ul>
+
+                      """Menú de Empleados modificado para que aparesca dentro del menú principal de Recursos Humanos XAVI"""
+
+                                <li class="dropdown-submenu">
+
+                                    <a href="#" class="has-children">
+
+                                        <i class="zmdi zmdi-view-dashboard"></i>Empleados</a>
+
+                                <ul class="dropdown-menu dropdown-menu-left">
+
+                                    <li>
+
+                                        <a href="/admin/HumanResources/employee/add/">Agregar</a>
+
                                     </li>
-                                # ags
-                                {% endif %}{% endcomment %}
-                                # mofificó ags
-                                {% if perms.HumanResources.change_payrollperiod %}
+
+                                    <li>
+
+                                        <a href="/admin/HumanResources/employee/">Consultar</a>
+
+                                    </li>
+
+                                </ul>
+
+                                </li>
+                    """XAVI"""
+
                                     <li class="dropdown-submenu">
                                         <a href="">
                                             <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
@@ -353,9 +363,7 @@
                                             <li>
                                                 <a href="/admin/HumanResources/payrollperiod/">Periodos de Nómina</a>
                                             </li>
-                                            <li>
-                                                <a href="/admin/HumanResources/employee/">Empleados</a>
-                                            </li>
+
                                             <li>
                                                 <a href="/admin/HumanResources/earningsdeductions/">Percepciones y
                                                     Deducciones</a>
@@ -411,27 +419,27 @@
                                     <a href="" class="has_children">
                                         <i class="zmdi zmdi-view-compact"></i> Contratación</a>
                                     <ul class="dropdown-menu dropdown-menu-left">
-                                        <li>
-                                            <a href="/admin/HumanResources/tag/">Etiquetas</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/test/">Pruebas</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/documenttype/">Documentos</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/direction/">Dirección</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/subdirection/">Subdirección</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/area/">Área</a>
-                                        </li>
-                                        <li>
-                                            <a href="/admin/HumanResources/department/">Departamento</a>
-                                        </li>
+                                        <!--<li>-->
+                                            <!--<a href="/admin/HumanResources/tag/">Etiquetas</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="/admin/HumanResources/test/">Pruebas</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="/admin/HumanResources/documenttype/">Documentos</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="/admin/HumanResources/direction/">Dirección</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="/admin/HumanResources/subdirection/">Subdirección</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="/admin/HumanResources/area/">Área</a>-->
+                                        <!--</li>-->
+                                        <!--<li>-->
+                                            <!--<a href="/admin/HumanResources/department/">Departamento</a>-->
+                                        <!--</li>-->
                                          <li>
                                             <a href="/admin/HumanResources/employeerequisition/">Requisición de Personal</a>
                                         </li>
@@ -440,6 +448,45 @@
                                         </li>
                                     </ul>
                                 </li>
+
+                                #Menú Catálogos
+
+                                <li class="dropdown-submenu">
+                                        <a href="">
+                                            <i class="zmdi zmdi-view-dashboard"></i>Catálogos</a>
+                                        <ul class="dropdown-menu dropdown-menu-left">
+
+                                            <li>
+                                                    <a href="/admin/HumanResources/tag/">Etiquetas</a>
+                                            </li>
+
+                                            <li>
+                                                    <a href="/admin/HumanResources/test/">Pruebas</a>
+                                            </li>
+
+                                            <li>
+                                                    <a href="/admin/HumanResources/documenttype/">Documentos</a>
+                                            </li>
+
+                                            <li>
+                                                    <a href="/admin/HumanResources/direction/">Dirección</a>
+                                            </li>
+
+                                            <li>
+                                                    <a href="/admin/HumanResources/subdirection/">Subdirección</a>
+                                            </li>
+
+                                            <li>
+                                                    <a href="/admin/HumanResources/area/">Área</a>
+                                            </li>
+
+                                            <li>
+                                                    <a href="/admin/HumanResources/department/">Departamento</a>
+                                            </li>
+
+                                        </ul>
+                                    </li>
+
                             </ul>
                         </li>
 

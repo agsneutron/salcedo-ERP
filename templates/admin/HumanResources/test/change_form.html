@@ -1,3 +1,4 @@
+
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls admin_static admin_modify %}
 
@@ -64,7 +65,7 @@
 
                 {% block field_sets %}
                     <div class="container">
-                    {% include "admin/HumanResources/employeerequisition-home.html" %}
+                    {% include "admin/HumanResources/employeecatlogs-home.html" %}
                         <div class="col-xs-9">
                             {% for fieldset in adminform %}
                                 {% include "admin/HumanResources/test/fieldset.html" %}
