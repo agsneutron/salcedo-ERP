@@ -1758,13 +1758,13 @@ display: -webkit-inline-box;
     top: 3px !important;
 }
 
-.errorlist {
+/*.errorlist {
 position: absolute !important;
     bottom: -25px !important;
     right: 15px !important;
     font-size: 10px;
     color: #ff0000 !important;
-}
+}*/
 
 .btn-excel {
     background-color: #207245 !important;

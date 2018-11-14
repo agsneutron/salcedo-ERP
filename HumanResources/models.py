@@ -378,12 +378,12 @@ def upload_employee_document(instance, filename):
 
 # Employee Documents.
 class EmployeeDocument(models.Model):
-    file = models.FileField(upload_to=upload_employee_document, null=True, verbose_name="Archivo")
-    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=False, blank=False, unique=False)
+    file = models.FileField(upload_to=upload_employee_document, null=True, verbose_name="Archivo*")
+    comments = models.CharField(verbose_name="Comentarios*", max_length=2048, null=False, blank=False, unique=False)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
-    document_type = models.ForeignKey('DocumentType', verbose_name='Tipo de Documento', null=False, blank=False)
+    document_type = models.ForeignKey('DocumentType', verbose_name='Tipo de Documento*', null=False, blank=False)
 
     def __str__(self):
         return self.file.name
@@ -598,13 +598,13 @@ class Test(models.Model):
 
 # To represent the application of an employee to a test.
 class TestApplication(models.Model):
-    application_date = models.DateField(verbose_name="Fecha de Aplicación", null=False, blank=False)
-    result = models.CharField(verbose_name="Resultado", max_length=512, null=False, blank=False)
+    application_date = models.DateField(verbose_name="Fecha de Aplicación*", null=False, blank=False)
+    result = models.CharField(verbose_name="Resultado*", max_length=512, null=False, blank=False)
     comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    test = models.ForeignKey(Test, verbose_name="Prueba", null=False, blank=False)
+    test = models.ForeignKey(Test, verbose_name="Prueba*", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Aplicaciones de Pruebas del Empleado"
@@ -1029,12 +1029,12 @@ class Department(models.Model):
 
 
 class EmployeePositionDescription(models.Model):
-    start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
-    end_date = models.DateField(verbose_name="Fecha de Termino", null=False, blank=False)
+    start_date = models.DateField(verbose_name="Fecha de Inicio*", null=False, blank=False)
+    end_date = models.DateField(verbose_name="Fecha de Termino*", null=False, blank=False)
     physical_location = models.CharField(verbose_name="Ubicación Física", max_length=250, null=False, blank=True)
-    entry_time = models.TimeField(verbose_name="Hora de Entrada", null=True, auto_now_add=False)
-    departure_time = models.TimeField(verbose_name="Hora de Salida", null=True, auto_now_add=False)
-    observations = models.CharField(verbose_name="Observaciones", null=True, blank=False, max_length=500)
+    entry_time = models.TimeField(verbose_name="Hora de Entrada*", null=True, auto_now_add=False)
+    departure_time = models.TimeField(verbose_name="Hora de Salida*", null=True, auto_now_add=False)
+    observations = models.CharField(verbose_name="Observaciones*", null=True, blank=False, max_length=500)
     monday = models.BooleanField(verbose_name="Lunes", default=True)
     tuesday = models.BooleanField(verbose_name="Martes", default=True)
     wednesday = models.BooleanField(verbose_name="Miércoles", default=True)
@@ -1045,23 +1045,23 @@ class EmployeePositionDescription(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina", null=False, blank=False)
-    direction = models.ForeignKey(Direction, verbose_name='Dirección', null=False, blank=False)
-    subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección', null=False, blank=False)
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina*", null=False, blank=False)
+    direction = models.ForeignKey(Direction, verbose_name='Dirección*', null=False, blank=False)
+    subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección*', null=False, blank=False)
     # subdirection = ChainedForeignKey(Subdirection,
     #                                  chained_field="direction",
     #                                  chained_model_field="direction",
     #                                  show_all=False,
     #                                  auto_choose=True,
     #                                  sort=True)
-    department = models.ForeignKey(Department, verbose_name='Departamento', null=False, blank=False)
+    department = models.ForeignKey(Department, verbose_name='Departamento*', null=False, blank=False)
     # department = ChainedForeignKey(Department,
     #                                chained_field="subdirection",
     #                                chained_model_field="subdirection",
     #                                show_all=False,
     #                                auto_choose=True,
     #                                sort=True)
-    area = models.ForeignKey(Area, verbose_name='Área', null=False, blank=False)
+    area = models.ForeignKey(Area, verbose_name='Área*', null=False, blank=False)
     # area = ChainedForeignKeyChainedForeignKey(Area,
     #                          chained_field="subdirection",
     #                          chained_model_field="subdirection",
@@ -1069,7 +1069,7 @@ class EmployeePositionDescription(models.Model):
     #                          auto_choose=True,
     #                          sort=True)
 
-    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto*', null=False, blank=False)
     contract = models.CharField(verbose_name="Contrato", null=False, blank=False, max_length=45)
 
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
@@ -1102,11 +1102,11 @@ class EmployeeFinancialData(models.Model):
         ('T', 'Transferencia Interbancaria'),
     )
 
-    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, default=0)
-    CLABE = models.IntegerField(verbose_name='CLABE', null=False, default=0)
-    monthly_salary = models.DecimalField(verbose_name='Salario Mensual', max_digits=20, decimal_places=2, null=True)
-    daily_salary = models.DecimalField(verbose_name='Salario Diario', max_digits=20, decimal_places=2, null=True)
-    aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20,
+    account_number = models.IntegerField(verbose_name='Número de Cuenta*', null=False, default=0)
+    CLABE = models.IntegerField(verbose_name='Clave*', null=False, default=0)
+    monthly_salary = models.DecimalField(verbose_name='Salario Mensual*', max_digits=20, decimal_places=2, null=True)
+    daily_salary = models.DecimalField(verbose_name='Salario Diario*', max_digits=20, decimal_places=2, null=True)
+    aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado*', max_digits=20,
                                                  decimal_places=2, null=True)
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
@@ -1114,7 +1114,7 @@ class EmployeeFinancialData(models.Model):
                                       verbose_name='Forma de Pago')
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
                                       verbose_name='Forma de Pago')
-    bank = models.ForeignKey(Bank, null=False, blank=False, verbose_name="Banco")
+    bank = models.ForeignKey(Bank, null=False, blank=False, verbose_name="Banco*")
 
     class Meta:
         verbose_name_plural = "Datos Financieros del Empleado"
@@ -1122,12 +1122,12 @@ class EmployeeFinancialData(models.Model):
 
 
 class InfonavitData(models.Model):
-    infonavit_credit_number = models.CharField(verbose_name="Número de Crédito", null=False, blank=False,
+    infonavit_credit_number = models.CharField(verbose_name="Número de Crédito*", null=False, blank=False,
                                                max_length=30, )
-    discount_type = models.CharField(verbose_name="Tipo de Descuento", null=False, blank=False, max_length=30, )
-    discount_amount = models.CharField(verbose_name="Monto de Descuento", null=False, blank=False, max_length=30, )
-    start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
-    credit_term = models.CharField(verbose_name="Duración de Crédito", null=False, blank=False, max_length=200)
+    discount_type = models.CharField(verbose_name="Tipo de Descuento*", null=False, blank=False, max_length=30, )
+    discount_amount = models.CharField(verbose_name="Monto de Descuento*", null=False, blank=False, max_length=30, )
+    start_date = models.DateField(verbose_name="Fecha de Inicio*", null=False, blank=False)
+    credit_term = models.CharField(verbose_name="Duración de Crédito*", null=False, blank=False, max_length=200)
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
 
     # Foreign Keys.
@@ -1226,14 +1226,13 @@ class EmployeeEarningsDeductions(models.Model):
     '''
         To keep a history of the applied employee earnings and deductions.
     '''
-    ammount = models.DecimalField(verbose_name="Monto", decimal_places=2, blank=False, null=False,
-                                  default=0, max_digits=20,
+    ammount = models.DecimalField(verbose_name="Monto*", decimal_places=2, blank=False, null=False, max_digits=20,
                                   validators=[MinValueValidator(Decimal('0.0'))])
-    date = models.DateField(verbose_name="Fecha", null=False, blank=False)
+    date = models.DateField(verbose_name="Fecha*", null=False, blank=False)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto", null=False, blank=False, limit_choices_to={
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto*", null=False, blank=False, limit_choices_to={
         'category': 'F', 'status':'A',
     })
 
