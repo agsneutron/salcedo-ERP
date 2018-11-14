@@ -96,10 +96,10 @@ def upload_employee_photo(instance, filename):
 
 # Employee General Information.
 class Employee(models.Model):
-    employee_key = models.CharField(verbose_name="Clave", max_length=64, null=False, blank=False, unique=False)
-    name = models.CharField(verbose_name="Nombre", max_length=255, null=False, blank=False, unique=False)
-    first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
-    second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
+    employee_key = models.CharField(verbose_name="Clave*", max_length=64, null=False, blank=False, unique=False)
+    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False)
+    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False)
+    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False)
 
     photo = models.FileField(upload_to=upload_employee_photo, null=True, blank=True, verbose_name="Foto")
 
@@ -110,7 +110,7 @@ class Employee(models.Model):
         (TYPE_B, 'Empleado Tipo B'),
     )
     type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleado')
-    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
+    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro*")
 
     STATUS_ACTIVE = 1
     STATUS_INNACTIVE = 2
@@ -121,8 +121,8 @@ class Employee(models.Model):
 
     status = models.IntegerField(choices=EMPLOYEE_STATUS_CHOICES, default=STATUS_ACTIVE,
                                  verbose_name='Estatus del Empleado')
-    birthdate = models.DateField(null=False, blank=False, verbose_name="Fecha de Nacimiento")
-    birthplace = models.CharField(null=False, blank=False, verbose_name="Lugar de Nacimiento", max_length=255)
+    birthdate = models.DateField(null=False, blank=False, verbose_name="Fecha de Nacimiento*")
+    birthplace = models.CharField(null=False, blank=False, verbose_name="Lugar de Nacimiento*", max_length=255)
 
     GENDER_A = 1
     GENDER_B = 2
@@ -140,25 +140,25 @@ class Employee(models.Model):
     )
     marital_status = models.IntegerField(choices=EMPLOYEE_MARITAL_STATUS_CHOICES, default=MARITAL_STATUS_A,
                                          verbose_name='Estado Civil')
-    curp = models.CharField(verbose_name="CURP", max_length=18, null=False, blank=False, unique=True)
-    rfc = models.CharField(verbose_name="RFC", max_length=13, null=False, blank=False, unique=True)
-    phone_number = models.CharField(verbose_name="Teléfono", max_length=20, null=False, blank=False)
-    cellphone_number = models.CharField(verbose_name="Celular", max_length=20, null=False, blank=True)
-    office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=20, null=False, blank=True)
-    extension_number = models.CharField(verbose_name="Número de Extensión", max_length=10, null=False, blank=True)
+    curp = models.CharField(verbose_name="CURP*", max_length=18, null=False, blank=False, unique=True)
+    rfc = models.CharField(verbose_name="RFC*", max_length=13, null=False, blank=False, unique=True)
+    phone_number = models.IntegerField(verbose_name="Teléfono*", null=False, blank=False, default=0)
+    cellphone_number = models.IntegerField(verbose_name="Celular", null=False, blank=True, default=0)
+    office_number = models.IntegerField(verbose_name="Teléfono de Oficina", null=False, blank=True, default=0)
+    extension_number = models.IntegerField(verbose_name="Número de Extensión", null=False, blank=True, default=0)
     personal_email = models.CharField(verbose_name="Correo Electrónico Personal", max_length=255, null=True,
                                       blank=False)
-    work_email = models.CharField(verbose_name="Correo Electrónico Laboral", max_length=255, null=False, blank=False)
+    work_email = models.CharField(verbose_name="Correo Electrónico Laboral", max_length=255, null=True, blank=True)
 
-    social_security_number = models.CharField(verbose_name="Número de Póliza de Seguro", max_length=20, null=False,
+    social_security_number = models.CharField(verbose_name="Número de Póliza de Seguro*", max_length=20, null=False,
                                               blank=False)
     social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
 
-    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
-    street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
-    outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
+    colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False)
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
-    zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
+    zip_code = models.IntegerField(verbose_name="Código Postal*", null=False, blank=False, default=0)
 
     BLOOD_TYPE_AP = 1
     BLOOD_TYPE_AM = 2
@@ -188,22 +188,22 @@ class Employee(models.Model):
     # Foreign Keys.
 
     # Attribute for the Chained Keys.
-    country = models.ForeignKey(Pais, verbose_name="País", null=False, blank=False)
+    country = models.ForeignKey(Pais, verbose_name="País*", null=False, blank=False)
     state = ChainedForeignKey(Estado,
                               chained_field="country",
                               chained_model_field="pais",
                               show_all=False,
                               auto_choose=True,
                               sort=True,
-                              verbose_name="Estado")
+                              verbose_name="Estado*")
     town = ChainedForeignKey(Municipio,
                              chained_field="state",
                              chained_model_field="estado",
                              show_all=False,
                              auto_choose=True,
                              sort=True,
-                             verbose_name="Municipio")
-    tax_regime = models.ForeignKey('TaxRegime', verbose_name="Régimen Fiscal", null=False, blank=False)
+                             verbose_name="Municipio*")
+    tax_regime = models.ForeignKey('TaxRegime', verbose_name="Régimen Fiscal*", null=False, blank=False)
 
     # Many to Many Foreign Keys.
     tags = models.ManyToManyField("Tag", verbose_name="Etiquetas", through="EmployeeHasTag")
@@ -473,8 +473,8 @@ class CurrentEducation(models.Model):
     )
     type = models.IntegerField(choices=EDUCATION_TYPE_CHOICES, default=EDUCATION_TYPE_A,
                                verbose_name='Tipo de Educación')
-    name = models.CharField(verbose_name="Nombre", max_length=2048, null=False, blank=False)
-    institution = models.CharField(verbose_name="Institución", max_length=1024, null=False, blank=False)
+    name = models.CharField(verbose_name="Nombre*", max_length=2048, null=False, blank=False)
+    institution = models.CharField(verbose_name="Institución*", max_length=1024, null=False, blank=False)
     sunday = models.BooleanField(verbose_name="Domingo", default=False)
     monday = models.BooleanField(verbose_name="Lunes", default=False)
     tuesday = models.BooleanField(verbose_name="Martes", default=False)
@@ -484,7 +484,7 @@ class CurrentEducation(models.Model):
     saturday = models.BooleanField(verbose_name="Sábado", default=False)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
 
     class Meta:
         verbose_name = "Formación Académica Actual del Empleado"
@@ -511,7 +511,7 @@ class CurrentEducationDocument(models.Model):
     comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True, unique=False)
 
     # Foreign Keys.
-    current_education = models.ForeignKey(CurrentEducation, verbose_name='Formación Actual del Empleado', null=False,
+    current_education = models.ForeignKey(CurrentEducation, verbose_name='Formación Actual del Empleado*', null=False,
                                           blank=False)
 
     def __str__(self):
@@ -560,14 +560,14 @@ class Education(models.Model):
     )
     type = models.IntegerField(choices=EDUCATION_TYPE_CHOICES, default=EDUCATION_TYPE_A,
                                verbose_name='Tipo de Educación')
-    name = models.CharField(verbose_name="Nombre", max_length=2048, null=False, blank=False)
-    institution = models.CharField(verbose_name="Institución", max_length=1024, null=False, blank=False)
-    license_code = models.CharField(verbose_name="Código o Número de Cédula", max_length=512, null=False, blank=False)
+    name = models.CharField(verbose_name="Nombre*", max_length=2048, null=False, blank=False)
+    institution = models.CharField(verbose_name="Institución*", max_length=1024, null=False, blank=False)
+    license_code = models.CharField(verbose_name="Código o Número de Cédula", max_length=512, null=True, blank=True)
     evidence = models.FileField(verbose_name="Comprobante", upload_to=upload_employee_education_document, null=True,
                                 blank=True)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name="Empleado¡", null=False, blank=False)
 
     class Meta:
         verbose_name = "Formación Académica del Empleado"
@@ -643,16 +643,16 @@ class TestApplication(models.Model):
 
 # To represent an employee's family member.
 class FamilyMember(models.Model):
-    name = models.CharField(verbose_name="Nombre", max_length=255, null=False, blank=False, unique=False)
-    first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
-    second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
+    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False)
+    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False)
+    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False)
     relationship = models.CharField(verbose_name="Parentesco", max_length=128, null=False, blank=True)
     career = models.CharField(verbose_name="Profesión", max_length=128, null=False, blank=True)
     age = models.IntegerField(verbose_name="Edad", null=True, blank=True, default=0)
-    phone_number = models.CharField(verbose_name="Número de Teléfono", max_length=20, null=True, blank=True)
+    phone_number = models.IntegerField(verbose_name="Número de Teléfono", null=True, blank=True, default=0)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Familiares"
@@ -667,18 +667,18 @@ class FamilyMember(models.Model):
 
 # To represent an employee's emergency contact.
 class EmergencyContact(models.Model):
-    name = models.CharField(verbose_name="Nombre", max_length=255, null=False, blank=False, unique=False)
-    first_last_name = models.CharField(verbose_name="Apellido Paterno", max_length=255, null=False, blank=False)
-    second_last_name = models.CharField(verbose_name="Apellido Materno", max_length=255, null=False, blank=False)
-    phone_number = models.CharField(verbose_name="Número de Teléfono", max_length=20, null=True, blank=True)
-    cellphone_number = models.CharField(verbose_name="Número de Celular", max_length=20, null=True, blank=True)
+    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False)
+    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False)
+    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False)
+    phone_number = models.IntegerField(verbose_name="Número de Teléfono", null=True, blank=True, default=0)
+    cellphone_number = models.IntegerField(verbose_name="Número de Celular", null=True, blank=True, default=0)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True)
 
-    colony = models.CharField(verbose_name="Colonia", max_length=255, null=False, blank=False)
-    street = models.CharField(verbose_name="Calle", max_length=255, null=False, blank=False)
-    outdoor_number = models.CharField(verbose_name="No. Exterior", max_length=10, null=False, blank=False)
+    colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False)
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
-    zip_code = models.CharField(verbose_name="Código Postal", max_length=5, null=False, blank=False)
+    zip_code = models.IntegerField(verbose_name="Código Postal*", null=False, blank=False, default=0)
 
     # Foreign Keys.
 
@@ -713,20 +713,20 @@ class EmergencyContact(models.Model):
 
 # To represent an employee's work reference.
 class WorkReference(models.Model):
-    name = models.CharField(verbose_name="Nombre", max_length=255, null=False,
+    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False,
                             blank=False, unique=False)
-    first_last_name = models.CharField(verbose_name="Apellido Paterno",
+    first_last_name = models.CharField(verbose_name="Apellido Paterno*",
                                        max_length=255, null=False, blank=False)
-    second_last_name = models.CharField(verbose_name="Apellido Materno",
+    second_last_name = models.CharField(verbose_name="Apellido Materno*",
                                         max_length=255, null=False, blank=False)
-    company_name = models.CharField(verbose_name="Empresa", max_length=255, null=False, blank=False)
-    first_phone_number = models.CharField(verbose_name="Número de Teléfono #1", max_length=20, null=False, blank=False)
-    second_phone_number = models.CharField(verbose_name="Número de Teléfono #2", max_length=20, null=True, blank=True)
+    company_name = models.CharField(verbose_name="Empresa*", max_length=255, null=False, blank=False)
+    first_phone_number = models.IntegerField(verbose_name="Número de Teléfono #1", null=False, blank=False, default=0)
+    second_phone_number = models.IntegerField(verbose_name="Número de Teléfono #2", null=True, blank=True, default=0)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True)
     notes = models.CharField(verbose_name="Notas", max_length=2048, null=True, blank=False)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Referencias Laborales"
