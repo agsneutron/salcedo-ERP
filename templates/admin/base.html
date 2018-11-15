@@ -221,6 +221,7 @@
                         </a>
 
                     </li>{% endcomment %}
+                    {% if perms.ERP  %}
                         <li class="dropdown
                                 {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="/admin/ERP/project/" class="dropdown-toggle"
@@ -297,6 +298,7 @@
                             </li>{% endcomment %}
                             </ul>
                         </li>
+                        {%endif%}
 
                         <li class="dropdown
                                 {% if request.resolver_match.view_name in "admin:HumanResources_jobprofile_add,admin:HumanResources_jobprofile_change,admin:HumanResources_jobprofile_changelist,admin:HumanResources_employee_add,admin:HumanResources_payrollgroup_add,admin:HumanResources_employee_changelist,admin:HumanResources_payrollperiod_add,admin:HumanResources_earningsdeductions_add,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_employeeloan_add,admin:HumanResources_employeedropout_add,admin:HumanResources_employeehastag_changelist,admin:HumanResources_testapplication_changelist,admin:employee-detail,admin:HumanResources_jobprofile_add,admin:auth_user_add,admin:users-list-view,admin:users-detail,admin:auth_user_change,admin:accesstoproject-list-view,admin:ERP_accesstoproject_add,admin:auth_user_delete,admin:HumanResources_payrollgroup_changelist,admin:HumanResources_payrollgroup_add,admin:HumanResources_payrollperiod_add,admin:HumanResources_payrollperiod_changelist,admin:HumanResources_payrolltype_add,admin:HumanResources_payrolltype_changelist,admin:HumanResources_earningsdeductions_add,admin:HumanResources_earningsdeductions_changelist,admin:HumanResources_uploadedemployeeassistancehistory_add,admin:HumanResources_uploadedemployeeassistancehistory_changelist,admin:HumanResources_employeeloan_add,admin:HumanResources_employeeloan_changelist,admin:HumanResources_employeedropout_add,admin:HumanResources_employeedropout_changelist"|slice:"," %}{{ "active" }}{% endif %}">
@@ -328,7 +330,6 @@
                                         </ul>
                                     </li>
 
-                      """Menú de Empleados modificado para que aparesca dentro del menú principal de Recursos Humanos XAVI"""
 
                                 <li class="dropdown-submenu">
 
@@ -353,8 +354,6 @@
                                 </ul>
 
                                 </li>
-                    """XAVI"""
-
                                     <li class="dropdown-submenu">
                                         <a href="">
                                             <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>

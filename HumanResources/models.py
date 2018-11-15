@@ -19,7 +19,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
-from ERP.models import Pais, Estado, Municipio, Project, Bank
+from ERP.models import Pais, Estado, Municipio, Project, Bank, SATBank
 from SharedCatalogs.models import Account
 from utilities import getParameters
 
@@ -1131,7 +1131,7 @@ class InfonavitData(models.Model):
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
 
     # Foreign Keys.
-    employee_financial_data = models.OneToOneField(EmployeeFinancialData)
+    employee_financial_data = models.ForeignKey(EmployeeFinancialData)
 
     class Meta:
         verbose_name_plural = "Datos del Infonavit del Empleado"

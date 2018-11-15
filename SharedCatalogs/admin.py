@@ -4,6 +4,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 
 # Register your models here.
-from SharedCatalogs.models import InternalCompany
+from SharedCatalogs.models import InternalCompany, SATBank
 
 admin.site.register(InternalCompany)
+admin.site.register(SATBank)
