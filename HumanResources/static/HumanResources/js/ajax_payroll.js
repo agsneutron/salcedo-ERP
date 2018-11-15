@@ -1,7 +1,3 @@
-/**
- * Created by bamaa on 14/09/17.
- */
-
 
 function sendSelected(url) {
     var seleccionados = $('input:checkbox:checked').map(function () {

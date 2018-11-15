@@ -336,23 +336,27 @@ class InfonavitDataForm(forms.ModelForm):
         model = InfonavitData
         fields = '__all__'
 
-    def __init__(self, *args, **kwargs):
+        widgets = {
+            'comments': forms.Textarea(attrs={'rows': 3})
+        }
 
-        self.request = kwargs.pop('request', None)
-        self.employee_id = self.request.GET.get('employee', None)
-
-        if not kwargs.get('initial'):
-            kwargs['initial'] = {}
-
-        # Selecting the current value for the contractor if it exists, otherwise, None.
-        kwargs['initial'].update({'employee': self.employee_id})
-
-        # Calling super class to have acces to the fields.
-        super(InfonavitDataForm, self).__init__(*args, **kwargs)
-
-        # Filtering the values for the contractor if it , otherwise, None.
-        if self.employee_id is not None:
-            self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
+    # def __init__(self, *args, **kwargs):
+    #
+    #     self.request = kwargs.pop('request', None)
+    #     self.employee_id = self.request.GET.get('employee', None)
+    #
+    #     if not kwargs.get('initial'):
+    #         kwargs['initial'] = {}
+    #
+    #     # Selecting the current value for the contractor if it exists, otherwise, None.
+    #     kwargs['initial'].update({'employee': self.employee_id})
+    #
+    #     # Calling super class to have acces to the fields.
+    #     super(InfonavitDataForm, self).__init__(*args, **kwargs)
+    #
+    #     # Filtering the values for the contractor if it , otherwise, None.
+    #     if self.employee_id is not None:
+    #         self.fields['employee'].queryset = Employee.objects.filter(pk=self.employee_id)
 
 
 # Form to include the fields of Earnings Deductions Form.
