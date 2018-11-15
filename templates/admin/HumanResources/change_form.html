@@ -1,3 +1,4 @@
+
 {% extends "admin/base_site.html" %}
 {% load i18n admin_urls admin_static admin_modify app_filters %}
 
@@ -99,14 +100,15 @@
             border-bottom: 3px solid white !important;
         }
 
-        {% comment %}  .errorlist {
-              position: relative;
-              top: -6px;
+        .errorlist {
+              position: absolute;
+              /*top: 55px;*/
               font-size: 10px;
               color: #ff0000;
-              line-height: 16px;
+              bottom: -16px;
+              /*line-height: 130px;*/
           }
-  {% endcomment %}
+
     </style>
 {% endblock %}
 
@@ -326,6 +328,9 @@
                             {% endfor %}
 
                             {% block inline_field_sets %}
+
+                            <br>
+
                                 {% for inline_admin_formset in inline_admin_formsets %}
                                     {% comment %}{% include inline_admin_formset.opts.template %}{% endcomment %}
                                     {% include "admin/HumanResources/stacked.html" %}
