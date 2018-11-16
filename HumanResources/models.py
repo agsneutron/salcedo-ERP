@@ -121,6 +121,7 @@ def upload_employee_photo(instance, filename):
     return '/'.join(['human_resources', 'employee_documents', instance.employee_key, filename])
 
 
+
 # Employee General Information.
 class Employee(models.Model):
     employee_key = models.CharField(verbose_name="Clave*", max_length=64, null=False, blank=False, unique=False)
