@@ -150,6 +150,7 @@ class EmployeeContractDetail(generic.DetailView):
     model = EmployeeContract
     template_name = "HumanResources/employee-contract-detail.html"
 
+
 class EmployeeDetailView(generic.DetailView):
     model = Employee
     template_name = "HumanResources/employee-detail.html"
