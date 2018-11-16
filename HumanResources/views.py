@@ -250,7 +250,6 @@ class EmployeeDetailView(generic.DetailView):
 
         context['employee_infonavit'] = Infonavit_array
 
-
         # Obtaining the employee's Employee Has TAG Data and setting it to the context.
         context['employee_has_tag'] = EmployeeHasTag.objects.filter(employee__id=employee.id)
 
