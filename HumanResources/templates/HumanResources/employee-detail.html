@@ -784,50 +784,49 @@
                                         <div class="">
                                             <strong>Días de Asistencia: </strong><br>
                                             <div class="checkbox">
-
+                                                <label>
+                                                    <a href="javascript:void(0)"
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  record.sunday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{%if record.sunday%}check{%else%}close{%endif%}"></i>
+                                                    </a>
+                                                    <br>Domingo
+                                                </label>
                                                 <label class="">
                                                     <a href="javascript:void(0)"
-                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
-                                                        <i class="zmdi zmdi-check"></i>
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  record.monday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{%if record.monday%}check{%else%}close{%endif%}"></i>
                                                     </a>
                                                     <br>Lunes
                                                 </label>
                                                 <label>
                                                     <a href="javascript:void(0)"
-                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
-                                                        <i class="zmdi zmdi-check"></i>
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  record.tuesday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{%if record.tuesday%}check{%else%}close{%endif%}"></i>
                                                     </a><br>Martes
                                                 </label>
                                                 <label>
                                                     <a href="javascript:void(0)"
-                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
-                                                        <i class="zmdi zmdi-check"></i>
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  record.wednesday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{%if record.wednesday%}check{%else%}close{%endif%}"></i>
                                                     </a><br>Miércoles
                                                 </label>
                                                 <label>
                                                     <a href="javascript:void(0)"
-                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
-                                                        <i class="zmdi zmdi-check"></i>
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  record.thursday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{%if record.thursday%}check{%else%}close{%endif%}"></i>
                                                     </a><br>Jueves
                                                 </label>
                                                 <label>
                                                     <a href="javascript:void(0)"
-                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
-                                                        <i class="zmdi zmdi-check"></i>
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  record.friday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{%if record.friday%}check{%else%}close{%endif%}"></i>
                                                     </a><br>Viernes
                                                 </label>
-                                                <label>
+                                                <label class="text-center">
                                                     <a href="javascript:void(0)"
-                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1">
-                                                        <i class="zmdi zmdi-close"></i>
+                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-{% if  record.saturday %}primary{% else %}default{% endif %} mb-1">
+                                                        <i class="zmdi zmdi-{%if record.saturday%}check{%else%}close{%endif%}"></i>
                                                     </a><br>Sábado
-                                                </label>
-                                                <label>
-                                                    <a href="javascript:void(0)"
-                                                       class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1">
-                                                        <i class="zmdi zmdi-check"></i>
-                                                    </a>
-                                                    <br>Domingo
                                                 </label>
 
                                             </div>

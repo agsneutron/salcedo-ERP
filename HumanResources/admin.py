@@ -1044,7 +1044,7 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 
 
 # @admin.register(InfonavitData)
-class InfonavitDataAdmin(admin.StackedInline):
+class InfonavitDataAdmin(admin.TabularInline):
     model = InfonavitData
     form = InfonavitDataForm
     extra = 1

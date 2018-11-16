@@ -150,6 +150,20 @@ class EmployeeContractDetail(generic.DetailView):
     model = EmployeeContract
     template_name = "HumanResources/employee-contract-detail.html"
 
+
+# class EmployeeFinancialDataview(generic.DetailView):
+#     model = EmployeeFinancialData
+#     template_name = "HumanResources/employee-detail.html"
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(EmployeeFinancialDataview, self).get_context_data(**kwargs)
+#
+#         employeefinancialdata = context['employeefinancialdata']
+#
+#         infonavit_credit_number =InfonavitData.objects.filter(employee_financial_data_id=employeefinancialdata.id)
+#         context['Numero_credito'] = infonavit_credit_number
+
+
 class EmployeeDetailView(generic.DetailView):
     model = Employee
     template_name = "HumanResources/employee-detail.html"
@@ -159,6 +173,7 @@ class EmployeeDetailView(generic.DetailView):
 
         # The employee object.
         employee = context['employee']
+        #employeefinancialdata = context['employeefinancialdata']
 
         # Obtaining the test applications of the employee and setting them to the context.
         test_applications = TestApplication.objects.filter(employee__id=employee.id)
@@ -217,6 +232,32 @@ class EmployeeDetailView(generic.DetailView):
 
         # Obtaining the employee's Employee Financial Data and setting it to the context.
         context['employee_financial_data'] = EmployeeFinancialData.objects.filter(employee__id=employee.id)
+
+        #Infonavit no estaba creado
+        #
+        # Inavit_array = []
+        # Infona_set = InfonavitData.objects.filter(employee_financial_data_id=employeefinancialdata.id)
+        # for info in Infona_set:
+        #     info_json = {
+        #         #'type': info.get_type_display(),
+        #         # 'numcuenta': info.account_number,
+        #         # 'clabe': info.CLABE,
+        #         # 'montsala': info.monthly_salary,
+        #         # 'daysala': info.daily_salary ,
+        #         # 'aggrsal': info.aggregate_daily_salary,
+        #         # 'paymet': info.payment_method,
+        #         # 'bank': info.bank,
+        #
+        #         #'info': [],
+        #        'info': info.infonavit_credit_number,
+        #       'discont': info.discount_type,
+        #        'ammou' : info.discount_amount,
+        #         'date' : info.start_date,
+        #         'term' : info.credit_term,
+        #         'coment' : info.comments,
+        #
+        #     }
+
 
         # Obtaining the employee's Employee Has TAG Data and setting it to the context.
         context['employee_has_tag'] = EmployeeHasTag.objects.filter(employee__id=employee.id)

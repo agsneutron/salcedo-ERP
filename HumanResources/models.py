@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.core.validators import RegexValidator
+
 # Django Libraries.
 from tinymce import models as tinymce_models
 
@@ -27,6 +29,9 @@ from utilities import getParameters
 from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
 from django.db.models import Sum
+
+
+olynum_regex = RegexValidator(regex="[0-9]", message="Asegurese de agregar solo caracteres numericos")
 
 
 # To represent ISRTable.
@@ -182,7 +187,7 @@ class Employee(models.Model):
     blood_type = models.IntegerField(choices=BLOOD_TYPE_CHOICES, default=BLOOD_TYPE_AP, verbose_name='Tipo Sanguíneo')
     driving_license_number = models.CharField(verbose_name="Número de Licencia de Conducir", max_length=20, null=False,
                                               blank=True)
-    driving_license_expiry_date = models.DateField(null=False, blank=True,
+    driving_license_expiry_date = models.DateField(null=True, blank=True,
                                                    verbose_name="Expiración de Licencia para Conducir")
 
     # Foreign Keys.
@@ -1069,8 +1074,8 @@ class EmployeePositionDescription(models.Model):
     #                          auto_choose=True,
     #                          sort=True)
 
-    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
-    contract = models.CharField(verbose_name="Contrato", null=False, blank=False, max_length=45)
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto*', null=False, blank=False)
+    contract = models.CharField(verbose_name="Contrato*", null=False, blank=False, max_length=45)
 
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
 
@@ -1102,19 +1107,22 @@ class EmployeeFinancialData(models.Model):
         ('T', 'Transferencia Interbancaria'),
     )
 
-    account_number = models.IntegerField(verbose_name='Número de Cuenta', null=False, default=0)
-    CLABE = models.IntegerField(verbose_name='CLABE', null=False, default=0)
-    monthly_salary = models.DecimalField(verbose_name='Salario Mensual', max_digits=20, decimal_places=2, null=True)
-    daily_salary = models.DecimalField(verbose_name='Salario Diario', max_digits=20, decimal_places=2, null=True)
+    #entero_regex = RegexValidator(regex=r'^\+?1?\d{9,40}$',
+     #                            message="Asegurese de agregar solo caracteres numericos")
+
+    account_number = models.CharField(verbose_name='Número de Cuenta',max_length=20, null=False, blank=False,default=0, validators=[olynum_regex])
+    CLABE = models.CharField(verbose_name='Clave Interbancaria (CLABE)',max_length=40, null=False, blank=False, default=0, validators=[olynum_regex])
+    monthly_salary = models.DecimalField(verbose_name='Salario Mensual*', max_digits=20, decimal_places=2, null=True)
+    daily_salary = models.DecimalField(verbose_name='Salario Diario*', max_digits=20, decimal_places=2, null=True)
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20,
-                                                 decimal_places=2, null=True)
+                                                 decimal_places=2, null=True, blank=True)
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
                                       verbose_name='Forma de Pago')
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
                                       verbose_name='Forma de Pago')
-    bank = models.ForeignKey(Bank, null=False, blank=False, verbose_name="Banco")
+    bank = models.ForeignKey(SATBank, null=False, blank=False, verbose_name="Banco*")
 
     class Meta:
         verbose_name_plural = "Datos Financieros del Empleado"
@@ -1128,7 +1136,7 @@ class InfonavitData(models.Model):
     discount_amount = models.CharField(verbose_name="Monto de Descuento", null=False, blank=False, max_length=30, )
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     credit_term = models.CharField(verbose_name="Duración de Crédito", null=False, blank=False, max_length=200)
-    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
+    comments = models.TextField(verbose_name="Observaciones", null=False, blank=False, max_length=500, )
 
     # Foreign Keys.
     employee_financial_data = models.ForeignKey(EmployeeFinancialData)
@@ -1226,8 +1234,7 @@ class EmployeeEarningsDeductions(models.Model):
     '''
         To keep a history of the applied employee earnings and deductions.
     '''
-    ammount = models.DecimalField(verbose_name="Monto", decimal_places=2, blank=False, null=False,
-                                  default=0, max_digits=20,
+    ammount = models.DecimalField(verbose_name="Monto*", decimal_places=2, blank=False, null=False, max_digits=20,
                                   validators=[MinValueValidator(Decimal('0.0'))])
     date = models.DateField(verbose_name="Fecha", null=False, blank=False)
 
