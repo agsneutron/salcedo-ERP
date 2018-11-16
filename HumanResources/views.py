@@ -230,33 +230,24 @@ class EmployeeDetailView(generic.DetailView):
         # Obtaining the employee's position description and setting it to the context.
         context['employee_position_description'] = EmployeePositionDescription.objects.filter(employee__id=employee.id)
 
+        employee_financial_data_id = EmployeeFinancialData.objects.values('id').filter(employee__id=employee.id)
         # Obtaining the employee's Employee Financial Data and setting it to the context.
         context['employee_financial_data'] = EmployeeFinancialData.objects.filter(employee__id=employee.id)
 
-        #Infonavit no estaba creado
-        #
-        # Inavit_array = []
-        # Infona_set = InfonavitData.objects.filter(employee_financial_data_id=employeefinancialdata.id)
-        # for info in Infona_set:
-        #     info_json = {
-        #         #'type': info.get_type_display(),
-        #         # 'numcuenta': info.account_number,
-        #         # 'clabe': info.CLABE,
-        #         # 'montsala': info.monthly_salary,
-        #         # 'daysala': info.daily_salary ,
-        #         # 'aggrsal': info.aggregate_daily_salary,
-        #         # 'paymet': info.payment_method,
-        #         # 'bank': info.bank,
-        #
-        #         #'info': [],
-        #        'info': info.infonavit_credit_number,
-        #       'discont': info.discount_type,
-        #        'ammou' : info.discount_amount,
-        #         'date' : info.start_date,
-        #         'term' : info.credit_term,
-        #         'coment' : info.comments,
-        #
-        #     }
+        #Infonavit
+        Infonavit_set = InfonavitData.objects.filter(employee_financial_data_id=employee_financial_data_id)
+        for infonavit in Infonavit_set:
+            infonavit_json = {
+            'info': infonavit.infonavit_credit_number,
+            'discont': infonavit.discount_type,
+            'ammou': infonavit.discount_amount,
+            'date': infonavit.start_date,
+            'term': infonavit.credit_term,
+            'coment': infonavit.comments,
+             }
+
+
+        context['employee_infonavit'] = Infonavit_set
 
 
         # Obtaining the employee's Employee Has TAG Data and setting it to the context.
