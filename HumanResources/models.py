@@ -51,8 +51,8 @@ rfc_regex = RegexValidator(regex="^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-
 onlynum_regex = RegexValidator(regex="[0-9]",
                              message="Este campo solo acepta números.")
 
-
-
+letras = RegexValidator(regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
+                             message="Éste campo no acepta caracateres como: +*/{] .")
 
 
 
@@ -414,7 +414,7 @@ def upload_employee_document(instance, filename):
 # Employee Documents.
 class EmployeeDocument(models.Model):
     file = models.FileField(upload_to=upload_employee_document, null=True, verbose_name="Archivo*")
-    comments = models.CharField(verbose_name="Comentarios*", max_length=2048, null=False, blank=False, unique=False)
+    comments = models.CharField(verbose_name="Comentarios*", max_length=2048, null=False, blank=False, unique=False, validators=[letras])
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
@@ -543,7 +543,7 @@ def upload_employee_current_education_document(instance, filename):
 class CurrentEducationDocument(models.Model):
     file = models.FileField(upload_to=upload_employee_current_education_document, null=True, verbose_name="Archivo",
                             blank=True)
-    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True, unique=False)
+    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True, unique=False, validators=[letras])
 
     # Foreign Keys.
     current_education = models.ForeignKey(CurrentEducation, verbose_name='Formación Actual del Empleado*', null=False,
@@ -635,7 +635,7 @@ class Test(models.Model):
 class TestApplication(models.Model):
     application_date = models.DateField(verbose_name="Fecha de Aplicación*", null=False, blank=False)
     result = models.CharField(verbose_name="Resultado*", max_length=512, null=False, blank=False)
-    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True)
+    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True, validators=[letras])
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
@@ -758,7 +758,7 @@ class WorkReference(models.Model):
     first_phone_number = models.CharField(verbose_name="Número de Teléfono #1", null=False, blank=False, validators=[phone_regex], max_length=15)
     second_phone_number = models.CharField(verbose_name="Número de Teléfono #2", null=True, blank=True, validators=[phone_regex],max_length=15)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True, validators=[email_regex])
-    notes = models.CharField(verbose_name="Notas", max_length=2048, null=True, blank=False)
+    notes = models.CharField(verbose_name="Notas", max_length=2048, null=True, blank=False, validators=[letras])
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
@@ -1065,11 +1065,11 @@ class Department(models.Model):
 
 class EmployeePositionDescription(models.Model):
     start_date = models.DateField(verbose_name="Fecha de Inicio*", null=False, blank=False)
-    end_date = models.DateField(verbose_name="Fecha de Termino*", null=False, blank=False)
+    end_date = models.DateField(verbose_name="Fecha de Termino", null=True, blank=True)
     physical_location = models.CharField(verbose_name="Ubicación Física", max_length=250, null=False, blank=True)
     entry_time = models.TimeField(verbose_name="Hora de Entrada*", null=True, auto_now_add=False)
     departure_time = models.TimeField(verbose_name="Hora de Salida*", null=True, auto_now_add=False)
-    observations = models.CharField(verbose_name="Observaciones*", null=True, blank=False, max_length=500)
+    observations = models.CharField(verbose_name="Observaciones*", null=False, blank=False, max_length=500, validators=[letras])
     monday = models.BooleanField(verbose_name="Lunes", default=True)
     tuesday = models.BooleanField(verbose_name="Martes", default=True)
     wednesday = models.BooleanField(verbose_name="Miércoles", default=True)
@@ -1081,7 +1081,7 @@ class EmployeePositionDescription(models.Model):
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina*", null=False, blank=False)
-    direction = models.ForeignKey(Direction, verbose_name='Dirección*', null=False, blank=False)
+    direction = models.ForeignKey(Direction, verbose_name='Empresa / Proyecto*', null=False, blank=False)
     subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección*', null=False, blank=False)
     # subdirection = ChainedForeignKey(Subdirection,
     #                                  chained_field="direction",
@@ -1104,8 +1104,8 @@ class EmployeePositionDescription(models.Model):
     #                          auto_choose=True,
     #                          sort=True)
 
-    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
-    contract = models.CharField(verbose_name="Contrato", null=False, blank=False, max_length=45)
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto*', null=False, blank=False)
+    contract = models.CharField(verbose_name="Contrato*", null=False, blank=False, max_length=45)
 
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
 
@@ -1166,7 +1166,7 @@ class InfonavitData(models.Model):
     discount_amount = models.CharField(verbose_name="Monto de Descuento", null=False, blank=False, max_length=30, )
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     credit_term = models.CharField(verbose_name="Duración de Crédito", null=False, blank=False, max_length=200)
-    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, )
+    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, validators=[letras])
 
     # Foreign Keys.
     employee_financial_data = models.ForeignKey(EmployeeFinancialData)
