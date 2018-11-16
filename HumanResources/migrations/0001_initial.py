@@ -180,7 +180,7 @@ class Migration(migrations.Migration):
                 ('street', models.CharField(max_length=255, verbose_name='Calle')),
                 ('outdoor_number', models.CharField(max_length=10, verbose_name='No. Exterior')),
                 ('indoor_number', models.CharField(blank=True, max_length=10, null=True, verbose_name='No. Interior')),
-                ('zip_code', models.IntegerField(max_length=5, verbose_name='C\xf3digo Postal')),
+                ('zip_code', models.CharField(max_length=5, verbose_name='C\xf3digo Postal')),
                 ('country', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='SharedCatalogs.Pais', verbose_name='Pa\xeds')),
             ],
             options={
@@ -218,7 +218,7 @@ class Migration(migrations.Migration):
                 ('street', models.CharField(max_length=255, verbose_name='Calle')),
                 ('outdoor_number', models.CharField(max_length=10, verbose_name='No. Exterior')),
                 ('indoor_number', models.CharField(blank=True, max_length=10, null=True, verbose_name='No. Interior')),
-                ('zip_code', models.IntegerField(max_length=5, verbose_name='C\xf3digo Postal')),
+                ('zip_code', models.CharField(max_length=5, verbose_name='C\xf3digo Postal')),
                 ('blood_type', models.IntegerField(choices=[(1, 'A+'), (2, 'A-'), (3, 'B+'), (4, 'B-'), (5, 'O+'), (6, 'O-'), (7, 'AB+'), (8, 'AB-')], default=1, verbose_name='Tipo Sangu\xedneo')),
                 ('driving_license_number', models.CharField(blank=True, max_length=20, verbose_name='N\xfamero de Licencia de Conducir')),
                 ('driving_license_expiry_date', models.DateField(blank=True, verbose_name='Expiraci\xf3n de Licencia para Conducir')),
