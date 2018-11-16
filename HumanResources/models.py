@@ -21,8 +21,8 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
-from ERP.models import Pais, Estado, Municipio, Project, Bank
-from SharedCatalogs.models import Account
+from ERP.models import Pais, Estado, Municipio, Project, Bank, SATBank
+from SharedCatalogs.models import Account, SATBank
 from utilities import getParameters
 
 # Create your models here.
@@ -1140,8 +1140,8 @@ class EmployeeFinancialData(models.Model):
     #entero_regex = RegexValidator(regex=r'^\+?1?\d{9,40}$',
      #                            message="Asegurese de agregar solo caracteres numericos")
 
-    account_number = models.CharField(verbose_name='Número de Cuenta',max_length=20, null=False, blank=False,default=0, validators=[olynum_regex])
-    CLABE = models.CharField(verbose_name='Clave Interbancaria (CLABE)',max_length=40, null=False, blank=False, default=0, validators=[olynum_regex])
+    account_number = models.CharField(verbose_name='Número de Cuenta',max_length=20, null=False, blank=False,default=0, validators=[onlynum_regex])
+    CLABE = models.CharField(verbose_name='Clave Interbancaria (CLABE)',max_length=40, null=False, blank=False, default=0, validators=[onlynum_regex])
     monthly_salary = models.DecimalField(verbose_name='Salario Mensual*', max_digits=20, decimal_places=2, null=True)
     daily_salary = models.DecimalField(verbose_name='Salario Diario*', max_digits=20, decimal_places=2, null=True)
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20,
