@@ -235,6 +235,7 @@ class EmployeeDetailView(generic.DetailView):
         context['employee_financial_data'] = EmployeeFinancialData.objects.filter(employee__id=employee.id)
 
         #Infonavit
+        Infonavit_array = []
         Infonavit_set = InfonavitData.objects.filter(employee_financial_data_id=employee_financial_data_id)
         for infonavit in Infonavit_set:
             infonavit_json = {
@@ -245,9 +246,9 @@ class EmployeeDetailView(generic.DetailView):
             'term': infonavit.credit_term,
             'coment': infonavit.comments,
              }
+            Infonavit_array.append(infonavit_json)
 
-
-        context['employee_infonavit'] = Infonavit_set
+        context['employee_infonavit'] = Infonavit_array
 
 
         # Obtaining the employee's Employee Has TAG Data and setting it to the context.
