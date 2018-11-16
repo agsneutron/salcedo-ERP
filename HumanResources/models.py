@@ -128,13 +128,13 @@ class Employee(models.Model):
     first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
     second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
 
-    photo = models.FileField(upload_to=upload_employee_photo, null=True, blank=True, verbose_name="Foto")
+    photo = models.FileField(upload_to=upload_employee_photo, null=False, blank=False, verbose_name="Foto*")
 
     TYPE_A = 1
     TYPE_B = 2
     EMPLOYEE_TYPE_CHOICES = (
-        (TYPE_A, 'Empleado Tipo A'),
-        (TYPE_B, 'Empleado Tipo B'),
+        (TYPE_A, 'Administrativo'),
+        (TYPE_B, 'Operativo'),
     )
     type = models.IntegerField(choices=EMPLOYEE_TYPE_CHOICES, default=TYPE_A, verbose_name='Tipo de Empleado')
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro*")
@@ -595,7 +595,7 @@ class Education(models.Model):
     )
     type = models.IntegerField(choices=EDUCATION_TYPE_CHOICES, default=EDUCATION_TYPE_A,
                                verbose_name='Tipo de Educación')
-    name = models.CharField(verbose_name="Nombre*", max_length=2048, null=False, blank=False, validators=[onlyletters_regex])
+    name = models.CharField(verbose_name="Nombre de la Profesión*", max_length=2048, null=False, blank=False, validators=[onlyletters_regex])
     institution = models.CharField(verbose_name="Institución*", max_length=1024, null=False, blank=False)
     license_code = models.CharField(verbose_name="Código o Número de Cédula", max_length=512, null=True, blank=True)
     evidence = models.FileField(verbose_name="Comprobante", upload_to=upload_employee_education_document, null=True,
@@ -681,7 +681,7 @@ class FamilyMember(models.Model):
     name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False, validators=[onlyletters_regex])
     first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
     second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
-    relationship = models.CharField(verbose_name="Parentesco", max_length=128, null=False, blank=True, validators=[onlynum_regex])
+    relationship = models.CharField(verbose_name="Parentesco", max_length=128, null=False, blank=True, validators=[onlyletters_regex])
     career = models.CharField(verbose_name="Profesión", max_length=128, null=False, blank=True, validators=[onlynum_regex])
     age = models.IntegerField(verbose_name="Edad", null=True, blank=True, default=0)
     phone_number = models.CharField(verbose_name="Número de Teléfono", null=True, blank=True, validators=[phone_regex], max_length=15)
@@ -758,7 +758,7 @@ class WorkReference(models.Model):
     first_phone_number = models.CharField(verbose_name="Número de Teléfono #1", null=False, blank=False, validators=[phone_regex], max_length=15)
     second_phone_number = models.CharField(verbose_name="Número de Teléfono #2", null=True, blank=True, validators=[phone_regex],max_length=15)
     email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True, validators=[email_regex])
-    notes = models.CharField(verbose_name="Notas", max_length=2048, null=True, blank=False)
+    notes = models.CharField(verbose_name="Notas*", max_length=2048, null=False, blank=False)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
@@ -1081,7 +1081,7 @@ class EmployeePositionDescription(models.Model):
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina*", null=False, blank=False)
-    direction = models.ForeignKey(Direction, verbose_name='Dirección*', null=False, blank=False)
+    direction = models.ForeignKey(Direction, verbose_name='Empresa/Proyecto*', null=False, blank=False)
     subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección*', null=False, blank=False)
     # subdirection = ChainedForeignKey(Subdirection,
     #                                  chained_field="direction",
@@ -1104,8 +1104,8 @@ class EmployeePositionDescription(models.Model):
     #                          auto_choose=True,
     #                          sort=True)
 
-    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto', null=False, blank=False)
-    contract = models.CharField(verbose_name="Contrato", null=False, blank=False, max_length=45)
+    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto*', null=False, blank=False)
+    contract = models.CharField(verbose_name="Contrato*", null=False, blank=False, max_length=45)
 
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
 
