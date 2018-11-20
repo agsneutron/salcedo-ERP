@@ -686,6 +686,7 @@ class FamilyMember(models.Model):
     age = models.IntegerField(verbose_name="Edad", null=True, blank=True, default=0)
     phone_number = models.CharField(verbose_name="Número de Teléfono", null=True, blank=True, validators=[phone_regex], max_length=15)
 
+
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
 
