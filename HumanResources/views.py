@@ -239,12 +239,12 @@ class EmployeeDetailView(generic.DetailView):
         Infonavit_set = InfonavitData.objects.filter(employee_financial_data_id=employee_financial_data_id)
         for infonavit in Infonavit_set:
             infonavit_json = {
-            'info': infonavit.infonavit_credit_number,
-            'discont': infonavit.discount_type,
-            'ammou': infonavit.discount_amount,
-            'date': infonavit.start_date,
-            'term': infonavit.credit_term,
-            'coment': infonavit.comments,
+            'credit_number': infonavit.infonavit_credit_number,
+            'discount_type': infonavit.discount_type,
+            'discount_amount': infonavit.discount_amount,
+            'start_date': infonavit.start_date,
+            'credit_term': infonavit.credit_term,
+            'comments': infonavit.comments,
              }
             Infonavit_array.append(infonavit_json)
 

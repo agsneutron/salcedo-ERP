@@ -1130,16 +1130,19 @@
                                     <h3 class="color-info card-title">Datos de Crédito Infonavit</h3>
                                 </div>
                                 <div class="card-block text-left">
-                                    {% for efd in employee_financial_data %}
+
+                                    {% for efd in employee_infonavit %}
+
                                         <ul class="list-group text-left">
-                                            <li class="list-group-item"><strong>Número de Crédito: </strong> {{ efd.infonavitdata.infonavit_credit_number }}</li>
-                                            <li class="list-group-item"><strong>Tipo de Descuento: </strong> {{ efd.infonavitdata.discount_type }}</li>
-                                            <li class="list-group-item"><strong>Monto de Descuento: </strong> {{ efd.infonavitdata.discount_amount }}</li>
-                                            <li class="list-group-item"><strong>Fecha de Inicio: </strong> {{ efd.infonavitdata.start_date }}</li>
-                                            <li class="list-group-item"><strong>Duración de Crédito: </strong> {{ efd.infonavitdata.credit_term }}</li>
-                                            <li class="list-group-item"><strong>Observaciones: </strong> {{ efd.infonavitdata.comments }}</li>
+                                            <li class="list-group-item"><strong>Número de Crédito: </strong> {{ efd.credit_number }}</li>
+                                            <li class="list-group-item"><strong>Tipo de Descuento: </strong> {{ efd.discount_type }}</li>
+                                            <li class="list-group-item"><strong>Monto de Descuento: </strong> {{ efd.discount_amount }}</li>
+                                            <li class="list-group-item"><strong>Fecha de Inicio: </strong> {{ efd.start_date }}</li>
+                                            <li class="list-group-item"><strong>Duración de Crédito: </strong> {{ efd.credit_term }}</li>
+                                            <li class="list-group-item"><strong>Observaciones: </strong> {{ efd.comments }}</li>
 
                                         </ul>
+                                        <hr>
                                     {% endfor %}
                                 </div>
                             </div>
