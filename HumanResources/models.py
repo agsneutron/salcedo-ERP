@@ -682,7 +682,7 @@ class FamilyMember(models.Model):
     first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
     second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
     relationship = models.CharField(verbose_name="Parentesco", max_length=128, null=False, blank=True, validators=[onlyletters_regex])
-    career = models.CharField(verbose_name="Profesión", max_length=128, null=False, blank=True, validators=[onlynum_regex])
+    career = models.CharField(verbose_name="Profesión", max_length=128, null=False, blank=True, validators=[onlyletters_regex])
     age = models.IntegerField(verbose_name="Edad", null=True, blank=True, default=0)
     phone_number = models.CharField(verbose_name="Número de Teléfono", null=True, blank=True, validators=[phone_regex], max_length=15)
 
