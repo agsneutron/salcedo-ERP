@@ -22,7 +22,7 @@ from smart_selects.db_fields import ChainedForeignKey
 
 # Importing model from other apps.
 from ERP.models import Pais, Estado, Municipio, Project, Bank, SATBank
-from SharedCatalogs.models import Account, SATBank
+from SharedCatalogs.models import Account, SATBank, InternalCompany
 from utilities import getParameters
 
 # Create your models here.
@@ -89,6 +89,8 @@ class PayrollClassification(models.Model):
 
 
 class PayrollGroup(models.Model):
+    company = models.ForeignKey('Direction', verbose_name="Empresa",
+                                               null=False, blank=False, default=1)
     name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
     payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina",
                                                null=False, blank=False)
@@ -994,6 +996,31 @@ class JobProfile(models.Model):
 class Direction(models.Model):
     name = models.CharField(verbose_name="Dirección", max_length=2048, null=False, blank=False,
                             unique=False)
+    rfc = models.CharField(verbose_name="RFC de la Empresa", max_length=15, null=False, blank=False, unique=True,
+                           validators=[rfc_regex])
+    colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False)
+    indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
+    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, validators=[onlynum_regex],
+                                max_length=5)
+
+    # Attribute for the Chained Keys.
+    country = models.ForeignKey(Pais, verbose_name="País*", null=False, blank=False)
+    state = ChainedForeignKey(Estado,
+                              chained_field="country",
+                              chained_model_field="pais",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True,
+                              verbose_name="Estado*")
+    town = ChainedForeignKey(Municipio,
+                             chained_field="state",
+                             chained_model_field="estado",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name="Municipio*")
 
     class Meta:
         verbose_name_plural = "Direcciones"

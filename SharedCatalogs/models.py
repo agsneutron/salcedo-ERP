@@ -1,11 +1,19 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.core.validators import RegexValidator
 from django.db import models
 from django.forms.models import model_to_dict
 
 # Create your models here.
 from django.forms import model_to_dict
+from smart_selects.db_fields import ChainedForeignKey
+
+rfc_regex = RegexValidator(regex="^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$",
+                             message="El RFC que proporcionas es incorrecto.")
+
+onlynum_regex = RegexValidator(regex="[0-9]",
+                             message="Este campo solo acepta números.")
 
 
 class Pais(models.Model):
@@ -205,6 +213,31 @@ class Account(models.Model):
 
 class InternalCompany(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=256, null=False, blank=False)
+    rfc = models.CharField(verbose_name="RFC de la Empresa", max_length=15, null=False, blank=False, unique=True,
+                           validators=[rfc_regex])
+    colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
+    street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
+    outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False)
+    indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
+    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, validators=[onlynum_regex],
+                                max_length=5)
+
+    # Attribute for the Chained Keys.
+    country = models.ForeignKey(Pais, verbose_name="País*", null=False, blank=False)
+    state = ChainedForeignKey(Estado,
+                              chained_field="country",
+                              chained_model_field="pais",
+                              show_all=False,
+                              auto_choose=True,
+                              sort=True,
+                              verbose_name="Estado*")
+    town = ChainedForeignKey(Municipio,
+                             chained_field="state",
+                             chained_model_field="estado",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name="Municipio*")
 
     class Meta:
         verbose_name_plural = "Empresas Internas"

@@ -1599,7 +1599,7 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('name', 'payroll_classification', 'project', 'checker_type')
+            'fields': ('company', 'name', 'payroll_classification', 'project', 'checker_type')
         }),
     )
 
@@ -2407,3 +2407,4 @@ class ISRTableAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PayrollClassification)
+
