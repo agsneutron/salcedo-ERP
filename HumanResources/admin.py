@@ -1599,7 +1599,7 @@ class PayrollGroupAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Grupos de Nómina", {
-            'fields': ('company', 'name', 'payroll_classification', 'project', 'checker_type')
+            'fields': ('internal_company', 'direction', 'name', 'payroll_classification', 'project', 'checker_type')
         }),
     )
 
@@ -1651,14 +1651,14 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
     form = PayrollPeriodForm
     fieldsets = (
         ("Periodos de Nómina", {
-            'fields': ('name', 'start_period', 'end_period', 'payroll_group', 'payroll_to_process')
+            'fields': ('payroll_group', 'payroll_to_process','periodicity','name', 'start_period', 'end_period',)
         }),
     )
 
     search_fields = (
-        'name', 'payroll_group__name', 'payroll_to_process__name')
+        'name', 'payroll_group__name', 'payroll_to_process__name', 'periodicity__name')
     list_display = (
-        'name', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
+        'name', 'periodicity', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
     def get_listpayroll_link(self, obj):
         return HumanResourcesAdminUtilities.get_listpayroll_link(obj, obj.id, obj.payroll_group.id)
@@ -2150,7 +2150,7 @@ class DirectionAdmin(admin.ModelAdmin):
     form = DirectionForm
 
     fieldsets = (
-        ("Dirección", {
+        ("Dirección/Empresa", {
             'fields': (
                 'name',)
         }),
@@ -2404,6 +2404,22 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
 @admin.register(ISRTable)
 class ISRTableAdmin(admin.ModelAdmin):
     pass
+
+
+
+# Payroll Type Admin.
+@admin.register(Periodicity)
+class PeriodicityAdmin(admin.ModelAdmin):
+    form = PeriodicityForm
+
+    fieldsets = (
+        ("Tipos de Periodicidad", {
+            'fields': ('name',)
+        }),
+    )
+
+    list_display = (
+        'name',)
 
 
 admin.site.register(PayrollClassification)

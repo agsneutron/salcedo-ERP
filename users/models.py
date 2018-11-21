@@ -48,6 +48,7 @@ class ERPUser(models.Model):
             ("is_vicepresident", "Es vicepresidente empresarial"),
             ("is_head_manager", "Es jefe de administración"),
             ("is_president", "Es presidente"),
+            ("is_rhadmin", "Es administrador RH"),
         )
 
     def to_serializable_dict(self):

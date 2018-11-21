@@ -1,4 +1,4 @@
-{% load i18n admin_static %}<!DOCTYPE html>
+{% load i18n admin_static app_filters %}<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
 <html lang="{{ LANGUAGE_CODE|default:"en-us" }}" {% if LANGUAGE_BIDI %}dir="rtl"{% endif %}>
 <head>
@@ -114,7 +114,6 @@
 
 
 {% comment %}{{ request.resolver_match.view_name }}{% endcomment %}
-
 
 
     {% if user.is_active and user.is_staff %}
@@ -356,6 +355,8 @@
                                 </ul>
 
                                 </li>
+                                    {% endif %}
+                                    {% if perms.HumanResources.change_payrollperiod %}
                                     <li class="dropdown-submenu">
                                         <a href="">
                                             <i class="zmdi zmdi-view-dashboard"></i>Nómina</a>
@@ -452,8 +453,9 @@
                                     </ul>
                                 </li>
 
-                                #Menú Catálogos
 
+
+                                {% if request.user|has_group:"Recursos Humanos-Admin" or request.user|has_group:"Admin" %}
                                 <li class="dropdown-submenu">
                                         <a href="">
                                             <i class="zmdi zmdi-view-dashboard"></i>Catálogos</a>
@@ -472,7 +474,11 @@
                                             </li>
 
                                             <li>
-                                                    <a href="/admin/HumanResources/direction/">Empresa/Proyecto</a>
+                                                    <a href="/admin/SharedCatalogs/internalcompany/">Empresa</a>
+                                            </li>
+
+                                            <li>
+                                                    <a href="/admin/HumanResources/direction/">Dirección</a>
                                             </li>
 
                                             <li>
@@ -493,7 +499,7 @@
 
                                         </ul>
                                     </li>
-
+                                {% endif %}
                             </ul>
                         </li>
 

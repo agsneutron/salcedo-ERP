@@ -791,3 +791,9 @@ class EmployeeContractForm(forms.ModelForm):
     class Meta:
         mode = EmployeeContract
         fields = '__all__'
+
+
+class PeriodicityForm(forms.ModelForm):
+    class Meta:
+        mode = Periodicity
+        fields = '__all__'

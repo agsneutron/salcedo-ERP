@@ -89,7 +89,9 @@ class PayrollClassification(models.Model):
 
 
 class PayrollGroup(models.Model):
-    company = models.ForeignKey('Direction', verbose_name="Empresa",
+    internal_company = models.ForeignKey(InternalCompany, verbose_name="Empresa",
+                                               null=False, blank=False, default=1)
+    direction = models.ForeignKey('Direction', verbose_name="Dirección",
                                                null=False, blank=False, default=1)
     name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
     payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina",
@@ -1339,6 +1341,20 @@ class PayrollToProcess(models.Model):
         return self.name
 
 
+class Periodicity(models.Model):
+    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
+
+    class Meta:
+        verbose_name_plural = "Periodicidad"
+        verbose_name = "Periodicidad"
+
+    def __str__(self):
+        return self.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return self.name
+
+
 class PayrollPeriod(models.Model):
     JANUARY = 1
     FEBRUARY = 2
@@ -1381,6 +1397,7 @@ class PayrollPeriod(models.Model):
 
     exclusions = models.ManyToManyField('Employee', through='EmployeePayrollPeriodExclusion',through_fields=('payroll_period', 'employee',),)
 
+    periodicity = models.ForeignKey(Periodicity, verbose_name="Periodicidad", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Periodos de Nómina"
@@ -1393,17 +1410,12 @@ class PayrollPeriod(models.Model):
         return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
 
 
-
 class EmployeePayrollPeriodExclusion(models.Model):
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
 
     class Meta:
         unique_together = (("employee", "payroll_period"),)
-
-
-
-
 
 
 class EmployeeEarningsDeductionsbyPeriod(models.Model):

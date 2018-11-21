@@ -19,6 +19,7 @@ from django.utils.formats import number_format
 from django.utils.safestring import mark_safe
 from django.utils.timezone import is_aware, utc
 from django.utils.translation import gettext as _, ngettext, pgettext
+from django.contrib.auth.models import Group
 
 register = template.Library()
 
@@ -107,3 +108,9 @@ def filename(value):
 @register.assignment_tag
 def define(val=None):
   return val
+
+
+@register.filter(name='has_group')
+def has_group(user, group_name):
+    group = Group.objects.get(name=group_name)
+    return True if group in user.groups.all() else False
