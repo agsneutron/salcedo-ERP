@@ -2152,9 +2152,12 @@ class DirectionAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Dirección/Empresa", {
             'fields': (
-                'name',)
-        }),
-    )
+                'internal_company', 'name', 'colony', 'street', 'outdoor_number', 'indoor_number', 'zip_code', 'country', 'state', 'town',)
+                }),
+         )
+
+    list_display = ('internal_company', 'name', 'country', 'state', 'town',)
+    list_display_links = ('name',)
 
 
 # Loan Admin.
@@ -2165,9 +2168,12 @@ class SubdirectionAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Subdirección", {
             'fields': (
-                'name',)
+                'internal_company', 'direction', 'name',)
         }),
     )
+
+    list_display = ('internal_company', 'direction', 'name',)
+    list_display_links = ('name',)
 
 
 # Loan Admin.
@@ -2234,9 +2240,12 @@ class AreaAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Área", {
             'fields': (
-                'name',)
+                'internal_company', 'direction', 'subdirection', 'name',)
         }),
     )
+
+    list_display = ('internal_company', 'direction', 'subdirection', 'name',)
+    list_display_links = ('name',)
 
 
 # Loan Admin.
@@ -2246,9 +2255,12 @@ class DepartmentAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Departamento", {
             'fields': (
-                'name',)
+                'internal_company', 'direction', 'subdirection', 'area', 'name',)
         }),
     )
+
+    list_display = ('internal_company', 'direction', 'subdirection', 'area', 'name',)
+    list_display_links = ('name', )
 
 
 # Loan Admin.

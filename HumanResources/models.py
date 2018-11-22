@@ -998,8 +998,6 @@ class JobProfile(models.Model):
 class Direction(models.Model):
     name = models.CharField(verbose_name="Dirección", max_length=2048, null=False, blank=False,
                             unique=False)
-    rfc = models.CharField(verbose_name="RFC de la Empresa", max_length=15, null=False, blank=False, unique=True,
-                           validators=[rfc_regex])
     colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
     outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False)
@@ -1008,6 +1006,7 @@ class Direction(models.Model):
                                 max_length=5)
 
     # Attribute for the Chained Keys.
+    internal_company = models.ForeignKey(InternalCompany, verbose_name='Empresa', null=False, blank=False, default=1)
     country = models.ForeignKey(Pais, verbose_name="País*", null=False, blank=False)
     state = ChainedForeignKey(Estado,
                               chained_field="country",
@@ -1040,6 +1039,17 @@ class Subdirection(models.Model):
     name = models.CharField(verbose_name="Subdirección", max_length=2048, null=False, blank=False,
                             unique=False)
 
+    internal_company = models.ForeignKey(InternalCompany, null=False, blank=False, default=1, verbose_name="Empresa*")
+
+    direction = ChainedForeignKey(Direction,
+                                  chained_field="internal_company",
+                                  chained_model_field="internal_company",
+                                  show_all=False,
+                                  auto_choose=True,
+                                  sort=True,
+                                  verbose_name="Dirección*"
+                                  )
+
     class Meta:
         verbose_name_plural = "Subdirecciones"
         verbose_name = "Subdirección"
@@ -1055,6 +1065,28 @@ class Subdirection(models.Model):
 class Area(models.Model):
     name = models.CharField(verbose_name="Área", max_length=2048, null=False, blank=False,
                             unique=False)
+    #subdirection = models.ForeignKey(Subdirection, null=False, blank=False, default=1, verbose_name="Subdirección")
+    #direction = models.ForeignKey(Direction, null=False, blank=False, default=1, verbose_name="Dirección")
+
+    internal_company = models.ForeignKey(InternalCompany, null=False, blank=False, default=1, verbose_name="Empresa*")
+
+    direction = ChainedForeignKey(Direction,
+                                  chained_field="internal_company",
+                                  chained_model_field="internal_company",
+                                  show_all=False,
+                                  auto_choose=True,
+                                  sort=True,
+                                  verbose_name="Dirección*",
+                                  )
+
+    subdirection = ChainedForeignKey(Subdirection,
+                                     chained_field="direction",
+                                     chained_model_field="direction",
+                                     show_all=False,
+                                     auto_choose=True,
+                                     sort=True,
+                                     verbose_name='Subdirección*',
+                                     )
 
     class Meta:
         verbose_name_plural = "Áreas"
@@ -1071,6 +1103,40 @@ class Area(models.Model):
 class Department(models.Model):
     name = models.CharField(verbose_name="Departamento", max_length=2048, null=False, blank=False,
                             unique=False)
+
+    #area = models.ForeignKey(Area, null=False, blank=False, default=1, verbose_name="Área")
+    #subdirection = models.ForeignKey(Subdirection, null=False, blank=False, default=1, verbose_name="Subdirección")
+    #direction = models.ForeignKey(Direction, null=False, blank=False, default=1, verbose_name="Dirección")
+
+    internal_company = models.ForeignKey(InternalCompany, null=False, blank=False, default=1, verbose_name="Empresa*")
+
+    direction = ChainedForeignKey(Direction,
+                                  chained_field="internal_company",
+                                  chained_model_field="internal_company",
+                                  show_all=False,
+                                  auto_choose=True,
+                                  sort=True,
+                                  verbose_name="Dirección*"
+                                  )
+
+    subdirection = ChainedForeignKey(Subdirection,
+                                     chained_field="direction",
+                                     chained_model_field="direction",
+                                     show_all=False,
+                                     auto_choose=True,
+                                     sort=True,
+                                     verbose_name='Subdirección*',
+                                     )
+
+    # area = models.ForeignKey(Area, verbose_name='Área*', null=False, blank=False)
+    area = ChainedForeignKey(Area,
+                             chained_field="subdirection",
+                             chained_model_field="subdirection",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name='Área*',
+                             )
 
     class Meta:
         verbose_name_plural = "Departamentos"
@@ -1113,29 +1179,45 @@ class EmployeePositionDescription(models.Model):
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina*", null=False, blank=False)
 
     direction = models.ForeignKey(Direction, verbose_name='Empresa/Proyecto*', null=False, blank=False)
-    subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección*', null=False, blank=False)
-    # subdirection = ChainedForeignKey(Subdirection,
-    #                                  chained_field="direction",
-    #                                  chained_model_field="direction",
-    #                                  show_all=False,
-    #                                  auto_choose=True,
-    #                                  sort=True)
-    department = models.ForeignKey(Department, verbose_name='Departamento*', null=False, blank=False)
-    # department = ChainedForeignKey(Department,
-    #                                chained_field="subdirection",
-    #                                chained_model_field="subdirection",
-    #                                show_all=False,
-    #                                auto_choose=True,
-    #                                sort=True)
-    area = models.ForeignKey(Area, verbose_name='Área*', null=False, blank=False)
-    # area = ChainedForeignKeyChainedForeignKey(Area,
-    #                          chained_field="subdirection",
-    #                          chained_model_field="subdirection",
-    #                          show_all=False,
-    #                          auto_choose=True,
-    #                          sort=True)
+    #subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección*', null=False, blank=False)
+    subdirection = ChainedForeignKey(Subdirection,
+                                     chained_field="direction",
+                                     chained_model_field="direction",
+                                     show_all=False,
+                                     auto_choose=True,
+                                     sort=True,
+                                     verbose_name='Subdirección*',
+                                     )
 
-    job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto*', null=False, blank=False)
+    #area = models.ForeignKey(Area, verbose_name='Área*', null=False, blank=False)
+    area = ChainedForeignKey(Area,
+                             chained_field="subdirection",
+                             chained_model_field="subdirection",
+                             show_all=False,
+                             auto_choose=True,
+                             sort=True,
+                             verbose_name='Área*',
+                             )
+
+    # department = models.ForeignKey(Department, verbose_name='Departamento*', null=False, blank=False)
+    department = ChainedForeignKey(Department,
+                                   chained_field="area",
+                                   chained_model_field="area",
+                                   show_all=False,
+                                   auto_choose=True,
+                                   sort=True,
+                                   verbose_name='Departamento*',
+                                   )
+
+    #job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto*', null=False, blank=False)
+    job_profile = ChainedForeignKey(JobProfile,
+                                    chained_field="department",
+                                    chained_model_field="department",
+                                    show_all=False,
+                                    auto_choose=True,
+                                    sort=True,
+                                    verbose_name='Puesto*',
+                                    )
     contract = models.CharField(verbose_name="Contrato*", null=False, blank=False, max_length=45)
 
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
