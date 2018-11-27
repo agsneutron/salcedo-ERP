@@ -36,7 +36,7 @@ phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                              message="Asegurate de que el numero de telefono que proporcionas sea correcto.")
 
 email_regex = RegexValidator(regex="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*",
-                             message="Asegurate de que el correo electrónico que proporcionas sea correcto.")
+                             message="Tu correo electrónico no es correcto.")
 
 
 onlyletters_regex = RegexValidator(regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
