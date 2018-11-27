@@ -212,7 +212,7 @@ class Account(models.Model):
 
 
 class InternalCompany(models.Model):
-    name = models.CharField(verbose_name="Nombre", max_length=256, null=False, blank=False)
+    name = models.CharField(verbose_name="Nombre", max_length=255, null=False, blank=False, unique=True,)
     rfc = models.CharField(verbose_name="RFC de la Empresa", max_length=15, null=False, blank=False, unique=True,
                            validators=[rfc_regex])
     colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
