@@ -165,9 +165,15 @@ class Employee(models.Model):
 
     MARITAL_STATUS_A = 1
     MARITAL_STATUS_B = 2
+    MARITAL_STATUS_C = 3
+    MARITAL_STATUS_D = 4
+    MARITAL_STATUS_E = 5
     EMPLOYEE_MARITAL_STATUS_CHOICES = (
         (MARITAL_STATUS_A, 'Soltero'),
         (MARITAL_STATUS_B, 'Casado'),
+        (MARITAL_STATUS_C, 'Unión Libre'),
+        (MARITAL_STATUS_D, 'Divorciado'),
+        (MARITAL_STATUS_E, 'Viudo'),
     )
     marital_status = models.IntegerField(choices=EMPLOYEE_MARITAL_STATUS_CHOICES, default=MARITAL_STATUS_A,
                                          verbose_name='Estado Civil')
@@ -175,15 +181,15 @@ class Employee(models.Model):
     rfc = models.CharField(verbose_name="RFC*", max_length=13, null=False, blank=False, unique=True, validators=[rfc_regex])
 
 
+    cellphone_number = models.CharField(verbose_name="Celular", max_length=15, null=False, blank=True,validators=[phone_regex])
     phone_number = models.CharField(verbose_name="Teléfono*", max_length=15, null=False, blank=False, validators=[phone_regex])
-    cellphone_number = models.CharField(verbose_name="Celular", max_length=15, null=False, blank=True, validators=[phone_regex])
     office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=15, null=False, blank=True, validators=[phone_regex])
     extension_number = models.CharField(verbose_name="Número de Extensión", max_length=13, null=False, blank=True, validators=[onlynum_regex])
-    personal_email = models.CharField(verbose_name="Correo Electrónico Personal*", max_length=255, null=True, blank=False, validators=[email_regex])
+    personal_email = models.CharField(verbose_name="Correo Electrónico Personal", max_length=255, null=True, blank=True, validators=[email_regex])
     work_email = models.CharField(verbose_name="Correo Electrónico Laboral", max_length=255, null=True, blank=True, validators=[email_regex])
 
-    social_security_number = models.CharField(verbose_name="Número de Póliza de Seguro*", max_length=20, null=False,
-                                              blank=False)
+    social_security_number = models.CharField(verbose_name="Número de Póliza de Seguro", max_length=20, null=True,
+                                              blank=True)
     social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
 
     colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
