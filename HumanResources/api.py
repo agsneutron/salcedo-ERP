@@ -335,7 +335,7 @@ class GeneratePayrollReceipt(View):
                 name=concept.name,
                 percent_taxable=concept.percent_taxable,
                 sat_key=concept.sat_key,
-                law_type=concept.law_type,
+                #law_type=concept.law_type,
                 status=concept.status,
                 accounting_account=concept.account.id,
                 comments=concept.comments,

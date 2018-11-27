@@ -13,21 +13,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='Periodicity',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30, verbose_name='Nombre')),
-            ],
-            options={
-                'verbose_name': 'Periodicidad',
-                'verbose_name_plural': 'Periodicidad',
-            },
-        ),
-        migrations.AddField(
-            model_name='payrollperiod',
-            name='periodicity',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='HumanResources.Periodicity', verbose_name='Periodicidad'),
-            preserve_default=False,
-        ),
+
+
+
     ]

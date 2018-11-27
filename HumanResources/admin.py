@@ -2168,11 +2168,11 @@ class SubdirectionAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Subdirección", {
             'fields': (
-                'internal_company', 'direction', 'name',)
+                'direction', 'name',)
         }),
     )
 
-    list_display = ('internal_company', 'direction', 'name',)
+    list_display = ('direction', 'name',)
     list_display_links = ('name',)
 
 
@@ -2240,11 +2240,11 @@ class AreaAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Área", {
             'fields': (
-                'internal_company', 'direction', 'subdirection', 'name',)
+                'subdirection', 'name',)
         }),
     )
 
-    list_display = ('internal_company', 'direction', 'subdirection', 'name',)
+    list_display = ('subdirection', 'name',)
     list_display_links = ('name',)
 
 
@@ -2255,11 +2255,11 @@ class DepartmentAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Departamento", {
             'fields': (
-                'internal_company', 'direction', 'subdirection', 'area', 'name',)
+                'area', 'name',)
         }),
     )
 
-    list_display = ('internal_company', 'direction', 'subdirection', 'area', 'name',)
+    list_display = ('area', 'name',)
     list_display_links = ('name', )
 
 
