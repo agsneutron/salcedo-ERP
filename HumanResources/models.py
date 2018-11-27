@@ -1294,6 +1294,13 @@ class EmployeeFinancialData(models.Model):
         ('T', 'Transferencia Interbancaria'),
     )
 
+    PRINCIPAL = 'P'
+    SECUNDARIA = 'S'
+    ACCOUNT_TYPE_CHOICES = (
+        ('P', 'Principal'),
+        ('S', 'Secundaria'),
+    )
+
     #entero_regex = RegexValidator(regex=r'^\+?1?\d{9,40}$',
      #                            message="Asegurese de agregar solo caracteres numericos")
 
@@ -1310,6 +1317,11 @@ class EmployeeFinancialData(models.Model):
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
                                       verbose_name='Forma de Pago')
     bank = models.ForeignKey(SATBank, null=False, blank=False, verbose_name="Banco*")
+
+    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
+                                validators=[letras])
+    account_type = models.CharField(max_length=1, choices=ACCOUNT_TYPE_CHOICES, default=PRINCIPAL,
+                                      verbose_name='Tipo de Cuenta')
 
     class Meta:
         verbose_name_plural = "Datos Financieros del Empleado"

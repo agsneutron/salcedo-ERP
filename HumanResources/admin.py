@@ -1237,7 +1237,7 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
         ("Datos Financieros", {
             'fields': (
                 'employee', 'payment_method', 'account_number', 'CLABE', 'bank', 'monthly_salary', 'daily_salary',
-                'aggregate_daily_salary',)
+                'aggregate_daily_salary', 'account_type', 'comments')
         }),
     )
 
