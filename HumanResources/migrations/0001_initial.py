@@ -33,16 +33,6 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='AccessToDirection',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-            ],
-            options={
-                'verbose_name': 'Acceso a Direcci\xf3n',
-                'verbose_name_plural': 'Accesos a Direcci\xf3n',
-            },
-        ),
-        migrations.CreateModel(
             name='Area',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -924,16 +914,6 @@ class Migration(migrations.Migration):
             field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='HumanResources.Subdirection', verbose_name='Subdirecci\xf3n'),
         ),
         migrations.AddField(
-            model_name='accesstodirection',
-            name='direction',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='HumanResources.Direction', verbose_name='Direcci\xf3n'),
-        ),
-        migrations.AddField(
-            model_name='accesstodirection',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Usuario'),
-        ),
-        migrations.AddField(
             model_name='absenceproof',
             name='employee',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='HumanResources.Employee', verbose_name='Empleado'),
@@ -982,9 +962,5 @@ class Migration(migrations.Migration):
         migrations.AlterUniqueTogether(
             name='area',
             unique_together=set([('subdirection', 'name')]),
-        ),
-        migrations.AlterUniqueTogether(
-            name='accesstodirection',
-            unique_together=set([('user', 'direction')]),
         ),
     ]
