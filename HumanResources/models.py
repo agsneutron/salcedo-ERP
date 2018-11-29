@@ -786,12 +786,24 @@ class EmployeeDropOut(models.Model):
     DROP_TYPE_A = 1
     DROP_TYPE_B = 2
     DROP_TYPE_C = 3
+    DROP_TYPE_D = 4
+    DROP_TYPE_E = 5
+    DROP_TYPE_F = 6
+    DROP_TYPE_G = 7
+    DROP_TYPE_H = 8
+
     DROP_TYPE_CHOICES = (
-        (DROP_TYPE_A, 'Despido'),
-        (DROP_TYPE_B, 'Renuncia'),
-        (DROP_TYPE_C, 'Incapacidad'),
+        (DROP_TYPE_A, 'Termino de Contrato'),
+        (DROP_TYPE_B, 'Separación Voluntaria'),
+        (DROP_TYPE_C, 'Abandono del Empleo'),
+        (DROP_TYPE_D, 'Defunción'),
+        (DROP_TYPE_E, 'Ausentismo'),
+        (DROP_TYPE_F, 'Rescisión de Contrato'),
+        (DROP_TYPE_G, 'Pensionado'),
+        (DROP_TYPE_H, 'Otra'),
+
     )
-    type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Tipo de Baja')
+    type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Motivo de Baja')
     reason = models.CharField(verbose_name="Motivo", max_length=4096, null=False, blank=True)
     severance_pay = models.FloatField(verbose_name="Liquidación", null=True, blank=False)
     observations = tinymce_models.HTMLField(verbose_name='Observaciones', null=True, blank=True, max_length=4096)
@@ -1338,7 +1350,9 @@ class InfonavitData(models.Model):
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, validators=[letras])
 
     # Foreign Keys.
-    employee_financial_data = models.ForeignKey(EmployeeFinancialData)
+   # employee_financial_data = models.ForeignKey(EmployeeFinancialData)
+###
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Datos del Infonavit del Empleado"

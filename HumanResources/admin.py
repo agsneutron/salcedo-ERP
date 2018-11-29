@@ -1056,35 +1056,88 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(redirect_url)
 
 
-# @admin.register(InfonavitData)
-class InfonavitDataAdmin(admin.TabularInline):
+@admin.register(InfonavitData)
+class InfonavitDataAdmin(admin.ModelAdmin):
     model = InfonavitData
     form = InfonavitDataForm
-    extra = 1
+    #extra = 1
 
     fieldsets = (
         ("Datos de Crédito Infonavit", {
-            'fields': ('infonavit_credit_number', 'discount_type', 'discount_amount', 'start_date', 'credit_term',
+            'fields': ('employee','infonavit_credit_number', 'discount_type', 'discount_amount', 'start_date', 'credit_term',
                        'comments',)
         }),
     )
-    # form = InfonavitDataForm
-    #
-    #
-    # # Method to override some characteristics of the form.
-    # def get_form(self, request, obj=None, **kwargs):
-    #      ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
-    #
-    #
-    #      # Class to pass the request to the form.
-    #      class ModelFormMetaClass(ModelForm):
-    #          def __new__(cls, *args, **kwargs):
-    #              kwargs['request'] = request
-    #
-    #              return ModelForm(*args, **kwargs)
-    #
-    #      return ModelFormMetaClass
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request']=request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    # Overriding the add_wiew method for the employee position description admin.
+    #def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+     #   extra = extra_context or {}
+
+      #  employee_id = request.GET.get('employee')
+        #found_infonavit_data = request.GET.get('position')
+
+       # extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        #infonavit_data = InfonavitData.objects.filter(employee_id=employee_id)
+
+        #if len(infonavit_data) > 0 and found_infonavit_data is None:
+        #   return HttpResponseRedirect(
+        #        "/admin/HumanResources/infonavitdata/" + str(
+        #            infonavit_data.first().id) + "/change?employee=" + str(
+        #            employee_id) + "&position=1")
+        #
+        #return super(InfonavitDataAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+        return super(InfonavitDataAdmin, self).delete_model(request, obj)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        infonavit_data = InfonavitData.objects.filter(employee_id=employee_id)
+
+        if len(infonavit_data) <= 0 or (int(object_id) != int(infonavit_data.first().id)):
+            raise PermissionDenied
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(InfonavitDataAdmin, self).change_view(request, object_id, form_url, extra)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/infonavitdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/infonavitdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/infonavitdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 @admin.register(EmployeeEarningsDeductionsbyPeriod)
 class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
@@ -1254,7 +1307,7 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
         }),
     )
 
-    inlines = (InfonavitDataAdmin,)
+    #inlines = (InfonavitDataAdmin,)
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
