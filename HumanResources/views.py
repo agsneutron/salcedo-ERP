@@ -635,7 +635,7 @@ class EarningsDeductionsListView(ListView):
        Display a Blog List page filtered by the search query.
     """
     paginate_by = 10
-    title_list = 'Penalizaciones'
+    title_list = 'Incidencias'
     penalty = ''
 
     def get_queryset(self):
@@ -644,7 +644,7 @@ class EarningsDeductionsListView(ListView):
         query = self.request.GET.get('q')
         query_penalty = self.request.GET.get('penalty')
         if query_penalty:
-            EarningsDeductionsListView.title_list = 'Penalizaciones'
+            EarningsDeductionsListView.title_list = 'Incidencias'
             EarningsDeductionsListView.penalty = '?tipo=2'
             EarningsDeductionsListView.query = query_penalty
             query_list = query_penalty.split()
