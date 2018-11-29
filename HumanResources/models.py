@@ -1350,8 +1350,8 @@ class InfonavitData(models.Model):
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, validators=[letras])
 
     # Foreign Keys.
-   # employee_financial_data = models.ForeignKey(EmployeeFinancialData)
-###
+    # employee_financial_data = models.ForeignKey(EmployeeFinancialData)
+
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
 
     class Meta:
