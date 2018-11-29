@@ -42,6 +42,7 @@
                                             {% comment %}<th>Proyectos</th>{% endcomment %}
                                             <th class="no-sorting">Ver</th>
                                             <th class="no-sorting">Editar</th>
+                                            <th class="no-sorting">Dirección</th>
                                             <th class="no-sorting">Proyectos</th>
                                             <th class="no-sorting">Eliminar</th>
                                         </tr>
@@ -73,9 +74,13 @@
                                                                                              class="btn btn-raised btn-default btn-xs"><i
                                                         class="fa fa-pencil color-default eliminar"></i></a></td>
 
+                                                <td class="text-center" style="width: 5%"><a href="/admin/HumanResources/accesstodirection/?user={{ user.id }}"
+                                                                                             class="btn btn-raised btn-default btn-xs"><i
+                                                        class="fa fa-sitemap color-default eliminar"></i></a></td>
+
                                                 <td class="text-center" style="width: 5%"><a href="/admin/ERP/accesstoproject/?user={{ user.id }}"
                                                                                              class="btn btn-raised btn-default btn-xs"><i
-                                                        class="fa fa-eye color-default eliminar"></i></a></td>
+                                                        class="fa fa-list color-default eliminar"></i></a></td>
 
                                                 <td class="text-center" style="width: 2%"><a href="{{ user.id }}/delete"
                                                                                              class="btn btn-raised btn-default btn-xs"><i

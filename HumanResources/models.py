@@ -1782,3 +1782,35 @@ class JobInstance(models.Model):
             return super(JobInstance, self).delete(using, keep_parents)
         print 'Job Instance can\'t be deleted, it is the root.'
         return False
+
+
+class AccessToDirection(models.Model):
+    user = models.ForeignKey(User, verbose_name="Usuario", on_delete=models.CASCADE)
+    direction = models.ForeignKey(Direction, verbose_name="Dirección", null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Accesos a Dirección'
+        verbose_name = 'Acceso a Dirección'
+        unique_together = ('user', 'direction')
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['name'] = str(self.user.user.first_name)
+        ans['direction'] = str(self.direction.name)
+        return ans
+
+    def __str__(self):
+        return self.user.get_username() + " - " + self.direction.name
+
+    @staticmethod
+    def user_has_access_to_direction(user_id, direction_id):
+        access_objects = AccessToDirection.objects.filter(Q(user_id=user_id) & Q(direction_id=direction_id))
+        return len(access_objects) > 0
+
+    @staticmethod
+    def get_directions_for_user(user_id):
+        directions = AccessToDirection.objects.filter(user_id=user_id).values('direction_id')
+        direction_ids = []
+        for p in directions:
+            direction_ids.append(p['direction_id'])
+        return direction_ids

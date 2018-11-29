@@ -32,13 +32,14 @@ from django.http.response import HttpResponseRedirect
 from django.http import QueryDict
 
 from HumanResources import views
-from HumanResources.views import EarningsDeductionsListView
+from HumanResources.views import EarningsDeductionsListView, AccessToDirectionAdminListView
 
 # Importing the forms.
 from HumanResources.forms import *
 
 # Importing the models.
 from HumanResources.models import *
+from django.contrib.auth.models import Group
 
 
 class HumanResourcesAdminUtilities():
@@ -139,6 +140,18 @@ class EmployeeAdmin(admin.ModelAdmin):
                 'driving_license_expiry_date')
         }),
     )
+
+    # def get_queryset(self, request):
+    #     qs = super(EmployeeAdmin, self).get_queryset(request)
+    #
+    #     user = request.user
+    #
+    #
+    #     if user..tipo != PerfilDeUsuario.ADMINISTRADOR:
+    #         qs = qs.filter(perfildeusuario__dependencia_id=user.perfildeusuario.dependencia.id)
+    #
+    #     return qs
+
 
     def queryset(self, request):
         qs = super(EmployeeAdmin, self).queryset(request)
@@ -1959,8 +1972,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 assitance_db_object.process_records()
 
                 # If everything went ok, generatethe automatic absences
-                atm_mgr = AutomaticAb
-                sences()
+                atm_mgr = AutomaticAbsences()
                 atm_mgr.generate_automatic_absences_for_period(payroll_period)
 
                 super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
@@ -2432,6 +2444,62 @@ class PeriodicityAdmin(admin.ModelAdmin):
 
     list_display = (
         'name',)
+
+@admin.register(AccessToDirection)
+class AccessToDirectionAdmin(admin.ModelAdmin):
+    model = AccessToDirection
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(AccessToDirectionAdmin, self).get_form(request, obj, **kwargs)
+
+        # Field objects.
+        user_field = ModelForm.base_fields['user']
+        direction_field = ModelForm.base_fields['direction']
+
+        user = request.GET.get('user')
+        directions_set = AccessToDirection.objects.filter(user__id=user).values('direction__id')
+
+        directions_array = []
+
+        for direction in directions_set:
+            directions_array.append(direction['direction__id'])
+
+        available_directions = Direction.objects.exclude(Q(id__in=directions_array))
+
+        if not available_directions.exists():
+            custom_message = "No hay Direcciones pendientes de asignación para el usuario actual."
+            messages_list = messages.get_messages(request)
+
+            if len(messages_list) <= 0:
+                messages.error(request, custom_message)
+
+        direction_field.queryset = available_directions
+
+        # Remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        user_field.widget.can_add_related = False
+        user_field.widget.can_change_related = False
+
+        return ModelForm
+
+    def response_add(self, request, obj, post_url_continue=None):
+        user_id = request.GET.get('user')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/HumanResources/accesstodirection/?user=' + user_id)
+        else:
+            return super(AccessToDirectionAdmin, self).response_add(request, obj, post_url_continue)
+
+    def get_urls(self):
+        urls = super(AccessToDirectionAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', self.admin_site.admin_view(AccessToDirectionAdminListView.as_view()),
+                name='accesstodirection-list-view'),
+        ]
+        return my_urls + urls
+
+    def response_delete(self, request, obj_display, obj_id):
+        user_id = request.GET.get('user')
+
+        return HttpResponseRedirect("/admin/HumanResources/accesstodirection/?user=" + str(user_id))
 
 
 admin.site.register(PayrollClassification)
