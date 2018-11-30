@@ -74,6 +74,8 @@ class AssistanceFileInterface(object):
                             elements[1] = date_as_datetime
 
                             # Enter time
+                            # time_value = xlrd.xldate_as_tuple(elements[2], self.book.datemode)
+                            # time_record_obj = time(*time_value[3:])
                             time_record_obj = datetime.time(*xlrd.xldate_as_tuple(elements[2], self.book.datemode)[3:])
                             elements[2] = time_record_obj
 
@@ -159,8 +161,8 @@ class AssistanceDBObject:
             exit_time_record = record[self.ElementPosition.MANUAL_EXIT_COL]
             print "Manual Assistance Upload"
 
-        entry_time_record = datetime.datetime.strptime(entry_time_record.encode('ascii','ignore'), '%H:%M:%S').time()
-        exit_time_record = datetime.datetime.strptime(exit_time_record.encode('ascii','ignore'), '%H:%M:%S').time()
+        #entry_time_record = datetime.datetime.strptime(entry_time_record.encode('ascii','ignore'), '%H:%M:%S').time()
+        #exit_time_record = datetime.datetime.strptime(exit_time_record.encode('ascii','ignore'), '%H:%M:%S').time()
 
 
         # Obtaining the related employee by theit key number. If the given employeee does not exist,

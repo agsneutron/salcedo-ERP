@@ -32,13 +32,14 @@ from django.http.response import HttpResponseRedirect
 from django.http import QueryDict
 
 from HumanResources import views
-from HumanResources.views import EarningsDeductionsListView
+from HumanResources.views import EarningsDeductionsListView, AccessToDirectionAdminListView
 
 # Importing the forms.
 from HumanResources.forms import *
 
 # Importing the models.
 from HumanResources.models import *
+from django.contrib.auth.models import Group
 
 
 class HumanResourcesAdminUtilities():
@@ -139,6 +140,15 @@ class EmployeeAdmin(admin.ModelAdmin):
                 'driving_license_expiry_date')
         }),
     )
+
+    def get_queryset(self, request):
+        qs = super(EmployeeAdmin, self).get_queryset(request)
+
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(employeepositiondescription__direction_id__in=direction_ids)
+
+        return qs
 
     def queryset(self, request):
         qs = super(EmployeeAdmin, self).queryset(request)
@@ -982,6 +992,9 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 
                 return ModelForm(*args, **kwargs)
 
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+        ModelForm.base_fields['direction'].queryset = Direction.objects.filter(pk__in=direction_ids)
+
         return ModelFormMetaClass
 
     # Overriding the add_wiew method for the employee position description admin.
@@ -1043,35 +1056,88 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
         return HttpResponseRedirect(redirect_url)
 
 
-# @admin.register(InfonavitData)
-class InfonavitDataAdmin(admin.TabularInline):
+@admin.register(InfonavitData)
+class InfonavitDataAdmin(admin.ModelAdmin):
     model = InfonavitData
     form = InfonavitDataForm
-    extra = 1
+    #extra = 1
 
     fieldsets = (
         ("Datos de Crédito Infonavit", {
-            'fields': ('infonavit_credit_number', 'discount_type', 'discount_amount', 'start_date', 'credit_term',
+            'fields': ('employee','infonavit_credit_number', 'discount_type', 'discount_amount', 'start_date', 'credit_term',
                        'comments',)
         }),
     )
-    # form = InfonavitDataForm
-    #
-    #
-    # # Method to override some characteristics of the form.
-    # def get_form(self, request, obj=None, **kwargs):
-    #      ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
-    #
-    #
-    #      # Class to pass the request to the form.
-    #      class ModelFormMetaClass(ModelForm):
-    #          def __new__(cls, *args, **kwargs):
-    #              kwargs['request'] = request
-    #
-    #              return ModelForm(*args, **kwargs)
-    #
-    #      return ModelFormMetaClass
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request']=request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+    # Overriding the add_wiew method for the employee position description admin.
+    #def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+     #   extra = extra_context or {}
+
+      #  employee_id = request.GET.get('employee')
+        #found_infonavit_data = request.GET.get('position')
+
+       # extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        #infonavit_data = InfonavitData.objects.filter(employee_id=employee_id)
+
+        #if len(infonavit_data) > 0 and found_infonavit_data is None:
+        #   return HttpResponseRedirect(
+        #        "/admin/HumanResources/infonavitdata/" + str(
+        #            infonavit_data.first().id) + "/change?employee=" + str(
+        #            employee_id) + "&position=1")
+        #
+        #return super(InfonavitDataAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def delete_model(self, request, obj):
+        employee = obj.employee.id
+        request.GET = request.GET.copy()
+        request.GET['employee'] = employee
+        return super(InfonavitDataAdmin, self).delete_model(request, obj)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+
+        extra = extra_context or {}
+
+        employee_id = request.GET.get('employee')
+        infonavit_data = InfonavitData.objects.filter(employee_id=employee_id)
+
+        if len(infonavit_data) <= 0 or (int(object_id) != int(infonavit_data.first().id)):
+            raise PermissionDenied
+
+        extra['employee'] = Employee.objects.get(pk=employee_id)
+
+        return super(InfonavitDataAdmin, self).change_view(request, object_id, form_url, extra)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/infonavitdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/infonavitdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/infonavitdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
 
 @admin.register(EmployeeEarningsDeductionsbyPeriod)
 class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
@@ -1241,7 +1307,7 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
         }),
     )
 
-    inlines = (InfonavitDataAdmin,)
+    #inlines = (InfonavitDataAdmin,)
 
     # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
@@ -1959,8 +2025,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 assitance_db_object.process_records()
 
                 # If everything went ok, generatethe automatic absences
-                atm_mgr = AutomaticAb
-                sences()
+                atm_mgr = AutomaticAbsences()
                 atm_mgr.generate_automatic_absences_for_period(payroll_period)
 
                 super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
@@ -2432,6 +2497,62 @@ class PeriodicityAdmin(admin.ModelAdmin):
 
     list_display = (
         'name',)
+
+@admin.register(AccessToDirection)
+class AccessToDirectionAdmin(admin.ModelAdmin):
+    model = AccessToDirection
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(AccessToDirectionAdmin, self).get_form(request, obj, **kwargs)
+
+        # Field objects.
+        user_field = ModelForm.base_fields['user']
+        direction_field = ModelForm.base_fields['direction']
+
+        user = request.GET.get('user')
+        directions_set = AccessToDirection.objects.filter(user__id=user).values('direction__id')
+
+        directions_array = []
+
+        for direction in directions_set:
+            directions_array.append(direction['direction__id'])
+
+        available_directions = Direction.objects.exclude(Q(id__in=directions_array))
+
+        if not available_directions.exists():
+            custom_message = "No hay Direcciones pendientes de asignación para el usuario actual."
+            messages_list = messages.get_messages(request)
+
+            if len(messages_list) <= 0:
+                messages.error(request, custom_message)
+
+        direction_field.queryset = available_directions
+
+        # Remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
+        user_field.widget.can_add_related = False
+        user_field.widget.can_change_related = False
+
+        return ModelForm
+
+    def response_add(self, request, obj, post_url_continue=None):
+        user_id = request.GET.get('user')
+        if '_addanother' not in request.POST:
+            return HttpResponseRedirect('/admin/HumanResources/accesstodirection/?user=' + user_id)
+        else:
+            return super(AccessToDirectionAdmin, self).response_add(request, obj, post_url_continue)
+
+    def get_urls(self):
+        urls = super(AccessToDirectionAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', self.admin_site.admin_view(AccessToDirectionAdminListView.as_view()),
+                name='accesstodirection-list-view'),
+        ]
+        return my_urls + urls
+
+    def response_delete(self, request, obj_display, obj_id):
+        user_id = request.GET.get('user')
+
+        return HttpResponseRedirect("/admin/HumanResources/accesstodirection/?user=" + str(user_id))
 
 
 admin.site.register(PayrollClassification)
