@@ -141,17 +141,14 @@ class EmployeeAdmin(admin.ModelAdmin):
         }),
     )
 
-    # def get_queryset(self, request):
-    #     qs = super(EmployeeAdmin, self).get_queryset(request)
-    #
-    #     user = request.user
-    #
-    #
-    #     if user..tipo != PerfilDeUsuario.ADMINISTRADOR:
-    #         qs = qs.filter(perfildeusuario__dependencia_id=user.perfildeusuario.dependencia.id)
-    #
-    #     return qs
+    def get_queryset(self, request):
+        qs = super(EmployeeAdmin, self).get_queryset(request)
 
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(employeepositiondescription__direction_id__in=direction_ids)
+
+        return qs
 
     def queryset(self, request):
         qs = super(EmployeeAdmin, self).queryset(request)
@@ -994,6 +991,9 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
                 kwargs['request'] = request
 
                 return ModelForm(*args, **kwargs)
+
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+        ModelForm.base_fields['direction'].queryset = Direction.objects.filter(pk__in=direction_ids)
 
         return ModelFormMetaClass
 

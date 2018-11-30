@@ -1359,10 +1359,10 @@ class InfonavitData(models.Model):
         verbose_name = "Datos del Infonavit del Empleado"
 
     def __str__(self):
-        return "Crédito :" + self.infonavit_credit_number + " del empleado " + self.employee_financial_data.employee.employee_key
+        return "Crédito :" + self.infonavit_credit_number + " del empleado " + self.employee.employee_key
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return "Crédito :" + self.infonavit_credit_number + " del empleado " + self.employee_financial_data.employee.employee_key
+        return "Crédito :" + self.infonavit_credit_number + " del empleado " + self.employee.employee_key
 
 
 class EarningsDeductions(models.Model):
