@@ -256,10 +256,10 @@
                                {{ request.GET.employee }}{% else %} disabled{% endif %}"
                            href="{% if request.GET.employee %}/admin/HumanResources/infonavitdata/add/?employee={{ request.GET.employee }}{% else %}#{% endif %}">
                             <div class="ripple-container
-
                                     {% if request.resolver_match.view_name == "admin:HumanResources_infonavitdata_add" %}{{ "active_btn" }}{% endif %}"></div>
                             Crédito<br> Infonavit
                         </a>
+
                     </div>
                     <div class="row mb-4">
                         <div class="col-md-2 col-sm-3">
@@ -676,95 +676,103 @@
                                         </tbody>
                                     </table>
                                 </div>
-                            {% elif template == "financial_data" %}
 
-                                <hr>
-                                <div class="table-responsive mt-15">
-                                    <table class="table table-striped">
-                                        <thead>
-                                        <tr>
-                                            <td>Cuenta</td>
-                                            <td>CLABE</td>
-                                            <td>Salario Mensual</td>
-                                            <td>Salario Diario</td>
-                                            <td>Salario Diario Acumulado</td>
+                            {% elif template == "employeefinancialdata" and employeefinancialdata %}
+
+    <hr>
+    <div class="table-responsive mt-15">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <td>Forma de Pago</td>
+                <td>No. de Cuenta</td>
+                <td>CLABE</td>
+                <td>Banco</td>
+                <td>Sala. Mensual</td>
+                <td>Sala. Diario</td>
+		<td>SDA</td>
+		<td>Tipo de Cuenta</td>
+		<td>Notas</td>
+                <td>Editar</td>
+                <td>Eliminar</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for record in employeefinancialdata %}
+                <tr>
+                    <td>{{ record.payment_method }}</td>
+                    <td>{{ record.account_number }}</td>
+                    <td>{{ record.CLABE }}</td>
+                    <td>{{ record.bank }}</td>
+                    <td>{{ record.monthly_salary }}</td>
+                    <td>{{ record.daily_salary }}</td>
+		    <td>{{ record.aggregate_daily_salary }}</td>
+                    <td>{{ record.account_type }}</td>
+                    <td>{{ record.comments }}</td>
+                    <td style="width: 5%">
+                        <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/change/?employee={{ request.GET.employee }}"
+                           class="btn btn-raised btn-default btn-xs"><i
+                                class="fa fa-pencil color-default eliminar"></i>
+                        </a>
+                    </td>
+                    <td style="width: 5%">
+                        <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/delete/?employee={{ request.GET.employee }}"
+                           class="btn btn-raised btn-default btn-xs"><i
+                                class="fa fa-trash-o color-danger eliminar"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 
-                                            <td>Editar</td>
-                                            <td>Eliminar</td>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for record in financial_data %}
-                                            <tr>
-                                                <td>{{ record.account_number }}</td>
-                                                <td>{{ record.CLABE }}</td>
-                                                <td>{{ record.monthly_salary }}</td>
-                                                <td>{{ record.daily_salary }}</td>
-                                                <td>{{ record.aggregate_daily_salary }}</td>
+                            {% elif template == "infonavitdata" and infonavitdata %}
+
+    <hr>
+    <div class="table-responsive mt-15">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <td>No. de Crédito</td>
+                <td>Tipo de Descuento</td>
+                <td>Monto de Descuento</td>
+                <td>Fecha de Inicio</td>
+                <td>Duración de Crédito</td>
+                <td>Notas</td>
+                <td>Editar</td>
+                <td>Eliminar</td>
+            </tr>
+            </thead>
+            <tbody>
+            {% for record in infonavitdata %}
+                <tr>
+                    <td>{{ record.infonavit_credit_number }}</td>
+                    <td>{{ record.discount_type }}</td>
+                    <td>{{ record.discount_amount }}</td>
+                    <td>{{ record.start_date }}</td>
+                    <td>{{ record.credit_term }}</td>
+                    <td>{{ record.comments }}</td>
+                    <td style="width: 5%">
+                        <a href="/admin/HumanResources/infonavitdata/{{ record.id }}/change/?employee={{ request.GET.employee }}"
+                           class="btn btn-raised btn-default btn-xs"><i
+                                class="fa fa-pencil color-default eliminar"></i>
+                        </a>
+                    </td>
+                    <td style="width: 5%">
+                        <a href="/admin/HumanResources/infonavitdata/{{ record.id }}/delete/?employee={{ request.GET.employee }}"
+                           class="btn btn-raised btn-default btn-xs"><i
+                                class="fa fa-trash-o color-danger eliminar"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 
 
-                                                <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/change/?employee={{ request.GET.employee }}"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-pencil color-default eliminar"></i>
-                                                    </a>
-                                                </td>
-                                                <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/delete/"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-trash-o color-danger eliminar"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
-
-
-                                <hr>
-                                <div class="table-responsive mt-15">
-                                    <table class="table table-striped">
-                                        <thead>
-                                        <tr>
-                                            <td>Numero de Crédito</td>
-                                            <td>Tipo Descuento</td>
-                                            <td>Monto Descuento</td>
-                                            <td>Fecha de Inicio</td>
-                                            <td>Duracion</td>
-                                            <td>Observaciones</td>
-                                            <td>Editar</td>
-                                            <td>Eliminar</td>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {% for record in financial_data %}
-                                            <tr>
-                                                <td>{{ record.infonavit_credit_number }}</td>
-                                                <td>{{ record.discount_type }}</td>
-                                                <td>{{ record.discount_amount }}</td>
-                                                <td>{{ record.start_date }}</td>
-                                                <td>{{ record.credit_term }}</td>
-                                                <td>{{ record.comments }}</td>
-
-                                                <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/change/?employee={{ request.GET.employee }}"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-pencil color-default eliminar"></i>
-                                                    </a>
-                                                </td>
-                                                <td style="width: 5%">
-                                                    <a href="/admin/HumanResources/employeefinancialdata/{{ record.id }}/delete/"
-                                                       class="btn btn-raised btn-default btn-xs"><i
-                                                            class="fa fa-trash-o color-danger eliminar"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        {% endfor %}
-                                        </tbody>
-                                    </table>
-                                </div>
                             {% elif template == "employee_earnings_deductions" %}
                                 <hr>
                                 <div class=" mt-15">

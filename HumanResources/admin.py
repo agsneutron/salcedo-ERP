@@ -1060,7 +1060,6 @@ class EmployeePositionDescriptionAdmin(admin.ModelAdmin):
 class InfonavitDataAdmin(admin.ModelAdmin):
     model = InfonavitData
     form = InfonavitDataForm
-    #extra = 1
 
     fieldsets = (
         ("Datos de Crédito Infonavit", {
@@ -1069,57 +1068,50 @@ class InfonavitDataAdmin(admin.ModelAdmin):
         }),
     )
 
+# Created By Xavi
+
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(InfonavitDataAdmin, self).get_form(request, obj, **kwargs)
 
         # Class to pass the request to the form.
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
-                kwargs['request']=request
+                kwargs['request'] = request
 
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
-
-    # Overriding the add_wiew method for the employee position description admin.
-    #def add_view(self, request, form_url='', extra_context=None):
-        # Setting the extra variable to the set context or none instead.
-     #   extra = extra_context or {}
-
-      #  employee_id = request.GET.get('employee')
-        #found_infonavit_data = request.GET.get('position')
-
-       # extra['employee'] = Employee.objects.get(pk=employee_id)
-
-        #infonavit_data = InfonavitData.objects.filter(employee_id=employee_id)
-
-        #if len(infonavit_data) > 0 and found_infonavit_data is None:
-        #   return HttpResponseRedirect(
-        #        "/admin/HumanResources/infonavitdata/" + str(
-        #            infonavit_data.first().id) + "/change?employee=" + str(
-        #            employee_id) + "&position=1")
-        #
-        #return super(InfonavitDataAdmin, self).add_view(request, form_url, extra_context=extra)
+        # Adding extra context to the change view.
 
     def delete_model(self, request, obj):
         employee = obj.employee.id
         request.GET = request.GET.copy()
         request.GET['employee'] = employee
+
         return super(InfonavitDataAdmin, self).delete_model(request, obj)
 
-    def change_view(self, request, object_id, form_url='', extra_context=None):
-
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
-        infonavit_data = InfonavitData.objects.filter(employee_id=employee_id)
+        employee = Employee.objects.get(pk=employee_id)
+        infonavitdata_set = InfonavitData.objects.filter(employee_id=employee_id)
 
-        if len(infonavit_data) <= 0 or (int(object_id) != int(infonavit_data.first().id)):
-            raise PermissionDenied
+        extra['template'] = "infonavitdata"
+        extra['employee'] = employee
+        extra['infonavitdata'] = infonavitdata_set
+
+        return super(InfonavitDataAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        extra = extra_context or {}
+        employee_id = request.GET.get('employee')
 
         extra['employee'] = Employee.objects.get(pk=employee_id)
+        extra['show_delete_link'] = False
 
-        return super(InfonavitDataAdmin, self).change_view(request, object_id, form_url, extra)
+        return super(InfonavitDataAdmin, self).change_view(request, object_id, form_url, extra_context=extra)
 
     # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
@@ -1138,6 +1130,7 @@ class InfonavitDataAdmin(admin.ModelAdmin):
         employee_id = request.GET.get('employee')
         redirect_url = "/admin/HumanResources/infonavitdata/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
+
 
 @admin.register(EmployeeEarningsDeductionsbyPeriod)
 class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
@@ -1307,9 +1300,8 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
         }),
     )
 
-    #inlines = (InfonavitDataAdmin,)
+#Created be XAVI
 
-    # Method to override some characteristics of the form.
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeFinancialDataAdmin, self).get_form(request, obj, **kwargs)
 
@@ -1321,66 +1313,54 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
+        # Adding extra context to the change view.
 
     def delete_model(self, request, obj):
         employee = obj.employee.id
         request.GET = request.GET.copy()
         request.GET['employee'] = employee
+
         return super(EmployeeFinancialDataAdmin, self).delete_model(request, obj)
 
-    # Overriding the add_wiew method for the employee pfinancial data admin.
     def add_view(self, request, form_url='', extra_context=None):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
         employee_id = request.GET.get('employee')
-        found_financial_data = request.GET.get('position')
+        employee = Employee.objects.get(pk=employee_id)
+        employeefinancialdata_set = EmployeeFinancialData.objects.filter(employee_id=employee_id)
 
-        extra['employee'] = Employee.objects.get(pk=employee_id)
-
-        financial_data = EmployeeFinancialData.objects.filter(employee_id=employee_id)
-
-        if len(financial_data) > 0 and found_financial_data is None:
-            return HttpResponseRedirect(
-                "/admin/HumanResources/employeefinancialdata/" + str(
-                    financial_data.first().id) + "/change?employee=" + str(employee_id) + "&position=1")
+        extra['template'] = "employeefinancialdata"
+        extra['employee'] = employee
+        extra['employeefinancialdata'] = employeefinancialdata_set
 
         return super(EmployeeFinancialDataAdmin, self).add_view(request, form_url, extra_context=extra)
 
     def change_view(self, request, object_id, form_url='', extra_context=None):
-
         extra = extra_context or {}
-
         employee_id = request.GET.get('employee')
-        financial_data = EmployeeFinancialData.objects.filter(employee_id=employee_id)
-
-        if len(financial_data) <= 0 or (int(object_id) != int(financial_data.first().id)):
-            raise PermissionDenied
 
         extra['employee'] = Employee.objects.get(pk=employee_id)
+        extra['show_delete_link'] = False
 
-        return super(EmployeeFinancialDataAdmin, self).change_view(request, object_id, form_url,
-                                                                   extra)
+        return super(EmployeeFinancialDataAdmin, self).change_view(request, object_id, form_url, extra_context=extra)
 
+    # To redirect after object delete.
     def response_delete(self, request, obj_display, obj_id):
         employee_id = request.GET.get('employee')
-
-        return HttpResponseRedirect(
-            "/admin/HumanResources/employeefinancialdata/add/?employee=" + str(employee_id))
-
-    def response_change(self, request, obj):
-        employee_id = request.GET.get('employee')
-
-        redirect_url = "/admin/HumanResources/employeefinancialdata/" + str(obj.id) + "/change?employee=" + str(
-            employee_id)
+        redirect_url = "/admin/HumanResources/employeefinancialdata/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
-        # To redirect after add
-
+    # To redirect after add
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
-        redirect_url = "/admin/HumanResources/employeefinancialdata/" + str(obj.id) + "/change?employee=" + str(
-            employee_id)
+        redirect_url = "/admin/HumanResources/employeefinancialdata/add/?employee=" + str(employee_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        employee_id = request.GET.get('employee')
+        redirect_url = "/admin/HumanResources/employeefinancialdata/add/?employee=" + str(employee_id)
         return HttpResponseRedirect(redirect_url)
 
 
