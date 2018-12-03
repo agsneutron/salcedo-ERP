@@ -120,7 +120,10 @@
         </div>
         <div class="col-xs-4">
             <div>
-                <a href="" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+                <a href="" class="btn btn-block btn-raised btn-primary">Ver Info. de Nómina</a>
+            </div>
+            <div>
+                <a href="" class="btn btn-block btn-raised btn-primary">Datos Financieros</a>
             </div>
             <hr>
             <div>
@@ -578,7 +581,11 @@
                         <li class="list-group-item"><strong>Estatus:</strong> {{ employee.get_status_display }}</li>
                     </ul>
                     <div>
-                        <a href="#employeeED" id="EED" class="btn btn-block btn-raised btn-primary">Ver Información de Nómina</a>
+                        <a href="#employeeED" id="EED" class="btn btn-block btn-raised btn-primary">Ver Info. de Nómina</a>
+                    </div>
+
+                    <div>
+                        <a href="#financialdata" id="EFD" class="btn btn-block btn-raised btn-primary">Datos Financieros</a>
                     </div>
 
                 </div>
@@ -633,11 +640,15 @@
                         <a href="#puesto" aria-controls="puesto" role="tab" data-toggle="tab">Puesto</a>
                     </li>
                     <li role="presentation">
-                        <a href="#datosfinancieros" aria-controls="datosfinancieros" role="tab" data-toggle="tab">Datos <br>Financieros</a>
+                        <a href="#datosfinancieros" aria-controls="datosfinancieros" role="tab" data-toggle="tab">Crédito <br>Infonavit</a>
                     </li>
                     <li role="presentation">
                         <a href="#employeeED" aria-controls="employeeED" role="tab" data-toggle="tab"></a>
                     </li>
+                    <li role="presentation">
+                        <a href="#financialdata" aria-controls="financialdata" role="tab" data-toggle="tab"></a>
+                    </li>
+
 
                 </ul>
 
@@ -1108,45 +1119,50 @@
                             </div>
                     </div>
 
+
                     <div role="tabpanel" class="tab-pane" id="datosfinancieros">
                             <div class="card card-info">
+
                                 <div class="">
-                                    <h3 class="color-info card-title">Datos Financieros</h3>
+                                    <h3 class="color-info card-title">Crédito Infonavit</h3>
                                 </div>
-                                <div class="card-block text-left">
-                                    {% for efd in employee_financial_data %}
-                                        <ul class="list-group text-left">
-                                            <li class="list-group-item"><strong>Forma de Pago: </strong> {{ efd.payment_method }} </li>
-                                            <li class="list-group-item"><strong>Número de Cuenta: </strong> {{ efd.account_number }} </li>
-                                            <li class="list-group-item"><strong>CLABE: </strong> {{ efd.CLABE }}</li>
-                                            <li class="list-group-item"><strong>Banco: </strong> {{ efd.bank }}</li>
-                                            <li class="list-group-item"><strong>Salario Mensual: </strong> {{ efd.monthly_salary }}</li>
-                                            <li class="list-group-item"><strong>Salario Diario: </strong> {{ efd.daily_salary }}</li>
-                                            <li class="list-group-item"><strong>Salario Diario Acumulado: </strong> {{ efd.aggregate_daily_salary }}</li>
-                                        </ul>
-                                    {% endfor %}
-                                </div>
-                                <div class="">
-                                    <h3 class="color-info card-title">Datos de Crédito Infonavit</h3>
-                                </div>
-                                <div class="card-block text-left">
 
-                                    {% for efd in employee_infonavit %}
+                                <div class="card-block text-center">
 
-                                        <ul class="list-group text-left">
-                                            <li class="list-group-item"><strong>Número de Crédito: </strong> {{ efd.credit_number }}</li>
-                                            <li class="list-group-item"><strong>Tipo de Descuento: </strong> {{ efd.discount_type }}</li>
-                                            <li class="list-group-item"><strong>Monto de Descuento: </strong> {{ efd.discount_amount }}</li>
-                                            <li class="list-group-item"><strong>Fecha de Inicio: </strong> {{ efd.start_date }}</li>
-                                            <li class="list-group-item"><strong>Duración de Crédito: </strong> {{ efd.credit_term }}</li>
-                                            <li class="list-group-item"><strong>Observaciones: </strong> {{ efd.comments }}</li>
+                                {% for record in infonavitdata %}
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>No. de Crédito</th>
+                                                <th>T. de Descuento</th>
+                                                <th>M. de Descuento</th>
+                                                <th>Fecha Inicio</th>
+                                                <th>Duración de Cred.</th>
+                                                <th>Notas</th>
 
-                                        </ul>
-                                        <hr>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th>{{ record.infonavit_credit_number }}</th>
+                                                <td>{{ record.discount_type }}</td>
+                                                <td>{{ record.discount_amount }}</td>
+                                                <td>{{ record.start_date }}</td>
+                                                <td>{{ record.credit_term }}</td>
+                                                <td>{{ record.comments }}</td>
+
+                                            </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     {% endfor %}
                                 </div>
                             </div>
                     </div>
+
+
+
                     <div role="tabpanel" class="tab-pane" id="employeeED">
                         <div class="card card-info">
                             <div class="">
@@ -1174,6 +1190,55 @@
                             </div>
                         </div>
                     </div>
+
+
+                    <div role="tabpanel" class="tab-pane" id="financialdata">
+                            <div class="card card-info">
+
+                                <div class="">
+                                    <h3 class="color-info card-title">Datos Financieros</h3>
+                                </div>
+
+                                <div class="card-block text-center">
+
+                                {% for efd in employeefinancialdata %}
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                            <tr>
+                                                <th>Forma de Pago</th>
+                                                <th>No. de Cuenta</th>
+                                                <th>CLABE</th>
+                                                <th>BANCO</th>
+                                                <th>Sala. Mensual</th>
+                                                <th>Sala. Diario</th>
+                                                <th>SDA</th>
+                                                <th>Tipo de Cuenta</thH>
+                                                <th>Notas</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <th>{{ efd.payment_method }}</th>
+                                                <td>{{ efd.account_number }}</td>
+                                                <td>{{ efd.CLABE }}</td>
+                                                <td>{{ efd.bank }}</td>
+                                                <td>{{ efd.monthly_salary }}</td>
+                                                <td>{{ efd.daily_salary }}</td>
+                                                <td>{{ efd.aggregate_daily_salary }}</td>
+                                                <td>{{ efd.account_type }}</td>
+                                                <td>{{ efd.comments}}</td>
+
+                                            </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                    </div>
+
 
                 </div>
             </div>
