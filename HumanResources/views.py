@@ -309,7 +309,7 @@ def EmployeeByPeriod(request):
 
 
     template = loader.get_template('admin/HumanResources/employee_by_payroll.html')
-    employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup)
+    employees = EmployeePositionDescription.objects.filter(payroll_group__id=payrollgroup).exclude(employee__status=1)
     period_data = PayrollPeriod.objects.filter(id=payrollperiod)
 
 
@@ -508,11 +508,11 @@ class EmployeeDropOutDetail(generic.DetailView):
     def get_queryset(self):
         result = super(EmployeeDropOutDetail, self).get_queryset()
 
+
         return result
 
     def get_context_data(self, **kwargs):
         context = super(EmployeeDropOutDetail, self).get_context_data(**kwargs)
-
 
         return context
 

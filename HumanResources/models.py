@@ -1295,6 +1295,14 @@ class EmployeePositionDescription(models.Model):
         ans['payroll_group'] = str(self.payroll_group.name)
         return ans
 
+    @staticmethod
+    def get_employees_for_direction(direction_ids):
+        employees = EmployeePositionDescription.objects.filter(direction_id__in=direction_ids).values('employee_id')
+        employee_ids = []
+        for p in employees:
+            employee_ids.append(p['employee_id'])
+        return employee_ids
+
 
 class EmployeeFinancialData(models.Model):
     DEPOSITO = 'D'
