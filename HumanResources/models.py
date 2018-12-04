@@ -89,12 +89,12 @@ class PayrollClassification(models.Model):
 
 
 class PayrollGroup(models.Model):
-    internal_company = models.ForeignKey(InternalCompany, verbose_name="Empresa",
+    internal_company = models.ForeignKey(InternalCompany, verbose_name="Empresa*",
                                                null=False, blank=False, default=1)
-    direction = models.ForeignKey('Direction', verbose_name="Dirección",
+    direction = models.ForeignKey('Direction', verbose_name="Dirección*",
                                                null=False, blank=False, default=1)
-    name = models.CharField(verbose_name="Nombre", max_length=200, null=False, blank=False, unique=False)
-    payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina",
+    name = models.CharField(verbose_name="Nombre*", max_length=200, null=False, blank=False, unique=False, validators=[letras])
+    payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina*",
                                                null=False, blank=False)
 
     CHECKER_TYPE_AUTOMATIC = 1
@@ -104,7 +104,7 @@ class PayrollGroup(models.Model):
         (CHECKER_TYPE_MANUAL, 'Manual')
     )
     checker_type = models.IntegerField(choices=CHECKER_TYPE_CHOICES, default=CHECKER_TYPE_AUTOMATIC,
-                                       verbose_name='Tipo de Checador')
+                                       verbose_name='Tipo de Checador*')
 
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=True, blank=True)
 
@@ -787,7 +787,7 @@ class WorkReference(models.Model):
 
 # To represent an employee's dropout.
 class EmployeeDropOut(models.Model):
-    date = models.DateField(verbose_name="Fecha de Baja", null=False, blank=False)
+    date = models.DateField(verbose_name="Fecha de Baja*", null=False, blank=False)
 
     DROP_TYPE_A = 1
     DROP_TYPE_B = 2
@@ -809,13 +809,13 @@ class EmployeeDropOut(models.Model):
         (DROP_TYPE_H, 'Otra'),
 
     )
-    type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Motivo de Baja')
-    reason = models.CharField(verbose_name="Motivo", max_length=4096, null=False, blank=True)
-    severance_pay = models.FloatField(verbose_name="Liquidación", null=True, blank=False)
-    observations = tinymce_models.HTMLField(verbose_name='Observaciones', null=True, blank=True, max_length=4096)
+    type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Motivo de Baja*')
+    reason = models.CharField(verbose_name="Motivo", max_length=4096, null=True, blank=True, validators=[letras])
+    severance_pay = models.FloatField(verbose_name="Liquidación*", null=True, blank=False, validators=[onlynum_regex])
+    observations = tinymce_models.HTMLField(verbose_name='Observaciones', null=True, blank=True, max_length=4096, validators=[letras])
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Bajas de Empleados"
@@ -1319,11 +1319,8 @@ class EmployeeFinancialData(models.Model):
         ('S', 'Secundaria'),
     )
 
-    #entero_regex = RegexValidator(regex=r'^\+?1?\d{9,40}$',
-     #                            message="Asegurese de agregar solo caracteres numericos")
-
-    account_number = models.CharField(verbose_name='Número de Cuenta',max_length=20, null=False, blank=False,default=0, validators=[onlynum_regex])
-    CLABE = models.CharField(verbose_name='Clave Interbancaria (CLABE)',max_length=40, null=False, blank=False, default=0, validators=[onlynum_regex])
+    account_number = models.CharField(verbose_name='Número de Cuenta*',max_length=20, null=False, blank=False,default=0, validators=[onlynum_regex])
+    CLABE = models.CharField(verbose_name='Clave Interbancaria (CLABE)*',max_length=40, null=False, blank=False, default=0, validators=[onlynum_regex])
     monthly_salary = models.DecimalField(verbose_name='Salario Mensual*', max_digits=20, decimal_places=2, null=True)
     daily_salary = models.DecimalField(verbose_name='Salario Diario*', max_digits=20, decimal_places=2, null=True)
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20,
@@ -1331,9 +1328,9 @@ class EmployeeFinancialData(models.Model):
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
-                                      verbose_name='Forma de Pago')
+                                      verbose_name='Forma de Pago*')
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
-                                      verbose_name='Forma de Pago')
+                                      verbose_name='Forma de Pago*')
     bank = models.ForeignKey(SATBank, null=False, blank=False, verbose_name="Banco*")
 
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
@@ -1349,14 +1346,13 @@ class EmployeeFinancialData(models.Model):
 class InfonavitData(models.Model):
     infonavit_credit_number = models.CharField(verbose_name="Número de Crédito*", null=False, blank=False,
                                                max_length=30, )
-    discount_type = models.CharField(verbose_name="Tipo de Descuento", null=False, blank=False, max_length=30, )
-    discount_amount = models.CharField(verbose_name="Monto de Descuento", null=False, blank=False, max_length=30, )
-    start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
-    credit_term = models.CharField(verbose_name="Duración de Crédito", null=False, blank=False, max_length=200)
+    discount_type = models.CharField(verbose_name="Tipo de Descuento*", null=False, blank=False, max_length=30, )
+    discount_amount = models.CharField(verbose_name="Monto de Descuento*", null=False, blank=False, max_length=30, )
+    start_date = models.DateField(verbose_name="Fecha de Inicio*", null=False, blank=False)
+    credit_term = models.CharField(verbose_name="Duración de Crédito*", null=False, blank=False, max_length=200)
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, validators=[letras])
 
     # Foreign Keys.
-    # employee_financial_data = models.ForeignKey(EmployeeFinancialData)
 
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
 
@@ -1470,7 +1466,7 @@ class EmployeeEarningsDeductions(models.Model):
 
 
 class PayrollType(models.Model):
-    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
+    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30,validators=[letras])
 
     class Meta:
         verbose_name_plural = "Tipo de Nómina"

@@ -230,25 +230,27 @@ class EmployeeDetailView(generic.DetailView):
         # Obtaining the employee's position description and setting it to the context.
         context['employee_position_description'] = EmployeePositionDescription.objects.filter(employee__id=employee.id)
 
-        employee_financial_data_id = EmployeeFinancialData.objects.values('id').filter(employee__id=employee.id)
+        #employee_financial_data_id = EmployeeFinancialData.objects.values('id').filter(employee__id=employee.id)
         # Obtaining the employee's Employee Financial Data and setting it to the context.
         context['employee_financial_data'] = EmployeeFinancialData.objects.filter(employee__id=employee.id)
 
-        #Infonavit
-        Infonavit_array = []
-        Infonavit_set = InfonavitData.objects.filter(employee_financial_data_id=employee_financial_data_id)
-        for infonavit in Infonavit_set:
-            infonavit_json = {
-            'credit_number': infonavit.infonavit_credit_number,
-            'discount_type': infonavit.discount_type,
-            'discount_amount': infonavit.discount_amount,
-            'start_date': infonavit.start_date,
-            'credit_term': infonavit.credit_term,
-            'comments': infonavit.comments,
-             }
-            Infonavit_array.append(infonavit_json)
+        # #Infonavit
+        # Infonavit_array = []
+        # Infonavit_set = InfonavitData.objects.filter(employee_financial_data_id=employee_financial_data_id)
+        # for infonavit in Infonavit_set:
+        #     infonavit_json = {
+        #     'credit_number': infonavit.infonavit_credit_number,
+        #     'discount_type': infonavit.discount_type,
+        #     'discount_amount': infonavit.discount_amount,
+        #     'start_date': infonavit.start_date,
+        #     'credit_term': infonavit.credit_term,
+        #     'comments': infonavit.comments,
+        #      }
+        #     Infonavit_array.append(infonavit_json)
+        #
+        # context['employee_infonavit'] = Infonavit_array
 
-        context['employee_infonavit'] = Infonavit_array
+        context['infonavitdata'] = InfonavitData.objects.filter(employee__id=employee.id)
 
         # Obtaining the employee's Employee Has TAG Data and setting it to the context.
         context['employee_has_tag'] = EmployeeHasTag.objects.filter(employee__id=employee.id)
