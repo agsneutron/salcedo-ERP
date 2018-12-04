@@ -73,6 +73,9 @@
             $('#EED').click(function () {
                 $('.nav-tabs a[href="#employeeED"]').tab('show')
 
+            $('#EFD').click(function () {
+                $('.nav-tabs a[href="#financialdata"]').tab('show')
+
             })
         });
     </script>
@@ -977,11 +980,11 @@
                     <div role="tabpanel" class="tab-pane" id="doc">
                         <div class="card card-info">
                             <div class="">
-                                <h3 class="color-info card-title">Documentación Probatoria</h3>
+                                <h3 class="color-info card-title">Documentación del Empleado</h3>
                             </div>
                             <div class="card-block text-left">
                                 <div class="table-responsive">
-                                    {% for record in employee_documents %}
+
                                         <table class="table table-bordered">
                                             <thead>
                                             <tr>
@@ -991,15 +994,17 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+                                            {% for record in employee_documents %}
                                             <tr>
                                                 <td><span></span>
                                                     <p class="truncate">{{ record.file.name }}</p></td>
                                                 <td>{{ record.document_type }}</td>
                                                 <td>{{ record.comments }}</td>
+                                              {% endfor %}
                                             </tr>
                                             </tbody>
                                         </table>
-                                     {% endfor %}
+
                                         </div>
 
 
@@ -1129,7 +1134,7 @@
 
                                 <div class="card-block text-center">
 
-                                {% for record in infonavitdata %}
+
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <thead>
@@ -1144,6 +1149,9 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+
+                                            {% for record in infonavitdata %}
+
                                             <tr>
                                                 <th>{{ record.infonavit_credit_number }}</th>
                                                 <td>{{ record.discount_type }}</td>
@@ -1153,10 +1161,13 @@
                                                 <td>{{ record.comments }}</td>
 
                                             </tr>
+
+                                            {% endfor %}
+
                                                 </tbody>
                                             </table>
                                         </div>
-                                    {% endfor %}
+
                                 </div>
                             </div>
                     </div>
@@ -1169,7 +1180,6 @@
                                 <h3 class="color-info card-title">Percepciones y Deducciones</h3>
                             </div>
                             <div class="card-block text-left">
-                                {% for pd in employee_ed %}
                                      <table class="table table-bordered">
                                             <thead>
                                             <tr>
@@ -1179,14 +1189,19 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+
+                                            {% for pd in employee_ed %}
+
                                             <tr>
                                                 <td>{{ pd.concept.type }}</td>
                                                 <td>{{ pd.concept}}</td>
                                                 <td>{{ pd.ammount }}</td>
                                             </tr>
+
+                                            {% endfor %}
+
                                             </tbody>
                                         </table>
-                                {% endfor %}
                             </div>
                         </div>
                     </div>
@@ -1201,7 +1216,6 @@
 
                                 <div class="card-block text-center">
 
-                                {% for efd in employeefinancialdata %}
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <thead>
@@ -1219,6 +1233,9 @@
                                             </tr>
                                             </thead>
                                             <tbody>
+
+                                            {% for efd in employee_financial_data %}
+
                                             <tr>
                                                 <th>{{ efd.payment_method }}</th>
                                                 <td>{{ efd.account_number }}</td>
@@ -1231,10 +1248,12 @@
                                                 <td>{{ efd.comments}}</td>
 
                                             </tr>
+
+                                            {% endfor %}
+
                                                 </tbody>
                                             </table>
                                         </div>
-                                    {% endfor %}
                                 </div>
                             </div>
                     </div>

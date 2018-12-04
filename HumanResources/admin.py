@@ -1652,6 +1652,32 @@ class PayrollGroupAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'payroll_classification', 'project', 'get_detail_button', 'get_change_link', 'get_delete_link')
 
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(PayrollGroupAdmin, self).get_form(request, obj, **kwargs)
+
+         # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                 #kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+        ModelForm.base_fields['direction'].queryset = Direction.objects.filter(pk__in=direction_ids)
+
+        return ModelFormMetaClass
+
+
+    def get_queryset(self, request):
+        qs = super(PayrollGroupAdmin, self).get_queryset(request)
+
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(direction_id__in=direction_ids)
+
+        return qs
+
+
     def get_detail_button(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
 
@@ -2417,6 +2443,23 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
             'fields': ('employee', 'type', 'severance_pay', 'reason', 'date', 'observations')
         }),
     )
+
+
+
+
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(EmployeeDropOutAdmin, self).get_form(request, obj, **kwargs)
+
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+
+                return ModelForm(*args, **kwargs)
+
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+        ModelForm.base_fields['employee'].queryset =EmployeePositionDescription.objects.filter(direction_id__in=direction_ids)
+
+        return ModelFormMetaClass
 
     def get_detail_column(self, obj):
         return HumanResourcesAdminUtilities.get_detail_link(obj)
