@@ -1198,7 +1198,7 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         django.contrib.messages.success(request, "Deducción borrada exitosamente.")
 
         return HttpResponseRedirect(
-            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
+            'http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=' + employee_id + "&payrollperiod=" + payroll_period_id)
 
     def response_change(self, request, obj):
         employee_id = request.GET.get('employee')

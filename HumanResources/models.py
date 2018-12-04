@@ -1806,7 +1806,7 @@ class JobInstance(models.Model):
 
 class AccessToDirection(models.Model):
     user = models.ForeignKey(User, verbose_name="Usuario", on_delete=models.CASCADE)
-    direction = models.ForeignKey(Direction, verbose_name="Dirección", null=False, blank=False)
+    direction = models.ForeignKey(Direction, verbose_name="Dirección*", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Accesos a Dirección'
