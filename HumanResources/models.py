@@ -1634,7 +1634,8 @@ class EmployeeLoanDetail(models.Model):
                                chained_model_field="payroll_group",
                                show_all=False,
                                auto_choose=True,
-                               sort=True)
+                               sort=True,
+                               verbose_name="Periodo")
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
     deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
 
