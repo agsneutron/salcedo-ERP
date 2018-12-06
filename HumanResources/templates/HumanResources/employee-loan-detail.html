@@ -19,24 +19,24 @@
             <div class="col-xs-6">
                 <ul class="list-group">
                     <li class="list-group-item withripple "><span class="color-info"
-                                                                  style="font-size: 18px">Nombre:</span> {{ object.employee.name }}
-                        - {{ policy.fiscal_period.accounting_year }}</li>
+                                                                  style="font-size: 18px">Empleado:</span> {{ object.employee.name }}  {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}
+{#                        - {{ policy.fiscal_period.accounting_year }}#}</li>
+{#                    <li class="list-group-item withripple "><span class="color-info"#}
+{#                                                                  style="font-size: 18px">Apellido:</span> {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}#}
+{#                    </li>#}
                     <li class="list-group-item withripple "><span class="color-info"
-                                                                  style="font-size: 18px">Apellido:</span> {{ object.employee.first_last_name }} {{ object.employee.second_last_name }}
-                    </li>
-                    <li class="list-group-item withripple "><span class="color-info"
-                                                                  style="font-size: 18px">Monto total:</span> {{ object.amount | formatoNumero }}
+                                                                  style="font-size: 18px">Monto Total:</span> {{ object.amount | formatoNumero }}
                     </li>
                 </ul>
             </div>
             <div class="col-xs-6">
                 <ul class="list-group">
-                    <li class="list-group-item withripple "><span class="color-info"
-                                                                  style="font-size: 18px">Tipo:</span> {{ object.get_type_display }}
-                    </li>
+{#                    <li class="list-group-item withripple "><span class="color-info"#}
+{#                                                                  style="font-size: 18px">Tipo:</span> {{ object.get_type_display }}#}
+{#                    </li>#}
 
                     <li class="list-group-item withripple "><span class="color-info"
-                                                                  style="font-size: 18px">Plan de pago:</span> {{ object.get_payment_plan_display }}
+                                                                  style="font-size: 18px">Plan de Pago:</span> {{ object.get_payment_plan_display }}
                     </li>
                     <li class="list-group-item withripple "><span class="color-info"
                                                                   style="font-size: 18px">Fecha de Solicitud:</span> {{ object.request_date }}
@@ -55,15 +55,21 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>Periodo de Pago</th>
+                        <th>Número de Pago</th>
                         <th>Cantidad</th>
+                        <th>Periodo de Pago</th>
+                        <th>Grupo de Pago</th>
+                        <th>Estatus de Pago</th>
                     </tr>
                     </thead>
                     <tbody>
                     {% for record in object.employeeloandetail_set.all %}
                         <tr>
-                            <td>{{ record.period }}</td>
+                            <td>{{ record.pay_number }}</td>
                             <td>{{ record.amount | formatoNumero }}</td>
+                            <td>{% if record.period is None %} Sin Periodo Asignado {% else %}{{ record.period }}{% endif %}</td>
+                            <td>{% if record.payroll_group is None %} Sin Grupo Asignado {% else %}{{ record.payroll_group }}{% endif %}</td>
+                            <td>{% if record.pay_status is False %} <i class="fa fa-times color-danger"></i> Sin cobrar{% else %}<i class="fa fa-check color-success"></i>Cobrado{% endif %}</td>
                         </tr>
                     {% endfor %}
                     </tbody>

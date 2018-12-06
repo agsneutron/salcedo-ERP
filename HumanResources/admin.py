@@ -2041,6 +2041,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
 
 class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
+
     def clean(self):
         # get forms that actually have valid data
         record_is_new = self.instance.pk is None
@@ -2054,6 +2055,7 @@ class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
                         continue
                     count += 1
                     total += form.cleaned_data['amount']
+                    print total
                     if form.cleaned_data['period'] in periods:
                         raise forms.ValidationError('No pueden haber periodos duplicados en los pagos.')
                     else:
@@ -2067,10 +2069,7 @@ class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
                             if(len(receipts) > 0):
                                 raise forms.ValidationError('No se puede modificar el pago de un periodo cerrado. ')
 
-
                         periods.append(period)
-
-
 
             except AttributeError:
                 # annoyingly, if a subform is invalid Django explicity raises
@@ -2078,7 +2077,6 @@ class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
                 pass
             except KeyError:
                 pass
-
 
         loan_instance = self.instance
         if loan_instance.payment_plan == EmployeeLoan.PLAN_A:
@@ -2089,11 +2087,14 @@ class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
         if count != expected_records:
             raise forms.ValidationError('Necesitas definir exactamente ' + str(expected_records) + ' pagos.')
 
-        if total != loan_instance.amount:
+        #print '-----'
+        #print total
+        #print loan_instance.amount
+        #print total + loan_instance.amount
+        #print '------'
+
+        if round(float(total), 2) != round(float(loan_instance.amount), 2):
             raise forms.ValidationError('Los pagos deben de sumar $' + str(loan_instance.amount) + '.')
-
-
-
 
         return super(EmployeeLoanDetailInLineFormset, self).clean()
 

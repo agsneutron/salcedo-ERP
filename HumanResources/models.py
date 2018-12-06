@@ -1626,7 +1626,8 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
 class EmployeeLoanDetail(models.Model):
     employeeloan = models.ForeignKey(EmployeeLoan, verbose_name='Préstamo', null=False, blank=False)
     # period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
-
+    pay_number = models.IntegerField(verbose_name='Número de Pago', null=False, blank=False, default=1)
+    pay_status = models.BooleanField(verbose_name="Estatus de Pago", null=False, blank=False, default=False)
     # The group is here to use chained keys
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=True, blank=True)
     period = ChainedForeignKey(PayrollPeriod,
@@ -1640,8 +1641,6 @@ class EmployeeLoanDetail(models.Model):
                                blank=True)
     amount = models.FloatField(verbose_name="Cantidad", null=True, blank=True)
     deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
-
-
 
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
