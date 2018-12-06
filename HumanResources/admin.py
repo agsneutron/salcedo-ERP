@@ -1191,7 +1191,7 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         django.contrib.messages.success(request, "Deducción borrada exitosamente.")
 
         return HttpResponseRedirect(
-            'http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=' + employee_id + "&payrollperiod=" + payroll_period_id)
+            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
 
     def response_change(self, request, obj):
         employee_id = request.GET.get('employee')
@@ -2444,20 +2444,35 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
         }),
     )
 
+    def get_queryset(self, request):
+        qs = super(EmployeeDropOutAdmin, self).get_queryset(request)
 
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        employee_ids = EmployeePositionDescription.get_employees_for_direction(direction_ids)
+        qs = qs.filter(employee__in=employee_ids)
 
+        return qs
 
+    def queryset(self, request):
+        qs = super(EmployeeDropOutAdmin, self).queryset(request)
+        # modify queryset here, eg. only user-assigned tasks
+        qs.filter(assigned__exact=request.user)
+        return qs
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeDropOutAdmin, self).get_form(request, obj, **kwargs)
 
+        # Class to pass the request to the form.
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
+
 
                 return ModelForm(*args, **kwargs)
 
         direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
-        ModelForm.base_fields['employee'].queryset =EmployeePositionDescription.objects.filter(direction_id__in=direction_ids)
+        employee_ids = EmployeePositionDescription.objects.filter(direction_id__in=direction_ids).values('employee_id')
+        ModelForm.base_fields['employee'].queryset = Employee.objects.filter(pk__in=employee_ids).exclude(status=2)
 
         return ModelFormMetaClass
 
