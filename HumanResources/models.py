@@ -30,30 +30,30 @@ from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
 from django.db.models import Sum
 
-
-
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                              message="Asegurate de que el numero de telefono que proporcionas sea correcto.")
 
 email_regex = RegexValidator(regex="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*",
                              message="Tu correo electrónico no es correcto.")
 
+onlyletters_regex = RegexValidator(
+    regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
+    message="Tu nombre no es correcto.")
 
-onlyletters_regex = RegexValidator(regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
-                             message="Tu nombre no es correcto.")
+curp_regex = RegexValidator(
+    regex="^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$",
+    message="La CURP que proporcionas es incorrecta.")
 
-curp_regex = RegexValidator(regex="^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$",
-                             message="La CURP que proporcionas es incorrecta.")
-
-rfc_regex = RegexValidator(regex="^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$",
-                             message="El RFC que proporcionas es incorrecto.")
+rfc_regex = RegexValidator(
+    regex="^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$",
+    message="El RFC que proporcionas es incorrecto.")
 
 onlynum_regex = RegexValidator(regex="[0-9]",
-                             message="Este campo solo acepta números.")
+                               message="Este campo solo acepta números.")
 
-letras = RegexValidator(regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
-                             message="Éste campo no acepta caracateres como: +*/{] .")
-
+letras = RegexValidator(
+    regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
+    message="Éste campo no acepta caracateres como: +*/{] .")
 
 
 # To represent ISRTable.
@@ -90,10 +90,11 @@ class PayrollClassification(models.Model):
 
 class PayrollGroup(models.Model):
     internal_company = models.ForeignKey(InternalCompany, verbose_name="Empresa*",
-                                               null=False, blank=False, default=1)
+                                         null=False, blank=False, default=1)
     direction = models.ForeignKey('Direction', verbose_name="Dirección*",
-                                               null=False, blank=False, default=1)
-    name = models.CharField(verbose_name="Nombre*", max_length=200, null=False, blank=False, unique=False, validators=[letras])
+                                  null=False, blank=False, default=1)
+    name = models.CharField(verbose_name="Nombre*", max_length=200, null=False, blank=False, unique=False,
+                            validators=[letras])
     payroll_classification = models.ForeignKey(PayrollClassification, verbose_name="Clasificación de Nómina*",
                                                null=False, blank=False)
 
@@ -128,9 +129,12 @@ def upload_employee_photo(instance, filename):
 # Employee General Information.
 class Employee(models.Model):
     employee_key = models.CharField(verbose_name="Clave*", max_length=64, null=False, blank=False, unique=False)
-    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False, validators=[onlyletters_regex])
-    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
-    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
+    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False,
+                            validators=[onlyletters_regex])
+    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False,
+                                       validators=[onlyletters_regex])
+    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False,
+                                        validators=[onlyletters_regex])
 
     photo = models.FileField(upload_to=upload_employee_photo, null=False, blank=False, verbose_name="Foto*")
 
@@ -177,16 +181,23 @@ class Employee(models.Model):
     )
     marital_status = models.IntegerField(choices=EMPLOYEE_MARITAL_STATUS_CHOICES, default=MARITAL_STATUS_A,
                                          verbose_name='Estado Civil')
-    curp = models.CharField(verbose_name="CURP*", max_length=18, null=False, blank=False, unique=True, validators=[curp_regex])
-    rfc = models.CharField(verbose_name="RFC*", max_length=13, null=False, blank=False, unique=True, validators=[rfc_regex])
+    curp = models.CharField(verbose_name="CURP*", max_length=18, null=False, blank=False, unique=True,
+                            validators=[curp_regex])
+    rfc = models.CharField(verbose_name="RFC*", max_length=13, null=False, blank=False, unique=True,
+                           validators=[rfc_regex])
 
-
-    cellphone_number = models.CharField(verbose_name="Celular", max_length=15, null=False, blank=True,validators=[phone_regex])
-    phone_number = models.CharField(verbose_name="Teléfono*", max_length=15, null=False, blank=False, validators=[phone_regex])
-    office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=15, null=False, blank=True, validators=[phone_regex])
-    extension_number = models.CharField(verbose_name="Número de Extensión", max_length=13, null=False, blank=True, validators=[onlynum_regex])
-    personal_email = models.CharField(verbose_name="Correo Electrónico Personal", max_length=255, null=True, blank=True, validators=[email_regex])
-    work_email = models.CharField(verbose_name="Correo Electrónico Laboral", max_length=255, null=True, blank=True, validators=[email_regex])
+    cellphone_number = models.CharField(verbose_name="Celular", max_length=15, null=False, blank=True,
+                                        validators=[phone_regex])
+    phone_number = models.CharField(verbose_name="Teléfono*", max_length=15, null=False, blank=False,
+                                    validators=[phone_regex])
+    office_number = models.CharField(verbose_name="Teléfono de Oficina", max_length=15, null=False, blank=True,
+                                     validators=[phone_regex])
+    extension_number = models.CharField(verbose_name="Número de Extensión", max_length=13, null=False, blank=True,
+                                        validators=[onlynum_regex])
+    personal_email = models.CharField(verbose_name="Correo Electrónico Personal", max_length=255, null=True, blank=True,
+                                      validators=[email_regex])
+    work_email = models.CharField(verbose_name="Correo Electrónico Laboral", max_length=255, null=True, blank=True,
+                                  validators=[email_regex])
 
     social_security_number = models.CharField(verbose_name="Número de Póliza de Seguro", max_length=20, null=True,
                                               blank=True)
@@ -196,7 +207,8 @@ class Employee(models.Model):
     street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
     outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False)
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
-    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, validators=[onlynum_regex], max_length=5)
+    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, validators=[onlynum_regex],
+                                max_length=5)
 
     BLOOD_TYPE_AP = 1
     BLOOD_TYPE_AM = 2
@@ -250,7 +262,6 @@ class Employee(models.Model):
     def get_full_name(self):
         return self.name + " " + self.first_last_name + " " + self.second_last_name
 
-
     def __str__(self):
         return self.employee_key + ": " + self.name + " " + self.first_last_name + " " + self.second_last_name
 
@@ -264,11 +275,6 @@ class Employee(models.Model):
 
         return dict
 
-
-
-
-
-
     class Meta:
         verbose_name_plural = 'Empleados'
         verbose_name = 'Empleado'
@@ -280,8 +286,6 @@ class Employee(models.Model):
                                                                       Q(concept__status=EarningsDeductions.ACTIVA))
 
         return employee_earnings
-
-
 
     # To get all the variable earnings for an employee in a specific period.
     def get_variable_earnings_for_period(self, payroll_period=None):
@@ -331,8 +335,6 @@ class Employee(models.Model):
         return absences
 
 
-
-
 # Method to save the employee document file.
 def upload_employee_contract(instance, filename):
     return '/'.join(['human_resources', 'employee_documents', instance.employee.employee_key, 'contracts', filename])
@@ -341,8 +343,8 @@ def upload_employee_contract(instance, filename):
 class EmployeeContract(models.Model):
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
 
-    contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=64, null=False, blank=False, unique=True)
-
+    contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=64, null=False, blank=False,
+                                    unique=True)
 
     CONTRACT_TYPE_PERMANENT = 'P'
     CONTRACT_TYPE_TEMPORAL = 'T'
@@ -353,25 +355,22 @@ class EmployeeContract(models.Model):
     )
 
     contract_type = models.CharField(max_length=1, choices=CONTRACT_TYPE_CHOICES, default=CONTRACT_TYPE_PERMANENT,
-                                      verbose_name='Tipo de Contrato')
-
+                                     verbose_name='Tipo de Contrato')
 
     description = tinymce_models.HTMLField(verbose_name='Descripción', null=True, blank=True, max_length=4096)
 
     start_date = models.DateField(verbose_name="Fecha de Inicio", null=False, blank=False)
     end_date = models.DateField(verbose_name="Fecha de Término", null=True, blank=True)
 
-
     contract_file = models.FileField(upload_to=upload_employee_contract, null=True, verbose_name="Contrato Escaneado")
 
-
     def __str__(self):
-        return self.contract_key+ ": " + self.employee.name+ " " + self.employee.first_last_name + " " + self.employee.second_last_name
-
+        return self.contract_key + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
 
     class Meta:
         verbose_name = 'Contrato'
         verbose_name_plural = 'Contratos'
+
 
 # Employee Checker Data.
 class CheckerData(models.Model):
@@ -424,7 +423,8 @@ def upload_employee_document(instance, filename):
 # Employee Documents.
 class EmployeeDocument(models.Model):
     file = models.FileField(upload_to=upload_employee_document, null=True, verbose_name="Archivo*")
-    comments = models.CharField(verbose_name="Comentarios*", max_length=2048, null=False, blank=False, unique=False, validators=[letras])
+    comments = models.CharField(verbose_name="Comentarios*", max_length=2048, null=False, blank=False, unique=False,
+                                validators=[letras])
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
@@ -553,7 +553,8 @@ def upload_employee_current_education_document(instance, filename):
 class CurrentEducationDocument(models.Model):
     file = models.FileField(upload_to=upload_employee_current_education_document, null=True, verbose_name="Archivo",
                             blank=True)
-    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True, unique=False, validators=[letras])
+    comments = models.CharField(verbose_name="Comentarios", max_length=2048, null=True, blank=True, unique=False,
+                                validators=[letras])
 
     # Foreign Keys.
     current_education = models.ForeignKey(CurrentEducation, verbose_name='Formación Actual del Empleado*', null=False,
@@ -605,7 +606,8 @@ class Education(models.Model):
     )
     type = models.IntegerField(choices=EDUCATION_TYPE_CHOICES, default=EDUCATION_TYPE_A,
                                verbose_name='Tipo de Educación')
-    name = models.CharField(verbose_name="Nombre de la Profesión*", max_length=2048, null=False, blank=False, validators=[onlyletters_regex])
+    name = models.CharField(verbose_name="Nombre de la Profesión*", max_length=2048, null=False, blank=False,
+                            validators=[onlyletters_regex])
     institution = models.CharField(verbose_name="Institución*", max_length=1024, null=False, blank=False)
     license_code = models.CharField(verbose_name="Código o Número de Cédula", max_length=512, null=True, blank=True)
     evidence = models.FileField(verbose_name="Comprobante", upload_to=upload_employee_education_document, null=True,
@@ -630,6 +632,7 @@ class Test(models.Model):
     key = models.CharField(verbose_name="Clave de la Prueba", max_length=512, null=False, blank=False)
     name = models.CharField(verbose_name="Nombre de la Prueba", max_length=512, null=False, blank=False)
     notes = models.CharField(verbose_name="Notas", max_length=1024, null=False, blank=False)
+
     class Meta:
         verbose_name_plural = "Pruebas a Empleados"
         verbose_name = "Pruebas a Empleados"
@@ -688,14 +691,19 @@ class TestApplication(models.Model):
 
 # To represent an employee's family member.
 class FamilyMember(models.Model):
-    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False, validators=[onlyletters_regex])
-    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
-    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
-    relationship = models.CharField(verbose_name="Parentesco", max_length=128, null=False, blank=True, validators=[onlyletters_regex])
-    career = models.CharField(verbose_name="Profesión", max_length=128, null=False, blank=True, validators=[onlyletters_regex])
+    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False,
+                            validators=[onlyletters_regex])
+    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False,
+                                       validators=[onlyletters_regex])
+    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False,
+                                        validators=[onlyletters_regex])
+    relationship = models.CharField(verbose_name="Parentesco", max_length=128, null=False, blank=True,
+                                    validators=[onlyletters_regex])
+    career = models.CharField(verbose_name="Profesión", max_length=128, null=False, blank=True,
+                              validators=[onlyletters_regex])
     age = models.IntegerField(verbose_name="Edad", null=True, blank=True, default=0)
-    phone_number = models.CharField(verbose_name="Número de Teléfono", null=True, blank=True, validators=[phone_regex], max_length=15)
-
+    phone_number = models.CharField(verbose_name="Número de Teléfono", null=True, blank=True, validators=[phone_regex],
+                                    max_length=15)
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
@@ -713,18 +721,25 @@ class FamilyMember(models.Model):
 
 # To represent an employee's emergency contact.
 class EmergencyContact(models.Model):
-    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False, validators=[onlyletters_regex])
-    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
-    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
-    phone_number = models.CharField(verbose_name="Número de Teléfono", max_length=15, null=True, blank=True, validators=[phone_regex])
-    cellphone_number = models.CharField(verbose_name="Número de Celular", max_length=15, null=True, blank=True, validators=[phone_regex])
-    email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True, validators=[email_regex])
+    name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False,
+                            validators=[onlyletters_regex])
+    first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False,
+                                       validators=[onlyletters_regex])
+    second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False,
+                                        validators=[onlyletters_regex])
+    phone_number = models.CharField(verbose_name="Número de Teléfono", max_length=15, null=True, blank=True,
+                                    validators=[phone_regex])
+    cellphone_number = models.CharField(verbose_name="Número de Celular", max_length=15, null=True, blank=True,
+                                        validators=[phone_regex])
+    email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True,
+                             validators=[email_regex])
 
     colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
-    outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False,)
+    outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False, )
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
-    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, max_length=5, validators=[onlynum_regex])
+    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, max_length=5,
+                                validators=[onlynum_regex])
 
     # Foreign Keys.
 
@@ -766,9 +781,12 @@ class WorkReference(models.Model):
     second_last_name = models.CharField(verbose_name="Apellido Materno*",
                                         max_length=255, null=False, blank=False, validators=[onlyletters_regex])
     company_name = models.CharField(verbose_name="Empresa*", max_length=255, null=False, blank=False)
-    first_phone_number = models.CharField(verbose_name="Número de Teléfono #1", null=False, blank=False, validators=[phone_regex], max_length=15)
-    second_phone_number = models.CharField(verbose_name="Número de Teléfono #2", null=True, blank=True, validators=[phone_regex],max_length=15)
-    email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True, validators=[email_regex])
+    first_phone_number = models.CharField(verbose_name="Número de Teléfono #1", null=False, blank=False,
+                                          validators=[phone_regex], max_length=15)
+    second_phone_number = models.CharField(verbose_name="Número de Teléfono #2", null=True, blank=True,
+                                           validators=[phone_regex], max_length=15)
+    email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True,
+                             validators=[email_regex])
     notes = models.CharField(verbose_name="Notas", max_length=2048, null=True, blank=False, validators=[letras])
 
     # Foreign Keys.
@@ -812,7 +830,8 @@ class EmployeeDropOut(models.Model):
     type = models.IntegerField(choices=DROP_TYPE_CHOICES, default=DROP_TYPE_A, verbose_name='Motivo de Baja*')
     reason = models.CharField(verbose_name="Motivo", max_length=4096, null=True, blank=True, validators=[letras])
     severance_pay = models.FloatField(verbose_name="Liquidación*", null=True, blank=False, validators=[onlynum_regex])
-    observations = tinymce_models.HTMLField(verbose_name='Observaciones', null=True, blank=True, max_length=4096, validators=[letras])
+    observations = tinymce_models.HTMLField(verbose_name='Observaciones', null=True, blank=True, max_length=4096,
+                                            validators=[letras])
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado*", null=False, blank=False)
@@ -925,10 +944,8 @@ class EmployeeRequisition(models.Model):
     area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
     department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
 
-
-
     description = models.CharField(verbose_name="Descripción", max_length=256, null=False, blank=False,
-                           unique=False)
+                                   unique=False)
 
     vacancy_number = models.IntegerField(verbose_name='Número de Vacantes', null=False, default=1,
                                          validators={MinValueValidator(1)})
@@ -939,11 +956,9 @@ class EmployeeRequisition(models.Model):
                                                max_length=4096)
 
     reason = tinymce_models.HTMLField(verbose_name='Razón', null=True, blank=True,
-                                               max_length=4096)
+                                      max_length=4096)
 
     user = models.ForeignKey(User, verbose_name="Solicitado por:", null=True, blank=True)
-
-
 
     def __str__(self):
         return self.description
@@ -951,35 +966,34 @@ class EmployeeRequisition(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.description
 
-
     class Meta:
         verbose_name = "Requisición de Personal"
         verbose_name_plural = "Requisiciones de Personal"
-
 
 
 # To represent a Job Profile.
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
                            unique=False)
-    abilities =tinymce_models.HTMLField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
-                                 unique=False)
+    abilities = tinymce_models.HTMLField(verbose_name="Habilidades", max_length=2048, null=False, blank=True,
+                                         unique=False)
     aptitudes = tinymce_models.HTMLField(verbose_name="Aptitudes", max_length=2048, null=False, blank=True,
-                                 unique=False)
+                                         unique=False)
     knowledge = tinymce_models.HTMLField(verbose_name="Conocimientos", max_length=2048, null=False, blank=True,
-                                 unique=False)
+                                         unique=False)
     competitions = tinymce_models.HTMLField(verbose_name="Competencias", max_length=2048, null=False, blank=True,
-                                    unique=False)
+                                            unique=False)
     scholarship = tinymce_models.HTMLField(verbose_name="Escolaridad ", max_length=2048, null=False, blank=True,
-                                   unique=False)
+                                           unique=False)
     experience = tinymce_models.HTMLField(verbose_name="Experiencia", max_length=2048, null=False, blank=True,
-                                  unique=False)
+                                          unique=False)
 
-    jobdescription = tinymce_models.HTMLField(verbose_name="Descripción del Puesto ", max_length=2048, null=False, blank=True,
-                                   unique=False)
-    minimumrequirements = tinymce_models.HTMLField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
-                                  unique=False)
-
+    jobdescription = tinymce_models.HTMLField(verbose_name="Descripción del Puesto ", max_length=2048, null=False,
+                                              blank=True,
+                                              unique=False)
+    minimumrequirements = tinymce_models.HTMLField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048,
+                                                   null=False, blank=True,
+                                                   unique=False)
 
     entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
     exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
@@ -993,9 +1007,9 @@ class JobProfile(models.Model):
 
     # Foreign Keys.
     direction = models.ForeignKey('Direction', verbose_name='Dirección', null=False, blank=False)
-    #subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección', null=False, blank=False)
-    #area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
-    #department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
+    # subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección', null=False, blank=False)
+    # area = models.ForeignKey('Area', verbose_name='Área', null=False, blank=False)
+    # department = models.ForeignKey('Department', verbose_name='Departamento', null=False, blank=False)
 
     subdirection = ChainedForeignKey('Subdirection',
                                      chained_field="direction",
@@ -1086,9 +1100,9 @@ class Direction(models.Model):
 # To represent a Subdirection.
 class Subdirection(models.Model):
     name = models.CharField(verbose_name="Subdirección", max_length=255, null=False, blank=False,
-                            unique=False,)
+                            unique=False, )
 
-    #internal_company = models.ForeignKey(InternalCompany, null=False, blank=False, default=1, verbose_name="Empresa*")
+    # internal_company = models.ForeignKey(InternalCompany, null=False, blank=False, default=1, verbose_name="Empresa*")
 
     # direction = ChainedForeignKey(Direction,
     #                               chained_field="internal_company",
@@ -1122,9 +1136,9 @@ class Area(models.Model):
 
     subdirection = models.ForeignKey(Subdirection, null=False, blank=False, default=1, verbose_name="Subdirección")
 
-    #direction = models.ForeignKey(Direction, null=False, blank=False, default=1, verbose_name="Dirección")
+    # direction = models.ForeignKey(Direction, null=False, blank=False, default=1, verbose_name="Dirección")
 
-    #internal_company = models.ForeignKey(InternalCompany, null=False, blank=False, default=1, verbose_name="Empresa*")
+    # internal_company = models.ForeignKey(InternalCompany, null=False, blank=False, default=1, verbose_name="Empresa*")
 
     # direction = ChainedForeignKey(Direction,
     #                               chained_field="internal_company",
@@ -1164,8 +1178,9 @@ class Department(models.Model):
                             unique=False)
 
     area = models.ForeignKey(Area, null=False, blank=False, default=1, verbose_name="Área*")
-    #subdirection = models.ForeignKey(Subdirection, null=False, blank=False, default=1, verbose_name="Subdirección")
-    #direction = models.ForeignKey(Direction, null=False, blank=False, default=1, verbose_name="Dirección")
+
+    # subdirection = models.ForeignKey(Subdirection, null=False, blank=False, default=1, verbose_name="Subdirección")
+    # direction = models.ForeignKey(Direction, null=False, blank=False, default=1, verbose_name="Dirección")
 
     # internal_company = models.ForeignKey(InternalCompany, null=False, blank=False, default=1, verbose_name="Empresa*")
     #
@@ -1227,7 +1242,8 @@ class EmployeePositionDescription(models.Model):
     physical_location = models.CharField(verbose_name="Ubicación Física", max_length=250, null=False, blank=True)
     entry_time = models.TimeField(verbose_name="Hora de Entrada*", null=True, auto_now_add=False)
     departure_time = models.TimeField(verbose_name="Hora de Salida*", null=True, auto_now_add=False)
-    observations = models.CharField(verbose_name="Observaciones*", null=False, blank=False, max_length=500, validators=[letras])
+    observations = models.CharField(verbose_name="Observaciones*", null=False, blank=False, max_length=500,
+                                    validators=[letras])
     monday = models.BooleanField(verbose_name="Lunes", default=True)
     tuesday = models.BooleanField(verbose_name="Martes", default=True)
     wednesday = models.BooleanField(verbose_name="Miércoles", default=True)
@@ -1241,7 +1257,7 @@ class EmployeePositionDescription(models.Model):
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina*", null=False, blank=False)
 
     direction = models.ForeignKey(Direction, verbose_name='Empresa/Proyecto*', null=False, blank=False)
-    #subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección*', null=False, blank=False)
+    # subdirection = models.ForeignKey(Subdirection, verbose_name='Subdirección*', null=False, blank=False)
     subdirection = ChainedForeignKey(Subdirection,
                                      chained_field="direction",
                                      chained_model_field="direction",
@@ -1251,7 +1267,7 @@ class EmployeePositionDescription(models.Model):
                                      verbose_name='Subdirección*',
                                      )
 
-    #area = models.ForeignKey(Area, verbose_name='Área*', null=False, blank=False)
+    # area = models.ForeignKey(Area, verbose_name='Área*', null=False, blank=False)
     area = ChainedForeignKey(Area,
                              chained_field="subdirection",
                              chained_model_field="subdirection",
@@ -1271,7 +1287,7 @@ class EmployeePositionDescription(models.Model):
                                    verbose_name='Departamento*',
                                    )
 
-    #job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto*', null=False, blank=False)
+    # job_profile = models.ForeignKey(JobProfile, verbose_name='Puesto*', null=False, blank=False)
     job_profile = ChainedForeignKey(JobProfile,
                                     chained_field="department",
                                     chained_model_field="department",
@@ -1283,7 +1299,6 @@ class EmployeePositionDescription(models.Model):
     contract = models.CharField(verbose_name="Contrato*", null=False, blank=False, max_length=45)
 
     # immediate_boss = models.ForeignKey(Instance_Position, verbose_name="Jefe Inmediato", null=False, blank=False)
-
 
     class Meta:
         verbose_name_plural = "Descripción de Puesto del Empleado"
@@ -1327,8 +1342,10 @@ class EmployeeFinancialData(models.Model):
         ('S', 'Secundaria'),
     )
 
-    account_number = models.CharField(verbose_name='Número de Cuenta*',max_length=20, null=False, blank=False,default=0, validators=[onlynum_regex])
-    CLABE = models.CharField(verbose_name='Clave Interbancaria (CLABE)*',max_length=40, null=False, blank=False, default=0, validators=[onlynum_regex])
+    account_number = models.CharField(verbose_name='Número de Cuenta*', max_length=20, null=False, blank=False,
+                                      default=0, validators=[onlynum_regex])
+    CLABE = models.CharField(verbose_name='Clave Interbancaria (CLABE)*', max_length=40, null=False, blank=False,
+                             default=0, validators=[onlynum_regex])
     monthly_salary = models.DecimalField(verbose_name='Salario Mensual*', max_digits=20, decimal_places=2, null=True)
     daily_salary = models.DecimalField(verbose_name='Salario Diario*', max_digits=20, decimal_places=2, null=True)
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20,
@@ -1344,7 +1361,7 @@ class EmployeeFinancialData(models.Model):
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
                                 validators=[letras])
     account_type = models.CharField(max_length=1, choices=ACCOUNT_TYPE_CHOICES, default=PRINCIPAL,
-                                      verbose_name='Tipo de Cuenta')
+                                    verbose_name='Tipo de Cuenta')
 
     class Meta:
         verbose_name_plural = "Datos Financieros del Empleado"
@@ -1358,7 +1375,8 @@ class InfonavitData(models.Model):
     discount_amount = models.CharField(verbose_name="Monto de Descuento*", null=False, blank=False, max_length=30, )
     start_date = models.DateField(verbose_name="Fecha de Inicio*", null=False, blank=False)
     credit_term = models.CharField(verbose_name="Duración de Crédito*", null=False, blank=False, max_length=200)
-    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, validators=[letras])
+    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
+                                validators=[letras])
 
     # Foreign Keys.
 
@@ -1404,16 +1422,19 @@ class EarningsDeductions(models.Model):
         (NO_ACTIVA, 'NO ACTIVA'),
     )
 
-    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30, validators=[onlyletters_regex])
+    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30,
+                            validators=[onlyletters_regex])
     percent_taxable = models.IntegerField("Porcentaje Gravable*", blank=False, null=False)
     sat_key = models.CharField(verbose_name="Clave SAT*", null=False, blank=False, max_length=30)
-    #law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
+    # law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
     status = models.CharField(verbose_name="Estatus*", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
                               default=ACTIVA, validators=[onlyletters_regex])
     account = models.ForeignKey(Account, verbose_name='Cuenta*', null=False, blank=False)
-        #models.IntegerField("Cuenta Contable", blank=False, null=False)
-    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, validators=[onlyletters_regex])
-    type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION, verbose_name="Tipo*s")
+    # models.IntegerField("Cuenta Contable", blank=False, null=False)
+    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
+                                validators=[onlyletters_regex])
+    type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION,
+                            verbose_name="Tipo*s")
     taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Gravable*")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA,
                                 verbose_name="Categoria*")
@@ -1429,7 +1450,6 @@ class EarningsDeductions(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.type + "-" + self.name
 
-
     def get_accumulated_for_period(self, payroll_period_id):
         total_fixed = 0
         records = EmployeeEarningsDeductions.objects.filter(concept_id=self.id)
@@ -1437,7 +1457,8 @@ class EarningsDeductions(models.Model):
             total_fixed += record.ammount
 
         total_variable = 0
-        records = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(concept_id=self.id) & Q(payroll_period_id=payroll_period_id))
+        records = EmployeeEarningsDeductionsbyPeriod.objects.filter(
+            Q(concept_id=self.id) & Q(payroll_period_id=payroll_period_id))
         for record in records:
             total_variable += record.ammount
 
@@ -1463,9 +1484,10 @@ class EmployeeEarningsDeductions(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto*", null=False, blank=False, limit_choices_to={
-        'category': 'F', 'status':'A',
-    })
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Concepto*", null=False, blank=False,
+                                limit_choices_to={
+                                    'category': 'F', 'status': 'A',
+                                })
 
     class Meta:
         verbose_name_plural = "Deducciones y Percepciones por Empleado"
@@ -1474,7 +1496,7 @@ class EmployeeEarningsDeductions(models.Model):
 
 
 class PayrollType(models.Model):
-    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30,validators=[letras])
+    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30, validators=[letras])
 
     class Meta:
         verbose_name_plural = "Tipo de Nómina"
@@ -1547,7 +1569,8 @@ class PayrollPeriod(models.Model):
     )
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina*", null=False, blank=False)
     payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a procesar*", null=False, blank=False)
-    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30, validators=[onlyletters_regex])
+    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30,
+                            validators=[onlyletters_regex])
     month = models.IntegerField(verbose_name="Mes", choices=MONTH_CHOICES, default=JANUARY)
     year = models.IntegerField(verbose_name="Año*", null=False, blank=False, default=2017,
                                validators=[MaxValueValidator(9999), MinValueValidator(2017), onlynum_regex])
@@ -1556,8 +1579,8 @@ class PayrollPeriod(models.Model):
     start_period = models.DateField(verbose_name="Inicio de Periodo*", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo*", null=False, blank=False)
 
-
-    exclusions = models.ManyToManyField('Employee', through='EmployeePayrollPeriodExclusion',through_fields=('payroll_period', 'employee',),)
+    exclusions = models.ManyToManyField('Employee', through='EmployeePayrollPeriodExclusion',
+                                        through_fields=('payroll_period', 'employee',), )
 
     periodicity = models.ForeignKey(Periodicity, verbose_name="Periodicidad", null=False, blank=False)
 
@@ -1588,9 +1611,10 @@ class EmployeeEarningsDeductionsbyPeriod(models.Model):
 
     # Foreign Keys.
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    concept = models.ForeignKey(EarningsDeductions, verbose_name="Conceptos", null=False, blank=False, limit_choices_to={
-        'category': 'V', 'status':'A',
-    })
+    concept = models.ForeignKey(EarningsDeductions, verbose_name="Conceptos", null=False, blank=False,
+                                limit_choices_to={
+                                    'category': 'V', 'status': 'A',
+                                })
     payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
 
     class Meta:
@@ -1634,17 +1658,20 @@ class EmployeeLoanDetail(models.Model):
     # period = models.IntegerField(verbose_name='Periodo a Cobrar', null=False, default=getParameters.getPeriodNumber())
 
     # The group is here to use chained keys
-    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=False, blank=False)
-    period = ChainedForeignKey(PayrollPeriod,
-                               chained_field="payroll_group",
-                               chained_model_field="payroll_group",
-                               show_all=False,
-                               auto_choose=True,
-                               sort=True)
+    payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo", null=True, blank=True)
+
+    period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo", null=True, blank=True)
+
+
+    # period = ChainedForeignKey(PayrollPeriod, null=True, blank=True,
+    #                            chained_field="payroll_group",
+    #                            chained_model_field="payroll_group",
+    #                            show_all=False,
+    #                            auto_choose=True,
+    #                            sort=True, verbose_name="Periodo")
+
     amount = models.FloatField(verbose_name="Cantidad", null=False, blank=False)
     deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
-
-
 
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
@@ -1669,7 +1696,7 @@ class EmployeeLoanDetail(models.Model):
             deduction.date = now()
             deduction.employee_id = self.employeeloan.employee.id
             deduction.concept_id = 1
-            deduction.payroll_period_id = self.period.id
+            deduction.period_id = self.period.id
             deduction.save()
             self.deduction_id = deduction.id
             super(EmployeeLoanDetail, self).save(*args, **kwargs)
@@ -1682,13 +1709,13 @@ class EmployeeLoanDetail(models.Model):
             self.deduction.save()
             super(EmployeeLoanDetail, self).save(*args, **kwargs)
 
-
     def unique_error_message(self, model_class, unique_check):
         if model_class == type(self) and unique_check == ('employeeloan', 'period'):
             return 'la amortización del préstamo para este periodo ya existe'
         else:
             return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
-    
+
+
 class EarningDeductionPeriod(models.Model):
     '''
         Earnings and deductions to be applied to the employee.
