@@ -581,7 +581,13 @@ class RegisterView(FormView):
 class EmployeeLoanDetailForm(forms.ModelForm):
     class Meta:
         model = EmployeeLoanDetail
-        fields = ('payroll_group', 'period', 'amount')
+        fields = ('payroll_group', 'period', 'pay_status', 'pay_number', 'amount')
+
+        widgets = {
+            'payroll_group': forms.HiddenInput,
+            'period': forms.HiddenInput,
+            'pay_status': forms.HiddenInput,
+        }
 
     def clean_email(self):
         email = self.cleaned_data.get('email')
