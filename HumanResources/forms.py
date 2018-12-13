@@ -51,7 +51,8 @@ class CurrentEducationForm(forms.ModelForm):
         model = Education
         fields = '__all__'
         widgets = {
-            "employee": forms.HiddenInput
+            "employee": forms.HiddenInput,
+
         }
 
     def __init__(self, *args, **kwargs):
@@ -165,7 +166,7 @@ class TestApplicationForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             "employee": forms.HiddenInput,
-            'comments': forms.Textarea(attrs={'rows': 3})
+
         }
 
     def __init__(self, *args, **kwargs):

@@ -1732,6 +1732,33 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'periodicity', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
+    # def get_form(self, request, obj=None, **kwargs):
+    #     ModelForm = super(PayrollPeriodAdmin, self).get_form(request, obj, **kwargs)
+    #
+    #     # Class to pass the request to the form.
+    #     class ModelFormMetaClass(ModelForm):
+    #         def __new__(cls, *args, **kwargs):
+    #             # kwargs['request'] = request
+    #
+    #             return ModelForm(*args, **kwargs)
+
+        # direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+        # ModelForm.base_fields['payroll_group'].queryset = Direction.objects.filter(pk__in=direction_ids).values("payrollgroup__name")
+        #
+        # return ModelFormMetaClass
+
+    # def get_queryset(self, request):
+    #     qs = super(PayrollPeriodAdmin, self).get_queryset(request)
+    #
+    #     user = request.user
+    #     direction_ids = AccessToDirection.get_directions_for_user(user)
+    #     qs = qs.filter(payroll_group__id__in=direction_ids)
+    #
+    #     return qs
+
+
+
+
     def get_listpayroll_link(self, obj):
         return HumanResourcesAdminUtilities.get_listpayroll_link(obj, obj.id, obj.payroll_group.id)
 

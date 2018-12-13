@@ -30,26 +30,26 @@ from multiselectfield import MultiSelectField
 from django.forms.models import model_to_dict
 from django.db.models import Sum
 
-
-
 phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$',
                              message="Asegurate de que el numero de telefono que proporcionas sea correcto.")
 
 email_regex = RegexValidator(regex="\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*",
-                             message="Asegurate de que el correo electrónico que proporcionas sea correcto.")
+                             message="Tu correo electrónico no es correcto.")
 
+onlyletters_regex = RegexValidator(
+    regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
+    message="Tu nombre no es correcto.")
 
-onlyletters_regex = RegexValidator(regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
-                             message="Tu nombre no es correcto.")
+curp_regex = RegexValidator(
+    regex="^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$",
+    message="La CURP que proporcionas es incorrecta.")
 
-curp_regex = RegexValidator(regex="^[A-Z]{1}[AEIOU]{1}[A-Z]{2}[0-9]{2}(0[1-9]|1[0-2])(0[1-9]|1[0-9]|2[0-9]|3[0-1])[HM]{1}(AS|BC|BS|CC|CS|CH|CL|CM|DF|DG|GT|GR|HG|JC|MC|MN|MS|NT|NL|OC|PL|QT|QR|SP|SL|SR|TC|TS|TL|VZ|YN|ZS|NE)[B-DF-HJ-NP-TV-Z]{3}[0-9A-Z]{1}[0-9]{1}$",
-                             message="La CURP que proporcionas es incorrecta.")
-
-rfc_regex = RegexValidator(regex="^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$",
-                             message="El RFC que proporcionas es incorrecto.")
+rfc_regex = RegexValidator(
+    regex="^([A-ZÑ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$",
+    message="El RFC que proporcionas es incorrecto.")
 
 onlynum_regex = RegexValidator(regex="[0-9]",
-                             message="Este campo solo acepta números.")
+                               message="Este campo solo acepta números.")
 
 letras = RegexValidator(regex="[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]",
                              message="Éste campo no acepta caracateres como: +*/{] .")
@@ -165,9 +165,15 @@ class Employee(models.Model):
 
     MARITAL_STATUS_A = 1
     MARITAL_STATUS_B = 2
+    MARITAL_STATUS_C = 3
+    MARITAL_STATUS_D = 4
+    MARITAL_STATUS_E = 5
     EMPLOYEE_MARITAL_STATUS_CHOICES = (
         (MARITAL_STATUS_A, 'Soltero'),
         (MARITAL_STATUS_B, 'Casado'),
+        (MARITAL_STATUS_C, 'Unión Libre'),
+        (MARITAL_STATUS_D, 'Divorciado'),
+        (MARITAL_STATUS_E, 'Viudo'),
     )
     marital_status = models.IntegerField(choices=EMPLOYEE_MARITAL_STATUS_CHOICES, default=MARITAL_STATUS_A,
                                          verbose_name='Estado Civil')
@@ -190,7 +196,8 @@ class Employee(models.Model):
     street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
     outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False)
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
-    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, validators=[onlynum_regex], max_length=5)
+    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, validators=[onlynum_regex],
+                                max_length=5)
 
     BLOOD_TYPE_AP = 1
     BLOOD_TYPE_AM = 2
@@ -716,9 +723,10 @@ class EmergencyContact(models.Model):
 
     colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
-    outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False,)
+    outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False, )
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
-    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, max_length=5, validators=[onlynum_regex])
+    zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, max_length=5,
+                                validators=[onlynum_regex])
 
     # Foreign Keys.
 
@@ -760,9 +768,12 @@ class WorkReference(models.Model):
     second_last_name = models.CharField(verbose_name="Apellido Materno*",
                                         max_length=255, null=False, blank=False, validators=[onlyletters_regex])
     company_name = models.CharField(verbose_name="Empresa*", max_length=255, null=False, blank=False)
-    first_phone_number = models.CharField(verbose_name="Número de Teléfono #1", null=False, blank=False, validators=[phone_regex], max_length=15)
-    second_phone_number = models.CharField(verbose_name="Número de Teléfono #2", null=True, blank=True, validators=[phone_regex],max_length=15)
-    email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True, validators=[email_regex])
+    first_phone_number = models.CharField(verbose_name="Número de Teléfono #1", null=False, blank=False,
+                                          validators=[phone_regex], max_length=15)
+    second_phone_number = models.CharField(verbose_name="Número de Teléfono #2", null=True, blank=True,
+                                           validators=[phone_regex], max_length=15)
+    email = models.CharField(verbose_name="Correo Electrónico", max_length=255, null=True, blank=True,
+                             validators=[email_regex])
     notes = models.CharField(verbose_name="Notas", max_length=2048, null=True, blank=False, validators=[letras])
 
     # Foreign Keys.
@@ -1338,7 +1349,7 @@ class EmployeeFinancialData(models.Model):
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
                                 validators=[letras])
     account_type = models.CharField(max_length=1, choices=ACCOUNT_TYPE_CHOICES, default=PRINCIPAL,
-                                      verbose_name='Tipo de Cuenta')
+                                    verbose_name='Tipo de Cuenta')
 
     class Meta:
         verbose_name_plural = "Datos Financieros del Empleado"
@@ -1352,7 +1363,8 @@ class InfonavitData(models.Model):
     discount_amount = models.CharField(verbose_name="Monto de Descuento*", null=False, blank=False, max_length=30, )
     start_date = models.DateField(verbose_name="Fecha de Inicio*", null=False, blank=False)
     credit_term = models.CharField(verbose_name="Duración de Crédito*", null=False, blank=False, max_length=200)
-    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500, validators=[letras])
+    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
+                                validators=[letras])
 
     # Foreign Keys.
 
@@ -1398,19 +1410,22 @@ class EarningsDeductions(models.Model):
         (NO_ACTIVA, 'NO ACTIVA'),
     )
 
-    name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
-    percent_taxable = models.IntegerField("Porcentaje Gravable", blank=False, null=False)
-    sat_key = models.CharField(verbose_name="Clave SAT", null=False, blank=False, max_length=30, )
-    #law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
-    status = models.CharField(verbose_name="Estatus", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
-                              default=ACTIVA)
-    account = models.ForeignKey(Account, verbose_name='Cuenta', null=True, blank=True,)
-        #models.IntegerField("Cuenta Contable", blank=False, null=False)
-    comments = models.TextField(verbose_name="Observaciones", null=False, blank=False, max_length=500, )
-    type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION, verbose_name="Tipo")
-    taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Gravable")
+    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30,
+                            validators=[onlyletters_regex])
+    percent_taxable = models.IntegerField("Porcentaje Gravable*", blank=False, null=False)
+    sat_key = models.CharField(verbose_name="Clave SAT*", null=False, blank=False, max_length=30)
+    # law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
+    status = models.CharField(verbose_name="Estatus*", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
+                              default=ACTIVA, validators=[onlyletters_regex])
+    account = models.ForeignKey(Account, verbose_name='Cuenta*', null=False, blank=False)
+    # models.IntegerField("Cuenta Contable", blank=False, null=False)
+    comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
+                                validators=[onlyletters_regex])
+    type = models.CharField(max_length=1, choices=EARNINGDEDUCTIONTYPE_CHOICES, default=DEDUCCION,
+                            verbose_name="Tipo*s")
+    taxable = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Gravable*")
     category = models.CharField(max_length=1, choices=EARNINGDEDUCTIONSCATEGORY_CHOICES, default=FIJA,
-                                verbose_name="Categoria")
+                                verbose_name="Categoria*")
     penalty = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Penalización")
 
     class Meta:
@@ -1468,7 +1483,7 @@ class EmployeeEarningsDeductions(models.Model):
 
 
 class PayrollType(models.Model):
-    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30,validators=[letras])
+    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30, validators=[letras])
 
     class Meta:
         verbose_name_plural = "Tipo de Nómina"
@@ -1543,12 +1558,12 @@ class PayrollPeriod(models.Model):
     payroll_to_process = models.ForeignKey(PayrollToProcess, verbose_name="Nómina a procesar", null=False, blank=False)
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
     month = models.IntegerField(verbose_name="Mes", choices=MONTH_CHOICES, default=JANUARY)
-    year = models.IntegerField(verbose_name="Año", null=False, blank=False, default=2017,
-                               validators=[MaxValueValidator(9999), MinValueValidator(2017)])
-    fortnight = models.IntegerField(verbose_name="Semana", null=False, blank=False, default=1,
-                                    validators=[MaxValueValidator(24), MinValueValidator(1)])
-    start_period = models.DateField(verbose_name="Inicio de Periodo", null=False, blank=False)
-    end_period = models.DateField(verbose_name="Fin de Periodo", null=False, blank=False)
+    year = models.IntegerField(verbose_name="Año*", null=False, blank=False, default=2017,
+                               validators=[MaxValueValidator(9999), MinValueValidator(2017), onlynum_regex])
+    fortnight = models.IntegerField(verbose_name="Semana*", null=False, blank=False, default=1,
+                                    validators=[MaxValueValidator(24), MinValueValidator(1), onlynum_regex])
+    start_period = models.DateField(verbose_name="Inicio de Periodo*", null=False, blank=False)
+    end_period = models.DateField(verbose_name="Fin de Periodo*", null=False, blank=False)
 
 
     exclusions = models.ManyToManyField('Employee', through='EmployeePayrollPeriodExclusion',through_fields=('payroll_period', 'employee',),)
@@ -1641,6 +1656,8 @@ class EmployeeLoanDetail(models.Model):
                                blank=True)
     amount = models.FloatField(verbose_name="Cantidad", null=True, blank=True)
     deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
+
+
 
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
@@ -1806,7 +1823,7 @@ class JobInstance(models.Model):
 
 class AccessToDirection(models.Model):
     user = models.ForeignKey(User, verbose_name="Usuario", on_delete=models.CASCADE)
-    direction = models.ForeignKey(Direction, verbose_name="Dirección", null=False, blank=False)
+    direction = models.ForeignKey(Direction, verbose_name="Dirección*", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Accesos a Dirección'
