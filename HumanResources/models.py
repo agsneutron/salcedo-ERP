@@ -127,7 +127,7 @@ def upload_employee_photo(instance, filename):
 
 # Employee General Information.
 class Employee(models.Model):
-    employee_key = models.CharField(verbose_name="Clave*", max_length=64, null=False, blank=False, unique=False)
+    employee_key = models.CharField(verbose_name="Clave (RFC)*", max_length=13, null=False, blank=False, unique=True, validators=[rfc_regex])
     name = models.CharField(verbose_name="Nombre*", max_length=255, null=False, blank=False, unique=False, validators=[onlyletters_regex])
     first_last_name = models.CharField(verbose_name="Apellido Paterno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
     second_last_name = models.CharField(verbose_name="Apellido Materno*", max_length=255, null=False, blank=False, validators=[onlyletters_regex])
