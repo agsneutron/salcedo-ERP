@@ -23,7 +23,7 @@ $(document).ready(function () {
                 limite=14;
             }
 
-            for (var i = 0; i < limite-1; i++) {
+            for (var i = 0; i < limite; i++) {
                // alert("i" + i);
                 $link = $('tr.add-row td a');
                 $link[0].click()
