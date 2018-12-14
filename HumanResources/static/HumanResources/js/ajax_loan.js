@@ -2,16 +2,20 @@ $(document).ready(function () {
     var activado = 0;
     $('tr.add-row td a').click(function (){
 
-        //location.href="#";
-        //alert("activado pre if" + activado);
         if (activado==0) {
-             // alert("activado post if" + activado);
+
             activado = 1;
-            // alert("activado a 1" + activado);
             limite = $('#id_payment_plan').val();
             amount = $('#id_amount').val();
 
-            //alert(limite);
+        if (amount==0) {
+
+                window.alert('Falta llenar los campos: Empleado, Cantidad o Fecha');
+                  //alert("Vriable " + amount + " amount");
+                location.reload();
+
+        }else{
+
             if (limite==1){
                 limite = 12;
             }
@@ -44,7 +48,7 @@ $(document).ready(function () {
 
             }
 
-
+          }//Validacion del if else
 
         }
     });
