@@ -183,30 +183,27 @@ class PayrollUtilities:
 
     @staticmethod
     def generate_single_payroll(employee, payroll_period):
+
         """
         Generates the payroll (total earnings, total deductions, etc) for the given employee.
         :param employee: employee to work with.
         :param payroll_period: specific payroll to look for.
         :return:
         """
+        period = PayrollPeriod.objects.filter(id=payroll_period.id)
+        payment_number = 0
+        for p in period:
+            payment_number = p.periodicity.total_payments
+        return payment_number
+
+        print "HOLA"
+        print payment_number
+
         total_earnings = 0
         total_deductions = 0
         total_taxable = 0
         earnings_array = []
         deductions_array = []
-
-        # period = PayrollPeriod.objects.filter(id=payroll_period.id)
-        # payment_number = 0
-        #
-        # for p in period:
-        #     payment_number = p.periodicity.total_payments
-        # return payment_number
-
-
-
-
-        # print "hola"
-        # print payment_number
 
         receipt = {}
 
@@ -331,6 +328,7 @@ class PayrollUtilities:
         receipt["total_deductions"] = str(total_deductions)
 
         return receipt
+
 
 
 class GeneratePayrollReceipt(View):
