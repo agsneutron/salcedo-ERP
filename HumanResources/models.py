@@ -1514,6 +1514,7 @@ class PayrollToProcess(models.Model):
 
 class Periodicity(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
+    total_payments = models.IntegerField(verbose_name="Numero de pagos", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Periodicidad"
@@ -1579,6 +1580,14 @@ class PayrollPeriod(models.Model):
 
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
+
+    # def get_payments_for_payrollgroup(self, payroll_group__id):
+    #     payment = PayrollPeriod.objects.filter(payroll_group__id=payroll_group__id)
+    #     payments_ids=[]
+    #     for p in payment:
+    #         payments_ids.append(p['payroll_group__id'])
+    #         return payments_ids
+
 
 
 class EmployeePayrollPeriodExclusion(models.Model):
@@ -1854,3 +1863,4 @@ class AccessToDirection(models.Model):
         for p in directions:
             direction_ids.append(p['direction_id'])
         return direction_ids
+

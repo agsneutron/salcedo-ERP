@@ -1,11 +1,13 @@
 # coding=utf-8
-
+import decimal
 import json
+from decimal import Decimal
+
 import django
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Sum, Count
 from django.db.models.query_utils import Q
-from django.forms.models import model_to_dict
+from django.forms.models import model_to_dict, ModelForm
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from ERP.lib.utilities import Utilities
@@ -192,6 +194,19 @@ class PayrollUtilities:
         total_taxable = 0
         earnings_array = []
         deductions_array = []
+
+        # period = PayrollPeriod.objects.filter(id=payroll_period.id)
+        # payment_number = 0
+        #
+        # for p in period:
+        #     payment_number = p.periodicity.total_payments
+        # return payment_number
+
+
+
+
+        # print "hola"
+        # print payment_number
 
         receipt = {}
 
