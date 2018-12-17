@@ -1581,12 +1581,15 @@ class PayrollPeriod(models.Model):
     def __unicode__(self):  # __unicode__ on Python 2
         return self.name + " del " + str(self.start_period) + " al " + str(self.end_period)
 
-    # def get_payments_for_payrollgroup(self, payroll_group__id):
-    #     payment = PayrollPeriod.objects.filter(payroll_group__id=payroll_group__id)
-    #     payments_ids=[]
-    #     for p in payment:
-    #         payments_ids.append(p['payroll_group__id'])
-    #         return payments_ids
+    def get_payments_for_payrollgroup(self, payroll_group__id):
+        payment = PayrollPeriod.objects.filter(payroll_group__id=payroll_group__id)
+        payments_ids=[]
+        for p in payment:
+            payments_ids.append(p['payroll_group__id'])
+            return payments_ids
+
+
+
 
 
 
