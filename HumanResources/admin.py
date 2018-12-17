@@ -1702,7 +1702,10 @@ class PayrollGroupAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         # employee_id = request.GET.get('employee')
-        period_set = PayrollGroup.objects.all()
+
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+
+        period_set = PayrollGroup.objects.filter(direction_id__in=direction_ids)
 
         extra['template'] = "payrollgroup"
         extra['period'] = period_set
@@ -1747,14 +1750,14 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         #
         # return ModelFormMetaClass
 
-    # def get_queryset(self, request):
-    #     qs = super(PayrollPeriodAdmin, self).get_queryset(request)
-    #
-    #     user = request.user
-    #     direction_ids = AccessToDirection.get_directions_for_user(user)
-    #     qs = qs.filter(payroll_group__id__in=direction_ids)
-    #
-    #     return qs
+     # def get_queryset(self, request):
+     #     qs = super(PayrollPeriodAdmin, self).get_queryset(request)
+     #
+     #     user = request.user
+     #     direction_ids = AccessToDirection.get_directions_for_user(user)
+     #     qs = qs.filter(payroll_group__direction__id__in=direction_ids)
+     #  
+     #     return qs
 
 
 
