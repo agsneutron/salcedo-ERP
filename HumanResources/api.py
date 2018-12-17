@@ -194,7 +194,7 @@ class PayrollUtilities:
         payment_number = 0
         for p in period:
             payment_number = p.periodicity.total_payments
-        return payment_number
+        # return payment_number
 
         print "HOLA"
         print payment_number
