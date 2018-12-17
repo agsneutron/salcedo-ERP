@@ -194,7 +194,7 @@ class PayrollUtilities:
         payment_number = 0
         for p in period:
             payment_number = p.periodicity.total_payments
-        return payment_number
+
 
         print "HOLA"
         print payment_number
@@ -220,7 +220,7 @@ class PayrollUtilities:
             }
             fixed_earnings_array.append(fixed_earning_json)
             earnings_array.append(fixed_earning_json)
-            total_earnings += fixed_earning.ammount
+            total_earnings += fixed_earning.ammount / payment_number
             total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
 
             if(fixed_earning.concept.name == "Salario"):
