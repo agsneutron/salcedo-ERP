@@ -1372,12 +1372,12 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Catálogo de Percepciones y Deducciones", {
             'fields': (
-                'name', 'type', 'category', 'taxable', 'percent_taxable', 'account', 'sat_key',
+                'name', 'type', 'category', 'taxable', 'percent_taxable', 'sat_key',
                 'status', 'comments',)
         }),
     )
 
-    list_display = ('name', 'type', 'account', 'percent_taxable', 'get_change_link', 'get_delete_link')
+    list_display = ('name', 'type', 'percent_taxable', 'get_change_link', 'get_delete_link')
     list_display_links = None
 
     def response_delete(self, request, obj_display, obj_id):

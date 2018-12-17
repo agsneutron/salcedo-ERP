@@ -14,7 +14,7 @@ from ERP.lib.utilities import Utilities
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
     EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed, ISRTable, EarningsDeductions, \
     EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag, EmployeePayrollPeriodExclusion, JobInstance, \
-    PayrollGroup
+    PayrollGroup, EmployeeLoan, EmployeeLoanDetail
 from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 from reporting.lib.payroll_list import PayrollListFile
@@ -194,7 +194,7 @@ class PayrollUtilities:
         payment_number = 0
         for p in period:
             payment_number = p.periodicity.total_payments
-
+        # return payment_number
 
         print "HOLA"
         print payment_number
@@ -220,7 +220,7 @@ class PayrollUtilities:
             }
             fixed_earnings_array.append(fixed_earning_json)
             earnings_array.append(fixed_earning_json)
-            total_earnings += fixed_earning.ammount / payment_number
+            total_earnings += fixed_earning.ammount
             total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
 
             if(fixed_earning.concept.name == "Salario"):
@@ -243,6 +243,7 @@ class PayrollUtilities:
 
         receipt['fixed_deductions'] = fixed_deductions_array
 
+
         # Variable Earnings.
         variable_earnings = employee.get_variable_earnings_for_period(payroll_period)
         variable_earnings_array = []
@@ -258,6 +259,9 @@ class PayrollUtilities:
             total_taxable += variable_earning.ammount * variable_earning.concept.percent_taxable / 100
 
         receipt['variable_earnings'] = variable_earnings_array
+
+        # before process the variable earnings go to search if exists pendind payments for loans
+        # employee_loan_charge = EmployeeLoanDetail.objects.filter(employeeloan__employee_id=employee).filter(pay_status=False).order_by('pay_number')[:1]
 
         # Variable Deductions.
         variable_deductions = employee.get_variable_deductions_for_period(payroll_period)
