@@ -1744,26 +1744,27 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
     #             # kwargs['request'] = request
     #
     #             return ModelForm(*args, **kwargs)
+    #
+    #     direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+    #     ModelForm.base_fields['payroll_group'].queryset = Direction.objects.filter(pk__in=direction_ids)
+    #
+    #     return ModelFormMetaClass
 
-        # direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
-        # ModelForm.base_fields['payroll_group'].queryset = Direction.objects.filter(pk__in=direction_ids).values("payrollgroup__name")
-        #
-        # return ModelFormMetaClass
+    def get_queryset(self, request):
+        qs = super(PayrollPeriodAdmin, self).get_queryset(request)
 
-     # def get_queryset(self, request):
-     #     qs = super(PayrollPeriodAdmin, self).get_queryset(request)
-     #
-     #     user = request.user
-     #     direction_ids = AccessToDirection.get_directions_for_user(user)
-     #     qs = qs.filter(payroll_group__direction__id__in=direction_ids)
-     #  
-     #     return qs
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(payroll_group__direction__id__in=direction_ids)
+
+        return qs
 
 
 
 
     def get_listpayroll_link(self, obj):
         return HumanResourcesAdminUtilities.get_listpayroll_link(obj, obj.id, obj.payroll_group.id)
+
 
     def get_change_link(self, obj):
         return HumanResourcesAdminUtilities.get_change_link(obj)
@@ -1788,14 +1789,16 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+
         payroll_group_id = request.GET.get('payroll_group')
 
         print 'the id id ' + str(payroll_group_id)
 
-        period_set = PayrollPeriod.objects.all()
+        period_set = PayrollPeriod.objects.filter(payroll_group__direction__id__in=direction_ids)
 
-        if payroll_group_id is not None:
-            period_set = period_set.filter(payroll_group_id=payroll_group_id)
+        # if payroll_group_id is not None:
+        #     period_set = period_set.filter(payroll_group__direction__id__in=direction_ids)
 
         extra['template'] = "payrollperiod"
         extra['period'] = period_set

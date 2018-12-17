@@ -1,11 +1,13 @@
 # coding=utf-8
-
+import decimal
 import json
+from decimal import Decimal
+
 import django
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.aggregates import Sum, Count
 from django.db.models.query_utils import Q
-from django.forms.models import model_to_dict
+from django.forms.models import model_to_dict, ModelForm
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from ERP.lib.utilities import Utilities
@@ -181,12 +183,22 @@ class PayrollUtilities:
 
     @staticmethod
     def generate_single_payroll(employee, payroll_period):
+
         """
         Generates the payroll (total earnings, total deductions, etc) for the given employee.
         :param employee: employee to work with.
         :param payroll_period: specific payroll to look for.
         :return:
         """
+        period = PayrollPeriod.objects.filter(id=payroll_period.id)
+        payment_number = 0
+        for p in period:
+            payment_number = p.periodicity.total_payments
+
+
+        print "HOLA"
+        print payment_number
+
         total_earnings = 0
         total_deductions = 0
         total_taxable = 0
@@ -208,7 +220,7 @@ class PayrollUtilities:
             }
             fixed_earnings_array.append(fixed_earning_json)
             earnings_array.append(fixed_earning_json)
-            total_earnings += fixed_earning.ammount
+            total_earnings += fixed_earning.ammount / payment_number
             total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
 
             if(fixed_earning.concept.name == "Salario"):
@@ -316,6 +328,7 @@ class PayrollUtilities:
         receipt["total_deductions"] = str(total_deductions)
 
         return receipt
+
 
 
 class GeneratePayrollReceipt(View):
