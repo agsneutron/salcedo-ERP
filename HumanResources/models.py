@@ -804,7 +804,7 @@ class EmployeeDropOut(models.Model):
     DROP_TYPE_H = 8
 
     DROP_TYPE_CHOICES = (
-        (DROP_TYPE_A, 'Termino de Contrato'),
+        (DROP_TYPE_A, 'Término de Contrato'),
         (DROP_TYPE_B, 'Separación Voluntaria'),
         (DROP_TYPE_C, 'Abandono del Empleo'),
         (DROP_TYPE_D, 'Defunción'),
@@ -1410,14 +1410,14 @@ class EarningsDeductions(models.Model):
         (NO_ACTIVA, 'NO ACTIVA'),
     )
 
-    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=30,
+    name = models.CharField(verbose_name="Nombre*", null=False, blank=False, max_length=200,
                             validators=[onlyletters_regex])
     percent_taxable = models.IntegerField("Porcentaje Gravable*", blank=False, null=False)
     sat_key = models.CharField(verbose_name="Clave SAT*", null=False, blank=False, max_length=30)
     # law_type = models.CharField(verbose_name="Tipo de Ley", null=False, blank=False, max_length=30, )
     status = models.CharField(verbose_name="Estatus*", null=False, blank=False, max_length=1, choices=STATUS_CHOICES,
                               default=ACTIVA, validators=[onlyletters_regex])
-    account = models.ForeignKey(Account, verbose_name='Cuenta*', null=False, blank=False)
+    account = models.ForeignKey(Account, verbose_name='Cuenta*', null=False, blank=False, default=1)
     # models.IntegerField("Cuenta Contable", blank=False, null=False)
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,
                                 validators=[onlyletters_regex])
