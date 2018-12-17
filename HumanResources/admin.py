@@ -1743,7 +1743,7 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
     #             return ModelForm(*args, **kwargs)
     #
     #     direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
-    #     ModelForm.base_fields['payroll_group'].queryset = Direction.objects.filter(pk__in=direction_ids)
+    #     ModelForm.base_fields['payroll_group'].queryset = Direction.objects.filter(payrollgroup__direction__id__in=direction_ids).values('payrollgroup__name')
     #
     #     return ModelFormMetaClass
 
