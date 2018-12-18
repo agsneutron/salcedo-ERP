@@ -336,7 +336,7 @@ def EmployeeByPeriod(request):
             "employee_payroll" : employee_payroll
         })
 
-        print PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+        #print PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
 
     # context = RequestContext.request
     context = {'employees_data_set': employee_data_set,

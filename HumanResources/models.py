@@ -1669,11 +1669,6 @@ class EmployeeLoanDetail(models.Model):
     amount = models.FloatField(verbose_name="Cantidad", null=True, blank=True)
     deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
 
-
-
-
-
-
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
@@ -1696,7 +1691,7 @@ class EmployeeLoanDetail(models.Model):
             deduction.ammount = self.amount
             deduction.date = now()
             deduction.employee_id = self.employeeloan.employee.id
-            deduction.concept_id = 15
+            deduction.concept_id = 59
             deduction.payroll_period_id = self.period
             deduction.save()
             self.deduction_id = deduction.id
@@ -1705,17 +1700,17 @@ class EmployeeLoanDetail(models.Model):
             self.deduction.ammount = self.amount
             self.deduction.date = now()
             self.deduction.employee_id = self.employeeloan.employee.id
-            self.deduction.concept_id = 15
+            self.deduction.concept_id = 59
             self.deduction.payroll_period_id = self.period
             self.deduction.save()
             super(EmployeeLoanDetail, self).save(*args, **kwargs)
-
 
     def unique_error_message(self, model_class, unique_check):
         if model_class == type(self) and unique_check == ('employeeloan', 'period'):
             return 'la amortización del préstamo para este periodo ya existe'
         else:
             return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
+
     
 class EarningDeductionPeriod(models.Model):
     '''
@@ -1791,7 +1786,7 @@ class PayrollProcessedDetail(models.Model):
     payroll_receip_processed = models.ForeignKey(PayrollReceiptProcessed, verbose_name="Recibo de Nómina Procesado",
                                                  null=False, blank=False)
 
-    name = models.CharField(verbose_name="Nombre", null=True, blank=True, max_length=30, )
+    name = models.CharField(verbose_name="Nombre", null=True, blank=True, max_length=100, )
     percent_taxable = models.IntegerField("Porcentaje Gravable", blank=True, null=True)
     sat_key = models.CharField(verbose_name="Clave SAT", null=True, blank=True, max_length=30, )
     law_type = models.CharField(verbose_name="Tipo de Ley", null=True, blank=True, max_length=30, )
