@@ -184,7 +184,7 @@ class PayrollUtilities:
     def set_loan_variable_deduction(employee, payroll_period):
 
         # before process the variable earnings go to search if exists pendind payments for loans
-        employee_loan_charge = EmployeeLoanDetail.objects.filter(employeeloan__employee_id=employee).filter(pay_status=False).order_by(
+        employee_loan_charge = EmployeeLoanDetail.objects.filter(employeeloan__employee_id=employee).filter(pay_status=0).order_by(
             'pay_number')[:1]
 
         if EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee.id).filter(payroll_period_id=payroll_period.id).count() == 0:
@@ -248,7 +248,7 @@ class PayrollUtilities:
 
         if employee_loan_charge.count() > 0:
             update_employee_loan = EmployeeLoanDetail.objects.filter(id=employee_loan_charge[0].id)
-            update_employee_loan.update(pay_status=0, period_id=None, payroll_group_id=None)
+            update_employee_loan.update(pay_status=0)
         return employee_loan_charge
 
     @staticmethod
