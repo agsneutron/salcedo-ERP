@@ -211,6 +211,10 @@ class Account(models.Model):
         return dict
 
 
+def uploaded_internal_company(instance, filename):
+    return '/'.join(['company_uploads', 'logos', filename])
+
+
 class InternalCompany(models.Model):
     name = models.CharField(verbose_name="Nombre", max_length=255, null=False, blank=False, unique=True,)
     rfc = models.CharField(verbose_name="RFC de la Empresa", max_length=15, null=False, blank=False, unique=True,
@@ -221,6 +225,8 @@ class InternalCompany(models.Model):
     indoor_number = models.CharField(verbose_name="No. Interior", max_length=10, null=True, blank=True)
     zip_code = models.CharField(verbose_name="Código Postal*", null=False, blank=False, validators=[onlynum_regex],
                                 max_length=5)
+
+    logo_file = models.FileField(upload_to=uploaded_internal_company, null=True, verbose_name="Logo de Empresa")
 
     # Attribute for the Chained Keys.
     country = models.ForeignKey(Pais, verbose_name="País*", null=False, blank=False)

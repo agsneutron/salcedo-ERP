@@ -11,6 +11,7 @@ from django.forms.models import model_to_dict, ModelForm
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from ERP.lib.utilities import Utilities
+from SharedCatalogs.models import InternalCompany
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
     EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed, ISRTable, EarningsDeductions, \
     EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag, EmployeePayrollPeriodExclusion, JobInstance, \
@@ -262,8 +263,12 @@ class PayrollUtilities:
         """
         period = PayrollPeriod.objects.filter(id=payroll_period.id)
         payment_number = 0
+        start_period = ""
+        end_period = ""
         for p in period:
             payment_number = p.periodicity.total_payments
+            start_period = p.start_period
+            end_period = p.end_period
         # return payment_number
 
         #print "HOLA"
@@ -290,7 +295,7 @@ class PayrollUtilities:
             }
             fixed_earnings_array.append(fixed_earning_json)
             earnings_array.append(fixed_earning_json)
-            total_earnings += fixed_earning.ammount
+            total_earnings += fixed_earning.ammount/ payment_number
             total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
 
             if(fixed_earning.concept.name == "Salario"):
@@ -399,10 +404,13 @@ class PayrollUtilities:
         receipt["employee_id"] = str(employee.id)
         receipt["employee_key"] = str(employee.employee_key)
         receipt["rfc"] = str(employee.rfc)
+        receipt["curp"] = str(employee.curp)
         receipt["ssn"] = str(employee.social_security_number)
         receipt["employee_fullname"] = employee.get_full_name()
         receipt["total_earnings"] = str(total_earnings)
         receipt["total_deductions"] = str(total_deductions)
+        receipt["start"] = str(start_period)
+        receipt["end"] = str(end_period)
 
         return receipt
 
@@ -544,7 +552,8 @@ class GeneratePayrollReceipt(View):
                     employee_loan_payroll_period = PayrollUtilities.set_loan_payroll_period(employee, payroll_period, payroll_group)
 
                 result = self.create_receipt_historic_record(payroll_period, receipts_array)
-                response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
+                company = InternalCompany.objects.filter(id=payroll_group.internal_company.id)
+                response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array, company)
                 return response
 
         except Exception as e:
@@ -589,6 +598,7 @@ class GeneratePayrollReceiptForEmployee(View):
         employee_id = request.GET.get('employee')
         employee = Employee.objects.get(pk=employee_id)
 
+        company = InternalCompany.objects.all.filter(id=payroll_period.payroll_group.internal_company.id)
         payroll_receipt_processed = PayrollReceiptProcessed.objects.get(
             Q(payroll_period__id=payroll_period.id) & Q(employee_id=employee.id))
 
@@ -614,7 +624,7 @@ class GeneratePayrollReceiptForEmployee(View):
         receipt["total_deductions"] = str(payroll_receipt_processed.total_deductions)
 
         receipts_array.append(receipt)
-        response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
+        response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array, company)
 
         # return HttpResponse(Utilities.json_to_dumps({}),'application/json; charset=utf-8')
         return response
