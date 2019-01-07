@@ -262,10 +262,12 @@ class PayrollUtilities:
         :return:
         """
         period = PayrollPeriod.objects.filter(id=payroll_period.id)
+        periodicity_name=''
         payment_number = 0
         start_period = ""
         end_period = ""
         for p in period:
+            periodicity_name = p.periodicity.name
             payment_number = p.periodicity.total_payments
             start_period = p.start_period
             end_period = p.end_period
@@ -291,15 +293,15 @@ class PayrollUtilities:
             fixed_earning_json = {
                 "id": str(fixed_earning.concept.id),
                 "name": fixed_earning.concept.name,
-                "amount": str(fixed_earning.ammount)
+                "amount": str(fixed_earning.ammount/ payment_number)
             }
             fixed_earnings_array.append(fixed_earning_json)
             earnings_array.append(fixed_earning_json)
             total_earnings += fixed_earning.ammount/ payment_number
             total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
 
-            if(fixed_earning.concept.name == "Salario"):
-                receipt['base_salary'] = float(fixed_earning.ammount)
+            if(fixed_earning.concept.name == "Sueldos, Salarios Rayas y Jornales"):
+                receipt['base_salary'] = float(fixed_earning.ammount/ payment_number)
 
         receipt['fixed_earnings'] = fixed_earnings_array
 
@@ -411,6 +413,7 @@ class PayrollUtilities:
         receipt["total_deductions"] = str(total_deductions)
         receipt["start"] = str(start_period)
         receipt["end"] = str(end_period)
+        receipt["periodicity"] = str(periodicity_name)
 
         return receipt
 

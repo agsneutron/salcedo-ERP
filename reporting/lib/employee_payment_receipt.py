@@ -90,7 +90,7 @@ class EmployeePaymentReceipt:
         page.append(line_break)
         page.append(line_break)
 
-        titulo = "<strong> RECIBO DE PAGO </strong>"
+        titulo = "<strong> RECIBO DE PAGO " + receipt_data['periodicity'] +" </strong>"
         paragraph = Paragraph(titulo, EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
         page.append(paragraph)
 
