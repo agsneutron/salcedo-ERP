@@ -195,10 +195,6 @@ class PayrollUtilities:
         for p in period:
             payment_number = p.periodicity.total_payments
 
-
-        print "HOLA"
-        print payment_number
-
         total_earnings = 0
         total_deductions = 0
         total_taxable = 0
