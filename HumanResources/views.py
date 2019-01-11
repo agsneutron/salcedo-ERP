@@ -336,7 +336,7 @@ def EmployeeByPeriod(request):
             "employee_payroll" : employee_payroll
         })
 
-        print PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
+        #print PayrollUtilities.generate_single_payroll(record.employee, period_data.first())
 
     # context = RequestContext.request
     context = {'employees_data_set': employee_data_set,
@@ -508,11 +508,11 @@ class EmployeeDropOutDetail(generic.DetailView):
     def get_queryset(self):
         result = super(EmployeeDropOutDetail, self).get_queryset()
 
+
         return result
 
     def get_context_data(self, **kwargs):
         context = super(EmployeeDropOutDetail, self).get_context_data(**kwargs)
-
 
         return context
 

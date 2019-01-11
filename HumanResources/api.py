@@ -11,10 +11,11 @@ from django.forms.models import model_to_dict, ModelForm
 from django.http.response import HttpResponse, HttpResponseRedirect
 from django.views.generic import View
 from ERP.lib.utilities import Utilities
+from SharedCatalogs.models import InternalCompany
 from HumanResources.models import EmployeeAssistance, PayrollPeriod, Employee, EmployeePositionDescription, \
     EmployeeFinancialData, PayrollProcessedDetail, PayrollReceiptProcessed, ISRTable, EarningsDeductions, \
     EmployeeEarningsDeductionsbyPeriod, EmployeeEarningsDeductions, Tag, EmployeePayrollPeriodExclusion, JobInstance, \
-    PayrollGroup
+    PayrollGroup, EmployeeLoan, EmployeeLoanDetail
 from SalcedoERP.lib.SystemLog import LoggingConstants, SystemException
 from reporting.lib.employee_payment_receipt import EmployeePaymentReceipt
 from reporting.lib.payroll_list import PayrollListFile
@@ -135,7 +136,6 @@ class DeleteAssistances(View):
         for assistance in assistances_to_delete:
             assistance.delete()
 
-
         return HttpResponseRedirect('/humanresources/employeebyperiod/?payrollperiod='+str(payroll_period_id))
 
 
@@ -182,6 +182,77 @@ class PayrollUtilities:
         return True
 
     @staticmethod
+    def set_loan_variable_deduction(employee, payroll_period):
+
+        # before process the variable earnings go to search if exists pendind payments for loans
+        employee_loan_charge = EmployeeLoanDetail.objects.filter(employeeloan__employee_id=employee).filter(pay_status=0).order_by(
+            'pay_number')[:1]
+
+        if EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee.id).filter(payroll_period_id=payroll_period.id).count() == 0:
+
+            #Earning_Deduction = EmployeeEarningsDeductionsbyPeriod
+            for loan in employee_loan_charge:
+                earning_deduction = EmployeeEarningsDeductionsbyPeriod(
+                    ammount=loan.amount,
+                    date=payroll_period.start_period,
+                    concept_id=59,
+                    employee_id=employee.id,
+                    payroll_period_id=payroll_period.id
+                )
+                #print 'Earning_Deduction'
+                #print earning_deduction
+                earning_deduction.save()
+
+                loan.deduction_id = earning_deduction.pk
+                loan.period = earning_deduction.payroll_period
+                loan.payroll_group = earning_deduction.payroll_period.payroll_group
+                loan.save()
+
+        return employee_loan_charge
+
+    @staticmethod
+    def set_loan_payroll_period(employee, payroll_period, payroll_group):
+
+        employee_loan_charge = EmployeeLoanDetail.objects.filter(employeeloan__employee_id=employee)\
+            .filter(pay_status=0).filter(payroll_group_id=payroll_group).filter(period_id=payroll_period).order_by('pay_number')[:1]
+
+        if employee_loan_charge.count()>0:
+            update_employee_loan =EmployeeLoanDetail.objects.filter(id=employee_loan_charge[0].id)
+            update_employee_loan.update(pay_status=1)
+            #.update(payroll_period=payroll_period, payroll_group=payroll_group, pay_status=True)
+
+
+        # for loan in employee_loan_charge:
+        #     loan_detail = EmployeeLoanDetail(
+        #         amount=loan.amount,
+        #         employeeloan=loan.employeeloan,
+        #         deduction_id=loan.deduction_id,
+        #         period_id=payroll_period.id,
+        #         payroll_group_id=payroll_group.id,
+        #         pay_status=True
+        #     )
+        #     loan_detail.save()
+
+        return employee_loan_charge
+
+
+    @staticmethod
+    def delete_loan_period(employee, payroll_period, payroll_group):
+
+        if employee == 0:
+            employee_loan_charge = EmployeeLoanDetail.objects\
+                                   .filter(pay_status=1).filter(period_id=payroll_period).order_by('pay_number')[:1]
+        else:
+            employee_loan_charge = EmployeeLoanDetail.objects.filter(employeeloan__employee_id=employee) \
+                                       .filter(pay_status=1).filter(payroll_group_id=payroll_group).filter(
+                period_id=payroll_period).order_by('pay_number')[:1]
+
+        if employee_loan_charge.count() > 0:
+            update_employee_loan = EmployeeLoanDetail.objects.filter(id=employee_loan_charge[0].id)
+            update_employee_loan.update(pay_status=0)
+        return employee_loan_charge
+
+    @staticmethod
     def generate_single_payroll(employee, payroll_period):
 
         """
@@ -191,9 +262,19 @@ class PayrollUtilities:
         :return:
         """
         period = PayrollPeriod.objects.filter(id=payroll_period.id)
+        periodicity_name=''
         payment_number = 0
+        start_period = ""
+        end_period = ""
         for p in period:
+            periodicity_name = p.periodicity.name
             payment_number = p.periodicity.total_payments
+            start_period = p.start_period
+            end_period = p.end_period
+        # return payment_number
+
+        #print "HOLA"
+        #print payment_number
 
         total_earnings = 0
         total_deductions = 0
@@ -212,15 +293,15 @@ class PayrollUtilities:
             fixed_earning_json = {
                 "id": str(fixed_earning.concept.id),
                 "name": fixed_earning.concept.name,
-                "amount": str(fixed_earning.ammount)
+                "amount": str(fixed_earning.ammount/ payment_number)
             }
             fixed_earnings_array.append(fixed_earning_json)
             earnings_array.append(fixed_earning_json)
-            total_earnings += fixed_earning.ammount / payment_number
+            total_earnings += fixed_earning.ammount/ payment_number
             total_taxable += fixed_earning.ammount * fixed_earning.concept.percent_taxable / 100
 
-            if(fixed_earning.concept.name == "Salario"):
-                receipt['base_salary'] = float(fixed_earning.ammount)
+            if(fixed_earning.concept.name == "Sueldos, Salarios Rayas y Jornales"):
+                receipt['base_salary'] = float(fixed_earning.ammount/ payment_number)
 
         receipt['fixed_earnings'] = fixed_earnings_array
 
@@ -239,6 +320,7 @@ class PayrollUtilities:
 
         receipt['fixed_deductions'] = fixed_deductions_array
 
+
         # Variable Earnings.
         variable_earnings = employee.get_variable_earnings_for_period(payroll_period)
         variable_earnings_array = []
@@ -254,6 +336,12 @@ class PayrollUtilities:
             total_taxable += variable_earning.ammount * variable_earning.concept.percent_taxable / 100
 
         receipt['variable_earnings'] = variable_earnings_array
+
+
+        # validate if an employee has loan deduction for the current period
+        employee_loan_charge = PayrollUtilities.set_loan_variable_deduction(employee, payroll_period)
+
+
 
         # Variable Deductions.
         variable_deductions = employee.get_variable_deductions_for_period(payroll_period)
@@ -318,10 +406,14 @@ class PayrollUtilities:
         receipt["employee_id"] = str(employee.id)
         receipt["employee_key"] = str(employee.employee_key)
         receipt["rfc"] = str(employee.rfc)
+        receipt["curp"] = str(employee.curp)
         receipt["ssn"] = str(employee.social_security_number)
         receipt["employee_fullname"] = employee.get_full_name()
         receipt["total_earnings"] = str(total_earnings)
         receipt["total_deductions"] = str(total_deductions)
+        receipt["start"] = str(start_period)
+        receipt["end"] = str(end_period)
+        receipt["periodicity"] = str(periodicity_name)
 
         return receipt
 
@@ -415,7 +507,6 @@ class GeneratePayrollReceipt(View):
         payroll_period_id = request.GET.get('payroll_period')
         employee_id = request.GET.get('employee')
 
-
         excluded_employees_csv = request.GET.get('employeesSelected')
         if excluded_employees_csv == "":
             excluded_employees = []
@@ -460,11 +551,13 @@ class GeneratePayrollReceipt(View):
 
                     receipt = PayrollUtilities.generate_single_payroll(employee, payroll_period)
                     receipts_array.append(receipt)
+                    # set payrollperiod, payroll group to a loan pay number
+                    employee_loan_payroll_period = PayrollUtilities.set_loan_payroll_period(employee, payroll_period, payroll_group)
 
                 result = self.create_receipt_historic_record(payroll_period, receipts_array)
-                response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
+                company = InternalCompany.objects.filter(id=payroll_group.internal_company.id)
+                response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array, company)
                 return response
-
 
         except Exception as e:
             print "Exception was: " + str(e)
@@ -508,6 +601,7 @@ class GeneratePayrollReceiptForEmployee(View):
         employee_id = request.GET.get('employee')
         employee = Employee.objects.get(pk=employee_id)
 
+        company = InternalCompany.objects.all.filter(id=payroll_period.payroll_group.internal_company.id)
         payroll_receipt_processed = PayrollReceiptProcessed.objects.get(
             Q(payroll_period__id=payroll_period.id) & Q(employee_id=employee.id))
 
@@ -533,7 +627,7 @@ class GeneratePayrollReceiptForEmployee(View):
         receipt["total_deductions"] = str(payroll_receipt_processed.total_deductions)
 
         receipts_array.append(receipt)
-        response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array)
+        response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array, company)
 
         # return HttpResponse(Utilities.json_to_dumps({}),'application/json; charset=utf-8')
         return response
@@ -557,6 +651,9 @@ class DeletePayrollReceiptsForPeriod(View):
         payroll_receipt_processed.delete()
 
         django.contrib.messages.success(request, "Se han borrado exitosamente los recibos de nómina.")
+
+        loan_pay_delete = PayrollUtilities.delete_loan_period(0, payroll_period_id, 0)
+        django.contrib.messages.success(request, "Se han borrado los préstamos asignados al Periodo.")
 
         return HttpResponseRedirect(
             "/humanresources/employeebyperiod?payrollperiod=" + str(payroll_period.id) + "&payrollgroup=" + str(

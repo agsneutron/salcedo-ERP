@@ -1,5 +1,5 @@
 # coding=utf-8
-
+import os
 
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
@@ -9,13 +9,20 @@ from reportlab.lib.pagesizes import letter, inch
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph
 from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib import enums
-from reportlab.platypus.flowables import PageBreak
+from reportlab.platypus.flowables import PageBreak, Image
 
+from SalcedoERP import settings
+
+
+def get_none(the_string):
+    if the_string is None:
+        the_string = ""
+    return the_string
 
 class EmployeePaymentReceipt:
 
     @staticmethod
-    def generate_employee_payment_receipts(receipts_data):
+    def generate_employee_payment_receipts(receipts_data, company):
         cm = 2.54
 
         response = HttpResponse(content_type='application/pdf')
@@ -26,7 +33,7 @@ class EmployeePaymentReceipt:
         doc = SimpleDocTemplate(response, rightMargin=0, leftMargin=3.5 * cm, topMargin=50 * cm, bottomMargin=0)
 
         for receipt in receipts_data:
-            receipt_page = EmployeePaymentReceipt.generate_receipt_page(receipt)
+            receipt_page = EmployeePaymentReceipt.generate_receipt_page(receipt, company)
             pages += receipt_page
 
 
@@ -39,30 +46,39 @@ class EmployeePaymentReceipt:
 
 
     @staticmethod
-    def generate_receipt_page(receipt_data):
+    def generate_receipt_page(receipt_data, company):
         page = []
         cm = 2.54
         line_break = Paragraph("<br />", EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
 
+        #internal company values for header
+        company_name_value = ""
+        company_rfc_value = ""
+        company_dir_value = ""
+        company_logo_value = ""
+        for company_values in company:
+            company_name_value = get_none(company_values.name)
+            company_rfc_value = get_none(company_values.rfc)
+            company_dir_value = get_none(company_values.street) + " No. " + get_none(company_values.outdoor_number) + ", " + get_none(company_values.colony) + ", " + get_none(company_values.town.nombreMunicipio) + ", " + get_none(company_values.state.nombreEstado) + ". C.P. " + get_none(company_values.zip_code)
+            company_logo_value = get_none(company_values.logo_file)
+
         # SALCEDO Headers.
-        company_name = "<strong>SALCEDO CONSTRUCCIÓN Y SUPERVISIÓN S.A. DE C.V.</strong>"
-        paragraph = Paragraph(company_name, EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
-        page.append(paragraph)
 
+        company_logo = os.path.join(settings.MEDIA_ROOT, str(company_logo_value))
+        imagen = Image(company_logo, width=90, height=50, hAlign='LEFT')
 
-        employer_registration = "<strong>REGISTRO PATRONAL: C6213152104</strong>"
-        paragraph = Paragraph(employer_registration, EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
-        page.append(paragraph)
+        company_name = Paragraph("<strong>"+company_name_value+"</strong>", EmployeePaymentReceipt.Styles.HEADERS_TITLE_STYLE)
+        employer_registration = Paragraph("<strong>R.F.C. " + company_rfc_value + "</strong>", EmployeePaymentReceipt.Styles.HEADERS_TITLE_STYLE)
 
+        rfc = Paragraph("<strong>DIRECCIÓN: " + company_dir_value + "</strong>", EmployeePaymentReceipt.Styles.HEADERS_SUBTITLE_STYLE)
 
+        encabezado = [[imagen, company_name],
+                      ['', employer_registration],
+                      ['', rfc]]
+        tabla_encabezado = Table(encabezado, colWidths=(40*cm, 144*cm))
+        tabla_encabezado.setStyle(EmployeePaymentReceipt.Styles.EMPLOYEE_HEADER_TABLE_STYLE)
 
-        rfc = "<strong>R.F.C: SCS111017F27</strong>"
-        paragraph = Paragraph(rfc, EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
-        page.append(paragraph)
-
-
-
-
+        page.append(tabla_encabezado)
 
 
         # Adding breaklines to separate the headers from the next table.
@@ -74,21 +90,26 @@ class EmployeePaymentReceipt:
         page.append(line_break)
         page.append(line_break)
 
-
-
-
+        titulo = "<strong> RECIBO DE PAGO " + receipt_data['periodicity'] +" </strong>"
+        paragraph = Paragraph(titulo, EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
+        page.append(paragraph)
 
         # Employee personal data table.
         employee_number_label = Paragraph('<strong>No. de Trabajador:</strong> '+receipt_data['employee_key'], EmployeePaymentReceipt.Styles.EMPLOYEE_LABEL_PARAGRAPH_STYLE)
         rfc_label = Paragraph('<strong>RFC:</strong> '+receipt_data['rfc'], EmployeePaymentReceipt.Styles.EMPLOYEE_LABEL_PARAGRAPH_STYLE)
+        periodo_label = Paragraph('<strong>Periodo:</strong> ' + receipt_data['start'] + ' - ' + receipt_data['end'], EmployeePaymentReceipt.Styles.EMPLOYEE_LABEL_PARAGRAPH_STYLE)
+        curp_label = Paragraph('<strong>CURP:</strong> ' + receipt_data['curp'], EmployeePaymentReceipt.Styles.EMPLOYEE_LABEL_PARAGRAPH_STYLE)
+
         employee_name_label = Paragraph('<strong>Nombre del Trabajador:</strong> '+receipt_data['employee_fullname'], EmployeePaymentReceipt.Styles.EMPLOYEE_LABEL_PARAGRAPH_STYLE)
         employee_ssn_label = Paragraph('<strong>NSS:</strong> '+receipt_data['ssn'], EmployeePaymentReceipt.Styles.EMPLOYEE_LABEL_PARAGRAPH_STYLE)
 
+
         data = [
             [employee_number_label, rfc_label],
+            [periodo_label, curp_label],
             [employee_name_label, employee_ssn_label],
         ]
-        employee_table = Table(data, colWidths=92*cm, rowHeights=(10*cm, 15*cm))
+        employee_table = Table(data, colWidths=92*cm, rowHeights=(10*cm, 10*cm, 15*cm))
         employee_table.setStyle(EmployeePaymentReceipt.Styles.EMPLOYEE_INFO_TABLE_STYLE)
 
         page.append(employee_table)
@@ -168,7 +189,6 @@ class EmployeePaymentReceipt:
 
             deductions_cell.append(deductions_data)
 
-
             deductions_table = Table(deductions_cell, colWidths=(60*cm, 40*cm), rowHeights=20)
             table_row.append(deductions_table)
 
@@ -235,20 +255,45 @@ class EmployeePaymentReceipt:
 
     class Styles:
         EMPLOYEE_INFO_TABLE_STYLE = TableStyle([
-            ('BACKGROUND', (0, 0), (1, 1), colors.Color(.16, .3, .5)),
-            ('GRID', (0, 0), (1, 1),1, colors.black),
-            ('TEXTCOLOR', (0, 0), (1, 1), colors.white),
-            ('FONTNAME', (0, 0), (1, 1), 'Helvetica'),
-            ('FONTSIZE', (0, 0), (1, 1),10),
-            ('VALIGN', (0, 0), (1, 1), 'MIDDLE')
+            ('BACKGROUND', (0, 0), (1, 2), colors.Color(.16, .3, .5)),
+            ('GRID', (0, 0), (1, 2),1, colors.black),
+            ('TEXTCOLOR', (0, 0), (1, 2), colors.white),
+            ('FONTNAME', (0, 0), (1, 2), 'Helvetica'),
+            ('FONTSIZE', (0, 0), (1, 2),10),
+            ('VALIGN', (0, 0), (1, 2), 'MIDDLE')
         ])
 
+        EMPLOYEE_HEADER_TABLE_STYLE = TableStyle([
+            ('BACKGROUND', (0, 0), (1, 2), colors.white),
+            ('TEXTCOLOR', (0, 0), (1, 2), colors.black),
+            ('FONTNAME', (0, 0), (1, 2), 'Helvetica'),
+            ('VALIGN', (0, 0), (0, 2), 'MIDDLE'),
+            ('VALIGN', (0, 1), (1, 2), 'TOP'),
+            ('SPAN', (0, 0), (0, 2)),
+
+        ])
 
         HEADERS_PARAGRAPH_STYLE = ParagraphStyle(
             name='Normal',
             fontName='Helvetica',
             fontSize=11,
             alignment=enums.TA_CENTER,
+            spaceAfter=5
+        )
+
+        HEADERS_TITLE_STYLE = ParagraphStyle(
+            name='Normal',
+            fontName='Helvetica',
+            fontSize=11,
+            alignment=enums.TA_RIGHT,
+            spaceAfter=5
+        )
+
+        HEADERS_SUBTITLE_STYLE = ParagraphStyle(
+            name='Normal',
+            fontName='Helvetica',
+            fontSize=10,
+            alignment=enums.TA_RIGHT,
             spaceAfter=5
         )
 

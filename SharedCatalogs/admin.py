@@ -14,7 +14,7 @@ class InternalCompanyAdmin(admin.ModelAdmin):
     fieldsets = (
         ("Empresa", {
             'fields': (
-                'name', 'rfc', 'colony', 'street', 'outdoor_number', 'indoor_number', 'zip_code', 'country', 'state', 'town')
+                'name', 'rfc', 'colony', 'street', 'outdoor_number', 'indoor_number', 'zip_code', 'country', 'state', 'town', 'logo_file')
         }),
     )
 
