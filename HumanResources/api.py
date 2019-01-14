@@ -23,6 +23,8 @@ from django.db import transaction
 from django.views.generic.list import ListView
 
 from HumanResources.search_engines.transactions_engine import TransactionsEngine
+from HumanResources.search_engines.paysheet_engine import PaySheetSearchEngine
+from HumanResources.reports.paysheet_report import PaySheetReport
 
 
 # Convierte a un string separado por comas en un arreglo o None
@@ -862,3 +864,31 @@ class GenerateTransactionsByAccountReport(ListView):
         return engine.generate_report(general_structure)
 
         # return HttpResponse(Utilities.json_to_dumps(general_structure) , 'application/json; charset=utf-8', )
+
+class GeneratePaySheetReport(ListView):
+    def get_details_for_report(self):
+        paysheet_details_set = PayrollReceiptProcessed.objects.all()
+
+        return paysheet_details_set
+
+    def get(self, request):
+
+        title = request.GET.get('title')
+        payroll_period = request.GET.get('payroll_period')
+        engine = PaySheetSearchEngine(
+            payroll_period = payroll_period
+        )
+
+        result = engine.search_paysheet ()
+
+        '''policies_details_set = self.get_details_for_policies(result)'''
+
+        # General data to send to the report maker.
+        general_data = {
+            "title": title,
+        }
+
+        report_result = PaySheetReport.generate_report(general_data, result)
+
+        # return HttpResponse(Utilities.query_set_to_dumps(result), 'application/json; charset=utf-8', )
+        return report_result
