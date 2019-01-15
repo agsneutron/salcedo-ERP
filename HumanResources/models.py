@@ -340,7 +340,7 @@ def upload_employee_contract(instance, filename):
 
 
 class EmployeeContract(models.Model):
-    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False,related_name='employeecontract')
 
     contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=64, null=False, blank=False, unique=True)
 

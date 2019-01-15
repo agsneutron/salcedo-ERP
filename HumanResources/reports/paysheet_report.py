@@ -8,6 +8,7 @@ from django.http.response import StreamingHttpResponse
 from xlsxwriter.workbook import Workbook
 
 from Accounting.models import FiscalPeriod
+from HumanResources.models import EmployeeContract
 
 
 class PaySheetReport():
@@ -43,7 +44,7 @@ class PaySheetReport():
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=Balanza_de_Comprobación.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Listado_nomina.xlsx'
         response['Content-Length'] = output.tell()
 
         output.seek(0)
@@ -69,7 +70,7 @@ class PaySheetReport():
         white_bold_header = formats['white_bold_header']
 
 
-        worksheet.set_column('A:F', 20)
+        worksheet.set_column('A:G', 20)
 
 
         # Row 1.
@@ -78,7 +79,7 @@ class PaySheetReport():
         else:
             title = general_data['title']
 
-        worksheet.merge_range('A1:F1', title, white_centered_bold_header)
+        worksheet.merge_range('A1:G1', title, white_centered_bold_header)
 
         # Row 2.
         worksheet.merge_range('A2:C2', "Salcedo Construcción y Supervisión", white_bold_header)
@@ -86,23 +87,36 @@ class PaySheetReport():
         #worksheet.merge_range('D2:F2', "CUIT", white_bold_header)
 
         # Row 3.
-        month_number = int(general_data['month'])
-        year_number = int(general_data['year'])
+        '''month_number = int(general_data['month'])
+        year_number = int(general_data['year'])'''
 
-        worksheet.merge_range('A3:C3', FiscalPeriod.get_month_name_from_number(month_number) + " " + str(year_number), white_bold_header)
+        worksheet.merge_range('A3:C3', FiscalPeriod.get_month_name_from_number(7) + " " + str(2018), white_bold_header)
+
+        COUNTER_COL = 0
+        PAYMENT_DATE_COL = 1
+        EMPLOYEE_KEY_COL = 2
+        WORKED_DAYS_COL = 3
+        DAILY_SALARY_COL = 5
+        TOTAL_PAYROLL_COL = 6
+        CONTRACT_KEY_COL = 7
+        TAX_REGIME_COL = 8
 
 
         # Table headers.
-        worksheet.merge_range('A5:A6', "N. Orden", blue_header_format_info)
-        worksheet.merge_range('B5:B6', "Cuenta", blue_header_format_info)
-
-        worksheet.merge_range('C5:D5', "Sumas", blue_header_format_info)
-        worksheet.write('C6', "Debe", blue_header_format_info)
-        worksheet.write('D6', "Haber", blue_header_format_info)
-
-        worksheet.merge_range('E5:F5', "Sumas", blue_header_format_info)
-        worksheet.write('E6', "Deudor", blue_header_format_info)
-        worksheet.write('F6', "Acreedor", blue_header_format_info)
+        worksheet.write('A5', "No.", blue_header_format_info)
+        worksheet.write('B5', "Fecha Pago", blue_header_format_info)
+        worksheet.write('C5', "Contacto", blue_header_format_info)
+        worksheet.write('D5', "Dias Pagados", blue_header_format_info)
+        worksheet.write('E5', "Concepto", blue_header_format_info)
+        worksheet.write('F5', "Salario Diario", blue_header_format_info)
+        worksheet.write('G5', "SDI", blue_header_format_info)
+        worksheet.write('H5', "Contrato", blue_header_format_info)
+        worksheet.write('I5', "Tipo Regimen", blue_header_format_info)
+        worksheet.write('J5', "Jornada", blue_header_format_info)
+        worksheet.write('K5', "Periodicidad Pago", blue_header_format_info)
+        worksheet.write('L5', "Tipo Nómina", blue_header_format_info)
+        worksheet.write('M5', "Riesgo Puesto", blue_header_format_info)
+        worksheet.write('N5', "Subsidio Causado", blue_header_format_info)
 
 
     @staticmethod
@@ -196,14 +210,16 @@ class PaySheetReport():
         :param policies_set: Set of policies that were found for the given fiscal period and account ranges.
 
         """
-        START_ROW = 6
+        START_ROW = 5
 
         COUNTER_COL = 0
-        ACCOUNT_COL = 1
-        DEBIT_COL = 2
-        CREDIT_COL = 3
-        DEBTOR_COL = 4
-        CREDITOR_COL = 5
+        PAYMENT_DATE_COL = 1
+        EMPLOYEE_KEY_COL = 2
+        WORKED_DAYS_COL = 3
+        DAILY_SALARY_COL = 5
+        TOTAL_PAYROLL_COL = 6
+        CONTRACT_KEY_COL = 7
+        TAX_REGIME_COL = 8
 
 
         # Getting the formats.
@@ -213,55 +229,28 @@ class PaySheetReport():
         gray_bold_right_currency = formats['gray_bold_right_currency']
         yellow_total_right = formats['yellow_total_right']
 
-        grouped_by_account_policies_set = paysheet_detail_set.values('account__grouping_code__id','account__grouping_code__account_name')\
-            .annotate(Count('account__grouping_code__id'), Count('account__grouping_code__account_name'), total_credit=Sum('credit'), total_debit=Sum('debit'))
+        paysheet_detail_qry_set = paysheet_detail_set.values('payment_date','employee__employee_key','worked_days','daily_salary','total_payroll',
+                                                                     'employee__tax_regime__name','employee__employeecontract__contract_key')
 
         row_counter = START_ROW
         counter = 1
 
-        # To keep track of the accumulates.
-        accumulated_credit = 0
-        accumulated_debit = 0
-        accumulated_debtor = 0
-        accumulated_creditor = 0
-
-
-        for account_record in grouped_by_account_policies_set:
-
-            name = account_record['account__grouping_code__account_name']
-            total_credit = account_record['total_credit']
-            total_debit = account_record['total_debit']
-
-            total_debtor = total_credit - total_debit
-            total_creditor = total_debit - total_credit
-
-            # Short if. If the value is negative, then turn it into 0.
-            total_debtor = 0 if total_debtor <= 0 else total_debtor
-            total_creditor = 0 if total_creditor <= 0 else total_creditor
+        for record in paysheet_detail_qry_set:
 
             worksheet.write(row_counter, COUNTER_COL, counter, white_bold_record)
-            worksheet.write(row_counter, ACCOUNT_COL, name, white_bold_record)
-            worksheet.write(row_counter, DEBIT_COL, total_debit, white_bold_right_currency)
-            worksheet.write(row_counter, CREDIT_COL, total_credit, white_bold_right_currency)
-            worksheet.write(row_counter, DEBTOR_COL, total_debtor, gray_bold_right_currency)
-            worksheet.write(row_counter, CREDITOR_COL, total_creditor, gray_bold_right_currency)
+            worksheet.write(row_counter, PAYMENT_DATE_COL, record['payment_date'], white_bold_record)
+            worksheet.write(row_counter, EMPLOYEE_KEY_COL, record['employee__employee_key'], white_bold_record)
+            worksheet.write(row_counter, WORKED_DAYS_COL, record['worked_days'], white_bold_right_currency)
+            worksheet.write(row_counter, DAILY_SALARY_COL, record['daily_salary'], white_bold_right_currency)
+            worksheet.write(row_counter, TOTAL_PAYROLL_COL, record['total_payroll'], gray_bold_right_currency)
+            worksheet.write(row_counter, TAX_REGIME_COL, record['employee__tax_regime__name'], gray_bold_right_currency)
+            worksheet.write(row_counter, CONTRACT_KEY_COL, record['employee__employeecontract__contract_key'], gray_bold_right_currency)
 
-            # Adding to the accumulates.
-            accumulated_credit += total_credit
-            accumulated_debit += total_debit
-            accumulated_debtor += total_debtor
-            accumulated_creditor += total_creditor
 
             row_counter += 1
             counter += 1
 
-        # Adding the accumulated values to the worksheet.
 
-        worksheet.write(row_counter+1, ACCOUNT_COL, "Total", yellow_total_right)
-        worksheet.write(row_counter+1, DEBIT_COL, accumulated_debit, white_bold_right_currency)
-        worksheet.write(row_counter+1, CREDIT_COL, accumulated_credit, white_bold_right_currency)
-        worksheet.write(row_counter+1, DEBTOR_COL, accumulated_debtor, white_bold_right_currency)
-        worksheet.write(row_counter+1, CREDITOR_COL, accumulated_creditor, white_bold_right_currency)
 
 
 
