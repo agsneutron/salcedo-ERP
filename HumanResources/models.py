@@ -1699,31 +1699,31 @@ class EmployeeLoanDetail(models.Model):
             delModel.deleteFromEmployeeLoanDetail(self)
             super(EmployeeLoanDetail, self).delete()
 
-    def save(self, *args, **kwargs):
-        if self.deduction is None:
-            deduction = EmployeeEarningsDeductionsbyPeriod()
-            deduction.ammount = self.amount
-            deduction.date = now()
-            deduction.employee_id = self.employeeloan.employee.id
-            deduction.concept_id = 59
-            deduction.payroll_period_id = self.period
-            deduction.save()
-            self.deduction_id = deduction.id
-            super(EmployeeLoanDetail, self).save(*args, **kwargs)
-        else:
-            self.deduction.ammount = self.amount
-            self.deduction.date = now()
-            self.deduction.employee_id = self.employeeloan.employee.id
-            self.deduction.concept_id = 59
-            self.deduction.payroll_period_id = self.period
-            self.deduction.save()
-            super(EmployeeLoanDetail, self).save(*args, **kwargs)
-
-    def unique_error_message(self, model_class, unique_check):
-        if model_class == type(self) and unique_check == ('employeeloan', 'period'):
-            return 'la amortización del préstamo para este periodo ya existe'
-        else:
-            return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
+    # def save(self, *args, **kwargs):
+    #     if self.deduction is None:
+    #         deduction = EmployeeEarningsDeductionsbyPeriod()
+    #         deduction.ammount = self.amount
+    #         deduction.date = now()
+    #         deduction.employee_id = self.employeeloan.employee.id
+    #         deduction.concept_id = 59
+    #         deduction.payroll_period_id = self.period
+    #         deduction.save()
+    #         self.deduction_id = deduction.id
+    #         super(EmployeeLoanDetail, self).save(*args, **kwargs)
+    #     else:
+    #         self.deduction.ammount = self.amount
+    #         self.deduction.date = now()
+    #         self.deduction.employee_id = self.employeeloan.employee.id
+    #         self.deduction.concept_id = 59
+    #         self.deduction.payroll_period_id = self.period
+    #         self.deduction.save()
+    #         super(EmployeeLoanDetail, self).save(*args, **kwargs)
+    #
+    # def unique_error_message(self, model_class, unique_check):
+    #     if model_class == type(self) and unique_check == ('employeeloan', 'period'):
+    #         return 'la amortización del préstamo para este periodo ya existe'
+    #     else:
+    #         return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
 
     
 class EarningDeductionPeriod(models.Model):
