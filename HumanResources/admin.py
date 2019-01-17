@@ -133,7 +133,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         ("Datos Personales", {
             'fields': (
                 'name', 'first_last_name', 'second_last_name', 'birthdate', 'birthplace', 'gender', 'marital_status',
-                'curp', 'rfc', 'tax_regime', 'social_security_type', 'social_security_number', 'blood_type', 'street',
+                'curp', 'rfc', 'tax_regime', 'social_security_type', 'social_security_number', 'risk_type', 'blood_type', 'street',
                 'outdoor_number', 'indoor_number', 'colony',
                 'country', 'state', 'town', 'zip_code', 'phone_number', 'cellphone_number', 'office_number',
                 'extension_number', 'personal_email', 'work_email', 'driving_license_number',
@@ -900,7 +900,7 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
     form = EmployeeHasTagForm
 
     fieldsets = (
-        ("Etiquetas", {
+        ("Certificaciones", {
             'fields': ('employee', 'tag',)
         }),
     )
@@ -1702,7 +1702,10 @@ class PayrollGroupAdmin(admin.ModelAdmin):
         extra = extra_context or {}
 
         # employee_id = request.GET.get('employee')
-        period_set = PayrollGroup.objects.all()
+
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+
+        period_set = PayrollGroup.objects.filter(direction_id__in=direction_ids)
 
         extra['template'] = "payrollgroup"
         extra['period'] = period_set
@@ -1743,7 +1746,12 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
-        ModelForm.base_fields['payroll_group'].queryset = Direction.objects.filter(pk__in=direction_ids).values('payrollgroup__name')
+        payroll_ids=Direction.objects.filter(pk__in=direction_ids).values('payrollgroup__id')
+        payroll_set=PayrollGroup.objects.filter(pk__in=payroll_ids).all()
+
+
+        ModelForm.base_fields['payroll_group'].queryset = payroll_set
+
 
         return ModelFormMetaClass
 
@@ -1882,7 +1890,7 @@ class TagAdmin(admin.ModelAdmin):
     form = TagForm
 
     fieldsets = (
-        ("Etiquetas", {
+        ("Certificaciones", {
             'fields': ('name',)
         }),
     )

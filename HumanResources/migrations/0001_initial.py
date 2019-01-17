@@ -368,8 +368,8 @@ class Migration(migrations.Migration):
                 ('employee', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='HumanResources.Employee', verbose_name='Empleado')),
             ],
             options={
-                'verbose_name': 'Etiquetas del Empleado',
-                'verbose_name_plural': 'Etiquetas del Empleado',
+                'verbose_name': 'Certificaciones del Empleado',
+                'verbose_name_plural': 'Certificaciones del Empleado',
             },
         ),
         migrations.CreateModel(
@@ -694,11 +694,11 @@ class Migration(migrations.Migration):
             name='Tag',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=64, verbose_name='Nombre de la Etiqueta')),
+                ('name', models.CharField(max_length=64, verbose_name='Nombre de la Certificación')),
             ],
             options={
-                'verbose_name': 'Etiqueta',
-                'verbose_name_plural': 'Etiquetas',
+                'verbose_name': 'Certificación',
+                'verbose_name_plural': 'Certificaciones',
             },
         ),
         migrations.CreateModel(
@@ -849,7 +849,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='employeehastag',
             name='tag',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='HumanResources.Tag', verbose_name='Etiqueta'),
+            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='HumanResources.Tag', verbose_name='Certificación'),
         ),
         migrations.AddField(
             model_name='employeeearningsdeductionsbyperiod',
@@ -864,7 +864,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='employee',
             name='tags',
-            field=models.ManyToManyField(through='HumanResources.EmployeeHasTag', to='HumanResources.Tag', verbose_name='Etiquetas'),
+            field=models.ManyToManyField(through='HumanResources.EmployeeHasTag', to='HumanResources.Tag', verbose_name='Certificaciones'),
         ),
         migrations.AddField(
             model_name='employee',

@@ -192,6 +192,20 @@ class Employee(models.Model):
                                               blank=False)
     social_security_type = models.CharField(verbose_name="Tipo de Seguro", null=True, blank=False, max_length=100)
 
+    RISK_TYPE_A = 1
+    RISK_TYPE_B = 2
+    RISK_TYPE_C = 3
+    RISK_TYPE_D = 4
+    RISK_TYPE_E = 5
+    EMPLOYEE_RISK_TYPE_CHOICES = (
+        (RISK_TYPE_A, '1'),
+        (RISK_TYPE_B, '2'),
+        (RISK_TYPE_C, '3'),
+        (RISK_TYPE_D, '4'),
+        (RISK_TYPE_E, '5'),
+    )
+    risk_type = models.IntegerField(choices=EMPLOYEE_RISK_TYPE_CHOICES, default=RISK_TYPE_A, verbose_name='Tipo de Riesgo')
+
     colony = models.CharField(verbose_name="Colonia*", max_length=255, null=False, blank=False)
     street = models.CharField(verbose_name="Calle*", max_length=255, null=False, blank=False)
     outdoor_number = models.CharField(verbose_name="No. Exterior*", max_length=10, null=False, blank=False)
@@ -245,7 +259,7 @@ class Employee(models.Model):
     tax_regime = models.ForeignKey('TaxRegime', verbose_name="Régimen Fiscal*", null=False, blank=False)
 
     # Many to Many Foreign Keys.
-    tags = models.ManyToManyField("Tag", verbose_name="Etiquetas", through="EmployeeHasTag")
+    tags = models.ManyToManyField("Tag", verbose_name="Certificaciones", through="EmployeeHasTag")
     tests = models.ManyToManyField("Test", verbose_name="Pruebas", through="TestApplication")
 
     def get_full_name(self):
@@ -459,7 +473,7 @@ class DocumentType(models.Model):
 
 # Tags to describe the Employee.
 class Tag(models.Model):
-    name = models.CharField(verbose_name="Nombre de la Etiqueta", max_length=64, null=False, blank=False, unique=False)
+    name = models.CharField(verbose_name="Nombre de la Certificación", max_length=64, null=False, blank=False, unique=False)
 
     def __str__(self):
         return self.name
@@ -468,19 +482,19 @@ class Tag(models.Model):
         return self.name
 
     class Meta:
-        verbose_name_plural = 'Etiquetas'
-        verbose_name = 'Etiqueta'
+        verbose_name_plural = 'Certificaciones'
+        verbose_name = 'Certificación'
 
 
 # Assigned Tags to an Employee.
 class EmployeeHasTag(models.Model):
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
-    tag = models.ForeignKey(Tag, verbose_name="Etiqueta", null=False, blank=False)
+    tag = models.ForeignKey(Tag, verbose_name="Certificación", null=False, blank=False)
 
     class Meta:
         unique_together = ('employee', 'tag')
-        verbose_name = "Etiquetas del Empleado"
-        verbose_name_plural = "Etiquetas del Empleado"
+        verbose_name = "Certificaciones del Empleado"
+        verbose_name_plural = "Certificaciones del Empleado"
 
     def __str__(self):
         return self.tag.name + ": " + self.employee.name + " " + self.employee.first_last_name + " " + self.employee.second_last_name
@@ -1669,11 +1683,6 @@ class EmployeeLoanDetail(models.Model):
     amount = models.FloatField(verbose_name="Cantidad", null=True, blank=True)
     deduction = models.ForeignKey(EmployeeEarningsDeductionsbyPeriod, verbose_name="Deduction", null=True, blank=True)
 
-
-
-
-
-
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
@@ -1690,32 +1699,32 @@ class EmployeeLoanDetail(models.Model):
             delModel.deleteFromEmployeeLoanDetail(self)
             super(EmployeeLoanDetail, self).delete()
 
-    def save(self, *args, **kwargs):
-        if self.deduction is None:
-            deduction = EmployeeEarningsDeductionsbyPeriod()
-            deduction.ammount = self.amount
-            deduction.date = now()
-            deduction.employee_id = self.employeeloan.employee.id
-            deduction.concept_id = 15
-            deduction.payroll_period_id = self.period
-            deduction.save()
-            self.deduction_id = deduction.id
-            super(EmployeeLoanDetail, self).save(*args, **kwargs)
-        else:
-            self.deduction.ammount = self.amount
-            self.deduction.date = now()
-            self.deduction.employee_id = self.employeeloan.employee.id
-            self.deduction.concept_id = 15
-            self.deduction.payroll_period_id = self.period
-            self.deduction.save()
-            super(EmployeeLoanDetail, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     if self.deduction is None:
+    #         deduction = EmployeeEarningsDeductionsbyPeriod()
+    #         deduction.ammount = self.amount
+    #         deduction.date = now()
+    #         deduction.employee_id = self.employeeloan.employee.id
+    #         deduction.concept_id = 59
+    #         deduction.payroll_period_id = self.period
+    #         deduction.save()
+    #         self.deduction_id = deduction.id
+    #         super(EmployeeLoanDetail, self).save(*args, **kwargs)
+    #     else:
+    #         self.deduction.ammount = self.amount
+    #         self.deduction.date = now()
+    #         self.deduction.employee_id = self.employeeloan.employee.id
+    #         self.deduction.concept_id = 59
+    #         self.deduction.payroll_period_id = self.period
+    #         self.deduction.save()
+    #         super(EmployeeLoanDetail, self).save(*args, **kwargs)
+    #
+    # def unique_error_message(self, model_class, unique_check):
+    #     if model_class == type(self) and unique_check == ('employeeloan', 'period'):
+    #         return 'la amortización del préstamo para este periodo ya existe'
+    #     else:
+    #         return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
 
-
-    def unique_error_message(self, model_class, unique_check):
-        if model_class == type(self) and unique_check == ('employeeloan', 'period'):
-            return 'la amortización del préstamo para este periodo ya existe'
-        else:
-            return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
     
 class EarningDeductionPeriod(models.Model):
     '''
@@ -1791,7 +1800,7 @@ class PayrollProcessedDetail(models.Model):
     payroll_receip_processed = models.ForeignKey(PayrollReceiptProcessed, verbose_name="Recibo de Nómina Procesado",
                                                  null=False, blank=False)
 
-    name = models.CharField(verbose_name="Nombre", null=True, blank=True, max_length=30, )
+    name = models.CharField(verbose_name="Nombre", null=True, blank=True, max_length=100, )
     percent_taxable = models.IntegerField("Porcentaje Gravable", blank=True, null=True)
     sat_key = models.CharField(verbose_name="Clave SAT", null=True, blank=True, max_length=30, )
     law_type = models.CharField(verbose_name="Tipo de Ley", null=True, blank=True, max_length=30, )

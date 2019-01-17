@@ -143,7 +143,7 @@
                 <p><strong>Estatus: </strong> {{ employee.get_status_display }} </p>
             </div>
             <div>
-                <h3 class="color-info">Etiquetas</h3>
+                <h3 class="color-info">Certificaciones</h3>
                 <select multiple class="" style="width: 100%">
                     <option>1</option>
                     <option>2</option>
@@ -600,7 +600,7 @@
             </div>
             <hr>
             <div class="card-block text-center">
-                <h3 class="color-info">Etiquetas</h3>
+                <h3 class="color-info">Certificaciones</h3>
                 {% for record in employee_has_tag %}
                 <span class="label label-default">{{ record.tag }}</span>
                 {% endfor %}

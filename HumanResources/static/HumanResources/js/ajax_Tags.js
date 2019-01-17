@@ -124,7 +124,7 @@ function populateTags(data){
      'class':"selectpicker",
      'data-style':"select-with-transition",
      'multiple':true,
-     'title':"Etiquetas"
+     'title':"Certificaciones"
 
     });
     var tagsSplit;
