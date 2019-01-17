@@ -245,11 +245,15 @@ class PaySheetReport():
             worksheet.write(row_counter, TOTAL_PAYROLL_COL, record['total_payroll'], gray_bold_right_currency)
             worksheet.write(row_counter, TAX_REGIME_COL, record['employee__tax_regime__name'], gray_bold_right_currency)
             worksheet.write(row_counter, CONTRACT_KEY_COL, record['employee__employeecontract__contract_key'], gray_bold_right_currency)
-
+            worksheet.write(row_counter, 9, '02', white_bold_record)
+            worksheet.write(row_counter, 10, '01', white_bold_record)
+            worksheet.write(row_counter, 11, '04', white_bold_record)
+            worksheet.write(row_counter, 12, 'O', white_bold_record)
+            worksheet.write(row_counter, 13, '1', white_bold_record)
+            worksheet.write(row_counter, 14, '0', white_bold_record)
 
             row_counter += 1
             counter += 1
-
 
 
 
