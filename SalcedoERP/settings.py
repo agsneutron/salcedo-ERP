@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'Accounting',
     'multiselectfield',
     'tinymce',
-'django.contrib.humanize',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [

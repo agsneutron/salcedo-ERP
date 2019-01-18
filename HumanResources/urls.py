@@ -52,7 +52,7 @@ urlpatterns = [
     # Calls to API
     url(r'^api/generate_earnings_deductions_report', api.GenerateEarningsDeductionsReport.as_view(), name='generate_earnings_deductions_report'),
     url(r'^api/change_justified_status', api.ChangeAbsenceJustifiedStatus.as_view(), name='change_justified_status'),
-url(r'^api/generate_paysheet_report', api.GeneratePaySheetReport.as_view(), name='generate_paysheet_report'),
+    url(r'^api/generate_paysheet_report', api.GeneratePaySheetReport.as_view(), name='generate_paysheet_report'),
     url(r'^api/generate_payroll_receipt$', api.GeneratePayrollReceipt.as_view(), name='generate_payroll_receipt'),
     url(r'^api/delete_assistances$', api.DeleteAssistances.as_view(), name='generate_payroll_receipt'),
     url(r'^api/generate_payroll_receipt_for_employee$', api.GeneratePayrollReceiptForEmployee.as_view(), name='generate_payroll_receipt_for_employee'),
