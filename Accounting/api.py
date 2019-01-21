@@ -562,3 +562,5 @@ class CommercialAllyEndpoint(ListView):
         return r
         # return render(request,'/admin/Accounting/commercialally/add/',{'name':'alex'})
         # return redirect('/admin/Accounting/commercialally/add',id=name)
+
+

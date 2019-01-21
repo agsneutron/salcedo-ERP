@@ -133,7 +133,7 @@ class EmployeeAdmin(admin.ModelAdmin):
         ("Datos Personales", {
             'fields': (
                 'name', 'first_last_name', 'second_last_name', 'birthdate', 'birthplace', 'gender', 'marital_status',
-                'curp', 'rfc', 'tax_regime', 'social_security_type', 'social_security_number', 'blood_type', 'street',
+                'curp', 'rfc', 'tax_regime', 'social_security_type', 'social_security_number', 'risk_type', 'blood_type', 'street',
                 'outdoor_number', 'indoor_number', 'colony',
                 'country', 'state', 'town', 'zip_code', 'phone_number', 'cellphone_number', 'office_number',
                 'extension_number', 'personal_email', 'work_email', 'driving_license_number',
@@ -900,7 +900,7 @@ class EmployeeHasTagAdmin(admin.ModelAdmin):
     form = EmployeeHasTagForm
 
     fieldsets = (
-        ("Etiquetas", {
+        ("Certificaciones", {
             'fields': ('employee', 'tag',)
         }),
     )
@@ -1735,20 +1735,25 @@ class PayrollPeriodAdmin(admin.ModelAdmin):
     list_display = (
         'name', 'periodicity', 'payroll_group', 'payroll_to_process', 'get_listpayroll_link', 'get_change_link', 'get_delete_link')
 
-    # def get_form(self, request, obj=None, **kwargs):
-    #     ModelForm = super(PayrollPeriodAdmin, self).get_form(request, obj, **kwargs)
-    #
-    #     # Class to pass the request to the form.
-    #     class ModelFormMetaClass(ModelForm):
-    #         def __new__(cls, *args, **kwargs):
-    #             # kwargs['request'] = request
-    #
-    #             return ModelForm(*args, **kwargs)
-    #
-    #     direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
-    #     ModelForm.base_fields['payroll_group'].queryset = Direction.objects.filter(payrollgroup__direction__id__in=direction_ids).values('payrollgroup__name')
-    #
-    #     return ModelFormMetaClass
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(PayrollPeriodAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                # kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+        payroll_ids=Direction.objects.filter(pk__in=direction_ids).values('payrollgroup__id')
+        payroll_set=PayrollGroup.objects.filter(pk__in=payroll_ids).all()
+
+
+        ModelForm.base_fields['payroll_group'].queryset = payroll_set
+
+
+        return ModelFormMetaClass
 
     def get_queryset(self, request):
         qs = super(PayrollPeriodAdmin, self).get_queryset(request)
@@ -1885,7 +1890,7 @@ class TagAdmin(admin.ModelAdmin):
     form = TagForm
 
     fieldsets = (
-        ("Etiquetas", {
+        ("Certificaciones", {
             'fields': ('name',)
         }),
     )
