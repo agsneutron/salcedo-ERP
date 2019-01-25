@@ -362,11 +362,12 @@ class PayrollUtilities:
 
         # Absences.
         employee_financial_data = EmployeeFinancialData.objects.get(employee_id=employee.id)
+        earning_deduction_data = EarningsDeductions.objects.get(id=57)
         absences = employee.get_unjustified_employee_absences_for_period(payroll_period)
         absences_array = []
         for absence in absences:
             absence_json = {
-                "id": absence.id,
+                "id": str(earning_deduction_data.id), #absence.id,
                 "name": "Falta del " + str(absence.record_date),
                 "amount": str(employee_financial_data.daily_salary)
             }
@@ -378,8 +379,9 @@ class PayrollUtilities:
 
         # ISR.
         isr = PayrollUtilities.get_ISR_from_taxable(float(total_taxable))
+        earning_deduction_data = EarningsDeductions.objects.get(id=38)
         deductions_array.append({
-            "id": "",
+            "id": str(earning_deduction_data.id), #"",
             "name": "ISR",
             "amount": isr
         })
@@ -431,7 +433,7 @@ class GeneratePayrollReceipt(View):
                 concept_id = None
 
             concept = EarningsDeductions.objects.get(pk=concept_id)
-            print "Concept:"
+            print "Concept a:"
             print concept
 
             new_obj = PayrollProcessedDetail(
@@ -446,11 +448,16 @@ class GeneratePayrollReceipt(View):
                 taxable=concept.get_taxable_display(),
                 category=concept.get_category_display(),
                 payroll_receip_processed=payroll_receipt_processed,
-                amount=concept_json['amount']
+                amount=concept_json['amount'],
+                earningdeduction = concept,
+                earningdeduction_key = concept.key
             )
 
         except EarningsDeductions.DoesNotExist as e:
-
+            print "except"
+            concept = EarningsDeductions.objects.get(pk=concept_id)
+            print "Concept b:"
+            print concept
             new_obj = PayrollProcessedDetail(
                 name=concept_json["name"],
                 percent_taxable=100,
@@ -463,7 +470,9 @@ class GeneratePayrollReceipt(View):
                 taxable="Sí",
                 category="Variable",
                 payroll_receip_processed=payroll_receipt_processed,
-                amount=float(concept_json['amount'])
+                amount=float(concept_json['amount']),
+                earningdeduction=concept,
+                earningdeduction_key = concept.key
             )
 
         new_obj.save()

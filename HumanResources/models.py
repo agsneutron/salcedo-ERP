@@ -1442,6 +1442,8 @@ class EarningsDeductions(models.Model):
                                 verbose_name="Categoria*")
     penalty = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Penalización")
 
+    key = models.CharField(verbose_name="Clave", null=False, blank=False, max_length=5)
+
     class Meta:
         verbose_name_plural = "Percepciones y Deducciones"
         verbose_name = "Percepciones y Deducciones"
@@ -1811,6 +1813,9 @@ class PayrollProcessedDetail(models.Model):
     taxable = models.CharField(verbose_name="Gravable", max_length=64)
     category = models.CharField(verbose_name="Categoria", max_length=64)
     amount = models.FloatField(verbose_name="Monto", null=False)
+
+    earningdeduction = models.ForeignKey(EarningsDeductions, verbose_name="Id_PercepcionDeduccion",null=True, blank=True)
+    earningdeduction_key = models.CharField(verbose_name="Clave", null=True, blank=True, max_length=5, )
 
     class Meta:
         verbose_name_plural = "Detalle de Nómina Procesada"
