@@ -104,19 +104,39 @@ class PaySheetReport():
 
         # Table headers.
         worksheet.write('A5', "No.", blue_header_format_info)
-        worksheet.write('B5', "Fecha Pago", blue_header_format_info)
-        worksheet.write('C5', "Contacto", blue_header_format_info)
-        worksheet.write('D5', "Dias Pagados", blue_header_format_info)
-        worksheet.write('E5', "Concepto", blue_header_format_info)
-        worksheet.write('F5', "Salario Diario", blue_header_format_info)
-        worksheet.write('G5', "SDI", blue_header_format_info)
-        worksheet.write('H5', "Contrato", blue_header_format_info)
-        worksheet.write('I5', "Tipo Regimen", blue_header_format_info)
-        worksheet.write('J5', "Jornada", blue_header_format_info)
-        worksheet.write('K5', "Periodicidad Pago", blue_header_format_info)
-        worksheet.write('L5', "Tipo Nómina", blue_header_format_info)
-        worksheet.write('M5', "Riesgo Puesto", blue_header_format_info)
-        worksheet.write('N5', "Subsidio Causado", blue_header_format_info)
+        worksheet.write('B5', "FechaD", blue_header_format_info)
+        worksheet.write('C5', "FechaA", blue_header_format_info)
+        worksheet.write('D5', "Fecha Pago", blue_header_format_info)
+        worksheet.write('E5', "Contacto", blue_header_format_info)
+        worksheet.write('F5', "Dias Pagados", blue_header_format_info)
+        worksheet.write('G5', "Concepto", blue_header_format_info)
+        worksheet.write('H5', "Movimiento", blue_header_format_info)
+        worksheet.write('I5', "Gravado", blue_header_format_info)
+        worksheet.write('J5', "Exento", blue_header_format_info)
+        worksheet.write('K5', "INCAPACIDADDIAS", blue_header_format_info)
+        worksheet.write('L5', "INCAPACIDADTIPO", blue_header_format_info)
+        worksheet.write('M5', "INCAPACIDADDESCUENTO", blue_header_format_info)
+        worksheet.write('N5', "HORASEXTRASDIAS", blue_header_format_info)
+        worksheet.write('O5', "HORASEXTRASHORAS", blue_header_format_info)
+        worksheet.write('P5', "HORASEXTRASTIPO", blue_header_format_info)
+        worksheet.write('Q5', "HORASEXTRASIMPORTE", blue_header_format_info)
+        worksheet.write('R5', "Salario Diario", blue_header_format_info)
+        worksheet.write('S5', "SDI", blue_header_format_info)
+        worksheet.write('T5', "FECHAANTIGUEDAD", blue_header_format_info)
+        worksheet.write('U5', "FECHAALTA", blue_header_format_info)
+        worksheet.write('V5', "RIMSSPATRON", blue_header_format_info)
+        worksheet.write('W5', "CENTROCOSTOS", blue_header_format_info)
+        worksheet.write('X5', "PUESTO", blue_header_format_info)
+        worksheet.write('Y5', "DEPARTAMENTO", blue_header_format_info)
+        worksheet.write('Z5', "GRUPO", blue_header_format_info)
+        worksheet.write('AA5', "Contrato", blue_header_format_info)
+        worksheet.write('AB5', "Tipo Regimen", blue_header_format_info)
+        worksheet.write('AC5', "Jornada", blue_header_format_info)
+        worksheet.write('AD5', "Periodicidad Pago", blue_header_format_info)
+        worksheet.write('AE5', "Forma Pago", blue_header_format_info)
+        worksheet.write('AF5', "Tipo Nómina", blue_header_format_info)
+        worksheet.write('AG5', "Riesgo Puesto", blue_header_format_info)
+        worksheet.write('AH5', "Subsidio Causado", blue_header_format_info)
 
 
     @staticmethod
@@ -184,6 +204,19 @@ class PaySheetReport():
         }
         formats['gray_bold_right_currency'] = workbook.add_format(gray_bold_right_currency_info)
 
+        gray_bold_right_date_info = {
+            'align': 'right',
+            'valign': 'vcenter',
+            'border': 1,
+            'border_color': '#000000',
+            'num_format': 'dd/mm/yyyy',
+            'bold': 1,
+            'fg_color': '#E8E8E8'
+        }
+        formats['gray_bold_right_date'] = workbook.add_format(gray_bold_right_date_info)
+
+
+
         # Format with yellow background and bold text aligned to the right.
         yellow_total_right_info = {
             'align': 'right',
@@ -213,13 +246,39 @@ class PaySheetReport():
         START_ROW = 5
 
         COUNTER_COL = 0
-        PAYMENT_DATE_COL = 1
-        EMPLOYEE_KEY_COL = 2
-        WORKED_DAYS_COL = 3
-        DAILY_SALARY_COL = 5
-        TOTAL_PAYROLL_COL = 6
-        CONTRACT_KEY_COL = 7
-        TAX_REGIME_COL = 8
+        INICTIAL_DATE_COL = 1
+        FINAL_DATE_COL = 2
+        PAYMENT_DATE_COL = 3
+        EMPLOYEE_KEY_COL = 4
+        WORKED_DAYS_COL = 5
+        CONCEPT_KEY_COL = 6
+        MOVEMENT_COL = 7
+        EXEMPT_COL=8
+        TAXABLE_COL = 9
+        INABILITY_DAYS_COL =10
+        INABILITY_TYPE_COL = 11
+        INABILITY_DISCOUNT_COL = 12
+        EXTRAHOURS_DAY_COL=13
+        EXTRAHOURS_HOURS_COL=14
+        EXTRAHOURS_TYPE_COL=15
+        EXTRAHOURS_AMOUNT_COL=16
+        DAILY_SALARY_COL = 17
+        TOTAL_PAYROLL_COL = 18
+        DATE_ANTIQUETY_COL = 19
+        DATE_START_COL = 20
+        RIMSSPATRON_COL = 21
+        COST_CENTER_COL =22
+        PROFILE_COL = 23
+        DEPARTMENT_COL = 24
+        GROUP_COL = 25
+        CONTRACT_KEY_COL = 26
+        TAX_REGIME_COL = 27
+        WORKINGDAY_COL = 28
+        FREQUENCY_COL = 29
+        WAYTOAY_COL =30
+        PAYROLLTYPE_COL=31
+        RISK_TYPE_COL = 32
+        SUBSIDY_COL = 33
 
 
         # Getting the formats.
@@ -228,29 +287,53 @@ class PaySheetReport():
         white_bold_right_currency = formats['white_bold_right_currency']
         gray_bold_right_currency = formats['gray_bold_right_currency']
         yellow_total_right = formats['yellow_total_right']
+        gray_bold_right_date = formats['gray_bold_right_date']
 
-        paysheet_detail_qry_set = paysheet_detail_set.values('payment_date','employee__employee_key','worked_days','daily_salary','total_payroll',
-                                                                     'employee__tax_regime__name','employee__employeecontract__contract_key')
+
+        paysheet_detail_qry_set = paysheet_detail_set.values('payroll_receip_processed__payment_date','payroll_receip_processed__employee__employee_key','payroll_receip_processed__worked_days','payroll_receip_processed__daily_salary','payroll_receip_processed__total_payroll',
+                                                                     'payroll_receip_processed__employee__tax_regime__id','payroll_receip_processed__employee__employeecontract__contract_key',
+                                                             'earningdeduction_key','type','taxable','amount','payroll_receip_processed__employee__risk_type','payroll_receip_processed__employee__employeedata__aggregate_daily_salary',
+                                                             'payroll_receip_processed__employee__employeeposition__job_profile__job','payroll_receip_processed__employee__employeeposition__department__name',
+                                                             'payroll_receip_processed__employee__employeeposition__direction__id','payroll_receip_processed__payroll_period__start_period','payroll_receip_processed__payroll_period__end_period',
+                                                             'payroll_receip_processed__employee__registry_date')
 
         row_counter = START_ROW
         counter = 1
-
+        exempt = 0
+        taxable = 0
         for record in paysheet_detail_qry_set:
 
+            if record['taxable'] == 'NO':
+                exempt = record['amount']
+            else:
+                taxable = record['amount']
             worksheet.write(row_counter, COUNTER_COL, counter, white_bold_record)
-            worksheet.write(row_counter, PAYMENT_DATE_COL, record['payment_date'], white_bold_record)
-            worksheet.write(row_counter, EMPLOYEE_KEY_COL, record['employee__employee_key'], white_bold_record)
-            worksheet.write(row_counter, WORKED_DAYS_COL, record['worked_days'], white_bold_right_currency)
-            worksheet.write(row_counter, DAILY_SALARY_COL, record['daily_salary'], white_bold_right_currency)
-            worksheet.write(row_counter, TOTAL_PAYROLL_COL, record['total_payroll'], gray_bold_right_currency)
-            worksheet.write(row_counter, TAX_REGIME_COL, record['employee__tax_regime__name'], gray_bold_right_currency)
-            worksheet.write(row_counter, CONTRACT_KEY_COL, record['employee__employeecontract__contract_key'], gray_bold_right_currency)
-            worksheet.write(row_counter, 9, '02', white_bold_record)
-            worksheet.write(row_counter, 10, '01', white_bold_record)
-            worksheet.write(row_counter, 11, '04', white_bold_record)
-            worksheet.write(row_counter, 12, 'O', white_bold_record)
-            worksheet.write(row_counter, 13, '1', white_bold_record)
-            worksheet.write(row_counter, 14, '0', white_bold_record)
+            worksheet.write(row_counter, INICTIAL_DATE_COL, record['payroll_receip_processed__payroll_period__start_period'],gray_bold_right_date)
+            worksheet.write(row_counter, FINAL_DATE_COL, record['payroll_receip_processed__payroll_period__end_period'],gray_bold_right_date)
+            worksheet.write(row_counter, PAYMENT_DATE_COL, record['payroll_receip_processed__payment_date'], gray_bold_right_date)
+            worksheet.write(row_counter, EMPLOYEE_KEY_COL, record['payroll_receip_processed__employee__employee_key'], white_bold_record)
+            worksheet.write(row_counter, WORKED_DAYS_COL, record['payroll_receip_processed__worked_days'], white_bold_right_currency)
+            worksheet.write(row_counter, CONCEPT_KEY_COL, record['earningdeduction_key'],white_bold_right_currency)
+            worksheet.write(row_counter, MOVEMENT_COL, record['type'], white_bold_right_currency)
+            worksheet.write(row_counter, TAXABLE_COL, taxable, white_bold_right_currency)
+            worksheet.write(row_counter, EXEMPT_COL, exempt, white_bold_right_currency)
+            worksheet.write(row_counter, DAILY_SALARY_COL, record['payroll_receip_processed__daily_salary'], white_bold_right_currency)
+            worksheet.write(row_counter, TOTAL_PAYROLL_COL, record['payroll_receip_processed__employee__employeedata__aggregate_daily_salary'], gray_bold_right_currency)
+
+            worksheet.write(row_counter, DATE_START_COL, record['payroll_receip_processed__employee__registry_date'],gray_bold_right_date)
+
+            worksheet.write(row_counter, COST_CENTER_COL,record['payroll_receip_processed__employee__employeeposition__direction__id'],white_bold_record)
+            worksheet.write(row_counter, PROFILE_COL, record['payroll_receip_processed__employee__employeeposition__job_profile__job'],white_bold_record)
+            worksheet.write(row_counter, DEPARTMENT_COL, record['payroll_receip_processed__employee__employeeposition__department__name'],white_bold_record)
+
+            worksheet.write(row_counter, CONTRACT_KEY_COL,record['payroll_receip_processed__employee__employeecontract__contract_key'],gray_bold_right_currency)
+            worksheet.write(row_counter, TAX_REGIME_COL, record['payroll_receip_processed__employee__tax_regime__id'], white_bold_record)
+            worksheet.write(row_counter, WORKINGDAY_COL, '02', white_bold_record)
+            worksheet.write(row_counter, FREQUENCY_COL, '01', white_bold_record)
+            worksheet.write(row_counter, WAYTOAY_COL, '01', white_bold_record)
+            worksheet.write(row_counter, PAYROLLTYPE_COL, '04', white_bold_record)
+            worksheet.write(row_counter, RISK_TYPE_COL, record['payroll_receip_processed__employee__risk_type'],white_bold_record)
+            worksheet.write(row_counter, SUBSIDY_COL, '0', white_bold_record)
 
             row_counter += 1
             counter += 1

@@ -1256,7 +1256,7 @@ class EmployeePositionDescription(models.Model):
     sunday = models.BooleanField(verbose_name="Domingo", default=False)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False,related_name='employeeposition')
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina*", null=False, blank=False)
 
     direction = models.ForeignKey(Direction, verbose_name='Empresa/Proyecto*', null=False, blank=False)
@@ -1353,7 +1353,7 @@ class EmployeeFinancialData(models.Model):
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20,
                                                  decimal_places=2, null=True, blank=True)
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False,related_name='employeedata')
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
                                       verbose_name='Forma de Pago*')
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
