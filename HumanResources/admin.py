@@ -146,7 +146,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
         user = request.user
         direction_ids = AccessToDirection.get_directions_for_user(user)
-        qs = qs.filter(employeepositiondescription__direction_id__in=direction_ids)
+        qs = qs.filter(employeeposition__direction_id__in=direction_ids)
 
         return qs
 

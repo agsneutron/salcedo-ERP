@@ -12,9 +12,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='payrollprocesseddetail',
-            name='earningdeduction_key',
-            field=models.CharField(blank=True, max_length=5, null=True, verbose_name='Clave'),
-        ),
+
     ]

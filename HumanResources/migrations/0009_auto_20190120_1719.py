@@ -12,9 +12,5 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.RenameField(
-            model_name='payrollprocesseddetail',
-            old_name='earningdeduction_id',
-            new_name='earningdeduction',
-        ),
+
     ]
