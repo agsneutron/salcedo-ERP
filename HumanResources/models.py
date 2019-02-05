@@ -1256,7 +1256,7 @@ class EmployeePositionDescription(models.Model):
     sunday = models.BooleanField(verbose_name="Domingo", default=False)
 
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False,related_name='employeeposition')
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payroll_group = models.ForeignKey(PayrollGroup, verbose_name="Grupo de Nómina*", null=False, blank=False)
 
     direction = models.ForeignKey(Direction, verbose_name='Empresa/Proyecto*', null=False, blank=False)
