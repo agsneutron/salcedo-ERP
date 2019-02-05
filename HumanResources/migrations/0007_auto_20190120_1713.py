@@ -13,12 +13,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='earningsdeductions',
-            name='key',
-            field=models.CharField(default='P', max_length=5, verbose_name='Clave'),
-            preserve_default=False,
-        ),
+
         migrations.AddField(
             model_name='payrollprocesseddetail',
             name='earningdeduction_id',

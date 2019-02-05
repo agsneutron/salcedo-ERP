@@ -44,7 +44,7 @@ class PaySheetReport():
         response = StreamingHttpResponse(FileWrapper(output),
                                          content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
 
-        response['Content-Disposition'] = 'attachment; filename=Datos_para_CFD.xlsx'
+        response['Content-Disposition'] = 'attachment; filename=Datos_para_CFD.xls'
         response['Content-Length'] = output.tell()
 
         output.seek(0)

@@ -2632,10 +2632,10 @@ class AccessToDirectionAdmin(admin.ModelAdmin):
 
         if not available_directions.exists():
             custom_message = "No hay Direcciones pendientes de asignación para el usuario actual."
-            messages_list = messages.get_messages(request)
+            messages_list = django.contrib.messages.get_messages(request)
 
             if len(messages_list) <= 0:
-                messages.error(request, custom_message)
+                django.contrib.messages.error(request, custom_message)
 
         direction_field.queryset = available_directions
 
