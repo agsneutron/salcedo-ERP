@@ -293,8 +293,8 @@ class PaySheetReport():
         paysheet_detail_qry_set = paysheet_detail_set.values('payroll_receip_processed__payment_date','payroll_receip_processed__employee__employee_key','payroll_receip_processed__worked_days','payroll_receip_processed__daily_salary','payroll_receip_processed__total_payroll',
                                                                      'payroll_receip_processed__employee__tax_regime__id','payroll_receip_processed__employee__employeecontract__contract_key',
                                                              'earningdeduction_key','type','taxable','amount','payroll_receip_processed__employee__risk_type','payroll_receip_processed__employee__employeedata__aggregate_daily_salary',
-                                                             'payroll_receip_processed__employee__employeeposition__job_profile__job','payroll_receip_processed__employee__employeeposition__department__name',
-                                                             'payroll_receip_processed__employee__employeeposition__direction__id','payroll_receip_processed__payroll_period__start_period','payroll_receip_processed__payroll_period__end_period',
+                                                             'payroll_receip_processed__employee__employeepositiondescription__job_profile__job','payroll_receip_processed__employee__employeepositiondescription__department__name',
+                                                             'payroll_receip_processed__employee__employeepositiondescription__direction__id','payroll_receip_processed__payroll_period__start_period','payroll_receip_processed__payroll_period__end_period',
                                                              'payroll_receip_processed__employee__registry_date')
 
         row_counter = START_ROW
@@ -322,9 +322,9 @@ class PaySheetReport():
 
             worksheet.write(row_counter, DATE_START_COL, record['payroll_receip_processed__employee__registry_date'],gray_bold_right_date)
 
-            worksheet.write(row_counter, COST_CENTER_COL,record['payroll_receip_processed__employee__employeeposition__direction__id'],white_bold_record)
-            worksheet.write(row_counter, PROFILE_COL, record['payroll_receip_processed__employee__employeeposition__job_profile__job'],white_bold_record)
-            worksheet.write(row_counter, DEPARTMENT_COL, record['payroll_receip_processed__employee__employeeposition__department__name'],white_bold_record)
+            worksheet.write(row_counter, COST_CENTER_COL,record['payroll_receip_processed__employee__employeepositiondescription__direction__id'],white_bold_record)
+            worksheet.write(row_counter, PROFILE_COL, record['payroll_receip_processed__employee__employeepositiondescription__job_profile__job'],white_bold_record)
+            worksheet.write(row_counter, DEPARTMENT_COL, record['payroll_receip_processed__employee__employeepositiondescription__department__name'],white_bold_record)
 
             worksheet.write(row_counter, CONTRACT_KEY_COL,record['payroll_receip_processed__employee__employeecontract__contract_key'],gray_bold_right_currency)
             worksheet.write(row_counter, TAX_REGIME_COL, record['payroll_receip_processed__employee__tax_regime__id'], white_bold_record)
