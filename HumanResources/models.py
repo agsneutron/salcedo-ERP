@@ -1442,7 +1442,7 @@ class EarningsDeductions(models.Model):
                                 verbose_name="Categoria*")
     penalty = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Penalización")
 
-    key = models.CharField(verbose_name="Clave", null=False, blank=False, max_length=5)
+    key = models.CharField(verbose_name="Clave Interna", null=False, blank=False, max_length=5)
 
     class Meta:
         verbose_name_plural = "Percepciones y Deducciones"
