@@ -1530,7 +1530,7 @@ class PayrollToProcess(models.Model):
 
 class Periodicity(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
-    total_payments = models.IntegerField(verbose_name="Numero de pagos", null=False, blank=False)
+    total_payments = models.IntegerField(verbose_name="Número de pagos", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Periodicidad"

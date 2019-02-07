@@ -224,8 +224,8 @@ class EmployeeDetailView(generic.DetailView):
         # Obtaining the employee's checker info and setting it to the context.
         checker_data = CheckerData.objects.filter(employee__id=employee.id)
 
-        if (len(checker_data) > 0):
-            context['checker_data'] = checker_data[0]
+        context['checker_data'] = checker_data
+
 
         # Obtaining the employee's position description and setting it to the context.
         context['employee_position_description'] = EmployeePositionDescription.objects.filter(employee__id=employee.id)
