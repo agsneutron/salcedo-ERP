@@ -2630,7 +2630,6 @@ class ISRTableAdmin(admin.ModelAdmin):
     pass
 
 
-
 # Payroll Type Admin.
 @admin.register(Periodicity)
 class PeriodicityAdmin(admin.ModelAdmin):
@@ -2638,12 +2637,13 @@ class PeriodicityAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Tipos de Periodicidad", {
-            'fields': ('name',)
+            'fields': ('name', 'total_payments')
         }),
     )
 
     list_display = (
-        'name',)
+        'name', 'total_payments')
+
 
 @admin.register(AccessToDirection)
 class AccessToDirectionAdmin(admin.ModelAdmin):
