@@ -16,9 +16,33 @@
     </style>
 {% endblock %}
 
-
-
 {% block content %}
+
+
+    <div class="col-xs-12 col-sm-6 text-left">
+        <span href="" class="list-group-item withripple "><i
+                class="fa fa-chevron-right color-active"></i> <span
+                class="color-active">Clave del Proyecto:</span> {{ projectdata.key }} </span>
+        <span href="" class="list-group-item withripple "><i
+                class="fa fa-chevron-right color-active"></i> <span
+                class="color-active">Nombre del Proyecto:</span> {{ projectdata.nombreProyecto  }} </span>
+        <br>
+    </div>
+
+    <div class="col-xs-12 col-sm-6 text-left">
+        <span href="" class="list-group-item withripple "><i
+                class="fa fa-chevron-right color-active"></i> <span
+                class="color-active">Fecha Inicio:</span> {{ projectdata.fecha_inicial }} </span>
+        <span href="" class="list-group-item withripple "><i
+                class="fa fa-chevron-right color-active"></i> <span
+                class="color-active">Fecha Final:</span> {{ projectdata.fecha_final }} </span>
+    </div>
+
+
+
+
+
+
     {% include "ERP/header_list.html" %}
     <div id="content-main">
 
@@ -60,7 +84,7 @@
         </form>
 
 
-        {#        <div><a href="/admin/ERP/estimate/add?project={{ project }}">Agregar</a></div>#}
+        {#<div><a href="/admin/ERP/estimate/add?project={{ project }}">Agregar</a></div>#}
 
         <div class="row">
             <div class="col-xs-12">

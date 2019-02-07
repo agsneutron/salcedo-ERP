@@ -291,7 +291,7 @@ class PropietarioAdmin(admin.ModelAdmin):
         estado.widget.can_add_related = False
         estado.widget.can_change_related = False
         municipio.widget.can_add_related = False
-        municipio.widget.can_change_related = False
+        municipio.widget.can_change_related = False3
 
         return ModelForm
 '''

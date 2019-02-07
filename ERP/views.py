@@ -931,14 +931,13 @@ class EstimateListView(ListView):
         context['title_list'] = EstimateListView.title_list
         context['form'] = EstimateSearchForm(EstimateListView.project_id)
         context['add_url'] = EstimateListView.add_url + str(EstimateListView.project_id)
-
         context['add_form'] = AddEstimateForm(EstimateListView.project_id)
-
+        context['projectdata'] = Project.objects.get(id=EstimateListView.project_id)
         AddEstimateFormSet = formset_factory(AddEstimateForm)
-
         context['formset'] = AddEstimateFormSet()
-
         return context
+
+
 
     def dispatch(self, request, *args, **kwargs):
         user_has_access = AccessToProject.user_has_access_to_project(request.user.id, kwargs['project'])

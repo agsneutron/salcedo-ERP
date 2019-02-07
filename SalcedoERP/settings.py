@@ -60,8 +60,15 @@ INSTALLED_APPS = [
     'Accounting',
     'multiselectfield',
     'tinymce',
-'django.contrib.humanize',
+    'django.contrib.humanize',
+
 ]
+
+
+# TEMPLATE_CONTEXT_PROCESSORS = (
+#
+#     'django.core.context_processors.request',
+# )
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -90,6 +97,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
         },
     },

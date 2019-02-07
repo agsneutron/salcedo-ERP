@@ -1374,7 +1374,7 @@ class InfonavitData(models.Model):
     infonavit_credit_number = models.CharField(verbose_name="Número de Crédito*", null=False, blank=False,
                                                max_length=30, )
     discount_type = models.CharField(verbose_name="Tipo de Descuento*", null=False, blank=False, max_length=30, )
-    discount_amount = models.CharField(verbose_name="Monto de Descuento*", null=False, blank=False, max_length=30, )
+    discount_amount = models.FloatField(verbose_name="Monto de Descuento*", null=False, blank=False, default=0.00, )
     start_date = models.DateField(verbose_name="Fecha de Inicio*", null=False, blank=False)
     credit_term = models.CharField(verbose_name="Duración de Crédito*", null=False, blank=False, max_length=200)
     comments = models.TextField(verbose_name="Observaciones", null=True, blank=True, max_length=500,

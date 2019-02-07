@@ -8,6 +8,8 @@ from ERP.views import CompaniesListView
 
 urlpatterns = [
 
+
+
     url(r'^progress_estimate_log$', views.progress_estimate_log_view, name='progress_estimate_log_view'),
     #
     # Endpoints to retrieve information.
@@ -33,6 +35,7 @@ urlpatterns = [
 
     # Endpoint to manage user assignment to a project.
     url(r'^api/get_access_to_project_by_user', api.AccessToProjectByUser.as_view()),
+
 
 ]
 

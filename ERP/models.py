@@ -536,7 +536,7 @@ class ContratoContratista(models.Model):
     lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=True,
                                        editable=True)
     monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
-                                         default=0, max_digits=20)
+                                         default=0.00, max_digits=20)
     porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,
                                          null=False, default=0, max_digits=5)
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True,
@@ -570,7 +570,7 @@ class ContratoContratista(models.Model):
                                             null=True, blank=True)
     assigment_number = models.IntegerField(verbose_name="Número de asignación", null=False, blank=False)
     pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
-    advanced_payment = models.FloatField(verbose_name="Anticipio", null=False, blank=False, default=0)
+    advanced_payment = models.FloatField(verbose_name="Anticipio", null=False, blank=False, default=0.00)
 
     class Meta:
         verbose_name_plural = 'Contratos'
@@ -622,6 +622,27 @@ class ContractConcepts(models.Model):
     contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False)
     concept = models.ForeignKey('Concept_Input', verbose_name="Concepto", null=False, blank=False)
     amount = models.DecimalField(verbose_name="Cantidad", null=False, blank=False, decimal_places=2, max_digits=12)
+    ThisEstimate = models.DecimalField(verbose_name="A Esta Estomacion", null=False, decimal_places=2, max_digits=12)
+    OfThisEstimate = models.DecimalField(verbose_name="De Esta Estimacion", null=False, decimal_places=2, max_digits=12)
+
+    class Meta:
+        verbose_name_plural = "ContractConcepts"
+
+    def __unicode__(self):
+        return "{0}".format(self.ThisEstimate)
+
+    @staticmethod
+    def handle_update(pk, ThisEstimate, OfThisEstimate):
+        if pk > 0:
+            var = ContractConcepts.object.get_or_create(pk=pk)
+        else:
+            ContractConcepts()
+
+        var.ThisEstimate = ThisEstimate
+        var.OfThisEstimate = OfThisEstimate
+        var.save()
+
+        return var.pk
 
 
 # Propietario
@@ -1557,6 +1578,8 @@ class ProgressEstimate(models.Model):
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
+    paid_out = models.FloatField(verbose_name="Pagado", null=False, blank=False, default=0.00)
+
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
                                       verbose_name="Justificación", blank=True)
 
