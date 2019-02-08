@@ -262,6 +262,17 @@ class Employee(models.Model):
     tags = models.ManyToManyField("Tag", verbose_name="Certificaciones", through="EmployeeHasTag")
     tests = models.ManyToManyField("Test", verbose_name="Pruebas", through="TestApplication")
 
+    direction = models.ForeignKey('Direction', verbose_name='Empresa/Proyecto*', null=False, blank=False)
+    # subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección*', null=False, blank=False)
+    subdirection = ChainedForeignKey('Subdirection',
+                                     chained_field="direction",
+                                     chained_model_field="direction",
+                                     show_all=False,
+                                     auto_choose=True,
+                                     sort=True,
+                                     verbose_name='Subdirección*',
+                                     )
+
     def get_full_name(self):
         return self.name + " " + self.first_last_name + " " + self.second_last_name
 
@@ -1688,7 +1699,7 @@ class EmployeeLoanDetail(models.Model):
     class Meta:
         verbose_name_plural = "Préstamos Detalle"
         verbose_name = "Préstamo Detalle"
-        #unique_together = ('employeeloan', 'period')
+        unique_together = ('employeeloan', 'period')
 
     def delete(self):
         payrollExist = PayrollReceiptProcessed.objects.filter(employee_id=self.employeeloan.employee_id,
@@ -1721,11 +1732,12 @@ class EmployeeLoanDetail(models.Model):
     #         self.deduction.save()
     #         super(EmployeeLoanDetail, self).save(*args, **kwargs)
     #
-    # def unique_error_message(self, model_class, unique_check):
-    #     if model_class == type(self) and unique_check == ('employeeloan', 'period'):
-    #         return 'la amortización del préstamo para este periodo ya existe'
-    #     else:
-    #         return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
+    def unique_error_message(self, model_class, unique_check):
+         if model_class == type(self) and unique_check == ('employeeloan', 'period'):
+             return 'la amortización del préstamo para este periodo ya existe'
+         else:
+             return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
+
 
     
 class EarningDeductionPeriod(models.Model):
