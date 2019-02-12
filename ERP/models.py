@@ -681,7 +681,8 @@ class ContratoContratista(models.Model):
     def __unicode__(self):
         return "Clave del Contrato: " + self.clave_contrato + " -  Contratista: " + self.contratista.nombreContratista
 
-class Partidas(models.Model):
+
+class PartidasContratoContratista(models.Model):
     line_item = ChainedForeignKey(
         'LineItem',
         chained_field="project",
@@ -698,6 +699,7 @@ class Partidas(models.Model):
     fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True)
     fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True)
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True,editable=True)
+    contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
 
 
 class DistribucionPago(models.Model):
@@ -711,12 +713,13 @@ class DistribucionPago(models.Model):
         sort=True,
         verbose_name="Partida"
     )
+    contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
 
 
-class Documentacion(models.Model):
+class DocumentacionContrato(models.Model):
     nombre_archivo = models.CharField(verbose_name='Nombre del Archivo: ', max_length=50, null=False, blank=True)
     pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
-
+    contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
 
 
 # Class to define the concepts in a Contractor Contract.

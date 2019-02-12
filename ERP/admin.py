@@ -830,9 +830,9 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-            'clave_contrato', 'project', 'line_item', 'no_licitacion', 'contratista', 'modalidad_contrato',
-            'dias_pactados', 'dependencia', 'fecha_firma', 'fecha_inicio', 'fecha_termino',
-            'monto_contrato', 'porcentaje_iva', 'advanced_payment',  'assigment_number', 'pdf_version',  'payment_distribution', 'objeto_contrato',
+            'clave_contrato', 'project', 'no_licitacion', 'contratista', 'modalidad_contrato',
+            'dependencia', 'fecha_firma', 'fecha_inicio', 'fecha_termino',
+            'porcentaje_iva',  'assigment_number', 'objeto_contrato',
             'lugar_ejecucion', 'observaciones', 'version')
         return fields
 
@@ -1373,3 +1373,6 @@ admin.site.register(AccessToProject, AccessToProjectAdmin)
 admin.site.register(Section)
 admin.site.register(ProjectSections)
 admin.site.register(Bank)
+admin.site.register(DistribucionPago)
+admin.site.register(DocumentacionContrato)
+admin.site.register(PartidasContratoContratista)
