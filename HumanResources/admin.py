@@ -128,7 +128,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Datos de Empleado", {
-            'fields': ('direction', 'subdirection', 'employee_key', 'type', 'registry_date', 'status', 'photo')
+            'fields': ('direction', 'employee_key', 'type', 'registry_date', 'status', 'photo')
         }),
         ("Datos Personales", {
             'fields': (
@@ -146,7 +146,7 @@ class EmployeeAdmin(admin.ModelAdmin):
 
         user = request.user
         direction_ids = AccessToDirection.get_directions_for_user(user)
-        qs = qs.filter(employeepositiondescription__direction_id__in=direction_ids)
+        qs = qs.filter(direction_id__in=direction_ids)
 
         return qs
 
@@ -245,6 +245,7 @@ class EmployeeAdmin(admin.ModelAdmin):
     def response_change(self, request, obj):
         redirect_url = "/admin/HumanResources/employee/" + str(obj.id) + "/change/?employee=" + str(obj.id)
         return HttpResponseRedirect(redirect_url)
+
 
 
 # Education Admin.

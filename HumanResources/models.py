@@ -263,15 +263,6 @@ class Employee(models.Model):
     tests = models.ManyToManyField("Test", verbose_name="Pruebas", through="TestApplication")
 
     direction = models.ForeignKey('Direction', verbose_name='Empresa/Proyecto*', null=False, blank=False)
-    # subdirection = models.ForeignKey('Subdirection', verbose_name='Subdirección*', null=False, blank=False)
-    subdirection = ChainedForeignKey('Subdirection',
-                                     chained_field="direction",
-                                     chained_model_field="direction",
-                                     show_all=False,
-                                     auto_choose=True,
-                                     sort=True,
-                                     verbose_name='Subdirección*',
-                                     )
 
     def get_full_name(self):
         return self.name + " " + self.first_last_name + " " + self.second_last_name
