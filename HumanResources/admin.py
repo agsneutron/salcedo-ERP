@@ -1185,29 +1185,64 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
 
         return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).add_view(request, form_url, extra_context=extra)
 
+    def change_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+
+        extra = extra_context or {}
+
+
+        employee_id = request.GET.get('employee')
+        payrollperiod_id = request.GET.get('payrollperiod')
+        payroll_group_id = request.GET.get('payrollgroup')
+        employee_position = EmployeePositionDescription.objects.filter(employee_id=employee_id)
+        employee_data = Employee.objects.filter(id=employee_id)
+        earnings_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='P')
+        deductions_set = EmployeeEarningsDeductions.objects.filter(employee_id=employee_id).filter(concept__type='D')
+        earnings_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
+            concept__type='P').filter(payroll_period=payrollperiod_id)
+        deductions_by_period_set = EmployeeEarningsDeductionsbyPeriod.objects.filter(employee_id=employee_id).filter(
+            concept__type='D').filter(payroll_period=payrollperiod_id)
+        payroll_set = PayrollPeriod.objects.filter(id=payrollperiod_id)
+
+        extra['template'] = "employee_earnings_deductions"
+        extra['payrolldata'] = payroll_set
+        extra['employeedata'] = employee_data
+        extra['employeeposition'] = employee_position
+        extra['earnings'] = earnings_set
+        extra['deductions'] = deductions_set
+        extra['periodearnings'] = earnings_by_period_set
+        extra['perioddeductions'] = deductions_by_period_set
+        extra['show_delete_link'] = False
+
+        return super(EmployeeEarningsDeductionsbyPeriodAdmin, self).change_view(request, form_url, extra_context=extra)
+
     def response_delete(self, request, obj_display, obj_id):
         employee_id = request.GET.get('employee')
         payroll_period_id = request.GET.get('payrollperiod')
-        django.contrib.messages.success(request, "Deducción borrada exitosamente.")
+        payroll_group_id = request.GET.get('payrollgroup')
+        django.contrib.messages.success(request, "Prestación/Deducción borrada exitosamente.")
 
         return HttpResponseRedirect(
-            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
+            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id)
 
     def response_change(self, request, obj):
         employee_id = request.GET.get('employee')
         payroll_period_id = request.GET.get('payrollperiod')
-        django.contrib.messages.success(request, "La deducción se modificó exitosamente.")
+        payroll_group_id = request.GET.get('payrollgroup')
+        django.contrib.messages.success(request, "Prestación/deducción modificada exitosamente.")
 
         return HttpResponseRedirect(
-            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id)
+            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id)
 
         # To redirect after add
 
     def response_add(self, request, obj, post_url_continue=None):
         employee_id = request.GET.get('employee')
         payroll_period_id = request.GET.get('payrollperiod')
-        redirect_url = "/humanresources/employeebyperiod?&payrollperiod=" + str(
-            payroll_period_id) + "&payrollgroup=" + request.GET.get('payrollgroup')
+        payroll_group_id = request.GET.get('payrollgroup')
+        #redirect_url = "/humanresources/employeebyperiod?&payrollperiod=" + str(
+        #    payroll_period_id) + "&payrollgroup=" + request.GET.get('payrollgroup')
+        redirect_url = "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id + ""
         return HttpResponseRedirect(redirect_url)
 
 
@@ -1373,12 +1408,13 @@ class EarningsDeductionsAdmin(admin.ModelAdmin):
         ("Catálogo de Percepciones y Deducciones", {
             'fields': (
                 'name', 'type', 'category', 'taxable', 'percent_taxable', 'sat_key',
-                'status', 'comments',)
+                'status', 'key', 'comments',)
         }),
     )
 
-    list_display = ('name', 'type', 'percent_taxable', 'get_change_link', 'get_delete_link')
+    list_display = ('key', 'name', 'type', 'percent_taxable', 'get_change_link', 'get_delete_link')
     list_display_links = None
+
 
     def response_delete(self, request, obj_display, obj_id):
 
@@ -2594,7 +2630,6 @@ class ISRTableAdmin(admin.ModelAdmin):
     pass
 
 
-
 # Payroll Type Admin.
 @admin.register(Periodicity)
 class PeriodicityAdmin(admin.ModelAdmin):
@@ -2602,12 +2637,13 @@ class PeriodicityAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Tipos de Periodicidad", {
-            'fields': ('name',)
+            'fields': ('name', 'total_payments')
         }),
     )
 
     list_display = (
-        'name',)
+        'name', 'total_payments')
+
 
 @admin.register(AccessToDirection)
 class AccessToDirectionAdmin(admin.ModelAdmin):
@@ -2632,10 +2668,10 @@ class AccessToDirectionAdmin(admin.ModelAdmin):
 
         if not available_directions.exists():
             custom_message = "No hay Direcciones pendientes de asignación para el usuario actual."
-            messages_list = messages.get_messages(request)
+            messages_list = django.contrib.messages.get_messages(request)
 
             if len(messages_list) <= 0:
-                messages.error(request, custom_message)
+                django.contrib.messages.error(request, custom_message)
 
         direction_field.queryset = available_directions
 

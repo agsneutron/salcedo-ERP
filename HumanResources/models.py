@@ -354,7 +354,7 @@ def upload_employee_contract(instance, filename):
 
 
 class EmployeeContract(models.Model):
-    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name='Empleado', null=False, blank=False,related_name='employeecontract')
 
     contract_key = models.CharField(verbose_name="Clave del Contrato", max_length=64, null=False, blank=False, unique=True)
 
@@ -1353,7 +1353,7 @@ class EmployeeFinancialData(models.Model):
     aggregate_daily_salary = models.DecimalField(verbose_name='Salario Diario Acumulado', max_digits=20,
                                                  decimal_places=2, null=True, blank=True)
     # Foreign Keys.
-    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
+    employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False,related_name='employeedata')
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
                                       verbose_name='Forma de Pago*')
     payment_method = models.CharField(max_length=1, choices=PAYMENT_METHOD_CHOICES, default=DEPOSITO,
@@ -1442,6 +1442,8 @@ class EarningsDeductions(models.Model):
                                 verbose_name="Categoria*")
     penalty = models.CharField(max_length=1, choices=YNTYPE_CHOICES, default=NO, verbose_name="Penalización")
 
+    key = models.CharField(verbose_name="Clave Interna", null=False, blank=False, max_length=5)
+
     class Meta:
         verbose_name_plural = "Percepciones y Deducciones"
         verbose_name = "Percepciones y Deducciones"
@@ -1528,7 +1530,7 @@ class PayrollToProcess(models.Model):
 
 class Periodicity(models.Model):
     name = models.CharField(verbose_name="Nombre", null=False, blank=False, max_length=30, )
-    total_payments = models.IntegerField(verbose_name="Numero de pagos", null=False, blank=False)
+    total_payments = models.IntegerField(verbose_name="Número de pagos", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Periodicidad"
@@ -1699,31 +1701,31 @@ class EmployeeLoanDetail(models.Model):
             delModel.deleteFromEmployeeLoanDetail(self)
             super(EmployeeLoanDetail, self).delete()
 
-    def save(self, *args, **kwargs):
-        if self.deduction is None:
-            deduction = EmployeeEarningsDeductionsbyPeriod()
-            deduction.ammount = self.amount
-            deduction.date = now()
-            deduction.employee_id = self.employeeloan.employee.id
-            deduction.concept_id = 59
-            deduction.payroll_period_id = self.period
-            deduction.save()
-            self.deduction_id = deduction.id
-            super(EmployeeLoanDetail, self).save(*args, **kwargs)
-        else:
-            self.deduction.ammount = self.amount
-            self.deduction.date = now()
-            self.deduction.employee_id = self.employeeloan.employee.id
-            self.deduction.concept_id = 59
-            self.deduction.payroll_period_id = self.period
-            self.deduction.save()
-            super(EmployeeLoanDetail, self).save(*args, **kwargs)
-
-    def unique_error_message(self, model_class, unique_check):
-        if model_class == type(self) and unique_check == ('employeeloan', 'period'):
-            return 'la amortización del préstamo para este periodo ya existe'
-        else:
-            return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
+    # def save(self, *args, **kwargs):
+    #     if self.deduction is None:
+    #         deduction = EmployeeEarningsDeductionsbyPeriod()
+    #         deduction.ammount = self.amount
+    #         deduction.date = now()
+    #         deduction.employee_id = self.employeeloan.employee.id
+    #         deduction.concept_id = 59
+    #         deduction.payroll_period_id = self.period
+    #         deduction.save()
+    #         self.deduction_id = deduction.id
+    #         super(EmployeeLoanDetail, self).save(*args, **kwargs)
+    #     else:
+    #         self.deduction.ammount = self.amount
+    #         self.deduction.date = now()
+    #         self.deduction.employee_id = self.employeeloan.employee.id
+    #         self.deduction.concept_id = 59
+    #         self.deduction.payroll_period_id = self.period
+    #         self.deduction.save()
+    #         super(EmployeeLoanDetail, self).save(*args, **kwargs)
+    #
+    # def unique_error_message(self, model_class, unique_check):
+    #     if model_class == type(self) and unique_check == ('employeeloan', 'period'):
+    #         return 'la amortización del préstamo para este periodo ya existe'
+    #     else:
+    #         return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
 
     
 class EarningDeductionPeriod(models.Model):
@@ -1811,6 +1813,9 @@ class PayrollProcessedDetail(models.Model):
     taxable = models.CharField(verbose_name="Gravable", max_length=64)
     category = models.CharField(verbose_name="Categoria", max_length=64)
     amount = models.FloatField(verbose_name="Monto", null=False)
+
+    earningdeduction = models.ForeignKey(EarningsDeductions, verbose_name="Id_PercepcionDeduccion",null=True, blank=True)
+    earningdeduction_key = models.CharField(verbose_name="Clave", null=True, blank=True, max_length=5, )
 
     class Meta:
         verbose_name_plural = "Detalle de Nómina Procesada"

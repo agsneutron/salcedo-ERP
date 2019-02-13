@@ -68,20 +68,21 @@
     <script>
         $( document ).ready(function() {
             //alert(window.location.hash);
-            $('.nav-tabs a[href="'+ window.location.hash +'"]').tab('show')
+            $('.nav-tabs a[href="'+ location.hash +'"]').tab('show');
 
             $('#EED').click(function () {
-                $('.nav-tabs a[href="#employeeED"]').tab('show')
+                $('.nav-tabs a[href="#employeeED"]').tab('show');
+            });
 
             $('#EFD').click(function () {
-                $('.nav-tabs a[href="#financialdata"]').tab('show')
+                $('.nav-tabs a[href="#financialdata"]').tab('show');
 
-            })
+            });
 
             $('#EFD').click(function () {
-                $('.nav-tabs a[href="#financialdata"]').tab('show')
+                $('.nav-tabs a[href="#financialdata"]').tab('show');
 
-            })
+            });
         });
     </script>
 {% endblock %}
@@ -1040,13 +1041,17 @@
                                             <strong>Tipo de
                                                 Checador: </strong> {{ checker_data.get_checker_type_display }}
                                         </label>{% endcomment %}
-                                        <label id="checaEntrada" class="text-center {{ checker_data.checks_entry }}">
+                                        {% for chk in checker_data %}
+
+                                            <label id="checaEntrada" class="text-center {{ chk.checks_entry }}">
 
 
-                                        </label>
-                                        <label id="checaSalida" class="text-center {{ checker_data.checks_exit }}">
+                                            </label>
+                                            <label id="checaSalida" class="text-center {{ chk.checks_exit }}">
+                                            </label>
 
-                                        </label>
+                                        {% endfor %}
+
                                     </div>
                                 </div>
                             </div>
@@ -1232,7 +1237,7 @@
                                                 <th>Sala. Mensual</th>
                                                 <th>Sala. Diario</th>
                                                 <th>SDA</th>
-                                                <th>Tipo de Cuenta</thH>
+                                                <th>Tipo de Cuenta</th>
                                                 <th>Notas</th>
 
                                             </tr>
@@ -1274,10 +1279,10 @@
         if ($(checkEntrada).hasClass("True")) {
             checkEntrada.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1"><i class="zmdi zmdi-check"></i></button> <br>Checa Entrada';
         } else {
-            checkEntrada.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
+            checkEntrada.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Entrada';
         }
         if ($(checkSalida).hasClass("True")) {
-            checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1"><i class="zmdi zmdi-check"></i></button> <br>Checa Entrada';
+            checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-primary mb-1"><i class="zmdi zmdi-check"></i></button> <br>Checa Salida';
         } else {
             checkSalida.innerHTML += ' <button href="" class="btn-circle btn-circle-xs btn-circle-raised btn-circle-default mb-1"><i class="zmdi zmdi-close"></i></button> <br>Checa Salida';
         }
@@ -1292,7 +1297,3 @@ $(document).ready(function() {
 
 
 {% endblock %}
-
-
-
-

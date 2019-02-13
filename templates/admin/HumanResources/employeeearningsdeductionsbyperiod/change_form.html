@@ -82,7 +82,7 @@
                     {% endfor %}
                     {% for record in payrolldata %}
                         <li class="list-group-item">
-                            <strong>Periodo:</strong> {{ record.name }}
+                            <strong>Periodo: <a href="/humanresources/employeebyperiod?payrollperiod={{ request.GET.payrollperiod }}&payrollgroup={{ request.GET.payrollgroup }}">{{ record.name }} </a> </strong>
                         </li>
                         <li class="list-group-item">
                             <strong>Inicio de Periodo:</strong> {{ record.start_period }}
@@ -151,11 +151,11 @@
                                 <td style="border:1px solid">{{ record.ammount }}</td>
 
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}"  class="btn btn-raised btn-default btn-xs"><i
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}&payrollperiod={{ request.GET.payrollperiod }}&payrollgroup={{ request.GET.payrollgroup }}"  class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-pencil color-default eliminar"></i>
                                 </td>
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/" class="btn btn-raised btn-default btn-xs"><i
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/?employee={{ request.GET.employee }}&payrollperiod={{ request.GET.payrollperiod }}&payrollgroup={{ request.GET.payrollgroup }}" class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-trash-o color-danger eliminar"></i>
                                     </a>
                                 </td>
@@ -199,12 +199,12 @@
                                  <td style="border:1px solid">{{ record.ammount }}</td>
 
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}&payrollperiod={{ request.GET.payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/change/?employee={{ request.GET.employee }}&payrollperiod={{ request.GET.payrollperiod }}&payrollgroup={{ request.GET.payrollgroup }}" class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-pencil color-default eliminar"></i>
                                     </a>
                                 </td>
                                 <td style="border:1px solid">
-                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/?employee={{ request.GET.employee }}&payrollperiod={{ request.GET.payrollperiod }}" class="btn btn-raised btn-default btn-xs"><i
+                                    <a href="/admin/HumanResources/employeeearningsdeductionsbyperiod/{{ record.id }}/delete/?employee={{ request.GET.employee }}&payrollperiod={{ request.GET.payrollperiod }}&payrollgroup={{ request.GET.payrollgroup }}" class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-trash-o color-danger eliminar"></i>
                                     </a>
                                 </td>
