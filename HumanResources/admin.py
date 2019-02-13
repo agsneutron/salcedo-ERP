@@ -32,7 +32,7 @@ from django.http.response import HttpResponseRedirect
 from django.http import QueryDict
 
 from HumanResources import views
-from HumanResources.views import EarningsDeductionsListView, AccessToDirectionAdminListView
+from HumanResources.views import EarningsDeductionsListView, AccessToDirectionAdminListView, JobProfileListView
 
 # Importing the forms.
 from HumanResources.forms import *
@@ -2309,20 +2309,22 @@ class JobProfileAdmin(admin.ModelAdmin):
         }),
     )
 
-    def get_change_column(self, obj):
-        return HumanResourcesAdminUtilities.get_change_link_with_employee(obj, obj.id)
+    def get_queryset(self, request):
+        qs = super(JobProfileAdmin, self).get_queryset(request)
 
-    def get_delete_column(self, obj):
-        return HumanResourcesAdminUtilities.get_delete_link(obj)
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(direction__in=direction_ids)
 
-    get_change_column.allow_tags = True
-    get_change_column.short_description = 'Editar'
+        return qs
 
-    get_delete_column.allow_tags = True
-    get_delete_column.short_description = 'Eliminar'
-
-    list_display = ('job', 'direction', 'subdirection', 'area', 'department', 'get_change_column', 'get_delete_column')
-    search_fields = ('job', 'direction__name', 'subdirection__name', 'area__name', 'department__name',)
+    def get_urls(self):
+        urls = super(JobProfileAdmin, self).get_urls()
+        my_urls = [
+            url(r'^$', self.admin_site.admin_view(JobProfileListView.as_view()),
+                name='jobprofile-list'),
+        ]
+        return my_urls + urls
 
 
 # Loan Admin.

@@ -26,7 +26,7 @@ from django.http import HttpResponse
 from django.template import RequestContext, loader
 
 from HumanResources.api import PayrollUtilities
-
+import getpass
 
 def get_array_or_none(the_string):
     if the_string is None:
@@ -737,3 +737,34 @@ class AccessToDirectionAdminListView(ListView):
         context['user_id'] = self.request.GET.get('user')
 
         return context
+
+
+# jobprofile
+class JobProfileListView(ListView):
+    model = JobProfile
+    template_name = 'HumanResources/jobprofile-list.html'
+    query = None
+    direction_id = None
+
+    # def get_queryset(self, request):
+    #     qs = super(JobProfileListView, self).get_queryset(request)
+    #
+    #     user = request.user
+    #     direction_ids = AccessToDirection.get_directions_for_user(user)
+    #     qs = qs.filter(direction__in=direction_ids)
+    #
+    #     return qs
+
+    def get_context_data(self, **kwargs):
+        context = super(JobProfileListView, self).get_context_data(**kwargs)
+        context['title_list'] = "Perfil de Puesto"
+
+        #print self.request.user
+        direction_ids = AccessToDirection.get_directions_for_user(self.request.user)
+
+        #for i in direction_ids:
+        #    print i
+        context['jobprofile'] = JobProfile.objects.filter(direction_id__in=direction_ids)
+
+        return context
+

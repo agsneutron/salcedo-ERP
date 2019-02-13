@@ -978,7 +978,6 @@ class EmployeeRequisition(models.Model):
         verbose_name_plural = "Requisiciones de Personal"
 
 
-
 # To represent a Job Profile.
 class JobProfile(models.Model):
     job = models.CharField(verbose_name="Puesto", max_length=2048, null=False, blank=False,
@@ -1000,7 +999,6 @@ class JobProfile(models.Model):
                                    unique=False)
     minimumrequirements = tinymce_models.HTMLField(verbose_name="Requisitos Mínimos del Puesto", max_length=2048, null=False, blank=True,
                                   unique=False)
-
 
     entry_time = models.TimeField(verbose_name="Horario de Entrada", null=False, blank=False)
     exit_time = models.TimeField(verbose_name="Horario de Salida", null=False, blank=False)
@@ -1730,7 +1728,6 @@ class EmployeeLoanDetail(models.Model):
              return super(EmployeeLoanDetail, self).unique_error_message(model_class, unique_check)
 
 
-    
 class EarningDeductionPeriod(models.Model):
     '''
         Earnings and deductions to be applied to the employee.
