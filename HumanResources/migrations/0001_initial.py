@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('ERP', '__first__'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('SharedCatalogs', '0004_internalcompany_logo_file'),
+
     ]
 
     operations = [
