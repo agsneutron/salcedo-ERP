@@ -9,7 +9,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('HumanResources', '0004_auto_20190114_1453'),
-        ('HumanResources', '0005_employee_risk_type'),
+
     ]
 
     operations = [
