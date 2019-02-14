@@ -252,20 +252,22 @@
                         </div>
                         </div>
                     {% endif %}{% endcomment %}
-                        {% if field.field.name == "advanced_payment" %}
-                            <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group field-{{ field.field.name }}">
-                                    <div>
-                                        {{ field.label_tag }}
-                                        {{ field.field|addcss:"form-control" }}
-                                        {{ field.errors }}
-                                    </div>
-                                </div>
-                            </div>
-                        {% endif %}
-                    {% if field.field.name == "assigment_number" %}
 
+                    {% if field.field.name == "advanced_payment" %}
+                        <div class="row">
+                        <div class="col-sm-3">
+                            <div class="form-group field-{{ field.field.name }}">
+
+                                {{ field.label_tag }}
+                                <div class="input-group">
+                                    <div class="input-group-addon">$</div>
+                                    {{ field.field|addcss:"form-control" }}
+                                </div>
+                                {{ field.errors }}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if field.field.name == "assigment_number" %}
                         <div class="col-sm-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
