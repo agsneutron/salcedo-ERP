@@ -848,7 +848,7 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def response_add(self, request, obj, post_url_continue="../%s/"):
-        return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id))
+        return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id) + "/change/?contrato=" + str(obj.id))
 
     def has_add_permission(self, request):
         if request.user.has_perm('ERP.add_contratocontratista'):
@@ -876,7 +876,7 @@ class ContractConceptsAdmin(admin.ModelAdmin):
     form = ContractConceptsForm
 
     def get_amounts_per_contract(self, contract_id):
-        line_item_id = ContratoContratista.objects.get(pk=contract_id).line_item.id
+        line_item_id = PartidasContratoContratista.objects.get(pk=contract_id).line_item.id
 
         concepts = Concept_Input.objects.filter(line_item_id=line_item_id)
         response = []

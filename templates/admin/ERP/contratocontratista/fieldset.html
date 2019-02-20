@@ -27,15 +27,52 @@
             {% endfor %}
         </div>
     {% endfor %}{% endcomment %}
+<h2 class="text-center">Contratos a Contratistas</h2>
+ <hr>
 
     <div class="card ">
-        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
-            <li role="presentation" class="active">
-                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="">Contrato de Contratistas</span>
-                </a>
-            </li>
-        </ul>
+{#        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">#}
+{#            <li role="presentation" class="active">#}
+{#                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">#}
+{#                    <span class="">Contrato de Contratistas</span>#}
+{#                </a>#}
+{#            </li>#}
+{#        </ul>#}
+
+                    <div class="btn-group btn-group-justified btn-group-raised">
+                        <a class="btn btn-primary contrato-menu"
+                           href="{% if request.GET.contrato %}/admin/ERP/contratocontratista/{{ request.GET.contrato }}/change/{% else %}#{% endif %}">
+                            Datos Generales del Contrato
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_contratocontratista_add,admin:ERP_contratocontratista_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                        <a class="btn btn-primary contrato-menu{% if request.GET.contrato %}{{ request.GET.contrato }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.contrato %}/admin/ERP/partidascontratocontratista/add/?contrato={{ request.GET.contrato }}{% else %}#{% endif %}">
+                            Partidas
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_partidascontratocontratista_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                        <a class="btn btn-primary contrato-menu{% if request.GET.contrato %}{{ request.GET.contrato }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.contrato %}/admin/ERP/distribucionpago/add/?contrato={{ request.GET.contrato }}{% else %}#{% endif %}">Distribución de Pago
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_distribucionpago_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                        <a class="btn btn-primary contrato-menu{% if request.GET.contrato %}
+                               {{ request.GET.contrato }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.contrato %}/admin/ERP/documentacioncontrato/add/?contrato={{ request.GET.contrato }}{% else %}#{% endif %}">Documentación
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_documentacioncontrato_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                    </div>
+
 
         <div class="card-block">
             <div class="tab-content">
@@ -45,9 +82,8 @@
                         {% if field.field.name == "clave_contrato" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                             <div class="row">
-                            <h2 class="text-center">Datos Generales</h2>
 
-                            <hr>
+
                             <div class="col-sm-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>
