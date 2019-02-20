@@ -143,14 +143,13 @@ class Saveamountofestimate(View):
             Hasta_Estimacion = request.GET.get('AEstaEstimacion')
             De_Estimacion = request.GET.get('DeEstaEstimacion')
 
-            Concept = ContractConcepts.object.filter(id__in=ID_Estimate)
-            print "id del concepto"
-            print Concept
+            Concept = ContractConcepts.objects.filter(id=ID_Estimate)
+
 
             if Concept:
                 Concept.OfThisEstimate = De_Estimacion
                 Concept.ThisEstimate = Hasta_Estimacion
-                Concept.addPSS.save();
+                Concept.save()
 
                 return HttpResponse('ok', 'application/json; charset=utf-8')
             else:

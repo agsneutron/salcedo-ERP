@@ -626,7 +626,7 @@ class ContratoContratista(models.Model):
 
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True)
-    fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True)
+    fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True, null=True)
     lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=True,editable=True)
 
     porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,null=False, default=0, max_digits=5)
@@ -640,7 +640,6 @@ class ContratoContratista(models.Model):
     project = models.ForeignKey('Project', verbose_name='Proyecto', null=False, blank=False)
     modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,blank=False)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
-
 
     # Aggregated fields as part of the requirements found in the training.
 
@@ -728,8 +727,8 @@ class ContractConcepts(models.Model):
     contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False)
     concept = models.ForeignKey('Concept_Input', verbose_name="Concepto", null=False, blank=False)
     amount = models.DecimalField(verbose_name="Cantidad", null=False, blank=False, decimal_places=2, max_digits=12)
-    ThisEstimate = models.DecimalField(verbose_name="A Esta Estomacion", null=False, decimal_places=2, max_digits=12)
-    OfThisEstimate = models.DecimalField(verbose_name="De Esta Estimacion", null=False, decimal_places=2, max_digits=12)
+    ThisEstimate = models.DecimalField(verbose_name="A Esta Estimación", null=False, decimal_places=2, max_digits=12)
+    OfThisEstimate = models.DecimalField(verbose_name="De Esta Estimación", null=False, decimal_places=2, max_digits=12)
 
     class Meta:
         verbose_name_plural = "ContractConcepts"
@@ -737,18 +736,7 @@ class ContractConcepts(models.Model):
     def __unicode__(self):
         return "{0}".format(self.ThisEstimate)
 
-    @staticmethod
-    def handle_update(pk, ThisEstimate, OfThisEstimate):
-        if pk > 0:
-            var = ContractConcepts.object.get_or_create(pk=pk)
-        else:
-            ContractConcepts()
 
-        var.ThisEstimate = ThisEstimate
-        var.OfThisEstimate = OfThisEstimate
-        var.save()
-
-        return var.pk
 
 
 # Propietario

@@ -830,10 +830,10 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-            'clave_contrato', 'project', 'no_licitacion', 'contratista', 'modalidad_contrato',
-            'dependencia', 'fecha_firma', 'fecha_inicio', 'fecha_termino',
-            'porcentaje_iva',  'assigment_number', 'objeto_contrato',
-            'lugar_ejecucion', 'observaciones', 'version')
+            'clave_contrato', 'project', 'contratista', 'no_licitacion',
+            'modalidad_contrato', 'dependencia', 'porcentaje_iva', 'assigment_number',
+            'fecha_firma', 'fecha_inicio','fecha_termino_propuesta', 'fecha_termino_real',
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version')
         return fields
 
     def get_urls(self):
