@@ -291,7 +291,7 @@ class PropietarioAdmin(admin.ModelAdmin):
         estado.widget.can_add_related = False
         estado.widget.can_change_related = False
         municipio.widget.can_add_related = False
-        municipio.widget.can_change_related = False3
+        municipio.widget.can_change_related = False
 
         return ModelForm
 '''
@@ -1267,7 +1267,7 @@ class EstimateAdmin(admin.ModelAdmin):
         (
             'Estimación', {
                 'fields': (
-                    'period', 'start_date', 'end_date', 'advance_payment_amount',
+                    'period', 'start_date', 'end_date', 'advance_payment_amount', 'Total_paid',
                     'advance_payment_date',
                     'advance_payment_status', 'version')
             }),

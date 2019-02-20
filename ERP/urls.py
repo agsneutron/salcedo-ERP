@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^api/estimates_by_line_item', api.EstimatesByLineItems.as_view(), ),
     url(r'^api/sections_for_project_save', api.SectionsByProjectSave.as_view()),
     url(r'^api/sections_by_project', api.SectionsByProjectEndpoint.as_view()),
+    url(r'^api/Saveamountofestimate', api.Saveamountofestimate.as_view()),
 
     url(r'^api/clean_project', api.CleanProject.as_view()),
     url(r'^api/clean_estimate', api.CleanEstimate.as_view()),

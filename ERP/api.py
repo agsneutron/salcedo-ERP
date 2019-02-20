@@ -11,6 +11,7 @@ from ERP.lib import utilities
 from ERP.lib.utilities import Utilities
 from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections, Section, \
     AccessToProject, ContratoContratista
+from ERP.models import ContractConcepts
 import json
 
 
@@ -134,6 +135,38 @@ class CleanEstimate(View):
         return HttpResponse('ok', 'application/json; charset=utf-8')
 
 
+class Saveamountofestimate(View):
+    def get(self, request):
+        ID_Estimate = request.GET.get('ID')
+
+        if ID_Estimate is not None:
+            Hasta_Estimacion = request.GET.get('AEstaEstimacion')
+            De_Estimacion = request.GET.get('DeEstaEstimacion')
+
+            Concept = ContractConcepts.object.filter(id__in=ID_Estimate)
+            print "id del concepto"
+            print Concept
+
+            if Concept:
+                Concept.OfThisEstimate = De_Estimacion
+                Concept.ThisEstimate = Hasta_Estimacion
+                Concept.addPSS.save();
+
+                return HttpResponse('ok', 'application/json; charset=utf-8')
+            else:
+                new_it = {
+                    'mensaje': 'No Se guardó correctamente la información'
+                }
+                return HttpResponse('ok', 'application/json; charset=utf-8')
+        else:
+            New_it = {
+                'mensaje': 'El ID no es correcto'
+            }
+            return HttpResponse('ok', 'application/json; charset=utf-8')
+
+
+
+
 class SectionsByProjectSave(View):
     def get(self, request):
         secciones_id = get_array_or_none(request.GET.get('secciones'))
@@ -151,8 +184,7 @@ class SectionsByProjectSave(View):
                     if addPS.count() == 0:
                         addPSN = ProjectSections.objects.create(project_id=projectid, id=section, status=1)
                     else:
-                        addPSS = ProjectSections.objects.filter(project_id=projectid, id=section).get(
-                            id=section)
+                        addPSS = ProjectSections.objects.filter(project_id=projectid, id=section).get(id=section)
                         if addPSS:
                             addPSS.status = 1
                             addPSS.save()

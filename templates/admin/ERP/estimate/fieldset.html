@@ -60,8 +60,20 @@
                             </div>
                         {% endif %}
 
-
-
+                        {% if field.field.name == "Total_paid" %}
+                            <div class="col-sm-4">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                         {{ field.label_tag }}
+                                            <div class="input-group">
+                                                <div class="input-group-addon">$</div>
+                                                {{ field.field|addcss:"form-control" }}
+                                            </div>
+                                         {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
 
                         {% if field.field.name == "line_item" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">

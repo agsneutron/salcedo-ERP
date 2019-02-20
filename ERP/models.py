@@ -1538,6 +1538,8 @@ class Estimate(models.Model):
     advance_payment_status = models.CharField(max_length=2, choices=ADVANCE_PAYMENT_STATUS_CHOICES, default=NOT_PAID,
                                               verbose_name="Estatus del Anticipo")
 
+    Total_paid = models.DecimalField(verbose_name="Total Pagado", decimal_places=2, max_digits=20, max_length=2, default=0, blank=False, null=False, validators=[MinValueValidator(Decimal('0.0'))])
+
     LOCKED = "L"
     UNLOCKED = "U"
     CLOSED = "C"

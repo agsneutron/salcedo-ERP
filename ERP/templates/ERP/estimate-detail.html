@@ -464,11 +464,37 @@
             var spli=Esti.split('/');
 
             if(mont >= espl[0] && mont >= spli[0]){
-                alert("Mi valor es:" + " " + "id=" + valor + " " + "Hasta esta estimación" + espl[0] + " " + "Desta estimación" + spli[0] + "El monto pactado es=" + " " + mont);
+
+                    var message="";
+                    var ajaxDat = {
+                        ID: valor,
+                        AEstaEstimacion: espl[0],
+                        DeEstaEstimacion: spli[0],
+                    };
+                    alert(ajaxDat.ID + ajaxDat.AEstaEstimacion + ajaxDat.DeEstaEstimacion);
+                    $.ajax({
+                        url: '/erp/api/Saveamountofestimate/',
+                        data: ajaxDat,
+                        type: 'get',
+                        dataType: "html",
+                        success: function (data) {
+                            //alert(data[0].mensaje);
+                            message = 'Se guardó correctamente la información';
+                            $('#alertModalSuccess').find('.modal-body p').text(message);
+                            $('#alertModalSuccess').modal('show')
+                        },
+                        error: function (data) {
+                            message = 'Ocurrió un error al guardar la información';
+                            $('#alertModal').find('.modal-body p').text(message);
+                            $('#alertModal').modal('show')
+
+                        }
+                    });
             }
             else{
               alert("Valor incorrecto");
             }
+
          }
 
 
