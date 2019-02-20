@@ -646,6 +646,7 @@ class ContratoContratista(models.Model):
     assigment_number = models.IntegerField(verbose_name="Número de asignación", null=False, blank=False)
 
 
+
     class Meta:
         verbose_name_plural = 'Contratos'
 
