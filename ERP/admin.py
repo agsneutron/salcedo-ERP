@@ -18,7 +18,8 @@ from ERP.models import *
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, ContractForm, \
     ContactForm, ContractConceptsForm, ProgressEstimateForm
 from ERP.forms import TipoProyectoDetalleAddForm, AddProyectoForm, DocumentoFuenteForm, EstimateForm, \
-    ProgressEstimateLogForm, OwnerForm
+    ProgressEstimateLogForm, OwnerForm, PartidasContratoForm, DistribucionPagoForm, DocumentacionContratoForm, \
+    DistribucionPagoDetailForm
 
 from django.contrib import admin
 from django.http import HttpResponseRedirect
@@ -850,6 +851,10 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
     def response_add(self, request, obj, post_url_continue="../%s/"):
         return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.id) + "/change/?contrato=" + str(obj.id))
 
+    def response_change(self, request, obj, post_url_continue="../%s/"):
+        return HttpResponseRedirect(
+            "/admin/ERP/contratocontratista/" + str(obj.id) + "/change/?contrato=" + str(obj.id))
+
     def has_add_permission(self, request):
         if request.user.has_perm('ERP.add_contratocontratista'):
             return True
@@ -865,6 +870,272 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
                 return True
         else:
             return False
+
+
+@admin.register(PartidasContratoContratista)
+class PartidasContratoContratistaAdmin(admin.ModelAdmin):
+    form = PartidasContratoForm
+
+    fieldsets = (
+        ("Partidas Asignadas al  Contrato", {
+            'fields': ('line_item','monto_partida','anticipo','fecha_inicio','fecha_termino_propuesta','fecha_termino_real',
+                  'observaciones', 'contrato')
+        }),
+    )
+
+    def get_fields(self, request, obj=None):
+        fields = ('line_item', 'monto_partida', 'anticipo', 'fecha_inicio', 'fecha_termino_propuesta', 'fecha_termino_real',
+                  'observaciones', 'contrato')
+        return fields
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(PartidasContratoContratistaAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
+    # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        contrato_id = request.GET.get('contrato')
+        contrato = ContratoContratista.objects.get(pk=contrato_id)
+        partidas = PartidasContratoContratista.objects.filter(contrato=contrato_id)
+
+        extra['template'] = "partidascontrato"
+        extra['contrato'] = contrato
+        extra['partidas'] = partidas
+
+        return super(PartidasContratoContratistaAdmin, self).change_view(request, object_id, form_url, extra)
+
+    # Adding extra context to the add view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        contrato_id = request.GET.get('contrato')
+        contrato = ContratoContratista.objects.get(pk=contrato_id)
+        partidas = PartidasContratoContratista.objects.filter(contrato=contrato_id)
+
+        extra['template'] = "partidascontrato"
+        extra['contrato'] = contrato
+        extra['partidas'] = partidas
+
+        return super(PartidasContratoContratistaAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def delete_model(self, request, obj):
+        contrato = obj.contrato.id
+        request.GET = request.GET.copy()
+        request.GET['contrato'] = contrato
+        return super(PartidasContratoContratistaAdmin, self).delete_model(request, obj)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/partidascontratocontratista/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/partidascontratocontratista/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/partidascontratocontratista/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
+
+
+class DistribucionPagoDetailInline(admin.TabularInline):
+    model = DistribucionPagoDetail
+    form = DistribucionPagoDetailForm
+    extra = 0
+
+    fieldsets = (
+        ("Detalle de Distribución de Pago por Partida", {
+            'fields': ('tipo_pago', 'porcentaje', 'monto', 'fecha_pago',)
+        }),
+    )
+
+
+@admin.register(DistribucionPago)
+class DistribucionPagoAdmin(admin.ModelAdmin):
+    form = DistribucionPagoForm
+
+    fieldsets = (
+        ("Distribución de Pago por Partida", {
+            'fields': ('line_item', 'dias_pactados', 'contrato',)
+        }),
+    )
+
+    inlines = [DistribucionPagoDetailInline]
+
+    def get_fields(self, request, obj=None):
+        fields = ('line_item', 'dias_pactados', 'contrato',)
+        return fields
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(DistribucionPagoAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
+    # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        contrato_id = request.GET.get('contrato')
+        contrato = ContratoContratista.objects.get(pk=contrato_id)
+        partidas = PartidasContratoContratista.objects.filter(contrato=contrato_id)
+        distribucion = DistribucionPago.objects.filter(contrato=contrato_id)
+        distribuciondetail = DistribucionPagoDetail.objects.filter(pk__in=distribucion)
+
+        extra['template'] = "partidascontrato"
+        extra['contrato'] = contrato
+        extra['partidas'] = partidas
+        extra['distribucion'] = distribucion
+        extra['distribucióndetail'] = distribuciondetail
+
+        return super(DistribucionPagoAdmin, self).change_view(request, object_id, form_url, extra)
+
+    # Adding extra context to the add view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        contrato_id = request.GET.get('contrato')
+        contrato = ContratoContratista.objects.get(pk=contrato_id)
+        partidas = PartidasContratoContratista.objects.filter(contrato=contrato_id)
+
+        extra['template'] = "partidascontrato"
+        extra['contrato'] = contrato
+        extra['partidas'] = partidas
+
+        return super(DistribucionPagoAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def delete_model(self, request, obj):
+        contrato = obj.contratocontratista.id
+        request.GET = request.GET.copy()
+        request.GET['contrato'] = contrato
+        return super(DistribucionPagoAdmin, self).delete_model(request, obj)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/distribucionpago/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/distribucionpago/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/distribucionpago/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
+
+
+@admin.register(DocumentacionContrato)
+class DocumentacionContratoAdmin(admin.ModelAdmin):
+    form = DocumentacionContratoForm
+
+    fieldsets = (
+        ("Documentación de Contrato", {
+            'fields': ('nombre_archivo', 'pdf_version', 'descripcion', 'contrato',)
+        }),
+    )
+
+    def get_fields(self, request, obj=None):
+        fields = ('nombre_archivo', 'pdf_version', 'descripcion', 'contrato',)
+        return fields
+
+    # Method to override some characteristics of the form.
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(DocumentacionContratoAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
+
+
+    # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        contrato_id = request.GET.get('contrato')
+        contrato = ContratoContratista.objects.get(pk=contrato_id)
+        documentos = DocumentacionContrato.objects.filter(contrato=contrato_id)
+
+        extra['template'] = "partidascontrato"
+        extra['contrato'] = contrato
+        extra['documentos'] = documentos
+
+        return super(DocumentacionContratoAdmin, self).change_view(request, object_id, form_url, extra)
+
+    # Adding extra context to the add view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        contrato_id = request.GET.get('contrato')
+        contrato = ContratoContratista.objects.get(pk=contrato_id)
+        documentos = DocumentacionContrato.objects.filter(contrato=contrato_id)
+
+        extra['template'] = "partidascontrato"
+        extra['contrato'] = contrato
+        extra['documentos'] = documentos
+
+        return super(DocumentacionContratoAdmin, self).add_view(request, form_url, extra_context=extra)
+
+    def delete_model(self, request, obj):
+        contrato = obj.contratocontratista.id
+        request.GET = request.GET.copy()
+        request.GET['contrato'] = contrato
+        return super(DocumentacionContratoAdmin, self).delete_model(request, obj)
+
+    # To redirect after object delete.
+    def response_delete(self, request, obj_display, obj_id):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/documentacioncontrato/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after add
+    def response_add(self, request, obj, post_url_continue=None):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/documentacioncontrato/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
+
+    # To redirect after object change
+    def response_change(self, request, obj):
+        contrato_id = request.GET.get('contrato')
+        redirect_url = "/admin/ERP/documentacioncontrato/add/?contrato=" + str(contrato_id)
+        return HttpResponseRedirect(redirect_url)
 
 
 class ConceptForContractsInlines(admin.TabularInline):
@@ -1372,6 +1643,6 @@ admin.site.register(AccessToProject, AccessToProjectAdmin)
 admin.site.register(Section)
 admin.site.register(ProjectSections)
 admin.site.register(Bank)
-admin.site.register(DistribucionPago)
-admin.site.register(DocumentacionContrato)
-admin.site.register(PartidasContratoContratista)
+admin.site.register(TipoPago)
+
+

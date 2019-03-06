@@ -19,7 +19,7 @@ import datetime
 
 from ERP.models import Project, TipoProyectoDetalle, DocumentoFuente, Estimate, ProgressEstimateLog, LogFile, LineItem, \
     ContratoContratista, Propietario, Empresa, Contact, Contratista, ContractConcepts, Concept_Input, AccessToProject, \
-    ProgressEstimate
+    ProgressEstimate, PartidasContratoContratista, DistribucionPago, DocumentacionContrato, DistribucionPagoDetail
 from django.utils.safestring import mark_safe
 from Logs.controller import Logs
 import os
@@ -497,3 +497,96 @@ class EstimateDedutionsForm(forms.ModelForm):
             return False
         return True
 
+
+class PartidasContratoForm(forms.ModelForm):
+    class Meta:
+        model = PartidasContratoContratista
+        fields = '__all__'
+
+        widgets = {
+            'contrato': forms.HiddenInput
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        contrato_id = self.request.GET.get('contrato', None)
+        project_id = ContratoContratista.objects.filter(pk=contrato_id).values('project')
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        # Selecting the current value for the contractor if it exists, otherwise, None.
+        kwargs['initial'].update({'contrato': contrato_id})
+
+        # Calling super class to have acces to the fields.
+        super(PartidasContratoForm, self).__init__(*args, **kwargs)
+
+        # Filtering the values for the contractor if it , otherwise, None.
+        if contrato_id is not None:
+            self.fields['contrato'].queryset = ContratoContratista.objects.filter(pk=contrato_id)
+            self.fields['line_item'].queryset = LineItem.objects.filter(project=project_id)
+
+
+class DistribucionPagoForm(forms.ModelForm):
+    class Meta:
+        model = DistribucionPago
+        fields = '__all__'
+
+        widgets = {
+            'contrato': forms.HiddenInput
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        contrato_id = self.request.GET.get('contrato', None)
+        partidas_id = PartidasContratoContratista.objects.filter(contrato=contrato_id).values('line_item')
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        # Selecting the current value for the contractor if it exists, otherwise, None.
+        kwargs['initial'].update({'contrato': contrato_id})
+
+        # Calling super class to have acces to the fields.
+        super(DistribucionPagoForm, self).__init__(*args, **kwargs)
+
+        # Filtering the values for the contractor if it , otherwise, None.
+        if contrato_id is not None:
+            self.fields['contrato'].queryset = ContratoContratista.objects.filter(pk=contrato_id)
+            self.fields['line_item'].queryset = LineItem.objects.filter(pk__in=partidas_id)
+
+
+class DocumentacionContratoForm(forms.ModelForm):
+    class Meta:
+        model = DocumentacionContrato
+        fields = '__all__'
+
+        widgets = {
+            'contrato': forms.HiddenInput
+        }
+
+    def __init__(self, *args, **kwargs):
+        self.request = kwargs.pop('request', None)
+        contrato_id = self.request.GET.get('contrato', None)
+
+        if not kwargs.get('initial'):
+            kwargs['initial'] = {}
+
+        # Selecting the current value for the contractor if it exists, otherwise, None.
+        kwargs['initial'].update({'contrato': contrato_id})
+
+        # Calling super class to have acces to the fields.
+        super(DocumentacionContratoForm, self).__init__(*args, **kwargs)
+
+        # Filtering the values for the contractor if it , otherwise, None.
+        if contrato_id is not None:
+            self.fields['contrato'].queryset = ContratoContratista.objects.filter(pk=contrato_id)
+
+
+class DistribucionPagoDetailForm(forms.ModelForm):
+    class Meta:
+        model = DistribucionPagoDetail
+        fields = '__all__'
+
+    def __init__(self, *args, **kwargs):
+        super(DistribucionPagoDetailForm, self).__init__(*args, **kwargs)

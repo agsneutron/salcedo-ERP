@@ -521,7 +521,7 @@ class Empresa(models.Model):
 
 
 def upload_contract_file(instance, filename):
-    return '/'.join(['documentosFuente', instance.project.key, 'contracts', instance.contratista.nombreContratista])
+    return '/'.join(['documentosFuente', str(instance.contrato.project.key), 'contracts', str(instance.contrato.contratista.nombreContratista)])
 
 
 # class ContratoContratista(models.Model):
@@ -625,7 +625,7 @@ class ContratoContratista(models.Model):
     fecha_firma = models.DateField(verbose_name='Fecha de Firma', editable=True)
 
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
-    fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True)
+    fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True, default='2019-01-01')
     fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True, null=True)
     lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=True,editable=True)
 
@@ -683,43 +683,94 @@ class ContratoContratista(models.Model):
 
 
 class PartidasContratoContratista(models.Model):
-    line_item = ChainedForeignKey(
-        'LineItem',
-        chained_field="project",
-        chained_model_field="project",
-        show_all=False,
-        auto_choose=True,
-        sort=True,
-        verbose_name="Partida"
-    )
 
-    monto_partida = models.CharField(verbose_name='Monto de la Partida: ', max_length=50, null=False, blank=True)
-    anticipo = models.CharField(verbose_name='Anticipo: ', max_length=50, null=False, blank=True)
+    line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
+    monto_partida = models.CharField(verbose_name='Monto de la Partida', max_length=50, null=False, blank=True)
+    anticipo = models.DecimalField(verbose_name='Anticipo %', decimal_places=2, max_digits=50, null=False, blank=True,)
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True)
-    fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True)
-    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True,editable=True)
+    fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True, null=True, blank=True)
+    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True, editable=True)
     contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Partidas del Contrato'
+        verbose_name = 'Partida del Contrato'
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['line_item'] = str(self.line_item.description)
+
+        return ans
+
+    def __str__(self):
+        return self.line_item.description
+
+    def __unicode__(self):
+        return self.line_item.description
 
 
 class DistribucionPago(models.Model):
-    dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False,editable=True)
-    line_item = ChainedForeignKey(
-        'LineItem',
-        chained_field="project",
-        chained_model_field="project",
-        show_all=False,
-        auto_choose=True,
-        sort=True,
-        verbose_name="Partida"
-    )
+    dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=20, null=False, blank=False, editable=True)
+    line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
     contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Distribución de Pagos'
+        verbose_name = 'Distribución de Pago'
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['line_item'] = str(self.line_item.description)
+
+        return ans
+
+    def __str__(self):
+        return self.line_item.description
+
+    def __unicode__(self):
+        return self.line_item.description
+
+
+class TipoPago(models.Model):
+    tipo_pago = models.CharField(verbose_name="Tipo de Pago", null=False, blank=False, max_length=200)
+    descripcion = models.CharField(verbose_name="Descripción", null=True, blank=True, max_length=500)
+
+    class Meta:
+        verbose_name_plural = 'Tipos de Pago'
+        verbose_name = 'Tipo de Pago'
+
+    def __str__(self):
+        return self.tipo_pago
+
+
+class DistribucionPagoDetail(models.Model):
+    tipo_pago = models.ForeignKey('TipoPago', verbose_name='Tipo de Pago', null=False, blank=False)
+    fecha_pago = models.DateField(verbose_name='Fecha de Pago', null=False, blank=False, editable=True)
+    porcentaje = models.DecimalField(verbose_name="Porcentaje", null=False, blank=False, max_digits=3, decimal_places=2,)
+    monto = models.DecimalField(verbose_name="Monto", null=False, blank=False, decimal_places=2, max_digits=50)
+    distribucion = models.ForeignKey(DistribucionPago, verbose_name='Distribución del Pago', null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Detalle Distribución de Pagos'
+        verbose_name = 'Detalle de Distribución de Pago'
+
+    def __str__(self):
+        return str(self.monto)
 
 
 class DocumentacionContrato(models.Model):
-    nombre_archivo = models.CharField(verbose_name='Nombre del Archivo: ', max_length=50, null=False, blank=True)
-    pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
+    nombre_archivo = models.CharField(verbose_name='Nombre del Archivo ', max_length=50, null=False, blank=True)
+    descripcion = models.TextField(verbose_name='Descripción del Archivo ', max_length=200, null=False, blank=True)
+    pdf_version = models.FileField(verbose_name="Archivo", upload_to=upload_contract_file)
     contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
+
+    class Meta:
+        verbose_name_plural = 'Documentos de Contrato'
+        verbose_name = 'Documento de Contrato'
+
+    def __str__(self):
+        return str(self.contrato.project.key) + str(self.contrato.contratista)
 
 
 # Class to define the concepts in a Contractor Contract.
@@ -731,7 +782,7 @@ class ContractConcepts(models.Model):
     OfThisEstimate = models.DecimalField(verbose_name="De Esta Estimación", null=False, decimal_places=2, max_digits=12)
 
     class Meta:
-        verbose_name_plural = "ContractConcepts"
+        verbose_name_plural = "Conceptos del Contrato"
 
     def __unicode__(self):
         return "{0}".format(self.ThisEstimate)

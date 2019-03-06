@@ -572,7 +572,7 @@ class GeneratePayrollReceipt(View):
 
         except Exception as e:
             print "Exception was: " + str(e)
-            django.contrib.messages.error(request, "Ya se han generado los recibos de nómina anteriormente.")
+            django.contrib.messages.error(request, "ERROR:"+str(e.message))
             return HttpResponseRedirect(
                 "/humanresources/employeebyperiod?payrollperiod=" + str(payroll_period.id) + "&payrollgroup=" + str(
                     payroll_period.payroll_group.id))
@@ -612,7 +612,18 @@ class GeneratePayrollReceiptForEmployee(View):
         employee_id = request.GET.get('employee')
         employee = Employee.objects.get(pk=employee_id)
 
-        company = InternalCompany.objects.all.filter(id=payroll_period.payroll_group.internal_company.id)
+        period = PayrollPeriod.objects.filter(id=payroll_period.id)
+        periodicity_name = ''
+        payment_number = 0
+        start_period = ""
+        end_period = ""
+        for p in period:
+            periodicity_name = p.periodicity.name
+            payment_number = p.periodicity.total_payments
+            start_period = p.start_period
+            end_period = p.end_period
+
+        company = InternalCompany.objects.filter(id=payroll_period.payroll_group.internal_company.id)
         payroll_receipt_processed = PayrollReceiptProcessed.objects.get(
             Q(payroll_period__id=payroll_period.id) & Q(employee_id=employee.id))
 
@@ -632,10 +643,14 @@ class GeneratePayrollReceiptForEmployee(View):
         receipt["employee_id"] = str(employee.id)
         receipt["employee_key"] = str(employee.employee_key)
         receipt["rfc"] = str(employee.rfc)
+        receipt["curp"] = str(employee.curp)
         receipt["ssn"] = str(employee.social_security_number)
         receipt["employee_fullname"] = employee.get_full_name()
         receipt["total_earnings"] = str(payroll_receipt_processed.total_perceptions)
         receipt["total_deductions"] = str(payroll_receipt_processed.total_deductions)
+        receipt["start"] = str(start_period)
+        receipt["end"] = str(end_period)
+        receipt["periodicity"] = str(periodicity_name)
 
         receipts_array.append(receipt)
         response = EmployeePaymentReceipt.generate_employee_payment_receipts(receipts_array, company)

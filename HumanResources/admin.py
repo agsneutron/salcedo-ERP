@@ -1224,16 +1224,16 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         django.contrib.messages.success(request, "Prestación/Deducción borrada exitosamente.")
 
         return HttpResponseRedirect(
-            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id)
+            "/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id)
 
     def response_change(self, request, obj):
         employee_id = request.GET.get('employee')
         payroll_period_id = request.GET.get('payrollperiod')
         payroll_group_id = request.GET.get('payrollgroup')
-        django.contrib.messages.success(request, "Prestación/deducción modificada exitosamente.")
+        django.contrib.messages.success(request, "Prestación/Deducción modificada exitosamente.")
 
         return HttpResponseRedirect(
-            "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id)
+            "/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id)
 
         # To redirect after add
 
@@ -1243,7 +1243,7 @@ class EmployeeEarningsDeductionsbyPeriodAdmin(admin.ModelAdmin):
         payroll_group_id = request.GET.get('payrollgroup')
         #redirect_url = "/humanresources/employeebyperiod?&payrollperiod=" + str(
         #    payroll_period_id) + "&payrollgroup=" + request.GET.get('payrollgroup')
-        redirect_url = "http://localhost:8000/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id + ""
+        redirect_url = "/admin/HumanResources/employeeearningsdeductionsbyperiod/add/?employee=" + employee_id + "&payrollperiod=" + payroll_period_id + "&payrollgroup=" + payroll_group_id + ""
         return HttpResponseRedirect(redirect_url)
 
 

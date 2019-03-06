@@ -1,0 +1,149 @@
+{% load app_filters admin_static %}
+<style>
+    .vLargeTextField, .vXMLLargeTextField {
+        width: 100%;
+    }
+
+    .col-xs-4 {
+        height: 65px;
+    }
+
+     .field-file .col-xs-4 {
+        height: 100%;
+    }
+    .col-xs-4 br {
+        display: none !important;
+
+    }
+    .active_btn {
+    border-bottom: 3px solid white !important;
+    }
+</style>
+<fieldset class="module {{ fieldset.classes }}">
+    {% if fieldset.name %}<h2></h2>{% endif %}
+    {% if fieldset.description %}
+        <div class="description">{{ fieldset.description|safe }}</div>
+    {% endif %}
+    {% comment %}    {% for line in fieldset %}
+        <div class="form-row{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}{% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% endfor %}">
+            {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+            {% for field in line %}
+                <div{% if not line.fields|length_is:'1' %} class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %} class="checkbox-row"{% endif %}>
+                    {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                    {% if field.is_checkbox %}
+                        {{ field.field }}{{ field.label_tag }}
+                    {% else %}
+                        {{ field.label_tag }}
+                        {% if field.is_readonly %}
+                            <p>{{ field.contents }}</p>
+                        {% else %}
+                            {{ field.field }}
+                        {% endif %}
+                    {% endif %}
+                    {% if field.field.help_text %}
+                        <p class="help">{{ field.field.help_text|safe }}</p>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}{% endcomment %}
+<h2 class="text-center">Contratos a Contratistas - {{ fieldset.name }}</h2>
+ <hr>
+
+    <div class="card ">
+
+                    <div class="btn-group btn-group-justified btn-group-raised">
+                        <a class="btn btn-primary contrato-menu"
+                           href="{% if request.GET.contrato %}/admin/ERP/contratocontratista/{{ request.GET.contrato }}/change/?contrato={{ request.GET.contrato }}{% else %}#{% endif %}">
+                            Datos Generales del Contrato
+                            <div class="ripple-container {% if request.resolver_match.view_name == "admin:ERP_contratocontratista_add,admin:ERP_contratocontratista_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                        <a class="btn btn-primary contrato-menu{% if request.GET.contrato %}{{ request.GET.contrato }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.contrato %}/admin/ERP/partidascontratocontratista/add/?contrato={{ request.GET.contrato }}{% else %}#{% endif %}">
+                            Partidas
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_partidascontratocontratista_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                        <a class="btn btn-primary contrato-menu{% if request.GET.contrato %}{{ request.GET.contrato }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.contrato %}/admin/ERP/distribucionpago/add/?contrato={{ request.GET.contrato }}{% else %}#{% endif %}">Distribución de Pago
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_distribucionpago_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                        <a class="btn btn-primary contrato-menu{% if request.GET.contrato %}
+                               {{ request.GET.contrato }}{% else %} disabled{% endif %}"
+                           href="{% if request.GET.contrato %}/admin/ERP/documentacioncontrato/add/?contrato={{ request.GET.contrato }}{% else %}#{% endif %}">Documentación
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_documentacioncontrato_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                    </div>
+
+
+        <div class="card-block">
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane fade active in" id="otro0">
+                    <div class="row">
+                {% for line in fieldset %}
+                    <div class="campo{% if line.fields|length_is:'1' and line.errors %} errors{% endif %}
+                    {% if not line.has_visible_field %} hidden{% endif %}{% for field in line %}
+                        {% if field.field.name %}field-{{ field.field.name }}{% endif %}{% endfor %}">
+
+                        {% for field in line %}
+
+
+                            <div class="col-xs-4"{% if not line.fields|length_is:'1' %}
+                                 class="field-box{% if field.field.name %} field-{{ field.field.name }}{% endif %}{% if not field.is_readonly and field.errors %} errors{% endif %}{% if field.field.is_hidden %} hidden{% endif %}"{% elif field.is_checkbox %}
+                                 class=“checkbox-row”{% endif %}>
+                                {% if not line.fields|length_is:'1' and not field.is_readonly %}{{ field.errors }}{% endif %}
+                                {% if field.is_checkbox %}
+                                    {{ field.field }}{{ field.label_tag }}
+                                {% else %}
+                                    {{ field.label_tag }}
+                                    {% if field.is_readonly %}
+                                        <div class=“readonly”>{{ field.contents }}</div>
+                                    {% else %}
+                                        {{ field.field }}
+                                    {% endif %}
+                                {% endif %}
+                                {% if field.field.help_text %}
+                                    <div class=“help”>{{ field.field.help_text|safe }}</div>
+                                {% endif %}
+                                {% if line.fields|length_is:'1' %}{{ line.errors }}{% endif %}
+                            </div>
+                        {% endfor %}
+
+                    </div>
+                {% endfor %}
+                    </div>
+                </div>
+
+             </div>
+
+        </div>
+    </div>
+
+</fieldset>
+<script>
+
+
+     $(document).ready(function () {
+        $('input').addClass('form-control');
+        $('select').addClass('form-control');
+        $('.col-xs-4>div').removeClass('form-group');
+
+        $('.field-observaciones>div').removeClass('col-xs-4');
+        $('.field-observaciones>div').addClass('col-xs-12');
+
+         $('.vDateField').addClass('form-control');
+
+        document.getElementById("id_observaciones").rows = "4"
+
+    });
+
+</script>

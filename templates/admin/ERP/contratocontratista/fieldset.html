@@ -1,4 +1,24 @@
 {% load app_filters admin_static %}
+<style>
+    .vLargeTextField, .vXMLLargeTextField {
+        width: 100%;
+    }
+
+    .col-xs-4 {
+        height: 65px;
+    }
+
+     .field-file .col-xs-4 {
+        height: 100%;
+    }
+    .col-xs-4 br {
+        display: none !important;
+
+    }
+    .active_btn {
+    border-bottom: 3px solid white !important;
+    }
+</style>
 <fieldset class="module {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
@@ -27,7 +47,7 @@
             {% endfor %}
         </div>
     {% endfor %}{% endcomment %}
-<h2 class="text-center">Contratos a Contratistas</h2>
+<h2 class="text-center">Contratos a Contratistas </h2>
  <hr>
 
     <div class="card ">
@@ -41,11 +61,10 @@
 
                     <div class="btn-group btn-group-justified btn-group-raised">
                         <a class="btn btn-primary contrato-menu"
-                           href="{% if request.GET.contrato %}/admin/ERP/contratocontratista/{{ request.GET.contrato }}/change/{% else %}#{% endif %}">
+                           href="{% if request.GET.contrato %}/admin/ERP/contratocontratista/{{ request.GET.contrato }}/change/?contrato={{ request.GET.contrato }}{% else %}#{% endif %}">
                             Datos Generales del Contrato
-                            <div class="ripple-container
 
-                                    {% if request.resolver_match.view_name == "admin:ERP_contratocontratista_add,admin:ERP_contratocontratista_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
+                            <div class="ripple-container active_btn"></div>
                         </a>
 
                         <a class="btn btn-primary contrato-menu{% if request.GET.contrato %}{{ request.GET.contrato }}{% else %} disabled{% endif %}"

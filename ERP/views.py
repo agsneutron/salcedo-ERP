@@ -344,7 +344,7 @@ class ContractorContractListView(ListView):
     """
        Display a Blog List page filtered by the search query.
        """
-    paginate_by = 10
+    paginate_by = 10000
 
     def get_queryset(self):
         result = super(ContractorContractListView, self).get_queryset()
