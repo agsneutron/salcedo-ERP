@@ -25,7 +25,8 @@ from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm,
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
     Contact, AccessToProject, TipoProyectoDetalle, Blueprint, PaymentSchedule, \
-    ProjectSections, ContractConcepts, ProgressEstimateAuthorization, EstimateAdvanceAuthorization
+    ProjectSections, ContractConcepts, ProgressEstimateAuthorization, EstimateAdvanceAuthorization, PartidasContratoContratista, \
+    DistribucionPago
 from django.db.models import Q
 import json
 
@@ -396,6 +397,11 @@ class ContractorContractDetailView(generic.DetailView):
         context = super(ContractorContractDetailView, self).get_context_data(**kwargs)
         contract_id = self.kwargs['pk']
         context['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id))
+
+        partidas = PartidasContratoContratista.objects.filter(contrato=contract_id)
+        distribucion = DistribucionPago.objects.filter(contrato=contract_id)
+        context['partidas'] = partidas
+        context['distribucion'] = distribucion
         # Getting, if exists, the advance payment for the contract
         try:
             estimate = Estimate.objects.get(contract__id=contract_id)

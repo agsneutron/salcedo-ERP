@@ -878,13 +878,13 @@ class PartidasContratoContratistaAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Partidas Asignadas al  Contrato", {
-            'fields': ('line_item','monto_partida','anticipo','fecha_inicio','fecha_termino_propuesta','fecha_termino_real',
+            'fields': ('line_item','monto_partida','dias_pactados','fecha_inicio','fecha_termino_propuesta','fecha_termino_real',
                   'observaciones', 'contrato')
         }),
     )
 
     def get_fields(self, request, obj=None):
-        fields = ('line_item', 'monto_partida', 'anticipo', 'fecha_inicio', 'fecha_termino_propuesta', 'fecha_termino_real',
+        fields = ('line_item', 'monto_partida', 'dias_pactados', 'fecha_inicio', 'fecha_termino_propuesta', 'fecha_termino_real',
                   'observaciones', 'contrato')
         return fields
 
@@ -974,14 +974,14 @@ class DistribucionPagoAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ("Distribución de Pago por Partida", {
-            'fields': ('line_item', 'dias_pactados', 'contrato',)
+            'fields': ('line_item', 'tipo_pago', 'porcentaje', 'monto', 'fecha_pago', 'contrato',)
         }),
     )
 
-    inlines = [DistribucionPagoDetailInline]
+    #inlines = [DistribucionPagoDetailInline]
 
     def get_fields(self, request, obj=None):
-        fields = ('line_item', 'dias_pactados', 'contrato',)
+        fields = ('line_item', 'tipo_pago', 'porcentaje', 'monto', 'fecha_pago', 'contrato',)
         return fields
 
     # Method to override some characteristics of the form.
@@ -1006,13 +1006,11 @@ class DistribucionPagoAdmin(admin.ModelAdmin):
         contrato = ContratoContratista.objects.get(pk=contrato_id)
         partidas = PartidasContratoContratista.objects.filter(contrato=contrato_id)
         distribucion = DistribucionPago.objects.filter(contrato=contrato_id)
-        distribuciondetail = DistribucionPagoDetail.objects.filter(pk__in=distribucion)
 
         extra['template'] = "partidascontrato"
         extra['contrato'] = contrato
         extra['partidas'] = partidas
         extra['distribucion'] = distribucion
-        extra['distribucióndetail'] = distribuciondetail
 
         return super(DistribucionPagoAdmin, self).change_view(request, object_id, form_url, extra)
 
@@ -1024,15 +1022,19 @@ class DistribucionPagoAdmin(admin.ModelAdmin):
         contrato_id = request.GET.get('contrato')
         contrato = ContratoContratista.objects.get(pk=contrato_id)
         partidas = PartidasContratoContratista.objects.filter(contrato=contrato_id)
+        distribucion = DistribucionPago.objects.filter(contrato=contrato_id)
 
         extra['template'] = "partidascontrato"
         extra['contrato'] = contrato
         extra['partidas'] = partidas
+        extra['distribucion'] = distribucion
+
+
 
         return super(DistribucionPagoAdmin, self).add_view(request, form_url, extra_context=extra)
 
     def delete_model(self, request, obj):
-        contrato = obj.contratocontratista.id
+        contrato = obj.contrato.id
         request.GET = request.GET.copy()
         request.GET['contrato'] = contrato
         return super(DistribucionPagoAdmin, self).delete_model(request, obj)
@@ -1146,8 +1148,8 @@ class ConceptForContractsInlines(admin.TabularInline):
 class ContractConceptsAdmin(admin.ModelAdmin):
     form = ContractConceptsForm
 
-    def get_amounts_per_contract(self, contract_id):
-        line_item_id = PartidasContratoContratista.objects.get(pk=contract_id).line_item.id
+    def get_amounts_per_contract(self, line_item_ids):
+        line_item_id = PartidasContratoContratista.objects.get(line_item=line_item_ids).line_item.id
 
         concepts = Concept_Input.objects.filter(line_item_id=line_item_id)
         response = []
@@ -1172,33 +1174,60 @@ class ContractConceptsAdmin(admin.ModelAdmin):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
                 kwargs['contract_id'] = request.GET.get('contract_id')
-                self.form.amounts_per_concept = self.get_amounts_per_contract(kwargs['contract_id'])
+                kwargs['line_item_id'] = request.GET.get('line_item_id')
+
+                self.form.amounts_per_concept = self.get_amounts_per_contract(kwargs['line_item_id'])
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
 
+    # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        contract_id = request.GET.get('contract_id')
+        line_item_id = request.GET.get('line_item_id')
+
+        extra['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id)&Q(line_item__id=line_item_id))
+
+        return super(ContractConceptsAdmin, self).change_view(request, object_id, form_url, extra)
+
+    # Adding extra context to the add view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        contract_id = request.GET.get('contract_id')
+        line_item_id = request.GET.get('line_item_id')
+
+        extra['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id) & Q(line_item__id=line_item_id))
+
+        return super(ContractConceptsAdmin, self).add_view(request, form_url, extra_context=extra)
+
     def response_change(self, request, obj):
         if '_continue' not in request.POST:
-            return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.contract.id))
+            return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
         else:
             return HttpResponseRedirect(
-                "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
+                "/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
 
     def response_add(self, request, obj, post_url_continue="../%s/"):
         if '_continue' not in request.POST:
-            return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(obj.contract.id))
+            return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
         else:
             return HttpResponseRedirect(
-                "/admin/ERP/contractconcepts/" + str(obj.id) + "/change/?contract_id=" + str(obj.contract.id))
+                "/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
 
     def response_delete(self, request, obj_display, obj_id):
         contract_id = request.contract_id
 
-        return HttpResponseRedirect("/admin/ERP/contratocontratista/" + str(contract_id))
+        return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
 
     def delete_model(self, request, obj):
         request.contract_id = obj.contract_id
         return super(ContractConceptsAdmin, self).delete_model(request,obj)
+
 
 @admin.register(Propietario)
 class OwnerModelAdmin(admin.ModelAdmin):

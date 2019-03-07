@@ -68,40 +68,44 @@
 {% endblock %}
 
 {% block after_related_objects %}
+    <h3> {% for record in partidas %}
+             <input type="hidden" id="monto_partida" value="{{ record.monto_partida }}">
+            {% endfor %}
+    </h3>
+
      <hr>
                                 <div class="table-responsive mt-15">
                                     <table class="table table-striped">
                                         <thead>
                                         <tr>
                                             <td>Partida</td>
+                                            <td>Tipo de Pago</td>
+                                            <td>Porcentaje</td>
                                             <td>Monto </td>
-                                            <td>Anticipo</td>
-                                            <td>Fecha de Inicio</td>
-                                            <td>Fecha Propuesta de Termino</td>
-                                            <td>Fecha Real de Termino</td>
+                                            <td>Fecha de Pago</td>
                                             <td>Editar</td>
                                             <td>Eliminar</td>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for record in partidas %}
+                                        {% for record in distribucion %}
+
                                             <tr>
                                                 <td>{{ record.line_item }}</td>
-                                                <td>{{ record.monto_partida }}</td>
-                                                <td>{{ record.anticipo }}</td>
-                                                <td>{{ record.fecha_inicio }}</td>
-                                                <td>{{ record.fecha_termino_propuesta }}</td>
-                                                <td>{{ record.fecha_termino_propuesta }}</td>
+                                                <td>{{ record.tipo_pago }}</td>
+                                                <td>{{ record.porcentaje }}</td>
+                                                <td>{{ record.monto }}</td>
+                                                <td>{{ record.fecha_pago }}</td>
 
                                                 <td style="width: 5%">
-                                                    <a href="/admin/ERP/partidascontratocontratista/{{ record.id }}/change/?contrato={{ request.GET.contrato }}"
+                                                    <a href="/admin/ERP/distribucionpago/{{ record.id }}/change/?contrato={{ request.GET.contrato }}"
                                                        class="
                                                        btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-pencil color-default eliminar"></i>
                                                     </a>
                                                 </td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/ERP/partidascontratocontratista/{{ record.id }}/delete/?contrato={{ request.GET.contrato }}"
+                                                    <a href="/admin/ERP/distribucionpago/{{ record.id }}/delete/?contrato={{ request.GET.contrato }}"
                                                        class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i>
                                                     </a>
@@ -138,6 +142,30 @@
 
 {# JavaScript for prepopulated fields #}
 {% prepopulated_fields_js %}
+
+<script>
+
+
+
+        $('input#id_porcentaje').change(function() {
+            monto_partida = $('input#monto_partida').val();
+            porcentaje =  $( this ).val();
+
+           if (porcentaje >=100){
+               alert("El porcentaje no puede ser 100%, favor de verificar la distribución.");
+               this.value=0;
+           }
+           else if (porcentaje > 0){
+              $('input#id_monto').val((monto_partida * porcentaje)/100);
+           }
+
+        });
+
+
+
+
+
+</script>
 
 </div>
 </form></div>

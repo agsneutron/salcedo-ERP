@@ -77,7 +77,46 @@
                     {% endfor %}
                 {% endblock %}
 
-                {% block after_related_objects %}{% endblock %}
+                {% block after_related_objects %}
+                            <div class="col-xs-12">
+                                 <div class="table-responsive mt-15">
+                                     <table class="table table-striped">
+                                        {% if concepts.count == 0 %}
+                                            <tbody>
+                                            <tr>
+                                                <td align="center">No hay conceptos asignados al contrato.</td>
+                                            </tr>
+                                            </tbody>
+                                        {% else %}
+                                            <thead>
+                                            <td>Clave</td>
+                                            <td>Descripción</td>
+                                            <td>Unidad</td>
+                                            <td>Precio Unitario</td>
+                                            <td>Cantidad del Contrato</td>
+                                            <td class="no-sorting">Editar</td>
+                                            </thead>
+                                            <tbody>
+                                            {% for concept in concepts %}
+                                                <tr style="border:1px solid">
+                                                    <td style="border:1px solid">{{ concept.concept.key }}</td>
+                                                    <td style="border:1px solid">{{ concept.concept.description }}</td>
+                                                    <td style="border:1px solid">{{ concept.concept.unit.name }}</td>
+                                                    <td style="border:1px solid">{{ concept.concept.unit_price }}</td>
+                                                    <td style="border:1px solid">{{ concept.amount }}</td>
+                                                    <td class="text-center" style="width: 5%"><a
+                                                            href="/admin/ERP/contractconcepts/{{ concept.id }}/change?contract_id={{ concept.contract.id }}&line_item_id={{ concept.line_item.id }}"
+                                                            class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-pencil color-default eliminar"></i></a></td>
+                                                </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                        {% endif %}
+                                    </table>
+                                </div>
+                            </div>
+
+                {% endblock %}
 
                 {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 

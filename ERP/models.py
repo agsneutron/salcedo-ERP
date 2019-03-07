@@ -686,7 +686,7 @@ class PartidasContratoContratista(models.Model):
 
     line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
     monto_partida = models.CharField(verbose_name='Monto de la Partida', max_length=50, null=False, blank=True)
-    anticipo = models.DecimalField(verbose_name='Anticipo %', decimal_places=2, max_digits=50, null=False, blank=True,)
+    dias_pactados = models.IntegerField(verbose_name='Días Pactados', null=False, blank=True,)
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True)
     fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True, null=True, blank=True)
@@ -711,9 +711,13 @@ class PartidasContratoContratista(models.Model):
 
 
 class DistribucionPago(models.Model):
-    dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=20, null=False, blank=False, editable=True)
     line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
     contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
+    tipo_pago = models.ForeignKey('TipoPago', verbose_name='Tipo de Pago', null=False, blank=False)
+    fecha_pago = models.DateField(verbose_name='Fecha de Pago', null=False, blank=False, editable=True)
+    porcentaje = models.DecimalField(verbose_name="Porcentaje", null=False, blank=False, max_digits=3,
+                                     decimal_places=0, )
+    monto = models.DecimalField(verbose_name="Monto", null=False, blank=False, decimal_places=2, max_digits=50)
 
     class Meta:
         verbose_name_plural = 'Distribución de Pagos'
@@ -747,7 +751,7 @@ class TipoPago(models.Model):
 class DistribucionPagoDetail(models.Model):
     tipo_pago = models.ForeignKey('TipoPago', verbose_name='Tipo de Pago', null=False, blank=False)
     fecha_pago = models.DateField(verbose_name='Fecha de Pago', null=False, blank=False, editable=True)
-    porcentaje = models.DecimalField(verbose_name="Porcentaje", null=False, blank=False, max_digits=3, decimal_places=2,)
+    porcentaje = models.DecimalField(verbose_name="Porcentaje", null=False, blank=False, max_digits=3, decimal_places=0,)
     monto = models.DecimalField(verbose_name="Monto", null=False, blank=False, decimal_places=2, max_digits=50)
     distribucion = models.ForeignKey(DistribucionPago, verbose_name='Distribución del Pago', null=False, blank=False)
 
@@ -778,8 +782,9 @@ class ContractConcepts(models.Model):
     contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False)
     concept = models.ForeignKey('Concept_Input', verbose_name="Concepto", null=False, blank=False)
     amount = models.DecimalField(verbose_name="Cantidad", null=False, blank=False, decimal_places=2, max_digits=12)
-    ThisEstimate = models.DecimalField(verbose_name="A Esta Estimación", null=False, decimal_places=2, max_digits=12)
-    OfThisEstimate = models.DecimalField(verbose_name="De Esta Estimación", null=False, decimal_places=2, max_digits=12)
+    ThisEstimate = models.DecimalField(verbose_name="A Esta Estimación", null=False, default=0.00, decimal_places=2, max_digits=12)
+    OfThisEstimate = models.DecimalField(verbose_name="De Esta Estimación", null=False, default=0.00, decimal_places=2, max_digits=12)
+    line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Conceptos del Contrato"

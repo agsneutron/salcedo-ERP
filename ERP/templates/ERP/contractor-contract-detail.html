@@ -99,8 +99,77 @@
     </div>
 
 
-
     <div class="col-xs-10 col-xs-offset-1">
+        <div class="card">
+
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">Partidas del Contrato</h3>
+                </div>
+                <div class="item-right">
+                    <a onclick="myFunction()" href="/admin/ERP/partidascontratocontratista/add?contrato={{ object.id }}"
+                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="card-block text-center">
+                <div class="table-responsive">
+                                    <table id="table_s" class="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <td>Partida</td>
+                                            <td>Monto </td>
+                                            <td>Días Pactados</td>
+                                            <td>Fecha de Inicio</td>
+                                            <td>Fecha Propuesta de Termino</td>
+                                            <td>Fecha Real de Termino</td>
+                                            <td>Conceptos</td>
+                                            <td>Editar</td>
+                                            <td>Eliminar</td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in partidas %}
+                                            <tr>
+                                                <td>{{ record.line_item }}</td>
+                                                <td>{{ record.monto_partida }}</td>
+                                                <td>{{ record.dias_pactados }}</td>
+                                                <td>{{ record.fecha_inicio }}</td>
+                                                <td>{{ record.fecha_termino_propuesta }}</td>
+                                                <td>{{ record.fecha_termino_propuesta }}</td>
+                                                <td style="width: 5%">
+                                                    <a href="/admin/ERP/contractconcepts/add?contract_id={{ object.id }}&line_item_id={{ record.line_item.id }}"
+                                                       class="
+                                                       btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-list color-default eliminar"></i>
+                                                    </a>
+                                                </td>
+                                                <td style="width: 5%">
+                                                    <a href="/admin/ERP/partidascontratocontratista/{{ record.id }}/change/?contrato={{ request.GET.contrato }}"
+                                                       class="
+                                                       btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-pencil color-default eliminar"></i>
+                                                    </a>
+                                                </td>
+                                                <td style="width: 5%">
+                                                    <a href="/admin/ERP/partidascontratocontratista/{{ record.id }}/delete/?contrato={{ request.GET.contrato }}"
+                                                       class="btn btn-raised btn-default btn-xs"><i
+                                                            class="fa fa-trash-o color-danger eliminar"></i>
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                 </div>
+            </div>
+
+        </div>
+    </div>
+
+    {% comment %}<div class="col-xs-10 col-xs-offset-1">
         <div class="card">
 
             <div class="card-header">
@@ -154,7 +223,7 @@
             </div>
 
         </div>
-    </div>
+    </div>{% endcomment %}
 
 
 {% endblock %}

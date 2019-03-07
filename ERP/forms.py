@@ -313,35 +313,45 @@ class ContractForm(forms.ModelForm):
 
 class ContractConceptsForm(forms.ModelForm):
     contract_id = None
+    line_item_id = None
 
     class Meta:
         model = ContractConcepts
-        fields = ('contract', 'concept', 'amount')
+        fields = ('contract', 'line_item', 'concept', 'amount')
+
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
         self.contract_id = kwargs.pop('contract_id', None)
+        self.line_item_id = kwargs.pop('line_item_id', None)
 
-        change=self.find_words();
+        change = self.find_words()
 
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
 
         kwargs['initial'].update({'contract': self.contract_id})
+        kwargs['initial'].update({'line_item': self.line_item_id})
+
         super(ContractConceptsForm, self).__init__(*args, **kwargs)
         if self.contract_id is not None:
             contract_obj = ContratoContratista.objects.get(pk=self.contract_id)
+            partidas_obj = PartidasContratoContratista.objects.get(line_item_id=self.line_item_id).line_item.id
+
+            print 'partidas_obj'
+            print partidas_obj
 
             self.fields['contract'].queryset = ContratoContratista.objects.filter(pk=self.contract_id)
+            self.fields['line_item'].queryset = LineItem.objects.filter(pk=self.line_item_id)
 
-            if change==False:
+            if change == False:
                 contract_concepts = ContractConcepts.objects.filter(contract__id=self.contract_id).values('concept_id')
                 exclude = []
                 for c in contract_concepts:
                     exclude.append(c['concept_id'])
 
                 self.fields['concept'].queryset = Concept_Input.objects.filter(
-                    line_item__id=contract_obj.line_item.id).exclude(id__in=exclude)
+                    line_item__id=partidas_obj).exclude(id__in=exclude)
 
                 if len(self.fields['concept'].queryset) == 0:
                     messages.error(self.request,
@@ -354,7 +364,7 @@ class ContractConceptsForm(forms.ModelForm):
                     include.append(c['concept_id'])
 
                 self.fields['concept'].queryset = Concept_Input.objects.filter(
-                    line_item__id=contract_obj.line_item.id).filter(id__in=include)
+                    line_item__id=partidas_obj).filter(id__in=include)
 
     def find_words(self):
         """Find exact words"""
@@ -387,11 +397,11 @@ class ContractConceptsForm(forms.ModelForm):
             else:
                 sparam=text_word
 
-
         if found_word >0:
             return int(sparam)
         else:
             return 0
+
 
 class EstimateSearchForm(forms.Form):
     current_project_id = 0
