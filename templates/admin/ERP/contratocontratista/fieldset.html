@@ -28,14 +28,47 @@
         </div>
     {% endfor %}{% endcomment %}
 
-    <div class="card ">
-        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
-            <li role="presentation" class="active">
-                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="">Contrato de Contratistas</span>
-                </a>
-            </li>
-        </ul>
+
+   <div class="container">
+                    <h2 class="text-center">Contratos</h2>
+                    <hr>
+                    <div class="btn-group btn-group-justified btn-group-raised">
+                        <a class="btn btn-primary contrato-menu"
+                           href="{% if contratocontratista.id %}/admin/ERP/contratocontratista/{{ contratocontratista.id }}/change/{% else %}#{% endif %}">
+                            Contratos
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_contratocontratista_add,admin:ERP_contratocontratista_change"|slice:"," %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                        <a class="btn btn-primary contrato-menu{% if contratocontratista.id %}{{ contratocontratista.id }}{% else %} disabled{% endif %}"
+                           href="{% if contratocontratista.id %}/admin/ERP/partidas/add/{% else %}#{% endif %}">
+                            Partidas
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_partidas_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                        <a class="btn btn-primary contrato-menu{% if contratocontratista.id %}{{ contratocontratista.id }}{% else %} disabled{% endif %}"
+                           href="{% if contratocontratista.id %}/admin/ERP/dpago/add/{% else %}#{% endif %}">Distribución de<br>
+                            Pago
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_dpago_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+    
+                        <a class="btn btn-primary contrato-menu{% if contratocontratista.id %}
+                               {{ contratocontratista.id }}{% else %} disabled{% endif %}"
+                           href="{% if contratocontratista %}/admin/ERP/documentacion/add/{% else %}#{% endif %}">Documentación
+                            <div class="ripple-container
+
+                                    {% if request.resolver_match.view_name == "admin:ERP_documentacion_add" %}{{ "active_btn" }}{% endif %}"></div>
+                        </a>
+
+                    </div>
+
+
+
 
         <div class="card-block">
             <div class="tab-content">
@@ -45,9 +78,9 @@
                         {% if field.field.name == "clave_contrato" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                             <div class="row">
-                            <h2 class="text-center">Datos Generales</h2>
+                            <h3 class="text-center">Datos Generales</h3>
 
-                            <hr>
+                            <!--<hr>-->
                             <div class="col-sm-3">
                                 <div class="form-group field-{{ field.field.name }}">
                                     <div>

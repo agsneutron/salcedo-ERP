@@ -258,43 +258,11 @@ class ContratoAdmin(admin.ModelAdmin):
 
     def get_fields(self, request, obj=None):
         fields = (
-            'no_licitacion', 'modalidad_contrato', 'dependencia', 'contratista', 'dias_pactados',
-            'fecha_firma',
-            'fecha_inicio', 'fecha_termino', 'monto_contrato', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
-            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version', 'line_item')
+            'no_licitacion', 'modalidad_contrato', 'dependencia', 'contratista', 'fecha_firma',
+            'fecha_inicio',
+            'fecha_termino_real', 'fecha_termino_propuesta', 'monto_contrato_iva', 'pago_inicial', 'pago_final',
+            'objeto_contrato', 'lugar_ejecucion', 'observaciones', 'version',)
         return fields
-
-
-'''
-class PropietarioAdmin(admin.ModelAdmin):
-    list_display = ('id', 'nombrePropietario', 'email', 'empresa', 'telefono1')
-    search_fields = ('nombrePropietario', 'empresa')
-    list_display_links = ('id', 'nombrePropietario', 'empresa')
-    list_per_page = 50
-
-    def get_fields(self, request, obj=None):
-        fields = (
-            'nombrePropietario', 'rfc', 'email', 'telefono1', 'telefono2', 'pais', 'estado', 'municipio',
-            'cp', 'calle', 'numero', 'colonia', 'version',)
-        return fields
-
-    def get_form(self, request, obj=None, **kwargs):
-        ModelForm = super(PropietarioAdmin, self).get_form(request, obj, **kwargs)
-        # get the foreign key field I want to restrict
-        pais = ModelForm.base_fields['pais']
-        estado = ModelForm.base_fields['estado']
-        municipio = ModelForm.base_fields['municipio']
-
-        # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
-        pais.widget.can_add_related = False
-        pais.widget.can_change_related = False
-        estado.widget.can_add_related = False
-        estado.widget.can_change_related = False
-        municipio.widget.can_add_related = False
-        municipio.widget.can_change_related = False
-
-        return ModelForm
-'''
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):

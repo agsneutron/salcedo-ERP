@@ -526,51 +526,33 @@ def upload_contract_file(instance, filename):
 
 class ContratoContratista(models.Model):
     version = IntegerVersionField()
+
     clave_contrato = models.CharField(verbose_name='Clave del Contrato', max_length=32, null=False, blank=False)
     dependencia = models.CharField(verbose_name='dependencia', max_length=50, null=False, blank=False, editable=True)
     fecha_firma = models.DateField(verbose_name='Fecha de Firma', editable=True)
-    dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False,
-                                     editable=True)
+
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
-    fecha_termino = models.DateField(verbose_name='Fecha de Termino', editable=True)
-    lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=True,
-                                       editable=True)
-    monto_contrato = models.DecimalField(verbose_name='Monto de Contrato', decimal_places=2, blank=False, null=False,
-                                         default=0, max_digits=20)
-    porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,
-                                         null=False, default=0, max_digits=5)
-    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True,
-                                     editable=True)
-    no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,
-                                     editable=True)
-    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=True,
-                                       editable=True)
+    fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True)
+    fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True)
+    lugar_ejecucion = models.TextField(verbose_name='Lugar de Ejecución', max_length=250, null=False, blank=True,editable=True)
+
+    porcentaje_iva = models.DecimalField(verbose_name='Porcentaje del IVA', decimal_places=2, blank=False,null=False, default=0, max_digits=5)
+    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True,editable=True)
+    no_licitacion = models.CharField(verbose_name='Número de Licitación', max_length=50, null=False, blank=True,editable=True)
+    objeto_contrato = models.TextField(verbose_name='Objeto de Contrato', max_length=250, null=False, blank=True,editable=True)
+
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     # Foreign Keys:
     project = models.ForeignKey('Project', verbose_name='Proyecto', null=False, blank=False)
-    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,
-                                           blank=False)
+    modalidad_contrato = models.ForeignKey(ModalidadContrato, verbose_name='Modalidad Contrato', null=False,blank=False)
     contratista = models.ForeignKey(Contratista, verbose_name='Contratista', null=False, blank=False)
 
-    line_item = ChainedForeignKey(
-        'LineItem',
-        chained_field="project",
-        chained_model_field="project",
-        show_all=False,
-        auto_choose=True,
-        sort=True,
-        verbose_name="Partida"
-    )
-
-    concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
 
     # Aggregated fields as part of the requirements found in the training.
-    payment_distribution = models.TextField(verbose_name="Distribución del pago", max_length=1024, default="",
-                                            null=True, blank=True)
+
     assigment_number = models.IntegerField(verbose_name="Número de asignación", null=False, blank=False)
-    pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
-    advanced_payment = models.FloatField(verbose_name="Anticipio", null=False, blank=False, default=0)
+
 
     class Meta:
         verbose_name_plural = 'Contratos'
@@ -589,11 +571,11 @@ class ContratoContratista(models.Model):
         ans['contratista'] = str(self.contratista.nombreContratista)
         ans['objeto_contrato'] = str(self.objeto_contrato)
         ans['fecha_firma'] = str(self.fecha_firma)
-        ans['dias_pactados'] = str(self.dias_pactados)
         ans['fecha_inicio'] = str(self.fecha_inicio)
-        ans['fecha_termino'] = str(self.fecha_termino)
+        ans['fecha_termino_real'] = str(self.fecha_termino_real)
+        ans['fecha_termino_propuesta'] = str(self.fecha_termino_propuesta)
         ans['lugar_ejecucion'] = str(self.lugar_ejecucion)
-        ans['monto_contrato'] = str(self.monto_contrato)
+        #ans['monto_contrato'] = str(self.monto_contrato)
         ans['monto_contrato_iva'] = str(self.monto_contrato_iva)
         ans['pago_inicial'] = str(self.pago_inicial)
         ans['pago_final'] = str(self.pago_final)
@@ -607,14 +589,43 @@ class ContratoContratista(models.Model):
     def __unicode__(self):
         return "Clave del Contrato: " + self.clave_contrato + " -  Contratista: " + self.contratista.nombreContratista
 
-        # def save(self, *args, **kwargs):
-        #    canSave = True
 
-        # if canSave:
-        #    Logs.log("Saving new Contrato", "Te")
-        #    super(Contrato, self).save(*args, **kwargs)
-        # else:
-        #    Logs.log("Couldn't save")
+class Partidas(models.Model):
+    line_item = ChainedForeignKey(
+        'LineItem',
+        chained_field="project",
+        chained_model_field="project",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        verbose_name="Partida"
+    )
+
+    monto_partida = models.CharField(verbose_name='Monto de la Partida: ', max_length=50, null=False, blank=True)
+    anticipo = models.CharField(verbose_name='Anticipo: ', max_length=50, null=False, blank=True)
+    fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
+    fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True)
+    fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True)
+    observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True,editable=True)
+
+
+class DistribucionPago(models.Model):
+    dias_pactados = models.CharField(verbose_name='Días Pactados', max_length=50, null=False, blank=False,editable=True)
+    line_item = ChainedForeignKey(
+        'LineItem',
+        chained_field="project",
+        chained_model_field="project",
+        show_all=False,
+        auto_choose=True,
+        sort=True,
+        verbose_name="Partida"
+    )
+
+
+class Documentacion(models.Model):
+    nombre_archivo = models.CharField(verbose_name='Nombre del Archivo: ', max_length=50, null=False, blank=True)
+    pdf_version = models.FileField(verbose_name="Archivo PDF del contrato", upload_to=upload_contract_file)
+
 
 
 # Class to define the concepts in a Contractor Contract.
