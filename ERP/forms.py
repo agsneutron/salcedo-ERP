@@ -109,6 +109,7 @@ class EstimateForm(forms.ModelForm):
         if kwargs.get('instance'):
             contract_id = kwargs['instance'].contract.id
             self.fields['contract'].queryset = ContratoContratista.objects.filter(id=contract_id)
+            self.fields['line_item_Est'].queryset = LineItem.objects.filter(project_id=project_id)
         else:
             estimated_contracts = Estimate.objects.filter(contract__project_id=project_id).values('contract_id')
 
@@ -133,6 +134,7 @@ class EstimateForm(forms.ModelForm):
                     no_concepts_contract_id_array.append(contract.id)
 
             self.fields['contract'].queryset = no_estimated_contracts.exclude(Q(id__in=no_concepts_contract_id_array))
+            self.fields['line_item_Est'].queryset = LineItem.objects.filter(project_id=project_id)
 
             if not all_contracts_by_project.exists():
                 messages.error(self.request, "No se han generado contratos con contratistas para el proyecto actual.")

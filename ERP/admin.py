@@ -298,8 +298,8 @@ class PropietarioAdmin(admin.ModelAdmin):
 
 
 class ProgressEstimateAdmin(admin.ModelAdmin):
-    list_display = ('estimate', 'key', 'amount', 'generator_file', 'payment_status')
-    fields = ('estimate', 'key', 'amount', 'generator_file', 'payment_status', 'version',)
+    list_display = ('estimate', 'key', 'amount', 'Real_Paid', 'generator_file', 'payment_status')
+    fields = ('estimate', 'key', 'amount',  'generator_file', 'payment_status', 'version','Real_Paid',)
     model = ProgressEstimate
 
     form = ProgressEstimateForm
@@ -773,7 +773,7 @@ class ContractorModelAdmin(admin.ModelAdmin):
             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
             'calle',
             'numero', 'colonia', 'employer_registration_number', 'infonavit', 'tax_person_type', 'services', 'version',
-            'bank', 'bank_account_name', 'bank_account') #'CLABE'
+            'bank', 'bank_account_name', 'bank_account')  # 'CLABE'
         return fields
 
     def get_urls(self):
@@ -832,10 +832,10 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         fields = (
             'clave_contrato', 'project', 'line_item', 'no_licitacion', 'contratista', 'modalidad_contrato',
             'dias_pactados', 'dependencia', 'fecha_firma', 'fecha_inicio', 'fecha_termino',
-            'monto_contrato', 'porcentaje_iva', 'advanced_payment',  'assigment_number', 'pdf_version',  'payment_distribution', 'objeto_contrato',
+            'monto_contrato', 'porcentaje_iva', 'advanced_payment', 'assigment_number', 'pdf_version',
+            'payment_distribution', 'objeto_contrato',
             'lugar_ejecucion', 'observaciones', 'version')
         return fields
-
 
     def get_urls(self):
         urls = super(ContractorContractModelAdmin, self).get_urls()
@@ -928,7 +928,8 @@ class ContractConceptsAdmin(admin.ModelAdmin):
 
     def delete_model(self, request, obj):
         request.contract_id = obj.contract_id
-        return super(ContractConceptsAdmin, self).delete_model(request,obj)
+        return super(ContractConceptsAdmin, self).delete_model(request, obj)
+
 
 @admin.register(Propietario)
 class OwnerModelAdmin(admin.ModelAdmin):
@@ -1027,7 +1028,7 @@ class PaymentScheduleInline(admin.TabularInline):
 class BlueprintInline(admin.TabularInline):
     model = Blueprint
     extra = 1
-    fields = ('file','description')
+    fields = ('file', 'description')
 
 
 @admin.register(Project)
@@ -1207,7 +1208,8 @@ class ProjectModelAdmin(admin.ModelAdmin):
 
             for top_section in sections:
                 for inner_section in top_section['inner_sections']:
-                    if inner_section['inner_section_status'] == 0 and inner_section['inner_section_short_name'] in sections_dictionary:
+                    if inner_section['inner_section_status'] == 0 and inner_section[
+                        'inner_section_short_name'] in sections_dictionary:
                         fields_to_exclude += sections_dictionary[inner_section['inner_section_short_name']]
 
             if len(fields_to_exclude) > 0:
@@ -1263,7 +1265,7 @@ class EstimateAdmin(admin.ModelAdmin):
     fieldsets = (
         (
             'Contrato', {
-                'fields': ('contract',)
+                'fields': ('contract', 'line_item_Est',)
             }),
         (
             'Estimación', {

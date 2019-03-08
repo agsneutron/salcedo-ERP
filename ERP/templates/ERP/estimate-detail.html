@@ -146,7 +146,6 @@
                                                 <th class="text-center">Hasta Esta Estimación</th>
                                                 <th class="text-center">De Esta Estimación</th>
                                                 <th class="text-center">Actualizar</th>
-                                                <th class="text-center">Cantidad Restante</th>
                                             </tr>
                                             </thead>
                                             {% for c in contract_concepts %}
@@ -158,7 +157,7 @@
                                                     <td id="EstaEstimacion{{ c.id }}"  contenteditable="true">{{ c.ThisEstimate }}/{{ c.concept.unit.abbreviation }} </td>
                                                     <td id="DeEstaEstimacion{{ c.id }}" contenteditable="true">{{ c.OfThisEstimate }}/{{ c.concept.unit.abbreviation }} </td>
                                                     <td><button type="button" onclick="myFunction({{ c.id }}, {{ c.amount }});" id="boton">Actualizar</button></td>
-                                                    <td><strong><FONT>{{ c.ThisEstimate }} {{ c.amount }}</FONT></strong></td>
+
                                                 </tr>
                                             {% endfor %}
                                         </table>
@@ -471,7 +470,7 @@
                         AEstaEstimacion: espl[0],
                         DeEstaEstimacion: spli[0],
                     };
-                    alert(ajaxDat.ID + ajaxDat.AEstaEstimacion + ajaxDat.DeEstaEstimacion);
+
                     $.ajax({
                         url: '/erp/api/Saveamountofestimate/',
                         data: ajaxDat,

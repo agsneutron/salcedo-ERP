@@ -104,6 +104,21 @@
 
                         </div>
                     {% endif %}
+
+                     {% if field.field.name == "line_item_Est" %}
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="form-group field-{{ field.field.name }}">
+                                    <div>
+                                        {{ field.label_tag }}
+                                        {{ field.field|addcss:"form-control" }}
+                                        {{ field.errors }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
                     {% if field.field.name == "period" %}
                         <div class="row">
                         <div class="col-sm-4">

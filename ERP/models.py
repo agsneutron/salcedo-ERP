@@ -1409,6 +1409,9 @@ class Estimate(models.Model):
     # Chained key attributes 'project'. Might be unnecessary, but it is required to reach the expected behaviour.
     contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False, default=None)
 
+
+    line_item_Est = models.ForeignKey(LineItem, verbose_name="Partida", null=False, blank=False, related_name='line_item_Est')
+
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     contract_amount_override = models.DecimalField(verbose_name='Total Real', decimal_places=2, blank=False, null=False,
@@ -1575,12 +1578,13 @@ class ProgressEstimate(models.Model):
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
     key = models.CharField(verbose_name="Clave del Avance", max_length=9, null=False, blank=False)
 
-    amount = models.DecimalField(verbose_name='Monto ($)', decimal_places=6, blank=False, null=False, default=0,
+    amount = models.DecimalField(verbose_name='Monto ($)', decimal_places=6, blank=False, null=False, default=0.00,
                                  max_digits=20)
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
     paid_out = models.FloatField(verbose_name="Pagado", null=False, blank=False, default=0.00)
+    Real_Paid = models.FloatField(verbose_name="Cantidaid Real de Pago", null=False, blank=False, default=0.00)
 
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
                                       verbose_name="Justificación", blank=True)

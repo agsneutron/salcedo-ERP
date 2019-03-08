@@ -74,6 +74,8 @@
 
 
                         {% endif %}
+
+
                     {% if field.field.name == "progress" %}
 
                         <div class="col-md-4">
@@ -88,14 +90,16 @@
 
                     {% endif %}
                     {% if field.field.name == "amount" %}
-
                         <div class="col-md-4">
                             <div class="form-group field-{{ field.field.name }}">
                                 <div>
                                     {{ field.label_tag }}
-                                    {{ field.field|addcss:"form-control" }}
-                                    {{ field.errors }}
-                                </div>
+                                        <div class="input-group">
+                                            <div class="input-group-addon">$</div>
+                                            {{ field.field|addcss:"form-control" }}
+                                        </div>
+                                     {{ field.errors }}
+                            </div>
                             </div>
                         </div>
 
@@ -116,11 +120,28 @@
                                 </div>
                             </div>
                         </div>
-
-
-
                         </div>
                     {% endif %}
+
+
+                    {% if field.field.name == "Real_Paid" %}
+                       <div class="row">
+                           <div class="col-md-4">
+                               <div class="form-group field-{{ field.field.name }}">
+                                   <div>
+                                       {{ field.label_tag }}
+                                           <div class="input-group">
+                                               <div class="input-group-addon">$</div>
+                                               {{ field.field|addcss:"form-control" }}
+                                           </div>
+                                        {{ field.errors }}
+                                   </div>
+                               </div>
+                            </div>
+                        </div>
+                    {% endif %}
+
+
                         {% if field.field.name == "type" %}
                             <div class="row">
                             <div class="col-md-4">
@@ -167,6 +188,8 @@
                         </div>
                         </div>
                     {% endif %}
+
+
 
                         {% if field.field.name == "version" %}
                             <div class="row">
