@@ -692,6 +692,8 @@ class PartidasContratoContratista(models.Model):
     fecha_termino_real = models.DateField(verbose_name='Fecha de Termino Real', editable=True, null=True, blank=True)
     observaciones = models.TextField(verbose_name='Observaciones', max_length=500, null=False, blank=True, editable=True)
     contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
+    concepts = ManyToManyField('Concept_Input', verbose_name="Conceptos", through='ContractConcepts')
+
 
     class Meta:
         verbose_name_plural = 'Partidas del Contrato'
@@ -700,14 +702,15 @@ class PartidasContratoContratista(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['line_item'] = str(self.line_item.description)
+        ans['contrato'] = str(self.contrato.clave_contrato)
 
         return ans
 
     def __str__(self):
-        return self.line_item.description
+        return self.contrato.clave_contrato + ' - ' + self.line_item.description
 
     def __unicode__(self):
-        return self.line_item.description
+        return self.contrato.clave_contrato + ' - ' + self.line_item.description
 
 
 class DistribucionPago(models.Model):
@@ -779,12 +782,12 @@ class DocumentacionContrato(models.Model):
 
 # Class to define the concepts in a Contractor Contract.
 class ContractConcepts(models.Model):
-    contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False)
+    contractlineitem = models.ForeignKey('PartidasContratoContratista', verbose_name="Contrato - Partida", null=False, blank=False)
     concept = models.ForeignKey('Concept_Input', verbose_name="Concepto", null=False, blank=False)
     amount = models.DecimalField(verbose_name="Cantidad", null=False, blank=False, decimal_places=2, max_digits=12)
     ThisEstimate = models.DecimalField(verbose_name="A Esta Estimación", null=False, default=0.00, decimal_places=2, max_digits=12)
     OfThisEstimate = models.DecimalField(verbose_name="De Esta Estimación", null=False, default=0.00, decimal_places=2, max_digits=12)
-    line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
+    #line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
 
     class Meta:
         verbose_name_plural = "Conceptos del Contrato"
@@ -1425,10 +1428,10 @@ class LineItem(models.Model):
         line_items = LineItem.objects.filter(query).values('id')
 
         for li in line_items:
-            contracts = ContractConcepts.objects.filter(concept__line_item_id=li['id']).values('contract_id')
+            contracts = ContractConcepts.objects.filter(contractlineitem__line_item_id=li['id']).values('contractlineitem__contrato_id')
             for contract in contracts:
-                contract_id = contract['contract_id']
-                estimates = Estimate.objects.filter(contract_id=contract_id)
+                contract_id = contract['contractlineitem__contrato_id']
+                estimates = Estimate.objects.filter(contractlineitem__contrato_id=contract_id)
 
                 if len(estimates) > 0:
                     return False
@@ -1557,8 +1560,9 @@ class Estimate(models.Model):
     period = models.DateField(default=now, null=True, blank=False, verbose_name="Periodo")
 
     # Chained key attributes 'project'. Might be unnecessary, but it is required to reach the expected behaviour.
-    contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False, default=None)
-
+    #contract = models.ForeignKey(ContratoContratista, verbose_name="Contrato", null=False, blank=False, default=None)
+    contractlineitem = models.ForeignKey('PartidasContratoContratista', verbose_name="Contrato - Partida", null=False,
+                                         blank=False, )
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
     contract_amount_override = models.DecimalField(verbose_name='Total Real', decimal_places=2, blank=False, null=False,
@@ -1622,10 +1626,10 @@ class Estimate(models.Model):
         )
 
     def __str__(self):
-        return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
+        return self.contractlineitem.contrato.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contractlineitem.contrato.clave_contrato + " del Contratista: " + self.contractlineitem.contrato.contratista.nombreContratista
 
     def __unicode__(self):  # __unicode__ on Python 2
-        return self.contract.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contract.clave_contrato + " del Contratista: " + self.contract.contratista.nombreContratista
+        return self.contractlineitem.contrato.project.nombreProyecto + " - " + "Estimación del Contrato: " + self.contractlineitem.contrato.clave_contrato + " del Contratista: " + self.contractlineitem.contrato.contratista.nombreContratista
 
     def save(self, *args, **kwargs):
         canSave = True

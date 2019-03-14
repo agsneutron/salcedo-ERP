@@ -294,7 +294,7 @@ class DBObject(object):
 
         # If the file defines a parent for the line item, we will check if it exists.
         if line_item_has_parent:
-            line_item_qs = LineItem.objects.filter(Q(key=line_item_parent_key.upper()) & Q(project_id=project_id))
+            line_item_qs = LineItem.objects.filter(Q(key=str(line_item_parent_key.upper())) & Q(project_id=project_id))
             if line_item_parent_key is not None and len(line_item_qs) == 0:
                 raise ErrorDataUpload(
                     'No existe la partida padre con clave ' + line_item_parent_key + ' para la partida ' + line_item_key + '.',
@@ -305,7 +305,7 @@ class DBObject(object):
 
             # Now we'll check if the top parent exists
             if line_item_top_parent_key is not None:
-                line_item_qs = LineItem.objects.filter(Q(key=line_item_top_parent_key.upper()) & Q(project_id=project_id))
+                line_item_qs = LineItem.objects.filter(Q(key=str(line_item_top_parent_key.upper())) & Q(project_id=project_id))
                 if line_item_top_parent_key is not None and len(line_item_qs) == 0:
                     raise ErrorDataUpload(
                         'No existe la partida padre con clave ' + line_item_top_parent_key + ' para la partida ' + line_item_key + '.',
@@ -349,7 +349,7 @@ class DBObject(object):
 
     def concept_has_been_estimated(self, concept_id):
         # Check if there are contracts with the concept
-        contracts = ContractConcepts.objects.filter(concept_id=concept_id).values('contract_id')
+        contracts = ContractConcepts.objects.filter(concept_id=concept_id).values('contractlineitem__contrato_id')
 
         if concept_id == 3792:
             debug = True
@@ -363,8 +363,8 @@ class DBObject(object):
 
         for contract in contracts:
             # Check if there are estimates with the contract
-            contract_id = contract['contract_id']
-            estimates = Estimate.objects.filter(contract_id=contract_id)
+            contract_id = contract['contractlineitem__contrato_id']
+            estimates = Estimate.objects.filter(contractlineitem__contrato_id=contract_id)
 
             if len(estimates) > 0:
                 return True
@@ -382,9 +382,9 @@ class DBObject(object):
         # First, we get each all the attributes.
         line_item_key = record[self.ConceptConstants.LINE_ITEM_KEY_COL]
         # line_item_description = record[self.ConceptConstants.LINE_ITEM_DESCRIPTION_COL].encode('utf-8')  # Not used
-        concept_key = record[self.ConceptConstants.CONCEPT_KEY_COL].encode('utf-8')
-        concept_description = record[self.ConceptConstants.CONCEPT_DESCRIPTION_COL].encode('utf-8')
-        unit = record[self.ConceptConstants.UNIT_COL].encode('utf-8')
+        concept_key = str(record[self.ConceptConstants.CONCEPT_KEY_COL]).encode('utf-8')
+        concept_description = str(record[self.ConceptConstants.CONCEPT_DESCRIPTION_COL]).encode('utf-8')
+        unit = str(record[self.ConceptConstants.UNIT_COL]).encode('utf-8')
         quantity = Decimal(record[self.ConceptConstants.QUANTITY_COL].replace(',', ''))
         # unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL][1:].replace(',', ''))
         unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL].replace(',', ''))

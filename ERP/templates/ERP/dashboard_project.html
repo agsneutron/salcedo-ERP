@@ -24,9 +24,9 @@
         <div class="btn-group btn-group-justified btn-group-raised">
             <a class="btn btn-info dash-menu" href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/">CATÁLOGO DE
                 CONCEPTOS</a>
-            {% comment %}
-            <a class="btn btn-info dash-menu" href="/admin/ERP/lineitem/insumos/{{ project_id }}/0/">Explosión de<br>Insumos</a>
-{% endcomment %}
+
+            <a class="btn btn-info dash-menu" href="/admin/ERP/contratocontratista/?project_id={{ project_id }}">CONTRATOS</a>
+
             <a class="btn btn-info dash-menu" href="/admin/ERP/estimate/list/{{ project_id }}">ESTIMACIONES</a>
 
             {% comment %}<a class="btn btn-info dash-menu" href="/admin/ERP/uploadedcatalogshistory/add/?project={{ project_id }}">Añadir Cat.<br>de
@@ -35,7 +35,7 @@
                 de
                 Insumos</a>{% endcomment %}
             <a class="btn btn-info dash-menu"
-               href="/admin/ERP/progressestimatelog/?project={{ project_id }}">BITÁCORAS</a>
+               href="/admin/ERP/progressestimatelog/?project={{ project_id }}">SEGUIMIENTO A PROYECTO</a>
         </div>
 
         {% comment %}        <div class="row">
@@ -72,7 +72,7 @@
                     <div class="card-header ">
                         <div class="item-left">
                             {% for project in project %}
-                                <h3 class="card-title text">Nombre de Proyecto: {{ project.nombreProyecto }} </h3>
+                                <div class="card-title text">Nombre de Proyecto: {{ project.nombreProyecto }} </div>
 
                                 </div>
                                 </div>
@@ -169,8 +169,8 @@
 
                                 <div class="col-xs-12 col-md-6">
                                 <div class="card">
-                                <div class="card-header ">
-                                    <h3 class="card-title">Ubicación</h3>
+                                <div class="card-header">
+                                    <div class="card-title text">Ubicación</div>
                                 </div>
                                 <div class="card-block" style="height: 340px; padding: 0">
 

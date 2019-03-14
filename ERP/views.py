@@ -349,7 +349,7 @@ class ContractorContractListView(ListView):
 
     def get_queryset(self):
         result = super(ContractorContractListView, self).get_queryset()
-
+        query_project = self.request.GET.get('project_id')
         query = self.request.GET.get('q')
         if query:
             ContractorContractListView.query = query
@@ -361,7 +361,12 @@ class ContractorContractListView(ListView):
                        (Q(project__nombreProyecto__icontains=q) for q in query_list))
             )
         else:
-            ContractorContractListView.query = ''
+            if query_project:
+                ContractorContractListView.query = query_project
+                query_list = query_project
+                result = result.filter(reduce(operator.and_,(Q(project__id__icontains=q) for q in query_list)))
+            else:
+                ContractorContractListView.query = ''
 
         # Get the projects to which the user has access
         user = self.request.user
@@ -396,7 +401,7 @@ class ContractorContractDetailView(generic.DetailView):
     def get_context_data(self, **kwargs):
         context = super(ContractorContractDetailView, self).get_context_data(**kwargs)
         contract_id = self.kwargs['pk']
-        context['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id))
+        context['concepts'] = ContractConcepts.objects.filter(Q(contractlineitem__contrato_id=contract_id))
 
         partidas = PartidasContratoContratista.objects.filter(contrato=contract_id)
         distribucion = DistribucionPago.objects.filter(contrato=contract_id)
@@ -404,7 +409,7 @@ class ContractorContractDetailView(generic.DetailView):
         context['distribucion'] = distribucion
         # Getting, if exists, the advance payment for the contract
         try:
-            estimate = Estimate.objects.get(contract__id=contract_id)
+            estimate = Estimate.objects.get(contractlineitem__contrato_id=contract_id)
         except Estimate.DoesNotExist:
             estimate = None
 
@@ -536,7 +541,7 @@ class LineItemListView(ListView):
     url_i = "uploadedinputexplotionshistory/add/?project="
 
     current_type = 'C'
-    current_type_full = 'conceptos'
+    current_type_full = 'Conceptos'
 
     types_dict = {
         'conceptos': 'C',
@@ -647,7 +652,7 @@ class ProjectListView(ListView):
     """
        Display a Blog List page filtered by the search query.
     """
-    paginate_by = 10
+    #paginate_by = 10
 
     def get_queryset(self):
         user_id = self.request.user.id
@@ -881,7 +886,7 @@ class EstimateListView(ListView):
     """
        Display a Blog List page filtered by the search query.
     """
-    paginate_by = 10
+    paginate_by = 10000
 
     def get_queryset(self):
 
@@ -897,7 +902,7 @@ class EstimateListView(ListView):
         query = Q()
 
         # Must filter by project id.
-        query = query & Q(contract__project__id=EstimateListView.project_id)
+        query = query & Q(contractlineitem__contrato__project__id=EstimateListView.project_id)
 
         params_copy = self.request.GET.copy()
         params_copy.pop('page', None)
@@ -906,7 +911,7 @@ class EstimateListView(ListView):
 
         line_item = self.request.GET.get('line_item')
         if line_item is not None and line_item is not "":
-            query = query & Q(contract__line_item__id=line_item)
+            query = query & Q(contractlineitem__line_item__id=line_item)
 
         start_date = self.request.GET.get('start_date')
         if start_date is not None:
@@ -920,7 +925,7 @@ class EstimateListView(ListView):
 
         contractor = self.request.GET.get('contractor')
         if contractor is not None and contractor is not "":
-            query = query & Q(contract__contratista__id=contractor)
+            query = query & Q(contractlineitem__contrato__contratista__id=contractor)
 
         if query is not None:
             print "Query: "
@@ -983,8 +988,8 @@ class EstimateDetailView(generic.DetailView):
         # Shallow copy for the main object.
         estimate = context['estimate']
         estimate.deduction_amount = Utilities.number_to_currency(estimate.deduction_amount)
-        contract_amount = estimate.contract.monto_contrato
-        estimate.contract.monto_contrato = Utilities.number_to_currency(estimate.contract.monto_contrato)
+        contract_amount = estimate.contractlineitem.monto_partida
+        estimate.contractlineitem.monto_partida = Utilities.number_to_currency(estimate.contractlineitem.monto_partida)
         estimate.contract_amount_override = Utilities.number_to_currency(estimate.contract_amount_override)
 
         progress_estimates = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
@@ -1027,7 +1032,7 @@ class EstimateDetailView(generic.DetailView):
 
     def dispatch(self, request, *args, **kwargs):
         estimate_id = kwargs['pk']
-        project_id = Estimate.objects.get(pk=estimate_id).contract.project_id
+        project_id = Estimate.objects.get(pk=estimate_id).contractlineitem.contrato.project.id
         user_has_access = AccessToProject.user_has_access_to_project(request.user.id, project_id)
         user = request.user
         if user_has_access and user.has_perm('ERP.view_list_project'):

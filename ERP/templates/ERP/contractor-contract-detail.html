@@ -39,10 +39,10 @@
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Proyecto:</span> {{ contratocontratista.project.nombreProyecto }}</span>
 
-                        <span href="" class="list-group-item withripple "><i
+                       {% comment %} <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Partida:</span> {{ contratocontratista.line_item.description }}</span>
-
+{% endcomment %}
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Dependencia:</span> {{ contratocontratista.dependencia }}</span>
@@ -93,7 +93,7 @@
                 </div>
 
 
-                <a href="change" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-pencil"></i> Editar</a>
+                <a href="change?contrato={{ contratocontratista.id }}" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-pencil"></i> Editar</a>
             </div>
         </div>
     </div>
@@ -140,7 +140,7 @@
                                                 <td>{{ record.fecha_termino_propuesta }}</td>
                                                 <td>{{ record.fecha_termino_propuesta }}</td>
                                                 <td style="width: 5%">
-                                                    <a href="/admin/ERP/contractconcepts/add?contract_id={{ object.id }}&line_item_id={{ record.line_item.id }}"
+                                                    <a href="/admin/ERP/contractconcepts/add?contractlineitem={{ record.id }}"
                                                        class="
                                                        btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-list color-default eliminar"></i>

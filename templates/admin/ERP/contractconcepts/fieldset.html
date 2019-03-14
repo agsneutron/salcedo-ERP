@@ -40,10 +40,11 @@
                 <div class="item-left">
                     <h3 class="card-title text">Conceptos del Contrato</h3>
                 </div>
-        <div class="item-right">
-                    <a href="/admin/ERP/contratocontratista/{{ request.GET.contract_id }}/?contrato={{ request.GET.contract_id }}"
+        <div class="item-right"> {% for concept in concepts %}
+                    <a href="/admin/ERP/contratocontratista/{{ concept.contractlineitem.contrato.id}}/?contrato={{ concept.contractlineitem.contrato.id}}"
                        class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-city-alt zmdi-hc-2x"></i>
                     </a>
+                                {% endfor %}
 
                 </div>
         </div>
@@ -52,7 +53,7 @@
                 {% for line in fieldset %}
                     {% for field in line %}
 
-                        {% if field.field.name == "contract" %}
+                        {% if field.field.name == "contractlineitem" %}
                             <div role="tabpanel" class="tab-pane fade active in">
 
                                 <div class="row">
@@ -61,7 +62,7 @@
                                     </div>
                                     <div class="clearfix"></div>
                                     <hr>
-                                    <div class="col-md-6">
+                                    <div class="col-md-12">
                                         <div class="form-group field-{{ field.field.name }}">
                                             <div>
                                                 {{ field.label_tag }}
@@ -70,21 +71,8 @@
                                             </div>
                                         </div>
                                     </div>
+                                </div>
 
-
-                        {% endif %}
-                        {% if field.field.name == "line_item" %}
-
-                                    <div class="col-md-6">
-                                        <div class="form-group field-{{ field.field.name }}">
-                                            <div>
-                                                {{ field.label_tag }}
-                                                {{ field.field|addcss:"form-control no_change" }}
-                                                {{ field.errors }}
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
 
                         {% endif %}
 

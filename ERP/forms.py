@@ -108,31 +108,37 @@ class EstimateForm(forms.ModelForm):
 
         if kwargs.get('instance'):
             contract_id = kwargs['instance'].contract.id
-            self.fields['contract'].queryset = ContratoContratista.objects.filter(id=contract_id)
+            self.fields['contract'].queryset = PartidasContratoContratista.objects.filter(contrato=contract_id)
         else:
-            estimated_contracts = Estimate.objects.filter(contract__project_id=project_id).values('contract_id')
+            estimated_contracts = Estimate.objects.filter(contractlineitem__contrato__project_id=project_id).values('contractlineitem__contrato_id')
 
             print "Contracts by Project: " + str(project_id)
             print estimated_contracts
 
             contract_id_array = []
             for estimated_contract in estimated_contracts:
-                contract_id_array.append(estimated_contract['contract_id'])
+                contract_id_array.append(estimated_contract['contractlineitem__contrato_id'])
 
-            all_contracts_by_project = ContratoContratista.objects.filter(Q(project_id=project_id))
-            no_estimated_contracts = ContratoContratista.objects.filter(Q(project_id=project_id)).exclude(
+            all_contracts_by_project = PartidasContratoContratista.objects.filter(Q(contrato__project_id=project_id))
+            no_estimated_contracts = PartidasContratoContratista.objects.filter(Q(contrato__project_id=project_id)).exclude(
                 Q(id__in=contract_id_array))
 
             no_concepts_contract_key_array = []
             no_concepts_contract_id_array = []
 
-            for contract in all_contracts_by_project:
-                concepts_by_contract = contract.concepts.all()
-                if len(concepts_by_contract) <= 0:
-                    no_concepts_contract_key_array.append(contract.clave_contrato)
-                    no_concepts_contract_id_array.append(contract.id)
+            #line_item_concepts = []
+            #for contract in all_contracts_by_project:
+            #    line_item_concepts = PartidasContratoContratista.objects.filter(Q(contrato_id=contract))
 
-            self.fields['contract'].queryset = no_estimated_contracts.exclude(Q(id__in=no_concepts_contract_id_array))
+            for contractconcepts in all_contracts_by_project:
+                concepts_by_contract = contractconcepts.concepts.all()
+
+                if len(concepts_by_contract) <= 0:
+                    no_concepts_contract_key_array.append(contractconcepts.contrato.clave_contrato)
+                    no_concepts_contract_id_array.append(contractconcepts.contrato.id)
+
+            self.fields['contractlineitem'].queryset = no_estimated_contracts.exclude(Q(contrato__in=no_concepts_contract_id_array))
+
 
             if not all_contracts_by_project.exists():
                 messages.error(self.request, "No se han generado contratos con contratistas para el proyecto actual.")
@@ -317,35 +323,32 @@ class ContractConceptsForm(forms.ModelForm):
 
     class Meta:
         model = ContractConcepts
-        fields = ('contract', 'line_item', 'concept', 'amount')
-
+        fields = ('contractlineitem', 'concept', 'amount')
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request', None)
-        self.contract_id = kwargs.pop('contract_id', None)
-        self.line_item_id = kwargs.pop('line_item_id', None)
+        self.contractlineitem_id = kwargs.pop('contractlineitem', None)
 
         change = self.find_words()
 
         if not kwargs.get('initial'):
             kwargs['initial'] = {}
 
-        kwargs['initial'].update({'contract': self.contract_id})
-        kwargs['initial'].update({'line_item': self.line_item_id})
+        kwargs['initial'].update({'contractlineitem': self.contractlineitem_id})
 
         super(ContractConceptsForm, self).__init__(*args, **kwargs)
-        if self.contract_id is not None:
-            contract_obj = ContratoContratista.objects.get(pk=self.contract_id)
-            partidas_obj = PartidasContratoContratista.objects.get(line_item_id=self.line_item_id).line_item.id
+        if self.contractlineitem_id is not None:
+            #contract_obj = ContratoContratista.objects.get(pk=self.contract_id)
+            partidas_obj = PartidasContratoContratista.objects.get(Q(id=self.contractlineitem_id)).line_item.id
 
             print 'partidas_obj'
             print partidas_obj
 
-            self.fields['contract'].queryset = ContratoContratista.objects.filter(pk=self.contract_id)
-            self.fields['line_item'].queryset = LineItem.objects.filter(pk=self.line_item_id)
+            #self.fields['contract'].queryset = ContratoContratista.objects.filter(pk=self.contract_id)
+            self.fields['contractlineitem'].queryset = PartidasContratoContratista.objects.filter(pk=self.contractlineitem_id)
 
             if change == False:
-                contract_concepts = ContractConcepts.objects.filter(contract__id=self.contract_id).values('concept_id')
+                contract_concepts = ContractConcepts.objects.filter(contractlineitem__id=self.contractlineitem_id).values('concept_id')
                 exclude = []
                 for c in contract_concepts:
                     exclude.append(c['concept_id'])
@@ -357,7 +360,7 @@ class ContractConceptsForm(forms.ModelForm):
                     messages.error(self.request,
                                    "Ya no hay más conceptos que se puedan agregar al contrato.")
             else:
-                contract_concepts = ContractConcepts.objects.filter(contract__id=self.contract_id).filter(id=self.find_param())\
+                contract_concepts = ContractConcepts.objects.filter(contractlineitem__id=self.contractlineitem_id).filter(id=self.find_param())\
                     .values('concept_id')
                 include = []
                 for c in contract_concepts:

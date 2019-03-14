@@ -809,6 +809,12 @@ class ContractorModelAdmin(admin.ModelAdmin):
 class ContractorContractModelAdmin(admin.ModelAdmin):
     form = ContractForm
 
+    def get_queryset(self, request):
+        qs = super(ContractorContractModelAdmin, self).get_queryset(request)
+        qs = qs.filter(project__id=request.GET.get('project_id'))
+
+        return qs
+
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(ContractorContractModelAdmin, self).get_form(request, obj, **kwargs)
         # get the foreign key field I want to restrict
@@ -827,7 +833,14 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
         project_ids = AccessToProject.get_projects_for_user(request.user.id)
         ModelForm.base_fields['project'].queryset = Project.objects.filter(pk__in=project_ids)
 
-        return ModelForm
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+                kwargs['request'] = request
+
+                return ModelForm(*args, **kwargs)
+
+        return ModelFormMetaClass
 
     def get_fields(self, request, obj=None):
         fields = (
@@ -1148,8 +1161,8 @@ class ConceptForContractsInlines(admin.TabularInline):
 class ContractConceptsAdmin(admin.ModelAdmin):
     form = ContractConceptsForm
 
-    def get_amounts_per_contract(self, line_item_ids):
-        line_item_id = PartidasContratoContratista.objects.get(line_item=line_item_ids).line_item.id
+    def get_amounts_per_contract(self, contractlineitem):
+        line_item_id = PartidasContratoContratista.objects.get(id=contractlineitem).line_item.id
 
         concepts = Concept_Input.objects.filter(line_item_id=line_item_id)
         response = []
@@ -1173,10 +1186,9 @@ class ContractConceptsAdmin(admin.ModelAdmin):
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
                 kwargs['request'] = request
-                kwargs['contract_id'] = request.GET.get('contract_id')
-                kwargs['line_item_id'] = request.GET.get('line_item_id')
+                kwargs['contractlineitem'] = request.GET.get('contractlineitem')
 
-                self.form.amounts_per_concept = self.get_amounts_per_contract(kwargs['line_item_id'])
+                self.form.amounts_per_concept = self.get_amounts_per_contract(kwargs['contractlineitem'])
                 return ModelForm(*args, **kwargs)
 
         return ModelFormMetaClass
@@ -1186,10 +1198,9 @@ class ContractConceptsAdmin(admin.ModelAdmin):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
-        contract_id = request.GET.get('contract_id')
-        line_item_id = request.GET.get('line_item_id')
+        contractlineitem_id = request.GET.get('contractlineitem')
 
-        extra['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id)&Q(line_item__id=line_item_id))
+        extra['concepts'] = ContractConcepts.objects.filter(Q(contractlineitem=contractlineitem_id))
 
         return super(ContractConceptsAdmin, self).change_view(request, object_id, form_url, extra)
 
@@ -1198,31 +1209,30 @@ class ContractConceptsAdmin(admin.ModelAdmin):
         # Setting the extra variable to the set context or none instead.
         extra = extra_context or {}
 
-        contract_id = request.GET.get('contract_id')
-        line_item_id = request.GET.get('line_item_id')
+        contractlineitem_id = request.GET.get('contractlineitem')
 
-        extra['concepts'] = ContractConcepts.objects.filter(Q(contract__id=contract_id) & Q(line_item__id=line_item_id))
+        extra['concepts'] = ContractConcepts.objects.filter(Q(contractlineitem=contractlineitem_id))
 
         return super(ContractConceptsAdmin, self).add_view(request, form_url, extra_context=extra)
 
     def response_change(self, request, obj):
         if '_continue' not in request.POST:
-            return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
+            return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contractlineitem="+str(obj.contractlineitem.id))
         else:
             return HttpResponseRedirect(
-                "/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
+                "/admin/ERP/contractconcepts/add/?contractlineitem="+str(obj.contractlineitem.id))
 
     def response_add(self, request, obj, post_url_continue="../%s/"):
         if '_continue' not in request.POST:
-            return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
+            return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contractlineitem="+str(obj.contractlineitem.id))
         else:
             return HttpResponseRedirect(
-                "/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
+                "/admin/ERP/contractconcepts/add/?contractlineitem="+str(obj.contractlineitem.id))
 
     def response_delete(self, request, obj_display, obj_id):
         contract_id = request.contract_id
 
-        return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contract_id=" + str(obj.contract.id) + '&line_item_id=' + str(obj.line_item.id))
+        return HttpResponseRedirect("/admin/ERP/contractconcepts/add/?contractlineitem="+str(obj.contractlineitem.id))
 
     def delete_model(self, request, obj):
         request.contract_id = obj.contract_id
@@ -1561,8 +1571,8 @@ class EstimateAdmin(admin.ModelAdmin):
 
     fieldsets = (
         (
-            'Contrato', {
-                'fields': ('contract',)
+            'Contrato - Partida', {
+                'fields': ('contractlineitem', )
             }),
         (
             'Estimación', {
@@ -1576,11 +1586,11 @@ class EstimateAdmin(admin.ModelAdmin):
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EstimateAdmin, self).get_form(request, obj, **kwargs)
         # get the foreign key field I want to restrict
-        contract = ModelForm.base_fields['contract']
+        contractlineitem = ModelForm.base_fields['contractlineitem']
 
         # remove the green + and change icons by setting can_change_related and can_add_related to False on the widget
-        contract.widget.can_add_related = False
-        contract.widget.can_change_related = False
+        contractlineitem.widget.can_add_related = False
+        contractlineitem.widget.can_change_related = False
 
         class ModelFormMetaClass(ModelForm):
             def __new__(cls, *args, **kwargs):
