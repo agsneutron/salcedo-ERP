@@ -1,12 +1,51 @@
   {% block header_list%}
+    {% if projectdata %}
+         {% for obj in projectdata %}
+            <div class="col-xs-12 list-group-item">
+
+                    <div class="col-xs-12 col-sm-1 text-left">
+                        <span href="/admin/ERP/project/dashboard/{{ obj.id }}" class="text-small">
+                                <a href="/admin/ERP/project/dashboard/{{ obj.id }}" class="btn btn-raised btn-default btn-xs">
+                                    <i class="fa fa-tachometer color-danger eliminar"></i>
+                                </a>
+
+                        </span>
+                    </div>
+                    <div class="col-xs-12 col-sm-5 text-left">
+                        <span href="" class=" withripple text-small"><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active text-small"> Proyecto:</span>  {{ obj.key }} - {{ obj.nombreProyecto  }}</span>
+
+                    </div>
+                     <div class="col-xs-12 col-sm-3 text-left">
+                       <span href="" class=" withripple text-small"><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active text-small">Fecha Inicio:</span> {{ obj.fecha_inicial }} </span>
+
+                    </div>
+                    <div class="col-xs-12 col-sm-3 text-left">
+                       <span href="" class=" withripple text-small"><i
+                                class="fa fa-chevron-right color-active text-small"></i> <span
+                                class="color-active text-small">Fecha Final:</span> {{ obj.fecha_final }} </span>
+                    </div>
+
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <div id="content-main">
+
         <div class="row">
             <div class="col-xs-12">
                 <div class="card">
                     <div class="card-header">
                         <div class="item-left">
-                            <h3 class="card-title text">{% block title %}{{ title_list|title }} {% endblock %}</h3>
+
+
+                            <h3 class="card-title text">
+                                  {% block title %}{{ title_list|title }} {% endblock %}</h3>
                         </div>
+
                           <div class="item-right">
 
                             <a  {% if add_url != "" %}

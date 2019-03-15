@@ -685,7 +685,7 @@ class ContratoContratista(models.Model):
 class PartidasContratoContratista(models.Model):
 
     line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
-    monto_partida = models.CharField(verbose_name='Monto de la Partida', max_length=50, null=False, blank=True)
+    monto_partida = models.DecimalField(verbose_name='Monto de la Partida',max_digits=20, decimal_places=2, null=False, blank=True)
     dias_pactados = models.IntegerField(verbose_name='Días Pactados', null=False, blank=True,)
     fecha_inicio = models.DateField(verbose_name='Fecha de Inicio', editable=True)
     fecha_termino_propuesta = models.DateField(verbose_name='Fecha de Termino Propuesta', editable=True)
@@ -1734,7 +1734,7 @@ class ProgressEstimate(models.Model):
     generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
-    paid_out = models.FloatField(verbose_name="Pagado", null=False, blank=False, default=0.00)
+    paid_out = models.DecimalField(verbose_name="Pagado", null=False, blank=False, default=0.00, decimal_places=2, max_digits=20)
 
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
                                       verbose_name="Justificación", blank=True)
@@ -1774,11 +1774,11 @@ class ProgressEstimate(models.Model):
         return ans
 
     def __str__(self):
-        return "Estimación " + self.key + "del Contrato " + self.estimate.contract.clave_contrato + " en el periodo: " \
+        return "Estimación " + self.key + "del Contrato " + self.estimate.contractlineitem.contrato.clave_contrato + " en el periodo: " \
                + str(self.estimate.period)
 
     def __unicode__(self):
-        return "Estimación " + self.key + "del Contrato " + self.estimate.contract.clave_contrato + " en el periodo: " \
+        return "Estimación " + self.key + "del Contrato " + self.estimate.contractlineitem.contrato.clave_contrato + " en el periodo: " \
                + str(self.estimate.period)
 
     def save(self, *args, **kwargs):

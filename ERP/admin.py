@@ -326,12 +326,12 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
             qs = Estimate.objects.filter(pk=estimate_id)
             if qs.exists():
                 estimate = qs[0]
-                form.contract_amount = estimate.contract.monto_contrato
+                form.contract_amount = estimate.contractlineitem.monto_partida
 
                 accumulated = estimate.get_accumulated_amount()
 
                 form.contract_amount_accumulated = "{0:.2f}%".format(
-                    accumulated / estimate.contract.monto_contrato * 100)
+                    accumulated / estimate.contractlineitem.monto_partida * 100)
 
         amount_field = form.base_fields['amount']
         amount_field.widget = forms.NumberInput(attrs={'step': .1})
@@ -387,7 +387,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
         else:
             estimate = Estimate.objects.get(pk=estimate_id)
             user = request.user
-            user_has_access = AccessToProject.user_has_access_to_project(user.id, estimate.contract.project_id)
+            user_has_access = AccessToProject.user_has_access_to_project(user.id, estimate.contractlineitem.contrato.project_id)
             if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm('ERP.add_progressestimate'):
                 return True
             return False
@@ -397,7 +397,7 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
 
         if user.has_perm('ERP.change_progressestimate'):
             if obj is not None:
-                user_has_access = AccessToProject.user_has_access_to_project(user.id, obj.estimate.contract.project_id)
+                user_has_access = AccessToProject.user_has_access_to_project(user.id, obj.estimate.contractlineitem.contrato.project_id)
                 if user_has_access and user.has_perm('ERP.view_list_project') and user.has_perm(
                         'ERP.change_progressestimate') and obj.payment_status == ProgressEstimate.NOT_PAID:
                     return True
@@ -1647,7 +1647,7 @@ class EstimateAdmin(admin.ModelAdmin):
 
         if user.has_perm('ERP.change_estimate'):
             if obj is not None:
-                return AccessToProject.user_has_access_to_project(user.id, obj.contract.project_id)
+                return AccessToProject.user_has_access_to_project(user.id, obj.contractlineitem.contrato.project_id)
             else:
                 return True
         else:

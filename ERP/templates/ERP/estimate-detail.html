@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static app_filters %}
+{% load i18n admin_static app_filters%}
 {% block content %}
 
     <style>
@@ -69,7 +69,7 @@
                             </a>
                         {% endif %}
 
-                        <a href="/reporting/get_estimates_report?project_id={{ estimate.contract.project.id }}&estimate_id={{ estimate.id }}">
+                        <a href="/reporting/get_estimates_report?project_id={{ estimate.contractlineitem.contrato.project.id }}&estimate_id={{ estimate.id }}">
                             <i class="fa fa-print"></i>
                         </a>
 
@@ -79,22 +79,22 @@
                     <div class="col-xs-12 col-sm-6 text-left">
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Proyecto:</span> {{ estimate.contract.project }} </span>
+                                class="color-active">Proyecto:</span> {{ estimate.contractlineitem.contrato.project }} </span>
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Clave del Contrato:</span> {{ estimate.contract.clave_contrato }}</span>
+                                class="color-active">Clave del Contrato:</span> {{ estimate.contractlineitem.contrato.clave_contrato }}</span>
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Contratista:</span> {{ estimate.contract.contratista.nombreContratista }}</span>
+                                class="color-active">Contratista:</span> {{ estimate.contractlineitem.contrato.contratista.nombreContratista }}</span>
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Monto del Contrato:</span> {{ estimate.contract.monto_contrato }}</span>
+                                class="color-active">Monto de la Partida:</span> {{ estimate.contractlineitem.monto_partida }}</span>
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Monto Actual:</span> {{ estimate.contract_amount_override }}</span>
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Partida:</span> {{ estimate.contract.line_item.description }}</span>
+                                class="color-active">Partida:</span> {{ estimate.contractlineitem.line_item.description }}</span>
 
 
                         <br>
@@ -158,7 +158,7 @@
                                                     <td id="EstaEstimacion{{ c.id }}"  contenteditable="true">{{ c.ThisEstimate }}/{{ c.concept.unit.abbreviation }} </td>
                                                     <td id="DeEstaEstimacion{{ c.id }}" contenteditable="true">{{ c.OfThisEstimate }}/{{ c.concept.unit.abbreviation }} </td>
                                                     <td><button type="button" onclick="myFunction({{ c.id }}, {{ c.amount }});" id="boton">Actualizar</button></td>
-                                                    <td><strong><FONT>{{ c.ThisEstimate }} {{ c.amount }}</FONT></strong></td>
+                                                    <td id="Restante"><strong><FONT>{% subtractify c %}  </FONT></strong></td>
                                                 </tr>
                                             {% endfor %}
                                         </table>
@@ -456,7 +456,7 @@
     <script>
          function myFunction(id, monto) {
             var valor=id;
-            var mont = monto
+            var mont = monto;
             var Est=document.getElementById('EstaEstimacion'+valor).innerHTML;
             var Esti=document.getElementById('DeEstaEstimacion'+valor).innerHTML;
 
@@ -471,7 +471,7 @@
                         AEstaEstimacion: espl[0],
                         DeEstaEstimacion: spli[0],
                     };
-                    alert(ajaxDat.ID + ajaxDat.AEstaEstimacion + ajaxDat.DeEstaEstimacion);
+                    //alert(ajaxDat.ID +'ID  aesta '+ ajaxDat.AEstaEstimacion +' de esta '+ ajaxDat.DeEstaEstimacion);
                     $.ajax({
                         url: '/erp/api/Saveamountofestimate/',
                         data: ajaxDat,
@@ -481,12 +481,12 @@
                             //alert(data[0].mensaje);
                             message = 'Se guardó correctamente la información';
                             $('#alertModalSuccess').find('.modal-body p').text(message);
-                            $('#alertModalSuccess').modal('show')
+                            $('#alertModalSuccess').modal('show');
                         },
                         error: function (data) {
                             message = 'Ocurrió un error al guardar la información';
                             $('#alertModal').find('.modal-body p').text(message);
-                            $('#alertModal').modal('show')
+                            $('#alertModal').modal('show');
 
                         }
                     });

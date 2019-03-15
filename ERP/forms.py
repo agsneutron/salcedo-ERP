@@ -107,8 +107,8 @@ class EstimateForm(forms.ModelForm):
         project_id = self.request.GET.get('project')
 
         if kwargs.get('instance'):
-            contract_id = kwargs['instance'].contract.id
-            self.fields['contract'].queryset = PartidasContratoContratista.objects.filter(contrato=contract_id)
+            contract_id = kwargs['instance'].contractlineitem.contrato.id
+            self.fields['contractlineitem'].queryset = PartidasContratoContratista.objects.filter(contrato=contract_id)
         else:
             estimated_contracts = Estimate.objects.filter(contractlineitem__contrato__project_id=project_id).values('contractlineitem__contrato_id')
 
@@ -269,7 +269,7 @@ class ProgressEstimateForm(forms.ModelForm):
         estimate = cleaned_data['estimate']
         new_amount = cleaned_data['amount']
         accumulated_amount = estimate.get_accumulated_amount()
-        contract_amount = estimate.contract.monto_contrato
+        contract_amount = estimate.contractlineitem.monto_partida
 
         if is_new:
             accumulated_amount = accumulated_amount + new_amount

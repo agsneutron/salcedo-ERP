@@ -2,28 +2,8 @@
 
 
 {% block content %}
+    {% include "ERP/header_list.html" %}
     <div id="content-main">
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="item-left">
-                            <h3 class="card-title text">{% block title %}{{ title_list }} {% endblock %}</h3>
-                        </div>
-                        <div class="item-right">
-
-                            <a href="add/"
-                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="card-block">
-                        <div class="row">
-                            <div class="col-xs-12">
-                                {% include 'ERP/list-search-fields.html' %}
-                            </div>
-                        </div>
                         <div class="row">
                             <div class="col-xs-12">
                                 <div class="table-responsive">
@@ -82,12 +62,10 @@
                         </div>
 
 
-                    </div>
 
-                </div>
-            </div>
-        </div>
 
 
     </div>
+
+    {% include "ERP/footer_list.html" %}
 {% endblock %}

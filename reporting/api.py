@@ -10,7 +10,7 @@ from django.views.generic import View
 from django.db.models.functions import TruncMonth
 
 from ERP.models import LineItem, Concept_Input, ProgressEstimate, PaymentSchedule, Project, Estimate, \
-    ContratoContratista, Contact, Contratista
+    ContratoContratista, Contact, Contratista, PartidasContratoContratista
 import os, sys
 
 sys.setdefaultencoding('utf-8')
@@ -485,18 +485,18 @@ class EstimatesReport():
 
         project = Project.objects.get(pk=project_id)
         if estimate_id is None:
-            estimate_set = Estimate.objects.filter(contract__project__id=project_id)
+            estimate_set = Estimate.objects.filter(contractlineitem__contrato__project__id=project_id)
         else:
-            estimate_set = Estimate.objects.filter(Q(contract__project__id=project_id) & Q(id=estimate_id))
+            estimate_set = Estimate.objects.filter(Q(contractlineitem__contrato__project__id=project_id) & Q(id=estimate_id))
 
         for estimate in estimate_set:
             print "Is:" + str(estimate.id)
             concepts_array = []
-            contract_obj = ContratoContratista.objects.get(pk=estimate.contract.id)
-            contractor = Contact.objects.filter(contractor_id=estimate.contract.contratista_id)
+            contract_obj = PartidasContratoContratista.objects.get(pk=estimate.contractlineitem.id)
+            contractor = Contact.objects.filter(contractor_id=estimate.contractlineitem.contrato.contratista_id)
             contract_name = "Sin contacto"
             if len(contractor) > 0:
-                contact = Contact.objects.get(contractor_id=estimate.contract.contratista_id)
+                contact = Contact.objects.get(contractor_id=estimate.contractlineitem.contrato.contratista_id)
                 if contact is not None:
                     contract_name = contact.name
 
@@ -507,17 +507,17 @@ class EstimatesReport():
                 })
 
             estimate_json = {
-                'contractor_name': estimate.contract.contratista.nombreContratista,
+                'contractor_name': estimate.contractlineitem.contrato.contratista.nombreContratista,
                 'contract_name': contract_name,
-                'contract_amount_with_tax': float(estimate.contract.monto_contrato) * 1.16,
+                'contract_amount_with_tax': float(estimate.contractlineitem.monto_partida) * 1.16,
                 'concepts': concepts_array,
-                'project': estimate.contract.project.nombreProyecto,
-                'general_director': estimate.contract.project.general_director.get_full_name(),
-                'construction_director': estimate.contract.project.construction_director.get_full_name(),
-                'business_president': estimate.contract.project.business_president.get_full_name(),
-                'business_vice_president': estimate.contract.project.business_vice_president.get_full_name(),
-                'administration_head': estimate.contract.project.administration_head.get_full_name(),
-                'line_item': estimate.contract.line_item.description,
+                'project': estimate.contractlineitem.contrato.project.nombreProyecto,
+                'general_director': estimate.contractlineitem.contrato.project.general_director.get_full_name(),
+                'construction_director': estimate.contractlineitem.contrato.project.construction_director.get_full_name(),
+                'business_president': estimate.contractlineitem.contrato.project.business_president.get_full_name(),
+                'business_vice_president': estimate.contractlineitem.contrato.project.business_vice_president.get_full_name(),
+                'administration_head': estimate.contractlineitem.contrato.project.administration_head.get_full_name(),
+                'line_item': estimate.contractlineitem.line_item.description,
                 'start_date': str(estimate.start_date.strftime('%m/%d/%Y')),
                 'end_date': str(estimate.end_date.strftime('%m/%d/%Y')),
                 'period': str(estimate.period.strftime('%m/%d/%Y')),

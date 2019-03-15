@@ -114,3 +114,9 @@ def define(val=None):
 def has_group(user, group_name):
     group = Group.objects.get(name=group_name)
     return True if group in user.groups.all() else False
+
+
+@register.simple_tag(takes_context=True)
+def subtractify(context, obj):
+    newval = obj.amount - (obj.ThisEstimate + obj.OfThisEstimate)
+    return newval

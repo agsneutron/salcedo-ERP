@@ -381,6 +381,7 @@ class ContractorContractListView(ListView):
     def get_context_data(self, **kwargs):
         context = super(ContractorContractListView, self).get_context_data(**kwargs)
         context['title_list'] = ContractorContractListView.title_list
+        context['projectdata'] = Project.objects.filter(pk=self.request.GET.get('project_id'))
         context['query'] = CompaniesListView.query
         context['query_string'] = '&q=' + ContractorContractListView.query
         context['has_query'] = (ContractorContractListView.query is not None) and (
@@ -610,6 +611,7 @@ class LineItemListView(ListView):
         context = super(LineItemListView, self).get_context_data(**kwargs)
         context['title_list'] = LineItemListView.title_list + LineItemListView.current_type_full
         context['project_id'] = LineItemListView.project_id
+        context['projectdata'] = Project.objects.filter(pk=LineItemListView.project_id)
         context['query'] = LineItemListView.query
         context['query_string'] = '&q=' + LineItemListView.query
         context['has_query'] = (LineItemListView.query is not None) and (LineItemListView.query != "")
@@ -807,6 +809,7 @@ class ProgressEstimateLogListView(ListView):
         context = super(ProgressEstimateLogListView, self).get_context_data(**kwargs)
         context['query'] = ProgressEstimateLogListView.query
         context['title_list'] = ProgressEstimateLogListView.title_list
+        context['projectdata'] = Project.objects.filter(pk=project_id)
         if project_id is not None:
             context['add_url'] = ProgressEstimateLogListView.add_url + project_id
 
@@ -943,7 +946,7 @@ class EstimateListView(ListView):
         context['form'] = EstimateSearchForm(EstimateListView.project_id)
         context['add_url'] = EstimateListView.add_url + str(EstimateListView.project_id)
         context['add_form'] = AddEstimateForm(EstimateListView.project_id)
-        context['projectdata'] = Project.objects.get(id=EstimateListView.project_id)
+        context['projectdata'] = Project.objects.filter(pk=EstimateListView.project_id)
         AddEstimateFormSet = formset_factory(AddEstimateForm)
         context['formset'] = AddEstimateFormSet()
         return context
@@ -1017,7 +1020,8 @@ class EstimateDetailView(generic.DetailView):
         context['progress_estimates'] = progress_estimates
 
         # Get the concepts specified for the contract
-        concepts = estimate.contract.contractconcepts_set.all()
+
+        concepts = estimate.contractlineitem.contractconcepts_set.all()
 
         context['contract_concepts'] = concepts
 

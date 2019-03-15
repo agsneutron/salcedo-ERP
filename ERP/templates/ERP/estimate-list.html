@@ -19,24 +19,20 @@
 {% block content %}
 
 
-    <div class="col-xs-12 col-sm-6 text-left">
-        <span href="" class="list-group-item withripple "><i
-                class="fa fa-chevron-right color-active"></i> <span
-                class="color-active">Clave del Proyecto:</span> {{ projectdata.key }} </span>
-        <span href="" class="list-group-item withripple "><i
-                class="fa fa-chevron-right color-active"></i> <span
-                class="color-active">Nombre del Proyecto:</span> {{ projectdata.nombreProyecto  }} </span>
-        <br>
-    </div>
 
-    <div class="col-xs-12 col-sm-6 text-left">
+
+
+
+    {% comment %}<div class="col-xs-12 col-sm-3 text-left">
         <span href="" class="list-group-item withripple "><i
                 class="fa fa-chevron-right color-active"></i> <span
                 class="color-active">Fecha Inicio:</span> {{ projectdata.fecha_inicial }} </span>
         <span href="" class="list-group-item withripple "><i
                 class="fa fa-chevron-right color-active"></i> <span
                 class="color-active">Fecha Final:</span> {{ projectdata.fecha_final }} </span>
-    </div>
+    </div>{% endcomment %}
+
+
 
 
 
@@ -119,14 +115,14 @@
                                         {% if perms.ERP.view_list_contratocontratista %}
                                             <a href="/admin/ERP/contratocontratista/{{ estimate.contract.id }}"
                                                target="_blank">
-                                                <span>{{ estimate.contract.clave_contrato }}</span>
+                                                <span>{{ estimate.contractlineitem.contrato.clave_contrato }}</span>
                                             </a>
                                         {% else %}
-                                            <span>{{ estimate.contract.clave_contrato }}</span>
+                                            <span>{{ estimate.contractlineitem.contrato.clave_contrato }}</span>
                                         {% endif %}
                                     </td>
-                                    <td><span>{{ estimate.contract.contratista.nombreContratista }}</span></td>
-                                    <td><span>{{ estimate.contract.line_item.description }}</span></td>
+                                    <td><span>{{ estimate.contractlineitem.contrato.contratista.nombreContratista }}</span></td>
+                                    <td><span>{{ estimate.contractlineitem.line_item }}</span></td>
 
 
                                     <td class="text-center" style="width: 5%"><a

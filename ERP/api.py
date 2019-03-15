@@ -33,6 +33,7 @@ class ProjectEndpoint(View):
             Utilities.json_to_dumps(the_list),
             'application/json', )
 
+
 class ContractorByProject(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
@@ -104,13 +105,10 @@ class CleanProject(View):
     def get(self, request):
         project_id = request.GET.get('project_id')
 
-
         items = LineItem.objects.filter(project_id=project_id)
 
         for item in items:
             item.delete()
-
-
 
         return HttpResponse('ok cleaning project', 'application/json; charset=utf-8')
 
@@ -119,12 +117,10 @@ class CleanEstimate(View):
     def get(self, request):
         estimate_id = request.GET.get('id')
 
-
         items = ProgressEstimate.objects.filter(estimate_id=estimate_id)
 
         for item in items:
             item.delete()
-
 
         estimate = Estimate.objects.get(pk=estimate_id)
         estimate.lock_status = 'L'
@@ -137,18 +133,17 @@ class CleanEstimate(View):
 
 class Saveamountofestimate(View):
     def get(self, request):
-        ID_Estimate = request.GET.get('ID')
+        ID_CONTRACTCONCEPT = request.GET.get('ID')
 
-        if ID_Estimate is not None:
-            Hasta_Estimacion = request.GET.get('AEstaEstimacion')
-            De_Estimacion = request.GET.get('DeEstaEstimacion')
+        if ID_CONTRACTCONCEPT is not None:
+            hasta_estimacion = request.GET.get('AEstaEstimacion')
+            de_estimacion = request.GET.get('DeEstaEstimacion')
 
-            Concept = ContractConcepts.objects.filter(id=ID_Estimate)
-
+            Concept = ContractConcepts.objects.get(id=ID_CONTRACTCONCEPT)
 
             if Concept:
-                Concept.OfThisEstimate = De_Estimacion
-                Concept.ThisEstimate = Hasta_Estimacion
+                Concept.OfThisEstimate = de_estimacion
+                Concept.ThisEstimate = hasta_estimacion
                 Concept.save()
 
                 return HttpResponse('ok', 'application/json; charset=utf-8')
@@ -158,12 +153,10 @@ class Saveamountofestimate(View):
                 }
                 return HttpResponse('ok', 'application/json; charset=utf-8')
         else:
-            New_it = {
+            new_it = {
                 'mensaje': 'El ID no es correcto'
             }
             return HttpResponse('ok', 'application/json; charset=utf-8')
-
-
 
 
 class SectionsByProjectSave(View):
