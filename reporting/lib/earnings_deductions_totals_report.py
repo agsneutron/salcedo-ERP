@@ -56,7 +56,7 @@ class EarningsDeductionsTotalEarnings(object):
         formats = EarningsDeductionsTotalEarnings.get_formats(workbook)
 
         # Title and subtitle.
-        worksheet.merge_range('A3:D3', 'SALCEDO CONSTRUCCIÓN Y SUPERVISIÓN S.A. DE C.V.', formats['white_border'])
+        worksheet.merge_range('A3:D3', data_set['internal_company'], formats['white_border'])
         worksheet.merge_range('A5:D5', 'PERCEPCIONES Y DEDUCCIONES', formats['white_bg_blue_border'])
 
         # General Data.

@@ -1455,16 +1455,29 @@ class EarningsDeductions(models.Model):
         return self.type + "-" + self.name
 
 
-    def get_accumulated_for_period(self, payroll_period_id):
+    def get_accumulated_for_period(self, payroll_period_id, internal_company, periodicity, category):
         total_fixed = 0
-        records = EmployeeEarningsDeductions.objects.filter(concept_id=self.id)
+        records = EmployeeEarningsDeductions.objects.filter(Q(concept_id=self.id) & Q(employee__direction__internal_company=internal_company))
         for record in records:
-            total_fixed += record.ammount
+            if category == 'F':
+                total_fixed += record.ammount/periodicity
+            else:
+                total_fixed += record.ammount
 
         total_variable = 0
         records = EmployeeEarningsDeductionsbyPeriod.objects.filter(Q(concept_id=self.id) & Q(payroll_period_id=payroll_period_id))
         for record in records:
             total_variable += record.ammount
+
+        if self.id == 57:
+            absences = EmployeeAssistance.objects.filter(Q(employee__direction__internal_company=internal_company) &
+                                                         Q(payroll_period__id=payroll_period_id) &
+                                                         Q(absence=True) &
+                                                         Q(justified=False))
+            absences_array = []
+            for absence in absences:
+                daily_salary = EmployeeFinancialData.objects.get(employee_id=absence.employee_id).daily_salary
+                total_variable += daily_salary
 
         return total_fixed, total_variable
 

@@ -56,6 +56,7 @@ class GenerateEarningsDeductionsReport(View):
     def get(self, request):
         payroll_period_id = request.GET.get('payroll_period_id')
 
+
         #Check that the parameter is provided
         if payroll_period_id is None:
             raise Exception('Se necesita enviar el parámetro payroll_period_id')
@@ -69,9 +70,12 @@ class GenerateEarningsDeductionsReport(View):
             # The specified Payroll Group does not exist.
             raise Exception('No existe un periodo de nómina con el id ' + str(payroll_period_id))
 
+        internal_company = payroll_period.payroll_group.internal_company
+        periodicity = payroll_period.periodicity.total_payments
         response = {
             'payroll_period_name': payroll_period.name,
             'payroll_group_name': payroll_period.payroll_group.name,
+            'internal_company': internal_company.name,
 
         }
 
@@ -81,7 +85,7 @@ class GenerateEarningsDeductionsReport(View):
         perceptions = EarningsDeductions.objects.filter(type=EarningsDeductions.PERCEPCION)
         perceptions_array = []
         for perception in perceptions:
-            total_fixed, total_variable = perception.get_accumulated_for_period(payroll_period_id)
+            total_fixed, total_variable = perception.get_accumulated_for_period(payroll_period_id, internal_company.id, periodicity, perception.category)
             total = total_fixed + total_variable
             perception_total_fixed += total_fixed
             perception_total_variable += total_variable
@@ -103,7 +107,7 @@ class GenerateEarningsDeductionsReport(View):
         deductions = EarningsDeductions.objects.filter(type=EarningsDeductions.DEDUCCION)
         deductions_array = []
         for deduction in deductions:
-            total_fixed, total_variable = deduction.get_accumulated_for_period(payroll_period_id)
+            total_fixed, total_variable = deduction.get_accumulated_for_period(payroll_period_id, internal_company.id, periodicity, deduction.category)
             total = total_fixed + total_variable
             deduction_total_fixed += total_fixed
             deduction_total_variable += total_variable
