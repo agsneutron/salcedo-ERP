@@ -811,13 +811,15 @@ class ContractorContractModelAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         qs = super(ContractorContractModelAdmin, self).get_queryset(request)
-        qs = qs.filter(project__id=request.GET.get('project_id'))
+        if request.GET.get('project_id') is not None:
+            qs = qs.filter(project__id=request.GET.get('project_id'))
 
         return qs
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(ContractorContractModelAdmin, self).get_form(request, obj, **kwargs)
         # get the foreign key field I want to restrict
+
         project = ModelForm.base_fields['project']
         contratista = ModelForm.base_fields['contratista']
         modalidad_contrato = ModelForm.base_fields['modalidad_contrato']

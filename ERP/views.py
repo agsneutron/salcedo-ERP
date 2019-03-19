@@ -25,8 +25,9 @@ from ERP.forms import EstimateSearchForm, AddEstimateForm, ContractConceptsForm,
 from ERP.models import ProgressEstimateLog, LogFile, ProgressEstimate, Empresa, ContratoContratista, Contratista, \
     Propietario, Concept_Input, LineItem, Estimate, Project, UploadedInputExplotionsHistory, UploadedCatalogsHistory, \
     Contact, AccessToProject, TipoProyectoDetalle, Blueprint, PaymentSchedule, \
-    ProjectSections, ContractConcepts, ProgressEstimateAuthorization, EstimateAdvanceAuthorization, PartidasContratoContratista, \
-    DistribucionPago
+    ProjectSections, ContractConcepts, ProgressEstimateAuthorization, EstimateAdvanceAuthorization, \
+    PartidasContratoContratista, \
+    DistribucionPago, DocumentacionContrato
 from django.db.models import Q
 import json
 
@@ -342,6 +343,8 @@ class ContractorContractListView(ListView):
     template_name = "ERP/contractor-contract-list.html"
     query = None
     title_list = 'Contratos con Contratistas'
+    add_url = "/admin/ERP/contratocontratista/add"
+
     """
        Display a Blog List page filtered by the search query.
        """
@@ -382,6 +385,12 @@ class ContractorContractListView(ListView):
         context = super(ContractorContractListView, self).get_context_data(**kwargs)
         context['title_list'] = ContractorContractListView.title_list
         context['projectdata'] = Project.objects.filter(pk=self.request.GET.get('project_id'))
+        if self.request.GET.get('project') is not None:
+            context['add_url'] = ContractorContractListView.add_url + '?project=' + str(self.request.GET.get('project_id'))
+        else:
+            context['add_url'] = ContractorContractListView.add_url
+        if self.request.GET.get('project_id') is not None:
+            context['add_url'] = ContractorContractListView.add_url + '?project=' + str(self.request.GET.get('project_id'))
         context['query'] = CompaniesListView.query
         context['query_string'] = '&q=' + ContractorContractListView.query
         context['has_query'] = (ContractorContractListView.query is not None) and (
@@ -406,29 +415,32 @@ class ContractorContractDetailView(generic.DetailView):
 
         partidas = PartidasContratoContratista.objects.filter(contrato=contract_id)
         distribucion = DistribucionPago.objects.filter(contrato=contract_id)
+        documentos = DocumentacionContrato.objects.filter(contrato=contract_id)
         context['partidas'] = partidas
-        context['distribucion'] = distribucion
+        context['distribuciones'] = distribucion
+        context['documentos'] = documentos
         # Getting, if exists, the advance payment for the contract
         try:
-            estimate = Estimate.objects.get(contractlineitem__contrato_id=contract_id)
+            estimate = Estimate.objects.filter(contractlineitem__contrato_id=contract_id)
         except Estimate.DoesNotExist:
             estimate = None
 
         advance_payment = None
         advance_payment_status = ""
 
-        if estimate:
-            advance_payment = estimate.advance_payment_amount
+        #if estimate:
+        #    advance_payment = estimate.advance_payment_amount
 
-        if advance_payment == None:
-            advance_payment = "No se ha registrado un anticipo."
-            advance_payment_status = "Estatus no disponible."
-        else:
-            advance_payment = Utilities.number_to_currency(advance_payment)
-            advance_payment_status = estimate.get_advance_payment_status_display()
+        #if advance_payment == None:
+        #    advance_payment = "No se ha registrado un anticipo."
+        #    advance_payment_status = "Estatus no disponible."
+        #else:
+        #    advance_payment = Utilities.number_to_currency(advance_payment)
+        #    advance_payment_status = estimate.get_advance_payment_status_display()
 
-        context['advance_payment'] = advance_payment
-        context['advance_payment_status'] = advance_payment_status
+        #context['advance_payment'] = advance_payment
+        #context['advance_payment_status'] = advance_payment_status
+        context['estimateadvance'] = estimate
 
         return context
 
@@ -976,7 +988,7 @@ class EstimateDelete(DeleteView):
     def delete(self, request, *args, **kwargs):
         print "About to delete."
         obj = self.get_object()
-        project_id = obj.contract.project.id
+        project_id = obj.contractlineitem.contrato.project.id
         EstimateDelete.success_url = "/admin/ERP/estimate/list/" + str(project_id)
         return super(EstimateDelete, self).delete(request, *args, **kwargs)
 
@@ -1114,16 +1126,19 @@ class UploadedCatalogsHistoryAdminListView(ListView):
     model = UploadedCatalogsHistory
     template_name = "ERP/uploadedcatalogshistoryadmin-list.html"
     query = None
+    query_project = None
+    add_url= "/admin/ERP/uploadedcatalogshistory/add?project="
     title_list = "Carga de Catálogo de Conceptos"
     """
-       Display a Blog List page filtered by the search query.
+       Display a List page filtered by the search query.
     """
-    paginate_by = 10
+    #paginate_by = 100000
 
     def get_queryset(self):
         result = super(UploadedCatalogsHistoryAdminListView, self).get_queryset()
 
         query = self.request.GET.get('q')
+        query_project = self.request.GET.get('project')
         if query:
             UploadedCatalogsHistoryAdminListView.query = query
             query_list = query.split()
@@ -1134,13 +1149,20 @@ class UploadedCatalogsHistoryAdminListView(ListView):
                        (Q(line_items_file__icontains=q) for q in query_list))
             )
         else:
-            UploadedCatalogsHistoryAdminListView.query = ''
+            if query_project:
+                UploadedCatalogsHistoryAdminListView.query = query_project
+                query_list = query_project
+                result = result.filter(reduce(operator.and_,(Q(project__id__icontains=q) for q in query_list)))
+            else:
+                UploadedCatalogsHistoryAdminListView.query = ''
 
         return result
 
     def get_context_data(self, **kwargs):
         context = super(UploadedCatalogsHistoryAdminListView, self).get_context_data(**kwargs)
         context['title_list'] = UploadedCatalogsHistoryAdminListView.title_list
+        context['projectdata'] = Project.objects.filter(pk=self.request.GET.get('project'))
+        context['add_url'] = UploadedCatalogsHistoryAdminListView.add_url + str(self.request.GET.get('project'))
         context['query'] = UploadedCatalogsHistoryAdminListView.query
         context['query_string'] = '&q=' + UploadedCatalogsHistoryAdminListView.query
         context['has_query'] = (UploadedCatalogsHistoryAdminListView.query is not None) and (

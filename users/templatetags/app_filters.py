@@ -120,3 +120,9 @@ def has_group(user, group_name):
 def subtractify(context, obj):
     newval = obj.amount - (obj.ThisEstimate + obj.OfThisEstimate)
     return newval
+
+
+@register.simple_tag(takes_context=True)
+def montopartida(context, obj):
+    montopartida = obj.line_item.monto_partida
+    return montopartida

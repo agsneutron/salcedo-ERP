@@ -33,15 +33,15 @@
                                                     {% comment %}<td><span>{{ contratocontratista.last_edit_date }}</span></td>{% endcomment %}
 
 
-                                                    <td style="width: 2%"><a href="{{ contratocontratista.id }}/?contrato={{ contratocontratista.id }}"
+                                                    <td style="width: 2%"><a href="/admin/ERP/contratocontratista/{{ contratocontratista.id }}/?contrato={{ contratocontratista.id }}"
                                                                              class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-eye color-default eliminar"></i></a></td>
                                                     <td class="text-center" style="width: 5%"><a
-                                                            href="{{ contratocontratista.id }}/change/?contrato={{ contratocontratista.id }}"
+                                                            href="/admin/ERP/contratocontratista/{{ contratocontratista.id }}/change/?contrato={{ contratocontratista.id }}"
                                                             class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-pencil color-default eliminar"></i></a></td>
                                                     <td class="text-center" style="width: 2%"><a
-                                                            href="{{ contratocontratista.id }}/delete/?contrato={{ contratocontratista.id }}"
+                                                            href="/admin/ERP/contratocontratista/{{ contratocontratista.id }}/delete/?contrato={{ contratocontratista.id }}"
                                                             class="btn btn-raised btn-default btn-xs"><i
                                                             class="fa fa-trash-o color-danger eliminar"></i></a>
                                                     </td>

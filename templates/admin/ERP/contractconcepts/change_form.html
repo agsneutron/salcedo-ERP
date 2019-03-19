@@ -166,6 +166,24 @@
 
             });
 
+            $('#id_amount').change(function (e) {
+                var amount = amounts['' + $('#id_concept').val()];  // Cantidad total del catálogo de conceptos
+                var resting = resting_amounts['' + $('#id_concept').val()]; // Cantidad restante
+                //alert(amount + '--'+ resting);
+                //alert($('#id_amount').val());
+                if ($('#id_amount').val() > resting.valueOf()){
+                     var html5 = '<span class="color-active" id="error_mas">La cantidad asignada debe ser menor a la cantidad restante</span><br> ' ;
+                     $('#error_amount').html(html5);
+                     $('#id_amount').val('0');
+
+                }
+                else{
+                    $('#error_mas').empty();
+                }
+
+
+            });
+
             {% if change %}
                 var amount = amounts['' + $('#id_concept').val()];  // Cantidad total del catálogo de conceptos
                 var resting = resting_amounts['' + $('#id_concept').val()]; // Cantidad restante

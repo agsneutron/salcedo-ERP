@@ -30,9 +30,18 @@
         <div class="card card-info">
             <div class="card-block text-center">
                 <div class="row">
-                <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i
-                        class="zmdi zmdi-city-alt"></i></span>
-                    <h3 class="color-info"><b>Clave del Contrato:</b> {{ contratocontratista.clave_contrato }}</h3>
+                     <div class="col-xs-12 text-center">
+                        <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i class="zmdi zmdi-city-alt"></i></span>
+                     </div>
+                    <div class="col-xs-6 text-left">
+                    <h4 class="color-info"><b>Clave del Contrato:</b> {{ contratocontratista.clave_contrato }}</h4>
+                    </div>
+                    <div class="col-xs-6 text-left">
+                    <h4 class="color-info"><b>Contratista:</b> {{ contratocontratista.contratista }}</h4>
+                    </div>
+                </div>
+                <div class="row">
+
                     <div class="col-xs-6 text-left">
 
                         <span href="" class="list-group-item withripple "><i
@@ -47,10 +56,11 @@
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Dependencia:</span> {{ contratocontratista.dependencia }}</span>
 
-                         {% if contratocontratista.no_licitacion != "" %}
-                            <span href="" class="list-group-item withripple "><i
-                                    class="fa fa-chevron-right color-active"></i> <span class="color-active">Número de Licitación:</span> {{ contratocontratista.no_licitacion }}</span>
-                        {% endif %}
+
+
+                        <span href="" class="list-group-item withripple "><i
+                                class="fa fa-chevron-right color-active"></i> <span
+                                class="color-active">Fecha de Firma:</span> {{ contratocontratista.fecha_firma }}</span>
 
 
                         <span href="" class="list-group-item withripple "><i
@@ -59,41 +69,42 @@
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Fecha de Término:</span> {{ contratocontratista.fecha_termino }}</span>
 
-                        <span href="" class="list-group-item withripple "><i
+                       {% comment %} <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Días Pactados:</span> {{ contratocontratista.dias_pactados }}</span>
+{% endcomment %}
 
-                        <span href="" class="list-group-item withripple "><i
-                                class="fa fa-chevron-right color-active"></i> <span
-                                class="color-active">Fecha de Firma:</span> {{ contratocontratista.fecha_firma }}</span>
                     </div>
                     <div class="col-xs-12 col-sm-6 text-left">
 
-
+                         {% if contratocontratista.no_licitacion != "" %}
+                            <span href="" class="list-group-item withripple "><i
+                                    class="fa fa-chevron-right color-active"></i> <span class="color-active">Número de Licitación:</span> {{ contratocontratista.no_licitacion }}</span>
+                        {% endif %}
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Objeto Contrato:</span> {{ contratocontratista.objeto_contrato }}</span>
 
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Lugar de Ejecución:</span> {{ contratocontratista.lugar_ejecucion }}</span>
-                        <span href="" class="list-group-item withripple "><i
+                        {% comment %}<span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Monto del Contrato:</span> {{ contratocontratista.monto_contrato }}</span>
+                        {% endcomment %}
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Porcentaje de IVA del Contrato:</span> {{ contratocontratista.porcentaje_iva }} %</span>
 
-                        <span href="" class="list-group-item withripple "><i
+                        {% comment %}<span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Anticipo:</span> {{ advance_payment }}</span>
 
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span class="color-active">Estatus del anticipo:</span> {{ advance_payment_status }}</span>
-
+{% endcomment %}
                         <span href="" class="list-group-item withripple "><i
                                 class="fa fa-chevron-right color-active"></i> <span
                                 class="color-active">Observaciones:</span> {{ contratocontratista.observaciones }}</span>
                     </div>
                 </div>
+                 <a href="change?contrato={{ contratocontratista.id }}" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-pencil"></i> Editar</a>
 
-
-                <a href="change?contrato={{ contratocontratista.id }}" class="btn btn-raised btn-danger button-center-top"><i class="fa fa-pencil"></i> Editar</a>
             </div>
         </div>
     </div>
@@ -169,15 +180,15 @@
         </div>
     </div>
 
-    {% comment %}<div class="col-xs-10 col-xs-offset-1">
+    <div class="col-xs-10 col-xs-offset-1">
         <div class="card">
 
             <div class="card-header">
                 <div class="item-left">
-                    <h3 class="card-title text">Conceptos del Contrato</h3>
+                    <h3 class="card-title text">Distribución de Pago</h3>
                 </div>
                 <div class="item-right">
-                    <a onclick="myFunction()" href="/admin/ERP/contractconcepts/add?contract_id={{ object.id }}"
+                    <a onclick="myFunction()" href="/admin/ERP/distribucionpago/add?contrato={{ object.id }}"
                        class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
                     </a>
 
@@ -187,31 +198,31 @@
             <div class="card-block text-center">
                 <div class="table-responsive">
                     <table id="table_s" class="table table-bordered">
-                        {% if concepts.count == 0 %}
+                        {% if distribuciones.count == 0 %}
                             <tbody>
                             <tr>
-                                <td align="center">No hay conceptos asignados al contrato.</td>
+                                <td align="center">No hay distribución de pago asignada al contrato.</td>
                             </tr>
                             </tbody>
                         {% else %}
                             <thead>
-                            <td>Clave</td>
-                            <td>Descripción</td>
-                            <td>Unidad</td>
-                            <td>Precio Unitario</td>
-                            <td>Cantidad del Contrato</td>
+                            <td>Partida</td>
+                            <td>Tipo de Pago</td>
+                            <td>Porcentaje</td>
+                            <td>Monto</td>
+                            <td>Fecha de Pago</td>
                             <td class="no-sorting">Editar</td>
                             </thead>
                             <tbody>
-                            {% for concept in concepts %}
+                            {% for distribucion in distribuciones %}
                                 <tr style="border:1px solid">
-                                    <td style="border:1px solid">{{ concept.concept.key }}</td>
-                                    <td style="border:1px solid">{{ concept.concept.description }}</td>
-                                    <td style="border:1px solid">{{ concept.concept.unit.name }}</td>
-                                    <td style="border:1px solid">{{ concept.concept.unit_price }}</td>
-                                    <td style="border:1px solid">{{ concept.amount }}</td>
+                                    <td style="border:1px solid">{{ distribucion.line_item }}</td>
+                                    <td style="border:1px solid">{{ distribucion.tipo_pago }}</td>
+                                    <td style="border:1px solid">{{ distribucion.porcentaje }}</td>
+                                    <td style="border:1px solid">{{ distribucion.monto }}</td>
+                                    <td style="border:1px solid">{{ distribucion.fecha_pago }}</td>
                                     <td class="text-center" style="width: 5%"><a
-                                            href="/admin/ERP/contractconcepts/{{ concept.id }}/change?contract_id={{ object.id }}"
+                                            href="/admin/ERP/distribucionpago/{{ distribucion.id }}/change?contrato={{ object.id }}"
                                             class="btn btn-raised btn-default btn-xs"><i
                                             class="fa fa-pencil color-default eliminar"></i></a></td>
                                 </tr>
@@ -223,7 +234,61 @@
             </div>
 
         </div>
-    </div>{% endcomment %}
+    </div>
+
+
+     <div class="col-xs-10 col-xs-offset-1">
+        <div class="card">
+
+            <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title text">Documentación del Contrato</h3>
+                </div>
+                <div class="item-right">
+                    <a onclick="myFunction()" href="/admin/ERP/documentacioncontrato/add?contrato={{ object.id }}"
+                       class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-plus zmdi-hc-2x"></i>
+                    </a>
+
+                </div>
+            </div>
+
+            <div class="card-block text-center">
+                <div class="table-responsive">
+                    <table id="table_s" class="table table-bordered">
+                        {% if documentos.count == 0 %}
+                            <tbody>
+                            <tr>
+                                <td align="center">No hay documentos relacionados al contrato.</td>
+                            </tr>
+                            </tbody>
+                        {% else %}
+                            <thead>
+                            <td>Documento</td>
+                            <td>Descripción</td>
+                            <td>Descargar</td>
+                            <td class="no-sorting">Editar</td>
+                            </thead>
+                            <tbody>
+                            {% for documento in documentos %}
+                                <tr style="border:1px solid">
+                                    <td style="border:1px solid">{{ documento.nombre_archivo }}</td>
+                                    <td style="border:1px solid">{{ documento.descripcion }}</td>
+                                    <td style="border:1px solid"><a href="/media/{{ documento.pdf_version }}"><i
+                                            class="fa fa-download color-default eliminar"></i></a></td>
+                                    <td class="text-center" style="width: 5%"><a
+                                            href="/admin/ERP/documentacioncontrato/{{ documento.id }}/change?contrato={{ object.id }}"
+                                            class="btn btn-raised btn-default btn-xs"><i
+                                            class="fa fa-pencil color-default eliminar"></i></a></td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        {% endif %}
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
 
 
 {% endblock %}

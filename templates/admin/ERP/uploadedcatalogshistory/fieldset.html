@@ -29,13 +29,10 @@
     {% endfor %}{% endcomment %}
 
     <div class="card ">
-        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
-            <li role="presentation" class="active">
-                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="">Catálogo de Conceptos</span>
-                </a>
-            </li>
-        </ul>
+    <div class="card-header">
+              <h3 class="card-title text">Catálogo de Conceptos</h3>
+    </div>
+
 
         <div class="card-block">
             <div class="tab-content">
@@ -44,7 +41,7 @@
                         {% if field.field.name == "project" %}
                             <div role="tabpanel" class="tab-pane fade active in" id="otro0">
                             <div class="row">
-                                <h2 class="text-center">Archivos</h2>
+                                <h3 class="text-center">Cargar Archivos</h3>
 
                                 <hr>
                                 <div class="col-sm-12">
