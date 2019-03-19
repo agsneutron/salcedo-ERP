@@ -1336,7 +1336,6 @@ class EmployeeFinancialDataAdmin(admin.ModelAdmin):
         }),
     )
 
-#Created be XAVI
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(EmployeeFinancialDataAdmin, self).get_form(request, obj, **kwargs)

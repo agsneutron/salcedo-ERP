@@ -55,7 +55,7 @@ class LineItemAdmin(admin.ModelAdmin):
     list_display = ('id', 'description',)
     search_fields = ('description',)
     list_display_links = ('description',)
-    list_per_page = 50
+    #list_per_page = 50
 
 
 class LogFileAdmin(admin.ModelAdmin):
@@ -77,7 +77,7 @@ class ProgressEstimateLogAdmin(admin.ModelAdmin):
     list_display = ('user', 'date', 'description')
     search_fields = ('user', 'date', 'description')
     list_display_links = ('user', 'date', 'description')
-    list_per_page = 50
+    #list_per_page = 50
     inlines = [LogFileInline, ]
 
     def get_form(self, request, obj=None, **kwargs):
@@ -206,21 +206,21 @@ class ConceptInputAdmin(admin.ModelAdmin):
     search_fields = ('unit', 'quantity', 'unitPrice')
     list_display_links = ('unit', 'quantity', 'unit_price')
     exclude = ('end_date',)
-    list_per_page = 50
+    #list_per_page = 50
 
 
 class UnitAdmin(admin.ModelAdmin):
     list_display = ('id', 'name', 'abbreviation')
     search_fields = ('name', 'abbreviation')
     list_display_links = ('name', 'abbreviation')
-    list_per_page = 50
+    #list_per_page = 50
 
 
 class EmpleadoAdmin(admin.ModelAdmin):
     list_display = ('id', 'nombreEmpleado', 'rfc')
     search_fields = ('nombreEmpleado', 'rfc')
     list_display_links = ('id', 'nombreEmpleado', 'rfc')
-    list_per_page = 50
+    #list_per_page = 50
 
 
 #
@@ -255,7 +255,7 @@ class ContratoAdmin(admin.ModelAdmin):
     list_display = ('id', 'objeto_contrato')
     search_fields = ('objeto_contrato')
     list_display_links = ('id', 'objeto_contrato')
-    list_per_page = 50
+    #list_per_page = 50
 
     def get_fields(self, request, obj=None):
         fields = (
@@ -468,7 +468,7 @@ class UploadedCatalogsHistoryAdmin(admin.ModelAdmin):
     model = UploadedCatalogsHistory
     fields = ('project', 'line_items_file', 'concepts_file', 'version')
     list_display = ('project', 'line_items_file', 'concepts_file', 'upload_date')
-    list_per_page = 50
+    #list_per_page = 50
 
     def get_form(self, request, obj=None, **kwargs):
         ModelForm = super(UploadedCatalogsHistoryAdmin, self).get_form(request, obj, **kwargs)
@@ -1569,7 +1569,7 @@ class ProjectModelAdmin(admin.ModelAdmin):
 @admin.register(Estimate)
 class EstimateAdmin(admin.ModelAdmin):
     form = EstimateForm
-    list_per_page = 50
+    #list_per_page = 50
 
     fieldsets = (
         (
