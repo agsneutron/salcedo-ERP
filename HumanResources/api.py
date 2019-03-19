@@ -128,8 +128,6 @@ class GenerateEarningsDeductionsReport(View):
         #return HttpResponse(Utilities.json_to_dumps(response),'application/json; charset=utf-8')
         return report
 
-
-
 class DeleteAssistances(View):
     def get(self, request):
         payroll_period_id = request.GET.get('payroll_period')
@@ -711,6 +709,7 @@ class ExportPayrollList(View):
 
         # Getting the employee object for batch generation.
         payroll_group = payroll_period.payroll_group
+        internal_company = payroll_period.payroll_group.internal_company.name
 
         # Getting all the position descriptions related to the payroll group.
         position_description_set = EmployeePositionDescription.objects.filter(payroll_group_id=payroll_group.id)
@@ -748,7 +747,7 @@ class ExportPayrollList(View):
                 single_payroll = PayrollUtilities.generate_single_payroll(employee, payroll_period)
                 payroll_array.append(single_payroll)
 
-            payroll_list_file = PayrollListFile.generate_payroll_list(payroll_array)
+            payroll_list_file = PayrollListFile.generate_payroll_list(payroll_array,internal_company)
 
             '''
             return HttpResponse(

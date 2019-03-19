@@ -12,7 +12,7 @@ class PayrollListFile(object):
 
 
     @staticmethod
-    def generate_payroll_list(payroll_array):
+    def generate_payroll_list(payroll_array, internal_company):
 
         if len(payroll_array) == 0:
             output = StringIO.StringIO()
@@ -30,14 +30,10 @@ class PayrollListFile(object):
             workbook = Workbook(output)
             worksheet = workbook.add_worksheet('Lista Nominal')
 
-
             # Widen the first column to make the text clearer.
             worksheet.set_column('A:K', 15)
 
-
-            PayrollListFile.add_headers(workbook, worksheet, payroll_array)
-
-
+            PayrollListFile.add_headers(workbook, worksheet, payroll_array, internal_company)
 
         workbook.close()
         response = StreamingHttpResponse(FileWrapper(output),
@@ -51,12 +47,11 @@ class PayrollListFile(object):
         return response
 
     @staticmethod
-    def add_headers(workbook, worksheet, payroll_array):
+    def add_headers(workbook, worksheet, payroll_array, internal_company):
 
         formats = PayrollListFile.get_formats(workbook)
 
-        worksheet.merge_range('C3:G3', 'SALCEDO CONSTRUCCIÓN Y SUPERVISIÓN S.A. DE C.V.', formats['white_border'])
-
+        worksheet.merge_range('C3:G3', str(internal_company), formats['white_border'])
 
         worksheet.merge_range('D5:F5', 'LISTADO NOMINAL', formats['white_bg_blue_border'])
         worksheet.merge_range('G5:K5', '', formats['white_bg_blue_border'])
