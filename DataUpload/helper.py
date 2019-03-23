@@ -294,10 +294,10 @@ class DBObject(object):
 
         # If the file defines a parent for the line item, we will check if it exists.
         if line_item_has_parent:
-            line_item_qs = LineItem.objects.filter(Q(key=str(line_item_parent_key.upper())) & Q(project_id=project_id))
+            line_item_qs = LineItem.objects.filter(Q(key=str(line_item_parent_key).upper().replace('.0', '')) & Q(project_id=project_id))
             if line_item_parent_key is not None and len(line_item_qs) == 0:
                 raise ErrorDataUpload(
-                    'No existe la partida padre con clave ' + line_item_parent_key + ' para la partida ' + line_item_key + '.',
+                    'No existe la partida padre con clave ' + str(line_item_parent_key).upper().replace('.0', '') + ' para la partida ' + line_item_key + '.',
                     LoggingConstants.ERROR, self.user_id)
             else:
                 parent_id = line_item_qs[0].id
@@ -305,10 +305,10 @@ class DBObject(object):
 
             # Now we'll check if the top parent exists
             if line_item_top_parent_key is not None:
-                line_item_qs = LineItem.objects.filter(Q(key=str(line_item_top_parent_key.upper())) & Q(project_id=project_id))
+                line_item_qs = LineItem.objects.filter(Q(key=str(line_item_top_parent_key).upper().replace('.0', '')) & Q(project_id=project_id))
                 if line_item_top_parent_key is not None and len(line_item_qs) == 0:
                     raise ErrorDataUpload(
-                        'No existe la partida padre con clave ' + line_item_top_parent_key + ' para la partida ' + line_item_key + '.',
+                        'No existe la partida padre con clave ' + str(line_item_top_parent_key).upper().replace('.0', '') + ' para la partida ' + line_item_key + '.',
                         LoggingConstants.ERROR, self.user_id)
                 else:
                     top_parent_id = line_item_qs[0].id
@@ -320,7 +320,7 @@ class DBObject(object):
         # We will do that by first checking if the key already exists on the database.
         # If the key already exists, we have to make sure the description is also the same.
 
-        line_item_validation_qs = LineItem.objects.filter(Q(key=line_item_key) & Q(project_id=project_id))
+        line_item_validation_qs = LineItem.objects.filter(Q(key=str(line_item_key).upper().replace('.0', '')) & Q(project_id=project_id))
         if len(line_item_validation_qs) != 0:
             # The key already exists. Make sure the description is the same for both instances.
             old_description = line_item_validation_qs[0].description
@@ -334,12 +334,12 @@ class DBObject(object):
                 project_key = Project.objects.filter(Q(pk=project_id))[0].key
 
                 raise ErrorDataUpload(
-                    u"Problema al guardar la partida " + line_item_key + u" para el proyecto " + project_key
+                    u"Problema al guardar la partida " + str(line_item_key).upper().replace('.0', '') + u" para el proyecto " + project_key
                     + u". Esta partida ya existe y se intentó agregar con una descripción diferente. La operación ha sido cancelada.",
                     LoggingConstants.ERROR, self.user_id)
 
         else:
-            line_item_obj = LineItem(key=line_item_key.upper(),
+            line_item_obj = LineItem(key=str(line_item_key).upper().replace('.0', ''),
                                      project_id=project_id,
                                      parent_line_item_id=parent_id,
                                      top_parent_line_item_id=top_parent_id,
@@ -385,24 +385,26 @@ class DBObject(object):
         concept_key = str(record[self.ConceptConstants.CONCEPT_KEY_COL]).encode('utf-8')
         concept_description = str(record[self.ConceptConstants.CONCEPT_DESCRIPTION_COL]).encode('utf-8')
         unit = str(record[self.ConceptConstants.UNIT_COL]).encode('utf-8')
-        quantity = Decimal(record[self.ConceptConstants.QUANTITY_COL].replace(',', ''))
+        quantity = Decimal(record[self.ConceptConstants.QUANTITY_COL])
+        #.replace(',', '')
         # unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL][1:].replace(',', ''))
-        unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL].replace(',', ''))
+        unit_price = Decimal(record[self.ConceptConstants.UNIT_PRICE_COL])
+        #.replace(',', '')
 
         # Check if the unit exists. If not, add it.
-        unit_qs = Unit.objects.filter(abbreviation=unit.upper())
+        unit_qs = Unit.objects.filter(abbreviation=str(unit.upper()))
         if len(unit_qs) == 0:
             # The unit does not exist. Add it.
-            unit_obj = Unit(abbreviation=unit.upper(),
+            unit_obj = Unit(abbreviation=str(unit.upper()),
                             quantification='C',
-                            name=unit.upper())
+                            name=str(unit.upper()))
             unit_obj.save()
         else:
             # The unit exists. Use it.
             unit_obj = unit_qs[0]
 
         # Now we're going to check if the line item provided for the concept exists.
-        line_item_qs = LineItem.objects.filter(Q(key=line_item_key.upper()) & Q(project_id=project_id))
+        line_item_qs = LineItem.objects.filter(Q(key=str(line_item_key).upper().replace('.0', '')) & Q(project_id=project_id))
         if len(line_item_qs) == 0:
             # The line item does not exist. Raise an exception to be displayed to the user.
             model_names = {
@@ -411,7 +413,7 @@ class DBObject(object):
             }
             raise ErrorDataUpload(
                 u"Se intentó agregar un " + model_names[
-                    model] + "(" + concept_key + ") correspondiente a una partida que no existe (" + line_item_key + ").",
+                    model] + "(" + concept_key + ") correspondiente a una partida que no existe (" + str(line_item_key) + ").",
                 LoggingConstants.ERROR, self.user_id)
         else:
             # The line item exists. Use it.
@@ -433,7 +435,7 @@ class DBObject(object):
 
                 # Check unit is the same:
                 old_unit = old_concept.unit.abbreviation
-                new_unit = unit.upper()
+                new_unit = str(unit.upper())
 
                 if old_unit != new_unit:
                     errors.append('unidad')
