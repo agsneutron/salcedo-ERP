@@ -8,9 +8,10 @@
         height: 65px;
     }
 
-     .field-file .col-xs-4 {
+    .field-file .col-xs-4 {
         height: 100%;
     }
+
     .col-xs-4 br {
         display: none !important;
 
@@ -18,6 +19,10 @@
 
     .active_btn {
     border-bottom: 3px solid white !important;
+    }
+
+    .no_change {
+        pointer-events: none !important;
     }
 
 </style>
@@ -49,7 +54,7 @@
             {% endfor %}
         </div>
     {% endfor %}{% endcomment %}
-<h2 class="text-center">Contratos a Contratistas - {{ fieldset.name }} </h2>
+<h3 class="text-center">Contratos a Contratistas - {{ fieldset.name }} </h3>
  <hr>
 
     <div class="card ">
@@ -112,7 +117,11 @@
                                     {% if field.is_readonly %}
                                         <div class=“readonly”>{{ field.contents }}</div>
                                     {% else %}
-                                        {{ field.field }}
+                                        {% if field.field.name == "monto" %}
+                                            {{ field.field|addcss:"no_change" }}
+                                        {% else %}
+                                            {{ field.field }}
+                                        {% endif %}
                                     {% endif %}
                                 {% endif %}
                                 {% if field.field.help_text %}
@@ -122,8 +131,13 @@
                             </div>
                         {% endfor %}
 
+
                     </div>
                 {% endfor %}
+                   <div class="col-xs-4 distribuido" id="distribuido">
+                       <span></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
@@ -144,11 +158,11 @@
         $('.field-observaciones>div').removeClass('col-xs-4');
         $('.field-observaciones>div').addClass('col-xs-12');
 
-         $('.vDateField').addClass('form-control');
+        $('.vDateField').addClass('form-control');
 
-        document.getElementById("id_observaciones").rows = "4"
+        document.getElementById("id_observaciones").rows = "4";
 
-
+        $('input#id_monto').addClass('no_change');
 
     });
 

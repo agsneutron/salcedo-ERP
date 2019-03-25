@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_modify %}
+{% load i18n admin_urls admin_static admin_modify app_filters %}
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -83,9 +83,9 @@
                                         </thead>
                                         <tbody>
                                         {% for record in partidas %}
-                                            <tr>
-                                                <td>{{ record.line_item }}</td>
-                                                <td>{{ record.monto_partida }}</td>
+                                            <tr class="text-small" style="">
+                                                <td width="40%">{{ record.line_item }}</td>
+                                                <td align="right">${{ record.monto_partida|intcomma }}</td>
                                                 <td>{{ record.dias_pactados }}</td>
                                                 <td>{{ record.fecha_inicio }}</td>
                                                 <td>{{ record.fecha_termino_propuesta }}</td>

@@ -1021,11 +1021,17 @@ class DistribucionPagoAdmin(admin.ModelAdmin):
         contrato = ContratoContratista.objects.get(pk=contrato_id)
         partidas = PartidasContratoContratista.objects.filter(contrato=contrato_id)
         distribucion = DistribucionPago.objects.filter(contrato=contrato_id)
+        distribuido = distribucion.values('line_item__description', 'line_item', 'line_item__key').annotate(asignado=Sum('monto'), porcentaje=Sum('porcentaje'))
+
+        print "GROUP SUM"
+        for dist in distribuido:
+            print dist
 
         extra['template'] = "partidascontrato"
         extra['contrato'] = contrato
         extra['partidas'] = partidas
         extra['distribucion'] = distribucion
+        extra['distribuido'] = distribuido
 
         return super(DistribucionPagoAdmin, self).change_view(request, object_id, form_url, extra)
 
@@ -1037,14 +1043,18 @@ class DistribucionPagoAdmin(admin.ModelAdmin):
         contrato_id = request.GET.get('contrato')
         contrato = ContratoContratista.objects.get(pk=contrato_id)
         partidas = PartidasContratoContratista.objects.filter(contrato=contrato_id)
-        distribucion = DistribucionPago.objects.filter(contrato=contrato_id)
+        distribucion = DistribucionPago.objects.filter(contrato=contrato_id).order_by('line_item')
+        distribuido = distribucion.values('line_item__description', 'line_item', 'line_item__key').annotate(asignado=Sum('monto'), porcentaje=Sum('porcentaje'))
+
+        print "GROUP SUM"
+        for dist in distribuido:
+            print dist
 
         extra['template'] = "partidascontrato"
         extra['contrato'] = contrato
         extra['partidas'] = partidas
         extra['distribucion'] = distribucion
-
-
+        extra['distribuido'] = distribuido
 
         return super(DistribucionPagoAdmin, self).add_view(request, form_url, extra_context=extra)
 

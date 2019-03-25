@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_modify %}
+{% load i18n admin_urls admin_static admin_modify app_filters %}
 
 {% block extrahead %}{{ block.super }}
 <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -68,14 +68,41 @@
 {% endblock %}
 
 {% block after_related_objects %}
-    <h3> {% for record in partidas %}
+    {% for record in partidas %}
              <input type="hidden" id="monto_partida" value="{{ record.monto_partida }}">
             {% endfor %}
-    </h3>
 
-     <hr>
+    <h4 class="text-light">Distribución de Pago</h4>
+
                                 <div class="table-responsive mt-15">
                                     <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <td>Partida</td>
+                                            <td>Porcentaje Distribuido</td>
+                                            <td>Monto Distribuido</td>
+
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for record in distribuido %}
+
+                                            <tr class="text-small">
+                                                <td>{{ record.line_item__key }} - {{ record.line_item__description }}</td>
+                                                <td align="right">  {{ record.porcentaje }} %</td>
+                                                <td align="right">${{ record.asignado|intcomma }}</td>
+
+                                            </tr>
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+    <hr>
+   <h4>Detalle de la Distribución</h4>
+
+
+                                <div class="table-responsive mt-15">
+                                    <table class="table table-striped text-small">
                                         <thead>
                                         <tr>
                                             <td>Partida</td>
@@ -90,12 +117,12 @@
                                         <tbody>
                                         {% for record in distribucion %}
 
-                                            <tr>
-                                                <td>{{ record.line_item }}</td>
+                                            <tr class="text-small">
+                                                <td width="50%">{{ record.line_item }}</td>
                                                 <td>{{ record.tipo_pago }}</td>
-                                                <td>{{ record.porcentaje }}</td>
-                                                <td>{{ record.monto }}</td>
-                                                <td>{{ record.fecha_pago }}</td>
+                                                <td align="right">{{ record.porcentaje }} %</td>
+                                                <td align="right">${{ record.monto|intcomma }}</td>
+                                                <td align="right">{{ record.fecha_pago }}</td>
 
                                                 <td style="width: 5%">
                                                     <a href="/admin/ERP/distribucionpago/{{ record.id }}/change/?contrato={{ request.GET.contrato }}"
@@ -115,6 +142,8 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+
 {% endblock %}
 
 {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
@@ -135,6 +164,8 @@
             {% if adminform and add %}
                 $('form#{{ opts.model_name }}_form :input:visible:enabled:first').focus()
             {% endif %}
+
+
             });
         })(django.jQuery);
     </script>
@@ -144,26 +175,67 @@
 {% prepopulated_fields_js %}
 
 <script>
-
-
+ $(document).ready(function () {
+        var distribuidos = {
+                {%  for c in distribuido %}
+                    '{{ c.line_item }}': '{{  c.porcentaje }}',
+                {% endfor %}
+        };
 
         $('input#id_porcentaje').change(function() {
             monto_partida = $('input#monto_partida').val();
             porcentaje =  $( this ).val();
 
-           if (porcentaje >=100){
-               alert("El porcentaje no puede ser 100%, favor de verificar la distribución.");
-               this.value=0;
-           }
-           else if (porcentaje > 0){
-              $('input#id_monto').val((monto_partida * porcentaje)/100);
-           }
+            if ($('select#id_line_item').val() !="") {
+
+                if (porcentaje >= 100) {
+                    var message = 'El porcentaje no puede ser mayor o igual a 100%, favor de verificar la distribución.\n';
+                    $('#alertModal').find('.modal-body p').text(message);
+                    $('#alertModal').modal('show');
+                    this.value = "";
+                }
+                else if (porcentaje > 0) {
+
+                    var porcentajeasignado = distribuidos['' + $('select#id_line_item').val()];
+                    //alert(distribuidos['' + $('select#id_line_item').val()]);
+                    //alert(parseFloat(porcentajeasignado.valueOf())+parseFloat(porcentaje.valueOf()));
+                    //alert($('select#id_line_item').val());
+                    if ((parseFloat(porcentajeasignado.valueOf()) + parseFloat(porcentaje.valueOf())) > 100) {
+
+                        var message = 'El porcentaje ' + porcentaje + '% para la partida seleccionada, sumará un porcentaje mayor al 100%, favor de verificar la Distribución de Pago para saber el porcentaje disponible que puede asignar.\n';
+                        $('#alertModal').find('.modal-body p').text(message);
+                        $('#alertModal').modal('show');
+                        this.value = "";
+                    }
+                    else {
+                        var porcentaje = (monto_partida * porcentaje) / 100;
+                        $('input#id_monto').val(porcentaje.toFixed(2));
+                    }
+                }
+
+            }
+            else{
+                var message = 'Favor de seleccionar una partida antes de asignar un porcentaje.\n';
+                $('#alertModal').find('.modal-body p').text(message);
+                $('#alertModal').modal('show');
+                this.value = "";
+            }
 
         });
 
+        $('select#id_line_item').change(function() {
+            var asignado = distribuidos['' + $('select#id_line_item').val()];
+            if (asignado.valueOf() == '100.00'){
+                var message = 'La distribución de pago de la partida seleccionada ha sido asignada al 100%, favor de seleccionar otra partida.\n';
+                $('#alertModal').find('.modal-body p').text(message);
+                $('#alertModal').modal('show');
+                this.value = "";
+
+            }
+        });
 
 
-
+ });
 
 </script>
 
