@@ -774,7 +774,7 @@ class ContractorModelAdmin(admin.ModelAdmin):
             'nombreContratista', 'rfc', 'email', 'telefono', 'telefono_dos', 'pais', 'estado', 'municipio', 'cp',
             'calle',
             'numero', 'colonia', 'employer_registration_number', 'infonavit', 'tax_person_type', 'services', 'version',
-            'bank', 'bank_account_name', 'bank_account') #'CLABE'
+            'bank', 'bank_account_name', 'bank_account', 'CLABE')   #'CLABE'
         return fields
 
     def get_urls(self):
