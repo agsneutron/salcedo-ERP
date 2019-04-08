@@ -34,9 +34,34 @@ class AccountingPolicyForm(forms.ModelForm):
             else:
                 instance.folio = 1
 
-
-
         return super(AccountingPolicyForm, self).save(commit=commit)
+
+
+class ExpenseForm(forms.ModelForm):
+    class Meta:
+        model = Expense
+        fields = '__all__'
+        widgets = {
+            'description': forms.Textarea(attrs={'rows': 2})
+        }
+
+    def save(self, commit=True):
+        instance = super(ExpenseForm, self).save(commit=False)
+
+        # if instance.folio is None:
+        #
+        #     lista = Expense.objects.filter(type_expense__id=instance.type_expense.id).values('folio').order_by('-folio')
+        #
+        #     if lista.count() > 0:
+        #         last_number = lista[0]
+        #         numero = int(last_number.get('folio')) + 1
+        #         print numero
+        #         instance.folio = numero
+        #     else:
+        #         instance.folio = 1
+
+        return super(ExpenseForm, self).save(commit=commit)
+
 
 # Form to include the fields of the FiscalPeriod Form.
 class FiscalPeriodForm(forms.ModelForm):

@@ -121,6 +121,17 @@ class AccountingPolicyDetailInline(admin.TabularInline):
     )
 
 
+class ExpenseDetailInline(admin.TabularInline):
+    model = ExpenseDetail
+    extra = 0
+
+    fieldsets = (
+        ("Detalle", {
+            'fields': ('internal_company', 'description', 'debit', 'deliveryto', 'registry_date')
+        }),
+    )
+
+
 @admin.register(AccountingPolicy)
 class AccountingPolicyAdmin(admin.ModelAdmin):
     form = AccountingPolicyForm
@@ -171,6 +182,58 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         super(AccountingPolicyAdmin, self).save_model(request, obj, form, change)
+
+
+@admin.register(Expense)
+class ExpenseAdmin(admin.ModelAdmin):
+    form = ExpenseForm
+    inlines = (ExpenseDetailInline,)
+    actions = None
+
+    readonly_fields = []
+
+    fieldsets = (
+        ("", {
+            'fields': (
+            'internal_company', 'reference', 'monto', 'registry_date', 'description',)
+        }),
+    )
+
+    list_display = ('reference', 'monto', 'internal_company', 'description', 'registry_date', 'get_detail_column', 'get_change_column', 'get_delete_column')
+    list_display_links = None
+
+    def get_urls(self):
+        urls = super(ExpenseAdmin, self).get_urls()
+        my_urls = [
+            url(r'^(?P<pk>\d+)/$', views.ExpenseAdminDetailView.as_view(), name='expense-detail'),
+        ]
+
+        return my_urls + urls
+
+    def get_detail_column(self, obj):
+        return AccountingAdminUtilities.get_detail_link_accounting(obj)
+
+    def get_change_column(self, obj):
+        return AccountingAdminUtilities.get_change_link_accounting(obj)
+
+    def get_delete_column(self, obj):
+        return AccountingAdminUtilities.get_delete_link_accounting(obj)
+
+    get_detail_column.short_description = 'Detalle'
+    get_detail_column.allow_tags = True
+
+    get_change_column.short_description = 'Editar'
+    get_change_column.allow_tags = True
+
+    get_delete_column.short_description = 'Eliminar'
+    get_delete_column.allow_tags = True
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly_fields = ('folio',)
+        return readonly_fields
+
+    def save_model(self, request, obj, form, change):
+        super(ExpenseAdmin, self).save_model(request, obj, form, change)
 
 
 @admin.register(FiscalPeriod)

@@ -117,7 +117,7 @@ class EstimateForm(forms.ModelForm):
 
             contract_id_array = []
             for estimated_contract in estimated_contracts:
-                contract_id_array.append(estimated_contract['contractlineitem__contrato_id'])
+                contract_id_array.append(estimated_contract['contractlineitem'])
 
             all_contracts_by_project = PartidasContratoContratista.objects.filter(Q(contrato__project_id=project_id))
             no_estimated_contracts = PartidasContratoContratista.objects.filter(Q(contrato__project_id=project_id)).exclude(
@@ -125,6 +125,8 @@ class EstimateForm(forms.ModelForm):
 
             no_concepts_contract_key_array = []
             no_concepts_contract_id_array = []
+            no_concepts_lineitem_id_array = []
+
 
             #line_item_concepts = []
             #for contract in all_contracts_by_project:
@@ -134,10 +136,12 @@ class EstimateForm(forms.ModelForm):
                 concepts_by_contract = contractconcepts.concepts.all()
 
                 if len(concepts_by_contract) <= 0:
-                    no_concepts_contract_key_array.append(contractconcepts.contrato.clave_contrato)
+                    #no_concepts_contract_key_array.append(contractconcepts.contrato.clave_contrato)
+                    no_concepts_contract_key_array.append(contractconcepts.line_item.description)
                     no_concepts_contract_id_array.append(contractconcepts.contrato.id)
+                    no_concepts_lineitem_id_array.append(contractconcepts.line_item_id)
 
-            self.fields['contractlineitem'].queryset = no_estimated_contracts.exclude(Q(contrato__in=no_concepts_contract_id_array))
+            self.fields['contractlineitem'].queryset = no_estimated_contracts.exclude(Q(line_item_id__in=no_concepts_lineitem_id_array))
 
 
             if not all_contracts_by_project.exists():
@@ -145,7 +149,7 @@ class EstimateForm(forms.ModelForm):
             elif not no_estimated_contracts.exists():
                 messages.error(self.request, "No hay contratos pendientes de estimar para este proyecto.")
             if len(no_concepts_contract_key_array) >= 1:
-                messages.error(self.request, "Los siguientes contratos no cuentan con conceptos asignados: "
+                messages.error(self.request, "Los siguientes contratos - partidas no cuentan con conceptos asignados: "
                                + ", ".join(no_concepts_contract_key_array))
 
     def clean(self):

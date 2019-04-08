@@ -339,3 +339,63 @@ class CommercialAllyContact(models.Model):
             super(CommercialAllyContact, self).save(*args, **kwargs)
         else:
             Logs.log("Couldn't save")
+
+
+class Expense(models.Model):
+    #fiscal_period = models.ForeignKey(FiscalPeriod, verbose_name='Periodo Fiscal', null=False, blank=False)
+    #type_expense = models.ForeignKey(TypePolicy, verbose_name='Tipo de Gasto', null=False, blank=False)
+    monto = models.DecimalField("Monto", blank=True, null=True, max_digits=50, decimal_places=2)
+    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
+    description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
+    reference = models.CharField(verbose_name="Factura", max_length=1024, null=False, blank=False)
+    internal_company = models.ForeignKey(InternalCompany, verbose_name='Empresa Interna', null=True, blank=True)
+
+    def __str__(self):
+        return str(self.reference) + " Fecha: " + str(self.registry_date)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.reference) + " Fecha: " + str(self.registry_date)
+
+    class Meta:
+        verbose_name_plural = 'Registro de Gastos'
+        verbose_name = 'Registro de Gastos'
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['registry_date'] = str(self.registry_date)
+        ans['reference'] = str(self.reference)
+        #ans['fiscal_period_year'] = str(self.fiscal_period.accounting_year)
+        #ans['fiscal_period_month'] = str(self.fiscal_period.get_account_period_display())
+        #ans['type_expense_name'] = str(self.type_expense.name)
+        return ans
+
+
+# Model for accounting policy
+class ExpenseDetail(models.Model):
+    expense = models.ForeignKey(Expense, verbose_name='Póliza', null=False, blank=False)
+    internal_company = models.ForeignKey(InternalCompany, verbose_name='Empresa Interna', null=True, blank=True)
+    description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
+    debit = models.FloatField(verbose_name="Monto", null=False, blank=False, default=0)
+    #credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
+    deliveryto = models.CharField(verbose_name="Entregado a", max_length=100, null=False, blank=False)
+    registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
+
+    def __str__(self):
+        return str(self.internal_company) + ": " + self.description
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.internal_company) + ": " + self.description
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['registry_date'] = self.registry_date.strftime('%m/%d/%Y')
+        return ans
+
+    class Meta:
+        verbose_name_plural = 'Detalle de Gastos'
+        verbose_name = 'Detalle de Gasto'
+
+    def save(self, *args, **kwargs):
+        self.registry_date = now()
+        super(ExpenseDetail, self).save(*args, **kwargs)
+

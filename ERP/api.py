@@ -10,7 +10,7 @@ from django.http.response import HttpResponse
 from ERP.lib import utilities
 from ERP.lib.utilities import Utilities
 from ERP.models import Project, LineItem, Estimate, Concept_Input, ProgressEstimate, ProjectSections, Section, \
-    AccessToProject, ContratoContratista
+    AccessToProject, ContratoContratista, ProgressEstimateConcepts
 from ERP.models import ContractConcepts
 import json
 
@@ -126,31 +126,56 @@ class CleanEstimate(View):
         estimate.lock_status = 'L'
         estimate.save()
 
-
-
         return HttpResponse('ok', 'application/json; charset=utf-8')
 
 
 class Saveamountofestimate(View):
     def get(self, request):
         ID_CONTRACTCONCEPT = request.GET.get('ID')
+        contract_line_item_id = request.GET.get('contract_line_item')
+        progress_estimate_id = request.GET.get('progress_estimate')
+        accumulated=0;
 
         if ID_CONTRACTCONCEPT is not None:
             hasta_estimacion = request.GET.get('AEstaEstimacion')
             de_estimacion = request.GET.get('DeEstaEstimacion')
 
-            Concept = ContractConcepts.objects.get(id=ID_CONTRACTCONCEPT)
+            Concept = ContractConcepts.objects.get(Q(id=ID_CONTRACTCONCEPT))
 
-            if Concept:
-                Concept.OfThisEstimate = de_estimacion
-                Concept.ThisEstimate = hasta_estimacion
+            try:
+                progress_estimate_concept = ProgressEstimateConcepts.objects.get(Q(progress_estimate_id=progress_estimate_id),
+                                                                         Q(contract_concept_id=ID_CONTRACTCONCEPT))
+            except ProgressEstimateConcepts.DoesNotExist:
+                progress_estimate_concept = None
+
+            if progress_estimate_concept is not None:
+                calculate_acumulatedprogress = ProgressEstimateConcepts.objects.filter(contract_concept_id=ID_CONTRACTCONCEPT)\
+                    .values('progress_this_estimate')\
+                    .annotate(acumulated=Sum('accumulated_progress'))
+
+                for ca in calculate_acumulatedprogress:
+                    accumulated = ca['acumulated']
+
+                print 'calculate_acumulatedprogress'
+                print accumulated
+
+                progress_estimate_concept.progress_this_estimate = de_estimacion
+                progress_estimate_concept.accumulated_progress = accumulated
+                progress_estimate_concept.save()
+
+                Concept.ThisEstimate = accumulated
                 Concept.save()
 
                 return HttpResponse('ok', 'application/json; charset=utf-8')
             else:
-                new_it = {
-                    'mensaje': 'No Se guardó correctamente la información'
-                }
+                ProgressEstimateConcepts.objects.create(progress_estimate_id=progress_estimate_id,
+                                                        contract_concept_id=ID_CONTRACTCONCEPT,
+                                                        progress_this_estimate=de_estimacion,
+                                                        accumulated_progress=hasta_estimacion)
+
+                Concept.ThisEstimate = hasta_estimacion
+                Concept.save()
+
                 return HttpResponse('ok', 'application/json; charset=utf-8')
         else:
             new_it = {

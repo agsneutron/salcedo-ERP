@@ -407,6 +407,76 @@ class ProgressEstimateAdmin(admin.ModelAdmin):
         else:
             return False
 
+    # Adding extra context to the change view.
+    def change_view(self, request, object_id, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        progressestimate_id = object_id
+        progressestimate_concepts_array = []
+        concepts_array = []
+        pf_progress_this_estimate = 0
+        pf_accumulated_progress = 0
+
+
+        print progressestimate_id
+        estimate_id = ProgressEstimate.objects.filter(id=progressestimate_id).values('estimate_id')
+        estimate = Estimate.objects.get(pk=estimate_id)
+        print estimate
+        concepts = estimate.contractlineitem.contractconcepts_set.all()
+
+        for concept in concepts:
+
+            #progressestimate_concepts_array.append([])
+            progress_found = ProgressEstimateConcepts.objects.filter(Q(contract_concept=concept.id), Q(progress_estimate=progressestimate_id))
+
+            j = concept.id
+            print 'CONCEPT ID'
+            print j
+            if progress_found:
+                for pf in progress_found:
+                    pf_progress_this_estimate = pf.progress_this_estimate
+                    pf_accumulated_progress = pf.accumulated_progress
+
+                progressestimate_concepts_array.append(
+                    [concept.id, concept.concept.key, concept.concept.description, concept.amount,
+                     concept.concept.unit.abbreviation, concept.contractlineitem_id, pf_progress_this_estimate,
+                     pf_accumulated_progress, progressestimate_id])
+            else:
+                calculate_acumulatedprogress = ProgressEstimateConcepts.objects.filter(
+                    contract_concept_id=concept.id) \
+                    .values('contract_concept_id') \
+                    .annotate(acumulated=Sum('progress_this_estimate'))
+
+                print calculate_acumulatedprogress
+                for ca in calculate_acumulatedprogress:
+                    accumulated = ca['acumulated']
+                    print 'in for acumulated'
+                    print accumulated
+
+                progressestimate_concepts_array.append(
+                    [concept.id, concept.concept.key, concept.concept.description, concept.amount,
+                     concept.concept.unit.abbreviation, concept.contractlineitem_id,
+                     Decimal('0.0'),
+                     accumulated, progressestimate_id])
+        print 'CONCEPTOS'
+        print progressestimate_concepts_array
+        extra['conceptos'] = progressestimate_concepts_array
+
+        return super(ProgressEstimateAdmin, self).change_view(request, object_id, form_url, extra)
+
+    # Adding extra context to the add view.
+    def add_view(self, request, form_url='', extra_context=None):
+        # Setting the extra variable to the set context or none instead.
+        extra = extra_context or {}
+
+        estimate_id = request.GET.get('estimate')
+        estimate = Estimate.objects.get(pk=estimate_id)
+        concepts = estimate.contractlineitem.contractconcepts_set.all()
+        extra['conceptos'] = concepts
+
+        return super(ProgressEstimateAdmin, self).add_view(request, form_url, extra_context=extra)
+
 
 class AccessToProjectAdmin(admin.ModelAdmin):
     model = AccessToProject
@@ -1695,5 +1765,6 @@ admin.site.register(Section)
 admin.site.register(ProjectSections)
 admin.site.register(Bank)
 admin.site.register(TipoPago)
+admin.site.register(ProgressEstimateConcepts)
 
 

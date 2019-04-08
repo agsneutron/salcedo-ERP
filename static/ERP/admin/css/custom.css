@@ -267,7 +267,7 @@ hr {
 }
 
 .ms-header.ms-header-primary {
-    background-color: #2d2d2d;
+    background-color: #204280;
     color: #fff;
 }
 
@@ -549,6 +549,7 @@ form .aligned ul {
     position: relative;
     background-color: #204280;
     border: 0;
+    padding-left: inherit !important;
 }
 
 .nav.nav-tabs li a {
@@ -860,9 +861,9 @@ ul {
 
 .ms-slidebar .ms-slidebar-header .ms-slidebar-title h3 {
     color: #fff;
-    font-size: 20px;
+    font-size: 14px !important;
     margin: 0;
-    word-spacing: -4px;
+    word-spacing: inherit;
     display: inline-block;
     vertical-align: middle;
     margin-left: 10px;
@@ -1758,13 +1759,16 @@ display: -webkit-inline-box;
     top: 3px !important;
 }
 
-/*.errorlist {
-position: absolute !important;
-    bottom: -25px !important;
-    right: 15px !important;
+.errorlist {
+    position: absolute !important;
+    /* top: 5px !important; */
+    right: 5px !important;
     font-size: 10px;
     color: #ff0000 !important;
-}*/
+    width: 100%;
+    line-height: 11px;
+    padding-left: 0px !important;
+}
 
 .btn-excel {
     background-color: #207245 !important;
@@ -1795,4 +1799,25 @@ position: absolute !important;
 }
 .hide {
     display: none;
+}
+input[type=checkbox], input[type=radio] {
+    margin: 4px 0 0;
+    margin-top: 1px\9;
+    line-height: normal;
+    height: 20px;
+}
+.ms-collapse-nav li.panel a:after {
+    content: '\f2fb';
+}
+.ms-collapse-nav li a:after {
+    font-family: Material-Design-Iconic-Font;
+    font-size: 1.2em;
+    float: right;
+    content: '\f2fb';
+}
+ul.messagelist {
+    padding-left: 0px !important;
+}
+.w-150 {
+    width: 150px !important;
 }

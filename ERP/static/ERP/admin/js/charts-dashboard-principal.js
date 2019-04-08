@@ -40,10 +40,11 @@ function callGraphicOne() {
             type: 'get',
             success: function(data) {
                 datosJson=data;
+                console.log('datosJson'+ datosJson.toString());
                 setMapa(data);
                 for (var i = 0; i <= data.length-1; i++) {
                     $("#cardGrafica"+i).show();
-                    $("#tituloGrafica"+i).html('<h3 class="card-title"><a href="/admin/ERP/project/dashboard/'+data[i].general.project_id+'/">' + data[i].general.project_name + '</a></h3>' + '<div class="item-right" style="    top: 2px;"><a href="/admin/ERP/project/dashboard/'+data[i].general.project_id+'/" class="btn btn-raised btn-default btn-xs"><i class="fa fa-tachometer color-danger eliminar" style="margin:0;vertical-align: baseline;"></i> Dashboard<div class="ripple-container"></div></a></div>');
+                    $("#tituloGrafica"+i).html('<div class="card-title text-small"><a href="/admin/ERP/project/dashboard/'+data[i].general.project_id+'/">' + data[i].general.project_name + '</a></div>' + '<div class="item-right" style="    top: 2px;"><a href="/admin/ERP/project/dashboard/'+data[i].general.project_id+'/" class="btn btn-raised btn-default btn-xs"><i class="fa fa-tachometer color-danger eliminar" style="margin:0;vertical-align: baseline;"></i> Dashboard<div class="ripple-container"></div></a></div>');
 
                     setDataCircles(data[i].general.percentaje_estimated, data[i].general.percentaje_paid_estimated,i);
                     Series = obtenSeries_Mensual_Grupo(data[i].schedule);
@@ -137,7 +138,7 @@ function obtenSeries_Mensual_Grupo(datosJson2) {
 
         }
     }
-    console.log(arrMeses);
+    console.log(arrMeses.toString());
     // con el arreglo nombres se recorre el arreglo asociativo para llenar el json de series.
     for (var i = 0; i <= nombres.length-1; i++) {
         Series.serie.push({
@@ -392,7 +393,7 @@ function puntosMapa(Datos) {
 
     for(var i= 0;i<Datos.length;i++){
         var arregloSimple=new Array();
-        arregloSimple.push("<b>Obra:</b>" + Datos[i].general.project_name + " <br> ");
+        arregloSimple.push("<b>Obra:</b>" + Datos[i].general.project_name + " <br> " + "<b>Ubicación:</b> " + Datos[i].general.project_direction );
         arregloSimple.push(Datos[i].general.project_latitud);
         arregloSimple.push(Datos[i].general.project_longitud);
         arregloSimple.push(i);

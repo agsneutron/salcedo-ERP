@@ -118,7 +118,7 @@ def has_group(user, group_name):
 
 @register.simple_tag(takes_context=True)
 def subtractify(context, obj):
-    newval = obj.amount - (obj.ThisEstimate + obj.OfThisEstimate)
+    newval = obj[3] - (obj[6] + obj[7])
     return newval
 
 

@@ -883,10 +883,14 @@ class GetMainDashboard(View):
                 "project_key" : access.project.key,
                 "project_latitud" : access.project.latitud,
                 "project_longitud" : access.project.longitud,
-                "project_id" : access.project.id
+                "project_id" : access.project.id,
+                "project_direction" : access.project.ubicacion_calle + " " + access.project.ubicacion_numero + ", "
+                                      + access.project.ubicacion_colonia,
             }
 
             response_by_project.append(structured_response)
+            print 'RESPONSE'
+            print response_by_project
 
 
         return HttpResponse(Utilities.json_to_dumps(response_by_project), 'application/json; charset=utf-8')

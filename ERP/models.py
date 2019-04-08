@@ -1130,7 +1130,7 @@ class Project(models.Model):
         ans['nombreProyecto'] = unicode(str(self.nombreProyecto))
         ans['propietario'] = str(self.propietario.nombrePropietario)
         ans['ubicacion_municipio'] = unicode(str(self.ubicacion_municipio.nombreMunicipio))
-        ans['ubicacion_estado'] = 'eh'  # unicode(str(self.ubicacion_estado.nombreEstado))
+        ans['ubicacion_estado'] = unicode(str(self.ubicacion_estado.nombreEstado))
         ans['ubicacion_pais'] = unicode(str(self.ubicacion_pais.nombrePais))
 
         return ans
@@ -1944,6 +1944,27 @@ class SystemLogEntry(models.Model):
 
     def __str__(self):
         return "Value: " + self.information
+
+
+class ProgressEstimateConcepts(models.Model):
+    progress_estimate = models.ForeignKey(ProgressEstimate, verbose_name="Avance de Estimación", on_delete=models.CASCADE)
+    contract_concept = models.ForeignKey(ContractConcepts, verbose_name="Concepto", on_delete=models.CASCADE)
+    progress_this_estimate = models.DecimalField(verbose_name="En esta Estimación", null=False, default=0.00, decimal_places=2, max_digits=12)
+    accumulated_progress = models.DecimalField(verbose_name="Hasta esta Estimación", null=False, default=0.00, decimal_places=2, max_digits=12)
+
+    class Meta:
+        verbose_name_plural = 'Avance Físico de los Conceptos'
+        verbose_name = 'Avance Fñisico del Concepto'
+        unique_together = ('progress_estimate', 'contract_concept')
+
+    def to_serializable_dict(self):
+        ans = model_to_dict(self)
+        ans['progress_estimate'] = str(self.progress_estimate.key)
+        ans['contract_concept'] = str(self.contract_concept.concept.description)
+        return ans
+
+    def __str__(self):
+        return str(self.contract_concept.concept.description) + ' - ' + str(self.progress_estimate.key)
 
 
 class AccessToProject(models.Model):

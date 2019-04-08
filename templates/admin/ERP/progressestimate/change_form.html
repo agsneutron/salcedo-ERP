@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_urls admin_static admin_modify %}
+{% load i18n admin_urls admin_static admin_modify app_filters %}
 
 {% block extrahead %}{{ block.super }}
     <script type="text/javascript" src="{% url 'admin:jsi18n' %}"></script>
@@ -75,7 +75,54 @@
                     {% endfor %}
                 {% endblock %}
 
-                {% block after_related_objects %}{% endblock %}
+                {% block after_related_objects %}
+                    {% comment %}begin concepts{% endcomment %}
+                        <div id="verconceptos" >
+                            <div class="row">
+
+                                <div class="col-xs-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-striped">
+                                            <thead>
+                                            <tr>
+                                                <th class="text-center" style='visibility: hidden;'>ID</th>
+                                                <th class="text-center">Key</th>
+                                                <th class="text-center">Descripción</th>
+                                                <th class="text-center">Cantidad Pactada</th>
+                                                <th class="text-center">Hasta Esta Estimación</th>
+                                                <th class="text-center">De Esta Estimación</th>
+                                                <th class="text-center">Actualizar</th>
+                                                <th class="text-center">Cantidad Restante</th>
+                                                <th class="text-center" style='visibility: hidden;'>CLI</th>
+                                            </tr>
+                                            </thead>
+
+                                            {% for c in conceptos %}
+
+                                                <tr>
+                                                    <td id="1" style='visibility: hidden;'>{{ c.0 }}</td>
+                                                    <td width="10%">{{ c.1 }}</td>
+                                                    <td>{{ c.2 }}</td>
+                                                    <td>{{ c.3 }}/{{ c.4 }}</td>
+                                                    <td id="EstaEstimacion{{ c.0 }}"  contenteditable="true">{{ c.7 }}/{{ c.4 }} </td>
+                                                    <td id="DeEstaEstimacion{{ c.0 }}" contenteditable="true">{{ c.6 }}/{{ c.4 }} </td>
+                                                    <td><button type="button" onclick="myFunction({{ c.0 }}, {{ c.3 }},{{ c.5 }},{{ c.8 }});" id="boton">Actualizar</button></td>
+                                                    <td id="Restante"><strong><FONT> {% subtractify c %} /{{ c.4 }}</FONT></strong></td>
+                                                    <td id="contract_line_item" style='visibility: hidden;'>{{ c.5 }}</td>
+                                                </tr>
+
+                                            {% endfor %}
+
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <br>
+
+                        </div>
+                        {% comment %}end concepts{% endcomment %}
+                {% endblock %}
 
                 {% block submit_buttons_bottom %}{% submit_row %}{% endblock %}
 
@@ -124,6 +171,56 @@
             var new_percentaje = jQuery('#id_amount').val() /{{ adminform.form.contract_amount }} * 100;
             jQuery('#id_porcentaje').html(new_percentaje.toFixed(2) + '%');
         }
+    </script>
+
+        <script>
+         function myFunction(id, monto, contract_line_item, progress_estimate) {
+            var valor=id;
+            var mont = monto;
+            var Est=document.getElementById('EstaEstimacion'+valor).innerHTML;
+            var Esti=document.getElementById('DeEstaEstimacion'+valor).innerHTML;
+
+            var espl=Est.split('/');
+            var spli=Esti.split('/');
+
+            if(mont >= espl[0] && mont >= spli[0]){
+
+                    var message="";
+                    var ajaxDat = {
+                        ID: valor,
+                        contract_line_item:contract_line_item,
+                        progress_estimate:progress_estimate,
+                        AEstaEstimacion: espl[0],
+                        DeEstaEstimacion: spli[0],
+                    };
+                    //alert(ajaxDat.ID +'ID  aesta '+ ajaxDat.AEstaEstimacion +' de esta '+ ajaxDat.DeEstaEstimacion);
+                    $.ajax({
+                        url: '/erp/api/Saveamountofestimate/',
+                        data: ajaxDat,
+                        type: 'get',
+                        dataType: "html",
+                        success: function (data) {
+                            //alert(data[0].mensaje);
+                            message = 'Se guardó correctamente la información';
+                            $('#alertModalSuccess').find('.modal-body p').text(message);
+                            $('#alertModalSuccess').modal('show');
+                        },
+                        error: function (data) {
+                            message = 'Ocurrió un error al guardar la información';
+                            alert(data.toString());
+                            $('#alertModal').find('.modal-body p').text(message);
+                            $('#alertModal').modal('show');
+
+                        }
+                    });
+            }
+            else{
+              alert("Valor incorrecto");
+            }
+
+         }
+
+
     </script>
 {% endblock %}
 

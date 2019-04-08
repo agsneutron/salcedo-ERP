@@ -45,6 +45,7 @@
 
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/assets/dataTables/datatables.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/bootstrap.min.css" %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/bootstrap-datepicker3.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/theme.css" %}"/>
     <link rel="stylesheet" type="text/css" href="{% static "ERP/admin/css/custom.css" %}"/>
     <!-- Bootstrap Library js -->
@@ -63,14 +64,18 @@
     {% block blockbots %}
 
         <script src="{% static "ERP/admin/js/theme.js" %}"></script>
+        <script src="{% static "ERP/admin/js/moment.min.js" %}"></script>
+        <script src="{% static "ERP/admin/js/bootstrap-datetimepicker.js" %}"></script>
+
+
         <script src="{% static "ERP/admin/assets/dataTables/dataTables.js" %}"></script>
+
         {% comment %} <script src="{% static "ERP/admin/assets/dataTables/date_range.js" %}"></script>{% endcomment %}
 
         {% comment %}DataTables{% endcomment %}
 
-    {% endblock %}
 
-    <!-- Jquery Library js -->
+    {% endblock %}
 
 
 </head>
@@ -531,6 +536,15 @@
                                     </li>
                                 {% endif %}
                             </ul>
+                        </li>
+                        <li id="op_io" class="dropdown {% if request.resolver_match.view_name in "admin:Accounting_accountingpolicy_changelist,dmin:Accounting_accountingpolicy_add"|slice:"," %}{{ "active" }}{% endif %}">
+                            <a href="/admin/Accounting/expense" class="dropdown-toggle"
+                               data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
+                               data-name="money">
+                                <i class="fa fa-money text-center"></i><br class="hidden-xs">
+                                Balance de Gastos
+                                <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
+                            </a>
                         </li>
 
                         <li id="op_reportes" class="dropdown {% if request.resolver_match.view_name in "Reporting:report"|slice:"," %}{{ "active" }}{% endif %}">

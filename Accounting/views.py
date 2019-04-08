@@ -201,6 +201,33 @@ class AccountingPolicyDetailView(generic.DetailView):
         return super(AccountingPolicyDetailView, self).dispatch(request, args, kwargs)
 
 
+class ExpenseAdminDetailView(generic.DetailView):
+    model = Expense
+    template_name = "Accounting/expense-detail.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(ExpenseAdminDetailView, self).get_context_data(**kwargs)
+        expense_id = self.kwargs['pk']
+
+        totalDebit = 0
+        #totalCredit=0
+        expenses = ExpenseDetail.objects.filter(Q(expense__id=expense_id))
+        for expense in expenses:
+            totalDebit += expense.debit
+            #totalCredit += policy.credit
+
+        context['expense'] = Expense.objects.get(Q(id=expense_id))
+        context['totalDebit'] = totalDebit
+        #context['totalCredit']=totalCredit
+        context['details'] = ExpenseDetail.objects.filter(Q(expense__id=expense_id))
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        #if not request.user.has_perm('ERP.view_list_accountingpolicy'):
+        #    raise PermissionDenied
+        return super(ExpenseAdminDetailView, self).dispatch(request, args, kwargs)
+
+
 class AccountDetailView(generic.DetailView):
     model = Account
     template_name = "Accounting/account-detail.html"
