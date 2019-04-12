@@ -176,6 +176,39 @@
                                     {% block pagination %}{% pagination cl %}{% endblock %}
                                 </form>
 
+                                <div class="row">
+                                    <div class="col-xs-4">
+                                        <div class="card  text-center" style="border-right: 1px solid #e2e2e2;">
+                                            <div class="card-block">
+                                                <h4 class="color-primary"><span class="counter" id="debit-total"></span></h4>
+                                                <h6 class="color-primary">Monto Total</h6>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-4">
+                                        <div class="card  text-center" style="border-right: 1px solid #e2e2e2;">
+                                            <div class="card-block">
+                                                <h4 class="color-primary"><span class="counter" id="credit-total"></span></h4>
+                                                <h6 class="color-primary">Total Gastos</h6>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-xs-4">
+                                        <div class="card  text-center">
+                                            <div class="card-block">
+                                                <h4 class="color-primary"><span class="counter" id="rest-total"></span></h4>
+                                                <h6 class="color-primary">Total Restante</h6>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
                                 {#   -------------------------------#}
                                 {#   -------------------------------#}
 
@@ -294,6 +327,20 @@
             });
         });{% endcomment %}
      $(".field-account>div>.related-widget-wrapper").addClass("w-150");
+    </script>
+
+     <script>
+    jQuery(function ($) {
+
+         $(document).ready(function () {
+             $('#credit-total').html(toCurrency({{ total_expense }}));
+             $('#debit-total').html(toCurrency({{ expense_count }}));
+             $('#rest-total').html(toCurrency({{ amount_left }}));
+         });
+        function toCurrency(val) {
+            return '$' + parseFloat(val,10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
+        }
+    });
     </script>
 
 {% endblock %}

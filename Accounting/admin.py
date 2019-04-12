@@ -3,8 +3,9 @@ from __future__ import unicode_literals
 
 from django.contrib import admin
 from django.conf.urls import url
-
+from decimal import *
 # Register your models here.
+from django.db.models import Sum
 from django.db.models.query_utils import Q
 from Accounting import views
 from Accounting.models import *
@@ -16,11 +17,23 @@ from django.http.response import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 
 # Shared Catalogs Imports.
+from HumanResources.models import AccessToDirection, Direction
 from SharedCatalogs.models import GroupingCode, Account,ItemAccount
 
 
-
 class AccountingAdminUtilities():
+    @staticmethod
+    def get_expense(obj):
+        model_name = obj.__class__.__name__.lower()
+        totaldebit = 0
+        totalexpense = 0
+        expenses = ExpenseDetail.objects.filter(Q(expense__id=obj.id))
+        for expense in expenses:
+            totaldebit += expense.debit
+            totalexpense = obj.monto - Decimal(totaldebit)
+
+        return '$ {:,}'.format(totalexpense)
+
     @staticmethod
     def get_detail_link_accounting(obj):
         model_name = obj.__class__.__name__.lower()
@@ -114,6 +127,7 @@ class AccountingPolicyDetailInline(admin.TabularInline):
     extra = 0
     formset = AccountingPolicyDetailInlineFormset
 
+
     fieldsets = (
         ("Detalle", {
             'fields': ('account', 'description', 'debit', 'credit')
@@ -127,7 +141,7 @@ class ExpenseDetailInline(admin.TabularInline):
 
     fieldsets = (
         ("Detalle", {
-            'fields': ('internal_company', 'description', 'debit', 'deliveryto', 'registry_date')
+            'fields': ('internal_company', 'project', 'description', 'debit', 'deliveryto', 'registry_date')
         }),
     )
 
@@ -147,7 +161,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
         }),
     )
 
-    list_display = ('folio','internal_company', 'type_policy', 'fiscal_period', 'description','get_detail_column','get_change_column','get_delete_column')
+    list_display = ('folio', 'internal_company', 'type_policy', 'fiscal_period', 'description','get_detail_column','get_change_column','get_delete_column')
     list_display_links = None
 
     def get_urls(self):
@@ -176,6 +190,7 @@ class AccountingPolicyAdmin(admin.ModelAdmin):
     get_delete_column.short_description = 'Eliminar'
     get_delete_column.allow_tags = True
 
+
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = ('folio',)
         return readonly_fields
@@ -195,12 +210,14 @@ class ExpenseAdmin(admin.ModelAdmin):
     fieldsets = (
         ("", {
             'fields': (
-            'internal_company', 'reference', 'monto', 'registry_date', 'description',)
+                'internal_company', 'type_document', 'reference', 'total_ammount', 'monto', 'registry_date', 'description',)
         }),
     )
 
-    list_display = ('reference', 'monto', 'internal_company', 'description', 'registry_date', 'get_detail_column', 'get_change_column', 'get_delete_column')
+    list_display = ('reference', 'get_formated_monto', 'internal_company', 'description', 'registry_date', 'get_expense_column', 'get_detail_column', 'get_change_column')
     list_display_links = None
+    search_fields = [
+        'internal_company__name', 'type_document__name', 'reference', 'total_ammount', 'monto', 'registry_date', 'description',]
 
     def get_urls(self):
         urls = super(ExpenseAdmin, self).get_urls()
@@ -209,6 +226,22 @@ class ExpenseAdmin(admin.ModelAdmin):
         ]
 
         return my_urls + urls
+
+    def get_queryset(self, request):
+        qs = super(ExpenseAdmin, self).get_queryset(request)
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        ic_directions = Direction.objects.filter(id__in=direction_ids).values('internal_company_id')
+        qs = qs.filter(internal_company_id__in=ic_directions)
+
+
+        return qs
+
+    def queryset(self, request):
+        qs = super(ExpenseAdmin, self).queryset(request)
+        # modify queryset here, eg. only user-assigned tasks
+        qs.filter(assigned__exact=request.user)
+        return qs
 
     def get_detail_column(self, obj):
         return AccountingAdminUtilities.get_detail_link_accounting(obj)
@@ -219,6 +252,12 @@ class ExpenseAdmin(admin.ModelAdmin):
     def get_delete_column(self, obj):
         return AccountingAdminUtilities.get_delete_link_accounting(obj)
 
+    def get_expense_column(self, obj):
+        return AccountingAdminUtilities.get_expense(obj)
+
+    def get_formated_monto(self, obj):
+        return '$ {:,}'.format(obj.monto)
+
     get_detail_column.short_description = 'Detalle'
     get_detail_column.allow_tags = True
 
@@ -228,12 +267,50 @@ class ExpenseAdmin(admin.ModelAdmin):
     get_delete_column.short_description = 'Eliminar'
     get_delete_column.allow_tags = True
 
+    get_expense_column.short_description = "Restante"
+    get_expense_column.allow_tags = True
+
+    get_formated_monto.short_description = "Monto"
+    get_formated_monto.allow_tags = True
+
     def get_readonly_fields(self, request, obj=None):
         readonly_fields = ('folio',)
         return readonly_fields
 
     def save_model(self, request, obj, form, change):
         super(ExpenseAdmin, self).save_model(request, obj, form, change)
+
+    def changelist_view(self, request, extra_context=None):
+        response = super(ExpenseAdmin, self).changelist_view(request, extra_context)
+        filtered_query_set = response.context_data["cl"].queryset
+
+        expense_count = filtered_query_set.values('monto').aggregate(totalexpense=Sum('monto'))
+        expensebydocument = filtered_query_set.values('id')
+
+        print 'expensebydocument'
+        print expensebydocument
+        print expense_count
+
+        amount_left = 0
+        total_expense = 0
+        for ebyd in expensebydocument:
+            expenses = ExpenseDetail.objects.filter(Q(expense__id=ebyd['id']))
+            for expense in expenses:
+                total_expense += expense.debit
+
+        if expense_count['totalexpense'] != None:
+            amount_left = expense_count['totalexpense'] - Decimal(total_expense)
+        else:
+            amount_left = 0
+
+        extra_context = {
+            'expense_count': expense_count['totalexpense'],
+            'amount_left': amount_left,
+            'total_expense': total_expense,
+        }
+        response.context_data.update(extra_context)
+
+        return response
 
 
 @admin.register(FiscalPeriod)
@@ -314,6 +391,22 @@ class TypePolicyAdmin(admin.ModelAdmin):
     )
 
     list_display = ('name', 'balanced_accounts')
+    search_fields = ('name',)
+    list_per_page = 25
+
+
+@admin.register(TypeDocument)
+class TypeDocumentAdmin(admin.ModelAdmin):
+    model = TypeDocument
+
+    fieldsets = (
+        ("Tipo de Documento", {
+            'fields': (
+                'name', 'description')
+        }),
+    )
+
+    list_display = ('name', 'description')
     search_fields = ('name',)
     list_per_page = 25
 

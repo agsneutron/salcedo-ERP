@@ -44,7 +44,6 @@
 
     </style>
 
-    <script type="text/javascript" src="{% static "Accounting/js/ajax_policiesbyaccount.js" %}"></script>
 
 {% endblock %}
 {% block breadcrumbs %}{% endblock %}
@@ -67,7 +66,9 @@
                 <ul class="list-group">
                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Empresa:</span> {{ expense.internal_company.name }}
                     </li>
-                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Monto:</span> {{ expense.monto }}
+                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Valor Total:</span> $ {{ expense.total_ammount|intcomma }}
+                    </li>
+                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Tipo de Documento:</span> {{ expense.type_document }}
                     </li>
                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Concepto:</span> {{ expense.description }}
                     </li>
@@ -77,8 +78,11 @@
                 <ul class="list-group">
                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Fecha de Registro:</span> {{ expense.registry_date }}
                     </li>
-                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Factura:</span> {{ expense.reference }}
+                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Monto Liquido:</span> $ {{ expense.monto|intcomma }}
                     </li>
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Documento:</span> {{ expense.reference }}
+                    </li>
+
                 </ul>
             </div>
 
@@ -97,7 +101,7 @@
             <div class="col-xs-6">
                 <div class="card  text-center" style="border-right: 1px solid #e2e2e2;">
                     <div class="card-block">
-                        <h4 class="color-primary"><span class="" id="debit-total">{{ totalDebit }}</span>
+                        <h4 class="color-primary"><span class="" id="debit-total"></span>
                         </h4>
                         <h6 class="color-primary">Total Gastos Reportados</h6>
                     </div>
@@ -119,6 +123,8 @@
                     <th class="original"></th>
                     <th class="required">Empresa
                     </th>
+                    <th class="required">Proyecto
+                    </th>
                     <th class="required">Concepto
                     </th>
                     <th class="required">Monto
@@ -134,11 +140,11 @@
                     <tr align="left">
                         <td></td>
                         <td>{{ obj.internal_company.name }}</td>
+                        <td>{% if obj.project != None %}{{ obj.project }}{% endif %}</td>
                         <td>{{ obj.description }}</td>
-                        <td style="text-align: left">{{ obj.debit }}</td>
+                        <td style="text-align: left">$ {{ obj.debit|intcomma }}</td>
                         <td style="text-align: left">{{ obj.deliveryto }}</td>
                         <td style="text-align: left">{{ obj.registry_date }}</td>
-                        <td></td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -147,4 +153,17 @@
     </div>
     <div class="clearfix"></div>
     </div>
+
+    <script>
+    jQuery(function ($) {
+
+         $(document).ready(function () {
+             $('#credit-total').html(toCurrency({{ totalExpense }}));
+             $('#debit-total').html(toCurrency({{ totalDebit }}));
+         });
+        function toCurrency(val) {
+            return '$' + parseFloat(val,10).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, "$1,").toString();
+        }
+    });
+    </script>
 {% endblock %}

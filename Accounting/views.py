@@ -12,6 +12,7 @@ from django.views.generic import ListView
 from django.views.generic.edit import DeleteView
 from forms import SearchAccountForm
 from django.shortcuts import render
+from decimal import *
 
 import operator
 
@@ -210,15 +211,17 @@ class ExpenseAdminDetailView(generic.DetailView):
         expense_id = self.kwargs['pk']
 
         totalDebit = 0
-        #totalCredit=0
+        totalExpense=0
         expenses = ExpenseDetail.objects.filter(Q(expense__id=expense_id))
         for expense in expenses:
             totalDebit += expense.debit
             #totalCredit += policy.credit
 
+        ammount = Expense.objects.get(Q(id=expense_id)).monto
+
         context['expense'] = Expense.objects.get(Q(id=expense_id))
-        context['totalDebit'] = totalDebit
-        #context['totalCredit']=totalCredit
+        context['totalDebit'] = str(totalDebit)
+        context['totalExpense'] = str(ammount - Decimal(totalDebit))
         context['details'] = ExpenseDetail.objects.filter(Q(expense__id=expense_id))
         return context
 

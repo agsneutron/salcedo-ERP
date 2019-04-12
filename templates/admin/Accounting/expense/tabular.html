@@ -72,7 +72,7 @@
                              </th>
                            {% endif %}
                          {% endfor %}
-                         {% if inline_admin_formset.formset.can_delete %}<th>{% trans "Delete?" %}</th>{% endif %}
+                         {% if inline_admin_formset.formset.can_delete %}<th>{% trans "x" %}</th>{% endif %}
                          </tr></thead>
                          <tbody>
                          {% for inline_admin_form in inline_admin_formset %}
@@ -115,13 +115,22 @@
                                                     {{ field.field|addcss:"form-control detail_date" }}
                                                     {{ field.errors }}
                                             </div>
-                                      {% else %}
+                                      {%  else %}
+                                          {% if field.field.name == "project" %}
                                               <div class="form-group field-{{ field.field.name }}">
                                                 <div>
-                                                    {{ field.field|addcss:"form-control" }}
+                                                    {{ field.field|addcss:"form-control smallselect" }}
                                                     {{ field.errors }}
                                                 </div>
-                                            </div>
+                                                </div>
+                                            {% else %}
+                                                <div class="form-group field-{{ field.field.name }}">
+                                                    <div>
+                                                        {{ field.field|addcss:"form-control" }}
+                                                        {{ field.errors }}
+                                                    </div>
+                                                </div>
+                                            {% endif %}
                                       {% endif %}
                                   {% endif %}
                                   </td>
@@ -146,7 +155,6 @@
     $(this).datepicker({
         format: "dd/mm/yyyy",
         language: "es",
-        todayBtn: "linked",
         clearBtn: true,
         autoclose: true,
     }
@@ -170,7 +178,7 @@
 
     .inline-info-label, .inline-info-value {
         display: inline-block;
-        font-size: 14px;
+        font-size: 10px;
         padding: 0 5px;
     }
 
@@ -182,6 +190,15 @@
 
     .inline-info-value {
 
+    }
+
+    .smallselect {
+        width: 100px;
+        font-size: smaller;
+    }
+
+    .form-control{
+        font-size: smaller;
     }
 </style>
 

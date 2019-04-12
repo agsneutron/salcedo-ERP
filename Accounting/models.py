@@ -12,7 +12,7 @@ from django.forms import model_to_dict
 from django.utils.timezone import now
 from smart_selects.db_fields import ChainedForeignKey
 
-from ERP.models import Pais, Estado, Municipio
+from ERP.models import Pais, Estado, Municipio, Project
 from Logs.controller import Logs
 from django.contrib import messages
 
@@ -341,14 +341,31 @@ class CommercialAllyContact(models.Model):
             Logs.log("Couldn't save")
 
 
+# Model for accounting policy
+class TypeDocument(models.Model):
+    name = models.CharField(verbose_name='Tipo de Documento', null=False, blank=False, max_length=256)
+    description = models.CharField(verbose_name="Descripción", default=False, blank=True, max_length=256)
+
+    def __str__(self):
+        return str(self.name)
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return str(self.name)
+
+    class Meta:
+        verbose_name_plural = 'Tipos de Documento'
+        verbose_name = 'Tipo de Documento'
+
+
 class Expense(models.Model):
     #fiscal_period = models.ForeignKey(FiscalPeriod, verbose_name='Periodo Fiscal', null=False, blank=False)
-    #type_expense = models.ForeignKey(TypePolicy, verbose_name='Tipo de Gasto', null=False, blank=False)
-    monto = models.DecimalField("Monto", blank=True, null=True, max_digits=50, decimal_places=2)
+    type_document = models.ForeignKey(TypeDocument, verbose_name='Tipo de Documento', null=False, blank=False)
+    total_ammount = models.DecimalField("Valor Total", blank=False, null=False, max_digits=50, decimal_places=2)
+    monto = models.DecimalField("Monto Liquido", blank=False, null=False, max_digits=50, decimal_places=2)
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
-    description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
-    reference = models.CharField(verbose_name="Factura", max_length=1024, null=False, blank=False)
-    internal_company = models.ForeignKey(InternalCompany, verbose_name='Empresa Interna', null=True, blank=True)
+    description = models.CharField(verbose_name="Descripción", max_length=4096, null=False, blank=False)
+    reference = models.CharField(verbose_name="Documento", max_length=1024, null=False, blank=False)
+    internal_company = models.ForeignKey(InternalCompany, verbose_name='Empresa Interna', null=False, blank=False)
 
     def __str__(self):
         return str(self.reference) + " Fecha: " + str(self.registry_date)
@@ -357,7 +374,7 @@ class Expense(models.Model):
         return str(self.reference) + " Fecha: " + str(self.registry_date)
 
     class Meta:
-        verbose_name_plural = 'Registro de Gastos'
+        verbose_name_plural = 'Registros de Gastos'
         verbose_name = 'Registro de Gastos'
 
     def to_serializable_dict(self):
@@ -379,6 +396,7 @@ class ExpenseDetail(models.Model):
     #credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
     deliveryto = models.CharField(verbose_name="Entregado a", max_length=100, null=False, blank=False)
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
+    project = models.ForeignKey(Project, verbose_name='Proyecto', null=True, blank=True)
 
     def __str__(self):
         return str(self.internal_company) + ": " + self.description
@@ -396,6 +414,6 @@ class ExpenseDetail(models.Model):
         verbose_name = 'Detalle de Gasto'
 
     def save(self, *args, **kwargs):
-        self.registry_date = now()
+        #self.registry_date = now()
         super(ExpenseDetail, self).save(*args, **kwargs)
 
