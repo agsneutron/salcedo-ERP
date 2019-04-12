@@ -50,50 +50,44 @@
 
 {% block content %}
 
-    <div class="col-xs-12">
+
         <div class="row">
             <div class="col-xs-12">
                 <div class="text-center">
-
                 <span class="ms-icon ms-icon-circle ms-icon-xxlg mb-4 color-info"><i
                         class="zmdi  zmdi-file-text"></i></span>
                     <h3 class="section-title">Reporte de Gastos </h3>
-
                     <hr>
                 </div>
             </div>
             <div class="col-xs-6">
                 <ul class="list-group">
-                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Empresa:</span> {{ expense.internal_company.name }}
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Empresa:</span> {{ expense.internal_company.name }}
                     </li>
-                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Valor Total:</span> $ {{ expense.total_ammount|intcomma }}
+                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Valor Total:</span> $ {{ expense.total_ammount|intcomma }}
                     </li>
-                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Tipo de Documento:</span> {{ expense.type_document }}
+                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Tipo de Documento:</span> {{ expense.type_document }}
                     </li>
-                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Concepto:</span> {{ expense.description }}
+                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Concepto:</span> {{ expense.description }}
                     </li>
                 </ul>
             </div>
             <div class="col-xs-6">
                 <ul class="list-group">
-                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Fecha de Registro:</span> {{ expense.registry_date }}
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Fecha de Registro:</span> {{ expense.registry_date }}
                     </li>
-                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Monto Liquido:</span> $ {{ expense.monto|intcomma }}
+                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Monto Líquido:</span> $ {{ expense.monto|intcomma }}
                     </li>
-                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 18px">Documento:</span> {{ expense.reference }}
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Documento:</span> {{ expense.reference }}
                     </li>
-
                 </ul>
             </div>
-
         </div>
 
-        </div>
-
-        <div class="row" style="padding-top: 35px">
+        <div class="row" style="padding-top: 0px">
             <div class="col-xs-12">
                 <div class="">
-                    <h3 class="section-title">Detalle de Gastos</h3>
+                    <h4 class="section-title"><b>Detalle de Gastos</b></h4>
                     <hr>
                 </div>
             </div>

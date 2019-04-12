@@ -361,7 +361,7 @@ class Expense(models.Model):
     #fiscal_period = models.ForeignKey(FiscalPeriod, verbose_name='Periodo Fiscal', null=False, blank=False)
     type_document = models.ForeignKey(TypeDocument, verbose_name='Tipo de Documento', null=False, blank=False)
     total_ammount = models.DecimalField("Valor Total", blank=False, null=False, max_digits=50, decimal_places=2)
-    monto = models.DecimalField("Monto Liquido", blank=False, null=False, max_digits=50, decimal_places=2)
+    monto = models.DecimalField("Monto Líquido", blank=False, null=False, max_digits=50, decimal_places=2)
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
     description = models.CharField(verbose_name="Descripción", max_length=4096, null=False, blank=False)
     reference = models.CharField(verbose_name="Documento", max_length=1024, null=False, blank=False)

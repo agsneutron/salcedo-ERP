@@ -151,7 +151,7 @@
 
         $('.add-row').click(function () {
             if (($('#id_internal_company').val() == '') || ($('#id_monto').val() == '') || ($('#id_reference').val() == '')) {
-                 var message = 'Verifique que los siguientes campos tienen un valor asignado: Empresa Interna, Factura y  Monto.\n';
+                 var message = 'Verifique que los siguientes campos tienen un valor asignado: Empresa Interna, Documento, Monto Líquido, Valor Total.\n';
                 $('#alertModal').find('.modal-body p').text(message);
                 $('#alertModal').modal('show');
                 $('#id_internal_company').focus();
