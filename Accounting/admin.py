@@ -298,7 +298,7 @@ class ExpenseAdmin(admin.ModelAdmin):
             for expense in expenses:
                 total_expense += expense.debit
 
-        if expense_count['totalexpense'] != None:
+        if expense_count['totalexpense'] is not None:
             amount_left = expense_count['totalexpense'] - Decimal(total_expense)
         else:
             amount_left = 0
