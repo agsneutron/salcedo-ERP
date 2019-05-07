@@ -134,54 +134,65 @@ class Saveamountofestimate(View):
         ID_CONTRACTCONCEPT = request.GET.get('ID')
         contract_line_item_id = request.GET.get('contract_line_item')
         progress_estimate_id = request.GET.get('progress_estimate')
-        accumulated=0;
+        accumulated=0
 
-        if ID_CONTRACTCONCEPT is not None:
-            hasta_estimacion = request.GET.get('AEstaEstimacion')
-            de_estimacion = request.GET.get('DeEstaEstimacion')
+        estimate_id = ProgressEstimate.objects.filter(id=progress_estimate_id).values('estimate_id')
+        gt_progressestimate_concepts = ProgressEstimateConcepts.objects.filter(Q(contract_concept=ID_CONTRACTCONCEPT),
+                                                                               Q(
+                                                                                   progress_estimate_id__gt=progress_estimate_id),
+                                                                               Q(
+                                                                                   progress_estimate__estimate_id__in=estimate_id))
 
-            Concept = ContractConcepts.objects.get(Q(id=ID_CONTRACTCONCEPT))
+        print 'GT'
+        print gt_progressestimate_concepts.count()
+        if gt_progressestimate_concepts.count() == 0:
 
-            try:
-                progress_estimate_concept = ProgressEstimateConcepts.objects.get(Q(progress_estimate_id=progress_estimate_id),
-                                                                         Q(contract_concept_id=ID_CONTRACTCONCEPT))
-            except ProgressEstimateConcepts.DoesNotExist:
-                progress_estimate_concept = None
+            if ID_CONTRACTCONCEPT is not None:
+                hasta_estimacion = request.GET.get('AEstaEstimacion')
+                de_estimacion = request.GET.get('DeEstaEstimacion')
 
-            if progress_estimate_concept is not None:
-                calculate_acumulatedprogress = ProgressEstimateConcepts.objects.filter(contract_concept_id=ID_CONTRACTCONCEPT)\
-                    .values('progress_this_estimate')\
-                    .annotate(acumulated=Sum('accumulated_progress'))
+                Concept = ContractConcepts.objects.get(Q(id=ID_CONTRACTCONCEPT))
+                try:
+                    progress_estimate_concept = ProgressEstimateConcepts.objects.get(Q(progress_estimate_id=progress_estimate_id),
+                                                                             Q(contract_concept_id=ID_CONTRACTCONCEPT))
+                except ProgressEstimateConcepts.DoesNotExist:
+                    progress_estimate_concept = None
 
-                for ca in calculate_acumulatedprogress:
-                    accumulated = ca['acumulated']
+                if progress_estimate_concept is not None:
+                    calculate_acumulatedprogress = ProgressEstimateConcepts.objects.filter(contract_concept_id=ID_CONTRACTCONCEPT)\
+                        .values('progress_this_estimate')\
+                        .annotate(acumulated=Sum('accumulated_progress'))
 
-                print 'calculate_acumulatedprogress'
-                print accumulated
+                    for ca in calculate_acumulatedprogress:
+                        accumulated = ca['acumulated']
 
-                progress_estimate_concept.progress_this_estimate = de_estimacion
-                progress_estimate_concept.accumulated_progress = accumulated
-                progress_estimate_concept.save()
+                    print 'calculate_acumulatedprogress'
+                    print accumulated
 
-                Concept.ThisEstimate = accumulated
-                Concept.save()
+                    progress_estimate_concept.progress_this_estimate = de_estimacion
+                    progress_estimate_concept.accumulated_progress = accumulated
+                    progress_estimate_concept.save()
 
-                return HttpResponse('ok', 'application/json; charset=utf-8')
+                    Concept.ThisEstimate = accumulated
+                    Concept.save()
+
+                    return HttpResponse('ok', 'application/json; charset=utf-8')
+                else:
+                    ProgressEstimateConcepts.objects.create(progress_estimate_id=progress_estimate_id,
+                                                            contract_concept_id=ID_CONTRACTCONCEPT,
+                                                            progress_this_estimate=de_estimacion,
+                                                            accumulated_progress=hasta_estimacion)
+
+                    Concept.ThisEstimate = hasta_estimacion
+                    Concept.save()
+
+                    return HttpResponse('ok', 'application/json; charset=utf-8')
             else:
-                ProgressEstimateConcepts.objects.create(progress_estimate_id=progress_estimate_id,
-                                                        contract_concept_id=ID_CONTRACTCONCEPT,
-                                                        progress_this_estimate=de_estimacion,
-                                                        accumulated_progress=hasta_estimacion)
-
-                Concept.ThisEstimate = hasta_estimacion
-                Concept.save()
-
-                return HttpResponse('ok', 'application/json; charset=utf-8')
+                return HttpResponse('Error: Error al guardar la estimación del concepto.', 'application/json; charset=utf-8')
         else:
-            new_it = {
-                'mensaje': 'El ID no es correcto'
-            }
-            return HttpResponse('ok', 'application/json; charset=utf-8')
+            return HttpResponse('Error: No puede actualizar el avance del concepto porque ya existen estimaciones posteriores.',
+                                'application/json; charset=utf-8')
+
 
 
 class SectionsByProjectSave(View):

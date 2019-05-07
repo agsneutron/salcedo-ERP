@@ -149,7 +149,7 @@ class PaySheetReport():
             'border': 1,
             'align': 'center',
             'valign': 'vcenter',
-            'fg_color': '#3E84CF',
+            'fg_color': '#a8a8a8',  ##3E84CF',
             'border_color': '#000000',
             'font_color': '#FFFFFF'
         }

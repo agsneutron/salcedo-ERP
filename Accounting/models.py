@@ -394,7 +394,7 @@ class ExpenseDetail(models.Model):
     description = models.CharField(verbose_name="Concepto", max_length=4096, null=False, blank=False)
     debit = models.FloatField(verbose_name="Monto", null=False, blank=False, default=0)
     #credit = models.FloatField(verbose_name="Haber", null=False, blank=False, default=0)
-    deliveryto = models.CharField(verbose_name="Entregado a", max_length=100, null=False, blank=False)
+    deliveryto = models.CharField(verbose_name="Entregado a", max_length=100, null=True, blank=True)
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
     project = models.ForeignKey(Project, verbose_name='Proyecto', null=True, blank=True)
 

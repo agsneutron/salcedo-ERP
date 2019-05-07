@@ -113,8 +113,7 @@
                                     <td>
 
                                         {% if perms.ERP.view_list_contratocontratista %}
-                                            <a href="/admin/ERP/contratocontratista/{{ estimate.contract.id }}"
-                                               target="_blank">
+                                            <a href="/admin/ERP/contratocontratista/{{ estimate.contractlineitem.contrato.id }}">
                                                 <span>{{ estimate.contractlineitem.contrato.clave_contrato }}</span>
                                             </a>
                                         {% else %}

@@ -30,7 +30,7 @@
     {% if not actions_on_top and not actions_on_bottom %}
         <style>
             #changelist table thead th:first-child {
-                width: inherit
+                width: inherit;
             }
 
             .ui-selectmenu.ui-popup .ui-input-search {
@@ -55,8 +55,27 @@
             .ui-selectmenu.ui-dialog .ui-header {
                 border-bottom-width: 1px;
             }
+
+            .table > tbody > tr > td {
+                font-size: 11px !important;
+                padding: 2px 2px !important;
+
+            }
         </style>
     {% endif %}
+        <style>
+        .table > tbody > tr > td {
+                font-size: 11px !important;
+                padding: 2px 2px !important;
+
+            }
+        .table > thead > tr > th {
+                font-size: 12px !important;
+                padding: 2px 2px !important;
+
+            }
+        </style>
+
 {% endblock %}
 
 {% block extrahead %}

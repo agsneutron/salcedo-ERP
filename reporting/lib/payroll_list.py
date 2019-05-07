@@ -183,8 +183,8 @@ class PayrollListFile(object):
             'border': 1,
             'align': 'left',
             'valign': 'vcenter',
-            'fg_color': '6f8eb4'})
-        formats['blue_bg_white_font'].set_border_color('9FB0BC')
+            'fg_color': 'a8a8a8'})
+        formats['blue_bg_white_font'].set_border_color('a8a8a8')
         formats['blue_bg_white_font'].set_font_color('white')
         formats['blue_bg_white_font'].set_align('center')
 
@@ -195,7 +195,7 @@ class PayrollListFile(object):
             'align': 'center',
             'valign': 'vcenter',
             'fg_color': 'FFFFFF'})
-        formats['white_bg_blue_border'].set_border_color('9FB0BC')
+        formats['white_bg_blue_border'].set_border_color('a8a8a8')
         formats['white_bg_blue_border'].set_font_color('black')
 
         return formats

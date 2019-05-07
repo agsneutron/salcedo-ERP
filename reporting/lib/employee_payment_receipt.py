@@ -255,9 +255,9 @@ class EmployeePaymentReceipt:
 
     class Styles:
         EMPLOYEE_INFO_TABLE_STYLE = TableStyle([
-            ('BACKGROUND', (0, 0), (1, 2), colors.Color(.16, .3, .5)),
+            ('BACKGROUND', (0, 0), (1, 2), '#a8a8a8'),
             ('GRID', (0, 0), (1, 2),1, colors.black),
-            ('TEXTCOLOR', (0, 0), (1, 2), colors.white),
+            ('TEXTCOLOR', (0, 0), (1, 2), colors.black),
             ('FONTNAME', (0, 0), (1, 2), 'Helvetica'),
             ('FONTSIZE', (0, 0), (1, 2),10),
             ('VALIGN', (0, 0), (1, 2), 'MIDDLE')
@@ -313,7 +313,7 @@ class EmployeePaymentReceipt:
 
         EARNINGS_AND_DEDUCTIONS_TABLE_STYLE = TableStyle([
             # Headers.
-            ('BACKGROUND', (0, 0), (1, 0), colors.Color(.06, .3, .5)),
+            ('BACKGROUND', (0, 0), (1, 0), '#a8a8a8'),
             ('GRID', (0, 0), (1, 0), 0, colors.black),
             ('TEXTCOLOR', (0, 0), (1, 0), colors.white),
             ('FONTNAME', (0, 0), (1, 0), 'Helvetica'),

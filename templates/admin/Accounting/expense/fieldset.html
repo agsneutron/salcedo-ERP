@@ -40,7 +40,7 @@
    .bootstrap-select {
     height: 30px;
     padding: 5px 10px;
-    font-size: 16px;
+    font-size: 10px;
     line-height: 1.42857;
     border: 1px solid #e2e2e2;
     width: 100% !important;
@@ -82,6 +82,7 @@
     }
     .campo.field-description {
         width: 100%;
+        padding: 2px 2px;
     }
 </style>
 <fieldset class=" {{ fieldset.classes }}">
@@ -148,6 +149,9 @@
 
         $('.field-description>div').removeClass('col-xs-3');
         $('.field-description>div').addClass('col-xs-12');
+        $('.field-description>div').css({"font-size": "10px"});
+        $('textarea#id_description').css({"font-size": "10px", "padding-top": "1px", "padding-right": "1px", "padding-left": "1px", "padding-bottom": "1px"});
+
 
         $('.add-row').click(function () {
             if (($('#id_internal_company').val() == '') || ($('#id_monto').val() == '') || ($('#id_reference').val() == '')) {

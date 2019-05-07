@@ -41,6 +41,16 @@
             margin: 0px;
         }
 
+        .required {
+            padding: 0px !important;
+            margin: 0px !important;
+            font-size: 11px !important;
+        }
+
+        .table tr td, .table tr th {
+            padding: 2px 2px !important;
+        }
+
 
     </style>
 
@@ -61,24 +71,24 @@
                 </div>
             </div>
             <div class="col-xs-6">
-                <ul class="list-group">
-                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Empresa:</span> {{ expense.internal_company.name }}
+                <ul class="list-group" style="margin-bottom: 0px;">
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Empresa:</span> <span style="font-size: 11px">{{ expense.internal_company.name }}</span>
                     </li>
-                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Valor Total:</span> $ {{ expense.total_ammount|intcomma }}
+                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Valor Total:</span> <span style="font-size: 11px">$ {{ expense.total_ammount|intcomma }}</span>
                     </li>
-                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Tipo de Documento:</span> {{ expense.type_document }}
+                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Tipo de Documento:</span> <span style="font-size: 11px">{{ expense.type_document }}</span>
                     </li>
-                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Concepto:</span> {{ expense.description }}
+                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Concepto:</span> <span style="font-size: 11px">{{ expense.description }}</span>
                     </li>
                 </ul>
             </div>
             <div class="col-xs-6">
-                <ul class="list-group">
-                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Fecha de Registro:</span> {{ expense.registry_date }}
+                <ul class="list-group" style="margin-bottom: 0px;">
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Fecha de Registro:</span> <span style="font-size: 11px">{{ expense.registry_date }}</span>
                     </li>
-                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Monto Líquido:</span> $ {{ expense.monto|intcomma }}
+                      <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Monto Líquido:</span> <span style="font-size: 11px">$ {{ expense.monto|intcomma }}</span>
                     </li>
-                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 14px">Documento:</span> {{ expense.reference }}
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Documento:</span> <span style="font-size: 11px">{{ expense.reference }}</span>
                     </li>
                 </ul>
             </div>
@@ -93,21 +103,21 @@
             </div>
 
             <div class="col-xs-6">
-                <div class="card  text-center" style="border-right: 1px solid #e2e2e2;">
+                <div class="card  text-center" style="border-right: 1px solid #e2e2e2; margin-bottom: 0px;">
                     <div class="card-block">
-                        <h4 class="color-primary"><span class="" id="debit-total"></span>
-                        </h4>
-                        <h6 class="color-primary">Total Gastos Reportados</h6>
+                        <h5 class="color-primary" style="margin-bottom: 0px;"><span class="" id="debit-total"></span>
+                        </h5>
+                        <span class="color-primary" style="font-size: 11px">Total Gastos Reportados</span>
                     </div>
                 </div>
             </div>
 
             <div class="col-xs-6">
-                <div class="card  text-center">
+                <div class="card  text-center" style="margin-bottom: 0px;">
                     <div class="card-block">
-                        <h4 class="color-primary"><span class=""
-                                                        id="credit-total"></span></h4>
-                        <h6 class="color-primary">Total Restante</h6>
+                        <h5 class="color-primary" style="margin-bottom: 0px;"><span class=""
+                                                        id="credit-total"></span></h5>
+                        <span class="color-primary" style="font-size: 11px">Total Restante</span>
                     </div>
                 </div>
             </div>
@@ -133,12 +143,12 @@
                 {% for obj in details %}
                     <tr align="left">
                         <td></td>
-                        <td>{{ obj.internal_company.name }}</td>
-                        <td>{% if obj.project != None %}{{ obj.project }}{% endif %}</td>
-                        <td>{{ obj.description }}</td>
-                        <td style="text-align: left">$ {{ obj.debit|intcomma }}</td>
-                        <td style="text-align: left">{{ obj.deliveryto }}</td>
-                        <td style="text-align: left">{{ obj.registry_date }}</td>
+                        <td class="required">{{ obj.internal_company.name }}</td>
+                        <td class="required">{% if obj.project != None %}{{ obj.project }}{% endif %}</td>
+                        <td class="required">{{ obj.description }}</td>
+                        <td class="required" style="text-align: left">$ {{ obj.debit|intcomma }}</td>
+                        <td class="required" style="text-align: left">{{ obj.deliveryto }}</td>
+                        <td class="required" style="text-align: left">{{ obj.registry_date }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>

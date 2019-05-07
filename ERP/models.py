@@ -793,10 +793,8 @@ class ContractConcepts(models.Model):
         verbose_name_plural = "Conceptos del Contrato"
 
     def __unicode__(self):
-        return "{0}".format(self.ThisEstimate)
-
-
-
+        #return "{0}".format(self.ThisEstimate)
+        return str(self.concept.key) + '-' + str(self.concept.description)
 
 # Propietario
 class Propietario(models.Model):
@@ -1960,7 +1958,7 @@ class ProgressEstimateConcepts(models.Model):
     def to_serializable_dict(self):
         ans = model_to_dict(self)
         ans['progress_estimate'] = str(self.progress_estimate.key)
-        ans['contract_concept'] = str(self.contract_concept.concept.description)
+        ans['contract_concept'] = str(self.contract_concept.concept.key) + '-' + str(self.contract_concept.concept.description)
         return ans
 
     def __str__(self):

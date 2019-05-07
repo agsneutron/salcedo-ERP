@@ -41,9 +41,11 @@
                     <h3 class="card-title text">Conceptos del Contrato</h3>
                 </div>
         <div class="item-right"> {% for concept in concepts %}
+            {% if forloop.first %}
                     <a href="/admin/ERP/contratocontratista/{{ concept.contractlineitem.contrato.id}}/?contrato={{ concept.contractlineitem.contrato.id}}"
                        class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-city-alt zmdi-hc-2x"></i>
                     </a>
+                        {% endif %}
                                 {% endfor %}
 
                 </div>

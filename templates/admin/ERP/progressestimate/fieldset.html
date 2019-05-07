@@ -1,5 +1,5 @@
 {% load app_filters admin_static %}
-<fieldset class=" {{ fieldset.classes }}">
+<div class=" {{ fieldset.classes }}">
     {% if fieldset.name %}<h2>{{ fieldset.name }}</h2>{% endif %}
     {% if fieldset.description %}
         <div class="description">{{ fieldset.description|safe }}</div>
@@ -27,15 +27,30 @@
             {% endfor %}
         </div>
     {% endfor %}{% endcomment %}
-
+<div class="col-xs-12">
     <div class="card ">
-        <ul class="nav nav-tabs  nav-tabs-8 shadow-2dp" role="tablist">
-            <li role="presentation" class="active">
-                <a class="withoutripple" href="#otro0" aria-controls="otro0" role="tab" data-toggle="tab">
-                    <span class="hidden-xs">Avance de Estimación</span>
-                </a>
-            </li>
-        </ul>
+        <div class="card-header">
+                <div class="item-left">
+                    <h3 class="card-title">Avance de Estimación</h3>
+                </div>
+                <div class="item-right">
+                {% if change %}
+                    {% for eid in estimate %}
+                        {% if forloop.first %}
+                            <a href="/admin/ERP/estimate/{{ eid.estimate_id }}/"
+                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-city-alt zmdi-hc-2x"></i>
+                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+                {% if add %}
+                    <a href="/admin/ERP/estimate/{{ estimate }}/"
+                               class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-city-alt zmdi-hc-2x"></i>
+                            </a>
+                {% endif %}
+                </div>
+        </div>
+
 
         <div class="card-block">
             <div class="tab-content">
@@ -183,4 +198,7 @@
 
 
             </div>
+        </div>
+    </div>
+</div>
 </fieldset>
