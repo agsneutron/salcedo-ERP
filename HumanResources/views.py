@@ -636,7 +636,7 @@ class EarningsDeductionsListView(ListView):
     """
        Display a Blog List page filtered by the search query.
     """
-    paginate_by = 1000
+    #paginate_by = 1000
     title_list = 'Incidencias'
     penalty = ''
 
@@ -702,7 +702,7 @@ class AccessToDirectionAdminListView(ListView):
     """
        Display a Project List page filtered by the search query.
     """
-    paginate_by = 10
+    #paginate_by = 10
 
     def get_queryset(self):
 

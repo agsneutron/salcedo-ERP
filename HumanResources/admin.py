@@ -2079,6 +2079,39 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
     )
     list_display = ('payroll_period', 'assistance_file', 'get_UploadedEmployeeAssistanceHistory_link')
 
+
+    def get_queryset(self, request):
+        qs = super(UploadedEmployeeAssistanceHistoryAdmin, self).get_queryset(request)
+
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(payroll_period_id__payroll_group_id__direction_id__in=direction_ids)
+
+        return qs
+
+    def queryset(self, request):
+        qs = super(UploadedEmployeeAssistanceHistoryAdmin, self).queryset(request)
+        # modify queryset here, eg. only user-assigned tasks
+        qs.filter(assigned__exact=request.user)
+        return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(UploadedEmployeeAssistanceHistoryAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+
+                return ModelForm(*args, **kwargs)
+
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+        payrollperiodbydirection_ids = UploadedEmployeeAssistanceHistory.objects\
+            .filter(payroll_period_id__payroll_group_id__direction_id__in=direction_ids)\
+            .values('payroll_period_id')
+        ModelForm.base_fields['payroll_period'].queryset = PayrollPeriod.objects.filter(id__in=payrollperiodbydirection_ids)
+
+        return ModelFormMetaClass
+
     def get_UploadedEmployeeAssistanceHistory_link(self, obj):
         return HumanResourcesAdminUtilities.get_UploadedEmployeeAssistanceHistory_link(
             "UploadedEmployeeAssistanceHistory", obj.payroll_period.id, "")
@@ -2109,7 +2142,6 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 atm_mgr.generate_automatic_absences_for_period(payroll_period)
 
                 super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
-
 
         except ErrorDataUpload as e:
             e.save()
@@ -2341,6 +2373,15 @@ class DirectionAdmin(admin.ModelAdmin):
     list_display = ('internal_company', 'name', 'country', 'state', 'town',)
     list_display_links = ('name',)
 
+    def get_queryset(self, request):
+        qs = super(DirectionAdmin, self).get_queryset(request)
+
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(id__in=direction_ids)
+
+        return qs
+
 
 # Loan Admin.
 @admin.register(Subdirection)
@@ -2356,6 +2397,15 @@ class SubdirectionAdmin(admin.ModelAdmin):
 
     list_display = ('direction', 'name',)
     list_display_links = ('name',)
+
+    def get_queryset(self, request):
+        qs = super(SubdirectionAdmin, self).get_queryset(request)
+
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(direction_id__in=direction_ids)
+
+        return qs
 
 
 # Loan Admin.
@@ -2429,6 +2479,14 @@ class AreaAdmin(admin.ModelAdmin):
     list_display = ('subdirection', 'name',)
     list_display_links = ('name',)
 
+    def get_queryset(self, request):
+        qs = super(AreaAdmin, self).get_queryset(request)
+
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(subdirection_id__direction_id__in=direction_ids)
+
+        return qs
 
 # Loan Admin.
 @admin.register(Department)
@@ -2443,6 +2501,15 @@ class DepartmentAdmin(admin.ModelAdmin):
 
     list_display = ('area', 'name',)
     list_display_links = ('name', )
+
+    def get_queryset(self, request):
+        qs = super(DepartmentAdmin, self).get_queryset(request)
+
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(area_id__subdirection_id__direction_id__in=direction_ids)
+
+        return qs
 
 
 # Loan Admin.

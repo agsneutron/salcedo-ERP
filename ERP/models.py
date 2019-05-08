@@ -1719,7 +1719,7 @@ def generator_file_storage(instance, filename):
 
 
 def content_file_generador(instance, filename):
-    return '/'.join(['documentosFuente', instance.estimate.contract.project.key, filename])
+    return '/'.join(['documentosFuente', instance.estimate.contractlineitem.contrato.project.key, filename])
 
 
 class ProgressEstimate(models.Model):
