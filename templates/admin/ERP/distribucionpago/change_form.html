@@ -212,7 +212,7 @@
                     //alert(distribuidos['' + $('select#id_line_item').val()]);
                     //alert(parseFloat(porcentajeasignado.valueOf())+parseFloat(porcentaje.valueOf()));
                     //alert($('select#id_line_item').val());
-                    if ((parseFloat(porcentajeasignado.valueOf()) + parseFloat(porcentaje.valueOf())) > 100) {
+                    if ((parseFloat(porcentajeasignado) + parseFloat(porcentaje)) > 100) {
 
                         var message = 'El porcentaje ' + porcentaje + '% para la partida seleccionada, sumará un porcentaje mayor al 100%, favor de verificar la Distribución de Pago para saber el porcentaje disponible que puede asignar.\n';
                         $('#alertModal').find('.modal-body p').text(message);
@@ -237,7 +237,7 @@
 
         $('select#id_line_item').change(function() {
             var asignado = distribuidos['' + $('select#id_line_item').val()];
-            if (asignado.valueOf() == '100.00'){
+            if (parseFloat(asignado) == 100.00){
                 var message = 'La distribución de pago de la partida seleccionada ha sido asignada al 100%, favor de seleccionar otra partida.\n';
                 $('#alertModal').find('.modal-body p').text(message);
                 $('#alertModal').modal('show');
