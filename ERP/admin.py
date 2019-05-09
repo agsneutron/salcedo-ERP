@@ -1743,7 +1743,7 @@ class EstimateAdmin(admin.ModelAdmin):
                 'fields': (
                     'period', 'start_date', 'end_date', 'advance_payment_amount', 'Total_paid',
                     'advance_payment_date',
-                    'advance_payment_status', 'version')
+                    'advance_payment_status', 'generator_file', 'version')
             }),
     )
 

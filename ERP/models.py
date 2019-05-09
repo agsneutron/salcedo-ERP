@@ -1594,6 +1594,14 @@ class Concept_Input(models.Model):
             Logs.log("Couldn't save")
 
 
+def content_file_generador(instance, filename):
+    return '/'.join(['documentosFuente', instance.estimate.contractlineitem.contrato.project.key, filename])
+
+
+def content_file_anticipo(instance, filename):
+    return '/'.join(['documentosFuente', instance.contractlineitem.contrato.project.key, 'anticipo', filename])
+
+
 '''
     Model for the Estimates.
 '''
@@ -1653,6 +1661,9 @@ class Estimate(models.Model):
                                            null=False,
                                            default=0, max_digits=20,
                                            validators=[MinValueValidator(Decimal('0.0'))])
+
+    generator_file = models.FileField(upload_to=content_file_anticipo, null=True,
+                                      verbose_name="Justificación", blank=True)
 
     # Director General
     #
@@ -1766,8 +1777,6 @@ def generator_file_storage(instance, filename):
         ['documentosFuente', project_key, line_item_key, concept_key, estimate_id, progress_estimate_key, filename])
 
 
-def content_file_generador(instance, filename):
-    return '/'.join(['documentosFuente', instance.estimate.contractlineitem.contrato.project.key, filename])
 
 
 class ProgressEstimate(models.Model):
