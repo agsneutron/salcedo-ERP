@@ -69,7 +69,7 @@
 
 {% block after_related_objects %}
     {% for record in partidas %}
-             <input type="hidden" id="monto_partida" value="{{ record.monto_partida }}">
+             <input type="hidden" id="monto_partida_{{ record.lineitem__key }}" value="{{ record.monto_partida }}">
             {% endfor %}
 
     <h4 class="text-light">Distribución de Pago</h4>
@@ -182,8 +182,20 @@
                 {% endfor %}
         };
 
+        var montos_partidas = {
+             {%  for c in partidas %}
+                    '{{ c.line_item_id }}': '{{  c.monto_partida }}',
+                {% endfor %}
+        };
+
+        var distribuciones = {
+            {%  for c in distribucion %}
+                    '{{ c.line_item_id }}': '{{  c.id }}',
+                {% endfor %}
+        }
+
         $('input#id_porcentaje').change(function() {
-            monto_partida = $('input#monto_partida').val();
+            monto_partida = montos_partidas['' + $('select#id_line_item').val()];
             porcentaje =  $( this ).val();
 
             if ($('select#id_line_item').val() !="") {
@@ -230,8 +242,15 @@
                 $('#alertModal').find('.modal-body p').text(message);
                 $('#alertModal').modal('show');
                 this.value = "";
-
             }
+            else{
+                {% if change %}
+                    var distribucion_id = distribuciones['' + $('select#id_line_item').val()];
+                    window.location.href = "/admin/ERP/distribucionpago/"+distribucion_id+"/change/?contrato={{ request.GET.contrato }}";
+                {% endif %}
+            }
+
+
         });
 
 
