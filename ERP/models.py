@@ -722,6 +722,7 @@ class DistribucionPago(models.Model):
     porcentaje = models.DecimalField(verbose_name="Porcentaje", null=False, blank=False, decimal_places=2, max_digits=6, )
     monto = models.DecimalField(verbose_name="Monto", null=False, blank=False, decimal_places=2, max_digits=50)
 
+
     class Meta:
         verbose_name_plural = 'Distribución de Pagos'
         verbose_name = 'Distribución de Pago'
@@ -737,6 +738,51 @@ class DistribucionPago(models.Model):
 
     def __unicode__(self):
         return self.line_item.description
+
+    def save(self, *args, **kwargs):
+        canSave = True
+        project = ''
+        pk_ps = None
+        schedule = None
+
+        project_id = ContratoContratista.objects.filter(id=self.contrato_id).values('project_id')
+        for pid in project_id:
+            project = pid['project_id']
+
+        year = self.fecha_pago.strftime('%Y')
+        month = self.fecha_pago.strftime('%m')
+
+        programacion = PaymentSchedule.objects.filter(Q(contrato_id=self.contrato_id),
+                                                      Q(line_item=self.line_item_id),
+                                                      Q(project_id=project),
+                                                      Q(year=year),
+                                                      Q(month=month)).values('id')
+
+        schedule = PaymentSchedule()
+        schedule.month = month
+        schedule.year = year
+        schedule.amount = self.monto
+        schedule.project_id = project
+        schedule.contrato_id = self.contrato_id
+        schedule.line_item_id = self.line_item_id
+
+        if programacion.count() == 0:
+            schedule.save()
+        else:
+            for ps in programacion:
+                pk_ps = ps['id']
+
+            schedule = PaymentSchedule.objects.get(id=pk_ps)
+            schedule.month = month
+            schedule.year = year
+            schedule.amount = self.monto
+            schedule.project_id = project
+            schedule.contrato_id = self.contrato_id
+            schedule.line_item_id = self.line_item_id
+            schedule.save()
+
+        super(DistribucionPago, self).save(*args, **kwargs)
+
 
 
 class TipoPago(models.Model):
@@ -1224,11 +1270,13 @@ class PaymentSchedule(models.Model):
                                  validators=[MinValueValidator(Decimal('0.0'))])
 
     project = models.ForeignKey(Project, verbose_name="Proyecto", null=False, blank=False)
+    line_item = models.ForeignKey('LineItem', verbose_name="Partida", null=False, blank=False)
+    contrato = models.ForeignKey('ContratoContratista', verbose_name='Contrato', null=False, blank=False)
 
     class Meta:
         verbose_name_plural = 'Programación de Pagos'
         verbose_name = 'Programación de Pagos'
-        unique_together = ('project', 'year', 'month')
+        unique_together = ('project', 'year', 'month', 'line_item', 'contrato')
 
 
 @receiver(post_save, sender=Project, dispatch_uid='assing_sections')

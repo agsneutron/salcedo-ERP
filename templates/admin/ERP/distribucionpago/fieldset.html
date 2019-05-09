@@ -54,10 +54,22 @@
             {% endfor %}
         </div>
     {% endfor %}{% endcomment %}
-<h3 class="text-center">Contratos a Contratistas - {{ fieldset.name }} </h3>
- <hr>
 
+<div class="col-xs-12">
+    <div class="card-header">
+        <div class="item-right">
+                         <a href="/admin/ERP/contratocontratista/{{ request.GET.contrato }}/?contrato={{ request.GET.contrato }}"
+                                   class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-city-alt zmdi-hc-2x"></i>
+                                </a>
+
+        </div>
+        <div class="item-left">
+            <h3 class="text-center">Contratos a Contratistas - {{ fieldset.name }} </h3>
+        </div>
+     </div>
+</div>
     <div class="card ">
+
 
                     <div class="btn-group btn-group-justified btn-group-raised">
                         <a class="btn btn-primary contrato-menu"
@@ -92,6 +104,7 @@
                         </a>
 
                     </div>
+
 
 
         <div class="card-block">
@@ -143,8 +156,8 @@
 
              </div>
 
-        </div>
     </div>
+
 
 </fieldset>
 <script>

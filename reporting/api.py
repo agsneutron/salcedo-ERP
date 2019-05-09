@@ -8,9 +8,10 @@ from django.db.models import F
 from django.db.models import Q, Count, Sum
 from django.views.generic import View
 from django.db.models.functions import TruncMonth
+from django.db.models.functions import ExtractYear, ExtractMonth
 
 from ERP.models import LineItem, Concept_Input, ProgressEstimate, PaymentSchedule, Project, Estimate, \
-    ContratoContratista, Contact, Contratista, PartidasContratoContratista
+    ContratoContratista, Contact, Contratista, PartidasContratoContratista, DistribucionPago
 import os, sys
 
 sys.setdefaultencoding('utf-8')
@@ -222,7 +223,7 @@ class PhysicalFinancialAdvanceReport(View):
             }
 
         # Getting all the estimates for the project.
-        estimates_set = Estimate.objects.filter(contract__project_id=project_id)
+        estimates_set = Estimate.objects.filter(contractlineitem__contract__project_id=project_id)
         for estimate in estimates_set:
 
             # Getting the line_item from the selected_line_items the estimate belongs to.
@@ -322,8 +323,17 @@ class PhysicalFinancialAdvanceReport(View):
         response = []
 
         # Getting the years found in the schedule.
-        schedule_years = PaymentSchedule.objects.filter(project_id=project_id).values('year').annotate(Count('year')) \
+        schedule_years = PaymentSchedule.objects.filter(project_id=project_id)\
+            .values('year')\
+            .annotate(Count('year'))\
             .order_by('year')
+        #schedule_years = DistribucionPago.objects.filter(contrato__project_id=project_id)\
+        #    .values('id').annotate(Count('fecha_pago')) \
+        #    .order_by('fecha_pago')
+
+
+
+
 
         # Years JSON.
 
@@ -337,7 +347,8 @@ class PhysicalFinancialAdvanceReport(View):
             yearly_json['year'] = str(temp_year)
             yearly_json['months'] = []
 
-            monthly_program = PaymentSchedule.objects.filter(Q(project_id=project_id) & Q(year=temp_year)) \
+            monthly_program = PaymentSchedule.objects.filter(Q(project_id=project_id)
+                                                              & Q(year=temp_year))\
                 .order_by('month')
 
             for record in monthly_program:
@@ -345,10 +356,11 @@ class PhysicalFinancialAdvanceReport(View):
                 month_paid_estimate = 0
                 month_total_estimate = 0
                 # Obtaining all the estimates for the current month and year.
-                progress_estimate_set = ProgressEstimate.objects.filter(Q(estimate__contract__project__id=project_id)
-                                                                        & Q(estimate__period__month=record.month)
-                                                                        & Q(estimate__period__year=temp_year)).values(
-                    'estimate__id').annotate(Count('estimate__id'), total=Sum('amount'))
+                progress_estimate_set = ProgressEstimate.objects.filter(
+                    Q(estimate__contractlineitem__contrato__project__id=project_id)
+                    & Q(estimate__period__month=record.month)
+                    & Q(estimate__period__year=temp_year))\
+                    .values('estimate__id').annotate(Count('estimate__id'), total=Sum('amount'))
 
                 paid_progress_estimate_set = progress_estimate_set.filter(Q(payment_status='P'))
 
