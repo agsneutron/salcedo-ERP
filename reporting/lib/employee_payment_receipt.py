@@ -30,10 +30,12 @@ class EmployeePaymentReceipt:
 
         pages = []
 
-        doc = SimpleDocTemplate(response, rightMargin=0, leftMargin=3.5 * cm, topMargin=50 * cm, bottomMargin=0)
+        doc = SimpleDocTemplate(response, rightMargin=0, leftMargin=3.5 * cm, topMargin=25 * cm, bottomMargin=0)
 
+        breakpage= 1
         for receipt in receipts_data:
-            receipt_page = EmployeePaymentReceipt.generate_receipt_page(receipt, company)
+            breakpage +=1
+            receipt_page = EmployeePaymentReceipt.generate_receipt_page(receipt, company, breakpage)
             pages += receipt_page
 
 
@@ -46,7 +48,7 @@ class EmployeePaymentReceipt:
 
 
     @staticmethod
-    def generate_receipt_page(receipt_data, company):
+    def generate_receipt_page(receipt_data, company, breackpage):
         page = []
         cm = 2.54
         line_break = Paragraph("<br />", EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
@@ -243,10 +245,14 @@ class EmployeePaymentReceipt:
         page.append(totals_table)
 
 
+
         # End Page.
-        page.append(PageBreak())
-
-
+        if breackpage%2 != 0:
+            page.append(PageBreak())
+        else:
+            page.append(line_break)
+            page.append(line_break)
+            page.append(line_break)
 
 
         return page
@@ -255,7 +261,7 @@ class EmployeePaymentReceipt:
 
     class Styles:
         EMPLOYEE_INFO_TABLE_STYLE = TableStyle([
-            ('BACKGROUND', (0, 0), (1, 2), '#a8a8a8'),
+            ('BACKGROUND', (0, 0), (1, 2), colors.white),
             ('GRID', (0, 0), (1, 2),1, colors.black),
             ('TEXTCOLOR', (0, 0), (1, 2), colors.black),
             ('FONTNAME', (0, 0), (1, 2), 'Helvetica'),
@@ -303,7 +309,7 @@ class EmployeePaymentReceipt:
             fontName='Helvetica',
             fontSize=8,
             alignment=enums.TA_LEFT,
-            textColor=colors.white
+            textColor=colors.black
         )
 
 
@@ -329,7 +335,7 @@ class EmployeePaymentReceipt:
             fontName='Helvetica',
             fontSize=8,
             alignment=enums.TA_CENTER,
-            textColor=colors.white
+            textColor=colors.black
         )
 
         EARNINGS_AND_DEDUCTIONS_TEXT_LEFT_STYLE = ParagraphStyle(

@@ -182,7 +182,7 @@ class PayrollUtilities:
             :return:
         """
 
-        employee_financial_data = EmployeeFinancialData.objects.get(employee__id=employee.id)
+        employee_financial_data = EmployeeFinancialData.objects.get(Q(employee_id=employee.id), Q(account_type='P'))
         return True
 
     @staticmethod
@@ -363,7 +363,7 @@ class PayrollUtilities:
         receipt['variable_deductions'] = variable_deductions_array
 
         # Absences.
-        employee_financial_data = EmployeeFinancialData.objects.get(employee_id=employee.id)
+        employee_financial_data = EmployeeFinancialData.objects.get(Q(employee_id=employee.id), Q(account_type='P'))
         earning_deduction_data = EarningsDeductions.objects.get(id=57)
         absences = employee.get_unjustified_employee_absences_for_period(payroll_period)
         absences_array = []
@@ -489,7 +489,7 @@ class GeneratePayrollReceipt(View):
             employee_total_taxed = float(receipt['total_taxable'])
             employee_isr = float(receipt['isr'])
 
-            employee_financial_data = EmployeeFinancialData.objects.get(employee_id=employee.id)
+            employee_financial_data = EmployeeFinancialData.objects.get(Q(employee_id=employee.id), Q(account_type='P'))
 
             payroll_receipt_processed = PayrollReceiptProcessed(
                 employee=employee,

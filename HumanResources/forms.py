@@ -718,12 +718,17 @@ class UploadedEmployeeAssistanceHistoryForm(forms.ModelForm):
 
 
 # Form to include the fields of Tag Form.
+class UploadedEmployeeAssistanceCheckerForm(forms.ModelForm):
+    class Meta:
+        model = UploadedEmployeeAssistanceChecker
+        fields = '__all__'
+
+
+# Form to include the fields of Tag Form.
 class EmployeeLoanForm(forms.ModelForm):
     class Meta:
         model = EmployeeLoan
         fields = '__all__'
-
-
 
 
 # Form to include the fields of Tag Form.

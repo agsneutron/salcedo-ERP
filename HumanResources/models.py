@@ -904,6 +904,27 @@ class UploadedEmployeeAssistanceHistory(models.Model):
     assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
                                        verbose_name="Archivo de Asistencias")
 
+    date_processed = models.DateTimeField(verbose_name='Fecha de Actualización', auto_now=True, blank=True, null=True )
+
+    class Meta:
+        verbose_name_plural = "Archivos de Asistencias"
+        verbose_name = "Archivo de asistencias"
+
+    def __str__(self):
+        return "Del " + str(self.payroll_period.start_period) + " al " + str(self.payroll_period.end_period) + \
+               " - " + self.assistance_file.name
+
+    def __unicode__(self):  # __unicode__ on Python 2
+        return "Del " + str(self.payroll_period.start_period) + " al " + str(self.payroll_period.end_period) + \
+               " - " + self.assistance_file.name
+
+
+class UploadedEmployeeAssistanceChecker(models.Model):
+    payroll_period = models.ForeignKey('PayrollPeriod', verbose_name="Periodo de nómina", null=False, blank=False)
+    assistance_file = models.FileField(upload_to=uploaded_employees_assistance_destination, null=True,
+                                       verbose_name="Archivo de Asistencias")
+    upload_date = models.DateTimeField(verbose_name='Fecha de Registro', auto_now_add=True)
+
     class Meta:
         verbose_name_plural = "Archivos de Asistencias"
         verbose_name = "Archivo de asistencias"
@@ -1368,6 +1389,7 @@ class EmployeeFinancialData(models.Model):
     class Meta:
         verbose_name_plural = "Datos Financieros del Empleado"
         verbose_name = "Datos Financieros del Empleado"
+        unique_together = (('account_type', 'employee'),)
 
 
 class InfonavitData(models.Model):

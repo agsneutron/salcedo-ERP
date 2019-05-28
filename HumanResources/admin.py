@@ -2077,7 +2077,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
             'fields': ('payroll_period', 'assistance_file',)
         }),
     )
-    list_display = ('payroll_period', 'assistance_file', 'get_UploadedEmployeeAssistanceHistory_link')
+    list_display = ('payroll_period', 'assistance_file', 'date_processed', 'get_UploadedEmployeeAssistanceHistory_link')
 
 
     def get_queryset(self, request):
@@ -2105,10 +2105,14 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
-        payrollperiodbydirection_ids = UploadedEmployeeAssistanceHistory.objects\
-            .filter(payroll_period_id__payroll_group_id__direction_id__in=direction_ids)\
-            .values('payroll_period_id')
-        ModelForm.base_fields['payroll_period'].queryset = PayrollPeriod.objects.filter(id__in=payrollperiodbydirection_ids)
+        payrollset = PayrollPeriod.objects\
+            .filter(payroll_group_id__direction_id__in=direction_ids)
+
+        print "PAYROLLSET"
+        print payrollset
+        ModelForm.base_fields['payroll_period'].queryset = PayrollPeriod.objects\
+            .filter(payroll_group_id__direction_id__in=direction_ids)
+
 
         return ModelFormMetaClass
 
@@ -2118,6 +2122,98 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
     get_UploadedEmployeeAssistanceHistory_link.short_description = 'Justificar Asistencias'
     get_UploadedEmployeeAssistanceHistory_link.allow_tags = True
+
+    def save_model(self, request, obj, form, change):
+        current_user = request.user
+        # payroll_group_id = int(request.POST.get('payroll_group'))
+        payroll_period_id = int(request.POST.get('payroll_period'))
+        payroll_period = PayrollPeriod.objects.get(pk=payroll_period_id)
+
+        try:
+            with transaction.atomic():
+                assistance_file = request.FILES['assistance_file']
+                file_interface_obj = AssistanceFileInterface(assistance_file, request.user)
+
+                # Getting the elements from the file.
+                elements = file_interface_obj.get_element_list(obj.payroll_period.payroll_group.checker_type, payroll_period)
+
+                # Processing the results.
+                assitance_db_object = AssistanceDBObject(current_user, elements, payroll_period_id)
+                assitance_db_object.process_records()
+
+                # If everything went ok, generatethe automatic absences
+                atm_mgr = AutomaticAbsences()
+                atm_mgr.generate_automatic_absences_for_period(payroll_period)
+
+                super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
+
+        except ErrorDataUpload as e:
+            e.save()
+            # messages.set_level(request, messages.ERROR)
+            django.contrib.messages.error(request, e.get_error_message())
+
+        except django.db.utils.IntegrityError as e:
+            django.contrib.messages.error(request, "Error de integridad de datos.")
+
+    def response_add(self, request, obj, post_url_continue=None):
+        # return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
+        return HttpResponseRedirect("/admin/HumanResources/uploadedemployeeassistancehistory/")
+
+
+# Uploaded Assistances Admin.
+@admin.register(UploadedEmployeeAssistanceChecker)
+class UploadedEmployeeAssistanceCheckerAdmin(admin.ModelAdmin):
+    form = UploadedEmployeeAssistanceCheckerForm
+
+    fieldsets = (
+        ("Carga de Archivo de Asistencias del Checador", {
+            'fields': ('payroll_period', 'assistance_file',)
+        }),
+    )
+
+    list_display = ('payroll_period', 'assistance_file', 'get_UploadedEmployeeAssistanceChecker_link', 'upload_date')
+
+    def get_queryset(self, request):
+        qs = super(UploadedEmployeeAssistanceCheckerAdmin, self).get_queryset(request)
+
+        user = request.user
+        direction_ids = AccessToDirection.get_directions_for_user(user)
+        qs = qs.filter(payroll_period_id__payroll_group_id__direction_id__in=direction_ids)
+
+        return qs
+
+    def queryset(self, request):
+        qs = super(UploadedEmployeeAssistanceCheckerAdmin, self).queryset(request)
+        # modify queryset here, eg. only user-assigned tasks
+        qs.filter(assigned__exact=request.user)
+        return qs
+
+    def get_form(self, request, obj=None, **kwargs):
+        ModelForm = super(UploadedEmployeeAssistanceCheckerAdmin, self).get_form(request, obj, **kwargs)
+
+        # Class to pass the request to the form.
+        class ModelFormMetaClass(ModelForm):
+            def __new__(cls, *args, **kwargs):
+
+                return ModelForm(*args, **kwargs)
+
+        direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
+        payrollset = PayrollPeriod.objects \
+            .filter(payroll_group_id__direction_id__in=direction_ids)
+
+        print "PAYROLLSET"
+        print payrollset
+        ModelForm.base_fields['payroll_period'].queryset = PayrollPeriod.objects \
+            .filter(payroll_group_id__direction_id__in=direction_ids)
+
+        return ModelFormMetaClass
+
+    def get_UploadedEmployeeAssistanceChecker_link(self, obj):
+        return HumanResourcesAdminUtilities.get_UploadedEmployeeAssistanceChecker_link(
+            "UploadedEmployeeAssistanceChecker", obj.payroll_period.id, "")
+
+    get_UploadedEmployeeAssistanceChecker_link.short_description = 'Justificar Asistencias'
+    get_UploadedEmployeeAssistanceChecker_link.allow_tags = True
 
     def save_model(self, request, obj, form, change):
         current_user = request.user
@@ -2141,7 +2237,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
                 atm_mgr = AutomaticAbsences()
                 atm_mgr.generate_automatic_absences_for_period(payroll_period)
 
-                super(UploadedEmployeeAssistanceHistoryAdmin, self).save_model(request, obj, form, change)
+                super(UploadedEmployeeAssistanceCheckerAdmin, self).save_model(request, obj, form, change)
 
         except ErrorDataUpload as e:
             e.save()
@@ -2153,7 +2249,7 @@ class UploadedEmployeeAssistanceHistoryAdmin(admin.ModelAdmin):
 
     def response_add(self, request, obj, post_url_continue=None):
         # return HttpResponseRedirect("/humanresources/employeebyperiod?payrollperiod="+str(obj.payroll_period.id)+"&payrollgroup="+str(obj.payroll_period.payroll_group.id))
-        return HttpResponseRedirect("/admin/HumanResources/uploadedemployeeassistancehistory/")
+        return HttpResponseRedirect("/admin/HumanResources/uploadedemployeeassistancechecker/")
 
 
 class EmployeeLoanDetailInLineFormset(forms.models.BaseInlineFormSet):
