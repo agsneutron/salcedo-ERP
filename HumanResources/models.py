@@ -1623,7 +1623,6 @@ class PayrollPeriod(models.Model):
     start_period = models.DateField(verbose_name="Inicio de Periodo*", null=False, blank=False)
     end_period = models.DateField(verbose_name="Fin de Periodo*", null=False, blank=False)
 
-
     exclusions = models.ManyToManyField('Employee', through='EmployeePayrollPeriodExclusion',through_fields=('payroll_period', 'employee',),)
 
     periodicity = models.ForeignKey(Periodicity, verbose_name="Periodicidad", null=False, blank=False)
