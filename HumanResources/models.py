@@ -347,7 +347,13 @@ class Employee(models.Model):
 
         return absences
 
-
+    @staticmethod
+    def get_employees_for_direction(direction_ids):
+        employees = Employee.objects.filter(direction_id__in=direction_ids).values('id')
+        employee_ids = []
+        for p in employees:
+            employee_ids.append(p['id'])
+        return employee_ids
 
 
 # Method to save the employee document file.

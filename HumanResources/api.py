@@ -546,7 +546,7 @@ class GeneratePayrollReceipt(View):
                 employee_array.append(position_description.employee.id)
 
             # Getting all the employees realted to the found payroll groups.
-            employee_set = Employee.objects.filter(Q(id__in=employee_array)).exclude(id__in=excluded_employees)
+            employee_set = Employee.objects.filter(Q(id__in=employee_array)).exclude(id__in=excluded_employees).exclude(status=2)
 
         # Generating the payroll for every single employee.
         receipts_array = []

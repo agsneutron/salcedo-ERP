@@ -147,6 +147,9 @@ class EmployeeAdmin(admin.ModelAdmin):
         user = request.user
         direction_ids = AccessToDirection.get_directions_for_user(user)
         qs = qs.filter(direction_id__in=direction_ids)
+        qs = qs.filter(status=1)
+        print'qs employee'
+        print qs
 
         return qs
 
@@ -2557,7 +2560,7 @@ class EmployeeRequisitionAdmin(admin.ModelAdmin):
     def save_model(self, request, obj, form, change):
         obj.user = request.user
 
-        return super(EmployeeRequisitionAdmin, self).save_model(request, obj, form, change);
+        return super(EmployeeRequisitionAdmin, self).save_model(request, obj, form, change)
 
 
 # Loan Admin.
@@ -2723,7 +2726,7 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
 
         user = request.user
         direction_ids = AccessToDirection.get_directions_for_user(user)
-        employee_ids = EmployeePositionDescription.get_employees_for_direction(direction_ids)
+        employee_ids = Employee.get_employees_for_direction(direction_ids)
         qs = qs.filter(employee__in=employee_ids)
 
         return qs
@@ -2745,8 +2748,8 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
                 return ModelForm(*args, **kwargs)
 
         direction_ids = AccessToDirection.get_directions_for_user(request.user.id)
-        employee_ids = EmployeePositionDescription.objects.filter(direction_id__in=direction_ids).values('employee_id')
-        ModelForm.base_fields['employee'].queryset = Employee.objects.filter(pk__in=employee_ids).exclude(status=2)
+        employee_ids = Employee.objects.filter(direction_id__in=direction_ids).values('id')
+        ModelForm.base_fields['employee'].queryset = Employee.objects.filter(direction_id__in=direction_ids).exclude(status=2)
 
         return ModelFormMetaClass
 
@@ -2785,6 +2788,12 @@ class EmployeeDropOutAdmin(admin.ModelAdmin):
         employee = obj.employee
         employee.status = Employee.STATUS_INNACTIVE
         employee.save()
+
+        update_employee_status = Employee.objects.get(pk=employee.id)
+        print 'update_employee_status'
+        print update_employee_status
+        update_employee_status.status = 2
+        update_employee_status.save()
 
         return super(EmployeeDropOutAdmin, self).response_add(request, obj, post_url_continue)
 

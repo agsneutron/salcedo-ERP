@@ -111,13 +111,10 @@ class AutomaticAbsences(ListView):
             employee_array.append(position_description.employee.id)
 
         # Getting all the employees related to the found payroll groups.
-        employee_set = Employee.objects.filter(id__in=employee_array)
+        employee_set = Employee.objects.filter(id__in=employee_array).exclude(status=2)
 
         for employee in employee_set:
             self.generate_automatic_absecences_for_employee(payroll_period, employee)
-
-
-
 
     def get(self, request):
         payroll_period_id = int(request.GET.get('payroll_period'))

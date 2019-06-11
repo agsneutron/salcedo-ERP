@@ -19,6 +19,7 @@ def get_none(the_string):
         the_string = ""
     return the_string
 
+
 class EmployeePaymentReceipt:
 
     @staticmethod
@@ -30,25 +31,21 @@ class EmployeePaymentReceipt:
 
         pages = []
 
-        doc = SimpleDocTemplate(response, rightMargin=0, leftMargin=3.5 * cm, topMargin=25 * cm, bottomMargin=0)
+        doc = SimpleDocTemplate(response, rightMargin=0, leftMargin=3.5 * cm, topMargin=15 * cm, bottomMargin=0)
 
-        breakpage= 1
+        add_bp = 0
+        pagenumber = 1
         for receipt in receipts_data:
-            breakpage +=1
-            receipt_page = EmployeePaymentReceipt.generate_receipt_page(receipt, company, breakpage)
+            # breakpage = 1
+            receipt_page, add_bp = EmployeePaymentReceipt.generate_receipt_page(receipt, company, pagenumber, add_bp)
+            pagenumber += 1
             pages += receipt_page
-
-
-
         doc.build(pages)
         return response
 
 
-
-
-
     @staticmethod
-    def generate_receipt_page(receipt_data, company, breackpage):
+    def generate_receipt_page(receipt_data, company, pagenumber, add_bp):
         page = []
         cm = 2.54
         line_break = Paragraph("<br />", EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
@@ -80,21 +77,11 @@ class EmployeePaymentReceipt:
         tabla_encabezado = Table(encabezado, colWidths=(40*cm, 144*cm))
         tabla_encabezado.setStyle(EmployeePaymentReceipt.Styles.EMPLOYEE_HEADER_TABLE_STYLE)
 
-        page.append(tabla_encabezado)
 
-
-        # Adding breaklines to separate the headers from the next table.
-        page.append(line_break)
-        page.append(line_break)
-        page.append(line_break)
-        page.append(line_break)
-        page.append(line_break)
-        page.append(line_break)
-        page.append(line_break)
 
         titulo = "<strong> RECIBO DE PAGO " + receipt_data['periodicity'] +" </strong>"
         paragraph = Paragraph(titulo, EmployeePaymentReceipt.Styles.HEADERS_PARAGRAPH_STYLE)
-        page.append(paragraph)
+
 
         # Employee personal data table.
         employee_number_label = Paragraph('<strong>No. de Trabajador:</strong> '+receipt_data['employee_key'], EmployeePaymentReceipt.Styles.EMPLOYEE_LABEL_PARAGRAPH_STYLE)
@@ -111,23 +98,8 @@ class EmployeePaymentReceipt:
             [periodo_label, curp_label],
             [employee_name_label, employee_ssn_label],
         ]
-        employee_table = Table(data, colWidths=92*cm, rowHeights=(10*cm, 10*cm, 15*cm))
+        employee_table = Table(data, colWidths=92*cm, rowHeights=(10*cm, 10*cm, 10*cm))
         employee_table.setStyle(EmployeePaymentReceipt.Styles.EMPLOYEE_INFO_TABLE_STYLE)
-
-        page.append(employee_table)
-
-
-
-
-
-        # Adding breaklines to separate the headers from the next table.
-        page.append(line_break)
-        page.append(line_break)
-        page.append(line_break)
-
-
-
-
 
 
         # Earnings and deductions table.
@@ -147,8 +119,6 @@ class EmployeePaymentReceipt:
             total_rows = number_of_earnings
         else:
             total_rows = number_of_deductions
-
-
 
         for i in range(total_rows):
 
@@ -173,10 +143,8 @@ class EmployeePaymentReceipt:
                 earnings_data.append('')
 
             earnings_cell.append(earnings_data)
-
             earnings_table = Table(earnings_cell, colWidths=(60*cm, 40*cm), rowHeights=20)
             table_row.append(earnings_table)
-
 
             try:
                 deductions_record = receipt_data['deductions'][i]
@@ -196,24 +164,10 @@ class EmployeePaymentReceipt:
 
             earnings_deductions_data.append(table_row)
 
-
         earnings_and_deductions_table = Table(earnings_deductions_data, colWidths=92*cm, rowHeights=20)
         earnings_and_deductions_table.setStyle(EmployeePaymentReceipt.Styles.EARNINGS_AND_DEDUCTIONS_TABLE_STYLE)
         wrap_style = EmployeePaymentReceipt.Styles.wrap_earnings_and_deductions(total_rows)
         earnings_and_deductions_table.setStyle(wrap_style)
-
-        page.append(earnings_and_deductions_table)
-
-
-
-
-
-
-        # Adding breaklines to separate the headers from the next table.
-        page.append(line_break)
-        page.append(line_break)
-        page.append(line_break)
-
 
 
 
@@ -242,20 +196,67 @@ class EmployeePaymentReceipt:
             ['', net_salary_table]
         ]
         totals_table = Table(totals_data, colWidths=(92*cm), rowHeights=20)
-        page.append(totals_table)
 
-
-
-        # End Page.
-        if breackpage%2 != 0:
+        breakpage = 0
+        if total_rows > 5 and add_bp == 0 and pagenumber > 1:
             page.append(PageBreak())
+            breakpage = 1
+
+        #begin page
+        page.append(tabla_encabezado)
+
+        # Adding breaklines to separate the headers from the next table.
+        page.append(line_break)
+        page.append(line_break)
+        page.append(line_break)
+        page.append(line_break)
+        page.append(line_break)
+        page.append(line_break)
+        page.append(line_break)
+
+        page.append(paragraph)
+
+        page.append(employee_table)
+
+        # Adding breaklines to separate the headers from the next table.
+        page.append(line_break)
+        page.append(line_break)
+        page.append(line_break)
+
+        page.append(earnings_and_deductions_table)
+
+        # Adding breaklines to separate the headers from the next table.
+        page.append(line_break)
+        page.append(line_break)
+        page.append(line_break)
+
+        page.append(totals_table)
+        # End Page.
+
+        if total_rows > 5:
+            page.append(PageBreak())
+            breakpage = 1
         else:
-            page.append(line_break)
-            page.append(line_break)
-            page.append(line_break)
+            if add_bp == 1:
+                # es estado de cuenta corto y hubo corte de pagina anterior entonces sólo agregamos espacios
+                breakpage = 0   # anotamos que no hay corte de página
+                page.append(line_break)
+                page.append(line_break)
+                page.append(line_break)
+            elif add_bp == 0 and pagenumber > 1:
+                # es estado de cuenta corto y no hubo corte de pagina anterior entonces hacemos corte de página
+                page.append(PageBreak())
+                breakpage = 1   # anotamos que hay corte de página
 
+        #if breakpage % 2 != 0:
+        #    if pagebreak:
+        #        page.append(PageBreak())
+        #else:
+        #        page.append(line_break)
+        #        page.append(line_break)
+        #        page.append(line_break)
 
-        return page
+        return page, breakpage
 
 
 
@@ -282,25 +283,25 @@ class EmployeePaymentReceipt:
         HEADERS_PARAGRAPH_STYLE = ParagraphStyle(
             name='Normal',
             fontName='Helvetica',
-            fontSize=11,
+            fontSize=10,
             alignment=enums.TA_CENTER,
-            spaceAfter=5
+            spaceAfter=4
         )
 
         HEADERS_TITLE_STYLE = ParagraphStyle(
             name='Normal',
             fontName='Helvetica',
-            fontSize=11,
+            fontSize=10,
             alignment=enums.TA_RIGHT,
-            spaceAfter=5
+            spaceAfter=4
         )
 
         HEADERS_SUBTITLE_STYLE = ParagraphStyle(
             name='Normal',
             fontName='Helvetica',
-            fontSize=10,
+            fontSize=8,
             alignment=enums.TA_RIGHT,
-            spaceAfter=5
+            spaceAfter=4
         )
 
 
@@ -323,7 +324,7 @@ class EmployeePaymentReceipt:
             ('GRID', (0, 0), (1, 0), 0, colors.black),
             ('TEXTCOLOR', (0, 0), (1, 0), colors.white),
             ('FONTNAME', (0, 0), (1, 0), 'Helvetica'),
-            ('FONTSIZE', (0, 0), (1, 0), 10),
+            ('FONTSIZE', (0, 0), (1, 0), 8),
 
             # Data.
 

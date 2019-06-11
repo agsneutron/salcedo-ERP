@@ -1,7 +1,7 @@
 # coding=utf-8
 import datetime
 from _mysql import IntegrityError
-from datetime import date, datetime, timedelta
+#from datetime import date, datetime, timedelta
 
 import xlrd
 from django.db.models.query_utils import Q
@@ -42,7 +42,6 @@ class AssistanceFileInterface(object):
         process_date = None
         #start_payroll_period = datetime.datetime.now()
 
-
         if file_type == PayrollGroup.CHECKER_TYPE_AUTOMATIC:
             # Get the first sheet
             sheet = self.book.sheet_by_index(2)
@@ -53,6 +52,9 @@ class AssistanceFileInterface(object):
             sheet = self.book.sheet_by_index(0)
             i = 1
 
+        if sheet.ncols == 0:
+            error_message = "El formato del archivo que intenta procesar es incorrecto."
+            raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
 
         # If the type of assistance check is automatic, check that there are at least 15 columns..
         if file_type == PayrollGroup.CHECKER_TYPE_AUTOMATIC and len(sheet.row_values(0)) < 15:
@@ -82,10 +84,10 @@ class AssistanceFileInterface(object):
 
                             elements = sheet.row_values(2)
                             start_period_date = elements[6]
-                            start_period_date = datetime.strptime(start_period_date[:10], formato_fecha)
+                            start_period_date = datetime.datetime.strptime(start_period_date[:10], formato_fecha)
                             end_period_date = elements[6]
-                            end_period_date = datetime.strptime(end_period_date[13:], formato_fecha)
-                            process_date = datetime.strptime(elements[18], formato_fecha)
+                            end_period_date = datetime.datetime.strptime(end_period_date[13:], formato_fecha)
+                            process_date = datetime.datetime.strptime(elements[18], formato_fecha)
                             elements[0] = start_period_date.date()
                             elements[1] = end_period_date.date()
                             elements[2] = start_payroll_period
@@ -164,7 +166,7 @@ class AssistanceDBObject:
         if self.payroll_period.payroll_group.checker_type == PayrollGroup.CHECKER_TYPE_AUTOMATIC:
             i = 0
 
-            start_date = datetime.now().date()
+            start_date = datetime.datetime.now().date()
             start_day = None
 
             for record in self.records:
@@ -179,7 +181,7 @@ class AssistanceDBObject:
                         print element
                         automatic_record = []
                         automatic_record.append(id_empleado)
-                        automatic_record.append(start_date + timedelta(days=j))
+                        automatic_record.append(start_date + datetime.timedelta(days=j))
                         automatic_record.append(element[:5])
                         automatic_record.append(element[5:])
                         self.save_assistance_record(automatic_record)
@@ -212,6 +214,16 @@ class AssistanceDBObject:
             entry_time_record = record[self.ElementPosition.ATM_ENTRY_COL]
             exit_time_record = record[self.ElementPosition.ATM_EXIT_COL]
             print "Automatic Assistance Upload"
+            if entry_time_record == '':
+                entry_time_record = None
+            else:
+                entry_time_record = datetime.datetime.strptime(entry_time_record+':00', '%H:%M:%S').time()
+
+            if exit_time_record == '':
+                exit_time_record = None
+            else:
+                exit_time_record = datetime.datetime.strptime(exit_time_record+':00', '%H:%M:%S').time()
+
 
         else:
             employee_key = record[self.ElementPosition.MANUAL_EMPLOYEE_KEY_COL]
@@ -220,58 +232,53 @@ class AssistanceDBObject:
             exit_time_record = record[self.ElementPosition.MANUAL_EXIT_COL]
             print "Manual Assistance Upload"
 
-        #entry_time_record = datetime.datetime.strptime(entry_time_record.encode('ascii','ignore'), '%H:%M:%S').time()
-        #exit_time_record = datetime.datetime.strptime(exit_time_record.encode('ascii','ignore'), '%H:%M:%S').time()
 
         # Obtaining the related employee by theit key number. If the given employeee does not exist,
         # the system will throw an exception.
         employee_to_save = self.validate_employee_key(employee_key)
 
-        # Validates that the given date is found between the limits of the selected payroll period.
-        date_to_save = self.validate_date(record_date, employee_to_save.employee_key)
+        if employee_to_save is not False:
 
-        # Validates the given fromat for the entry and exit time.
-        entry_time_to_save = self.validate_entry_and_exit_time(entry_time_record, employee_to_save.employee_key)
-        exit_time_to_save = self.validate_entry_and_exit_time(exit_time_record, employee_to_save.employee_key)
+            # Validates that the given date is found between the limits of the selected payroll period.
+            date_to_save = self.validate_date(record_date, employee_to_save.employee_key)
 
-        employee_was_absent = self.check_if_absent(employee_to_save, entry_time_to_save, exit_time_to_save)
+            # Validates the given fromat for the entry and exit time.
+            entry_time_to_save = self.validate_entry_and_exit_time(entry_time_record, employee_to_save.employee_key)
+            exit_time_to_save = self.validate_entry_and_exit_time(exit_time_record, employee_to_save.employee_key)
 
-        # To check if the assistance exists before saving it.
-        assistance_existed = EmployeeAssistance.objects.filter(
-            Q(record_date = date_to_save) &
-            Q(employee = employee_to_save) &
-            Q(payroll_period=self.payroll_period))
+            employee_was_absent = self.check_if_absent(employee_to_save, entry_time_to_save, exit_time_to_save)
 
+            # if was absent then do not register the assistance
+            if not employee_was_absent:
 
-        if len(assistance_existed) > 0:
-            # If the assistance already existed, lets update the information.
-            assistance_obj = assistance_existed[0]
-            assistance_obj.entry_time = entry_time_to_save
-            assistance_obj.exit_time = exit_time_to_save
-            assistance_obj.absence = employee_was_absent
+                # To check if the assistance exists before saving it.
+                assistance_existed = EmployeeAssistance.objects.filter(
+                    Q(record_date = date_to_save) &
+                    Q(employee = employee_to_save) &
+                    Q(payroll_period=self.payroll_period))
 
-            # Maybe add a message that says that some records where updated.
+                if len(assistance_existed) > 0:
+                    # If the assistance already existed, lets update the information.
+                    assistance_obj = assistance_existed[0]
+                    assistance_obj.entry_time = entry_time_to_save
+                    assistance_obj.exit_time = exit_time_to_save
+                    assistance_obj.absence = employee_was_absent
 
-            assistance_obj.save()
+                    # Maybe add a message that says that some records where updated.
 
-        else:
-            assistance_obj = EmployeeAssistance(
-                entry_time=entry_time_to_save,
-                exit_time=exit_time_to_save,
-                record_date = date_to_save,
-                employee = employee_to_save,
-                payroll_period=self.payroll_period,
-                absence=employee_was_absent
-            )
+                    assistance_obj.save()
 
+                else:
+                    assistance_obj = EmployeeAssistance(
+                        entry_time=entry_time_to_save,
+                        exit_time=exit_time_to_save,
+                        record_date = date_to_save,
+                        employee = employee_to_save,
+                        payroll_period=self.payroll_period,
+                        absence=employee_was_absent
+                    )
 
-
-            assistance_obj.save()
-
-
-
-
-
+                    assistance_obj.save()
 
     def validate_employee_key(self, employee_key):
         """
@@ -279,14 +286,17 @@ class AssistanceDBObject:
         :param employee_key: the key to check for.
         :return: employee object.
         """
-        try:
+        #try:
+
+        if Employee.objects.filter(employee_key=employee_key).exists():
             employee = Employee.objects.get(employee_key=employee_key)
             return employee
+        else:
+            return False
 
-        except Employee.DoesNotExist:
-            error_message = "El empleado con la clave " + str(employee_key) + " no existe."
-            raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
-
+        #except Employee.DoesNotExist:
+            #error_message = "El empleado con la clave " + str(employee_key) + " no existe."
+            #raise ErrorDataUpload(error_message, LoggingConstants.ERROR, self.current_user.id)
 
     def validate_date(self, record_date, employee_key):
         """
@@ -299,7 +309,7 @@ class AssistanceDBObject:
         # Obtaining the date object from the obtained record date.
         error_message = "Ha habido un error con el formato de la fecha " + str(record_date) + " para el registro del" + \
                         " empleado con la clave " + str(employee_key)
-        date_to_save = record_date
+        date_to_save = datetime.datetime.combine(record_date, datetime.datetime.min.time())
 
         '''if type(record_date) is float:
             try:
@@ -324,7 +334,6 @@ class AssistanceDBObject:
 
         return date_to_save
 
-
     def validate_entry_and_exit_time(self, time_record, employee_key):
         if time_record is '' or time_record is None:
             return None
@@ -342,9 +351,7 @@ class AssistanceDBObject:
         '''
         return time_record_obj
 
-
     def check_if_absent(self, employee, entry_time_record, exit_time_record):
-
 
         if entry_time_record is None or exit_time_record is None:
             return True
@@ -354,8 +361,8 @@ class AssistanceDBObject:
         position_entry_time = employee_position.entry_time
         position_exit_time = employee_position.departure_time
 
-        entry_diff = datetime.datetime.combine(date.today(), entry_time_record) - datetime.datetime.combine(date.today(), position_entry_time)
-        exit_diff = datetime.datetime.combine(date.today(), position_exit_time) - datetime.datetime.combine(date.today(), exit_time_record)
+        entry_diff = datetime.datetime.combine(datetime.date.today(), entry_time_record) - datetime.datetime.combine(datetime.date.today(), position_entry_time)
+        exit_diff = datetime.datetime.combine(datetime.date.today(), position_exit_time) - datetime.datetime.combine(datetime.date.today(), exit_time_record)
 
         arrived_minutes_late = entry_diff.total_seconds() / 60
         left_minutes_early = exit_diff.total_seconds() / 60
@@ -379,7 +386,6 @@ class AssistanceDBObject:
             absent = True
 
         return absent
-
 
 
 class ErrorDataUpload(SystemException):
