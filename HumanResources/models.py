@@ -1646,10 +1646,6 @@ class PayrollPeriod(models.Model):
             return payments_ids
 
 
-
-
-
-
 class EmployeePayrollPeriodExclusion(models.Model):
     employee = models.ForeignKey(Employee, verbose_name="Empleado", null=False, blank=False)
     payroll_period = models.ForeignKey(PayrollPeriod, verbose_name="Periodo de Nómina", null=False, blank=False)
