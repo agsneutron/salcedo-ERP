@@ -288,8 +288,8 @@ class AssistanceDBObject:
         """
         #try:
 
-        if Employee.objects.filter(employee_key=employee_key).exists():
-            employee = Employee.objects.get(employee_key=employee_key)
+        if Employee.objects.filter(id=employee_key).exists():
+            employee = Employee.objects.get(id=employee_key)
             return employee
         else:
             return False
