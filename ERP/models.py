@@ -35,10 +35,10 @@ from Logs.controller import Logs
 
 # Shared Catalogs Imports.
 from SharedCatalogs.models import Pais, Estado, Municipio, Bank, SATBank
+from django.core.validators import RegexValidator
 
-
+decimal_ammount = RegexValidator(regex="^\d{0,10}(\.\d{0,9})?$", message="Favor de verificar el .")
 # Create your models here.
-
 
 
 class TipoConstruccion(models.Model):
@@ -1619,12 +1619,12 @@ class Estimate(models.Model):
                                          blank=False, )
     last_edit_date = models.DateTimeField(auto_now_add=True)
 
-    contract_amount_override = models.DecimalField(verbose_name='Total Real', decimal_places=2, blank=False, null=False,
+    contract_amount_override = models.DecimalField(verbose_name='Total Real', decimal_places=9, blank=False, null=False,
                                                    default=0, max_digits=20,
                                                    validators=[MinValueValidator(Decimal('0.0'))])
 
     # Fields to provide the Advance (payment) functionality.
-    advance_payment_amount = models.DecimalField(verbose_name='Anticipo', decimal_places=2, blank=False, null=False,
+    advance_payment_amount = models.DecimalField(verbose_name='Anticipo', decimal_places=9, blank=False, null=False,
                                                  default=0, max_digits=20,
                                                  validators=[MinValueValidator(Decimal('0.0'))])
 
@@ -1640,7 +1640,7 @@ class Estimate(models.Model):
     advance_payment_status = models.CharField(max_length=2, choices=ADVANCE_PAYMENT_STATUS_CHOICES, default=NOT_PAID,
                                               verbose_name="Estatus del Anticipo")
 
-    Total_paid = models.DecimalField(verbose_name="Total Pagado", decimal_places=2, max_digits=20, max_length=2, default=0, blank=False, null=False, validators=[MinValueValidator(Decimal('0.0'))])
+    Total_paid = models.DecimalField(verbose_name="Total Pagado", decimal_places=9, max_digits=20, max_length=2, default=0, blank=False, null=False, validators=[MinValueValidator(Decimal('0.0'))])
 
     LOCKED = "L"
     UNLOCKED = "U"
@@ -1784,12 +1784,12 @@ class ProgressEstimate(models.Model):
     estimate = models.ForeignKey(Estimate, verbose_name="Estimación", null=False, blank=False)
     key = models.CharField(verbose_name="Clave del Avance", max_length=9, null=False, blank=False)
 
-    amount = models.DecimalField(verbose_name='Monto ($)', decimal_places=6, blank=False, null=False, default=0,
-                                 max_digits=20)
-    generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=2, blank=False,
+    amount = models.DecimalField(verbose_name='Monto ($)', decimal_places=9, blank=False, null=False, default=0,
+                                 max_digits=20, validators=[decimal_ammount])
+    generator_amount = models.DecimalField(verbose_name='Cantidad del Generador', decimal_places=9, blank=False,
                                            null=False, default=0,
                                            max_digits=20)
-    paid_out = models.DecimalField(verbose_name="Pagado", null=False, blank=False, default=0.00, decimal_places=2, max_digits=20)
+    paid_out = models.DecimalField(verbose_name="Pagado", null=False, blank=False, default=0.00, decimal_places=9, max_digits=20)
 
     generator_file = models.FileField(upload_to=content_file_generador, null=True,
                                       verbose_name="Justificación", blank=True)

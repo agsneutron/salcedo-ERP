@@ -1002,10 +1002,10 @@ class EstimateDetailView(generic.DetailView):
 
         # Shallow copy for the main object.
         estimate = context['estimate']
-        estimate.deduction_amount = Utilities.number_to_currency(estimate.deduction_amount)
+        estimate.deduction_amount = Utilities.number_to_currency_estm(estimate.deduction_amount)
         contract_amount = estimate.contractlineitem.monto_partida
-        estimate.contractlineitem.monto_partida = Utilities.number_to_currency(estimate.contractlineitem.monto_partida)
-        estimate.contract_amount_override = Utilities.number_to_currency(estimate.contract_amount_override)
+        estimate.contractlineitem.monto_partida = Utilities.number_to_currency_estm(estimate.contractlineitem.monto_partida)
+        estimate.contract_amount_override = Utilities.number_to_currency_estm(estimate.contract_amount_override)
 
         progress_estimates = ProgressEstimate.objects.filter(Q(estimate_id=estimate.id))
 
@@ -1013,7 +1013,8 @@ class EstimateDetailView(generic.DetailView):
         context['advance_percentage'] = "{0:.0f}%".format(total / contract_amount * 100)
 
         #estimate.advance_payment_amount = locale.currency(estimate.advance_payment_amount, grouping=True)
-        estimate.advance_payment_amount = Utilities.number_to_currency(estimate.advance_payment_amount)
+        estimate.advance_payment_amount = Utilities.number_to_currency_estm(estimate.advance_payment_amount)
+
 
         current_user_can_approve = estimate.user_can_approve(self.request.user.id)
         context['current_user_can_approve'] = current_user_can_approve
@@ -1022,7 +1023,7 @@ class EstimateDetailView(generic.DetailView):
 
         for record in progress_estimates:
             total += record.amount
-            record.amount = Utilities.number_to_currency(record.amount)
+            record.amount = Utilities.number_to_currency_estm(record.amount)
             percentage = total / contract_amount
             record.progress = "{0:.0f}%".format(percentage * 100)
 

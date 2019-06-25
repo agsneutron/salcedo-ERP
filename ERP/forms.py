@@ -27,6 +27,7 @@ from django.conf import settings
 from django.contrib.admin import widgets
 
 from django.contrib.admin.widgets import RelatedFieldWidgetWrapper
+from django.core import validators
 
 
 class TipoProyectoDetalleAddForm(forms.ModelForm):
@@ -271,7 +272,14 @@ class ProgressEstimateForm(forms.ModelForm):
         cleaned_data = super(ProgressEstimateForm, self).clean()
 
         estimate = cleaned_data['estimate']
-        new_amount = cleaned_data['amount']
+
+        if cleaned_data.get('amount'):
+            new_amount = cleaned_data['amount']
+        else:
+            self._errors["amount"] = self.error_class(
+                ['Verificar el monto, sólo se permiten 10 digítos enteros y 9 decimales'])
+            raise ValidationError('Error en la cantidad')
+
         accumulated_amount = estimate.get_accumulated_amount()
         contract_amount = estimate.contractlineitem.monto_partida
 

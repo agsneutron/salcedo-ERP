@@ -91,6 +91,13 @@ class Utilities():
             return '-${:,.2f}'.format(-number)
 
     @staticmethod
+    def number_to_currency_estm(number):
+        if number >= 0:
+            return '${:,.9f}'.format(number)
+        else:
+            return '-${:,.9f}'.format(-number)
+
+    @staticmethod
     def string_to_date(str):
         if str is None:
             return None
