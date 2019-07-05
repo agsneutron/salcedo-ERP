@@ -66,13 +66,24 @@
             </div>
         </div>{% endcomment %}
 
+
+
         <div class="row">
+            <div class="col-xs-12 col-md-12">
+
+                    <div class="card-header light">
+                        {% for project in project %}
+                        <div class="card-title"> <b>PROYECTO:</b> {{ project.nombreProyecto }} </div>
+                        {% endfor %}
+                    </div>
+
+            </div>
             <div class="col-xs-12 col-md-6">
                 <div class="card">
                     <div class="card-header ">
                         <div class="item-left">
                             {% for project in project %}
-                                <div class="card-title text">Nombre de Proyecto: {{ project.nombreProyecto }} </div>
+                                <div class="card-title text">GENERALES </div>
 
                                 </div>
                                 </div>
@@ -96,7 +107,7 @@
                                 </div>
                                 <div class="col-xs-12 col-sm-6" style="    padding-left: 0;">
                                     <div class="" style="">
-                                        <h4 class="color-active">Generales</h4>
+                                        <br>
                                         <ul class="list-group">
                                             <li href="" class="list-group-item withripple ">
                                                 <b>Clave de Proyecto:</b> {{ project.key }} </li>
@@ -170,14 +181,14 @@
                                 <div class="col-xs-12 col-md-6">
                                 <div class="card">
                                 <div class="card-header">
-                                    <div class="card-title text">Ubicación</div>
+                                    <div class="card-title text">UBICACIÓN</div>
                                 </div>
                                 <div class="card-block" style="height: 340px; padding: 0">
 
                                 <div class="col-xs-12 col-sm-6">
                                     <div class="">
 
-                                        <h4 class="color-active">Ubicación</h4>
+                                        <br>
 
                                         <ul class="list-group">
                                             <li class="list-group-item withripple "
@@ -214,14 +225,41 @@
         </div>
         <hr style="margin: 25px 0;" class="visible-xs">
         <div class="row">
-            <div class="col-xs-12">
+            <div class="col-xs-6">
                 <div class="card">
                     <div class="card-header light">
-                        <h3 class="card-title">Estado Financiero</h3>
+                        <div class="card-title text">ESTADO FINANCIERO</div>
                     </div>
                     <div class="card-block" style="height: 200px; padding: 0">
                         <div id="container-chart-2" style="height: 200px"></div>
                         <div id="container-chart" style="height: 0px; display: none;"></div>
+
+                    </div>
+                </div>
+            </div>
+
+             <div class="col-xs-6">
+                <div class="card">
+                    <div class="card-header light">
+                        <div class="card-title text">DATOS FINANCIEROS</div>
+                    </div>
+                    <div class="card-block" style="height: 200px; padding: 0">
+                        <div class="col-xs-12 col-sm-12">
+                                    <div class="">
+                                        <ul class="list-group">
+                                            <li class="list-group-item withripple ">
+                                                <b>Monto Contrato:</b> {{ totalpartidas }}</li>
+                                            <li class="list-group-item withripple ">
+                                                <b>Monto Distribuido:</b> {{ totaldistribuido}}</li>
+                                            <li href="" class="list-group-item withripple ">
+                                                <b>Monto Estimado:</b> {{ totalestimado }}
+                                            </li>
+                                            <li href="" class="list-group-item withripple ">
+                                                <b>Monto Pagado:</b> {{ totalpagado }}</li>
+
+                                        </ul>
+                                    </div>
+                                </div>
 
                     </div>
                 </div>

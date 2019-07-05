@@ -79,8 +79,8 @@
                                         <thead>
                                         <tr>
                                             <td>Partida</td>
-                                            <td>Porcentaje Distribuido</td>
-                                            <td>Monto Distribuido</td>
+                                            <td align="right">Porcentaje Distribuido</td>
+                                            <td align="right">Monto Distribuido</td>
 
                                         </tr>
                                         </thead>
@@ -98,7 +98,7 @@
                                     </table>
                                 </div>
     <hr>
-   <h4>Detalle de la Distribución</h4>
+                            <h4>Detalle de la Distribución</h4>
 
 
                                 <div class="table-responsive mt-15">
@@ -118,7 +118,7 @@
                                         {% for record in distribucion %}
 
                                             <tr class="text-small">
-                                                <td width="50%">{{ record.line_item }}</td>
+                                                <td width="40%">{{ record.line_item }}</td>
                                                 <td>{{ record.tipo_pago }}</td>
                                                 <td align="right">{{ record.porcentaje }} %</td>
                                                 <td align="right">${{ record.monto|intcomma }}</td>

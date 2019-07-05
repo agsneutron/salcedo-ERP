@@ -38,6 +38,7 @@ from SalcedoERP.lib.constants import Constants
 from django.forms import formset_factory
 
 from users.models import ERPUser
+from django.db.models import Sum
 
 
 def custom_404(request):
@@ -286,7 +287,7 @@ class ContractorListView(ListView):
     """
        Display a Blog List page filtered by the search query.
     """
-    paginate_by = 10
+
 
     def get_queryset(self):
         result = super(ContractorListView, self).get_queryset()
@@ -348,7 +349,6 @@ class ContractorContractListView(ListView):
     """
        Display a Blog List page filtered by the search query.
        """
-    paginate_by = 10000
 
     def get_queryset(self):
         result = super(ContractorContractListView, self).get_queryset()
@@ -367,7 +367,7 @@ class ContractorContractListView(ListView):
             if query_project:
                 ContractorContractListView.query = query_project
                 query_list = query_project
-                result = result.filter(reduce(operator.and_,(Q(project__id__icontains=q) for q in query_list)))
+                result = result.filter((Q(project__id=query_project)))
             else:
                 ContractorContractListView.query = ''
 
@@ -379,12 +379,26 @@ class ContractorContractListView(ListView):
             # Filter the result to only include the appropriate results
             result = result.filter(reduce(operator.or_, (Q(project_id=pid) for pid in project_ids)))
 
+        print result
+
+        # for ol in result['object_list']:
+        #     distribucion = DistribucionPago.objects.filter(contrato=ol['id'])
+        #     totalpartidas = PartidasContratoContratista.objects.filter(contrato=ol['id']) \
+        #         .values('contrato') \
+        #         .annotate(total=Sum('monto_partida'))
+        #     distribuido = distribucion.values('line_item__description', 'line_item', 'line_item__key').annotate(
+        #         asignado=Sum('monto'), porcentaje=Sum('porcentaje'))
+        #     qs.aggregate(totalpartidas['total'],distribuido['asignado'])
+        #     print qs
+
         return result
 
     def get_context_data(self, **kwargs):
         context = super(ContractorContractListView, self).get_context_data(**kwargs)
         context['title_list'] = ContractorContractListView.title_list
         context['projectdata'] = Project.objects.filter(pk=self.request.GET.get('project_id'))
+
+
         if self.request.GET.get('project') is not None:
             context['add_url'] = ContractorContractListView.add_url + '?project=' + str(self.request.GET.get('project_id'))
         else:
@@ -416,9 +430,30 @@ class ContractorContractDetailView(generic.DetailView):
         partidas = PartidasContratoContratista.objects.filter(contrato=contract_id)
         distribucion = DistribucionPago.objects.filter(contrato=contract_id)
         documentos = DocumentacionContrato.objects.filter(contrato=contract_id)
+
+        totalpartidas = PartidasContratoContratista.objects.filter(contrato=contract_id)\
+            .values('contrato')\
+            .annotate(total=Sum('monto_partida'))
+
+        distribuido = distribucion.values('line_item__description', 'line_item', 'line_item__key').annotate(
+            asignado=Sum('monto'), porcentaje=Sum('porcentaje'))
+
+        print distribuido
+
+        totaldistribuido = 0
+
+        for d in distribuido:
+            totaldistribuido = totaldistribuido + d['asignado']
+
+
+        print totaldistribuido
+
         context['partidas'] = partidas
         context['distribuciones'] = distribucion
         context['documentos'] = documentos
+        context['totalpartidas'] = totalpartidas
+        context['distribuido'] = distribuido
+        context['totaldistribuido'] = totaldistribuido
         # Getting, if exists, the advance payment for the contract
         try:
             estimate = Estimate.objects.filter(contractlineitem__contrato_id=contract_id)
@@ -1072,6 +1107,71 @@ class DashBoardView(ListView):
         context = super(DashBoardView, self).get_context_data(**kwargs)
         context['project_id'] = DashBoardView.project_id
         context['project'] = Project.objects.filter(Q(id=DashBoardView.project_id))
+        contrato = ContratoContratista.objects.filter(Q(project_id=DashBoardView.project_id))
+
+
+        totalpartidas = 0
+        totaldistribuido = 0
+        partidas = []
+        qspartidas = None
+        for c in contrato:
+            # get total ammount by lineitem
+            qspartidas = PartidasContratoContratista.objects.filter(contrato=c)
+
+            for qsp in qspartidas:
+                partidas.append(qsp.id)
+
+            partida = qspartidas.values('contrato').annotate(total=Sum('monto_partida'))
+
+            for p in partida:
+                totalpartidas = totalpartidas + p['total']
+
+            # get total distributed
+            distribuido = DistribucionPago.objects.filter(contrato=c)\
+                .values('line_item__description', 'line_item', 'line_item__key')\
+                .annotate(asignado=Sum('monto'), porcentaje=Sum('porcentaje'))
+
+            for d in distribuido:
+                totaldistribuido = totaldistribuido + d['asignado']
+
+        estimacion = None
+        if qspartidas is not None:
+            estimacion = Estimate.objects.filter(contractlineitem__in=qspartidas)
+
+        anticipos = 0
+        pagadoanticipos = 0
+        pe_amount = 0
+        pe_pagado = 0
+
+        if estimacion is not None:
+            for e in estimacion:
+                print 'estimacion'
+                print e.advance_payment_amount
+                anticipos = anticipos + e.advance_payment_amount
+                pagadoanticipos = pagadoanticipos + e.Total_paid
+
+                if e:
+                    pe = ProgressEstimate.objects.filter(estimate_id=e.id).values('estimate_id').annotate(total=Sum('amount'), petotalpagado=Sum('paid_out'))
+
+                    print pe
+                    for p in pe:
+                        pe_amount = pe_amount + p['total']
+                        pe_pagado = pe_pagado + p['petotalpagado']
+
+
+
+
+        #progressestimate = ProgressEstimate.objects.filter(estimate_id__in = pe)
+
+
+        context['totalpartidas'] = totalpartidas
+        context['totaldistribuido'] = totaldistribuido
+        context['totalestimado'] = anticipos + pe_amount
+        context['totalpagado'] = pagadoanticipos + pe_pagado
+        #context[''] =
+
+
+
         return context
 
     def dispatch(self, request, *args, **kwargs):
