@@ -1160,14 +1160,33 @@ class DashBoardView(ListView):
 
 
 
-
+        #get total ammount for concepts in lineitems
+        line_items = None
+        total_lineconcepts = 0
+        line_items = LineItem.objects.filter(project_id=DashBoardView.project_id).values('id')
+        #print('RPOJECT_ID')
+        #print(DashBoardView.project_id)
+        #print('LINE ITEMS')
+        #print(line_items)
+        if line_items is not None:
+            #print('LINEITEM IS NOT NONE')
+            concept_inputs = Concept_Input.objects.filter(line_item_id__in=line_items).values('quantity', 'unit_price')
+            #print('CONCEPT INPUTS')
+            #print(concept_inputs)
+            for ci in concept_inputs:
+                #print('FOR CI in C_I')
+                #print ci['quantity']
+                #print ci['unit_price']
+                #print ci['quantity'] * ci['unit_price']
+                total_lineconcepts = total_lineconcepts + (ci['quantity'] * ci['unit_price'])
         #progressestimate = ProgressEstimate.objects.filter(estimate_id__in = pe)
 
 
-        context['totalpartidas'] = totalpartidas
-        context['totaldistribuido'] = totaldistribuido
-        context['totalestimado'] = anticipos + pe_amount
-        context['totalpagado'] = pagadoanticipos + pe_pagado
+        context['totalpartidas'] = Utilities.number_to_currency_estm(totalpartidas)
+        context['totaldistribuido'] = Utilities.number_to_currency_estm(totaldistribuido)
+        context['totalestimado'] = Utilities.number_to_currency_estm(anticipos + pe_amount)
+        context['totalpagado'] = Utilities.number_to_currency_estm(pagadoanticipos + pe_pagado)
+        context['techofinanciero'] = Utilities.number_to_currency(total_lineconcepts)
         #context[''] =
 
 

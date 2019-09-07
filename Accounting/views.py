@@ -223,7 +223,13 @@ class ExpenseAdminDetailView(generic.DetailView):
         context['totalDebit'] = str(totalDebit)
         context['totalExpense'] = str(ammount - Decimal(totalDebit))
         context['details'] = ExpenseDetail.objects.filter(Q(expense__id=expense_id))
+
+        print Expense.objects.get(Q(id=expense_id))
+        print str(totalDebit)
+        print str(ammount - Decimal(totalDebit))
+        print ExpenseDetail.objects.filter(Q(expense__id=expense_id))
         return context
+
 
     def dispatch(self, request, *args, **kwargs):
         #if not request.user.has_perm('ERP.view_list_accountingpolicy'):

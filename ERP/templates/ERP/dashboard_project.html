@@ -1,5 +1,5 @@
 {% extends "admin/base_site.html" %}
-{% load i18n admin_static app_filters %}
+{% load i18n admin_static humanize l10n %}
 
 
 
@@ -22,11 +22,11 @@
 {% block content %}
     <div id="container">
         <div class="btn-group btn-group-justified btn-group-raised">
-            <a class="btn btn-info dash-menu" href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/">CATÁLOGO DE
-                CONCEPTOS</a>
+
 
             <a class="btn btn-info dash-menu" href="/admin/ERP/contratocontratista/?project_id={{ project_id }}">CONTRATOS</a>
 
+             <a class="btn btn-info dash-menu" href="/admin/ERP/lineitem/conceptos/{{ project_id }}/0/">CATÁLOGO DE CONCEPTOS</a>
             <a class="btn btn-info dash-menu" href="/admin/ERP/estimate/list/{{ project_id }}">ESTIMACIONES</a>
 
             {% comment %}<a class="btn btn-info dash-menu" href="/admin/ERP/uploadedcatalogshistory/add/?project={{ project_id }}">Añadir Cat.<br>de
@@ -244,18 +244,23 @@
                         <div class="card-title text">DATOS FINANCIEROS</div>
                     </div>
                     <div class="card-block" style="height: 200px; padding: 0">
+                        <br>
                         <div class="col-xs-12 col-sm-12">
                                     <div class="">
                                         <ul class="list-group">
                                             <li class="list-group-item withripple ">
                                                 <b>Monto Contrato:</b> {{ totalpartidas }}</li>
                                             <li class="list-group-item withripple ">
-                                                <b>Monto Distribuido:</b> {{ totaldistribuido}}</li>
+                                                <b>Monto Distribuido:</b> {{ totaldistribuido }}</li>
                                             <li href="" class="list-group-item withripple ">
-                                                <b>Monto Estimado:</b> {{ totalestimado }}
+                                                <b>Monto Estimado:</b> {{ totalestimado  }}
                                             </li>
                                             <li href="" class="list-group-item withripple ">
-                                                <b>Monto Pagado:</b> {{ totalpagado }}</li>
+                                                <b>Monto Pagado:</b> {{ totalpagado  }}
+                                            </li>
+                                            <li href="" class="list-group-item withripple ">
+                                                <b>Monto Techo Financiero:</b> {{ techofinanciero  }}
+                                            </li>
 
                                         </ul>
                                     </div>

@@ -303,6 +303,10 @@ class ExpenseAdmin(admin.ModelAdmin):
         else:
             amount_left = 0
 
+        print expense_count['totalexpense']
+        print amount_left
+        print total_expense
+
         extra_context = {
             'expense_count': expense_count['totalexpense'],
             'amount_left': amount_left,
