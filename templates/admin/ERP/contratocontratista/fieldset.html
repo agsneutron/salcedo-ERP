@@ -50,10 +50,18 @@
 
 <div class="col-xs-12">
     <div class="card-header">
+
         <div class="item-right">
-                         <a href="/admin/ERP/contratocontratista/{{ request.GET.contrato }}/?contrato={{ request.GET.contrato }}"
+                {% if add %}
+                         <a href="/admin/ERP/contratocontratista/?project_id={{ request.GET.project }}"
                                    class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-city-alt zmdi-hc-2x"></i>
                                 </a>
+                {% else %}
+                    <a href="/admin/ERP/contratocontratista/{{ request.GET.contrato }}/?contrato={{ request.GET.contrato }}"
+                                   class="btn-circle btn-circle-sm btn-circle-raised btn-circle-success"><i class="zmdi zmdi-city-alt zmdi-hc-2x"></i>
+                                </a>
+
+                {% endif %}
 
         </div>
         <div class="item-left">
