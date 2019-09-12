@@ -30,7 +30,7 @@ class AccountingAdminUtilities():
         expenses = ExpenseDetail.objects.filter(Q(expense__id=obj.id))
         for expense in expenses:
             totaldebit += expense.debit
-            totalexpense = round((obj.monto - Decimal(totaldebit)), 2)
+        totalexpense = round((obj.monto - Decimal(totaldebit)), 2)
 
         return '$ {:,}'.format(totalexpense)
 
