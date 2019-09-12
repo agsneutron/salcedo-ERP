@@ -90,6 +90,8 @@
                     </li>
                     <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Documento:</span> <span style="font-size: 11px">{{ expense.reference }}</span>
                     </li>
+                    <li class="list-group-item withripple "><span class="color-info" style="font-size: 12px">Evidencias:</span> <span style="font-size: 11px"><b><a href="/media/{{ expense.file_evidence }}">{{ expense.file_evidence|filename}}</a></b></span>
+                    </li>
                 </ul>
             </div>
         </div>

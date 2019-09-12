@@ -210,7 +210,7 @@ class ExpenseAdmin(admin.ModelAdmin):
     fieldsets = (
         ("", {
             'fields': (
-                'internal_company', 'type_document', 'reference', 'total_ammount', 'monto', 'registry_date', 'description',)
+                'internal_company', 'type_document', 'reference', 'total_ammount', 'monto', 'registry_date', 'file_evidence', 'description',)
         }),
     )
 

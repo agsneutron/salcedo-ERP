@@ -357,13 +357,18 @@ class TypeDocument(models.Model):
         verbose_name = 'Tipo de Documento'
 
 
+def upload_contract_file(instance, filename):
+    return '/'.join(['uploads_expenses', str(instance.id), filename])
+
+
 class Expense(models.Model):
-    #fiscal_period = models.ForeignKey(FiscalPeriod, verbose_name='Periodo Fiscal', null=False, blank=False)
+    # fiscal_period = models.ForeignKey(FiscalPeriod, verbose_name='Periodo Fiscal', null=False, blank=False)
     type_document = models.ForeignKey(TypeDocument, verbose_name='Tipo de Documento', null=False, blank=False)
     total_ammount = models.DecimalField("Valor Total", blank=False, null=False, max_digits=50, decimal_places=2)
     monto = models.DecimalField("Monto Líquido", blank=False, null=False, max_digits=50, decimal_places=2)
     registry_date = models.DateField(default=now, null=False, blank=False, verbose_name="Fecha de Registro")
     description = models.CharField(verbose_name="Descripción", max_length=4096, null=False, blank=False)
+    file_evidence = models.FileField(verbose_name="Evidencias", upload_to=upload_contract_file)
     reference = models.CharField(verbose_name="Documento", max_length=1024, null=False, blank=False)
     internal_company = models.ForeignKey(InternalCompany, verbose_name='Empresa Interna', null=False, blank=False)
 
@@ -381,7 +386,7 @@ class Expense(models.Model):
         ans = model_to_dict(self)
         ans['registry_date'] = str(self.registry_date)
         ans['reference'] = str(self.reference)
-        #ans['fiscal_period_year'] = str(self.fiscal_period.accounting_year)
+        ans['expense'] = str(self.id)
         #ans['fiscal_period_month'] = str(self.fiscal_period.get_account_period_display())
         #ans['type_expense_name'] = str(self.type_expense.name)
         return ans
@@ -416,4 +421,5 @@ class ExpenseDetail(models.Model):
     def save(self, *args, **kwargs):
         #self.registry_date = now()
         super(ExpenseDetail, self).save(*args, **kwargs)
+
 
