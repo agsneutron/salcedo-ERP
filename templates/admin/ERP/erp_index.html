@@ -1,0 +1,471 @@
+{% extends "admin/base_site.html" %}
+{% load i18n admin_static %}
+
+
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard{% endblock %}
+
+{% block breadcrumbs %}{% endblock %}
+{% block extrastyle %}{{ block.super }}
+    <link rel="stylesheet" type="text/css" href="{% static "admin/css/dashboard.css" %}"/>
+    {#    <script src="{% static "admin/assets/Highcharts/code/themes/dark-unica.js" %}"></script>#}
+{% endblock %}
+{% block content %}
+    <div id="container">
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="card">
+                    <div class="card-header light">
+                        <div class="item-left">
+                            <div class="card-title text-small">Mapa</div>
+                        </div>
+                        <div class="item-right">
+                            {% comment %} <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-pie-chart"></i></a>
+                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-line-chart"></i></a>
+                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-area-chart"></i></a>
+                            <a href="#" class="btn btn-raised btn-xs btn-default"><i class="fa fa-bar-chart"></i></a>
+{% endcomment %}                        </div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart" style="height: 0px; display: none"></div>
+                        <div id="map" style="height: 345px;"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica0" style="display:none">
+                    <div class="card-header light" id="tituloGrafica0">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-0" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-0"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-0-0"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica1" style="display:none">
+                    <div class="card-header light" id="tituloGrafica1">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-1" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-1"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-1-1"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica2" style="display:none">
+                    <div class="card-header light" id="tituloGrafica2">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-2" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-2"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-2-2"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica3" style="display:none">
+                    <div class="card-header light" id="tituloGrafica3">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-3" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-3"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-3-3"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica4" style="display:none">
+                    <div class="card-header light" id="tituloGrafica4">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-4" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-4"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-4-4"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica5" style="display:none">
+                    <div class="card-header light" id="tituloGrafica5">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-5" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-5"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-5-5"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica6" style="display:none">
+                    <div class="card-header light" id="tituloGrafica6">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-6" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-6"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-6-6"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica7" style="display:none">
+                    <div class="card-header light" id="tituloGrafica7">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-7" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-7"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-7-7"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-xs-12 col-sm-6">
+                <div class="card" id="cardGrafica8" style="display:none">
+                    <div class="card-header light" id="tituloGrafica8">
+                        <div class="card-title text-small">Proyecto 1</div>
+                    </div>
+                    <div class="card-block" style="height: 345px; padding: 0">
+                        <div id="container-chart-8" style="height: 170px"></div>
+
+                        <br>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-8"></div>
+                                <span class="color-active circle-font">
+                                        Avance Físico
+                                    </span>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 text-center">
+                            <div style="padding: 0px 0px">
+                                <div class="circle" id="circles-8-8"></div>
+                                <span class="color-active circle-font">
+                                        Avance Finaciero
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            var myCircle = Circles.create({
+                id: 'circles-1',
+                radius: 50,
+                value: 43,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-1-1',
+                radius: 50,
+                value: 43,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-2',
+                radius: 50,
+                value: 23,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-2-1',
+                radius: 50,
+                value: 43,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-3',
+                radius: 50,
+                value: 76,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-3-1',
+                radius: 50,
+                value: 43,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-4',
+                radius: 50,
+                value: 98,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+            var myCircle = Circles.create({
+                id: 'circles-4-1',
+                radius: 50,
+                value: 43,
+                maxValue: 100,
+                width: 5,
+                text: function (value) {
+                    return value + '%';
+                },
+                colors: ['#f1f1f1', '#000'],
+                duration: 600,
+                wrpClass: 'circles-wrp',
+                textClass: 'circles-text',
+                valueStrokeClass: 'circles-valueStroke circle-primary',
+                maxValueStrokeClass: 'circles-maxValueStroke',
+                styleWrapper: true,
+                styleText: true
+            });
+        });
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAXbpD-OdsUB7EIvVisIKAHH7p5qy5Mtxs"></script>
+
+
+
+    <script src="{% static "ERP/admin/assets/Highcharts/code/highcharts.js" %}"></script>
+    <script src="{% static "ERP/admin/assets/Highcharts/code/modules/no-data-to-display.js" %}"></script>
+    <script src="{% static "ERP/admin/assets/Highcharts/code/modules/exporting.js" %}"></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+    <script src="{% static "ERP/admin/js/charts-dashboard-principal.js" %}"></script>
+{% endblock %}

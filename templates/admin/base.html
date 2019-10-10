@@ -104,7 +104,9 @@
 
     <header class="ms-header ms-header-primary" id="header">
         <div class="container container-full">
-            <div class="ms-title">
+
+
+            <div class="ms-title center-block">
                 <a href="/admin">
                     <!-- <img src="assets/img/demo/logo-header.png" alt=""> -->
                     <span class="ms-logo"><img
@@ -125,6 +127,8 @@
                     </a>
                 {% endif %}
             </div>
+
+
         </div>
     </header>
     <!-- End Header -->
@@ -132,9 +136,9 @@
 
 
 {% comment %}{{ request.resolver_match.view_name }}{% endcomment %}
+<br>
 
-
-    {% if user.is_active and user.is_staff %}
+    {% comment %}{% if user.is_active and user.is_staff %}
         <nav class="navbar  yamm ms-navbar ms-navbar-primary">
             <div class="container container-full container-nav">
                 <div class="navbar-header">
@@ -162,7 +166,7 @@
                                 <i class="zmdi zmdi-chevron-down hidden-xs" style="opacity: 0;margin-left: -11px;"></i>
                             </a>
                         </li>
-                        {% comment %}<li class="dropdown
+                        <li class="dropdown
                                 {% if request.resolver_match.view_name in "admin:ERP_contratista_add,admin:contractor-list-view,ERP_empresa_add,admin:company-list-view,admin:contractor-detail,admin:ERP_contratista_change,admin:ERP_contratista_delete,admin:company-detail,admin:ERP_empresa_change,admin:ERP_empresa_delete,admin:ERP_empresa_add"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle fadeIn"
                                data-toggle="dropdown"
@@ -173,9 +177,9 @@
                                 <i class="zmdi zmdi-chevron-down hidden-xs"></i>
                             </a>
 
-                        </li>{% endcomment %}
+                        </li>
                      {% if perms.ERP  %}
-                       {% comment %} <li class="dropdown
+                        <li class="dropdown
                                 {% if request.resolver_match.view_name in "admin:ERP_contratocontratista_add,admin:contractor-contract-list-view,admin:contractor-contract-detail,admin:ERP_contratocontratista_change,admin:ERP_contratocontratista_delete"|slice:"," %}{{ "active" }}{% endif %}">
                             <a href="#" class="dropdown-toggle"
                                data-toggle="dropdown"
@@ -190,9 +194,9 @@
 
                             </ul>
 
-                        </li>{% endcomment %}
+                        </li>
                           {% endif %}
-                        {% comment %}<li class="dropdown">
+                        <li class="dropdown">
                         <a href="/admin/ERP/project/" class="dropdown-toggle animated fadeIn animation-delay-8"
                            data-toggle="dropdown"
                            data-hover="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
@@ -201,7 +205,7 @@
                             Proyectos
                         </a>
 
-                    </li>{% endcomment %}
+                    </li>
                     {% if perms.ERP  %}
                         <li class="dropdown
                                 {% if request.resolver_match.view_name in "admin:project-list-view,admin:ERP_project_add,admin:project-detail,admin:ERP_project_change,admin:project-dashboard,admin:concept-input-view,admin:ERP_estimate_add,admin:ERP_uploadedcatalogshistory_add,admin:estimate-view,admin:estimate-detail,admin:ERP_estimate_change,admin:ERP_progressestimate_change,admin:ERP_progressestimate_add,admin:ERP_uploadedinputexplotionshistory_add,admin:progressestimatelog-list-view,admin:progressestimatelog-detail,admin:ERP_progressestimatelog_change,admin:ERP_progressestimatelog_add"|slice:"," %}{{ "active" }}{% endif %}">
@@ -273,7 +277,7 @@
                                         </li>
                                     </ul>
                                 </li>
-                                {% comment %}<li class="dropdown-submenu">
+                                <li class="dropdown-submenu">
                                 <a href="blog-sidebar.html" class="has_children">
                                     <i class="zmdi zmdi-view-compact"></i> Precios Unitarios</a>
                                 <ul class="dropdown-menu dropdown-menu-left">
@@ -329,7 +333,7 @@
                                         <a href="/admin/ERP/progressestimatelog/">Consultar</a>
                                     </li>
                                 </ul>
-                            </li>{% endcomment %}
+                            </li>
                             </ul>
 
                         </li>
@@ -428,9 +432,9 @@
                                                 <a href="/admin/HumanResources/employeedropout/">Bajas</a>
                                             </li>
                                             <li><a href="/humanresources/searchtransactions/">Reportes</a></li>
-                                            {% comment %}<li>
+                                            <li>
                                                 <a href="/admin/HumanResources/employee/">Consultar</a>
-                                            </li>{% endcomment %}
+                                            </li>
                                         </ul>
                                     </li>
                                 {% endif %}
@@ -585,7 +589,7 @@
             <a onclick="goBack()" class="btn-circle btn-circle-default go-back-btn"><i
                     class="fa fa-arrow-left"></i></a>
         </nav>
-    {% endif %}
+    {% endif %}{% endcomment %}
     <!-- ends navigation -->
     {% comment %}{% block breadcrumbs %}
     <div class="breadcrumbs">

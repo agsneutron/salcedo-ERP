@@ -8,7 +8,7 @@ from ERP.views import CompaniesListView
 
 urlpatterns = [
 
-
+    url(r'^erp_index', views.erp_index, name='erp_index'),
 
     url(r'^progress_estimate_log$', views.progress_estimate_log_view, name='progress_estimate_log_view'),
     #

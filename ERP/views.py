@@ -49,6 +49,9 @@ def custom_500(request):
     return render_to_response('500.html', RequestContext(request))
 
 
+def erp_index(request):
+    return render(request, 'erp_index.html')
+
 # Create your views here.
 def progress_estimate_log_view(request):
     project = request.GET.get('project')
