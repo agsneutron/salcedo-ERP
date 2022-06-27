@@ -11,7 +11,7 @@ oauth2-provider==0.0
 olefile==0.44
 Pillow==4.3.0
 pytz==2017.2
-reportlab==3.4.0
+reportlab==3.5.55
 six==1.10.0
 WebOb==1.7.3
 xlrd==1.0.0
